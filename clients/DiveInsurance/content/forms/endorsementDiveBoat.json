@@ -211,20 +211,19 @@
 				"key": "panelPanel4Columns2",
 				"columns": [{
 					"components": [{
-						"label": "Initial",
-						"placeholder": "Initial",
+						"label": "First Name",
+						"placeholder": "First Name",
 						"hideLabel": true,
 						"spellcheck": true,
 						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
-							"customMessage": "Please enter your initial.",
+							"customMessage": "Please enter your first name.",
 							"unique": false,
 							"multiple": false
 						},
-						"key": "initial",
+						"key": "firstname",
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
@@ -236,20 +235,19 @@
 					"pull": 0
 				}, {
 					"components": [{
-						"label": "First Name",
-						"placeholder": "First Name",
+						"label": "Initial",
+						"placeholder": "Initial",
 						"hideLabel": true,
 						"spellcheck": true,
 						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
-							"customMessage": "Please enter your first name.",
+							"customMessage": "Please enter your initial.",
 							"unique": false,
 							"multiple": false
 						},
-						"key": "firstname",
+						"key": "initial",
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
@@ -269,7 +267,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter your last name.",
 							"unique": false,
 							"multiple": false
@@ -290,7 +287,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "panelPanel4Columns2"
 			}, {
 				"key": "panelPanel5",
 				"input": false,
@@ -1330,26 +1328,10 @@
 				"tooltip": "Primary limit $1,000,000",
 				"hideLabel": true,
 				"tableView": true,
+				"dataSrc": "custom",
 				"data": {
-					"values": [{
-						"value": "excessLiabilityCoverageDeclined",
-						"label": "None"
-					}, {
-						"value": "excessLiabilityCoverage1000000",
-						"label": "1M"
-					}, {
-						"value": "excessLiabilityCoverage2000000",
-						"label": "2M"
-					}, {
-						"value": "excessLiabilityCoverage3000000",
-						"label": "3M"
-					}, {
-						"value": "excessLiabilityCoverage4000000",
-						"label": "4M"
-					}, {
-						"value": "excessLiabilityCoverage9000000",
-						"label": "9M"
-					}]
+					"values": [{}],
+					"custom": "if(data['endorsementCoverage']){\n  for(var key in data['endorsementCoverage']){\nvar item = {}\nitem.label = data['endorsementCoverage'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
 				},
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
@@ -4141,35 +4123,10 @@
 						"placeholder": "Select Group Coverage",
 						"hideLabel": true,
 						"tableView": true,
+						"dataSrc": "custom",
 						"data": {
-							"values": [{
-								"value": "groupCoverageMoreThan0",
-								"label": "0 to $25,000"
-							}, {
-								"value": "groupCoverageMoreThan25000",
-								"label": "$25,001 to $50,000"
-							}, {
-								"value": "groupCoverageMoreThan50000",
-								"label": "$50,001 to $100,000"
-							}, {
-								"value": "groupCoverageMoreThan100000",
-								"label": "$100,001 to $150,000"
-							}, {
-								"value": "groupCoverageMoreThan150000",
-								"label": "$150,001 to $200,000"
-							}, {
-								"value": "groupCoverageMoreThan200000",
-								"label": "$200,001 to $250,000"
-							}, {
-								"value": "groupCoverageMoreThan250000",
-								"label": "$250,001 to $350,000"
-							}, {
-								"value": "groupCoverageMoreThan350000",
-								"label": "$350,001 to $500,000"
-							}, {
-								"value": "groupCoverageMoreThan500000",
-								"label": "$500,001 and up"
-							}]
+							"values": [{}],
+							"custom": "if(data['endorsementGroupCoverage']){\n  for(var key in data['endorsementGroupCoverage']){\nvar item = {}\nitem.label = data['endorsementGroupCoverage'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
 						},
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
@@ -4214,23 +4171,9 @@
 						"placeholder": "Select Excess Liability",
 						"hideLabel": true,
 						"tableView": true,
+						"dataSrc": "custom",
 						"data": {
-							"values": [{
-								"value": "groupExcessLiability1M",
-								"label": "1M"
-							}, {
-								"value": "groupExcessLiability2M",
-								"label": "2M"
-							}, {
-								"value": "groupExcessLiability3M",
-								"label": "3M"
-							}, {
-								"value": "groupExcessLiability4M",
-								"label": "4M"
-							}, {
-								"value": "groupExcessLiability9M",
-								"label": "9M"
-							}]
+							"custom": "if(data['endorsementGroupLiability']){\n  for(var key in data['endorsementGroupLiability']){\nvar item = {}\nitem.label = data['endorsementGroupLiability'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
 						},
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
@@ -5088,6 +5031,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-02-13T06:57:50.467Z",
+	"modified": "2020-02-19T04:49:53.629Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }
