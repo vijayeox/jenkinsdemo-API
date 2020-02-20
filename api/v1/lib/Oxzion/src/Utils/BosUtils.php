@@ -17,8 +17,7 @@ class BosUtils
         $firstPart = strstr(strtolower($string), $pattern, true);
         $secondPart = substr(strstr(strtolower($string), $pattern, false), 0, 3);
         $nrRand = rand(0, 100);
-
-        $username = trim($firstPart).trim($secondPart).trim($nrRand);
+        $username = trim($firstPart) . trim($secondPart) . trim($nrRand);
         return $username;
     }
 
@@ -34,7 +33,8 @@ class BosUtils
         return implode($pass); //turn the array into a string
     }
 
-    public static function execCommand($command){
+    public static function execCommand($command)
+    {
         return exec($command, $output, $return);
     }
 }

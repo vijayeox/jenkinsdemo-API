@@ -70,10 +70,11 @@ class UserService extends AbstractService
         return $response[0]['orgid'];
     }
 
-    public function getRolesofUser($orgId,$id){
-        $user_id = $this->getIdFromUuid('ox_user',$id);
-        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
-        $select = "SELECT oro.uuid, oro.name from ox_user_role as ouo inner join ox_role as oro on ouo.role_id = oro.id where ouo.user_id = (SELECT ou.id from ox_user as ou where ou.id ='".$user_id."') and oro.org_id = ".$orgId;
+    public function getRolesofUser($orgId, $id)
+    {
+        $user_id = $this->getIdFromUuid('ox_user', $id);
+        $orgId = $this->getIdFromUuid('ox_organization', $orgId);
+        $select = "SELECT oro.uuid, oro.name from ox_user_role as ouo inner join ox_role as oro on ouo.role_id = oro.id where ouo.user_id = (SELECT ou.id from ox_user as ou where ou.id ='" . $user_id . "') and oro.org_id = " . $orgId;
         $resultSet = $this->executeQueryWithParams($select)->toArray();
         return $resultSet;
     }
@@ -758,8 +759,8 @@ class UserService extends AbstractService
         if (isset($result['timezone'])) {
             $result['preferences']['timezone'] = $result['timezone'];
         }
-        $result['orgid'] = $this->getUuidFromId('ox_organization',$result['orgid']);
-        $result['managerid'] = $this->getUuidFromId('ox_user',$result['managerid']);
+        $result['orgid'] = $this->getUuidFromId('ox_organization', $result['orgid']);
+        $result['managerid'] = $this->getUuidFromId('ox_user', $result['managerid']);
         if (isset($result)) {
             return $result;
         } else {
@@ -1068,29 +1069,33 @@ class UserService extends AbstractService
     public function sendResetPasswordCode($username)
     {
         $resetPasswordCode = UuidUtil::uuid();
-        $userDetails = $this->getUserBaseProfile($username);
-        if ($username === $userDetails['username']) {
-            $userReset['email'] = $userDetails['email'];
-            $userReset['firstname'] = $userDetails['firstname'];
-            $userReset['lastname'] = $userDetails['lastname'];
-            $userReset['url'] = $this->config['applicationUrl'] . "/?resetpassword=" . $resetPasswordCode;
-            $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
-            $userReset['orgid'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
-            $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
-            $userDetails['password_reset_code'] = $resetPasswordCode;
-            //Code to update the password reset and expiration time
-            $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);
-            if ($userUpdate) {
-                $this->messageProducer->sendQueue(json_encode(array(
-                    'to' => $userReset['email'],
-                    'subject' => $userReset['firstname'] . ', You login details for EOX vantage!',
-                    'body' => $this->templateService->getContent('resetPassword', $userReset),
-                )), 'mail');
-                return $userReset;
+        try {
+            $userDetails = $this->getUserBaseProfile($username);
+            if ($username === $userDetails['username']) {
+                $userReset['email'] = $userDetails['email'];
+                $userReset['firstname'] = $userDetails['firstname'];
+                $userReset['lastname'] = $userDetails['lastname'];
+                $userReset['url'] = $this->config['applicationUrl'] . "/?resetpassword=" . $resetPasswordCode;
+                $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+                $userReset['orgid'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
+                $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
+                $userDetails['password_reset_code'] = $resetPasswordCode;
+                //Code to update the password reset and expiration time
+                $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);
+                if ($userUpdate) {
+                    $this->messageProducer->sendQueue(json_encode(array(
+                        'to' => $userReset['email'],
+                        'subject' => $userReset['firstname'] . ', You login details for EOX vantage!',
+                        'body' => $this->templateService->getContent('resetPassword', $userReset),
+                    )), 'mail');
+                    return $userReset;
+                }
+                return 0;
+            } else {
+                return 0;
             }
-            return 0;
-        } else {
-            return 0;
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
@@ -1117,7 +1122,8 @@ class UserService extends AbstractService
         return $result->toArray();
     }
 
-    public function userProfile($params){
+    public function userProfile($params)
+    {
         $select = "SELECT
         user.about,
         user.username,
@@ -1145,17 +1151,17 @@ class UserService extends AbstractService
         LEFT JOIN ox_user_org ON user.id = ox_user_org.user_id
         JOIN ox_organization as org ON ox_user_org.org_id = org.id
     WHERE
-        user.uuid = '".$params['userId']."' 
-        AND org.uuid = '".$params['orgId']."'";
+        user.uuid = '" . $params['userId'] . "'
+        AND org.uuid = '" . $params['orgId'] . "'";
         $userData = $this->executeQuerywithParams($select)->toArray();
-        if(count($userData) == 0){
-            return array('data' => array() ,'role' => array()); 
+        if (count($userData) == 0) {
+            return array('data' => array(), 'role' => array());
         }
         $userData = $userData[0];
-        $userData['preferences'] = json_decode($userData['preferences'],true);
-        $userData['orgid'] = $this->getUuidFromId('ox_organization',$params['orgId']);
-        $userData['managerid'] = $this->getUuidFromId('ox_user',$userData['managerid']);
-        $userData['role'] = $this->getRolesofUser($params['orgId'],$params['userId']);
+        $userData['preferences'] = json_decode($userData['preferences'], true);
+        $userData['orgid'] = $this->getUuidFromId('ox_organization', $params['orgId']);
+        $userData['managerid'] = $this->getUuidFromId('ox_user', $userData['managerid']);
+        $userData['role'] = $this->getRolesofUser($params['orgId'], $params['userId']);
         return $userData;
     }
 
@@ -1251,7 +1257,7 @@ class UserService extends AbstractService
             throw new ServiceException("Username/Email Used", "username.exists");
         }
     }
-    
+
     public function getUsersList($appUUid, $params)
     {
         try {
@@ -1259,7 +1265,7 @@ class UserService extends AbstractService
             $appId = $this->getIdFromUuid('ox_app', $appUUid);
             if (!isset($orgId)) {
                 $orgId = $params['orgId'];
-            } else if($orgId == 0) {
+            } else if ($orgId == 0) {
                 throw new ServiceException("Organization does not exist", "orgnot.found");
             }
             $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
