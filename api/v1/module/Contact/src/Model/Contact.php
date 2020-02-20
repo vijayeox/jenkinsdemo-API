@@ -3,7 +3,6 @@
 namespace Contact\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class Contact extends Entity
 {
@@ -25,7 +24,7 @@ class Contact extends Entity
         'country' => null,
         'owner_id' => 0,
         'date_created' => 0,
-        'date_modified' => null
+        'date_modified' => null,
     );
 
     public function validate()
