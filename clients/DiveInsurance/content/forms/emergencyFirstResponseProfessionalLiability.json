@@ -33,10 +33,6 @@
                         "validate": {
                             "unique": false, "multiple": false
                         }
-                        ,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
                     }
                     ,
                     {
@@ -51,10 +47,6 @@
                         "validate": {
                             "unique": false, "multiple": false
                         }
-                        ,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
                     }
                     ,
                     {
@@ -62,10 +54,7 @@
                             "unique": false, "multiple": false
                         }
                         ,
-                        "hideOnChildrenHidden":false,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
+                        "hideOnChildrenHidden":false
                     }
                     ,
                     {
@@ -80,10 +69,6 @@
                         "validate": {
                             "unique": false, "multiple": false
                         }
-                        ,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
                     }
                     ,
                     {
@@ -98,10 +83,6 @@
                         "validate": {
                             "unique": false, "multiple": false
                         }
-                        ,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
                     }
                     ],
                     "width":4,
@@ -129,14 +110,7 @@
                         "lockKey":true,
                         "decimalLimit":0,
                         "hideLabel":true,
-                        "hideOnChildrenHidden":false,
-                        "prefix":"",
-                        "suffix":"",
-                        "defaultValue":"",
-                        "protected":false,
-                        "persistent":true,
-                        "hidden":false,
-                        "clearOnHide":true
+                        "hideOnChildrenHidden":false
                     }
                     ,
                     {
@@ -156,9 +130,7 @@
                         }
                         ,
                         "hideOnChildrenHidden":false,
-                        "hideLabel":true,
-                        "tag":"p",
-                        "className":""
+                        "hideLabel":true
                     }
                     ,
                     {
@@ -185,13 +157,6 @@
                         "validate": {
                             "unique": false, "multiple": false
                         }
-                        ,
-                        "autofocus":false,
-                        "size":"md",
-                        "leftIcon":"",
-                        "rightIcon":"",
-                        "block":false,
-                        "disableOnInvalid":false
                     }
                     ,
                     {
@@ -212,9 +177,7 @@
                         }
                         ,
                         "hideOnChildrenHidden":false,
-                        "hideLabel":true,
-                        "tag":"p",
-                        "className":""
+                        "hideLabel":true
                     }
                     ,
                     {
@@ -235,9 +198,7 @@
                         }
                         ,
                         "hideOnChildrenHidden":false,
-                        "hideLabel":true,
-                        "tag":"p",
-                        "className":""
+                        "hideLabel":true
                     }
                     ,
                     {
@@ -258,9 +219,7 @@
                         }
                         ,
                         "hideOnChildrenHidden":false,
-                        "hideLabel":true,
-                        "tag":"p",
-                        "className":""
+                        "hideLabel":true
                     }
                     ,
                     {
@@ -281,9 +240,7 @@
                         }
                         ,
                         "hideOnChildrenHidden":false,
-                        "hideLabel":true,
-                        "tag":"p",
-                        "className":""
+                        "hideLabel":true
                     }
                     ],
                     "width":4,
@@ -305,10 +262,6 @@
                         "validate": {
                             "unique": false, "multiple": false
                         }
-                        ,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
                     }
                     ,
                     {
@@ -316,10 +269,7 @@
                             "unique": false, "multiple": false
                         }
                         ,
-                        "hideOnChildrenHidden":false,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
+                        "hideOnChildrenHidden":false
                     }
                     ,
                     {
@@ -333,10 +283,7 @@
                             "unique": false, "multiple": false
                         }
                         ,
-                        "hideOnChildrenHidden":false,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -351,8 +298,7 @@
                     "unique": false, "multiple": false
                 }
                 ,
-                "path":"panelPanel2Columns",
-                "clearOnHide":false
+                "path":"panelPanel2Columns"
             }
             ],
             "type":"panel",
@@ -361,9 +307,7 @@
                 "unique": false, "multiple": false
             }
             ,
-            "path":"panelPanel2",
-            "clearOnHide":false,
-            "hideLabel":false
+            "path":"panelPanel2"
         }
         ,
         {
@@ -410,19 +354,7 @@
                         "type":"textfield",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"text",
-                        "inputMask":"",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false,
-                        "clearOnHide":true
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -452,18 +384,7 @@
                         "type":"textfield",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"text",
-                        "inputMask":"",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -493,18 +414,7 @@
                         "type":"textfield",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"text",
-                        "inputMask":"",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -518,8 +428,6 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "clearOnHide":false
             }
             ,
             {
@@ -560,22 +468,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -592,22 +485,7 @@
                             "type":"textfield",
                             "lockKey":true,
                             "hideLabel":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -631,22 +509,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -663,22 +526,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -696,21 +544,14 @@
                             "tableView":true,
                             "dataSrc":"custom",
                             "data": {
-                                "values":[ {
-                                    "value": "", "label": ""
-                                }
+                                "values":[ {}
                                 ],
-                                "url":"https://api.myjson.com/bins/1b5h5a",
-                                "headers":[ {
-                                    "key": "", "value": ""
-                                }
-                                ],
-                                "custom":"values = data['countryList'];"
+                                "custom": "values = data['countryList']"
                             }
                             ,
                             "valueProperty":"country",
                             "dataType":"string",
-                            "template":"<span>{{ item.label }}</span>",
+                            "template":"<span>{{ item.country }}</span>",
                             "selectThreshold":0.3,
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
@@ -718,29 +559,9 @@
                             ,
                             "key":"country",
                             "type":"select",
-                            "filter":"contains",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "lazyLoad":false,
-                            "disableLimit":false,
-                            "autofocus":false,
-                            "defaultValue":"",
-                            "refreshOn":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "labelPosition":"top",
-                            "tags":[],
-                            "conditional": {
-                                "show": "", "when": null, "eq": ""
-                            }
-                            ,
-                            "properties": {}
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -755,10 +576,9 @@
                                     "value": "", "label": ""
                                 }
                                 ],
-                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n}\n}"
                             }
                             ,
-                            "valueProperty":"abbreviation",
                             "dataType":"auto",
                             "template":"<span>{{ item }}</span>",
                             "selectThreshold":0.3,
@@ -772,24 +592,7 @@
                             "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
-                            "clearOnRefresh":true,
-                            "autofocus":false,
-                            "defaultValue":"",
-                            "filter":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "labelPosition":"top",
-                            "tags":[],
-                            "conditional": {
-                                "show": "", "when": null, "eq": ""
-                            }
-                            ,
-                            "properties": {}
+                            "clearOnRefresh":true
                         }
                         ],
                         "width":4,
@@ -804,16 +607,12 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "path":"panelPanelColumns",
-                    "clearOnHide":false
+                    "path":"panelPanelColumns"
                 }
                 ],
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "clearOnHide":false,
-                "hideLabel":false
             }
             ,
             {
@@ -843,16 +642,7 @@
                     "type":"checkbox",
                     "input":true,
                     "dataGridLabel":false,
-                    "lockKey":true,
-                    "autofocus":false,
-                    "inputType":"checkbox",
-                    "hideLabel":false,
-                    "protected":false,
-                    "persistent":true,
-                    "hidden":false,
-                    "name":"",
-                    "value":"",
-                    "clearOnHide":true
+                    "lockKey":true
                 }
                 ,
                 {
@@ -879,19 +669,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -908,22 +686,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -947,22 +710,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -979,22 +727,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -1005,7 +738,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Country 2",
+                            "label":"Mailing Country",
                             "widget":"choicesjs",
                             "placeholder":"Country",
                             "hideLabel":true,
@@ -1016,12 +749,7 @@
                                     "value": "", "label": ""
                                 }
                                 ],
-                                "url":"https://api.myjson.com/bins/1b5h5a",
-                                "headers":[ {
-                                    "key": "", "value": ""
-                                }
-                                ],
-                                "custom":"values = data['countryList'];"
+                                "custom":"values = data['countryList']"
                             }
                             ,
                             "valueProperty":"country",
@@ -1034,26 +762,13 @@
                             ,
                             "key":"physical_country",
                             "type":"select",
-                            "filter":"contains",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "lazyLoad":false,
-                            "disableLimit":false,
-                            "autofocus":false,
-                            "defaultValue":"",
-                            "refreshOn":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
-                            "label":"Select",
+                            "label":"Mailing State",
                             "widget":"choicesjs",
                             "placeholder":"State",
                             "hideLabel":true,
@@ -1064,10 +779,9 @@
                                     "value": "", "label": ""
                                 }
                                 ],
-                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n}\n}"
                             }
                             ,
-                            "valueProperty":"abbreviation",
                             "dataType":"auto",
                             "template":"<span>{{ item }}</span>",
                             "selectThreshold":0.3,
@@ -1081,17 +795,7 @@
                             "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
-                            "clearOnRefresh":true,
-                            "autofocus":false,
-                            "defaultValue":"",
-                            "filter":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "clearOnHide":true
+                            "clearOnRefresh":true
                         }
                         ],
                         "width":4,
@@ -1107,16 +811,12 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "path":"panelPanel3Columns",
-                    "clearOnHide":false
+                    "path":"panelPanel3Columns"
                 }
                 ],
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "clearOnHide":false,
-                "hideLabel":false
             }
             ,
             {
@@ -1148,19 +848,7 @@
                                 "key":"home_country_code",
                                 "type":"select",
                                 "input":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "defaultValue":"",
-                                "refreshOn":"",
-                                "filter":"",
-                                "authenticate":false,
-                                "template":"<span>{{ item.label }}</span>",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false,
-                                "clearOnHide":true
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":3,
@@ -1184,19 +872,7 @@
                                 "type":"phoneNumber",
                                 "input":true,
                                 "lockKey":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "inputType":"tel",
-                                "inputMask":"(999) 999-9999",
-                                "prefix":"",
-                                "suffix":"",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false,
-                                "defaultValue":"",
-                                "clearOnHide":true
+                                "hideOnChildrenHidden":false
                             }
                             ,
                             {
@@ -1210,10 +886,7 @@
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "hideOnChildrenHidden":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":9,
@@ -1231,7 +904,6 @@
                         }
                         ,
                         "path":"columns",
-                        "clearOnHide":false,
                         "hideLabel":true
                     }
                     ,
@@ -1258,19 +930,7 @@
                                 "key":"phone_country_code",
                                 "type":"select",
                                 "input":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "defaultValue":"",
-                                "refreshOn":"",
-                                "filter":"",
-                                "authenticate":false,
-                                "template":"<span>{{ item.label }}</span>",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false,
-                                "clearOnHide":true
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":3,
@@ -1294,19 +954,7 @@
                                 "type":"phoneNumber",
                                 "input":true,
                                 "lockKey":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "inputType":"tel",
-                                "inputMask":"(999) 999-9999",
-                                "prefix":"",
-                                "suffix":"",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false,
-                                "defaultValue":"",
-                                "clearOnHide":true
+                                "hideOnChildrenHidden":false
                             }
                             ,
                             {
@@ -1320,10 +968,7 @@
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "hideOnChildrenHidden":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":9,
@@ -1341,7 +986,6 @@
                         }
                         ,
                         "path":"columns1",
-                        "clearOnHide":false,
                         "hideLabel":true
                     }
                     ],
@@ -1353,61 +997,38 @@
                 ,
                 {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
                         "label":"Fax",
-                        "key":"fax",
                         "placeholder":"Fax",
+                        "hideLabel":true,
+                        "spellcheck":true,
+                        "tableView":true,
                         "validate": {
                             "unique": false, "multiple": false
                         }
                         ,
+                        "key":"fax",
                         "type":"phoneNumber",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"tel",
-                        "inputMask":"(999) 999-9999",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false,
-                        "defaultValue":"",
-                        "clearOnHide":true
+                        "hideOnChildrenHidden":false
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
                         "label":"Email",
-                        "key":"email",
                         "placeholder":"Email",
-                        "type":"email",
+                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list.",
+                        "hideLabel":true,
+                        "spellcheck":true,
+                        "tableView":true,
                         "validate": {
                             "required": true, "customMessage": "Please enter the email address.", "unique": false, "multiple": false
                         }
                         ,
+                        "key":"email",
+                        "type":"email",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
-                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list.",
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"email",
-                        "prefix":"",
-                        "suffix":"",
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false,
-                        "clearOnHide":true,
-                        "kickbox": {
-                            "enabled": false
-                        }
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":6,
@@ -1422,8 +1043,7 @@
                     "unique": false, "multiple": false
                 }
                 ,
-                "path":"panelPanel4Columns2",
-                "clearOnHide":false
+                "path":"panelPanel4Columns2"
             }
             ],
             "lockKey":true,
@@ -1431,9 +1051,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "clearOnHide":false,
-            "hideLabel":false
         }
         ],
         "type":"panel",
@@ -1441,9 +1058,6 @@
         "validate": {
             "unique": false, "multiple": false
         }
-        ,
-        "clearOnHide":false,
-        "hideLabel":false
     }
     ,
     {
@@ -1477,6 +1091,7 @@
             "components":[ {
                 "label":"Policy Period",
                 "widget":"choicesjs",
+                "placeholder":"Select a Policy Period",
                 "tableView":true,
                 "dataSrc":"custom",
                 "data": {
@@ -1564,10 +1179,11 @@
                 "key":"pageNaNPanelColumns",
                 "columns":[ {
                     "components":[ {
-                        "input":true,
+                        "label":"Liability Coverage",
+                        "optionsLabelPosition":"right",
+                        "inline":false,
+                        "hideLabel":true,
                         "tableView":true,
-                        "label":"Coverage",
-                        "key":"liabilityCoverageName",
                         "values":[ {
                             "value": "liabilityCoverage5000000", "label": "Liability Coverage ($5,000,000)", "shortcut": ""
                         }
@@ -1585,18 +1201,18 @@
                         }
                         ],
                         "validate": {
-                            "required": true, "unique": false, "multiple": false, "customMessage": "Please choose one of these options."
+                            "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                         }
                         ,
-                        "type":"radio",
-                        "optionsLabelPosition":"right",
+                        "key":"liabilityCoverageName",
                         "properties": {
                             "target": "coverageAmount"
                         }
                         ,
+                        "type":"radio",
+                        "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "hideLabel":true
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":6,
@@ -1739,7 +1355,7 @@
                         ,
                         {
                             "components":[ {
-                                "label": "Text", "prefix": "$", "hideLabel": true, "spellcheck": false, "disabled": true, "tableView": true, "clearOnHide": false, "calculateValue": "value = data['coverageAmount'];", "validate": {
+                                "label": "Total", "prefix": "$", "hideLabel": true, "spellcheck": false, "disabled": true, "tableView": true, "clearOnHide": false, "calculateValue": "value = data['coverageAmount'];", "validate": {
                                     "unique": false, "multiple": false
                                 }
                                 ,
@@ -1939,6 +1555,7 @@
                         "customMessage": "Please let us know if any Incidents have occured in the past!", "custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)", "unique": false, "multiple": false
                     }
                     ,
+                    "errorLabel":"Please let us know if any Incidents have occured in the past!",
                     "key":"section1Agreement",
                     "properties": {
                         "negate": "section2Agreement"
@@ -2048,7 +1665,14 @@
                         "page5ColumnsPanel2ColumnsBriefsummaryofsituationorpossibleclaim":"",
                         "page5ColumnsPanel2ColumnsSurvey": {}
                         ,
-                        "page5ColumnsPanel2ColumnsLocationofIncident": ""
+                        "page5ColumnsPanel2ColumnsLocationofIncident":"",
+                        "nameofpersoninjured":"",
+                        "dateofincident":"",
+                        "reportcanbeobtained":"",
+                        "summaryofsituation":"",
+                        "survey": {}
+                        ,
+                        "locationofIncident": ""
                     }
                     ],
                     "validate": {
@@ -2075,7 +1699,7 @@
                                     "required": true, "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"page5ColumnsPanel2ColumnsNameofpersoninjured",
+                                "key":"nameofpersoninjured",
                                 "type":"textfield",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -2096,7 +1720,7 @@
                                     "required": true, "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"page5ColumnsPanel2ColumnsDateofincident",
+                                "key":"dateofincident",
                                 "type":"datetime",
                                 "input":true,
                                 "hideOnChildrenHidden":false,
@@ -2117,7 +1741,7 @@
                                     "required": true, "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"page5ColumnsPanel2ColumnsExplainhowthereportcanbeobtained",
+                                "key":"reportcanbeobtained",
                                 "type":"textfield",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -2136,7 +1760,7 @@
                                     "required": true, "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"page5ColumnsPanel2ColumnsBriefsummaryofsituationorpossibleclaim",
+                                "key":"summaryofsituation",
                                 "type":"textarea",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -2177,7 +1801,7 @@
                                     "required": true, "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"page5ColumnsPanel2ColumnsSurvey",
+                                "key":"survey",
                                 "type":"survey",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -2193,7 +1817,7 @@
                                     "required": true, "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"page5ColumnsPanel2ColumnsLocationofIncident",
+                                "key":"locationofIncident",
                                 "type":"textfield",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -2232,6 +1856,7 @@
                         "customMessage": "Please let us know if any Incidents have occured in the past!", "custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)", "unique": false, "multiple": false
                     }
                     ,
+                    "errorLabel":"Please let us know if any Incidents have occured in the past!",
                     "key":"section2Agreement",
                     "properties": {
                         "negate": "section1Agreement"
@@ -2304,17 +1929,18 @@
             }
             ,
             {
-                "input":true,
-                "tableView":true,
                 "label":"Acknowledged",
-                "dataGridLabel":false,
-                "key":"page5ColumnsPanelAcknowledged",
+                "tableView":true,
                 "defaultValue":false,
                 "validate": {
-                    "required": true, "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please Acknowledge the Agreements", "unique": false, "multiple": false
                 }
                 ,
-                "type":"checkbox"
+                "errorLabel":"Please Acknowledge the Agreements",
+                "key":"signatureAcknowledged",
+                "type":"checkbox",
+                "input":true,
+                "dataGridLabel":false
             }
             ],
             "type":"panel",
@@ -2361,17 +1987,18 @@
             }
             ,
             {
-                "input":true,
-                "tableView":true,
                 "label":"I Agree",
-                "dataGridLabel":false,
-                "key":"page5ColumnsPanel4IAgree",
+                "tableView":true,
                 "defaultValue":false,
                 "validate": {
-                    "required": true, "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please Acknowledge the GDPR Agreements", "unique": false, "multiple": false
                 }
                 ,
-                "type":"checkbox"
+                "errorLabel":"Please Acknowledge the GDPR Agreements",
+                "key":"GDPRAgreement",
+                "type":"checkbox",
+                "input":true,
+                "dataGridLabel":false
             }
             ],
             "type":"panel",
@@ -2388,19 +2015,20 @@
             "theme":"primary",
             "tableView":false,
             "components":[ {
-                "input":true,
-                "tableView":true,
-                "label":"Text Area",
-                "key":"page5ColumnsPanel3TextArea",
+                "label":"Comments",
                 "placeholder":"Comments",
+                "autoExpand":false,
+                "hideLabel":true,
                 "spellcheck":true,
+                "tableView":true,
+                "inputFormat":"plain",
                 "validate": {
                     "unique": false, "multiple": false
                 }
                 ,
+                "key":"comments",
                 "type":"textarea",
-                "inputFormat":"plain",
-                "hideLabel":true
+                "input":true
             }
             ],
             "type":"panel",
@@ -2453,29 +2081,26 @@
                 "key":"page4PanelWell",
                 "input":false,
                 "components":[ {
-                    "input":true,
-                    "tableView":true,
                     "label":"Please choose one of these options",
-                    "key":"AdditionalInsuredOption",
+                    "optionsLabelPosition":"right",
+                    "inline":false,
+                    "tableView":true,
+                    "defaultValue":"noAdditionalInsureds",
                     "values":[ {
-                        "value": "asPerExistingPolicyIfRenewing", "label": "As per existing policy (if renewing)", "shortcut": ""
-                    }
-                    ,
-                    {
-                        "value": "newListOfAdditionalInsureds", "label": "New list of Additional Insureds", "shortcut": ""
+                        "value": "newListOfAdditionalInsureds", "label": "Add Additional Insureds", "shortcut": ""
                     }
                     ,
                     {
                         "value": "noAdditionalInsureds", "label": "No Additional Insureds", "shortcut": ""
                     }
                     ],
-                    "defaultValue":"noAdditionalInsureds",
                     "validate": {
                         "unique": false, "multiple": false
                     }
                     ,
+                    "key":"AdditionalInsuredOption",
                     "type":"radio",
-                    "optionsLabelPosition":"right",
+                    "input":true,
                     "lockKey":true
                 }
                 ],
@@ -2605,7 +2230,7 @@
                             "key":"additionalInsuredTableColumns",
                             "columns":[ {
                                 "components":[ {
-                                    "label":"Select",
+                                    "label":"Country",
                                     "widget":"choicesjs",
                                     "placeholder":"Country",
                                     "hideLabel":true,
@@ -2642,28 +2267,30 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "label":"Select",
-                                    "key":"state",
+                                    "label":"State",
+                                    "widget":"choicesjs",
                                     "placeholder":"State",
+                                    "hideLabel":true,
+                                    "tableView":true,
+                                    "dataSrc":"custom",
                                     "data": {
                                         "values":[ {
                                             "value": "", "label": ""
                                         }
                                         ],
-                                        "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+                                        "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n}\n}"
                                     }
                                     ,
-                                    "dataSrc":"custom",
-                                    "refreshOn":"country",
                                     "template":"<span>{{ item }}</span>",
+                                    "selectThreshold":0.3,
                                     "validate": {
                                         "required": true, "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"state",
                                     "type":"select",
-                                    "hideLabel":true,
+                                    "refreshOn":"country",
+                                    "input":true,
                                     "clearOnRefresh":true,
                                     "lockKey":true,
                                     "hideOnChildrenHidden":false
@@ -2677,7 +2304,7 @@
                             ,
                             {
                                 "components":[ {
-                                    "label":"Text",
+                                    "label":"Zip",
                                     "placeholder":"Zip",
                                     "hideLabel":true,
                                     "spellcheck":true,
@@ -2701,7 +2328,7 @@
                             ,
                             {
                                 "components":[ {
-                                    "label":"Select",
+                                    "label":"Business Relation",
                                     "widget":"choicesjs",
                                     "placeholder":"Business Relation",
                                     "hideLabel":true,
@@ -2738,20 +2365,20 @@
                                 }
                                 ,
                                 {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Please mention the same:",
-                                    "key":"businessRelationOther",
                                     "spellcheck":true,
+                                    "tableView":true,
                                     "validate": {
-                                        "required": true
+                                        "required": true, "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"businessRelationOther",
                                     "conditional": {
-                                        "show": "true", "when": "businessRelation", "eq": "other"
+                                        "show": true, "when": "businessRelation", "eq": "other"
                                     }
                                     ,
                                     "type":"textfield",
+                                    "input":true,
                                     "lockKey":true,
                                     "hideOnChildrenHidden":false
                                 }
@@ -2834,17 +2461,17 @@
             }
             ,
             {
-                "input":true,
-                "tableView":true,
                 "label":"YES!  Sign me up for AUTOMATIC RENEWAL.",
-                "dataGridLabel":false,
-                "key":"automatic_renewal",
+                "tableView":true,
                 "defaultValue":false,
                 "validate": {
                     "unique": false, "multiple": false
                 }
                 ,
+                "key":"automatic_renewal",
                 "type":"checkbox",
+                "input":true,
+                "dataGridLabel":false,
                 "lockKey":true
             }
             ],
@@ -2983,7 +2610,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":279,
+    "_vid":286,
     "title":"Emergency First Response Professional Liability",
     "display":"wizard",
     "access":[ {
@@ -3088,7 +2715,7 @@
     "path":"emergencyfirstresponseprofessionalliability",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-07-11T13:08:59.838Z",
-    "modified":"2020-02-20T10:35:28.381Z",
+    "modified":"2020-02-22T09:45:05.943Z",
     "machineName":"testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
     "controller":""
 }
