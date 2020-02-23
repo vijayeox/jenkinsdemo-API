@@ -378,6 +378,7 @@ class WorkflowService extends AbstractService
         } else {
             $workflowId = $workflowId;
         }
+
         $select = "select ox_form.name as formName,ox_form.uuid as id
     from ox_form
     left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
@@ -404,6 +405,7 @@ class WorkflowService extends AbstractService
         $field = "";
         $where = "";
         $joinQuery = "";
+        $whereQuery = "";
         $sort = "ORDER BY ox_file.date_created desc";
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
@@ -482,8 +484,10 @@ class WorkflowService extends AbstractService
     INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
     LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
     LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
-        $whereQuery .= " " . $where;
-        
+
+        if(strlen($whereQuery) > 0){
+            $whereQuery .= " " . $where;    
+        }
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
