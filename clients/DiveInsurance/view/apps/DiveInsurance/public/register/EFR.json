@@ -884,7 +884,8 @@
                             }
                             ,
                             "valueProperty":"dial_code",
-                            "template":"<span>{{ item.name }} - {{ item.dial_code }}</span>",
+                            "dataType":"auto",
+                            "template":"<span>{{ item.dial_code }}</span>",
                             "selectThreshold":0.3,
                             "calculateValue":"if(data.country && phoneList){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                             "validate": {
@@ -970,7 +971,7 @@
                             }
                             ,
                             "valueProperty":"dial_code",
-                            "template":"<span>{{ item.name }} - {{ item.dial_code }}</span>",
+                            "template":"<span>{{ item.dial_code }}</span>",
                             "selectThreshold":0.3,
                             "calculateValue":"if(data.country && phoneList){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                             "validate": {
@@ -1118,7 +1119,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":68,
+    "_vid":69,
     "title":"Padi Verification Form - Emergency First Response",
     "display":"form",
     "access":[ {
@@ -1134,7 +1135,7 @@
     "path":"padiverificationformemergencyfirstresponse",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-05T12:05:39.142Z",
-    "modified":"2020-02-24T12:18:35.591Z",
+    "modified":"2020-02-24T14:03:14.562Z",
     "machineName":"testdivehub:padiVerificationFormEmergencyFirstResponse",
     "controller":""
 }

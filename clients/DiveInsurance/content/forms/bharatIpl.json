@@ -511,11 +511,11 @@
                             "hideLabel":true,
                             "spellcheck":true,
                             "tableView":true,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "customMessage": "Please enter your mailing address.", "unique": false, "multiple": false
                             }
                             ,
-                            "errorLabel":"Please enter your mailing address.",
                             "key":"address1",
                             "type":"textfield",
                             "input":true,
@@ -553,6 +553,7 @@
                             "hideLabel":true,
                             "spellcheck":true,
                             "tableView":true,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "customMessage": "Please enter your city.", "unique": false, "multiple": false
                             }
@@ -569,7 +570,8 @@
                             "placeholder":"Zip Code",
                             "hideLabel":true,
                             "spellcheck":false,
-                            "tableView":true,
+                            "tableView":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "pattern": "[0-9\\s-]*", "customMessage": "Please enter a valid Zip Code for your region.", "unique": false, "multiple": false
                             }
@@ -607,6 +609,7 @@
                             "template":"<span>{{ item.country }}</span>",
                             "selectThreshold":0.3,
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "customMessage": "Please enter your country.", "unique": false, "multiple": false
                             }
@@ -635,6 +638,7 @@
                             "template":"<span>{{ item }}</span>",
                             "selectThreshold":0.3,
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
@@ -702,6 +706,7 @@
                             "hideLabel":true,
                             "spellcheck":true,
                             "tableView":true,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
@@ -738,12 +743,13 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Text",
+                            "label":"Mailing City",
                             "placeholder":"City",
                             "hideLabel":true,
                             "spellcheck":true,
                             "tableView":true,
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
@@ -756,12 +762,13 @@
                         }
                         ,
                         {
-                            "label":"Text",
+                            "label":"Mailing Zip",
                             "placeholder":"Zip Code",
                             "hideLabel":true,
                             "spellcheck":false,
                             "tableView":true,
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "pattern": "[0-9\\s-]*", "unique": false, "multiple": false
                             }
@@ -800,6 +807,7 @@
                             "template":"<span>{{ item.country }}</span>",
                             "selectThreshold":0.3,
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
@@ -824,10 +832,10 @@
                                 "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states\n}"
                             }
                             ,
-                            "valueProperty":"abbreviation",
                             "template":"<span>{{ item }}</span>",
                             "selectThreshold":0.3,
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
@@ -890,7 +898,7 @@
                                 ,
                                 "valueProperty":"dial_code",
                                 "dataType":"auto",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "allowCalculateOverride":true,
@@ -915,8 +923,8 @@
                                 "label":"Home Phone",
                                 "placeholder":"Home Phone",
                                 "hideLabel":true,
-                                "spellcheck":true,
-                                "tableView":true,
+                                "spellcheck":false,
+                                "tableView":false,
                                 "validateOn":"blur",
                                 "validate": {
                                     "required": true, "customMessage": "Please enter a valid phone number", "unique": false, "multiple": false
@@ -980,7 +988,7 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "allowCalculateOverride":true,
@@ -1171,7 +1179,6 @@
                 ,
                 "selectThreshold":0.3,
                 "clearOnHide":false,
-                "validateOn":"blur",
                 "validate": {
                     "required": true, "customMessage": "Please select a policy period from the list", "unique": false, "multiple": false
                 }
@@ -1307,7 +1314,6 @@
                             }
                             ],
                             "dataType":"auto",
-                            "redrawOn":"start_date_range",
                             "clearOnHide":false,
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
@@ -1347,7 +1353,6 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
-                            "redrawOn":"careerCoverage",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -1593,7 +1598,6 @@
                                 "value": "declined", "label": "With TecRec Endorsement for selection above - Declined", "shortcut": ""
                             }
                             ],
-                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1627,7 +1631,6 @@
                             "requireDecimal":false,
                             "inputFormat":"plain",
                             "protected":true,
-                            "redrawOn":"tecRecEndorsment",
                             "clearOnHide":false,
                             "customDefaultValue":"value = 0.00",
                             "validate": {
@@ -1721,7 +1724,6 @@
                                 "value": "scubaFitInstructorDeclined", "label": "ScubaFit Instructor - Declined", "shortcut": ""
                             }
                             ],
-                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1757,7 +1759,6 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
-                            "redrawOn":"scubaFit",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -1854,7 +1855,6 @@
                                 "value": "cylinderInspectorOrInstructorDeclined", "label": "Cylinder Inspector Or Instructor - Declined", "shortcut": ""
                             }
                             ],
-                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1890,7 +1890,6 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
-                            "redrawOn":"cylinder",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -2006,7 +2005,6 @@
                                 "value": "equipmentLiabilityCoverageDeclined", "label": "Equipment Liability Coverage - Declined", "shortcut": ""
                             }
                             ],
-                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -2042,7 +2040,6 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
-                            "redrawOn":"equipment",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -2147,7 +2144,6 @@
                                 "value": "excessLiabilityCoverageDeclined", "label": "Excess Liability Coverage - Declined", "shortcut": ""
                             }
                             ],
-                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -2176,15 +2172,15 @@
                             "prefix":"$",
                             "hideLabel":true,
                             "mask":false,
-                            "spellcheck":true,
+                            "spellcheck":false,
                             "disabled":true,
-                            "tableView":true,
+                            "tableView":false,
                             "defaultValue":"0.00",
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
-                            "redrawOn":"excessLiability",
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "multiple": false, "unique": false
                             }
@@ -2292,6 +2288,8 @@
                     "validate": {
                         "unique": false, "multiple": false
                     }
+                    ,
+                    "path":"page3Columns"
                 }
                 ],
                 "tableView":false,
@@ -2301,6 +2299,8 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
+                ,
+                "path":"page3PanelWell7"
             }
             ,
             {
@@ -3834,7 +3834,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":551,
+    "_vid":556,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3856,7 +3856,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-24T12:56:06.117Z",
+    "modified":"2020-02-24T16:02:30.785Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }
