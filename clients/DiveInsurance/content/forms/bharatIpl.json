@@ -917,11 +917,11 @@
                                 "hideLabel":true,
                                 "spellcheck":true,
                                 "tableView":true,
+                                "validateOn":"blur",
                                 "validate": {
-                                    "required": true, "customMessage": "Please enter your home phone number.", "unique": false, "multiple": false
+                                    "required": true, "customMessage": "Please enter a valid phone number", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
                                 "key":"home_phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
@@ -957,7 +957,8 @@
                             "unique": false, "multiple": false
                         }
                         ,
-                        "path":"columns3"
+                        "path":"columns3",
+                        "hideLabel":true
                     }
                     ,
                     {
@@ -1007,11 +1008,11 @@
                                 "spellcheck":true,
                                 "tableView":true,
                                 "clearOnHide":false,
+                                "validateOn":"blur",
                                 "validate": {
-                                    "required": true, "unique": false, "multiple": false
+                                    "required": true, "customMessage": "Please enter a valid phone number", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
                                 "key":"phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
@@ -1047,7 +1048,8 @@
                             "unique": false, "multiple": false
                         }
                         ,
-                        "path":"columns4"
+                        "path":"columns4",
+                        "hideLabel":true
                     }
                     ],
                     "width":6,
@@ -1081,6 +1083,7 @@
                         "hideLabel":true,
                         "spellcheck":true,
                         "tableView":true,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "customMessage": "Please enter your email address in format: yourname@example.com", "unique": false, "multiple": false
                         }
@@ -1151,7 +1154,7 @@
             "theme":"primary",
             "tableView":false,
             "components":[ {
-                "label":"Select a Policy Period",
+                "label":"Policy Period",
                 "widget":"choicesjs",
                 "placeholder":"Select a Policy Period",
                 "hideLabel":true,
@@ -1168,14 +1171,14 @@
                 ,
                 "selectThreshold":0.3,
                 "clearOnHide":false,
+                "validateOn":"blur",
                 "validate": {
-                    "required": true, "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please select a policy period from the list", "unique": false, "multiple": false
                 }
                 ,
-                "errorLabel":"Please select a policy period from the list",
                 "key":"start_date_range",
                 "properties": {
-                    "delegate": "RateCard", "redraw": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
+                    "delegate": "RateCard", "post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
                 }
                 ,
                 "type":"select",
@@ -1234,7 +1237,7 @@
             "tooltip":"Please select the coverage and options from the list below",
             "collapsible":false,
             "tableView":false,
-            "key":"page3Panel",
+            "key":"coverageOptions",
             "customConditional":"show = data['start_date_range'].value ? true : false;",
             "type":"panel",
             "label":"Coverage and Options",
@@ -1310,7 +1313,6 @@
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
                             ,
-                            "errorLabel":"Please choose one of these options.",
                             "key":"careerCoverage",
                             "properties": {
                                 "target": "careerCoveragePrice"
@@ -1322,7 +1324,6 @@
                             "labelWidth":30,
                             "labelMargin":3,
                             "hideOnChildrenHidden":false,
-                            "isNew":false,
                             "refreshOn":"start_date_range"
                         }
                         ],
@@ -1358,17 +1359,17 @@
                             "input":true,
                             "inputType":"number",
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "isNew":false
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
+                            "label":"instructor",
+                            "defaultValue":"0",
+                            "redrawOn":"start_date_range",
+                            "key":"instructor",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"instructor",
-                            "label":"instructor",
-                            "type":"hidden",
-                            "defaultValue":"0",
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
                             "validate": {
@@ -1377,12 +1378,13 @@
                         }
                         ,
                         {
+                            "label":"assistantInstructor",
+                            "defaultValue":"0",
+                            "redrawOn":"start_date_range",
+                            "key":"assistantInstructor",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"assistantInstructor",
-                            "label":"assistantInstructor",
-                            "type":"hidden",
-                            "defaultValue":"0",
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
                             "validate": {
@@ -1600,8 +1602,7 @@
                             "type":"radio",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "isNew":false
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":8,
@@ -1866,8 +1867,7 @@
                             "type":"radio",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "isNew":false
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":8,
@@ -2011,7 +2011,6 @@
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
                             ,
-                            "errorLabel":"Please choose one of these options.",
                             "key":"equipment",
                             "properties": {
                                 "target": "equipmentPrice"
@@ -2747,18 +2746,19 @@
                                 "components":[ {
                                     "label":"Name of person injured",
                                     "placeholder":"Name of person injured",
+                                    "hideLabel":true,
                                     "spellcheck":true,
                                     "tableView":true,
+                                    "validateOn":"blur",
                                     "validate": {
-                                        "unique": false, "multiple": false
+                                        "required": true, "unique": false, "multiple": false
                                     }
                                     ,
                                     "key":"nameofpersoninjured",
                                     "type":"textfield",
                                     "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":4,
@@ -2769,34 +2769,34 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Date of incident",
-                                    "key":"page4Panel2ColumnsDateTime",
-                                    "placeholder":"Date of incident",
                                     "format":"yyyy-MM-dd",
-                                    "enableTime":false,
+                                    "placeholder":"Date of incident",
+                                    "hideLabel":true,
+                                    "tableView":true,
                                     "datePicker": {
                                         "datepickerMode": "day"
                                     }
                                     ,
+                                    "enableTime":false,
                                     "timePicker": {
                                         "showMeridian": false
                                     }
                                     ,
                                     "validate": {
-                                        "unique": false, "multiple": false
+                                        "required": true, "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"page4Panel2ColumnsDateTime",
                                     "type":"datetime",
+                                    "input":true,
                                     "lockKey":true,
                                     "hideOnChildrenHidden":false,
                                     "widget": {
                                         "type": "calendar", "displayInTimezone": "viewer", "language": "en", "useLocaleSettings": false, "allowInput": true, "mode": "single", "enableTime": false, "noCalendar": false, "format": "yyyy-MM-dd", "hourIncrement": 1, "minuteIncrement": 1, "time_24hr": true, "minDate": null, "maxDate": null
                                     }
                                     ,
-                                    "suffix":"<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-                                    "hideLabel":true
+                                    "suffix":"<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
                                 }
                                 ],
                                 "width":4,
@@ -2807,20 +2807,20 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Location of incident",
-                                    "key":"page4Panel2ColumnsLocationofincident",
                                     "placeholder":"Location of incident",
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"locationofincident",
                                     "type":"textfield",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":4,
@@ -2844,21 +2844,22 @@
                             "label":"Columns",
                             "columns":[ {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "label":"Text Area",
-                                    "key":"page4Panel2ColumnsTextArea",
+                                    "label":"Report Details",
                                     "placeholder":"Explain how the report can be obtained",
+                                    "autoExpand":false,
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
+                                    "inputFormat":"plain",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"reportcanbeobtained",
                                     "type":"textarea",
-                                    "inputFormat":"plain",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":6,
@@ -2869,21 +2870,22 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "label":"BriefSummary",
-                                    "key":"page4Panel2ColumnsBriefSummary",
+                                    "label":"Brief Summary",
                                     "placeholder":"Brief summary of situation or possible claim",
+                                    "autoExpand":false,
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
+                                    "inputFormat":"plain",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"page4Panel2ColumnsBriefSummary",
                                     "type":"textarea",
-                                    "inputFormat":"plain",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":6,
@@ -3832,7 +3834,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":546,
+    "_vid":551,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3854,7 +3856,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-19T11:00:47.186Z",
+    "modified":"2020-02-24T12:56:06.117Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

@@ -779,11 +779,11 @@
                                 "spellcheck":true,
                                 "tableView":true,
                                 "clearOnHide":false,
+                                "validateOn":"blur",
                                 "validate": {
                                     "required": true, "customMessage": "Please enter your phone number.", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
                                 "key":"home_phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
@@ -868,11 +868,11 @@
                                 "spellcheck":true,
                                 "tableView":true,
                                 "clearOnHide":false,
+                                "validateOn":"blur",
                                 "validate": {
                                     "required": true, "customMessage": "Please enter your phone number.", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
                                 "key":"mobile_phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
@@ -937,20 +937,22 @@
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
                         "label":"Email",
-                        "key":"email",
                         "placeholder":"Email",
+                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "hideLabel":true,
+                        "spellcheck":true,
+                        "tableView":true,
                         "clearOnHide":false,
-                        "type":"email",
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "customMessage": "Please enter your email address in format: yourname@example.com", "unique": false, "multiple": false
                         }
                         ,
-                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "key":"email",
+                        "type":"email",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -2938,7 +2940,7 @@
     "path":"iplendorcover",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-08T15:16:11.935Z",
-    "modified":"2020-02-19T11:51:02.083Z",
+    "modified":"2020-02-24T12:48:21.908Z",
     "machineName":"testdivehub:iplEndorCover",
     "controller":""
 }

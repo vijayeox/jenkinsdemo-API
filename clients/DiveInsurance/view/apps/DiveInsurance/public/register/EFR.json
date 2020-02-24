@@ -888,7 +888,7 @@
                             "selectThreshold":0.3,
                             "calculateValue":"if(data.country && phoneList){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                             "validate": {
-                                "unique": false, "multiple": false
+                                "required": true, "unique": false, "multiple": false
                             }
                             ,
                             "key":"countryCode",
@@ -905,18 +905,33 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
                             "label":"Home Phone",
-                            "key":"home_phone",
                             "placeholder":"Home Phone",
+                            "hideLabel":true,
+                            "spellcheck":true,
+                            "tableView":true,
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
                             ,
+                            "key":"home_phone_number",
                             "type":"phoneNumber",
+                            "input":true,
                             "lockKey":true,
-                            "hideLabel":true,
+                            "hideOnChildrenHidden":false
+                        }
+                        ,
+                        {
+                            "label":"home_phone",
+                            "calculateValue":"value = data.home_country_code + \"\"+ data.home_phone_number",
+                            "key":"home_phone",
+                            "type":"hidden",
+                            "input":true,
+                            "tableView":false,
+                            "validate": {
+                                "unique": false, "multiple": false
+                            }
+                            ,
                             "hideOnChildrenHidden":false
                         }
                         ],
@@ -926,6 +941,7 @@
                         "pull":0
                     }
                     ],
+                    "hideLabel":true,
                     "tableView":false,
                     "key":"columns",
                     "type":"columns",
@@ -934,8 +950,7 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "path":"columns",
-                    "hideLabel":true
+                    "path":"columns"
                 }
                 ,
                 {
@@ -959,7 +974,7 @@
                             "selectThreshold":0.3,
                             "calculateValue":"if(data.country && phoneList){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                             "validate": {
-                                "unique": false, "multiple": false
+                                "required": true, "unique": false, "multiple": false
                             }
                             ,
                             "key":"countryCode1",
@@ -976,18 +991,33 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
                             "label":"Mobile Phone",
-                            "key":"mobilephone",
                             "placeholder":"Mobile Phone",
+                            "hideLabel":true,
+                            "spellcheck":true,
+                            "tableView":true,
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
                             ,
+                            "key":"phone_number",
                             "type":"phoneNumber",
+                            "input":true,
                             "lockKey":true,
-                            "hideLabel":true,
+                            "hideOnChildrenHidden":false
+                        }
+                        ,
+                        {
+                            "label":"phone",
+                            "calculateValue":"value = data.phone_country_code + \"\" + data.phone_number",
+                            "key":"phone",
+                            "type":"hidden",
+                            "input":true,
+                            "tableView":false,
+                            "validate": {
+                                "unique": false, "multiple": false
+                            }
+                            ,
                             "hideOnChildrenHidden":false
                         }
                         ],
@@ -1088,7 +1118,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":66,
+    "_vid":68,
     "title":"Padi Verification Form - Emergency First Response",
     "display":"form",
     "access":[ {
@@ -1104,7 +1134,7 @@
     "path":"padiverificationformemergencyfirstresponse",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-05T12:05:39.142Z",
-    "modified":"2020-02-22T09:51:37.823Z",
+    "modified":"2020-02-24T12:18:35.591Z",
     "machineName":"testdivehub:padiVerificationFormEmergencyFirstResponse",
     "controller":""
 }

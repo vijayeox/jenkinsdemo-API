@@ -930,11 +930,11 @@
                             "hideLabel":true,
                             "spellcheck":true,
                             "tableView":true,
+                            "validateOn":"blur",
                             "validate": {
-                                "required": true, "unique": false, "multiple": false
+                                "required": true, "customMessage": "Please enter a valid phone number", "unique": false, "multiple": false
                             }
                             ,
-                            "errorLabel":"Please enter a valid phone number",
                             "key":"home_phone_number",
                             "type":"phoneNumber",
                             "input":true,
@@ -1020,10 +1020,9 @@
                             "spellcheck":true,
                             "tableView":true,
                             "validate": {
-                                "required": true, "unique": false, "multiple": false
+                                "required": true, "customMessage": "Please enter a valid phone number", "unique": false, "multiple": false
                             }
                             ,
-                            "errorLabel":"Please enter a valid phone number",
                             "key":"phone_number",
                             "type":"phoneNumber",
                             "input":true,
@@ -1087,19 +1086,20 @@
                 }
                 ,
                 {
-                    "input":true,
-                    "tableView":true,
                     "label":"Email",
-                    "key":"email",
                     "placeholder":"Email",
-                    "type":"email",
+                    "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                    "hideLabel":true,
+                    "spellcheck":true,
+                    "tableView":true,
                     "validate": {
                         "required": true, "unique": false, "multiple": false
                     }
                     ,
+                    "key":"email",
+                    "type":"email",
+                    "input":true,
                     "lockKey":true,
-                    "hideLabel":true,
-                    "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
                     "hideOnChildrenHidden":false
                 }
                 ],
@@ -1142,7 +1142,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":185,
+    "_vid":186,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -1158,7 +1158,7 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-02-18T17:03:59.979Z",
+    "modified":"2020-02-24T12:16:54.874Z",
     "machineName":"testdivehub:padiVerificationForm",
     "controller":""
 }

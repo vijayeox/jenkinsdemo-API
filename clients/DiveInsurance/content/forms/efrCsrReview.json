@@ -1489,7 +1489,6 @@
                                     "dataType":"string",
                                     "template":"<span>{{ item.country }}</span>",
                                     "selectThreshold":0.3,
-                                    "customDefaultValue":"value = \"United States of America\";",
                                     "validate": {
                                         "required": true, "unique": false, "multiple": false
                                     }
@@ -1528,6 +1527,7 @@
                                     }
                                     ,
                                     "key":"state",
+                                    "customConditional":"show = (row.country)",
                                     "type":"select",
                                     "input":true,
                                     "hideOnChildrenHidden":false
@@ -2343,7 +2343,7 @@
     ],
     "controller":"",
     "revisions":"current",
-    "_vid":20,
+    "_vid":21,
     "title":"EFR CSR Review",
     "display":"form",
     "access":[ {
@@ -2366,6 +2366,6 @@
     "path":"efrcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-02-02T14:54:05.531Z",
-    "modified":"2020-02-22T09:45:35.251Z",
+    "modified":"2020-02-24T10:16:15.245Z",
     "machineName":"testdivehub:efrCsr222"
 }

@@ -10,11 +10,19 @@
         "theme":"primary",
         "tableView":false,
         "components":[ {
-            "key":"panelPanel2",
-            "input":false,
-            "title":"Padi Validation",
+            "title":"PADI Validation",
             "theme":"primary",
+            "breadcrumbClickable":true,
+            "buttonSettings": {
+                "previous": true, "cancel": true, "next": true
+            }
+            ,
+            "collapsible":false,
             "tableView":false,
+            "key":"panelPanel2",
+            "type":"panel",
+            "label":"PAD Validation",
+            "input":false,
             "components":[ {
                 "label":"Columns",
                 "input":false,
@@ -301,8 +309,6 @@
                 "path":"panelPanel2Columns"
             }
             ],
-            "type":"panel",
-            "label":"Panel",
             "validate": {
                 "unique": false, "multiple": false
             }
@@ -836,10 +842,13 @@
                                 "tableView":true,
                                 "dataSrc":"custom",
                                 "data": {
+                                    "values":[ {}
+                                    ],
                                     "custom": "values = data['phoneList']"
                                 }
                                 ,
                                 "valueProperty":"dial_code",
+                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
                                 "selectThreshold":0.3,
                                 "validate": {
                                     "unique": false, "multiple": false
@@ -918,10 +927,13 @@
                                 "tableView":true,
                                 "dataSrc":"custom",
                                 "data": {
+                                    "values":[ {}
+                                    ],
                                     "custom": "values = data['phoneList']"
                                 }
                                 ,
                                 "valueProperty":"dial_code",
+                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
                                 "selectThreshold":0.3,
                                 "validate": {
                                     "unique": false, "multiple": false
@@ -2288,6 +2300,11 @@
                                     }
                                     ,
                                     "key":"state",
+                                    "conditional": {
+                                        "show": true, "when": "country"
+                                    }
+                                    ,
+                                    "customConditional":"show = (row.country)",
                                     "type":"select",
                                     "refreshOn":"country",
                                     "input":true,
@@ -2610,7 +2627,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":286,
+    "_vid":289,
     "title":"Emergency First Response Professional Liability",
     "display":"wizard",
     "access":[ {
@@ -2715,7 +2732,7 @@
     "path":"emergencyfirstresponseprofessionalliability",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-07-11T13:08:59.838Z",
-    "modified":"2020-02-22T09:45:05.943Z",
+    "modified":"2020-02-24T12:12:07.842Z",
     "machineName":"testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
     "controller":""
 }
