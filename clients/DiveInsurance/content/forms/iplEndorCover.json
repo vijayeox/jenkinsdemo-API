@@ -827,7 +827,7 @@
                         "key":"panelPanel3ColumnsColumns2",
                         "columns":[ {
                             "components":[ {
-                                "label":"Select",
+                                "label":"Country Code",
                                 "widget":"choicesjs",
                                 "placeholder":"Country Code",
                                 "hideLabel":true,
@@ -847,7 +847,7 @@
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"mobile_country_code",
+                                "key":"phone_country_code",
                                 "type":"select",
                                 "input":true,
                                 "lockKey":true,
@@ -873,7 +873,7 @@
                                     "required": true, "customMessage": "Please enter your phone number.", "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"mobile_phone_number",
+                                "key":"phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
                                 "lockKey":true,
@@ -882,9 +882,9 @@
                             }
                             ,
                             {
-                                "label":"mobile_phone",
-                                "calculateValue":"value = data.mobile_country_code + \"\" + data.mobile_phone_number",
-                                "key":"mobile_phone",
+                                "label":"phone",
+                                "calculateValue":"value = data.phone_country_code + \"\" + data.phone_number",
+                                "key":"phone",
                                 "type":"hidden",
                                 "input":true,
                                 "tableView":false,
@@ -2477,6 +2477,7 @@
                                             }
                                             ,
                                             "valueProperty":"country",
+                                            "template":"<span>{{ item.country }}</span>",
                                             "selectThreshold":0.3,
                                             "clearOnHide":false,
                                             "validate": {
@@ -2510,7 +2511,7 @@
                                                     "value": "", "label": ""
                                                 }
                                                 ],
-                                                "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n} else {\nvalues = \"\"\nvalue = \"\"\n}"
+                                                "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
                                             }
                                             ,
                                             "template":"<span>{{ item }}</span>",
@@ -2940,7 +2941,7 @@
     "path":"iplendorcover",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-08T15:16:11.935Z",
-    "modified":"2020-02-24T12:48:21.908Z",
+    "modified":"2020-02-24T17:26:52.219Z",
     "machineName":"testdivehub:iplEndorCover",
     "controller":""
 }

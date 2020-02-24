@@ -1166,8 +1166,7 @@
                 "widget":"choicesjs",
                 "placeholder":"Select a Policy Period",
                 "hideLabel":true,
-                "autofocus":true,
-                "tableView":true,
+                "tableView":false,
                 "dataSrc":"custom",
                 "data": {
                     "values":[ {
@@ -2121,27 +2120,27 @@
                             "hideLabel":true,
                             "tableView":false,
                             "values":[ {
-                                "value": "excessLiabilityCoverage9000000", "label": "Excess Liability Coverage ($9,000,000)", "shortcut": ""
+                                "label": "Excess Liability Coverage ($9,000,000)", "value": "excessLiabilityCoverage9000000", "shortcut": ""
                             }
                             ,
                             {
-                                "value": "excessLiabilityCoverage4000000", "label": "Excess Liability Coverage ($4,000,000)", "shortcut": ""
+                                "label": "Excess Liability Coverage ($4,000,000)", "value": "excessLiabilityCoverage4000000", "shortcut": ""
                             }
                             ,
                             {
-                                "value": "excessLiabilityCoverage3000000", "label": "Excess Liability Coverage ($3,000,000)", "shortcut": ""
+                                "label": "Excess Liability Coverage ($3,000,000)", "value": "excessLiabilityCoverage3000000", "shortcut": ""
                             }
                             ,
                             {
-                                "value": "excessLiabilityCoverage2000000", "label": "Excess Liability Coverage ($2,000,000)", "shortcut": ""
+                                "label": "Excess Liability Coverage ($2,000,000)", "value": "excessLiabilityCoverage2000000", "shortcut": ""
                             }
                             ,
                             {
-                                "value": "excessLiabilityCoverage1000000", "label": "Excess Liability Coverage ($1,000,000)", "shortcut": ""
+                                "label": "Excess Liability Coverage ($1,000,000)", "value": "excessLiabilityCoverage1000000", "shortcut": ""
                             }
                             ,
                             {
-                                "value": "excessLiabilityCoverageDeclined", "label": "Excess Liability Coverage - Declined", "shortcut": ""
+                                "label": "Excess Liability Coverage - Declined", "value": "excessLiabilityCoverageDeclined", "shortcut": ""
                             }
                             ],
                             "validate": {
@@ -2155,7 +2154,6 @@
                             ,
                             "type":"radio",
                             "input":true,
-                            "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
                         ],
@@ -3834,7 +3832,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":556,
+    "_vid":559,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3856,7 +3854,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-24T16:02:30.785Z",
+    "modified":"2020-02-24T17:15:24.133Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }
