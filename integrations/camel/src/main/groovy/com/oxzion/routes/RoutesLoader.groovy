@@ -14,7 +14,7 @@ class RoutesLoader extends RouteBuilder{
     @Override
     void configure() throws Exception {
         println "In RoutesBuilder"
-        def routes = loadRoutes()
+        def routes = loadRoutes(null)
         routes = routes.routes
         CamelContext context = new DefaultCamelContext()
         context.addRoutes(new RouteBuilder() {
@@ -54,8 +54,8 @@ class RoutesLoader extends RouteBuilder{
         context.start()
     }
 
-    
-    def loadRoutes(){
+    //flag is added for test : Junit
+    def loadRoutes(String flag){
         String routeLocation = System.getProperty('ROUTE_CONFIG')
         println "routeLocation - ${routeLocation}"
         URL url
@@ -67,11 +67,19 @@ class RoutesLoader extends RouteBuilder{
             if(routeFile.exists()){
                 url = new URL("file:///${routeFile.absolutePath}")
             }
+        }else{
+            //load the routes from Externalise route file
+            if(flag==null){
+                url =  new URL(new URL("file:"), "./../camel/testReload/CamelRoutes.groovy")
+            }else{
+                //test file
+                url = new URL(new URL("file:"), "./../camel/testReload/camelRoutesTest.groovy")
+            }
         }
-        println "url - ${url}"
+            println "url - ${url}"
         if(!url){
             url = RoutesLoader.class.classLoader.getResource("Routes.groovy")
-            
+
         }
         println url
         return new ConfigSlurper().parse(url)
