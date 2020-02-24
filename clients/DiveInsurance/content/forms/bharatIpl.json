@@ -79,11 +79,19 @@
         }
         ,
         {
-            "key":"panelPanel2",
-            "input":false,
-            "title":"Padi Validation",
+            "title":"PADI Validation",
             "theme":"primary",
+            "breadcrumbClickable":true,
+            "buttonSettings": {
+                "previous": true, "cancel": true, "next": true
+            }
+            ,
+            "collapsible":false,
             "tableView":false,
+            "key":"panelPanel2",
+            "type":"panel",
+            "label":"PAD Validation",
+            "input":false,
             "components":[ {
                 "label":"Columns",
                 "input":false,
@@ -382,8 +390,6 @@
                 }
             }
             ],
-            "type":"panel",
-            "label":"Panel",
             "validate": {
                 "unique": false, "multiple": false
             }
@@ -402,20 +408,21 @@
                 "key":"panelColumns2",
                 "columns":[ {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
                         "label":"First Name",
-                        "key":"firstname",
                         "placeholder":"First Name",
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "disabled":true,
+                        "tableView":false,
+                        "clearOnHide":false,
                         "validate": {
                             "customMessage": "Please enter your first name.", "unique": false, "multiple": false
                         }
                         ,
+                        "key":"firstname",
                         "type":"textfield",
-                        "hideLabel":true,
+                        "input":true,
                         "lockKey":true,
-                        "disabled":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -427,20 +434,21 @@
                 ,
                 {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
                         "label":"Initial",
-                        "key":"initial",
                         "placeholder":"Initial",
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "disabled":true,
+                        "tableView":false,
+                        "clearOnHide":false,
                         "validate": {
                             "customMessage": "Please enter your initial.", "unique": false, "multiple": false
                         }
                         ,
+                        "key":"initial",
                         "type":"textfield",
-                        "hideLabel":true,
+                        "input":true,
                         "lockKey":true,
-                        "disabled":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -452,20 +460,21 @@
                 ,
                 {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
                         "label":"Last Name",
-                        "key":"lastname",
                         "placeholder":"Last Name",
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "disabled":true,
+                        "tableView":false,
+                        "clearOnHide":false,
                         "validate": {
                             "customMessage": "Please enter your last name.", "unique": false, "multiple": false
                         }
                         ,
+                        "key":"lastname",
                         "type":"textfield",
-                        "hideLabel":true,
+                        "input":true,
                         "lockKey":true,
-                        "disabled":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -497,18 +506,19 @@
                     "key":"panelPanelColumns",
                     "columns":[ {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
                             "label":"Address 1",
-                            "key":"address1",
                             "placeholder":"Address 1",
+                            "hideLabel":true,
                             "spellcheck":true,
+                            "tableView":true,
                             "validate": {
-                                "customMessage": "Please enter your mailing address.", "unique": false, "multiple": false, "required": true
+                                "required": true, "customMessage": "Please enter your mailing address.", "unique": false, "multiple": false
                             }
                             ,
+                            "errorLabel":"Please enter your mailing address.",
+                            "key":"address1",
                             "type":"textfield",
-                            "hideLabel":true,
+                            "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
@@ -538,18 +548,18 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
                             "label":"City",
-                            "key":"city",
                             "placeholder":"City",
+                            "hideLabel":true,
                             "spellcheck":true,
+                            "tableView":true,
                             "validate": {
-                                "customMessage": "Please enter your city.", "unique": false, "multiple": false, "required": true
+                                "required": true, "customMessage": "Please enter your city.", "unique": false, "multiple": false
                             }
                             ,
+                            "key":"city",
                             "type":"textfield",
-                            "hideLabel":true,
+                            "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
@@ -579,7 +589,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Additional Insured Country",
+                            "label":"Country",
                             "widget":"choicesjs",
                             "placeholder":"Country",
                             "hideLabel":true,
@@ -771,7 +781,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"physical country",
+                            "label":"Mailing Country",
                             "widget":"choicesjs",
                             "placeholder":"Country",
                             "hideLabel":true,
@@ -802,7 +812,7 @@
                         }
                         ,
                         {
-                            "label":"Select",
+                            "label":"Mailing State",
                             "widget":"choicesjs",
                             "placeholder":"State",
                             "hideLabel":true,
@@ -863,38 +873,183 @@
                 "key":"panelPanel3Columns",
                 "columns":[ {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
-                        "label":"Home Phone",
-                        "key":"home_phone",
-                        "placeholder":"Home Phone",
-                        "validate": {
-                            "required": true, "customMessage": "Please enter your home phone number.", "unique": false, "multiple": false
+                        "label":"Columns",
+                        "columns":[ {
+                            "components":[ {
+                                "label":"Country Code",
+                                "widget":"choicesjs",
+                                "placeholder":"Country Code",
+                                "hideLabel":true,
+                                "tableView":true,
+                                "dataSrc":"custom",
+                                "data": {
+                                    "values":[ {}
+                                    ],
+                                    "custom": "values = data['phoneList']"
+                                }
+                                ,
+                                "valueProperty":"dial_code",
+                                "dataType":"auto",
+                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "selectThreshold":0.3,
+                                "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "allowCalculateOverride":true,
+                                "validate": {
+                                    "unique": false, "multiple": false
+                                }
+                                ,
+                                "key":"home_country_code",
+                                "type":"select",
+                                "input":true,
+                                "hideOnChildrenHidden":false
+                            }
+                            ],
+                            "width":3,
+                            "offset":0,
+                            "push":0,
+                            "pull":0
                         }
                         ,
-                        "type":"phoneNumber",
-                        "lockKey":true,
-                        "hideLabel":true,
-                        "errorLabel":"Please enter a valid phone number",
-                        "hideOnChildrenHidden":false
+                        {
+                            "components":[ {
+                                "label":"Home Phone",
+                                "placeholder":"Home Phone",
+                                "hideLabel":true,
+                                "spellcheck":true,
+                                "tableView":true,
+                                "validateOn":"blur",
+                                "validate": {
+                                    "required": true, "customMessage": "Please enter a valid phone number", "unique": false, "multiple": false
+                                }
+                                ,
+                                "key":"home_phone_number",
+                                "type":"phoneNumber",
+                                "input":true,
+                                "lockKey":true,
+                                "hideOnChildrenHidden":false
+                            }
+                            ,
+                            {
+                                "label":"home_phone",
+                                "calculateValue":"value = data.home_country_code + \"\"+ data.home_phone_number",
+                                "key":"home_phone",
+                                "type":"hidden",
+                                "input":true,
+                                "tableView":false,
+                                "validate": {
+                                    "unique": false, "multiple": false
+                                }
+                                ,
+                                "hideOnChildrenHidden":false
+                            }
+                            ],
+                            "width":9,
+                            "offset":0,
+                            "push":0,
+                            "pull":0
+                        }
+                        ],
+                        "tableView":false,
+                        "key":"columns3",
+                        "type":"columns",
+                        "input":false,
+                        "validate": {
+                            "unique": false, "multiple": false
+                        }
+                        ,
+                        "path":"columns3",
+                        "hideLabel":true
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
-                        "label":"Mobile Phone",
-                        "key":"phone",
-                        "placeholder":"Mobile Phone",
-                        "clearOnHide":false,
-                        "validate": {
-                            "required": true, "unique": false, "multiple": false
+                        "label":"Columns",
+                        "columns":[ {
+                            "components":[ {
+                                "label":"Country Code",
+                                "widget":"choicesjs",
+                                "placeholder":"Country Code",
+                                "hideLabel":true,
+                                "tableView":true,
+                                "dataSrc":"custom",
+                                "data": {
+                                    "values":[ {
+                                        "label": "", "value": ""
+                                    }
+                                    ],
+                                    "custom":"values = data['phoneList']"
+                                }
+                                ,
+                                "valueProperty":"dial_code",
+                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "selectThreshold":0.3,
+                                "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "allowCalculateOverride":true,
+                                "validate": {
+                                    "unique": false, "multiple": false
+                                }
+                                ,
+                                "key":"phone_country_code",
+                                "type":"select",
+                                "input":true,
+                                "hideOnChildrenHidden":false
+                            }
+                            ],
+                            "width":3,
+                            "offset":0,
+                            "push":0,
+                            "pull":0
                         }
                         ,
-                        "type":"phoneNumber",
-                        "lockKey":true,
-                        "hideLabel":true,
-                        "errorLabel":"Please enter a valid phone number",
-                        "hideOnChildrenHidden":false
+                        {
+                            "components":[ {
+                                "label":"Mobile Phone",
+                                "placeholder":"Mobile Phone",
+                                "hideLabel":true,
+                                "spellcheck":true,
+                                "tableView":true,
+                                "clearOnHide":false,
+                                "validateOn":"blur",
+                                "validate": {
+                                    "required": true, "customMessage": "Please enter a valid phone number", "unique": false, "multiple": false
+                                }
+                                ,
+                                "key":"phone_number",
+                                "type":"phoneNumber",
+                                "input":true,
+                                "lockKey":true,
+                                "hideOnChildrenHidden":false
+                            }
+                            ,
+                            {
+                                "label":"mobile_phone",
+                                "calculateValue":"value = data.phone_country_code + \"\" + data.phone_number",
+                                "key":"phone",
+                                "type":"hidden",
+                                "input":true,
+                                "tableView":false,
+                                "validate": {
+                                    "unique": false, "multiple": false
+                                }
+                                ,
+                                "hideOnChildrenHidden":false
+                            }
+                            ],
+                            "width":9,
+                            "offset":0,
+                            "push":0,
+                            "pull":0
+                        }
+                        ],
+                        "tableView":false,
+                        "key":"columns4",
+                        "type":"columns",
+                        "input":false,
+                        "validate": {
+                            "unique": false, "multiple": false
+                        }
+                        ,
+                        "path":"columns4",
+                        "hideLabel":true
                     }
                     ],
                     "width":6,
@@ -922,19 +1077,21 @@
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
                         "label":"Email",
-                        "key":"email",
                         "placeholder":"Email",
-                        "type":"email",
+                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "hideLabel":true,
+                        "spellcheck":true,
+                        "tableView":true,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "customMessage": "Please enter your email address in format: yourname@example.com", "unique": false, "multiple": false
                         }
                         ,
-                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "key":"email",
+                        "type":"email",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -949,6 +1106,8 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
+                ,
+                "path":"panelPanel3Columns"
             }
             ],
             "type":"panel",
@@ -995,7 +1154,7 @@
             "theme":"primary",
             "tableView":false,
             "components":[ {
-                "label":"Select a Policy Period",
+                "label":"Policy Period",
                 "widget":"choicesjs",
                 "placeholder":"Select a Policy Period",
                 "hideLabel":true,
@@ -1012,14 +1171,14 @@
                 ,
                 "selectThreshold":0.3,
                 "clearOnHide":false,
+                "validateOn":"blur",
                 "validate": {
-                    "required": true, "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please select a policy period from the list", "unique": false, "multiple": false
                 }
                 ,
-                "errorLabel":"Please select a policy period from the list",
                 "key":"start_date_range",
                 "properties": {
-                    "delegate": "RateCard"
+                    "delegate": "RateCard", "post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
                 }
                 ,
                 "type":"select",
@@ -1028,18 +1187,14 @@
             }
             ,
             {
-                "input":true,
-                "tableView":true,
-                "key":"start_date",
-                "label":"start_date",
-                "type":"hidden",
-                "properties": {
+                "label": "start_date", "defaultValue": "null", "calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");", "key":"start_date", "properties": {
                     "data_type": "Date"
                 }
                 ,
+                "type":"hidden",
+                "input":true,
+                "tableView":true,
                 "lockKey":true,
-                "calculateValue":"console.log(44444);\nconsole.log(data['start_date']);\nvar startRange = moment(data['start_date_range'].value);\nconsole.log(22222);\nconsole.log(startRange);\nvar today = moment();\nconsole.log(121);\nconsole.log(today);\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");\nconsole.log(6666);\nconsole.log(data['start_date']);",
-                "defaultValue":"null",
                 "validate": {
                     "unique": false, "multiple": false
                 }
@@ -1071,11 +1226,22 @@
         }
         ,
         {
-            "key":"page3Panel",
-            "input":false,
             "title":"Coverage and Options",
             "theme":"primary",
+            "breadcrumb":"none",
+            "breadcrumbClickable":true,
+            "buttonSettings": {
+                "previous": true, "cancel": true, "next": true
+            }
+            ,
+            "tooltip":"Please select the coverage and options from the list below",
+            "collapsible":false,
             "tableView":false,
+            "key":"coverageOptions",
+            "customConditional":"show = data['start_date_range'].value ? true : false;",
+            "type":"panel",
+            "label":"Coverage and Options",
+            "input":false,
             "components":[ {
                 "clearOnHide":false,
                 "key":"page3PanelWell",
@@ -1087,11 +1253,11 @@
                     "key":"page3Columns2",
                     "columns":[ {
                         "components":[ {
-                            "label":"Radio",
+                            "label":"Career Coverage",
                             "optionsLabelPosition":"right",
                             "inline":false,
                             "hideLabel":true,
-                            "tableView":true,
+                            "tableView":false,
                             "values":[ {
                                 "value": "instructor", "label": "Instructor", "shortcut": ""
                             }
@@ -1140,6 +1306,9 @@
                                 "value": "internationalDivemasterAssistantInstructorAssistingOnly", "label": "International Divemaster/Assistant Instructor Assisting Only (2)(3)", "shortcut": ""
                             }
                             ],
+                            "dataType":"auto",
+                            "redrawOn":"start_date_range",
+                            "clearOnHide":false,
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1154,7 +1323,8 @@
                             "lockKey":true,
                             "labelWidth":30,
                             "labelMargin":3,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "refreshOn":"start_date_range"
                         }
                         ],
                         "width":8,
@@ -1165,35 +1335,41 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
-                            "inputType":"number",
-                            "label":"Number",
-                            "key":"careerCoveragePrice",
-                            "placeholder":"Amount ($)",
+                            "label":"Career Coverage Price",
+                            "placeholder":"0.00",
                             "prefix":"$",
+                            "hideLabel":true,
+                            "mask":false,
+                            "spellcheck":true,
+                            "disabled":true,
+                            "tableView":false,
                             "defaultValue":"0.00",
+                            "delimiter":false,
+                            "requireDecimal":true,
+                            "inputFormat":"plain",
+                            "redrawOn":"careerCoverage",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
                             }
                             ,
+                            "key":"careerCoveragePrice",
                             "type":"number",
-                            "hideLabel":true,
-                            "lockKey":true,
                             "decimalLimit":2,
-                            "disabled":true,
-                            "requireDecimal":true,
+                            "input":true,
+                            "inputType":"number",
+                            "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
                         ,
                         {
+                            "label":"instructor",
+                            "defaultValue":"0",
+                            "redrawOn":"start_date_range",
+                            "key":"instructor",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"instructor",
-                            "label":"instructor",
-                            "type":"hidden",
-                            "defaultValue":"0",
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
                             "validate": {
@@ -1202,12 +1378,13 @@
                         }
                         ,
                         {
+                            "label":"assistantInstructor",
+                            "defaultValue":"0",
+                            "redrawOn":"start_date_range",
+                            "key":"assistantInstructor",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"assistantInstructor",
-                            "label":"assistantInstructor",
-                            "type":"hidden",
-                            "defaultValue":"0",
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
                             "validate": {
@@ -1403,10 +1580,11 @@
                     "key":"page3PanelColumns",
                     "columns":[ {
                         "components":[ {
-                            "input":true,
+                            "label":"TechRec Coverage",
+                            "optionsLabelPosition":"right",
+                            "inline":false,
+                            "hideLabel":true,
                             "tableView":true,
-                            "label":"Radio",
-                            "key":"tecRecEndorsment",
                             "values":[ {
                                 "value": "accepted", "label": "With TecRec Endorsement for selection above (5)", "shortcut": ""
                             }
@@ -1415,14 +1593,15 @@
                                 "value": "declined", "label": "With TecRec Endorsement for selection above - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
                             ,
+                            "key":"tecRecEndorsment",
                             "type":"radio",
-                            "optionsLabelPosition":"right",
+                            "input":true,
                             "lockKey":true,
-                            "hideLabel":true,
                             "hideOnChildrenHidden":false
                         }
                         ],
@@ -1434,26 +1613,33 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
-                            "inputType":"number",
-                            "label":"Number",
-                            "key":"techRecPrice",
-                            "placeholder":"Amount($)",
+                            "label":"TecRech Price",
+                            "placeholder":"0.00",
                             "prefix":"$",
-                            "defaultValue":"0.00",
-                            "protected":true,
+                            "hideLabel":true,
+                            "mask":false,
+                            "spellcheck":true,
+                            "disabled":true,
+                            "tableView":true,
+                            "defaultValue":0,
                             "persistent":false,
+                            "delimiter":false,
+                            "requireDecimal":false,
+                            "inputFormat":"plain",
+                            "protected":true,
+                            "redrawOn":"tecRecEndorsment",
                             "clearOnHide":false,
+                            "customDefaultValue":"value = 0.00",
                             "validate": {
                                 "multiple": false, "unique": false
                             }
                             ,
+                            "key":"techRecPrice",
                             "type":"number",
-                            "hideLabel":true,
-                            "lockKey":true,
                             "decimalLimit":2,
-                            "disabled":true,
+                            "input":true,
+                            "inputType":"number",
+                            "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
                         ,
@@ -1522,7 +1708,7 @@
                     "key":"page3PanelColumns2",
                     "columns":[ {
                         "components":[ {
-                            "label":"Radio",
+                            "label":"ScubaFit Coverage",
                             "optionsLabelPosition":"right",
                             "inline":false,
                             "hideLabel":true,
@@ -1535,6 +1721,7 @@
                                 "value": "scubaFitInstructorDeclined", "label": "ScubaFit Instructor - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1558,25 +1745,30 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
-                            "inputType":"number",
-                            "label":"Number",
-                            "key":"scubaFitPrice",
-                            "placeholder":"Amount ($)",
+                            "label":"ScubaFit Price",
+                            "placeholder":"0.00",
                             "prefix":"$",
+                            "hideLabel":true,
+                            "mask":false,
+                            "spellcheck":true,
+                            "disabled":true,
+                            "tableView":true,
                             "defaultValue":"0.00",
+                            "delimiter":false,
+                            "requireDecimal":true,
+                            "inputFormat":"plain",
+                            "redrawOn":"scubaFit",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
                             }
                             ,
+                            "key":"scubaFitPrice",
                             "type":"number",
-                            "hideLabel":true,
-                            "lockKey":true,
                             "decimalLimit":2,
-                            "disabled":true,
-                            "requireDecimal":true,
+                            "input":true,
+                            "inputType":"number",
+                            "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
                         ,
@@ -1641,7 +1833,7 @@
                     "key":"page3PanelColumns3",
                     "columns":[ {
                         "components":[ {
-                            "label":"Radio",
+                            "label":"Cylinder Coverage",
                             "optionsLabelPosition":"right",
                             "inline":false,
                             "hideLabel":true,
@@ -1662,6 +1854,7 @@
                                 "value": "cylinderInspectorOrInstructorDeclined", "label": "Cylinder Inspector Or Instructor - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1685,25 +1878,30 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
-                            "inputType":"number",
-                            "label":"Number",
-                            "key":"cylinderPrice",
-                            "placeholder":"Amount ($)",
+                            "label":"Cylinder Price",
+                            "placeholder":"0.00",
                             "prefix":"$",
+                            "hideLabel":true,
+                            "mask":false,
+                            "spellcheck":true,
+                            "disabled":true,
+                            "tableView":true,
                             "defaultValue":"0.00",
+                            "delimiter":false,
+                            "requireDecimal":true,
+                            "inputFormat":"plain",
+                            "redrawOn":"cylinder",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
                             }
                             ,
+                            "key":"cylinderPrice",
                             "type":"number",
-                            "lockKey":true,
-                            "hideLabel":true,
                             "decimalLimit":2,
-                            "requireDecimal":true,
-                            "disabled":true,
+                            "input":true,
+                            "inputType":"number",
+                            "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
                         ,
@@ -1795,10 +1993,11 @@
                     "key":"page3PanelColumns4",
                     "columns":[ {
                         "components":[ {
-                            "input":true,
+                            "label":"Equipment Liability Coverage",
+                            "optionsLabelPosition":"right",
+                            "inline":false,
+                            "hideLabel":true,
                             "tableView":true,
-                            "label":"Radio",
-                            "key":"equipment",
                             "values":[ {
                                 "value": "equipmentLiabilityCoverage", "label": "Equipment Liability Coverage", "shortcut": ""
                             }
@@ -1807,17 +2006,18 @@
                                 "value": "equipmentLiabilityCoverageDeclined", "label": "Equipment Liability Coverage - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
                             ,
-                            "type":"radio",
-                            "optionsLabelPosition":"right",
+                            "key":"equipment",
                             "properties": {
                                 "target": "equipmentPrice"
                             }
                             ,
-                            "hideLabel":true,
+                            "type":"radio",
+                            "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
@@ -1830,25 +2030,30 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
-                            "inputType":"number",
-                            "label":"Number",
-                            "key":"equipmentPrice",
-                            "placeholder":"Amount ($)",
+                            "label":"Equipment Price",
+                            "placeholder":"0.00",
                             "prefix":"$",
+                            "hideLabel":true,
+                            "mask":false,
+                            "spellcheck":true,
+                            "disabled":true,
+                            "tableView":true,
                             "defaultValue":"0.00",
+                            "delimiter":false,
+                            "requireDecimal":true,
+                            "inputFormat":"plain",
+                            "redrawOn":"equipment",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
                             }
                             ,
+                            "key":"equipmentPrice",
                             "type":"number",
-                            "lockKey":true,
-                            "hideLabel":true,
                             "decimalLimit":2,
-                            "disabled":true,
-                            "requireDecimal":true,
+                            "input":true,
+                            "inputType":"number",
+                            "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
                         ,
@@ -1913,10 +2118,11 @@
                     "key":"page3Columns",
                     "columns":[ {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
-                            "label":"Radio",
-                            "key":"excessLiability",
+                            "label":"Excess Liability",
+                            "optionsLabelPosition":"right",
+                            "inline":false,
+                            "hideLabel":true,
+                            "tableView":false,
                             "values":[ {
                                 "value": "excessLiabilityCoverage9000000", "label": "Excess Liability Coverage ($9,000,000)", "shortcut": ""
                             }
@@ -1941,17 +2147,18 @@
                                 "value": "excessLiabilityCoverageDeclined", "label": "Excess Liability Coverage - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
                             ,
-                            "type":"radio",
-                            "optionsLabelPosition":"right",
+                            "key":"excessLiability",
                             "properties": {
                                 "target": "excessLiabilityPrice"
                             }
                             ,
-                            "hideLabel":true,
+                            "type":"radio",
+                            "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
@@ -1964,25 +2171,30 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
-                            "inputType":"number",
-                            "label":"Number",
-                            "key":"excessLiabilityPrice",
-                            "placeholder":"Amount ($)",
+                            "label":"Excess Liability",
+                            "placeholder":"0.00",
                             "prefix":"$",
+                            "hideLabel":true,
+                            "mask":false,
+                            "spellcheck":true,
+                            "disabled":true,
+                            "tableView":true,
                             "defaultValue":"0.00",
+                            "delimiter":false,
+                            "requireDecimal":true,
+                            "inputFormat":"plain",
+                            "redrawOn":"excessLiability",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
                             }
                             ,
+                            "key":"excessLiabilityPrice",
                             "type":"number",
-                            "lockKey":true,
-                            "hideLabel":true,
                             "decimalLimit":2,
-                            "disabled":true,
-                            "requireDecimal":true,
+                            "input":true,
+                            "inputType":"number",
+                            "lockKey":true,
                             "hideOnChildrenHidden":false
                         }
                         ,
@@ -2138,25 +2350,16 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "inputType":"number",
-                                    "label":"Number",
-                                    "key":"amount",
-                                    "placeholder":"Total",
-                                    "prefix":"$",
-                                    "defaultValue":"0.00",
-                                    "clearOnHide":false,
-                                    "validate": {
+                                    "label": "Total Price", "placeholder": "0.00", "prefix": "$", "hideLabel": true, "mask": false, "spellcheck": true, "tableView": true, "defaultValue": "0.00", "delimiter": false, "requireDecimal": true, "inputFormat": "plain", "clearOnHide": false, "calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);", "validate": {
                                         "multiple": false, "unique": false
                                     }
                                     ,
+                                    "key":"amount",
                                     "type":"number",
-                                    "hideLabel":true,
-                                    "calculateValue":"value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);",
-                                    "lockKey":true,
                                     "decimalLimit":2,
-                                    "requireDecimal":true,
+                                    "input":true,
+                                    "inputType":"number",
+                                    "lockKey":true,
                                     "hideOnChildrenHidden":false
                                 }
                                 ],
@@ -2239,15 +2442,9 @@
                 "path":"page3PanelPanel"
             }
             ],
-            "type":"panel",
-            "breadcrumb":"none",
-            "conditional": {
-                "show": "true", "when": "start_date"
+            "validate": {
+                "unique": false, "multiple": false
             }
-            ,
-            "tooltip":"Please select the coverage and options from the list below",
-            "customConditional":"console.log(23456);\nconsole.log(data['start_date_range'].value);\nshow = data['start_date_range'].value ? true : false;\nconsole.log(show);",
-            "label":"Panel"
         }
         ,
         {
@@ -2307,6 +2504,7 @@
                     "required": true, "customMessage": "Please accept these declarations", "unique": false, "multiple": false
                 }
                 ,
+                "errorLabel":"Please accept these declarations",
                 "key":"page3Panel4Bycheckingthisbox",
                 "type":"checkbox",
                 "input":true,
@@ -2548,18 +2746,19 @@
                                 "components":[ {
                                     "label":"Name of person injured",
                                     "placeholder":"Name of person injured",
+                                    "hideLabel":true,
                                     "spellcheck":true,
                                     "tableView":true,
+                                    "validateOn":"blur",
                                     "validate": {
-                                        "unique": false, "multiple": false
+                                        "required": true, "unique": false, "multiple": false
                                     }
                                     ,
                                     "key":"nameofpersoninjured",
                                     "type":"textfield",
                                     "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":4,
@@ -2570,34 +2769,34 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Date of incident",
-                                    "key":"page4Panel2ColumnsDateTime",
-                                    "placeholder":"Date of incident",
                                     "format":"yyyy-MM-dd",
-                                    "enableTime":false,
+                                    "placeholder":"Date of incident",
+                                    "hideLabel":true,
+                                    "tableView":true,
                                     "datePicker": {
                                         "datepickerMode": "day"
                                     }
                                     ,
+                                    "enableTime":false,
                                     "timePicker": {
                                         "showMeridian": false
                                     }
                                     ,
                                     "validate": {
-                                        "unique": false, "multiple": false
+                                        "required": true, "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"page4Panel2ColumnsDateTime",
                                     "type":"datetime",
+                                    "input":true,
                                     "lockKey":true,
                                     "hideOnChildrenHidden":false,
                                     "widget": {
                                         "type": "calendar", "displayInTimezone": "viewer", "language": "en", "useLocaleSettings": false, "allowInput": true, "mode": "single", "enableTime": false, "noCalendar": false, "format": "yyyy-MM-dd", "hourIncrement": 1, "minuteIncrement": 1, "time_24hr": true, "minDate": null, "maxDate": null
                                     }
                                     ,
-                                    "suffix":"<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-                                    "hideLabel":true
+                                    "suffix":"<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
                                 }
                                 ],
                                 "width":4,
@@ -2608,20 +2807,20 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Location of incident",
-                                    "key":"page4Panel2ColumnsLocationofincident",
                                     "placeholder":"Location of incident",
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"locationofincident",
                                     "type":"textfield",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":4,
@@ -2645,21 +2844,22 @@
                             "label":"Columns",
                             "columns":[ {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "label":"Text Area",
-                                    "key":"page4Panel2ColumnsTextArea",
+                                    "label":"Report Details",
                                     "placeholder":"Explain how the report can be obtained",
+                                    "autoExpand":false,
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
+                                    "inputFormat":"plain",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"reportcanbeobtained",
                                     "type":"textarea",
-                                    "inputFormat":"plain",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":6,
@@ -2670,21 +2870,22 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "label":"BriefSummary",
-                                    "key":"page4Panel2ColumnsBriefSummary",
+                                    "label":"Brief Summary",
                                     "placeholder":"Brief summary of situation or possible claim",
+                                    "autoExpand":false,
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
+                                    "inputFormat":"plain",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"page4Panel2ColumnsBriefSummary",
                                     "type":"textarea",
-                                    "inputFormat":"plain",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":6,
@@ -2909,17 +3110,18 @@
             }
             ,
             {
-                "input":true,
-                "tableView":true,
                 "label":"I Agree",
-                "dataGridLabel":false,
-                "key":"page4Panel2PanelIagree",
+                "tableView":true,
                 "defaultValue":false,
                 "validate": {
-                    "required": true, "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please Acknowledge the GDPR Agreement", "unique": false, "multiple": false
                 }
                 ,
+                "errorLabel":"Please Acknowledge the GDPR Agreement",
+                "key":"page4Panel2PanelIagree",
                 "type":"checkbox",
+                "input":true,
+                "dataGridLabel":false,
                 "lockKey":true
             }
             ],
@@ -2981,29 +3183,27 @@
                         "key":"page5ColumnsPanel2Well",
                         "input":false,
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
                             "label":"Please choose one of these options",
-                            "key":"AdditionalInsuredOption",
+                            "optionsLabelPosition":"right",
+                            "inline":false,
+                            "tableView":true,
+                            "defaultValue":"noAdditionalInsureds",
                             "values":[ {
-                                "value": "asPerExistingPolicyIfRenewing", "label": "As per existing policy (if renewing)", "shortcut": ""
-                            }
-                            ,
-                            {
-                                "value": "newListOfAdditionalInsureds", "label": "New list of Additional Insureds", "shortcut": ""
+                                "value": "newListOfAdditionalInsureds", "label": "Add Additional Insureds", "shortcut": ""
                             }
                             ,
                             {
                                 "value": "noAdditionalInsureds", "label": "No Additional Insureds", "shortcut": ""
                             }
                             ],
-                            "defaultValue":"noAdditionalInsureds",
                             "validate": {
-                                "required": true, "unique": false, "multiple": false
+                                "required": true, "customMessage": "Please choose whether you would like to add Additional Insured", "unique": false, "multiple": false
                             }
                             ,
+                            "errorLabel":"Please choose whether you would like to add Additional Insured",
+                            "key":"AdditionalInsuredOption",
                             "type":"radio",
-                            "optionsLabelPosition":"right",
+                            "input":true,
                             "lockKey":true
                         }
                         ],
@@ -3023,6 +3223,22 @@
                         "theme":"primary",
                         "tableView":false,
                         "components":[ {
+                            "label":"Data Grid",
+                            "disableAddingRemovingRows":false,
+                            "reorder":false,
+                            "addAnother":"Add More",
+                            "addAnotherPosition":"bottom",
+                            "defaultOpen":false,
+                            "layoutFixed":false,
+                            "enableRowGroups":false,
+                            "hideLabel":true,
+                            "tableView":true,
+                            "validate": {
+                                "minLength": 0, "unique": false, "multiple": false
+                            }
+                            ,
+                            "key":"additionalInsured",
+                            "type":"datagrid",
                             "input":true,
                             "components":[ {
                                 "title":"  ",
@@ -3368,20 +3584,9 @@
                                 }
                             }
                             ],
-                            "tableView":true,
-                            "label":"Data Grid",
-                            "key":"additionalInsured",
-                            "type":"datagrid",
-                            "addAnotherPosition":"bottom",
-                            "hideLabel":true,
                             "lockKey":true,
-                            "validate": {
-                                "minLength": 0, "unique": false, "multiple": false
-                            }
-                            ,
                             "condensed":true,
-                            "hover":false,
-                            "addAnother":"Add More"
+                            "hover":false
                         }
                         ],
                         "type":"panel",
@@ -3629,7 +3834,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":516,
+    "_vid":551,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3651,7 +3856,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-14T13:56:28.083Z",
+    "modified":"2020-02-24T12:56:06.117Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

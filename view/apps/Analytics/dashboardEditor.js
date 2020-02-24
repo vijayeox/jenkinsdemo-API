@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Overlay, Tooltip, Button } from 'react-bootstrap';
 import { dashboardEditor as section } from './metadata.json';
 import JavascriptLoader from './components/javascriptLoader';
+
 import { WidgetRenderer, DashboardEditorFilter } from './GUIComponents';
-import osjs from 'osjs';
 import Swal from "sweetalert2";
 import '../../gui/src/public/css/sweetalert.css';
 import './components/widget/editor/widgetEditorApp.scss';
@@ -27,7 +27,7 @@ class DashboardEditor extends React.Component {
         this.initialState = { ...this.state }
         this.renderedCharts = {};
         this.props.setTitle(section.title.en_EN);
-        this.restClient = osjs.make('oxzion/restClient');
+        this.restClient = this.core.make('oxzion/restClient');
         this.editor = null;
 
         let thisInstance = this;
@@ -67,10 +67,6 @@ class DashboardEditor extends React.Component {
     getJsLibraryList = () => {
         let self = this;
         return [
-            { 'name': 'amChartsCoreJs', 'url': '/apps/Analytics/script/core.js', 'onload': function () { }, 'onerror': function () { } },
-            { 'name': 'amChartsChartsJs', 'url': '/apps/Analytics/script/charts.js', 'onload': function () { }, 'onerror': function () { } },
-            { 'name': 'amChartsAnimatedJs', 'url': '/apps/Analytics/script/themes/animated.js', 'onload': function () { }, 'onerror': function () { } },
-            { 'name': 'amChartsKellyJs', 'url': '/apps/Analytics/script/themes/kelly.js', 'onload': function () { }, 'onerror': function () { } },
             { 'name': 'ckEditorJs', 'url': '/apps/Analytics/ckeditor/ckeditor.js', 'onload': function () { self.setupCkEditor(); }, 'onerror': function () { } }
         ];
     }
@@ -129,7 +125,9 @@ class DashboardEditor extends React.Component {
                 let elementId = event.data.elementId;
                 let chart = thisInstance.renderedCharts[elementId];
                 if (chart) {
-                    chart.dispose();
+                    if (chart.dispose) {
+                        chart.dispose();
+                    }
                     thisInstance.renderedCharts[elementId] = null;
                     console.info(`Disposed the chart of element id ${elementId} for downcasting it.`);
                 }
@@ -145,10 +143,18 @@ class DashboardEditor extends React.Component {
         //        });
         //    }
         //});
-        editor.on('oxzionWidgetChanged', function (event) {
+        editor.on('oxzionWidgetResized', function (event) {
             thisInstance.setState({
                 contentChanged: true
             });
+            try {
+                let elementId = event.data.elementId;
+                let widgetId = event.data.widgetId;
+                thisInstance.updateWidget(elementId, widgetId);
+            }
+            catch (error) {
+                console.error(error);
+            }
         });
         editor.on('change', function (event) {
             thisInstance.setState({
@@ -163,7 +169,6 @@ class DashboardEditor extends React.Component {
     }
 
     saveDashboard = () => {
-
         let params = {
             'content': this.editor.getData(),
             'version': this.state.version,
@@ -312,6 +317,15 @@ class DashboardEditor extends React.Component {
     }
 
     updateWidget = (elementId, widgetId) => {
+        //Dispose and cleanup if this chart had been painted previously.
+        let existingChart = this.renderedCharts[elementId];
+        if (existingChart) {
+            if (existingChart.dispose) {
+                existingChart.dispose();
+                this.renderedCharts[elementId] = null;
+            }
+        }
+
         let iframeElement = document.querySelector('iframe.cke_wysiwyg_frame');
         let iframeWindow = iframeElement.contentWindow;
         let iframeDocument = iframeWindow.document;
@@ -323,9 +337,11 @@ class DashboardEditor extends React.Component {
             }
         }
 
+        var thisInstance = this;
         this.doRestRequest(`analytics/widget/${widgetId}?data=true`, {}, 'get',
             function (response) {
-                WidgetRenderer.render(widgetElement, response.widget);
+                let chart = WidgetRenderer.render(widgetElement, response.widget);
+                thisInstance.renderedCharts[elementId] = chart;
             },
             function (response) {
                 Swal.fire({
@@ -336,8 +352,8 @@ class DashboardEditor extends React.Component {
             }
         );
     }
-    componentDidUpdate(prevProps) {
 
+    componentDidUpdate(prevProps) {
         if (this.props.dashboardId !== prevProps.dashboardId) {
             if (this.props.dashboardId === "") {
                 this.editor.setData("");
@@ -361,7 +377,9 @@ class DashboardEditor extends React.Component {
         for (let elementId in this.renderedCharts) {
             let chart = this.renderedCharts[elementId];
             if (chart) {
-                chart.dispose();
+                if (chart.dispose) {
+                    chart.dispose();
+                }
                 this.renderedCharts[elementId] = null;
             }
         }
@@ -371,12 +389,14 @@ class DashboardEditor extends React.Component {
         }
         JavascriptLoader.unloadScript(this.getJsLibraryList());
     }
+
     displayFilterDiv() {
         var element = document.getElementById("filter-form-container");
         element.classList.remove("disappear");
         document.getElementById("dashboard-container").classList.add("disappear")
         document.getElementById("dashboard-filter-btn").disabled = true
     }
+
     render() {
         return (
             <form className="dashboard-editor-form">
@@ -387,6 +407,7 @@ class DashboardEditor extends React.Component {
                 </div>
                 <div>
                     <DashboardEditorFilter 
+                     notif={this.props.notif}
                       dashboardId={this.props.dashboardId} 
                       dashboardVersion={this.state.version} 
                       core={this.core}

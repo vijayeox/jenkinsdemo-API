@@ -52,6 +52,10 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['owner_id'], 1);
     }
 
+    /*
+        TODO We need to create test cases for the create method to check if the ID is already passed. The create method has the update option also available
+    */
+
     //Testing to see if the Create Contact function is working as intended if all the value passed are correct.
 
     protected function setDefaultAsserts()
@@ -105,9 +109,9 @@ class ContactControllerTest extends ControllerTest
         $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US', 'owner_id' => 3];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/contact/10000', 'POST', null);
+        $this->dispatch('/contact/10000', 'PUT', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
         $this->assertEquals($content['status'], 'error');

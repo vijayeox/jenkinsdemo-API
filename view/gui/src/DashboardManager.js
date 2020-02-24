@@ -1,15 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { dashboard as section } from './metadata.json';
-import osjs from 'osjs';
+import { dashboard as section } from '../metadata.json';
 import Swal from "sweetalert2";
-import { OX_Grid, Notification, DashboardViewer } from './GUIComponents'
+import {Notification ,DashboardViewer} from '../../apps/Analytics/GUIComponents'
 import { Button, Form, Col, Row } from 'react-bootstrap'
-import Switch from 'react-switch'
 import '../../gui/src/public/css/sweetalert.css';
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
-import DashboardEditorModal from '../../gui/src/components/Modals/DashboardEditorModal'
-import DashboardEditor from "./dashboardEditor"
+import DashboardEditorModal from './components/Modals/DashboardEditorModal'
+import DashboardEditor from "../../apps/Analytics/dashboardEditor"
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -31,7 +29,7 @@ class Dashboard extends React.Component {
     this.proc = this.props.proc;
     this.refresh = React.createRef();
     this.notif = React.createRef();
-    this.restClient = osjs.make('oxzion/restClient');
+    this.restClient = this.core.make('oxzion/restClient');
     this.loader = null;
   }
   componentWillMount() {
@@ -48,7 +46,7 @@ class Dashboard extends React.Component {
     return rolesList;
   }
   dashboardOperation = (e, operation) => {
-    if (operation === "Delete" || operation === "Activate") {
+    if (operation === "Delete" || operation === "Activate" || operation ==="SetDefault") {
       this.setState({ showModal: true, modalContent: e, modalType: operation })
     }
     else {
@@ -64,12 +62,20 @@ class Dashboard extends React.Component {
     if (response.data.length >= 0) {
       that.setState({ dashList: response.data, uuid: '' })
       inputs["dashname"] !== undefined ?
+      //setting value of the dropdown after fetch
         response.data.map(dash => {
           dash.name === inputs["dashname"]["name"] ?
             (inputs["dashname"] = dash, that.setState({ inputs, dashList: response.data, uuid: dash.uuid }))
             : that.setState({ inputs: this.state.inputs })
         })
-        : null
+        :   
+        //setting default dashboard on page load
+        response.data.map(dash => {
+          dash.isdefault === "1" ?
+            (inputs["dashname"] = dash, that.setState({ inputs, dashList: response.data, uuid: dash.uuid }))
+            : null
+        })
+      
     }
   }
   setTitle(title) { }
@@ -82,6 +88,7 @@ class Dashboard extends React.Component {
     if (event.target.name === "dashname") {
       name = event.target.name
       value = JSON.parse(event.target.value)
+      
       var element = document.getElementById("dashboard-editor-div");
       element.classList.add("hide-dash-editor");
     }
@@ -138,10 +145,11 @@ class Dashboard extends React.Component {
                             as="select"
                             onChange={(e) => this.handleChange(e)}
                             name="dashname"
-                            value={this.state.inputs["dashname"] !== undefined && this.state.inputs["dashname"] !== {} ? JSON.stringify(this.state.inputs["dashname"])["name"] : -1}
+                            value={JSON.stringify(this.state.inputs["dashname"])!=undefined?JSON.stringify(this.state.inputs["dashname"]):""}
                           >
-                            <option disabled value={-1} key={-1} style={{ color: "grey" }}>Select Dashboard</option>
-                            {this.state.dashList !== undefined ? this.state.dashList.map((option, index) => (
+                            
+                            {this.state.dashList !== undefined ? 
+                              this.state.dashList.map((option, index) => (
                               <option key={option.uuid} value={JSON.stringify(option)}>{option.name}</option>
                             )) : null}
                           </Form.Control>
@@ -159,10 +167,24 @@ class Dashboard extends React.Component {
                         }
                         {
                           this.userProfile.key.privileges.MANAGE_DASHBOARD_DELETE ?
+                          this.state.inputs["dashname"]["isdefault"]=="0"?
                             <Button onClick={() => this.dashboardOperation(this.state.inputs["dashname"], "Delete")} title="Delete Dashboard">
                               <i class="fa fa-trash" aria-hidden="true"></i>
                             </Button>
                             : null
+                            :null
+                        }
+                         {this.userProfile.key.privileges.MANAGE_DASHBOARD_WRITE ?
+                         this.state.inputs["dashname"]!=undefined?this.state.inputs["dashname"]["isdefault"]=="0"?
+                           <Button 
+                              onClick={() => this.dashboardOperation(this.state.inputs["dashname"], "SetDefault")}
+                              title="Make current dashboard as default dashboard"
+                              >
+                            MAKE DEFAULT
+                          </Button>
+                          :<span style={{color:"white",fontWeight:"bolder"}}>Default Dashboard</span>
+                          : null
+                          :null
                         }
                       </>
                       : null
@@ -199,6 +221,7 @@ class Dashboard extends React.Component {
             <div id="dashboard-editor-div">
             <DashboardEditor
               args={this.core}
+              notif={this.notif}
               setTitle={this.setTitle}
               key={this.state.uuid}
               dashboardId={this.state.uuid}
@@ -221,10 +244,10 @@ class Dashboard extends React.Component {
           osjsCore={this.core}
           modalType={this.state.modalType}
           show={this.state.showModal}
-          onHide={() => { this.fetchDashboards(), this.setState({ showModal: false }) }}
+          onHide={() => {this.setState({ showModal: false }) }}
           content={this.state.modalContent}
           notification={this.notif}
-          refreshGrid={this.refresh}
+          refreshDashboard={()=>this.fetchDashboards()}
           deleteDashboard={() => this.deleteDashboard()}
         />
       </div>

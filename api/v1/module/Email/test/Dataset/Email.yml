@@ -1,46 +1,42 @@
 email_setting_user:
--
-    id: 1
+  - id: 1
     userid: 1
-    email: 'bharatg@myvamla.com'
-    password: 'hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9'
+    email: "bharatg@myvamla.com"
+    password: "hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9"
     token: '{"access_token":"f5af9f51-07e6-4332-8f1a-c0c11c1e3728","token_type":"bearer", "refresh_token":"f725f747-3a65-49f6-a231-3e8944ce464d","expires_in":631138518, "scope":"/activities/update/read-limited","name":"Sofia Garcia","orcid":"0000-0001-2345-6789"}'
-    host: 'myvamla.com'
+    host: "myvamla.com"
     isdefault: true
--
-    id: 2
+  - id: 2
     userid: 1
-    email: 'bharat@gmail.com'
-    password: 'hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9'
+    email: "bharat@gmail.com"
+    password: "hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9"
     token: '{"access_token":"f5af9f51-07e6-4332-8f1a-c0c11c1e3728","token_type":"bearer", "refresh_token":"f725f747-3a65-49f6-a231-3e8944ce464d","expires_in":631138518, "scope":"/activities/update/read-limited","name":"Sofia Garcia","orcid":"0000-0001-2345-6789"}'
-    host: 'gmail.com'
+    host: "gmail.com"
     isdefault: true
 ox_email_domain:
-  -
-    id: 1
-    name: 'myvamla.com'
-    imap_server: 'box3053.bluehost.com'
-    imap_port: '993'
-    imap_secure: 'ssl'
-    imap_short_login: '2'
-    smtp_server: 'box3053.bluehost.com'
-    smtp_port: '465'
-    smtp_secure: 'ssl'
-    smtp_short_login: 'short_name'
-    smtp_auth: 'auth'
-    smtp_use_php_mail: 'No'
-    created_by : 1
-  -
-    id: 2
-    name: 'gmail.com'
-    imap_server: 'imap.gmail.com'
-    imap_port: '993'
-    imap_secure: 'ssl'
-    imap_short_login: '2'
-    smtp_server: 'smtp.gmail.com'
-    smtp_port: '465'
-    smtp_secure: 'ssl'
-    smtp_short_login: 'short_name'
-    smtp_auth: 'auth'
-    smtp_use_php_mail: 'No'
-    created_by : 1
+  - id: 1
+    name: "myvamla.com"
+    imap_server: "box3053.bluehost.com"
+    imap_port: "993"
+    imap_secure: "ssl"
+    imap_short_login: "2"
+    smtp_server: "box3053.bluehost.com"
+    smtp_port: "465"
+    smtp_secure: "ssl"
+    smtp_short_login: "short_name"
+    smtp_auth: "auth"
+    smtp_use_php_mail: "No"
+    created_by: 1
+  - id: 2
+    name: "gmail.com"
+    imap_server: "imap.gmail.com"
+    imap_port: "993"
+    imap_secure: "ssl"
+    imap_short_login: "2"
+    smtp_server: "smtp.gmail.com"
+    smtp_port: "465"
+    smtp_secure: "ssl"
+    smtp_short_login: "short_name"
+    smtp_auth: "auth"
+    smtp_use_php_mail: "No"
+    created_by: 1
