@@ -410,6 +410,16 @@ class WorkflowService extends AbstractService
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
         $sortjoinQuery = "";
+        $appFilter = "ox_app.uuid ='" . $appId . "'";
+            
+        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId AND 
+                                ox_activity_instance_assignee.user_id is null)
+                                OR ox_activity_instance_assignee.user_id = $userId
+                                OR ox_activity_instance_assignee.group_id is null
+                                OR ox_activity_instance_assignee.id is null)
+                                AND $appFilter AND ox_activity_instance.status = 'In Progress'
+                                AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
+            
         if (!empty($filterParams)) {
             if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
                 $jsonParams = json_decode($filterParams['filter'], true);
@@ -434,14 +444,6 @@ class WorkflowService extends AbstractService
             $cnt = 1;
             $fieldParams = array();
             $tableFilters = "";
-            $appFilter = "ox_app.uuid ='" . $appId . "'";
-            $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId AND 
-                                ox_activity_instance_assignee.user_id is null)
-                                OR ox_activity_instance_assignee.user_id = $userId
-                                OR ox_activity_instance_assignee.group_id is null
-                                OR ox_activity_instance_assignee.id is null)
-                                AND $appFilter AND ox_activity_instance.status = 'In Progress'
-                                AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
             if (isset($filterParamsArray[0]['filter'])) {
                 $filterData = $filterParamsArray[0]['filter']['filters'];
                 $subQuery = "";
