@@ -14,7 +14,7 @@ class RoutesLoader extends RouteBuilder{
     @Override
     void configure() throws Exception {
         println "In RoutesBuilder"
-        def routes = loadRoutes(null)
+        def routes = loadRoutes()
         routes = routes.routes
         CamelContext context = new DefaultCamelContext()
         context.addRoutes(new RouteBuilder() {
@@ -55,7 +55,7 @@ class RoutesLoader extends RouteBuilder{
     }
 
     //flag is added for test : Junit
-    def loadRoutes(String flag){
+    def loadRoutes(String flag = null){
         String routeLocation = System.getProperty('ROUTE_CONFIG')
         println "routeLocation - ${routeLocation}"
         URL url
