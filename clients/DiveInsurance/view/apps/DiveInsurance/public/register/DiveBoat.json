@@ -136,11 +136,14 @@
                 "multiple": false
             }
         }, {
-            "key": "panelPanel2",
-            "input": false,
-            "title": "Padi Validation",
+            "title": "PADI Validation",
             "theme": "primary",
+            "collapsible": false,
             "tableView": false,
+            "key": "panelPanel2",
+            "type": "panel",
+            "label": "Pa Validation",
+            "input": false,
             "components": [{
                 "label": "Columns",
                 "input": false,
@@ -396,8 +399,6 @@
                 },
                 "path": "panelColumns"
             }],
-            "type": "panel",
-            "label": "Panel",
             "validate": {
                 "unique": false,
                 "multiple": false
@@ -415,46 +416,21 @@
                 "key": "panelPanel4Columns",
                 "columns": [{
                     "components": [{
-                        "input": true,
-                        "tableView": true,
-                        "label": "Initial",
-                        "key": "initial",
-                        "placeholder": "Initial",
-                        "clearOnHide": false,
-                        "spellcheck": true,
-                        "validate": {
-                            "required": true,
-                            "unique": false,
-                            "multiple": false
-                        },
-                        "type": "textfield",
-                        "lockKey": true,
-                        "hideLabel": true,
-                        "disabled": true,
-                        "hideOnChildrenHidden": false
-                    }],
-                    "width": 4,
-                    "offset": 0,
-                    "push": 0,
-                    "pull": 0
-                }, {
-                    "components": [{
-                        "input": true,
-                        "tableView": true,
                         "label": "First Name",
-                        "key": "firstname",
                         "placeholder": "First Name",
-                        "clearOnHide": false,
+                        "hideLabel": true,
                         "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "clearOnHide": false,
                         "validate": {
-                            "required": true,
                             "unique": false,
                             "multiple": false
                         },
+                        "key": "firstname",
                         "type": "textfield",
+                        "input": true,
                         "lockKey": true,
-                        "hideLabel": true,
-                        "disabled": true,
                         "hideOnChildrenHidden": false
                     }],
                     "width": 4,
@@ -463,22 +439,44 @@
                     "pull": 0
                 }, {
                     "components": [{
-                        "input": true,
-                        "tableView": true,
-                        "label": "Last Name",
-                        "key": "lastname",
-                        "placeholder": "Last Name",
-                        "clearOnHide": false,
+                        "label": "Initial",
+                        "placeholder": "Initial",
+                        "hideLabel": true,
                         "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "clearOnHide": false,
                         "validate": {
-                            "required": true,
                             "unique": false,
                             "multiple": false
                         },
+                        "key": "initial",
                         "type": "textfield",
+                        "input": true,
                         "lockKey": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0
+                }, {
+                    "components": [{
+                        "label": "Last Name",
+                        "placeholder": "Last Name",
                         "hideLabel": true,
+                        "spellcheck": true,
                         "disabled": true,
+                        "tableView": true,
+                        "clearOnHide": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        },
+                        "key": "lastname",
+                        "type": "textfield",
+                        "input": true,
+                        "lockKey": true,
                         "hideOnChildrenHidden": false
                     }],
                     "width": 4,
@@ -491,7 +489,8 @@
                 "validate": {
                     "unique": false,
                     "multiple": false
-                }
+                },
+                "path": "panelPanel4Columns"
             }, {
                 "key": "panelPanel",
                 "input": false,
@@ -961,7 +960,7 @@
     "path": "padiverificationformdiveboat",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-05T12:23:24.281Z",
-    "modified": "2020-02-10T06:16:33.861Z",
+    "modified": "2020-02-19T04:26:08.379Z",
     "machineName": "testdivehub:padiVerificationFormDiveBoat",
     "controller": ""
 }

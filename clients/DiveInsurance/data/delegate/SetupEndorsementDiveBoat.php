@@ -7,175 +7,128 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
 {
     public function __construct(){
         parent::__construct();
+    
     }
 
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("Executing Endorsement Setup - Dive Boat".json_encode($data));
-        $data['previous_excess_liability_coverage'] = $data['excess_liability_coverage'];
-        $data['previous_excessLiabilityLimit'] = $data['excessLiabilityLimit'];
-        $data['previous_totalLiabilityLimit'] = $data['totalLiabilityLimit'];
-        $data['previous_LiabilityPremiumCost'] = $data['LiabilityPremiumCost'];
-        $data['previous_ExcessLiabilityPremium'] = $data['ExcessLiabilityPremium'];
-        $data['previous_HullPremium'] = $data['HullPremium'];
-        $data['previous_DingyTenderPremium'] = $data['DingyTenderPremium'];
-        $data['previous_TrailerPremium'] = $data['TrailerPremium'];
-        $data['previous_CrewOnBoatPremium'] = $data['CrewOnBoatPremium'];
-        $data['previous_CrewMembersinWaterPremium'] = $data['CrewMembersinWaterPremium'];
+
+        $this->logger->info("Executing Endorsement Setup - Dive Boat".print_r($data,true));
+        $endorsementCoverage = array();
+        $endorsementGroupCoverage = array();
+        $endorsementGroupLiability = array();
+        $data['update_date'] =  date("Y-m-d H:i:s");
         $data['previous_hull_market_value'] = $data['hull_market_value'];
         $data['previous_purchase_price_currency'] = $data['purchase_price_currency'];
         $data['previous_dingy_value'] = $data['dingy_value'];
         $data['previous_trailer_value'] =$data['trailer_value'];
-        $data['previous_CrewInBoatCount'] = $data['CrewInBoatCount'];
-        $data['previous_CrewInWaterCount'] = $data['CrewInWaterCount'];
+        $data['previous_CrewInBoatCount'] = isset($data['CrewInBoatCount']) ? $data['CrewInBoatCount'] : 0;
+        $data['previous_CrewInWaterCount'] = isset($data['CrewInWaterCount']) ? $data['CrewInWaterCount'] : 0;
+        $data['previous_excess_liability_coverage'] = $data['excess_liability_coverage'];
+        $data['previous_excessLiabilityLimit'] = $data['excessLiabilityLimit'];
+        $data['previous_totalLiabilityLimit'] = $data['totalLiabilityLimit'];
+        $data['previous_HullPremium'] = $data['HullPremium'];
+        $data['previous_DingyTenderPremium'] = $data['DingyTenderPremium'];
+        $data['previous_TrailerPremium'] = $data['TrailerPremium'];
+        $data['previous_PropertyBasePremium'] = $data['PropertyBasePremium'];
+        $data['previous_Age25Surcharge'] = $data['Age25Surcharge'];
+        $data['previous_NavWaterSurchargeYN'] = $data['NavWaterSurchargeYN'];
+        $data['previous_NavWaterSurchargePremium'] = $data['NavWaterSurchargePremium'];
+        $data['previous_PortRiskYN'] = $data['PortRiskYN'];
+        $data['previous_PortRiskCredit'] = $data['PortRiskCredit'];
+        $data['previous_NavigationCreditYN'] = $data['NavigationCreditYN'];
+        $data['previous_NavigationCredit'] = $data['NavigationCredit'];
+        $data['previous_SuperiorRiskCreditYN'] = $data['SuperiorRiskCreditYN'];
+        $data['previous_SuperiorRiskCredit'] = $data['SuperiorRiskCredit'];
         $data['previous_PropertySubTotal'] = $data['PropertySubTotal'];
         $data['previous_PropertySubTotalProRated'] = $data['PropertySubTotalProRated'];
+      
+
+        $data['previous_LiabilityPremiumCost'] = $data['LiabilityPremiumCost'];
+        $data['previous_ExcessLiabilityPremium'] = $data['ExcessLiabilityPremium'];
+        $data['previous_DingyLiability'] = $data['DingyLiability'];
+        $data['previous_PassengerPremiumCost'] = $data['PassengerPremiumCost'];
+        $data['previous_CrewOnBoatPremium'] = isset($data['CrewOnBoatPremium']) ? $data['CrewOnBoatPremium'] : 0;
+        $data['previous_CrewMembersinWaterPremium'] = isset($data['CrewMembersinWaterPremium']) ? $data['CrewMembersinWaterPremium'] : 0;
+        $data['prevoius_FL-HISurchargeYN'] = $data['FL-HISurchargeYN'];
         $data['previous_LiabilitySubTotal'] = $data['LiabilitySubTotal'];
         $data['previous_LiabilitySubTotalProRated'] = $data['LiabilitySubTotalProRated'];
+
+
+
+        $data['previous_ProRataFactor'] = $data['ProRataFactor'];
         $data['previous_premiumTotalProRated'] = $data['premiumTotalProRated'];
         $data['previous_groupCoverageSelect'] = $data['groupCoverageSelect'];
-        $data['previous_groupCoverage'] = $data['groupCoverage'];
+        $data['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
         $data['previous_groupExcessLiabilitySelect'] = $data['groupExcessLiabilitySelect'];
+        $data['previous_groupTaxPercentage'] = $data['groupTaxPercentage'];
+        $data['previous_groupTaxAmount'] = $data['groupTaxAmount'];
+        $data['previous_groupPadiFeeAmount'] = $data['groupPadiFeeAmount'];
+        $data['previous_groupPAORfee'] = isset($data['groupPAORfee']) ? $data['groupPAORfee'] : 0;
+        $data['groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
         $data['previous_groupProfessionalLiabilityPrice'] = $data['groupProfessionalLiabilityPrice'];
         $data['previous_groupTotalAmount'] = $data['groupTotalAmount'];
+
+    
+        $data['previous_hullRate'] = $data['hullRate'];
         $data['previous_total'] = $data['total'];
-        $this->cleanUp($data);
-        return $data;
-    }
+        $data['update_date'] = $data['update_date'];        
 
 
-    private function cleanUp(&$data){
-      unset($data['excessLiabilityLimit'],
-        $data['totalLiabilityLimit'],
-        $data['LiabilityPremiumCost'],
-        $data['ExcessLiabilityPremium'],
-        $data['HullPremium'],
-        $data['DingyTenderPremium'],
-        $data['TrailerPremium'],
-        $data['CrewOnBoatPremium'],
-        $data['CrewMembersinWaterPremium'],
-        $data['PropertySubTotal'],
-        $data['PropertySubTotalProRated'],
-        $data['LiabilitySubTotal'],
-        $data['LiabilitySubTotalProRated'],
-        $data['premiumTotalProRated'],
-        $data['groupCoverageSelect'],
-        $data['groupCoverage'],
-        $data['groupExcessLiabilitySelect'],
-        $data['csrApproved'],
-        $data['quoteRequirement'],
-        $data['quote_due_date'],
-        $data['groupPadiFee'],
-        $data['groupExcessLiability9M'],
-        $data['groupExcessLiability4M'],
-        $data['groupExcessLiability3M'],
-        $data['groupExcessLiability2M'],
-        $data['groupExcessLiability1M'],
-        $data['groupCoverageMoreThan500000'],
-        $data['groupCoverageMoreThan350000'],
-        $data['groupCoverageMoreThan250000'],
-        $data['groupCoverageMoreThan200000'],
-        $data['groupCoverageMoreThan150000'],
-        $data['groupCoverageMoreThan100000'],
-        $data['groupCoverageMoreThan50000'],
-        $data['groupCoverageMoreThan25000'],
-        $data['groupCoverageMoreThan0'],
-        $data['stateTaxData'],
-        $data['SuperiorRisk'],
-        $data['DingyLiabilityPremium'],
-        $data['ProRataDays'],
-        $data['DateEffective'],
-        $data['excessLiabilityCoverage9000000'],
-        $data['excessLiabilityCoverage4000000'],
-        $data['excessLiabilityCoverage3000000'],
-        $data['excessLiabilityCoverage2000000'],
-        $data['excessLiabilityCoverage1000000'],
-        $data['excessLiabilityCoverageDeclined'],
-        $data['CrewInBoat'],
-        $data['CrewInWater'],
-        $data['PassengerPremium'],
-        $data['DeductibleGreaterthan24'],
-        $data['DeductibleLessthan25'],
-        $data['Layup2'],
-        $data['Layup1'],
-        $data['LayupA'],
-        $data['PortRisk'],
-        $data['Navigation'],
-        $data['NavWaterSurcharge'],
-        $data['FL-HISurcharge'],
-        $data['boat_age'],
-        $data['total'],
-        $data['padiFee'],
-        $data['groupProfessionalLiabilityPrice'],
-        $data['premiumTotalProRated'],
-        $data['PropertySubTotalProRated'],
-        $data['PropertySubTotal'],
-        $data['SuperiorRiskCredit'],
-        $data['NavigationCredit'],
-        $data['PortRiskCredit'],
-        $data['NavWaterSurchargePremium'],
-        $data['Age25Surcharge'],
-        $data['PropertyBasePremium'],
-        $data['hullRate'],
-        $data['ProRataFactor'],
-        $data['LiabilityPremium1M'],
-        $data['primaryLimit'],
-        $data['DingyLiability'],
-        $data['PassengerPremiumCost'],
-        $data['totalLiability'],
-        $data['FlHiSurchargePremium'],
-        $data['hull_age'],
-        $data['layupDeductible'],
-        $data['layup_period'],
-        $data['hull25000LessThan5'],
-        $data['hull25000LessThan11'],
-        $data['hull25000LessThan25'],
-        $data['hull25000GreaterThan25'],
-        $data['hull50000LessThan5'],
-        $data['hull50000LessThan11'],
-        $data['hull50000LessThan25'],
-        $data['hull50000GreaterThan25'],
-        $data['hull100000LessThan5'],
-        $data['hull100000LessThan11'],
-        $data['hull100000LessThan25'],
-        $data['hull100000GreaterThan25'],
-        $data['hull150000LessThan5'],
-        $data['hull150000LessThan11'],
-        $data['hull150000LessThan25'],
-        $data['hull150000GreaterThan25'],
-        $data['hull200000LessThan5'],
-        $data['hull200000LessThan11'],
-        $data['hull200000LessThan25'],
-        $data['hull200000GreaterThan25'],
-        $data['hull250000LessThan5'],
-        $data['hull250000LessThan11'],
-        $data['hull250000LessThan25'],
-        $data['hull250000GreaterThan25'],
-        $data['hull300000LessThan5'],
-        $data['hull300000LessThan11'],
-        $data['hull300000LessThan25'],
-        $data['hull300000GreaterThan25'],
-        $data['hull350000LessThan5'],
-        $data['hull350000LessThan11'],
-        $data['hull350000LessThan25'],
-        $data['hull350000GreaterThan25'],
-        $data['hull400000LessThan5'],
-        $data['hull400000LessThan11'],
-        $data['hull400000LessThan25'],
-        $data['hull400000GreaterThan25'],
-        $data['hull500000LessThan5'],
-        $data['hull500000LessThan11'],
-        $data['hull500000LessThan25'],
-        $data['hull500000GreaterThan25'],
-        $data['hull600000LessThan5'],
-        $data['hull600000LessThan11'],
-        $data['hull600000LessThan25'],
-        $data['hull600000GreaterThan25'],
-        $data['groupTotalAmount'],
-        $data['groupPAORfee'],
-        $data['groupPadiFeeAmount'],
-        $data['groupTaxAmount'],
-        $data['groupTaxPercentage'],
-        );
+
+        $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_excess_liability_coverage']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+            $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Boat".$selectCoverage);
+            $resultCoverage = $persistenceService->selectQuery($selectCoverage);
+            while ($resultCoverage->next()) {
+                $rate = $resultCoverage->current();
+                if(isset($rate['key'])){
+                    if($rate['key'] == $data['previous_excess_liability_coverage']){
+                        $data['excess_liability_coverage'] = $data['previous_excess_liability_coverage'];
+                    }
+                    $endorsementCoverage[$rate['key']] = $rate['coverage'];
+                }
+                unset($rate);
+            }
+
+        if(isset($data['previous_groupCoverageSelect'])){
+            $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_groupCoverageSelect']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                $this->logger->info("Executing Endorsement Rate Card Group Coverage - Dive Boat".$selectCoverage);
+                $resultCoverage = $persistenceService->selectQuery($selectCoverage);
+                while ($resultCoverage->next()) {
+                    $rate = $resultCoverage->current();
+                    if(isset($rate['key'])){
+                        if($rate['key'] == $data['previous_groupCoverageSelect']){
+                            $data['groupCoverageSelect'] = $data['previous_groupCoverageSelect'];
+                        }
+                        $endorsementGroupCoverage[$rate['key']] = $rate['coverage'];
+                    }
+                    unset($rate);
+                }
+         }
+
+
+         if(isset($data['previous_groupExcessLiabilitySelect'])){
+            $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_groupExcessLiabilitySelect']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Boat".$selectCoverage);
+                $resultCoverage = $persistenceService->selectQuery($selectCoverage);
+                while ($resultCoverage->next()) {
+                    $rate = $resultCoverage->current();
+                    if(isset($rate['key'])){
+                        if($rate['key'] == $data['previous_groupExcessLiabilitySelect']){
+                            $data['groupExcessLiabilitySelect'] = $data['previous_groupExcessLiabilitySelect'];
+                        }
+                        $endorsementGroupLiability[$rate['key']] = $rate['coverage'];
+                    }
+                    unset($rate);
+                }
+         }
+
+        $data['endorsementCoverage'] = $endorsementCoverage;
+        $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
+        $data['endorsementGroupLiability'] = $endorsementGroupLiability;
+
+
+       $this->logger->info("Set UP Edorsement Dive Boat - END",print_r($data,true));
+       return $data;
     }
 }

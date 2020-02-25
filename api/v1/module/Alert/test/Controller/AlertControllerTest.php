@@ -2,24 +2,19 @@
 namespace Alert;
 
 use Alert\Controller\AlertController;
-use Alert\Model;
 use Oxzion\Test\ControllerTest;
-use Oxzion\Db\ModelTable;
-use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 
 class AlertControllerTest extends ControllerTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         parent::setUp();
     }
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Alert.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Alert.yml");
         return $dataset;
     }
     protected function setDefaultAsserts()
@@ -36,7 +31,7 @@ class AlertControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alert');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['id'], 1);
@@ -67,14 +62,14 @@ class AlertControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
+        $data = ['name' => 'Test Alert', 'status' => 1, 'description' => 'testing'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_alert'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/alert', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alert');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
@@ -83,15 +78,15 @@ class AlertControllerTest extends ControllerTest
     public function testCreateWithOutNameFailure()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['status'=>1,'description'=>'testing'];
+        $data = ['status' => 1, 'description' => 'testing'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_alert'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/alert', 'POST', null);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alert');
         $this->assertResponseStatusCode(404);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
@@ -99,30 +94,30 @@ class AlertControllerTest extends ControllerTest
     public function testCreateAccess()
     {
         $this->initAuthToken($this->employeeUser);
-        $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
+        $data = ['name' => 'Test Alert', 'status' => 1, 'description' => 'testing'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/alert', 'POST', null);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
         $this->assertMatchedRouteName('alert');
         $this->assertResponseStatusCode(401);
         $this->assertResponseHeaderContains('content-type', 'application/json');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
     public function testUpdate()
     {
-        $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
+        $data = ['name' => 'Test Alert', 'status' => 1, 'description' => 'testing'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/alert/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alert');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -131,14 +126,14 @@ class AlertControllerTest extends ControllerTest
 
     public function testUpdateNotFound()
     {
-        $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
+        $data = ['name' => 'Test Alert', 'status' => 1, 'description' => 'testing'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/alert/122', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alert');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 
@@ -170,7 +165,7 @@ class AlertControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alertaccept');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
     public function testAcceptNotFound()
@@ -180,7 +175,7 @@ class AlertControllerTest extends ControllerTest
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alertaccept');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
     public function testDecline()
@@ -190,7 +185,7 @@ class AlertControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alertdecline');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
     public function testDeclineNotFound()
@@ -200,7 +195,7 @@ class AlertControllerTest extends ControllerTest
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alertdecline');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 }

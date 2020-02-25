@@ -9,8 +9,7 @@ html {
 }
 
 body {
-  background: #c1bdba;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Lato Sans", sans-serif;
 }
 
 a {
@@ -20,6 +19,11 @@ a {
 }
 a:hover {
   color: #275362;
+}
+.btn-default:hover {
+    color: #275362;
+    background-color: #ffffff;
+    border-color: #275262;
 }
 
 .form {
@@ -344,7 +348,24 @@ input:focus {
 
 .formio-component-submit .submit-fail::after {
   top: 2px;
-  right: 6px;
+}
+
+.control-label--hidden{
+  right: 8px;
+  top: 4px;
+}
+
+.alert .control-label--hidden{
+  right: 25px;
+  top: 18px;
+}
+
+.formio-component-select .control-label--hidden.field-required{
+  right: 45px;
+}
+
+.formio-component-select.alert .control-label--hidden.field-required{
+  right: 65px;
 }
 
 #wrongPassword {
@@ -362,4 +383,9 @@ input:focus {
 
 .resetPassword {
   cursor: pointer;
+}
+.btn-default {
+    color: #fff;
+    background-color: #275362;
+    border-color: #275362;
 }

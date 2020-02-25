@@ -7,7 +7,7 @@
 		"clearOnHide": false,
 		"key": "panelPanel2",
 		"input": false,
-		"title": "Padi Validation",
+		"title": "PADI Validation",
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
@@ -790,6 +790,6 @@
 	"path": "padivalidationpage",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-16T12:52:36.018Z",
-	"modified": "2020-01-29T12:29:20.389Z",
+	"modified": "2020-02-11T06:13:44.297Z",
 	"machineName": "testdivehub:padiValidationPage"
 }

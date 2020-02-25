@@ -6,29 +6,13 @@ use Oxzion\Auth\AuthConstants;
 use Oxion\Auth\AuthContext;
 
 
-abstract class MailDelegate extends AbstractAppDelegate
+abstract class MailDelegate extends CommunicationDelegate
 {
-	use UserContextTrait;
-	private $messageProducer;
-	private $templateService;
-	protected $baseUrl;
-
+	
 	public function __construct() {
 		parent::__construct();
 	}
 
-	public function setMessageProducer(MessageProducer $messageProducer) {
-		$this->messageProducer = $messageProducer;
-	}
-
-	public function setTemplateService(TemplateService $templateService){
-		$this->templateService = $templateService;
-	}
-
-    public function setBaseUrl($baseUrl){
-        $this->baseUrl = $baseUrl;
-    }
-    
 	protected function sendMail(array $data,string $template,array $mailOptions)
     {
     	$this->logger->info("SEND MAIL ----".print_r($data,true));
@@ -36,7 +20,7 @@ abstract class MailDelegate extends AbstractAppDelegate
     	$data['orgUuid'] = $orgUuid;
 
         $mailOptions['body'] = $this->templateService->getContent($template,$data);
-		$userMail = $this->messageProducer->sendQueue(json_encode($mailOptions), 'mail');
+		$userMail = $this->sendMessage($mailOptions, 'mail');
 		return $userMail;
     }
 }

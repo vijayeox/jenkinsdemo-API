@@ -18,20 +18,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => 'ProfessionalLiabilityCOI',
                 'header' => 'COIheader.html',
                 'footer' => 'COIfooter.html',
-                'slWording' => 'SL Wording.pdf',
+                'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Individual_Professional_Liability_Policy.pdf',
                 'aiTemplate' => 'Individual_PL_AI',
                 'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
                 'aiheader' => 'IPL_AI_header.html',
                 'aifooter' => null,
-                'iplScuba' => 'PL Scuba Fit Endorsement.pdf',
-                'iplCylinder' => 'PL Cylinder Endorsement.pdf',
-                'iplEquipment' => 'PL Equipment Liability Endorsement.pdf'),
+                'iplScuba' => 'PL_Scuba_Fit_Endorsement.pdf',
+                'iplCylinder' => 'PL_Cylinder_Endorsement.pdf',
+                'iplEquipment' => 'PL_Equipment_Liability_Endorsement.pdf'),
             'Dive Boat' 
                 => array('template' => 'DiveBoatCOI',
                 'header' => 'DiveBoatHeader.html',
                 'footer' => 'DiveBoatFooter.html',
-                'slWording' => 'SL Wording.pdf',
+                'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Dive_Boat_Policy.pdf',
                 'cover_letter' => 'Dive_Boat_Cover_Letter',
                 'lheader' => 'letter_header.html',
@@ -59,7 +59,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                         'header' => 'DiveStoreHeader.html',
                         'footer' => 'DiveStoreFooter.html',
-                        'slWording' => 'SL Wording.pdf',
+                        'slWording' => 'SL_Wording.pdf',
                         'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
                         'cover_letter' => 'Dive_Store_Cover_Letter',
                         'lheader' => 'letter_header.html',
@@ -80,14 +80,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
                 'footer' => 'EFR_footer.html',
-                'slWording' => 'SL Wording.pdf',
+                'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
                 'aiheader' => 'EFR_AI_header.html',
                 'aifooter' => 'EFR_AI_footer.html')
         );
             
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldNames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldnames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts','attachments');
     }
         
         public function execute(array $data,Persistence $persistenceService) 
@@ -108,22 +108,28 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
-
+            $state = "";
             if(isset($data['state'])){
               $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['state']."'";
-
+              $state = $data['state'];
             } 
 
             if(isset($data['business_state'])){
                  $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['business_state']."'";
+                 $state = $data['business_state'];
             }
             $resultSet = $persistenceService->selectQuery($selectQuery);
             $stateDetails = array();
+            if($resultSet->count() == 0){
+                $data['state_in_short'] = $data['state']; 
+            }
             while ($resultSet->next()) {
                 $stateDetails[] = $resultSet->current();
             }       
             if(isset($stateDetails) && count($stateDetails)>0){                
                     $data['state_in_short'] = $stateDetails[0]['state_in_short'];                
+            }else{
+                $data['state_in_short'] = isset($state) ? $state : "";
             }
             $this->logger->info("Data------------------ ".print_r($data,true));
             unset($data['dest']);

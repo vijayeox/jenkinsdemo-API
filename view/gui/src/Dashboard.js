@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import osjs from "osjs";
 import WidgetRenderer from "./WidgetRenderer";
-let helper = osjs.make("oxzion/restClient");
 
 
 class Dashboard extends Component {
@@ -25,13 +23,14 @@ class Dashboard extends Component {
     this.uuid = uuid;
     console.log(this.uuid);
     this.loader = this.core.make("oxzion/splash");
+    this.helper=this.core.make("oxzion/restClient");
     this.props.proc.on("destroy", () => {
       this.removeScriptsFromDom();
     });
   }
 
   async GetDashboardHtmlDataByUUID(uuid) {
-    let response = await helper.request(
+    let response = await this.helper.request(
       "v1",
       "analytics/dashboard/" + uuid,
       {},
@@ -40,7 +39,7 @@ class Dashboard extends Component {
     return response;
   }
   async GetWidgetByUUID(uuid) {
-    let response = await helper.request(
+    let response = await this.helper.request(
       "v1",
       "analytics/widget/" + uuid+'?data=true',
       {},
@@ -96,13 +95,14 @@ class Dashboard extends Component {
 
   updateGraph = root => {
     var widgets = root.getElementsByClassName("oxzion-widget");
-    widgets.forEach(widget => {
-      var attributes = widget.attributes;
-      var widgetUUId = attributes['data-oxzion-widget-id'].value;
-      this.GetWidgetByUUID(widgetUUId).then(response => {
-        WidgetRenderer.render(widget, response.data.widget);
-      });
-    });
+    for(let widget of widgets)
+    {
+        var attributes = widget.attributes;
+        var widgetUUId = attributes['data-oxzion-widget-id'].value;
+        this.GetWidgetByUUID(widgetUUId).then(response => {
+          WidgetRenderer.render(widget, response.data.widget);
+        })
+    }
   };
 
   render() {

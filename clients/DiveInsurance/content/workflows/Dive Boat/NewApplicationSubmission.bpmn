@@ -32,7 +32,7 @@
       <bpmn:outgoing>SequenceFlow_1wfbd9l</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0l826da</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="UserTask_1wsy6gb" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:assignee="owner">
+    <bpmn:userTask id="UserTask_1wsy6gb" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:assignee="{{padi}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveBoatUserApproval" />

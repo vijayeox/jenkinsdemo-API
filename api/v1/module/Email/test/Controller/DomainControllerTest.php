@@ -3,16 +3,11 @@ namespace Domain;
 
 use Email\Controller\DomainController;
 use Oxzion\Test\ControllerTest;
-use Email\Model;
-use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
-use Oxzion\Utils\FileUtils;
 
 class DomainControllerTest extends ControllerTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         parent::setUp();
@@ -35,23 +30,23 @@ class DomainControllerTest extends ControllerTest
     public function testGetList()
     {
         $data = ['id' => 1,
-            "name"=> 'myvamla.com',
-            "imap_server"=> 'box3053.bluehost.com',
-            "imap_port"=> '993',
-            "imap_secure"=> 'ssl',
-            "imap_short_login"=> '2',
-            "smtp_server"=> 'box3053.bluehost.com',
-            "smtp_port"=> '465',
-            "smtp_secure"=> 'ssl',
-            "smtp_short_login"=> 'short_name',
-            "smtp_auth"=> 'auth',
-            "smtp_use_php_mail"=> 'No'
+            "name" => 'myvamla.com',
+            "imap_server" => 'box3053.bluehost.com',
+            "imap_port" => '993',
+            "imap_secure" => 'ssl',
+            "imap_short_login" => '2',
+            "smtp_server" => 'box3053.bluehost.com',
+            "smtp_port" => '465',
+            "smtp_secure" => 'ssl',
+            "smtp_short_login" => 'short_name',
+            "smtp_auth" => 'auth',
+            "smtp_use_php_mail" => 'No',
         ];
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/domain', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         foreach ($data as $key => $val) {
@@ -62,17 +57,17 @@ class DomainControllerTest extends ControllerTest
     public function testGet()
     {
         $data = ['id' => 1,
-            "name"=> 'myvamla.com',
-            "imap_server"=> 'box3053.bluehost.com',
-            "imap_port"=> '993',
-            "imap_secure"=> 'ssl',
-            "imap_short_login"=> '2',
-            "smtp_server"=> 'box3053.bluehost.com',
-            "smtp_port"=> '465',
-            "smtp_secure"=> 'ssl',
-            "smtp_short_login"=> 'short_name',
-            "smtp_auth"=> 'auth',
-            "smtp_use_php_mail"=> 'No'
+            "name" => 'myvamla.com',
+            "imap_server" => 'box3053.bluehost.com',
+            "imap_port" => '993',
+            "imap_secure" => 'ssl',
+            "imap_short_login" => '2',
+            "smtp_server" => 'box3053.bluehost.com',
+            "smtp_port" => '465',
+            "smtp_secure" => 'ssl',
+            "smtp_short_login" => 'short_name',
+            "smtp_auth" => 'auth',
+            "smtp_use_php_mail" => 'No',
         ];
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/domain/1', 'GET');
@@ -114,7 +109,7 @@ class DomainControllerTest extends ControllerTest
         $this->dispatch('/domain', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         foreach ($data as $key => $val) {
             $this->assertEquals($content['data'][$key], $val);
@@ -130,7 +125,7 @@ class DomainControllerTest extends ControllerTest
         $this->dispatch('/domain', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['imap_server'], 'required');
@@ -148,7 +143,7 @@ class DomainControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('domain');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
     }
@@ -165,7 +160,7 @@ class DomainControllerTest extends ControllerTest
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('domain');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 

@@ -284,6 +284,23 @@ class AnalyticsTest extends MainControllerTest
         $this->assertEquals($results, 13.0);
     }
 
+    public function testCrmComplexFilterDate() {
+        if(enableElastic==0){                             
+            $input = '{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"bool":{"must":[{"range":{"createdAt":{"gte":"'.date("Y",strtotime("-1 year")).'-06-01","format":"yyyy-MM-dd"}}},{"range":{"createdAt":{"lte":"'.date("Y").'-07-15","format":"yyyy-MM-dd"}}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
+            $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":1,"relation":"eq"},"max_score":null,"hits":[]}}';
+            $this->setMockData($input,$output);          
+        }
+            AuthContext::put(AuthConstants::ORG_ID, 1);
+            $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+            $parameters = ['filter'=>[                 
+                        ['createdAt','>=','date:01 June Last Year'],'AND',
+                        ['createdAt','<=','date:15 July This year']
+                    ],'operation'=>'count'];
+            $results = $ae->runQuery('crm', 'Lead', $parameters);
+            $query = $results['meta']['query'];
+            $this->assertEquals($query,'{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"bool":{"must":[{"range":{"createdAt":{"gte":"'.date("Y",strtotime("-1 year")).'-06-01","format":"yyyy-MM-dd"}}},{"range":{"createdAt":{"lte":"'.date("Y").'-07-15","format":"yyyy-MM-dd"}}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}');
+    }
+
     public function testCrmComplexFilterNotNoArray() {
         if(enableElastic==0){
             $input = '{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"bool":{"must_not":[{"term":{"owner_username":"bharatg"}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';

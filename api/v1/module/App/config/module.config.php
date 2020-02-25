@@ -658,6 +658,91 @@ return [
                     ],
                 ],
             ],
+            'scheduleJob' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/scheduleJob',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'POST',
+                        'action' => 'scheduleJob',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'getJobsList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/getJobsList',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'GET',
+                        'action' => 'getJobsList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'getJob' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/getJob/:jobId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'GET',
+                        'action' => 'getJobDetails',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'cancelJob' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cancelJob',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'POST',
+                        'action' => 'cancelJob',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'cancelJobId' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cancelJobId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'POST',
+                        'action' => 'cancelJobId',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

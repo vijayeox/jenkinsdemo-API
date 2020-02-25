@@ -3,23 +3,18 @@ namespace Email;
 
 use Email\Controller\EmailController;
 use Oxzion\Test\ControllerTest;
-use Oxzion\Model\EmailTable;
-use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
-use Oxzion\Utils\FileUtils;
 
 class EmailControllerTest extends ControllerTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         parent::setUp();
     }
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Email.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Email.yml");
         return $dataset;
     }
     protected function setDefaultAsserts()
@@ -35,7 +30,7 @@ class EmailControllerTest extends ControllerTest
         $this->dispatch('/email', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['id'], 1);
@@ -64,12 +59,12 @@ class EmailControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['email' => 'brianmp@myvamla.com','username' => 'brianmp@myvamla.com','password' => 'password', 'host' => 'box3053.bluehost.com'];
+        $data = ['email' => 'brianmp@myvamla.com', 'username' => 'brianmp@myvamla.com', 'password' => 'password', 'host' => 'box3053.bluehost.com'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('email_setting_user'));
         $this->dispatch('/email', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('email_setting_user'));
@@ -78,12 +73,12 @@ class EmailControllerTest extends ControllerTest
     public function testCreateWithToken()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['email' => 'brianmp@myvamla.com','token' => 'token'];
+        $data = ['email' => 'brianmp@myvamla.com', 'token' => 'token'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('email_setting_user'));
         $this->dispatch('/email', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('email_setting_user'));
@@ -97,7 +92,7 @@ class EmailControllerTest extends ControllerTest
         $this->dispatch('/email', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['password'], 'required');
@@ -105,17 +100,17 @@ class EmailControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['email' => 'bharatg@myvamla.com','password' => 'password1'];
+        $data = ['email' => 'bharatg@myvamla.com', 'password' => 'password1'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/email', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['email'], $data['email']);
     }
-    
+
     public function testUpdateNotFound()
     {
         $data = ['email' => 'brianmp@myvamla.com'];
@@ -124,7 +119,7 @@ class EmailControllerTest extends ControllerTest
         $this->dispatch('/email', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 
@@ -135,7 +130,7 @@ class EmailControllerTest extends ControllerTest
         $this->dispatch('/email/delete/bharatg@myvamla.com', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, $this->getConnection()->getRowCount('email_setting_user'));
     }
@@ -146,7 +141,7 @@ class EmailControllerTest extends ControllerTest
         $this->dispatch('/email/delete/brianmp@myvamla.com', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Entity not found');
     }

@@ -49,13 +49,15 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
             mkdir($this->destination . $filepath, 0777, true);
         }
         for ($i = 0;$i < sizeof($documentsArray);$i++) {
-            $base64Data = explode(',', $documentsArray[$i]['url']);
-            $content = base64_decode($base64Data[1]);
-            $file = fopen($this->destination . $filepath . $documentsArray[$i]['name'], 'wb');
-            fwrite($file, $content);
-            fclose($file);
-            unset($documentsArray[$i]['url']);
-            $documentsArray[$i]['file'] = $filepath . $documentsArray[$i]['name'];
+            if(isset($documentsArray[$i]['url'])){
+                $base64Data = explode(',', $documentsArray[$i]['url']);
+                $content = base64_decode($base64Data[1]);
+                $file = fopen($this->destination . $filepath . $documentsArray[$i]['name'], 'wb');
+                fwrite($file, $content);
+                fclose($file);
+                unset($documentsArray[$i]['url']);
+                $documentsArray[$i]['file'] = $filepath . $documentsArray[$i]['name'];
+            }
         }
         $this->logger->info("saveFile return: ".print_r($documentsArray,true));
         return $documentsArray;

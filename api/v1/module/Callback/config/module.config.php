@@ -236,6 +236,26 @@ return [
                     ],
                 ],
             ],
+            'sendsmsfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/communication/sendsms',
+                    'defaults' => [
+                        'controller' => Controller\CommunicationCallbackController::class,
+                        'action' => 'sendSms',
+                    ],
+                ],
+            ],
+            'makecallfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/communication/makecall',
+                    'defaults' => [
+                        'controller' => Controller\CommunicationCallbackController::class,
+                        'action' => 'makeCall',
+                    ],
+                ],
+            ],
         ],
     ],
     
