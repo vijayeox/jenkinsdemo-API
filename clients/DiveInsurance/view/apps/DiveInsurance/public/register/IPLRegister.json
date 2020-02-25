@@ -929,7 +929,7 @@
                             "type":"select",
                             "input":true,
                             "hideOnChildrenHidden":false,
-                            "width":12
+                            "width":4
                         }
                         ],
                         "width":4,
@@ -955,7 +955,7 @@
                             "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
-                            "width":6
+                            "width":8
                         }
                         ,
                         {
@@ -970,7 +970,7 @@
                             }
                             ,
                             "hideOnChildrenHidden":false,
-                            "width":6
+                            "width":8
                         }
                         ],
                         "width":8,
@@ -979,7 +979,6 @@
                         "pull":0
                     }
                     ],
-                    "autoAdjust":true,
                     "tableView":false,
                     "key":"columns",
                     "type":"columns",
@@ -1163,7 +1162,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":196,
+    "_vid":198,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -1179,7 +1178,7 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-02-25T08:28:19.399Z",
+    "modified":"2020-02-25T11:22:10.183Z",
     "machineName":"testdivehub:padiVerificationForm",
     "controller":""
 }

@@ -681,29 +681,26 @@
                 "theme":"primary",
                 "tableView":false,
                 "components":[ {
-                    "input":true,
-                    "tableView":true,
                     "label":"Same as mailing address",
-                    "dataGridLabel":false,
-                    "key":"sameasmailingaddress",
+                    "tableView":true,
                     "defaultValue":"true",
                     "clearOnHide":false,
                     "validate": {
                         "unique": false, "multiple": false
                     }
                     ,
+                    "key":"sameasmailingaddress",
                     "type":"checkbox",
+                    "input":true,
+                    "dataGridLabel":false,
                     "lockKey":true
                 }
                 ,
                 {
                     "label":"Columns",
-                    "input":false,
-                    "tableView":false,
-                    "key":"panelPanel3Columns2",
                     "columns":[ {
                         "components":[ {
-                            "label":"Physical Address 1",
+                            "label":"Mailing Address 1",
                             "placeholder":"Address 1",
                             "hideLabel":true,
                             "spellcheck":true,
@@ -721,11 +718,11 @@
                         }
                         ,
                         {
-                            "label":"Physical Address 2",
+                            "label":"Mailing Address 2",
                             "placeholder":"Address 2",
                             "hideLabel":true,
-                            "spellcheck":true,
-                            "tableView":true,
+                            "spellcheck":false,
+                            "tableView":false,
                             "validate": {
                                 "unique": false, "multiple": false
                             }
@@ -751,7 +748,6 @@
                             "spellcheck":true,
                             "tableView":true,
                             "clearOnHide":false,
-                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
@@ -770,7 +766,6 @@
                             "spellcheck":false,
                             "tableView":true,
                             "clearOnHide":false,
-                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "pattern": "[0-9\\s-]*", "unique": false, "multiple": false
                             }
@@ -805,7 +800,7 @@
                             }
                             ,
                             "valueProperty":"country",
-                            "dataType":"auto",
+                            "dataType":"string",
                             "template":"<span>{{ item.country }}</span>",
                             "selectThreshold":0.3,
                             "clearOnHide":false,
@@ -826,12 +821,12 @@
                             "widget":"choicesjs",
                             "placeholder":"State",
                             "hideLabel":true,
-                            "tableView":true,
+                            "tableView":false,
                             "dataSrc":"custom",
                             "data": {
                                 "values":[ {}
                                 ],
-                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}\n}"
+                                "custom": "let obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}"
                             }
                             ,
                             "template":"<span>{{ item }}</span>",
@@ -844,10 +839,10 @@
                             ,
                             "key":"physical_state",
                             "type":"select",
+                            "refreshOn":"physical_country",
                             "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
-                            "refreshOn":"physical_country",
                             "clearOnRefresh":true
                         }
                         ],
@@ -857,15 +852,21 @@
                         "pull":0
                     }
                     ],
-                    "type":"columns",
                     "hideLabel":true,
+                    "tableView":false,
+                    "key":"panelPanel3Columns2",
                     "conditional": {
-                        "show": "true", "when": "sameasmailingaddress", "eq": "false"
+                        "show": true, "when": "sameasmailingaddress", "eq": "false"
                     }
                     ,
                     "customConditional":"show = (data['sameasmailingaddress'] == false)",
+                    "type":"columns",
+                    "input":false,
                     "lockKey":true,
-                    "path":"panelPanel3Columns2"
+                    "path":"panelPanel3Columns2",
+                    "validate": {
+                        "unique": false, "multiple": false
+                    }
                 }
                 ],
                 "type":"panel",
@@ -901,10 +902,10 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "dataType":"auto",
+                                "dataType":"string",
                                 "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
-                                "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "calculateValue":"let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}",
                                 "allowCalculateOverride":true,
                                 "validate": {
                                     "unique": false, "multiple": false
@@ -3872,7 +3873,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":566,
+    "_vid":567,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3894,7 +3895,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-25T08:26:41.956Z",
+    "modified":"2020-02-25T11:31:37.471Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }
