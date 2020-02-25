@@ -474,6 +474,7 @@
                         "template":"<span>{{ item.country }}</span>",
                         "selectThreshold":0.3,
                         "clearOnHide":false,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
@@ -508,7 +509,9 @@
                         "type":"select",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false
+                        "hideOnChildrenHidden":false,
+                        "refreshOn":"country",
+                        "clearOnRefresh":true
                     }
                     ],
                     "width":4,
@@ -558,6 +561,7 @@
                             "spellcheck":true,
                             "tableView":true,
                             "clearOnHide":false,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "customMessage": "Please enter your address.", "unique": false, "multiple": false
                             }
@@ -678,11 +682,12 @@
                                     "value": "", "label": ""
                                 }
                                 ],
-                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n}\n}"
+                                "custom":"let obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}"
                             }
                             ,
                             "template":"<span>{{ item }}</span>",
                             "selectThreshold":0.3,
+                            "validateOn":"blur",
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
@@ -748,7 +753,7 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
@@ -824,7 +829,7 @@
                         "key":"panelPanel3ColumnsColumns2",
                         "columns":[ {
                             "components":[ {
-                                "label":"Select",
+                                "label":"Country Code",
                                 "widget":"choicesjs",
                                 "placeholder":"Country Code",
                                 "hideLabel":true,
@@ -837,14 +842,15 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "validateOn":"blur",
                                 "validate": {
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"mobile_country_code",
+                                "key":"phone_country_code",
                                 "type":"select",
                                 "input":true,
                                 "lockKey":true,
@@ -871,7 +877,7 @@
                                 }
                                 ,
                                 "errorLabel":"Please enter a valid phone number",
-                                "key":"mobile_phone_number",
+                                "key":"phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
                                 "lockKey":true,
@@ -880,9 +886,9 @@
                             }
                             ,
                             {
-                                "label":"mobile_phone",
-                                "calculateValue":"value = data.mobile_country_code + \"\" + data.mobile_phone_number",
-                                "key":"mobile_phone",
+                                "label":"phone",
+                                "calculateValue":"value = data.phone_country_code + \"\" + data.phone_number",
+                                "key":"phone",
                                 "type":"hidden",
                                 "input":true,
                                 "tableView":false,
@@ -2978,6 +2984,6 @@
     "path":"iplendorcsrwithoutpayment",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-02-20T06:27:49.035Z",
-    "modified":"2020-02-20T06:33:51.099Z",
+    "modified":"2020-02-25T10:42:25.119Z",
     "machineName":"testdivehub:iplEndorCsrWithoutPayment1"
 }

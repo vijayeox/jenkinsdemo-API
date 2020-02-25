@@ -603,19 +603,11 @@
                         "tableView":true,
                         "dataSrc":"custom",
                         "data": {
-                            "values":[ {
-                                "value": "", "label": ""
-                            }
+                            "values":[ {}
                             ],
-                            "url":"https://api.myjson.com/bins/1bz191",
-                            "headers":[ {
-                                "value": "", "key": ""
-                            }
-                            ],
-                            "custom":"let obj = countryList.find(o => o.country === data['country']);\nif(obj){\nvalues = obj.states\n}"
+                            "custom": "let obj = countryList.find(o => o.country === data['country']);\nif(obj){\n  values = obj.states\n}"
                         }
                         ,
-                        "valueProperty":"abbreviation",
                         "template":"<span>{{ item }}</span>",
                         "selectThreshold":0.3,
                         "clearOnHide":false,
@@ -626,11 +618,11 @@
                         ,
                         "key":"state",
                         "type":"select",
-                        "refreshOn":"country",
                         "input":true,
                         "lockKey":true,
-                        "clearOnRefresh":true,
-                        "hideOnChildrenHidden":false
+                        "hideOnChildrenHidden":false,
+                        "refreshOn":"country",
+                        "clearOnRefresh":true
                     }
                     ],
                     "width":4,
@@ -841,7 +833,6 @@
                                     "custom":"let obj = countryList.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states\n}"
                                 }
                                 ,
-                                "valueProperty":"abbreviation",
                                 "template":"<span>{{ item }}</span>",
                                 "selectThreshold":0.3,
                                 "clearOnHide":false,
@@ -1172,7 +1163,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":193,
+    "_vid":196,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -1188,7 +1179,7 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-02-24T15:25:02.378Z",
+    "modified":"2020-02-25T08:28:19.399Z",
     "machineName":"testdivehub:padiVerificationForm",
     "controller":""
 }

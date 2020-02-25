@@ -632,7 +632,7 @@
                             "data": {
                                 "values":[ {}
                                 ],
-                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+                                "custom": "let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}"
                             }
                             ,
                             "template":"<span>{{ item }}</span>",
@@ -647,7 +647,9 @@
                             "type":"select",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "refreshOn":"country",
+                            "clearOnRefresh":true
                         }
                         ],
                         "width":4,
@@ -829,7 +831,7 @@
                             "data": {
                                 "values":[ {}
                                 ],
-                                "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states\n}"
+                                "custom":"if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}\n}"
                             }
                             ,
                             "template":"<span>{{ item }}</span>",
@@ -844,7 +846,9 @@
                             "type":"select",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "refreshOn":"physical_country",
+                            "clearOnRefresh":true
                         }
                         ],
                         "width":4,
@@ -990,7 +994,7 @@
                                 "valueProperty":"dial_code",
                                 "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
-                                "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "calculateValue":"if(data.country){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "allowCalculateOverride":true,
                                 "validate": {
                                     "unique": false, "multiple": false
@@ -1129,14 +1133,20 @@
         }
         ],
         "type":"panel",
-        "breadcrumb":"none",
         "lockKey":true,
         "source":"5d4ee6df800c612c49e802d3",
         "nextPage":"next = (data['padiVerified'] ==true) ? 'coveragePage' : 'panel'",
-        "label":"Panel",
+        "label":"Personal Information",
         "validate": {
             "unique": false, "multiple": false
         }
+        ,
+        "breadcrumbClickable":false,
+        "buttonSettings": {
+            "previous": false, "cancel": false, "next": true
+        }
+        ,
+        "collapsible":false
     }
     ,
     {
@@ -1735,7 +1745,8 @@
                             "type":"radio",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "validateOn":"blur"
                         }
                         ],
                         "width":8,
@@ -1866,7 +1877,8 @@
                             "type":"radio",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "validateOn":"blur"
                         }
                         ],
                         "width":8,
@@ -2016,7 +2028,8 @@
                             "type":"radio",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "validateOn":"blur"
                         }
                         ],
                         "width":8,
@@ -2154,7 +2167,8 @@
                             ,
                             "type":"radio",
                             "input":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "validateOn":"blur"
                         }
                         ],
                         "width":8,
@@ -2537,16 +2551,22 @@
         "key":"coveragePage",
         "theme":"primary",
         "tableView":false,
-        "breadcrumb":"none",
         "properties": {
             "delegate": "RateCard"
         }
         ,
         "lockKey":true,
-        "label":"Panel",
+        "label":"Coverage",
         "validate": {
             "unique": false, "multiple": false
         }
+        ,
+        "breadcrumbClickable":true,
+        "buttonSettings": {
+            "previous": true, "cancel": false, "next": true
+        }
+        ,
+        "collapsible":false
     }
     ,
     {
@@ -2597,21 +2617,21 @@
                 }
                 ,
                 {
-                    "input":true,
-                    "tableView":true,
                     "label":"I Agree",
-                    "dataGridLabel":false,
-                    "key":"section1Agreement",
+                    "tableView":true,
                     "defaultValue":"false",
                     "validate": {
-                        "custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)", "customMessage": "Please let us know if any Incidents have occured in the past!", "unique": false, "multiple": false
+                        "customMessage": "Please let us know if any Incidents have occured in the past!", "custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)", "unique": false, "multiple": false
                     }
                     ,
-                    "type":"checkbox",
+                    "key":"section1Agreement",
                     "properties": {
                         "negate": "section2Agreement"
                     }
                     ,
+                    "type":"checkbox",
+                    "input":true,
+                    "dataGridLabel":false,
                     "lockKey":true
                 }
                 ],
@@ -2849,6 +2869,7 @@
                                     "spellcheck":true,
                                     "tableView":true,
                                     "inputFormat":"plain",
+                                    "validateOn":"blur",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
@@ -2875,11 +2896,12 @@
                                     "spellcheck":true,
                                     "tableView":true,
                                     "inputFormat":"plain",
+                                    "validateOn":"blur",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
-                                    "key":"page4Panel2ColumnsBriefSummary",
+                                    "key":"briefSummary",
                                     "type":"textarea",
                                     "input":true,
                                     "lockKey":true,
@@ -3115,7 +3137,6 @@
                     "required": true, "customMessage": "Please Acknowledge the GDPR Agreement", "unique": false, "multiple": false
                 }
                 ,
-                "errorLabel":"Please Acknowledge the GDPR Agreement",
                 "key":"page4Panel2PanelIagree",
                 "type":"checkbox",
                 "input":true,
@@ -3134,13 +3155,17 @@
         "key":"page4",
         "theme":"primary",
         "tableView":false,
-        "breadcrumb":"none",
         "collapsible":false,
         "collapsed":false,
         "lockKey":true,
-        "label":"Panel",
+        "label":"Special Notice",
         "validate": {
             "unique": false, "multiple": false
+        }
+        ,
+        "breadcrumbClickable":false,
+        "buttonSettings": {
+            "previous": true, "cancel": false, "next": true
         }
     }
     ,
@@ -3389,14 +3414,14 @@
                                             "placeholder":"State",
                                             "customClass":"additionalInsuredPanelColumns2State",
                                             "hideLabel":true,
-                                            "tableView":true,
+                                            "tableView":false,
                                             "dataSrc":"custom",
                                             "data": {
                                                 "values":[ {
                                                     "value": "", "label": ""
                                                 }
                                                 ],
-                                                "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n} else {\nvalues = \"\"\nvalue = \"\"\n}"
+                                                "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
                                             }
                                             ,
                                             "template":"<span>{{ item }}</span>",
@@ -3452,11 +3477,11 @@
                                     ,
                                     {
                                         "components":[ {
-                                            "input":true,
-                                            "tableView":true,
-                                            "label":"Select",
-                                            "key":"businessRelation",
+                                            "label":"Business Relation",
+                                            "widget":"choicesjs",
                                             "placeholder":"Business Relation",
+                                            "hideLabel":true,
+                                            "tableView":false,
                                             "data": {
                                                 "values":[ {
                                                     "value": "Dive Store Owner", "label": "Dive Store Owner"
@@ -3484,38 +3509,41 @@
                                                 ]
                                             }
                                             ,
+                                            "selectThreshold":0.3,
+                                            "validateOn":"blur",
                                             "validate": {
                                                 "required": true, "unique": false, "multiple": false
                                             }
                                             ,
+                                            "key":"businessRelation",
                                             "type":"select",
+                                            "input":true,
                                             "lockKey":true,
-                                            "hideLabel":true,
                                             "hideOnChildrenHidden":false
                                         }
                                         ,
                                         {
-                                            "input":true,
-                                            "tableView":true,
-                                            "label":"Please mention the same:",
-                                            "key":"businessRelationOther",
+                                            "label":"Business Relation Name",
                                             "placeholder":"Please mention the same:",
+                                            "hideLabel":true,
                                             "spellcheck":true,
+                                            "tableView":true,
                                             "validate": {
-                                                "required": true
+                                                "required": true, "unique": false, "multiple": false
                                             }
                                             ,
+                                            "key":"businessRelationOther",
                                             "conditional": {
-                                                "show": "true", "when": "businessRelation", "eq": "other"
+                                                "show": true, "when": "businessRelation", "eq": "other"
                                             }
                                             ,
                                             "type":"textfield",
+                                            "input":true,
                                             "style": {
                                                 "margin-top": "4px"
                                             }
                                             ,
                                             "lockKey":true,
-                                            "hideLabel":true,
                                             "hideOnChildrenHidden":false
                                         }
                                         ],
@@ -3626,11 +3654,17 @@
         "key":"page5",
         "theme":"primary",
         "tableView":false,
-        "breadcrumb":"none",
-        "label":"Panel",
+        "label":"Additional Insured",
         "validate": {
             "unique": false, "multiple": false
         }
+        ,
+        "breadcrumbClickable":false,
+        "buttonSettings": {
+            "previous": true, "cancel": false, "next": true
+        }
+        ,
+        "collapsible":false
     }
     ,
     {
@@ -3809,15 +3843,21 @@
         "key":"page6",
         "theme":"primary",
         "tableView":false,
-        "breadcrumb":"none",
         "properties": {
             "payment_confirmation_page": "true"
         }
         ,
-        "label":"Panel",
+        "label":"Payment Information",
         "validate": {
             "unique": false, "multiple": false
         }
+        ,
+        "breadcrumbClickable":true,
+        "buttonSettings": {
+            "previous": true, "cancel": false, "next": true
+        }
+        ,
+        "collapsible":false
     }
     ,
     {
@@ -3832,7 +3872,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":559,
+    "_vid":566,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3854,7 +3894,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-24T17:15:24.133Z",
+    "modified":"2020-02-25T08:26:41.956Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

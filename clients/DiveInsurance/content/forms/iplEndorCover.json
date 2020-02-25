@@ -752,7 +752,7 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
@@ -776,8 +776,8 @@
                                 "label":"Home Phone",
                                 "placeholder":"Home Phone",
                                 "hideLabel":true,
-                                "spellcheck":true,
-                                "tableView":true,
+                                "spellcheck":false,
+                                "tableView":false,
                                 "clearOnHide":false,
                                 "validateOn":"blur",
                                 "validate": {
@@ -840,7 +840,7 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
@@ -865,8 +865,8 @@
                                 "label":"Mobile Phone",
                                 "placeholder":"Mobile Phone",
                                 "hideLabel":true,
-                                "spellcheck":true,
-                                "tableView":true,
+                                "spellcheck":false,
+                                "tableView":false,
                                 "clearOnHide":false,
                                 "validateOn":"blur",
                                 "validate": {
@@ -2941,7 +2941,7 @@
     "path":"iplendorcover",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-08T15:16:11.935Z",
-    "modified":"2020-02-24T17:26:52.219Z",
+    "modified":"2020-02-25T10:06:01.231Z",
     "machineName":"testdivehub:iplEndorCover",
     "controller":""
 }
