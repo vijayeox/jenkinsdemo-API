@@ -102,7 +102,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"},{"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
+                        route: 'file/user/me?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"}, {"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
@@ -733,6 +733,11 @@ workflow:
         uuid: 2bc1caaa-9628-486d-8b42-104534625993
         bpmn_file: 'Dive Boat/DiveBoatEndorsement.bpmn'
         entity: 'Dive Boat'
+    -
+        name: 'Dive Store'
+        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
+        bpmn_file: 'Dive Store/NewApplication.bpmn'
+        entity: 'Dive Store'
 form:
     -
         name: 'PADI Verification'
