@@ -16,7 +16,7 @@ public class RouteConfigurationDirectoryListener {
     private static final Logger logger = LoggerFactory.getLogger(RouteConfigurationDirectoryListener.class);
 
     //The directory to listen for changes : contains the Routes.groovy
-    private static final String DIRECTORY_NAME = "./../camel/testReload/";
+    private static final String DIRECTORY_NAME = "./../../../../../../../camel/testReload/";
     private static final long POLL_INTERVAL = 3000;
 
     @Autowired
