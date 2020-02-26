@@ -5974,6 +5974,18 @@
 								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
+								"label": "hull_deductible",
+								"calculateValue": "value = '1000.00';",
+								"key": "hull_deductible",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								},
+								"hideOnChildrenHidden": false
+							}, {
 								"label": "Dinghy / Tender Premium",
 								"prefix": "$",
 								"mask": false,
@@ -6032,7 +6044,8 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						}
+						},
+						"path": "page5PanelColumnsColumns2"
 					}, {
 						"label": "Property Base Premium",
 						"prefix": "$",
@@ -6458,6 +6471,18 @@
 							"unique": false,
 							"multiple": false
 						}
+					}, {
+						"label": "liability_deductible",
+						"calculateValue": "value = '1000.00';",
+						"key": "liabilityDeductible",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Liability",
 						"prefix": "$",
@@ -7965,7 +7990,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-02-24T09:31:08.274Z",
+	"modified": "2020-02-25T04:38:30.732Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }

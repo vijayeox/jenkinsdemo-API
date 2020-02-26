@@ -4,6 +4,17 @@
 	"tags": [],
 	"owner": "5db28b688d7586b574a8f4f6",
 	"components": [{
+		"label": "previousPolicyLength",
+		"calculateValue": "value = data['previous_policy_data'].length - 1;",
+		"key": "previousPolicyLength",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
+	}, {
 		"title": "Endorsement Change",
 		"theme": "primary",
 		"collapsible": false,
@@ -4993,6 +5004,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupTaxPercentage'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -5062,6 +5074,7 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupTaxAmount'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -5129,6 +5142,7 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupPadiFeeAmount'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -5196,6 +5210,7 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupPAORfee'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -5262,6 +5277,7 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupTotalAmount'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -6143,6 +6159,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_hullRate'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6216,6 +6233,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_HullPremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6289,6 +6307,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_hull_deductible'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6362,6 +6381,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_DingyTenderPremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6435,6 +6455,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_TrailerPremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6508,6 +6529,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PropertyBasePremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6581,6 +6603,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_Age25Surcharge'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6646,6 +6669,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_NavWaterSurchargeYN'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -6668,6 +6692,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_NavWaterSurchargePremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6746,6 +6771,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PortRiskYN'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -6768,6 +6794,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PortRiskCredit'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6846,6 +6873,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_NavigationCreditYN'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -6869,6 +6897,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_NavigationCredit'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6948,6 +6977,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_SuperiorRiskCreditYN'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -6970,6 +7000,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_SuperiorRiskCredit'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7056,6 +7087,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PropertySubTotal'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7129,6 +7161,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PropertySubTotalProRated'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7187,6 +7220,17 @@
 				"multiple": false
 			},
 			"components": [{
+				"label": "liability_deductible",
+				"calculateValue": "value = '1000.00';",
+				"key": "liability_deductible",
+				"type": "hidden",
+				"input": true,
+				"tableView": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
+			}, {
 				"label": "Table",
 				"cellAlignment": "left",
 				"tableView": false,
@@ -7272,6 +7316,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_LiabilityPremiumCost'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7345,6 +7390,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "excess_liability_coverage",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_ExcessLiabilityPremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7417,6 +7463,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_DingyLiability'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7490,6 +7537,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PassengerPremiumCost'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7563,6 +7611,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_CrewOnBoatPremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7636,6 +7685,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_CrewMembersinWaterPremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7699,6 +7749,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['prevoius_FL-HISurchargeYN'];",
 							"validate": {
 								"unique": false,
 								"multiple": false
@@ -7721,6 +7772,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_FlHiSurchargePremium'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7807,6 +7859,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_LiabilitySubTotal'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -7879,6 +7932,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_LiabilitySubTotalProRated'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8087,6 +8141,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_ProRataFactor'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8159,6 +8214,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_premiumTotalProRated'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8229,6 +8285,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupProfessionalLiabilityPrice'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8301,6 +8358,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_padiFee'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8374,6 +8432,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
+							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_total'];",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -9369,6 +9428,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-02-24T09:29:17.444Z",
+	"modified": "2020-02-25T13:04:51.104Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }

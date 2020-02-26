@@ -12,12 +12,13 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_074ybay</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="ServiceTask_0kfeda1" name="Policy and COI generation" camunda:expression="0" camunda:resultVariable="${premium_barrier == false || ">
+    <bpmn:serviceTask id="ServiceTask_0kfeda1" name="Policy and COI generation" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate":"PolicyDocument"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"DiveBoatEndorsementPremiumCalculation"}</camunda:value>
+              <camunda:value>{"command"{"command" : "delegate", "delegate":"EndorsementDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
             </camunda:list>
@@ -65,7 +66,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:userTask id="UserTask_0vsw34x" name="CSR Rating and Quoating" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR Group">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="endorsementDiveBoatCsr" />
+          <camunda:property name="template" value="endorsementDiveBoatCsr2" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_05el7yq</bpmn:incoming>
@@ -82,7 +83,8 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate":"QuoteDocument"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"DiveBoatEndorsementPremiumCalculation"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"EndorsementQuote"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
             </camunda:list>
@@ -95,7 +97,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_1ij66tv" sourceRef="UserTask_0vsw34x" targetRef="ServiceTask_1aqfyhm">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==true or csrApproved=="true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="UserTask_0cskr81" name="Customer Approval and payment" camunda:asyncAfter="true">
+    <bpmn:userTask id="UserTask_0cskr81" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:assignee="{{padi}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveBoatUserApproval" />
@@ -143,7 +145,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:userTask id="UserTask_1hi2slz" name="CSR Review" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR Group">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="endorsementDiveBoatCsr" />
+          <camunda:property name="template" value="endorsementDiveBoatCsr2" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1oes3om</bpmn:incoming>
@@ -284,7 +286,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmndi:BPMNShape id="ExclusiveGateway_055v5fg_di" bpmnElement="ExclusiveGateway_055v5fg" isMarkerVisible="true">
         <dc:Bounds x="1075" y="193" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1075" y="164" width="53" height="27" />
+          <dc:Bounds x="1103" y="243" width="53" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1ioni1f_di" bpmnElement="SequenceFlow_1ioni1f">
