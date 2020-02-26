@@ -142,10 +142,10 @@ class VisualizationService extends AbstractService
         $count=$resultSet->toArray()[0]['count'];
 
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,isdeleted,'renderer','type' FROM `ox_visualization`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,isdeleted,renderer,type FROM `ox_visualization`".$where." ".$sort." ".$limit;
         }
         else{
-            $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,'renderer','type' FROM `ox_visualization`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,renderer,type FROM `ox_visualization`".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
