@@ -41,14 +41,14 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
+        uuid: 703d3a09-b7f3-49e9-9c79-74d5cae7f6e7
     -
         name: CSR
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
-        uuid: ef71307c-7bdc-4dd3-bc75-afdc0ab2790a
+        uuid: 41bd1503-20c8-49fc-be10-6c9a8222489c
 entity:
     -
         name: 'Individual Professional Liability'
@@ -743,7 +743,7 @@ form:
         name: 'PADI Verification'
         uuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
         description: 'Page for CSR to verify PADI details'
-        template_file: padi_validation.json
+        template_file: padiValidationPage.json
         entity: Padi
     -
         name: 'Pocket Card'
