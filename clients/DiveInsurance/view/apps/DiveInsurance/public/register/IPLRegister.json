@@ -48,7 +48,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<center><h3><b>CONTACT US!</b></h3></br>\n \t\n<i>Have questions?</br></br></i>\nCall us at \n<font color=\"blue\">1 800 223 9998 </font>\nor \n<font color=\"blue\">1 714 739 3177</font></br></br>\n\nFAX us at\n<font color=\"blue\">1 714 739 3188</font></br></br>\n\nEmail us at <font color=\"blue\">efr@diveinsurance.com</font></center>",
+					"content": "<center><h3><b>CONTACT US!</b></h3></br>\n \t\n<i>Have questions?</br></br></i>\nCall us at \n<font color=\"blue\">1 800 223 9998 </font>\nor \n<font color=\"blue\">1 714 739 3177</font></br></br>\n\nFAX us at\n<font color=\"blue\">1 714 739 3188</font></br></br>\n\nEmail us at <font color=\"blue\">\n  <a href=\"mailto:instructors@diveinsurance.com\">instructors@diveinsurance.com</a>\n  </font></center>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html3",
@@ -1171,7 +1171,7 @@
 		"customConditional": "show = (data['padiVerified'] == true && (data['user_exists']==0||data['user_exists']=='0'))"
 	}],
 	"revisions": "current",
-	"_vid": 201,
+	"_vid": 203,
 	"title": "Padi Verification Form - IPL",
 	"display": "form",
 	"access": [{
@@ -1185,7 +1185,7 @@
 	"path": "padiverificationformipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-08-10T15:46:39.851Z",
-	"modified": "2020-02-26T07:56:50.943Z",
+	"modified": "2020-02-26T10:24:21.325Z",
 	"machineName": "testdivehub:padiVerificationForm",
 	"controller": ""
 }
