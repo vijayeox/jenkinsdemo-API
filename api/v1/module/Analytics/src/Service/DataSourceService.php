@@ -181,7 +181,12 @@ class DataSourceService extends AbstractService
                     break;
                 case 'MySQL':
                     $config = $config['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\MySQL\AnalyticsEngineMySQLImpl($config);
+                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEngineMySQLImpl($config);
+                    break;
+                case 'Postgres':
+                case 'PostgreSQL':
+                    $config = $config['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEnginePostgresImpl($config);
                     break;
             }
         }
