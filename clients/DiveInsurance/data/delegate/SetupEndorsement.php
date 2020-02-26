@@ -16,7 +16,7 @@ class SetupEndorsement extends AbstractAppDelegate
         $data = array_merge($data,$rates);
         if(isset($data['liabilityCoverageName'])){
             $data['careerCoverage'] = $data['liabilityCoverageName'];
-        } else {
+        } else if(isset($data['careerCoverage'])){
             $data['careerCoverage']= $data['careerCoverage'];
         }
         if(isset($data['endorsement_options'])){
