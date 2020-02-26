@@ -116,7 +116,7 @@ menu:
                         actions:
                             -
                                 name: View
-                                rule: '''{{policyStatus}}'' != ''Pending Approval'''
+                                rule: '''{{policyStatus}}'' == ''In Force'''
                                 details:
                                     -
                                         type: View
