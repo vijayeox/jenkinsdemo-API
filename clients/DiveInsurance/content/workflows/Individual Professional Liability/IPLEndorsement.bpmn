@@ -132,13 +132,13 @@ execution.setVariable("process_reminder",false)</camunda:script>
           <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_11738jy</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_16l2dji</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0spz5ac</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0isa8vl</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_12e5vo3</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_1m44nyk" sourceRef="StartEvent_0qetve8" targetRef="ExclusiveGateway_0spajg7" />
-    <bpmn:sequenceFlow id="SequenceFlow_11738jy" name="No" sourceRef="ExclusiveGateway_0spajg7" targetRef="UserTask_14i3m9l">
+    <bpmn:sequenceFlow id="SequenceFlow_11738jy" name="No" sourceRef="ExclusiveGateway_0spajg7" targetRef="Task_1jrn5e5">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1gaibuf" name="Yes" sourceRef="ExclusiveGateway_0spajg7" targetRef="ExclusiveGateway_1uh392h">
@@ -206,6 +206,19 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_144dyml" sourceRef="ExclusiveGateway_0goh29c" targetRef="ServiceTask_1nlbeez">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true and autoRenewalJob != null}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0spz5ac" sourceRef="Task_1jrn5e5" targetRef="UserTask_14i3m9l" />
+    <bpmn:serviceTask id="Task_1jrn5e5" name="Policy Status Change during Review" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')</camunda:script>
+        </camunda:executionListener>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="command">fileSave</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_11738jy</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0spz5ac</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1x7ok44">
@@ -244,10 +257,10 @@ execution.setVariable("process_reminder",false)</camunda:script>
         <di:waypoint x="307" y="339.5" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_11738jy_di" bpmnElement="SequenceFlow_11738jy">
-        <di:waypoint x="332" y="364.5" />
-        <di:waypoint x="332" y="523.5" />
+        <di:waypoint x="332" y="365" />
+        <di:waypoint x="332" y="405" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="340" y="446" width="14" height="14" />
+          <dc:Bounds x="340" y="380" width="14" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1gaibuf_di" bpmnElement="SequenceFlow_1gaibuf">
@@ -339,6 +352,13 @@ execution.setVariable("process_reminder",false)</camunda:script>
         <di:waypoint x="914" y="758" />
         <di:waypoint x="914" y="378" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0spz5ac_di" bpmnElement="SequenceFlow_0spz5ac">
+        <di:waypoint x="332" y="485" />
+        <di:waypoint x="332" y="524" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0ptuo61_di" bpmnElement="Task_1jrn5e5">
+        <dc:Bounds x="282" y="405" width="100" height="80" />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
