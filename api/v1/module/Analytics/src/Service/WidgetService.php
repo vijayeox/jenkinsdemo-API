@@ -240,6 +240,7 @@ class WidgetService extends AbstractService
                 'is_owner' => $firstRow['is_owner'],
                 'renderer' => $firstRow['renderer'],
                 'type' => $firstRow['type'],
+                'version' => $firstRow['version'],
                 'queries' => $queries
             ];
             $response = [
