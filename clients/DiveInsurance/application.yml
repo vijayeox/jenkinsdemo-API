@@ -226,7 +226,7 @@ menu:
                     type: List
                     content:
                         route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
-                        filterable: true
+                        filterable: false
                         reorderable: true
                         resizable: true
                         sortable: true
@@ -248,9 +248,6 @@ menu:
                             -
                                 title: Product
                                 field: entity_name
-                            -
-                                title: 'Policy Status'
-                                field: policyStatus
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
