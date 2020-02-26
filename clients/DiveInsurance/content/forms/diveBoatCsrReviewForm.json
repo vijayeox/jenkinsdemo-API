@@ -1283,6 +1283,7 @@
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
+					"required": true,
 					"unique": false,
 					"multiple": false
 				},
@@ -2383,24 +2384,23 @@
 							"key": "pageNaNFieldsetTableColumns",
 							"columns": [{
 								"components": [{
-									"input": true,
-									"tableView": true,
-									"inputType": "text",
 									"label": "Hull Market Value",
-									"key": "hull_market_value",
 									"placeholder": "Hull Market Value",
-									"delimiter": true,
-									"decimalLimit": 2,
-									"requireDecimal": true,
-									"validate": {
-										"required": true,
-										"multiple": false,
-										"customMessage": "Please enter the hull market value.",
-										"unique": false
-									},
-									"type": "currency",
+									"prefix": "$",
 									"hideLabel": true,
-									"lockKey": true,
+									"mask": false,
+									"spellcheck": true,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"validate": {
+										"unique": false,
+										"multiple": false
+									},
+									"key": "hull_market_value",
+									"type": "number",
+									"input": true,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 6,
@@ -2409,24 +2409,23 @@
 								"pull": 0
 							}, {
 								"components": [{
-									"input": true,
-									"tableView": true,
-									"inputType": "text",
-									"label": "Currency",
-									"key": "purchase_price_currency",
+									"label": "Purchase Price",
 									"placeholder": "Purchase Price",
-									"delimiter": false,
-									"decimalLimit": 2,
-									"requireDecimal": true,
-									"validate": {
-										"required": true,
-										"multiple": false,
-										"customMessage": "Please enter the purchase price.",
-										"unique": false
-									},
-									"type": "currency",
+									"prefix": "$",
 									"hideLabel": true,
-									"lockKey": true,
+									"mask": false,
+									"spellcheck": true,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"validate": {
+										"unique": false,
+										"multiple": false
+									},
+									"key": "purchase_price_currency",
+									"type": "number",
+									"input": true,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 6,
@@ -2439,7 +2438,8 @@
 							"validate": {
 								"unique": false,
 								"multiple": false
-							}
+							},
+							"path": "pageNaNFieldsetTableColumns"
 						}, {
 							"input": true,
 							"tableView": true,
@@ -3757,10 +3757,9 @@
 				"key": "page7Columns",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Group Coverage",
-						"key": "groupCoverageSelect",
+						"widget": "choicesjs",
+						"tableView": true,
 						"data": {
 							"values": [{
 								"value": "groupCoverageMoreThan0",
@@ -3791,11 +3790,14 @@
 								"label": "$500,001 and up"
 							}]
 						},
+						"selectThreshold": 0.3,
 						"validate": {
 							"unique": false,
 							"multiple": false
 						},
+						"key": "groupCoverageSelect",
 						"type": "select",
+						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -3849,11 +3851,10 @@
 				"key": "page7Columns2",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Excess Liability",
-						"key": "groupExcessLiabilitySelect",
+						"widget": "choicesjs",
 						"placeholder": "Select Excess Liability",
+						"tableView": true,
 						"data": {
 							"values": [{
 								"value": "groupExcessLiability1M",
@@ -3872,12 +3873,15 @@
 								"label": "9M"
 							}]
 						},
+						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
 							"unique": false,
 							"multiple": false
 						},
+						"key": "groupExcessLiabilitySelect",
 						"type": "select",
+						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -5970,6 +5974,18 @@
 								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
+								"label": "hull_deductible",
+								"calculateValue": "value = '1000.00';",
+								"key": "hull_deductible",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								},
+								"hideOnChildrenHidden": false
+							}, {
 								"label": "Dinghy / Tender Premium",
 								"prefix": "$",
 								"mask": false,
@@ -6028,7 +6044,8 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						}
+						},
+						"path": "page5PanelColumnsColumns2"
 					}, {
 						"label": "Property Base Premium",
 						"prefix": "$",
@@ -6065,7 +6082,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
-						"calculateValue": "if(parseFloat(data['boat_age']>24)){\nvalue = (parseFloat(data['PropertyBasePremium']) * parseFloat(data['DeductibleGreaterthan24'])/100)\n} else {\nvalue = 0\n}",
+						"calculateValue": "if(parseFloat(data['boat_age']>24)){\nvalue = (parseFloat(data['PropertyBasePremium']) * parseFloat(data['AgeSurcharge'])/100)\n} else {\nvalue = 0\n}",
 						"validate": {
 							"multiple": false,
 							"unique": false
@@ -6364,7 +6381,7 @@
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"redrawOn": "data",
-								"calculateValue": "value = (parseFloat(data['ProRataFactor'])*parseFloat(data['PropertySubTotal']))",
+								"calculateValue": "value = (parseFloat(data['ProRataFactor'])*parseFloat(data['PropertySubTotal'])) - (parseFloat(data['layupDeductible']) || 0)",
 								"validate": {
 									"multiple": false,
 									"unique": false
@@ -6454,6 +6471,18 @@
 							"unique": false,
 							"multiple": false
 						}
+					}, {
+						"label": "liability_deductible",
+						"calculateValue": "value = '1000.00';",
+						"key": "liabilityDeductible",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Liability",
 						"prefix": "$",
@@ -6990,6 +7019,17 @@
 							"multiple": false
 						}
 					}, {
+						"label": "AgeSurcharge",
+						"key": "ageSurcharge",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"hideOnChildrenHidden": false
+					}, {
 						"input": true,
 						"tableView": true,
 						"key": "FL-HISurcharge",
@@ -7498,7 +7538,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "total_col"
 			}, {
 				"input": true,
 				"tableView": true,
@@ -7949,7 +7990,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-02-19T04:27:19.960Z",
+	"modified": "2020-02-25T04:38:30.732Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }

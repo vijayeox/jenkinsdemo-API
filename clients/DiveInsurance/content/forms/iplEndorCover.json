@@ -752,7 +752,7 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
@@ -776,14 +776,14 @@
                                 "label":"Home Phone",
                                 "placeholder":"Home Phone",
                                 "hideLabel":true,
-                                "spellcheck":true,
-                                "tableView":true,
+                                "spellcheck":false,
+                                "tableView":false,
                                 "clearOnHide":false,
+                                "validateOn":"blur",
                                 "validate": {
                                     "required": true, "customMessage": "Please enter your phone number.", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
                                 "key":"home_phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
@@ -827,7 +827,7 @@
                         "key":"panelPanel3ColumnsColumns2",
                         "columns":[ {
                             "components":[ {
-                                "label":"Select",
+                                "label":"Country Code",
                                 "widget":"choicesjs",
                                 "placeholder":"Country Code",
                                 "hideLabel":true,
@@ -840,14 +840,14 @@
                                 }
                                 ,
                                 "valueProperty":"dial_code",
-                                "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "template":"<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"mobile_country_code",
+                                "key":"phone_country_code",
                                 "type":"select",
                                 "input":true,
                                 "lockKey":true,
@@ -865,15 +865,15 @@
                                 "label":"Mobile Phone",
                                 "placeholder":"Mobile Phone",
                                 "hideLabel":true,
-                                "spellcheck":true,
-                                "tableView":true,
+                                "spellcheck":false,
+                                "tableView":false,
                                 "clearOnHide":false,
+                                "validateOn":"blur",
                                 "validate": {
                                     "required": true, "customMessage": "Please enter your phone number.", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
-                                "key":"mobile_phone_number",
+                                "key":"phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
                                 "lockKey":true,
@@ -882,9 +882,9 @@
                             }
                             ,
                             {
-                                "label":"mobile_phone",
-                                "calculateValue":"value = data.mobile_country_code + \"\" + data.mobile_phone_number",
-                                "key":"mobile_phone",
+                                "label":"phone",
+                                "calculateValue":"value = data.phone_country_code + \"\" + data.phone_number",
+                                "key":"phone",
                                 "type":"hidden",
                                 "input":true,
                                 "tableView":false,
@@ -937,20 +937,22 @@
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
                         "label":"Email",
-                        "key":"email",
                         "placeholder":"Email",
+                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "hideLabel":true,
+                        "spellcheck":true,
+                        "tableView":true,
                         "clearOnHide":false,
-                        "type":"email",
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "customMessage": "Please enter your email address in format: yourname@example.com", "unique": false, "multiple": false
                         }
                         ,
-                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "key":"email",
+                        "type":"email",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -2475,6 +2477,7 @@
                                             }
                                             ,
                                             "valueProperty":"country",
+                                            "template":"<span>{{ item.country }}</span>",
                                             "selectThreshold":0.3,
                                             "clearOnHide":false,
                                             "validate": {
@@ -2508,7 +2511,7 @@
                                                     "value": "", "label": ""
                                                 }
                                                 ],
-                                                "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n} else {\nvalues = \"\"\nvalue = \"\"\n}"
+                                                "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
                                             }
                                             ,
                                             "template":"<span>{{ item }}</span>",
@@ -2938,7 +2941,7 @@
     "path":"iplendorcover",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-08T15:16:11.935Z",
-    "modified":"2020-02-19T11:51:02.083Z",
+    "modified":"2020-02-25T10:06:01.231Z",
     "machineName":"testdivehub:iplEndorCover",
     "controller":""
 }

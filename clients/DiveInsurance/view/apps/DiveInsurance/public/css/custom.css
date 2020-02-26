@@ -348,7 +348,24 @@ input:focus {
 
 .formio-component-submit .submit-fail::after {
   top: 2px;
-  right: 6px;
+}
+
+.control-label--hidden{
+  right: 8px;
+  top: 4px;
+}
+
+.alert .control-label--hidden{
+  right: 25px;
+  top: 18px;
+}
+
+.formio-component-select .control-label--hidden.field-required{
+  right: 45px;
+}
+
+.formio-component-select.alert .control-label--hidden.field-required{
+  right: 65px;
 }
 
 #wrongPassword {

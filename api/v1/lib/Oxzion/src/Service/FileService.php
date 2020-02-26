@@ -227,6 +227,7 @@ class FileService extends AbstractService
             }
         }
 
+        //TODO avoid doing array merge here instead replace the incoming data as is
         $fields = array_merge($fileObject, $data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
@@ -313,23 +314,35 @@ class FileService extends AbstractService
      * @return array $data
      * @return array Returns a JSON Response with Status Code and Created File.
      */
-    public function getFile($id)
+    public function getFile($id, $latest = false)
     {
         try {
             $this->logger->info("FILE ID  ------" . json_encode($id));
             $params = array('id' => $id,
                 'orgId' => AuthContext::get(AuthConstants::ORG_ID));
-            $select = "SELECT uuid, data  from ox_file where uuid = :id AND org_id = :orgId";
+            $select = "SELECT id, uuid, data, latest  from ox_file where uuid = :id AND org_id = :orgId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
             $this->logger->info("FILE DATA ------" . json_encode($result));
             if (count($result) > 0) {
-                $this->logger->info("FILE ID  ------" . json_encode($result));
-                if ($result[0]['data']) {
-                    $result[0]['data'] = json_decode($result[0]['data'], true);
+                if(!$latest || ($latest && $result[0]['latest'])){
+                    $this->logger->info("FILE ID  ------" . json_encode($result));
+                    if ($result[0]['data']) {
+                        $result[0]['data'] = json_decode($result[0]['data'], true);
+                    }
+                    unset($result[0]['latest']);
+                    unset($result[0]['id']);
+                    $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
+                    return $result[0];
+                }else {
+                    $select = "SELECT uuid from ox_file where parent_id = :id";
+                    $params = array('id' => $result[0]['id']);
+                    $this->logger->info("Executing query $select with params " . json_encode($params));
+                    $result2 = $this->executeQueryWithBindParameters($select, $params)->toArray();
+                    if (count($result2) > 0) {
+                        return $this->getFile($result2[0]['uuid'], $latest);
+                    }
                 }
-                $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
-                return $result[0];
             }
             return 0;
         } catch (Exception $e) {
@@ -377,7 +390,7 @@ class FileService extends AbstractService
             $where = array($entityId);
             $this->logger->info("Executing query - $query with  params" . json_encode($where));
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
-            $this->logger->info("Query result" . json_encode($fields));
+            $this->logger->info("Query result got " . count($fields)." fields");
         } else {
             $this->logger->info("No Entity ID");
             return 0;
@@ -386,7 +399,7 @@ class FileService extends AbstractService
         $whereParams = array($fileId);
         $this->logger->info("Executing query - $sqlQuery with  params" . json_encode($whereParams));
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery, $whereParams)->toArray();
-        $this->logger->info("Query result" . json_encode($fileArray));
+        $this->logger->info("Query result got " . count($fileArray)." records");
         $keyValueFields = array();
         $i = 0;
         if (!empty($fields)) {
@@ -399,7 +412,7 @@ class FileService extends AbstractService
                     $keyValueFields[$i]['id'] = null;
                 }
                 $fieldProperties = json_decode($field['template'], true);
-                $this->logger->info("FIELD PROPERTIES - " . json_encode($fieldProperties));
+                //$this->logger->info("FIELD PROPERTIES - " . json_encode($fieldProperties));
                 if (isset($fieldProperties['persistent']) && !$fieldProperties['persistent']) {
                     if (isset($fieldData[$field['name']])) {
                         unset($fieldData[$field['name']]);

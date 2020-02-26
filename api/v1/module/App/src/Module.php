@@ -9,12 +9,14 @@ use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\FieldTable;
 use Oxzion\Model\FileTable;
 use Oxzion\Model\FormTable;
+use Oxzion\Model\JobTable;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Service\CommandService;
 use Oxzion\Service\ErrorLogService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\FormService;
+use Oxzion\Service\JobService;
 use Oxzion\Service\RoleService;
 use Oxzion\Service\UserCacheService;
 use Oxzion\Service\UserService;
@@ -173,6 +175,13 @@ class Module implements ConfigProviderInterface
                     return new Controller\FormController(
                         $container->get(FormTable::class),
                         $container->get(FormService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\JobController::class => function ($container) {
+                    return new Controller\JobController(
+                        $container->get(JobTable::class),
+                        $container->get(JobService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

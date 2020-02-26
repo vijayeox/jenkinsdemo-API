@@ -96,6 +96,19 @@
             "key":"panelPanel2Columns",
             "columns":[ {
                 "components":[ {
+                    "label":"PadiEmpty",
+                    "key":"padi_empty",
+                    "type":"hidden",
+                    "input":true,
+                    "tableView":false,
+                    "validate": {
+                        "unique": false, "multiple": false
+                    }
+                    ,
+                    "hideOnChildrenHidden":false
+                }
+                ,
+                {
                     "label": "padiNotFound", "defaultValue": "padi", "customDefaultValue": "value = false;", "key":"padiNotFound", "type":"hidden", "input":true, "tableView":true, "lockKey":true, "hideOnChildrenHidden":false, "validate": {
                         "unique": false, "multiple": false
                     }
@@ -273,6 +286,30 @@
                     }
                     ,
                     "customConditional":"show =\n  (data[\"padiNotFound\"] == true || data[\"padiNotFound\"] == \"true\") &&\n  (data[\"verified\"] == true || data[\"verified\"] == \"true\");",
+                    "type":"htmlelement",
+                    "input":false,
+                    "validate": {
+                        "unique": false, "multiple": false
+                    }
+                    ,
+                    "hideOnChildrenHidden":false,
+                    "hideLabel":true
+                }
+                ,
+                {
+                    "label":"HTML",
+                    "attrs":[ {
+                        "attr": "style", "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
+                    }
+                    ],
+                    "content":"PADI Number cannot be blank",
+                    "refreshOnChange":false,
+                    "tableView":false,
+                    "key":"html",
+                    "conditional": {
+                        "show": true, "when": "padi_empty", "eq": "true"
+                    }
+                    ,
                     "type":"htmlelement",
                     "input":false,
                     "validate": {
@@ -547,7 +584,7 @@
                 ,
                 {
                     "components":[ {
-                        "label":"Country 2",
+                        "label":"Country ",
                         "widget":"choicesjs",
                         "placeholder":"Country",
                         "hideLabel":true,
@@ -561,6 +598,8 @@
                             "custom":"function arrayColumn(array, columnName) {\n    return array.map(function(value,index) {\n        return value[columnName];\n    })\n}\nvalues = arrayColumn(countryList,'country')"
                         }
                         ,
+                        "valueProperty":"country",
+                        "template":"<span>{{ item.country }}</span>",
                         "selectThreshold":0.3,
                         "clearOnHide":false,
                         "validate": {
@@ -583,34 +622,23 @@
                         "tableView":true,
                         "dataSrc":"custom",
                         "data": {
-                            "values":[ {
-                                "value": "", "label": ""
-                            }
+                            "values":[ {}
                             ],
-                            "url":"https://api.myjson.com/bins/1bz191",
-                            "headers":[ {
-                                "value": "", "key": ""
-                            }
-                            ],
-                            "custom":"let obj = countryList.find(o => o.country === data.country);\nif(obj){\nvalues = obj.states\n} else {\n  values = countrylist.find(o => o.country === \"United States of America\")\n    .states;\n}"
+                            "custom": "let obj = countryList.find(o => o.country === data['country']);\nif(obj){\nvalues = obj.states\n}"
                         }
                         ,
-                        "valueProperty":"abbreviation",
-                        "dataType":"string",
                         "template":"<span>{{ item }}</span>",
                         "selectThreshold":0.3,
                         "validate": {
-                            "required": true, "custom": "component.disabled = true", "unique": false, "multiple": false
+                            "required": true, "unique": false, "multiple": false
                         }
                         ,
                         "key":"state",
                         "type":"select",
                         "refreshOn":"country",
                         "input":true,
-                        "lockKey":true,
-                        "clearOnRefresh":true,
                         "hideOnChildrenHidden":false,
-                        "disabled":true
+                        "clearOnRefresh":true
                     }
                     ],
                     "width":4,
@@ -624,6 +652,8 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
+                ,
+                "path":"panelPanelColumns"
             }
             ],
             "type":"panel",
@@ -662,44 +692,44 @@
                 "key":"panelPanel3Columns2",
                 "columns":[ {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
-                        "label":"Address 1",
-                        "key":"mailaddress1",
+                        "label":"Mailing Address 1",
                         "placeholder":"Address 1",
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "tableView":true,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
                         ,
+                        "key":"mailaddress1",
                         "conditional": {
-                            "show": "false", "when": "panelPanel3Sameasmailingaddress", "eq": "1"
+                            "show": false, "when": "panelPanel3Sameasmailingaddress", "eq": "1"
                         }
                         ,
                         "type":"textfield",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
-                        "label":"Address 2",
-                        "key":"mailaddress2",
+                        "label":"Mailing Address 2",
                         "placeholder":"Address 2",
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "tableView":true,
                         "validate": {
-                            "required": true, "unique": false, "multiple": false
+                            "unique": false, "multiple": false
                         }
                         ,
+                        "key":"mailaddress2",
                         "conditional": {
-                            "show": "false", "when": "panelPanel3Sameasmailingaddress", "eq": "1"
+                            "show": false, "when": "panelPanel3Sameasmailingaddress", "eq": "1"
                         }
                         ,
                         "type":"textfield",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -711,25 +741,24 @@
                 ,
                 {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
-                        "label":"Text",
-                        "key":"physical_city",
+                        "label":"Mailing City",
                         "placeholder":"City",
-                        "clearOnHide":false,
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "tableView":true,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
                         ,
+                        "key":"physical_city",
                         "type":"textfield",
-                        "hideLabel":true,
+                        "input":true,
                         "lockKey":true,
                         "hideOnChildrenHidden":false
                     }
                     ,
                     {
-                        "label":"Text",
+                        "label":"Mailing Zip Code",
                         "placeholder":"Zip Code",
                         "hideLabel":true,
                         "spellcheck":true,
@@ -753,11 +782,12 @@
                 ,
                 {
                     "components":[ {
-                        "input":true,
-                        "tableView":true,
-                        "label":"Select country",
-                        "key":"physical_country",
+                        "label":"Mailing Country",
+                        "widget":"choicesjs",
                         "placeholder":"Country",
+                        "hideLabel":true,
+                        "tableView":true,
+                        "dataSrc":"custom",
                         "data": {
                             "values":[ {
                                 "value": "", "label": ""
@@ -766,25 +796,27 @@
                             "custom":"function arrayColumn(array, columnName) {\n    return array.map(function(value,index) {\n        return value[columnName];\n    })\n}\nvalues = arrayColumn(countryList,'country')"
                         }
                         ,
-                        "dataSrc":"custom",
                         "valueProperty":"country",
-                        "clearOnHide":false,
+                        "template":"<span>{{ item.country }}</span>",
+                        "selectThreshold":0.3,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
                         ,
+                        "key":"physical_country",
                         "type":"select",
-                        "hideLabel":true,
+                        "input":true,
                         "lockKey":true,
                         "hideOnChildrenHidden":false
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
-                        "label":"State",
-                        "key":"physical_state",
+                        "label":"Mailing State",
+                        "widget":"choicesjs",
                         "placeholder":"State",
+                        "hideLabel":true,
+                        "tableView":true,
+                        "dataSrc":"custom",
                         "data": {
                             "values":[ {
                                 "value": "", "label": ""
@@ -793,15 +825,16 @@
                             "custom":"let obj = countryList.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states\n}"
                         }
                         ,
-                        "dataSrc":"custom",
-                        "refreshOn":"physical_country",
                         "template":"<span>{{ item }}</span>",
+                        "selectThreshold":0.3,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
                         ,
+                        "key":"physical_state",
                         "type":"select",
-                        "hideLabel":true,
+                        "refreshOn":"physical_country",
+                        "input":true,
                         "hideOnChildrenHidden":false,
                         "lockKey":true,
                         "clearOnRefresh":true
@@ -850,11 +883,13 @@
                                 "custom": "values = phoneList"
                             }
                             ,
-                            "template":"<span>{{ item.name }} - {{ item.dial_code }}</span>",
+                            "valueProperty":"dial_code",
+                            "dataType":"auto",
+                            "template":"<span>{{ item.dial_code }}</span>",
                             "selectThreshold":0.3,
                             "calculateValue":"if(data.country && phoneList){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                             "validate": {
-                                "unique": false, "multiple": false
+                                "required": true, "unique": false, "multiple": false
                             }
                             ,
                             "key":"countryCode",
@@ -871,18 +906,33 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
                             "label":"Home Phone",
-                            "key":"home_phone",
                             "placeholder":"Home Phone",
+                            "hideLabel":true,
+                            "spellcheck":true,
+                            "tableView":true,
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
                             ,
+                            "key":"home_phone_number",
                             "type":"phoneNumber",
+                            "input":true,
                             "lockKey":true,
-                            "hideLabel":true,
+                            "hideOnChildrenHidden":false
+                        }
+                        ,
+                        {
+                            "label":"home_phone",
+                            "calculateValue":"value = data.home_country_code + \"\"+ data.home_phone_number",
+                            "key":"home_phone",
+                            "type":"hidden",
+                            "input":true,
+                            "tableView":false,
+                            "validate": {
+                                "unique": false, "multiple": false
+                            }
+                            ,
                             "hideOnChildrenHidden":false
                         }
                         ],
@@ -892,6 +942,7 @@
                         "pull":0
                     }
                     ],
+                    "hideLabel":true,
                     "tableView":false,
                     "key":"columns",
                     "type":"columns",
@@ -914,15 +965,17 @@
                             "tableView":true,
                             "dataSrc":"custom",
                             "data": {
+                                "values":[ {}
+                                ],
                                 "custom": "values = phoneList"
                             }
                             ,
                             "valueProperty":"dial_code",
-                            "template":"<span>{{ item.name }} - {{ item.dial_code }}</span>",
+                            "template":"<span>{{ item.dial_code }}</span>",
                             "selectThreshold":0.3,
                             "calculateValue":"if(data.country && phoneList){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                             "validate": {
-                                "unique": false, "multiple": false
+                                "required": true, "unique": false, "multiple": false
                             }
                             ,
                             "key":"countryCode1",
@@ -939,18 +992,33 @@
                     ,
                     {
                         "components":[ {
-                            "input":true,
-                            "tableView":true,
                             "label":"Mobile Phone",
-                            "key":"mobilephone",
                             "placeholder":"Mobile Phone",
+                            "hideLabel":true,
+                            "spellcheck":true,
+                            "tableView":true,
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
                             }
                             ,
+                            "key":"phone_number",
                             "type":"phoneNumber",
+                            "input":true,
                             "lockKey":true,
-                            "hideLabel":true,
+                            "hideOnChildrenHidden":false
+                        }
+                        ,
+                        {
+                            "label":"phone",
+                            "calculateValue":"value = data.phone_country_code + \"\" + data.phone_number",
+                            "key":"phone",
+                            "type":"hidden",
+                            "input":true,
+                            "tableView":false,
+                            "validate": {
+                                "unique": false, "multiple": false
+                            }
+                            ,
                             "hideOnChildrenHidden":false
                         }
                         ],
@@ -968,7 +1036,8 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "path":"columns1"
+                    "path":"columns1",
+                    "hideLabel":true
                 }
                 ],
                 "width":6,
@@ -1050,7 +1119,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":54,
+    "_vid":69,
     "title":"Padi Verification Form - Emergency First Response",
     "display":"form",
     "access":[ {
@@ -1066,7 +1135,7 @@
     "path":"padiverificationformemergencyfirstresponse",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-05T12:05:39.142Z",
-    "modified":"2020-02-19T10:46:31.007Z",
+    "modified":"2020-02-24T14:03:14.562Z",
     "machineName":"testdivehub:padiVerificationFormEmergencyFirstResponse",
     "controller":""
 }

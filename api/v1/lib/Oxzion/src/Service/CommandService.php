@@ -268,11 +268,7 @@ class CommandService extends AbstractService
             $data[$jobName] = json_encode($jobData);
         }
         $this->logger->info("Schedule JOB DATA - " . print_r($data, true));
-        $fileData = json_encode($data);
-        $params = array("filedata" => $fileData, "fileUuid" => $data['fileId']);
-        $query = "UPDATE ox_file SET data = :filedata where uuid = :fileUuid";
-        $this->executeUpdateWithBindParameters($query, $params);
-        // return $response;
+        $this->fileService->updateFile($data, $data['fileId']);
     }
 
     protected function canceljob(&$data)
@@ -470,7 +466,7 @@ class CommandService extends AbstractService
             throw new EntityNotFoundException("File Id not provided");
         }
 
-        $result = $this->fileService->getFile($fileId);
+        $result = $this->fileService->getFile($fileId, true);
         $this->logger->info("EXTRACT FILE DATA result" . print_r($result, true));
         if ($result == 0) {
             throw new EntityNotFoundException("File " . $fileId . " not found");
@@ -590,6 +586,9 @@ class CommandService extends AbstractService
         if(isset($data['data'])){
             $this->logger->info("Process File Data --");
             $fileData = $data['data'];
+            if(isset($fileData['uuid'])){
+                unset($fileData['uuid']);
+            }
             unset($data['data']);
             $processedData = array_merge($data,$fileData);
             $this->logger->info("Processed Data".print_r($processedData,true));

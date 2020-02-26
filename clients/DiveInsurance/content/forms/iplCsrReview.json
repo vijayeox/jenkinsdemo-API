@@ -250,7 +250,7 @@
                         "spellcheck":true,
                         "tableView":true,
                         "validate": {
-                            "required": true, "pattern": "[0-9\\s-]*", "customMessage": "Please enter your zip code.", "unique": false, "multiple": false
+                            "required": true, "pattern": "[0-9\\s-]*", "customMessage": "Please enter a valid Zip Code for your region.", "unique": false, "multiple": false
                         }
                         ,
                         "key":"zip",
@@ -272,7 +272,7 @@
                         "widget":"choicesjs",
                         "placeholder":"Country",
                         "hideLabel":true,
-                        "tableView":true,
+                        "tableView":false,
                         "dataSrc":"custom",
                         "data": {
                             "values":[ {
@@ -290,6 +290,7 @@
                         "template":"<span>{{ item.country }}</span>",
                         "selectThreshold":0.3,
                         "clearOnHide":false,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
@@ -299,7 +300,9 @@
                         "input":true,
                         "lockKey":true,
                         "source":"5d347da33e9be31e15d3b115",
-                        "hideOnChildrenHidden":false
+                        "hideOnChildrenHidden":false,
+                        "refreshOn":"country",
+                        "clearOnRefresh":true
                     }
                     ,
                     {
@@ -310,26 +313,26 @@
                         "tableView":true,
                         "dataSrc":"custom",
                         "data": {
-                            "values":[ {
-                                "value": "", "label": ""
-                            }
+                            "values":[ {}
                             ],
-                            "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n} else {\nvalues = \"\"\n}"
+                            "custom": "let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}"
                         }
                         ,
                         "template":"<span>{{ item }}</span>",
                         "selectThreshold":0.3,
                         "clearOnHide":false,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
                         ,
                         "key":"state",
                         "type":"select",
+                        "refreshOn":"country",
                         "input":true,
                         "lockKey":true,
                         "hideOnChildrenHidden":false,
-                        "indexeddb": {}
+                        "clearOnRefresh":true
                     }
                     ],
                     "width":4,
@@ -438,7 +441,7 @@
                             "spellcheck":true,
                             "tableView":true,
                             "validate": {
-                                "required": true, "pattern": "[0-9\\s-]*", "customMessage": "Please enter your zip code.", "unique": false, "multiple": false
+                                "required": true, "pattern": "[0-9\\s-]*", "customMessage": "Please enter a valid Zip Code for your region.", "unique": false, "multiple": false
                             }
                             ,
                             "key":"physical_zip",
@@ -501,7 +504,7 @@
                                     "value": "", "label": ""
                                 }
                                 ],
-                                "custom":"if(data['countryList']){\n  let obj = data['countryList'].find(o => o.country === data.country);\n  if (obj) {  \n    values = obj.states;\n  } else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n  }\n}"
+                                "custom":"let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {  \n  values = obj.states;\n}"
                             }
                             ,
                             "template":"<span>{{ item }}</span>",
@@ -512,9 +515,11 @@
                             ,
                             "key":"physical_state",
                             "type":"select",
+                            "refreshOn":"physical_country",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "clearOnRefresh":true
                         }
                         ],
                         "width":4,
@@ -567,13 +572,14 @@
                                 ,
                                 "valueProperty":"dial_code",
                                 "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "searchEnabled":false,
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"countryCode",
+                                "key":"home_country_code",
                                 "type":"select",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -592,11 +598,11 @@
                                 "hideLabel":true,
                                 "spellcheck":true,
                                 "tableView":true,
+                                "validateOn":"blur",
                                 "validate": {
                                     "required": true, "customMessage": "Please enter your phone number.", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
                                 "key":"home_phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
@@ -653,13 +659,14 @@
                                 ,
                                 "valueProperty":"dial_code",
                                 "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
+                                "searchEnabled":false,
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"home_country_code",
+                                "key":"phone_country_code",
                                 "type":"select",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -678,11 +685,11 @@
                                 "hideLabel":true,
                                 "spellcheck":true,
                                 "tableView":true,
+                                "validateOn":"blur",
                                 "validate": {
                                     "required": true, "customMessage": "Please enter your phone number.", "unique": false, "multiple": false
                                 }
                                 ,
-                                "errorLabel":"Please enter a valid phone number",
                                 "key":"phone_number",
                                 "type":"phoneNumber",
                                 "input":true,
@@ -746,19 +753,21 @@
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
                         "label":"Email",
-                        "key":"email",
                         "placeholder":"Email",
-                        "type":"email",
+                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "hideLabel":true,
+                        "spellcheck":true,
+                        "tableView":true,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "customMessage": "Please enter your email address in format: yourname@example.com", "unique": false, "multiple": false
                         }
                         ,
-                        "description":"Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+                        "key":"email",
+                        "type":"email",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -2361,20 +2370,20 @@
                             "key":"dataGridWellColumns",
                             "columns":[ {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Name of person injured",
-                                    "key":"nameofpersoninjured",
                                     "placeholder":"Name of person injured",
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"nameofpersoninjured",
                                     "type":"textfield",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":4,
@@ -2385,17 +2394,16 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Date of Incident",
-                                    "key":"page4Panel2ColumnsDateTime",
-                                    "placeholder":"Date of incident",
                                     "format":"yyyy-MM-dd",
-                                    "enableTime":false,
+                                    "placeholder":"Date of incident",
+                                    "hideLabel":true,
+                                    "tableView":true,
                                     "datePicker": {
                                         "datepickerMode": "day"
                                     }
                                     ,
+                                    "enableTime":false,
                                     "timePicker": {
                                         "showMeridian": false
                                     }
@@ -2404,15 +2412,15 @@
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"date_of_incident",
                                     "type":"datetime",
+                                    "input":true,
                                     "lockKey":true,
                                     "hideOnChildrenHidden":false,
                                     "suffix":"<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
                                     "widget": {
                                         "type": "calendar", "displayInTimezone": "viewer", "language": "en", "useLocaleSettings": false, "allowInput": true, "mode": "single", "enableTime": false, "noCalendar": false, "format": "yyyy-MM-dd", "hourIncrement": 1, "minuteIncrement": 1, "time_24hr": true, "minDate": null, "maxDate": null
                                     }
-                                    ,
-                                    "hideLabel":true
                                 }
                                 ],
                                 "width":4,
@@ -2423,18 +2431,18 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
                                     "label":"Location of incident",
-                                    "key":"page4Panel2ColumnsLocationofincident",
                                     "placeholder":"Location of incident",
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"locationofincident",
                                     "type":"textfield",
-                                    "hideLabel":true,
+                                    "input":true,
                                     "lockKey":true,
                                     "hideOnChildrenHidden":false
                                 }
@@ -2459,21 +2467,22 @@
                             "key":"dataGridWellColumns2",
                             "columns":[ {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "label":"Text Area",
-                                    "key":"page4Panel2ColumnsTextArea",
+                                    "label":"Report Can be obtained",
                                     "placeholder":"Explain how the report can be obtained",
+                                    "autoExpand":false,
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
+                                    "inputFormat":"plain",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"reportcanbeobtained",
                                     "type":"textarea",
-                                    "inputFormat":"plain",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":6,
@@ -2484,21 +2493,22 @@
                             ,
                             {
                                 "components":[ {
-                                    "input":true,
-                                    "tableView":true,
-                                    "label":"BriefSummary",
-                                    "key":"page4Panel2ColumnsBriefSummary",
+                                    "label":"Brief Summary",
                                     "placeholder":"Brief summary of situation or possible claim",
+                                    "autoExpand":false,
+                                    "hideLabel":true,
                                     "spellcheck":true,
+                                    "tableView":true,
+                                    "inputFormat":"plain",
                                     "validate": {
                                         "unique": false, "multiple": false
                                     }
                                     ,
+                                    "key":"briefSummary",
                                     "type":"textarea",
-                                    "inputFormat":"plain",
+                                    "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "hideLabel":true
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":6,
@@ -3012,7 +3022,7 @@
                                         "key":"state",
                                         "customConditional":"show = (row.country)",
                                         "type":"select",
-                                        "refreshOn":"country",
+                                        "refreshOn":"row.country",
                                         "input":true,
                                         "lockKey":true,
                                         "clearOnRefresh":true,
@@ -3343,7 +3353,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":151,
+    "_vid":157,
     "title":"IPL - CSR Review",
     "display":"form",
     "access":[ {
@@ -3362,7 +3372,7 @@
     "path":"iplcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-01T11:17:41.957Z",
-    "modified":"2020-02-19T11:45:38.650Z",
+    "modified":"2020-02-25T08:37:37.785Z",
     "machineName":"testdivehub:iplCsrReview",
     "controller":""
 }
