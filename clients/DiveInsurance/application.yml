@@ -102,7 +102,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"}, {"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
+                        route: 'file/user/me?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"}, {"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
