@@ -1,26 +1,19 @@
 <?php
-namespace Oxzion\Analytics\MySQL;
+namespace Oxzion\Analytics\Relational;
 
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
-use Oxzion\Analytics\AnalyticsEngine;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Analytics\AnalyticsPostProcessing;
 use Zend\Db\ResultSet\ResultSet;
 
-class AnalyticsEngineMySQLImpl implements AnalyticsEngine {
-	private $config;
+class AnalyticsEngineRelational {
 	private $dbAdapter;
+	private $dbConfig;
 
-    public function __construct($config) {
-		$this->config = $config;
-		$dbConfig['driver'] = 'Pdo';
-		$dbConfig['database'] = $config['database'];
-		$dbConfig['host'] = $config['host'];
-		$dbConfig['username'] = $config['username'];
-		$dbConfig['password'] = $config['password'];
-		$dbConfig['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=' . $config['host'] . ';charset=utf8;username=' . $config["username"] . ';password=' . $config["password"] . '';
+    public function __construct($dbConfig) {
+		$this->dbConfig = $dbConfig;
         $this->dbAdapter = new Adapter($dbConfig);
     }
 
