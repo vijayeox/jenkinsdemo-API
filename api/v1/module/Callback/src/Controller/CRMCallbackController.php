@@ -2,6 +2,7 @@
 namespace Callback\Controller;
 
 use Callback\Service\CRMService;
+use Exception;
 use Oxzion\Controller\AbstractApiControllerHelper;
 
 class CRMCallbackController extends AbstractApiControllerHelper
@@ -21,9 +22,14 @@ class CRMCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $this->log->info(__CLASS__ . "-> Add contact to CRM - " . json_encode($params, true));
-        $response = $this->crmService->addContact($params);
-        if ($response) {
-            return $this->getSuccessResponseWithData($response['body'], 201);
+        try {
+            $response = $this->crmService->addContact($params);
+            if ($response) {
+                return $this->getSuccessResponseWithData($response['body'], 201);
+            }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
         return $this->getErrorResponse("Contact Creation Failed", 404);
     }

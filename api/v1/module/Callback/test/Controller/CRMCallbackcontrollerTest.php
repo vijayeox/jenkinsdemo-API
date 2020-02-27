@@ -45,7 +45,7 @@ class CRMCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('crmaddcontactcallback');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Contact Creation Failed');
+        $this->assertEquals($content['message'], 'Could not add contact to the CRM');
     }
 
     protected function setDefaultAsserts()

@@ -3,9 +3,9 @@ namespace Callback\Service;
 
 use Contact\Service\ContactService;
 use Exception;
+use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\UserService;
-use Oxzion\ServiceException;
 
 class CRMService extends AbstractService
 {
@@ -45,14 +45,14 @@ class CRMService extends AbstractService
             $params['created_id'] = isset($owner['id']) ? $owner['id'] : null;
             $params['uuid'] = $assignedTo['uuid'];
             $result = $this->contactService->createContact($params);
+            if ($result) {
+                return array('body' => $params);
+            } else {
+                return 0;
+            }
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw new ServiceException("Could not add contact to the CRM", "could.not.add.contact.to.CRM");
-        }
-        if ($result) {
-            return array('body' => $params);
-        } else {
-            return 0;
         }
     }
 }
