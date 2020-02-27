@@ -9,13 +9,18 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.properties.PropertiesComponent
 import org.apache.camel.impl.DefaultCamelContext
 import org.apache.http.HttpHost
+import org.elasticsearch.ElasticsearchException
+import org.elasticsearch.action.bulk.BulkItemResponse
 import org.elasticsearch.action.bulk.BulkRequest
+import org.elasticsearch.action.bulk.BulkResponse
 import org.elasticsearch.action.delete.DeleteRequest
 import org.elasticsearch.action.index.*
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.common.xcontent.XContentType
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
 import org.springframework.core.env.Environment
@@ -27,13 +32,15 @@ class ElasticClientIndexer extends RouteBuilder {
     @Autowired
     private Environment env
 
+    private static final Logger logger = LoggerFactory.getLogger(ElasticClientIndexer.class)
+
     @Override
     void configure() throws Exception {
         CamelContext context = new DefaultCamelContext()
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from("activemq:topic:elastic").process(new Processor() {
+                from("activemq:queue:elastic").process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
                         def jsonSlurper = new JsonSlurper()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody())
@@ -87,7 +94,21 @@ class ElasticClientIndexer extends RouteBuilder {
                                     bulk.add(new DeleteRequest(indexName,type,id))
                                 }
                             }
-                           client.bulk(bulk,RequestOptions.DEFAULT)
+                            try {
+                                BulkResponse bulkResponse = client.bulk(bulk, RequestOptions.DEFAULT)
+                                for (BulkItemResponse bulkItemResponse : bulkResponse) {
+                                    if (bulkItemResponse.isFailed()) {
+                                        BulkItemResponse.Failure failure =
+                                                bulkItemResponse.getFailure()
+                                        logger.error("BULK INDEXING (EXCEPTION) Failure is---"+failure)
+                                    }
+                                }
+                            }
+                            catch(ElasticsearchException ex)
+                            {
+                                println("the exception is -"+ex)
+                                logger.error("BULK INDEXING (EXCEPTION) ---",ex)
+                            }
                         }
                         else
                         {
