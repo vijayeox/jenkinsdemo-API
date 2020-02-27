@@ -25,7 +25,7 @@ class CommunicationCallbackController extends AbstractApiControllerHelper
     }
 
     /**
-     * @ignore __construct
+     * public function
      * Make Call API
      * ! Deprecated. This function is not doing anything. We need to remove this one. I think this is moved to the mail delegate function
      */
