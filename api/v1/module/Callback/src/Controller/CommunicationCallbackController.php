@@ -2,15 +2,14 @@
 namespace Callback\Controller;
 
 use Oxzion\Controller\AbstractApiControllerHelper;
-use Oxzion\ValidationException;
 use Oxzion\Service\CommunicationService;
 
 class CommunicationCallbackController extends AbstractApiControllerHelper
 {
     private $log;
-    // /**
-    // * @ignore __construct
-    // */
+    /**
+     * @ignore __construct
+     */
     public function __construct()
     {
         $this->logger = $this->getLogger();
@@ -24,6 +23,12 @@ class CommunicationCallbackController extends AbstractApiControllerHelper
         $messageReturn = $this->communicationService->sendSms($params);
         return $this->getSuccessResponse();
     }
+
+    /**
+     * @ignore __construct
+     * Make Call API
+     * ! Deprecated. This function is not doing anything. We need to remove this one. I think this is moved to the mail delegate function
+     */
 
     public function makeCallAction()
     {
