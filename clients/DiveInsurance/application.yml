@@ -57,6 +57,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: 'Document'
+                data_type: document
     -
         name: 'Dive Store'
         field:
@@ -64,6 +68,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: 'Document'
+                data_type: document
     -
         name: 'Dive Boat'
         field:
@@ -71,6 +79,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: 'Document'
+                data_type: document
     -
         name: 'Emergency First Response'
         field:
@@ -78,6 +90,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: 'Document'
+                data_type: document
     -
         name: 'Pocket Card Job'
         field:
@@ -87,7 +103,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: pocketCard
+                text: 'Pocket Card'
                 data_type: document
 menu:
     -
@@ -116,7 +132,7 @@ menu:
                         actions:
                             -
                                 name: View
-                                rule: '''{{policyStatus}}'' != ''Pending Approval'''
+                                rule: '''{{policyStatus}}'' == ''In Force'''
                                 details:
                                     -
                                         type: View

@@ -415,8 +415,9 @@ class WorkflowService extends AbstractService
         $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId AND 
                                 ox_activity_instance_assignee.user_id is null)
                                 OR ox_activity_instance_assignee.user_id = $userId
-                                OR ox_activity_instance_assignee.group_id is null
-                                OR ox_activity_instance_assignee.id is null)
+                                 OR (ox_activity_instance_assignee.user_id is null AND (
+                                ox_activity_instance_assignee.group_id is null
+                                OR ox_activity_instance_assignee.id is null)))
                                 AND $appFilter AND ox_activity_instance.status = 'In Progress'
                                 AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
             
@@ -500,7 +501,7 @@ class WorkflowService extends AbstractService
     ox_activity.name as activityName, ox_file.date_created, 
     CASE WHEN ox_activity_instance_assignee.user_id is not null then false
     else true end as to_be_claimed $field $fromQuery $whereQuery $sort $pageSize $offset";
-        $this->logger->info("Executing query - $querySet");
+        $this->logger->info("Executing Assignment listing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         $result = array();
         foreach ($resultSet as $key => $value) {

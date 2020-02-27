@@ -276,6 +276,7 @@ class QueryService extends AbstractService
     {
         $aggCheck = 0;
         $data = array();
+        $resultCount = count($uuidList);
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -".$value);
             $queryData = $this->executeAnalyticsQuery($value);
@@ -288,7 +289,7 @@ class QueryService extends AbstractService
                     $aggCheck = 1;
                 }
             }
-            if (!empty($data) && isset($queryData['data'])) {
+            if (!empty($data) && isset($queryData['data']) && is_array($queryData['data'])) {
                 if($aggCheck==1){
                     if(!empty($queryData['meta']['aggregates']))
                         $data = array_replace_recursive($data, $queryData['data']);
@@ -304,7 +305,11 @@ class QueryService extends AbstractService
             }
             else {
                 if (isset($queryData['data'])) {
-                    $data = $queryData['data'];
+                    if (!is_array($queryData['data']) && $resultCount>1) {
+                        $data[0]['q'.strval($key+1)] = $queryData['data'];
+                    } else {
+                        $data = $queryData['data'];
+                    }
                 }
             }
         }
