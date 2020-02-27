@@ -55,7 +55,7 @@ class ContactService extends AbstractService
             }
             if ($count == 0) {
                 $this->rollback();
-                throw new ServiceException("Could not create the group", "could.not.create");
+                throw new ServiceException("Could not create the contact", "could.not.create");
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
@@ -87,7 +87,7 @@ class ContactService extends AbstractService
                 $this->uploadContactIcon($data['uuid'], $data['owner_id'], $files);
             }
             if ($count == 0) {
-                throw new ServiceException("Could not update the group", "could.not.update");
+                throw new ServiceException("Could not update the contact", "could.not.update");
             }
         } catch (Exception $e) {
             throw $e;
