@@ -18,10 +18,10 @@ class TaskCallbackController extends AbstractApiControllerHelper
         $this->log = $this->getLogger();
     }
 
-    public function setTaskService($taskService)
-    {
-        $this->taskService = $taskService;
-    }
+    // public function setTaskService($taskService)
+    // {
+    //     $this->taskService = $taskService;
+    // }
 
     public function addProjectAction()
     {
