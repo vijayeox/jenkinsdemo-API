@@ -70,7 +70,6 @@ class CustomServiceTaskListener implements ExecutionListener {
           if(taskDetails.variables.return == "true" || taskDetails.variables.return == true){
             logger.info("Inside Return");
             def responseData = responseValue.data
-            //responseData.putAll(responseData)
             execution.setVariables(responseData)
             println("responseData - ${responseData}")
             logger.info("Final Response received - ${execution.getVariables()}")
