@@ -39,7 +39,6 @@ class FileIndexerService extends AbstractService
             CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields,
             wf_user.user_id, file.workflow_instance_id,
             w.id as workflow_instance_id, w.status,
-            w.activity_instance_id,
             w.name as workflow_name, w.activities
             from ox_file as file
             INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
@@ -61,7 +60,7 @@ class FileIndexerService extends AbstractService
             GROUP BY wf_inst.id, wf_inst.status, act_inst.activity_instance_id, wf.name) w
             ON w.id = file.workflow_instance_id
             where file.id = ".$fileId." and file.latest =1
-            GROUP BY wf_user.user_id,file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.latest,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id,w.id, w.status,w.activity_instance_id,w.name, w.activities";
+            GROUP BY wf_user.user_id,file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.latest,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id,w.id, w.status,w.name, w.activities";
 
             $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
             $this->logger->info("Executing Query - $select");
@@ -71,7 +70,7 @@ class FileIndexerService extends AbstractService
             if(isset($databody['app_name']))
                 $app_name = $databody['app_name'];
             if (isset($app_name)&&isset($databody) && count($databody) > 0) {
-                $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','body' => $databody,'id' => $fileId, 'operation' => 'Index', 'type' => '_doc')), 'elastic');
+                $this->messageProducer->sendQueue(json_encode(array('index'=>  $app_name.'_index','body' => $databody,'id' => $fileId, 'operation' => 'Index', 'type' => '_doc')), 'elastic');
                 return $databody;
             }
         }
@@ -91,7 +90,7 @@ class FileIndexerService extends AbstractService
         }
         $app_name = $response[0]['name'];
         if (isset($app_name)) {
-            $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','id' => $fileId, 'operation' => 'Delete', 'type' => '_doc')), 'elastic');
+            $this->messageProducer->sendQueue(json_encode(array('index'=>  $app_name.'_index','id' => $fileId, 'operation' => 'Delete', 'type' => '_doc')), 'elastic');
             return array('fileId' => $fileId);
         }
         return null;
@@ -129,7 +128,6 @@ class FileIndexerService extends AbstractService
                     CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields,
                     wf_user.user_id, file.workflow_instance_id,
                     w.id as workflow_instance_id, w.status,
-                    w.activity_instance_id,
                     w.name as workflow_name, w.activities
                     from ox_file as file
                     INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
@@ -150,7 +148,7 @@ class FileIndexerService extends AbstractService
                     LEFT JOIN ox_activity as activity on wd.id = activity.workflow_deployment_id
                     GROUP BY wf_inst.id, wf_inst.status, act_inst.activity_instance_id, wf.name) w
                     ON w.id = file.workflow_instance_id
-                    where file.id in (".$fileIds.") AND app.id =".$appID." and file.latest =1 GROUP BY wf_user.user_id,file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.latest,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id,w.id, w.status,w.activity_instance_id,w.name, w.activities";
+                    where file.id in (".$fileIds.") AND app.id =".$appID." and file.latest =1 GROUP BY wf_user.user_id,file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.latest,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id,w.id, w.status,w.name, w.activities";
                     $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
                     $this->logger->info("Executing Query - $select");
                     $bodys=$this->executeQuerywithParams($select)->toArray();
@@ -166,14 +164,15 @@ class FileIndexerService extends AbstractService
                     where file.id in ('.$fileIds.') AND app.id ='.$appID.' and file.latest =0';
                     $list = $this->executeQuerywithParams($select)->toArray();
                     $deleteIdList = array_column($list, 'id');
+
+                    if(isset($bodys[0]['app_name'])){
+                        $app_name = $bodys[0]['app_name'];
+                    }
+                    if (isset($app_name)&&isset($bodys)) {
+                        $this->messageProducer->sendQueue(json_encode(array('index'=>  $app_name.'_index', 'operation' => 'Batch', 'type' => '_doc', 'idlist' => $indexIdList, 'deleteList' => $deleteIdList,'body' => $bodys)), 'elastic');
+                    }
                 }
-                if(isset($bodys[0]['app_name'])){
-                    $app_name = $bodys[0]['app_name'];
-                }
-                if (isset($app_name)&&isset($bodys) && count($bodys) > 0) {
-                    $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','body' => $bodys, 'operation' => 'Batch', 'type' => '_doc', 'idlist' => $indexIdList, 'deleteList' => $deleteIdList)), 'elastic');
-                    return $bodys;
-                }
+                return $bodys;
             }
         }
         catch (ZendDbException $e) {

@@ -553,6 +553,14 @@ class WorkflowService extends AbstractService
         $sortTable = "tblf" . $sortCount;
         $sort = " ORDER BY ";
         foreach ($sortOptions as $key => $value) {
+            if($value['field'] == 'entity_name'){
+                if($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " ox_app_entity.name ";
+                $sortCount++;
+                continue;
+            }
             if ($sortCount == 0) {
                 $sort .= $value['field'] . " " . $value['dir'];
             } else {
