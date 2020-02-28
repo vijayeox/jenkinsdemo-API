@@ -359,7 +359,7 @@ class FileService extends AbstractService
             $where = "ox_workflow_instance.id=:workflowInstanceId";
         }
         try {
-            $select = "SELECT ox_file.id,ox_file.data from ox_file
+            $select = "SELECT ox_file.id,ox_file.uuid as fileId,ox_file.data from ox_file
             inner join ox_workflow_instance on ox_workflow_instance.id = ox_file.workflow_instance_id
             where ox_file.org_id=:orgId and $where and ox_file.is_active =:isActive";
             $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),
@@ -367,6 +367,9 @@ class FileService extends AbstractService
                 "isActive" => 1);
             $result = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
             if (count($result) > 0) {
+                $result[0]['data'] = json_decode($result[0]['data']);
+                $result[0]['data']->fileId = $result[0]['fileId'];
+                $result[0]['data'] = json_encode($result[0]['data']);
                 return $result[0];
             }
             return 0;
