@@ -272,7 +272,7 @@
                         "widget":"choicesjs",
                         "placeholder":"Country",
                         "hideLabel":true,
-                        "tableView":true,
+                        "tableView":false,
                         "dataSrc":"custom",
                         "data": {
                             "values":[ {
@@ -290,6 +290,7 @@
                         "template":"<span>{{ item.country }}</span>",
                         "selectThreshold":0.3,
                         "clearOnHide":false,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
@@ -299,7 +300,9 @@
                         "input":true,
                         "lockKey":true,
                         "source":"5d347da33e9be31e15d3b115",
-                        "hideOnChildrenHidden":false
+                        "hideOnChildrenHidden":false,
+                        "refreshOn":"country",
+                        "clearOnRefresh":true
                     }
                     ,
                     {
@@ -310,26 +313,26 @@
                         "tableView":true,
                         "dataSrc":"custom",
                         "data": {
-                            "values":[ {
-                                "value": "", "label": ""
-                            }
+                            "values":[ {}
                             ],
-                            "custom":"try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n} else {\nvalues = \"\"\n}"
+                            "custom": "let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}"
                         }
                         ,
                         "template":"<span>{{ item }}</span>",
                         "selectThreshold":0.3,
                         "clearOnHide":false,
+                        "validateOn":"blur",
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
                         ,
                         "key":"state",
                         "type":"select",
+                        "refreshOn":"country",
                         "input":true,
                         "lockKey":true,
                         "hideOnChildrenHidden":false,
-                        "indexeddb": {}
+                        "clearOnRefresh":true
                     }
                     ],
                     "width":4,
@@ -501,7 +504,7 @@
                                     "value": "", "label": ""
                                 }
                                 ],
-                                "custom":"if(data['countryList']){\n  let obj = data['countryList'].find(o => o.country === data.country);\n  if (obj) {  \n    values = obj.states;\n  } else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n  }\n}"
+                                "custom":"let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {  \n  values = obj.states;\n}"
                             }
                             ,
                             "template":"<span>{{ item }}</span>",
@@ -512,9 +515,11 @@
                             ,
                             "key":"physical_state",
                             "type":"select",
+                            "refreshOn":"physical_country",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false
+                            "hideOnChildrenHidden":false,
+                            "clearOnRefresh":true
                         }
                         ],
                         "width":4,
@@ -574,7 +579,7 @@
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"countryCode",
+                                "key":"home_country_code",
                                 "type":"select",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -661,7 +666,7 @@
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "key":"home_country_code",
+                                "key":"phone_country_code",
                                 "type":"select",
                                 "input":true,
                                 "hideOnChildrenHidden":false
@@ -843,7 +848,7 @@
                 ,
                 "key":"start_date_range",
                 "properties": {
-                    "delegate": "RateCard"
+                    "delegate": "RateCard", "post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
                 }
                 ,
                 "type":"select",
@@ -851,7 +856,7 @@
             }
             ,
             {
-                "label": "start_date", "calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");", "key":"startDate", "properties": {
+                "label": "start_date", "redrawOn": "start_date_range", "calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");", "key":"start_date", "properties": {
                     "data_type": "Date"
                 }
                 ,
@@ -3017,7 +3022,7 @@
                                         "key":"state",
                                         "customConditional":"show = (row.country)",
                                         "type":"select",
-                                        "refreshOn":"country",
+                                        "refreshOn":"row.country",
                                         "input":true,
                                         "lockKey":true,
                                         "clearOnRefresh":true,
@@ -3220,17 +3225,17 @@
             "theme":"primary",
             "tableView":false,
             "components":[ {
-                "input":true,
-                "tableView":true,
                 "label":"YES!  Sign me up for AUTOMATIC RENEWAL.",
-                "dataGridLabel":false,
-                "key":"automatic_renewal",
+                "tableView":true,
                 "defaultValue":false,
                 "validate": {
                     "unique": false, "multiple": false
                 }
                 ,
+                "key":"automatic_renewal",
                 "type":"checkbox",
+                "input":true,
+                "dataGridLabel":false,
                 "lockKey":true
             }
             ],
@@ -3348,7 +3353,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":154,
+    "_vid":159,
     "title":"IPL - CSR Review",
     "display":"form",
     "access":[ {
@@ -3367,7 +3372,7 @@
     "path":"iplcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-01T11:17:41.957Z",
-    "modified":"2020-02-24T12:56:12.579Z",
+    "modified":"2020-02-26T15:17:28.258Z",
     "machineName":"testdivehub:iplCsrReview",
     "controller":""
 }

@@ -11,6 +11,7 @@ use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
 use Ramsey\Uuid\Uuid;
 use Oxzion\Analytics\Elastic\AnalyticsEngineImpl;
+use Oxzion\InvalidInputException;
 
 use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
@@ -179,7 +180,7 @@ class QueryService extends AbstractService
             unset($result[$key]['id']);
         }
         return array('data' => $result,
-                 'total' => $count);
+           'total' => $count);
     }
 
     public function getQueryJson($uuid)
@@ -200,11 +201,11 @@ class QueryService extends AbstractService
             'uuid' => $uuid
         ];
   //      try {
-            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (count($resultSet) == 0) {
-                return 0;
-            }
-            $result = $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
+        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        if (count($resultSet) == 0) {
+            return 0;
+        }
+        $result = $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
 
   //      } catch(Exception $e) {
    //         return 0;
@@ -244,16 +245,74 @@ class QueryService extends AbstractService
 
     private function runQuery($configuration,$datasource_uuid)
     {
-            $analyticsEngine = $this->datasourceService->getAnalyticsEngine($datasource_uuid);
-            $parameters = json_decode($configuration,1);
-            $app_name = $parameters['app_name'];
-            if (isset($parameters['entity_name'])) {
-                $entity_name = $parameters['entity_name'];
-            } else {
-                $entity_name = null;
-            }
-            $result = $analyticsEngine->runQuery($app_name,$entity_name,$parameters);
-            return $result;
+        $analyticsEngine = $this->datasourceService->getAnalyticsEngine($datasource_uuid);
+        $parameters = json_decode($configuration,1);
+        $app_name = $parameters['app_name'];
+        if (isset($parameters['entity_name'])) {
+            $entity_name = $parameters['entity_name'];
+        } else {
+            $entity_name = null;
+        }
+        $result = $analyticsEngine->runQuery($app_name,$entity_name,$parameters);
+        return $result;
     }
 
+    public function queryData($rows)
+    {
+        if(array_key_exists('uuids',$rows))
+        {
+            $data = $this->runMultipleQueries($rows['uuids']);
+        }
+        else {
+            $errors = array('message' => 'uuids is required');
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        }
+        return $data;
+    }
+
+    public function runMultipleQueries($uuidList)
+    {
+        $aggCheck = 0;
+        $data = array();
+        $resultCount = count($uuidList);
+        foreach ($uuidList as $key => $value) {
+            $this->logger->info("Executing AnalyticsQuery with input -".$value);
+            $queryData = $this->executeAnalyticsQuery($value);
+            $this->logger->info("Executing AnalyticsQuery returned -".print_r($queryData,true));
+            if($queryData == null || $queryData == 0)
+                throw new InvalidInputException("uuid entered is incorrect - $value", 1);
+            if($key == 0)
+            {
+                if(!empty($queryData['meta']['aggregates'])){
+                    $aggCheck = 1;
+                }
+            }
+            if (!empty($data) && isset($queryData['data']) && is_array($queryData['data'])) {
+                if($aggCheck==1){
+                    if(!empty($queryData['meta']['aggregates']))
+                        $data = array_replace_recursive($data, $queryData['data']);
+                    else
+                        throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
+                }
+                else{
+                    if(!empty($queryData['meta']['aggregates']))
+                        throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);
+                    else
+                        $data = array_replace_recursive($data, $queryData['data']);
+                }
+            }
+            else {
+                if (isset($queryData['data'])) {
+                    if (!is_array($queryData['data']) && $resultCount>1) {
+                        $data[0]['q'.strval($key+1)] = $queryData['data'];
+                    } else {
+                        $data = $queryData['data'];
+                    }
+                }
+            }
+        }
+        return $data;
+    }
 }

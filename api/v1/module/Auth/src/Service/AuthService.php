@@ -24,6 +24,7 @@ class AuthService extends AbstractService
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }
+
     public function executeActions($params)
     {
         if (isset($params['data'])) {
@@ -40,6 +41,7 @@ class AuthService extends AbstractService
         }
         return $params;
     }
+
     private function performCommand($command, $params, $data, $rawData)
     {
         switch ($command) {
@@ -57,6 +59,7 @@ class AuthService extends AbstractService
         }
         return $params;
     }
+
     private function createUser($params, $data, $rawData)
     {
         try {
@@ -72,6 +75,7 @@ class AuthService extends AbstractService
         }
         return 0;
     }
+
     private function storeCacheData($data, $params, $rawData)
     {
         if (isset($params['user']['username'])) {

@@ -32,7 +32,8 @@ class QuoteDocument extends PolicyDocument
                      'nfooter' => 'Group_NI_footer.html',
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
-                     'lpfooter' => 'DiveBoat_LP_footer.html'),
+                     'lpfooter' => 'DiveBoat_LP_footer.html',
+                     'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf'),
         'Dive Store' 
             => array(
                      'template' => 'DiveCenterProposal_Template', 

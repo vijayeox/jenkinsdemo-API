@@ -52,6 +52,20 @@ return [
                     ],
                 ],
             ],
+            'queryData' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/analytics/query/data',
+                    'defaults' => [
+                        'controller' => Controller\QueryController::class,
+                        'method' => 'POST',
+                        'action' => 'queryData',
+                        'access' => [
+                            'queryData'=>'MANAGE_QUERY_WRITE'
+                        ],
+                    ],
+                ],
+            ],
             'visualization' => [
                 'type'    => Segment::class,
                 'options' => [

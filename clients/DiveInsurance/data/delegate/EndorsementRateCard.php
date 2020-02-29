@@ -11,13 +11,20 @@ class EndorsementRatecard extends AbstractAppDelegate
     
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("Executing Endorsement Rate Card".json_encode($data));
+        $this->logger->info("Executing Endorsement Rate Card initial data".json_encode($data));
         $endorsementCoverages = array();
         $endorsementExcessLiability = array();
         $endorsementCylinder = array();
         
         if(!isset($data['update_date']) || empty($data['update_date']) ){
-            $data['update_date'] =  date("Y-m-d H:i:s");
+            $data['update_date'] =  date("Y-m-d");
+        } 
+        $date1 = date_create($data['start_date']);
+        $date2 = date_create($data['update_date']);
+        $diff = date_diff($date1,$date2);
+        $dateDifference = $diff->invert;
+        if($dateDifference == 1){
+            $data['update_date'] = $data['start_date'];
         }
         $data['careerCoverage']= isset($data['careerCoverage']) ? $data['careerCoverage']: $data['liabilityCoverageName'];
         if(!isset($data['previous_scuba'])){

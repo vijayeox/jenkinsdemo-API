@@ -3,7 +3,6 @@
 namespace PaymentGateway\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class PaymentTransaction extends Entity
 {
@@ -16,7 +15,7 @@ class PaymentTransaction extends Entity
         'date_created' => null,
         'created_by' => null,
         'date_modified' => null,
-        'modified_by' => null
+        'modified_by' => null,
     );
 
     public function validate()

@@ -41,14 +41,14 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
+        uuid: 703d3a09-b7f3-49e9-9c79-74d5cae7f6e7
     -
         name: CSR
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
-        uuid: ef71307c-7bdc-4dd3-bc75-afdc0ab2790a
+        uuid: 41bd1503-20c8-49fc-be10-6c9a8222489c
 entity:
     -
         name: 'Individual Professional Liability'
@@ -57,6 +57,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: Document
+                data_type: document
     -
         name: 'Dive Store'
         field:
@@ -64,6 +68,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: Document
+                data_type: document
     -
         name: 'Dive Boat'
         field:
@@ -71,6 +79,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: Document
+                data_type: document
     -
         name: 'Emergency First Response'
         field:
@@ -78,6 +90,10 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+            -
+                name: documents
+                text: Document
+                data_type: document
     -
         name: 'Pocket Card Job'
         field:
@@ -87,7 +103,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: pocketCard
+                text: 'Pocket Card'
                 data_type: document
 menu:
     -
@@ -102,7 +118,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"},{"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
+                        route: 'file/user/me?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"}, {"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
@@ -116,7 +132,7 @@ menu:
                         actions:
                             -
                                 name: View
-                                rule: 'true'
+                                rule: '''{{policyStatus}}'' == ''In Force'''
                                 details:
                                     -
                                         type: View
@@ -126,7 +142,7 @@ menu:
                                 icon: 'fa fa-envelope-open'
                             -
                                 name: Endorsement
-                                rule: '''{{entity_name}}'' == ''Individual Professional Liability'''
+                                rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
                                         type: Form
@@ -135,7 +151,7 @@ menu:
                                 icon: 'fa fa-pencil'
                             -
                                 name: Endorsement
-                                rule: '''{{entity_name}}'' == ''Emergency First Response'''
+                                rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
                                         type: Form
@@ -144,7 +160,7 @@ menu:
                                 icon: 'fa fa-pencil'
                             -
                                 name: Endorsement
-                                rule: '''{{entity_name}}'' == ''Dive Boat'''
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
                                         type: Form
@@ -226,7 +242,7 @@ menu:
                     type: List
                     content:
                         route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
-                        filterable: true
+                        filterable: false
                         reorderable: true
                         resizable: true
                         sortable: true
@@ -249,14 +265,13 @@ menu:
                                 title: Product
                                 field: entity_name
                             -
-                                title: 'Policy Status'
-                                field: policyStatus
-                            -
                                 title: 'Policy Start Date'
                                 field: start_date
+                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
+                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
     -
         name: Home
         icon: 'fa fa-home'
@@ -356,12 +371,26 @@ menu:
                             -
                                 title: Product
                                 field: entity_name
+                                filterCell:
+                                    type: dropdown
+                                    listItems:
+                                        - 'Individual Professional Liability'
+                                        - 'Dive Boat'
+                                        - 'Dive Store'
+                                        - 'Emergency First Response'
+                                    placeholder: 'Select Policy'
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
+                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
+                                filter: date
+                                format: YYYY-MM-DD
                             -
                                 title: 'Policy End Date'
                                 field: end_date
+                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
+                                filter: date
+                                format: YYYY-MM-DD
         uuid: 50fd8782-3e08-4a4c-9ff2-10d404904e5e
     -
         name: Errors
@@ -414,7 +443,7 @@ menu:
         uuid: 41551bff-e30e-4ba5-abc1-1a864f12e061
     -
         name: 'Manage Policies'
-        icon: 'fa fa-list-alt'
+        icon: 'fa fa-search'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
         page:
             name: 'Manage Policies'
@@ -532,13 +561,15 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
+                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
+                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
         uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'
-        icon: 'fa fa-search'
+        icon: 'fa fa-list-alt'
         privilege: MANAGE_POLICY_APPROVAL_READ
         page:
             name: 'Verify PADI details'
@@ -733,12 +764,17 @@ workflow:
         uuid: 2bc1caaa-9628-486d-8b42-104534625993
         bpmn_file: 'Dive Boat/DiveBoatEndorsement.bpmn'
         entity: 'Dive Boat'
+    -
+        name: 'Dive Store'
+        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
+        bpmn_file: 'Dive Store/NewApplication.bpmn'
+        entity: 'Dive Store'
 form:
     -
         name: 'PADI Verification'
         uuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
         description: 'Page for CSR to verify PADI details'
-        template_file: padi_validation.json
+        template_file: padiValidationPage.json
         entity: Padi
     -
         name: 'Pocket Card'

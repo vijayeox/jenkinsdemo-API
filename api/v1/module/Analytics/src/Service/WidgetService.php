@@ -240,13 +240,14 @@ class WidgetService extends AbstractService
                 'is_owner' => $firstRow['is_owner'],
                 'renderer' => $firstRow['renderer'],
                 'type' => $firstRow['type'],
+                'version' => $firstRow['version'],
                 'queries' => $queries
             ];
             $response = [
                 'widget' => $widget
             ];
             //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
-         //   $response['widget']['configuration'] = json_decode($resultSet[0]['configuration'],1);
+            //$response['widget']['configuration'] = json_decode($resultSet[0]['configuration'],1);
         }
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
@@ -257,19 +258,9 @@ class WidgetService extends AbstractService
             return 0;
         }
         $data = array();
+        $uuidList = array_column($resultSet, 'query_uuid');
         if(isset($params['data'])) {
-            foreach ($resultSet as $row) {
-                $query_uuid = $row['query_uuid'];
-                $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
-                if (!empty($data) && isset($queryData['data'])) {
-                    $data = array_replace_recursive($data, $queryData['data']);
-                }
-                else {
-                    if (isset($queryData['data'])) {
-                        $data = $queryData['data'];
-                    }
-                }
-            }
+            $data = $this->queryService->runMultipleQueries($uuidList);
 
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];

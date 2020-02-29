@@ -17,9 +17,10 @@ class AutoRenewalRateCard extends RateCard{
     public function execute(array $data,Persistence $persistenceService)
     {  
         $this->logger->info("AutoRenewal Rate Card");
+        $data['endDate'] = $data['end_date'];
         $this->cleanData($data);
-        $startYear = date("Y");
-        $endYear = date("Y") + 1;
+        $startYear = date_parse($data['endDate'])['year'];
+        $endYear = $startYear + 1;
         $data['start_date'] = $startYear."-07-01";
         $data['end_date'] = $endYear."-06-30";
         if($data['product'] == 'Dive Boat'){
@@ -46,13 +47,25 @@ class AutoRenewalRateCard extends RateCard{
         }else if($data['product'] == 'Dive Store'){
             $this->DiveStoreRates($data);
         }
-        $data['policyStatus'] = 'AutoRenewal Approval Pending';
+        $data['policyStatus'] = 'AutoRenewal Pending';
         $this->logger->info("AutoRenewalRateCard Final DATA".print_r($data,true));
         return $data;
     }
 
     private function IPLRates(&$data){
         $this->logger->info("IPL RATES");
+        if(isset($data['upgradeExcessLiability'])){
+            $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
+            unset($data['upgradeExcessLiability']);
+        }
+        if(isset($data['upgradeCareerCoverage'])){
+            $data['careerCoverage'] = $data['upgradeCareerCoverage']['value'];
+            unset($data['upgradeCareerCoverage']);
+        }
+        if(isset($data['upgradecylinder'])){
+            $data['cylinder'] = $data['upgradecylinder']['value'];
+            unset($data['upgradecylinder']);
+        }
         $data['careerCoveragePrice'] = $data[$data['careerCoverage']];
         $data['scubaFitPrice'] = $data[$data['scubaFit']];
         $data['equipmentPrice'] = $data[$data['equipment']];
