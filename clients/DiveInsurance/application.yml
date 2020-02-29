@@ -368,6 +368,9 @@ menu:
                                 title: Name
                                 field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                multiFieldFilter:
+                                    -
+                                        lastname
                             -
                                 title: Product
                                 field: entity_name
