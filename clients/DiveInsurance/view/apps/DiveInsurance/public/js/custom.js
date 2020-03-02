@@ -173,6 +173,7 @@ document.addEventListener("DOMContentLoaded", function() {
     );
     window.location.href = window.location.origin;
   }
+
   Formio.createForm(
     document.getElementById("formio"),
     JSON.parse(formContent),
@@ -180,6 +181,16 @@ document.addEventListener("DOMContentLoaded", function() {
   ).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
+
+    setTimeout(function() {
+      var padiField = $("input[name='data[padi]']");
+      padiField.keyup(function(e) {
+        if (e.keyCode === 13) {
+          $("button[name='data[validatePADIButton]']").trigger("click");
+        }
+      });
+    }, 500);
+
     form.on("submit", function(submission, next) {
       submission.data.app_id = appId;
       var response = fetch(baseUrl + "register", {

@@ -238,7 +238,7 @@
                   "shortcut": "Enter",
                   "customClass": "alignCenter",
                   "tableView": false,
-                  "key": "panelPanel2ColumnsValidatePadiMembership",
+                  "key": "validatePADIButton",
                   "properties": {
                     "commands": "{\"commands\":[{\"command\":\"verify_user\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]}"
                   },
@@ -1160,7 +1160,7 @@
     }
   ],
   "revisions": "current",
-  "_vid": 91,
+  "_vid": 92,
   "title": "Padi Verification Form - Emergency First Response",
   "display": "form",
   "access": [
@@ -1180,7 +1180,7 @@
   "path": "padiverificationformemergencyfirstresponse",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-05T12:05:39.142Z",
-  "modified": "2020-03-02T18:32:45.808Z",
+  "modified": "2020-03-02T20:20:21.051Z",
   "machineName": "testdivehub:padiVerificationFormEmergencyFirstResponse",
   "controller": ""
 }
