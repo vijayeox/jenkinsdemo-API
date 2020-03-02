@@ -418,7 +418,7 @@ class ProjectControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'old_projectname' => 'Test Project 1', 'new_projectname' => 'Test Project', 'description' => 'Project Description', 'uuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')), 'PROJECT_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'old_projectname' => 'Test Project 1', 'new_projectname' => 'Test Project', 'description' => 'Project Description', 'uuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'manager_login' => 'rakshithtest')), 'PROJECT_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
         $this->assertResponseStatusCode(200);
