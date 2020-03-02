@@ -228,10 +228,9 @@ class ProjectService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        if(isset($data['manager_login'])){
+        if (isset($data['manager_login'])) {
             $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'manager_login' => $data['manager_login'])), 'PROJECT_UPDATED');
-        }
-        else {
+        } else {
             $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'])), 'PROJECT_UPDATED');
         }
         return $count;
@@ -428,7 +427,6 @@ class ProjectService extends AbstractService
         return $newOrgId;
     }
 
-    
 /**
  * Delete user from project API
  * ! Deprecated method, not in use at the moment

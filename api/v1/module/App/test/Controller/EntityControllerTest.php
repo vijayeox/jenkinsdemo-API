@@ -19,6 +19,7 @@ class EntityControllerTest extends ControllerTest
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
         return $dataset;
     }
+
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('App');

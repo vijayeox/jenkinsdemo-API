@@ -2,12 +2,9 @@
 namespace Job;
 
 use Mockery;
-use App\Controller\JobController;
+use Oxzion\Service\JobService;
 use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Oxzion\Utils\FileUtils;
-use Symfony\Component\Yaml\Yaml;
-use Oxzion\Service\JobService;
 
 class JobControllerTest extends ControllerTest
 {
@@ -56,10 +53,10 @@ class JobControllerTest extends ControllerTest
         }
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/scheduleJob', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        if(isset($content['data'])){
-                $select = "Select * from ox_job where job_id = '".$content['data']['JobId']."'";
-                $job=$this->executeQueryTest($select);
-                $this->assertEquals(1, count($job));
+        if (isset($content['data'])) {
+            $select = "Select * from ox_job where job_id = '" . $content['data']['JobId'] . "'";
+            $job = $this->executeQueryTest($select);
+            $this->assertEquals(1, count($job));
         }
         $this->assertResponseStatusCode(200);
     }
@@ -137,13 +134,12 @@ class JobControllerTest extends ControllerTest
         $data['appId'] = '99';
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         $select = "Select * from ox_job";
-        $job=$this->executeQueryTest($select);
+        $job = $this->executeQueryTest($select);
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Cancelled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}'));
             $response = array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}');
-        }
-        else {
+        } else {
             $response = $service->scheduleNewJob($data['jobName'], $data['jobGroup'], $data['jobPayload'], $data['cron'], $data['appId'], $data['orgId']);
             $response = json_decode($response['body']);
         }
@@ -152,7 +148,7 @@ class JobControllerTest extends ControllerTest
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJob', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
         $select = "Select * from ox_job";
-        $job=$this->executeQueryTest($select);
+        $job = $this->executeQueryTest($select);
         $this->assertEmpty($job);
         $this->assertResponseStatusCode(200);
     }
@@ -168,13 +164,12 @@ class JobControllerTest extends ControllerTest
         $data['appId'] = '99';
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         $select = "Select * from ox_job";
-        $job=$this->executeQueryTest($select);
+        $job = $this->executeQueryTest($select);
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Cancelled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}'));
             $response = array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}');
-        }
-        else {
+        } else {
             $response = $service->scheduleNewJob($data['jobName'], $data['jobGroup'], $data['jobPayload'], $data['cron'], $data['appId'], $data['orgId']);
             $response = json_decode($response['body']);
         }
@@ -183,7 +178,7 @@ class JobControllerTest extends ControllerTest
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJob', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
         $select = "Select * from ox_job";
-        $job=$this->executeQueryTest($select);
+        $job = $this->executeQueryTest($select);
         $this->assertResponseStatusCode(406);
     }
 
@@ -198,13 +193,12 @@ class JobControllerTest extends ControllerTest
         $data['appId'] = '99';
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         $select = "Select * from ox_job";
-        $job=$this->executeQueryTest($select);
+        $job = $this->executeQueryTest($select);
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Cancelled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}'));
             $response = array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}');
-        }
-        else {
+        } else {
             $response = $service->scheduleNewJob($data['jobName'], $data['jobGroup'], $data['jobPayload'], $data['cron'], $data['appId'], $data['orgId']);
             $response = json_decode($response['body']);
         }
@@ -215,7 +209,7 @@ class JobControllerTest extends ControllerTest
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJobId', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
         $select = "Select * from ox_job";
-        $job=$this->executeQueryTest($select);
+        $job = $this->executeQueryTest($select);
         $this->assertEmpty($job);
         $this->assertResponseStatusCode(200);
     }
@@ -231,13 +225,12 @@ class JobControllerTest extends ControllerTest
         $data['appId'] = '99';
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         $select = "Select * from ox_job";
-        $job=$this->executeQueryTest($select);
+        $job = $this->executeQueryTest($select);
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Cancelled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}'));
             $response = array('body' => '{"Success":true,"Message":"Job Cancelled Successfully!","JobId":"368247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"autoRenewalJob"}');
-        }
-        else {
+        } else {
             $response = $service->scheduleNewJob($data['jobName'], $data['jobGroup'], $data['jobPayload'], $data['cron'], $data['appId'], $data['orgId']);
             $response = json_decode($response['body']);
         }
@@ -248,7 +241,7 @@ class JobControllerTest extends ControllerTest
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJobId', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertNotEmpty($job);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(500);
     }
 
 }

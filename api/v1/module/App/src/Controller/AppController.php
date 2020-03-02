@@ -254,8 +254,6 @@ class AppController extends AbstractApiController
      * @api
      * @link /app/:appId/assignments
      * @method POST
-     * ! Deprecated - This function does not have a test cases to it, not sure if we are using this api
-     * ? Need to check if this needs to be removed. We have the new getFileList api that can be used to get the list of all the assignments.
      * @return array of Apps
      */
     public function assignmentsAction()
