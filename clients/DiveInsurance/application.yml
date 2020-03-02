@@ -368,6 +368,9 @@ menu:
                                 title: Name
                                 field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                multiFieldFilter:
+                                    -
+                                        lastname
                             -
                                 title: Product
                                 field: entity_name
@@ -384,13 +387,13 @@ menu:
                                 field: start_date
                                 cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
                                 filter: date
-                                format: YYYY-MM-DD
+                                filterFormat: YYYY-MM-DD
                             -
                                 title: 'Policy End Date'
                                 field: end_date
                                 cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
                                 filter: date
-                                format: YYYY-MM-DD
+                                filterFormat: YYYY-MM-DD
         uuid: 50fd8782-3e08-4a4c-9ff2-10d404904e5e
     -
         name: Errors
