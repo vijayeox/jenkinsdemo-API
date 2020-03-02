@@ -110,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-
   function forgotPassword() {
     Swal.fire({
       title: "Please enter your username",
@@ -157,8 +156,8 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   }
-  
-    function autoLogin(data) {
+
+  function autoLogin(data) {
     localStorage.clear();
     localStorage.setItem(
       "User",
@@ -294,6 +293,9 @@ document.addEventListener("DOMContentLoaded", function() {
           }
         }
       }
+    });
+    form.on("resetPADI", changed => {
+      form.triggerChange();
     });
   });
 });
