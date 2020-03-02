@@ -26,7 +26,13 @@ class EndorsementRatecard extends AbstractAppDelegate
         if($dateDifference == 1){
             $data['update_date'] = $data['start_date'];
         }
-        $data['careerCoverage']= isset($data['careerCoverage']) ? $data['careerCoverage']: $data['liabilityCoverageName'];
+        if(isset($data['liabilityCoverageName'])){
+            $data['careerCoverage'] = $data['liabilityCoverageName'];
+        } else {
+            if(isset($data['careerCoverage'])){
+                $data['careerCoverage']= $data['careerCoverage'];
+            }
+        }
         if(!isset($data['previous_scuba'])){
             $data['previous_scuba'] = isset($data['scubaFit'])? $data['scubaFit']: '';
         }
