@@ -376,8 +376,15 @@ class ElasticService
 
     }
 
+    public function bulk($body) {
+        $responses = $this->client->bulk($body);
+    }
+
     public function index($index, $id, $body)
     {
+        if (substr($index,-6)!="_index") {
+            $index = $index."_index";
+        }
         $index = ($this->core) ? $this->core.'_'.$index:$index;
         $params['index'] = $index;
         $params['id'] = $id;
@@ -388,6 +395,9 @@ class ElasticService
 
     public function delete($index, $id)
     {
+        if (substr($index,-6)!="_index") {
+            $index = $index."_index";
+        }
         $index = ($this->core) ? $this->core.'_'.$index:$index;
         if ($id == 'all') {
             return $this->client->indices()->delete(['index' => $index]);

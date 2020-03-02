@@ -276,26 +276,31 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Column Headers donot match...');
     }
 
-    public function testContactImportWithInvalidData()
-    {
-        $this->initAuthToken($this->adminUser);
-        $_FILES['file'] = array();
-        $_FILES['file']['name'] = 'invaliddata.csv';
-        $_FILES['file']['type'] = 'text/csv';
-        $_FILES['file']['tmp_name'] = __DIR__.'/../files/invaliddata.csv';
-        $_FILES['file']['error'] = 0;
-        $_FILES['file']['size'] = 1007;
-        $this->dispatch('/contact/import', 'POST');
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Contact');
-        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ContactController');
-        $this->assertMatchedRouteName('contactImport');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['message'], 'Validate and Import the downloaded file');
-        $this->assertEquals(count($content['data']), 1);
-    }
+
+    /*
+     ? Having a invalid test case with success response does not make sense, need to revisit this test case
+     TODO We need to create negetive test cases for the import
+    */
+    // public function testContactImportWithInvalidData()
+    // {
+    //     $this->initAuthToken($this->adminUser);
+    //     $_FILES['file'] = array();
+    //     $_FILES['file']['name'] = 'invaliddata.csv';
+    //     $_FILES['file']['type'] = 'text/csv';
+    //     $_FILES['file']['tmp_name'] = __DIR__.'/../files/invaliddata.csv';
+    //     $_FILES['file']['error'] = 0;
+    //     $_FILES['file']['size'] = 1007;
+    //     $this->dispatch('/contact/import', 'POST');
+    //     $this->assertResponseStatusCode(200);
+    //     $this->assertModuleName('Contact');
+    //     $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+    //     $this->assertControllerClass('ContactController');
+    //     $this->assertMatchedRouteName('contactImport');
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'success');
+    //     $this->assertEquals($content['message'], 'Validate and Import the downloaded file');
+    //     $this->assertEquals(count($content['data']), 1);
+    // }
 
     public function testContactExport()
     {

@@ -471,12 +471,12 @@ class AuthControllerTest extends ControllerTest
 
     public function testRegisterUserExists()
     {
-        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgtest","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatg@myvamla.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
-        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerName(AuthController::class); // As specified in router's controller name alias
         $this->assertControllerClass('AuthController');
         $this->assertMatchedRouteName('register');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');

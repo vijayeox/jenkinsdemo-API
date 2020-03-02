@@ -411,8 +411,8 @@ class WorkflowService extends AbstractService
         $offset = " OFFSET 0";
         $sortjoinQuery = "";
         $appFilter = "ox_app.uuid ='" . $appId . "'";
-            
-        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId AND 
+
+        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId AND
                                 ox_activity_instance_assignee.user_id is null)
                                 OR ox_activity_instance_assignee.user_id = $userId
                                  OR (ox_activity_instance_assignee.user_id is null AND (
@@ -420,7 +420,7 @@ class WorkflowService extends AbstractService
                                 OR ox_activity_instance_assignee.id is null)))
                                 AND $appFilter AND ox_activity_instance.status = 'In Progress'
                                 AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
-            
+
         if (!empty($filterParams)) {
             if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
                 $jsonParams = json_decode($filterParams['filter'], true);
@@ -452,8 +452,8 @@ class WorkflowService extends AbstractService
                     $tablePrefix = "tblf" . $prefix;
                     if (!empty($val)) {
                         $filterOperator = $this->fileService->processFilters($val);
-                        if($val['field'] == 'entity_name'){
-                            $whereQuery .= " AND ox_app_entity.name ".$filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                        if ($val['field'] == 'entity_name') {
+                            $whereQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             continue;
                         }
                         if ($subQuery != '') {
@@ -488,8 +488,8 @@ class WorkflowService extends AbstractService
     LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
     LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
 
-        if(strlen($whereQuery) > 0){
-            $whereQuery .= " " . $where;    
+        if (strlen($whereQuery) > 0) {
+            $whereQuery .= " " . $where;
         }
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
@@ -498,9 +498,10 @@ class WorkflowService extends AbstractService
 
         $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
     ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,ox_app_entity.name as entity_name,
-    ox_activity.name as activityName, ox_file.date_created, 
+    ox_activity.name as activityName, ox_file.date_created,
     CASE WHEN ox_activity_instance_assignee.user_id is not null then false
     else true end as to_be_claimed $field $fromQuery $whereQuery $sort $pageSize $offset";
+
         $this->logger->info("Executing Assignment listing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         $result = array();
@@ -553,6 +554,14 @@ class WorkflowService extends AbstractService
         $sortTable = "tblf" . $sortCount;
         $sort = " ORDER BY ";
         foreach ($sortOptions as $key => $value) {
+            if ($value['field'] == 'entity_name') {
+                if ($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " ox_app_entity.name ";
+                $sortCount++;
+                continue;
+            }
             if ($sortCount == 0) {
                 $sort .= $value['field'] . " " . $value['dir'];
             } else {

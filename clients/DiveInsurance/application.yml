@@ -59,7 +59,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: 'Document'
+                text: Document
                 data_type: document
     -
         name: 'Dive Store'
@@ -70,7 +70,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: 'Document'
+                text: Document
                 data_type: document
     -
         name: 'Dive Boat'
@@ -81,7 +81,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: 'Document'
+                text: Document
                 data_type: document
     -
         name: 'Emergency First Response'
@@ -92,7 +92,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: 'Document'
+                text: Document
                 data_type: document
     -
         name: 'Pocket Card Job'
@@ -267,9 +267,11 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
+                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
+                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
     -
         name: Home
         icon: 'fa fa-home'
@@ -366,15 +368,32 @@ menu:
                                 title: Name
                                 field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                multiFieldFilter:
+                                    -
+                                        lastname
                             -
                                 title: Product
                                 field: entity_name
+                                filterCell:
+                                    type: dropdown
+                                    listItems:
+                                        - 'Individual Professional Liability'
+                                        - 'Dive Boat'
+                                        - 'Dive Store'
+                                        - 'Emergency First Response'
+                                    placeholder: 'Select Policy'
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
+                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
+                                filter: date
+                                filterFormat: YYYY-MM-DD
                             -
                                 title: 'Policy End Date'
                                 field: end_date
+                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
+                                filter: date
+                                filterFormat: YYYY-MM-DD
         uuid: 50fd8782-3e08-4a4c-9ff2-10d404904e5e
     -
         name: Errors
@@ -427,7 +446,7 @@ menu:
         uuid: 41551bff-e30e-4ba5-abc1-1a864f12e061
     -
         name: 'Manage Policies'
-        icon: 'fa fa-list-alt'
+        icon: 'fa fa-search'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
         page:
             name: 'Manage Policies'
@@ -545,13 +564,15 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
+                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
+                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
         uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'
-        icon: 'fa fa-search'
+        icon: 'fa fa-list-alt'
         privilege: MANAGE_POLICY_APPROVAL_READ
         page:
             name: 'Verify PADI details'

@@ -36,7 +36,7 @@ class PocketCard extends PolicyDocument
             $this->logger->info("filter params is : ". json_encode($filterParams));
             $params['workflowStatus'] = 'Completed';
             $files = $this->getFileList($params, $filterParams);
-            $data['product'] = implode(", ", array_column($files, 'product'));
+            $data['product'] = implode(", ", array_column($files['data'], 'product'));
             // print_r($data);exit;
             $this->logger->info("the product is: ", print_r($data['product'], true));
         }

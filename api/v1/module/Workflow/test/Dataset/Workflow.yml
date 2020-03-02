@@ -292,7 +292,7 @@ ox_activity_instance:
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0778"
     workflow_instance_id: 1
-    status: "Completed"
+    status: "In Progress"
     org_id: 1
   - id: 2
     activity_id: 2
@@ -324,6 +324,5 @@ ox_wf_user_identifier:
     identifier_name: "expiry_data"
     identifier: "2019-01-01"
 ox_app_registry:
--
-    org_id: 1
+  - org_id: 1
     app_id: 99

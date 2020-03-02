@@ -166,7 +166,9 @@ class UserService extends AbstractService
             }
             $select = "SELECT ou.id,ou.uuid,count(ou.id) as org_count,ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) as organisation_id from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '" . $data['username'] . "' OR ou.email = '" . $data['email'] . "' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
             $result = $this->executeQuerywithParams($select)->toArray();
-            //Is this required?????
+            /*
+            ? Is this required?????
+             */
             if (count($result) > 1) {
                 throw new ServiceException("Username or Email Exists in other Organization", "user.email.exists");
             }
@@ -261,7 +263,7 @@ class UserService extends AbstractService
                 $this->addRoleToUser($data['uuid'], $data['role'], $form->orgid);
             }
             // $this->emailService->sendUserEmail($form);
-            // // Code to add the user information to the Elastic Search Index
+            // Code to add the user information to the Elastic Search Index
             // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
             // $es = $this->generateUserIndexForElastic($data);
             $this->commit();
@@ -1248,6 +1250,7 @@ class UserService extends AbstractService
                 throw $e;
             }
         }
+
         if ($data['username'] == $result[0]['username']) {
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];

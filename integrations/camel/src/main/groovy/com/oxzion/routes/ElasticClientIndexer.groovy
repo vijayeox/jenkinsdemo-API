@@ -66,35 +66,35 @@ class ElasticClientIndexer extends RouteBuilder {
                         String operation = object.operation.toString()
                         def output = JsonOutput.toJson(object.body)
                         def client = new RestHighLevelClient(
-                        RestClient.builder(new HttpHost(HOST, PORT, "http")))
-                        if(operation == 'Index')
-                        {
-                            def request = new IndexRequest(indexName,type,ID)
-                            request.source(output, XContentType.JSON)
-                            client.index(request, RequestOptions.DEFAULT)
-                        }
-                        else if(operation == 'Delete')
-                        {
-                            def deleteRequest = new DeleteRequest(indexName,type,ID)
-                            client.delete(deleteRequest, RequestOptions.DEFAULT)
-                        }
-                        else if(operation == 'Batch')
-                        {
-                            int i = 0
-                            BulkRequest bulk = new BulkRequest()
-                            for(obj in object.body) {
-                                String id = idList[i].toString()
-                                ++i
-                                String content = JsonOutput.toJson(obj)
-                                bulk.add(new IndexRequest(indexName,type,id).source(content, XContentType.JSON))
+                                RestClient.builder(new HttpHost(HOST, PORT, "http")))
+                        try{
+                            if(operation == 'Index')
+                            {
+                                def request = new IndexRequest(indexName,type,ID)
+                                request.source(output, XContentType.JSON)
+                                client.index(request, RequestOptions.DEFAULT)
                             }
-                            if(deleteList){
-                                for(del in deleteList) {
-                                    String id = del.toString()
-                                    bulk.add(new DeleteRequest(indexName,type,id))
+                            else if(operation == 'Delete')
+                            {
+                                def deleteRequest = new DeleteRequest(indexName,type,ID)
+                                client.delete(deleteRequest, RequestOptions.DEFAULT)
+                            }
+                            else if(operation == 'Batch')
+                            {
+                                int i = 0
+                                BulkRequest bulk = new BulkRequest()
+                                for(obj in object.body) {
+                                    String id = idList[i].toString()
+                                    ++i
+                                    String content = JsonOutput.toJson(obj)
+                                    bulk.add(new IndexRequest(indexName,type,id).source(content, XContentType.JSON))
                                 }
-                            }
-                            try {
+                                if(deleteList){
+                                    for(del in deleteList) {
+                                        String id = del.toString()
+                                        bulk.add(new DeleteRequest(indexName,type,id))
+                                    }
+                                }
                                 BulkResponse bulkResponse = client.bulk(bulk, RequestOptions.DEFAULT)
                                 for (BulkItemResponse bulkItemResponse : bulkResponse) {
                                     if (bulkItemResponse.isFailed()) {
@@ -104,15 +104,15 @@ class ElasticClientIndexer extends RouteBuilder {
                                     }
                                 }
                             }
-                            catch(ElasticsearchException ex)
+                            else
                             {
-                                println("the exception is -"+ex)
-                                logger.error("BULK INDEXING (EXCEPTION) ---",ex)
+                                throw new Exception("Incorrect operation specified :" + operation)
                             }
                         }
-                        else
+                        catch(ElasticsearchException ex)
                         {
-                            throw new Exception("Incorrect operation specified :" + operation)
+                            println("the exception is -"+ex)
+                            logger.error("INDEXING (EXCEPTION) ---",ex)
                         }
                     }
                 }).to("log:notification")

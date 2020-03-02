@@ -3,7 +3,6 @@
 namespace User;
 
 use Zend\Router\Http\Segment;
-use Zend\Router\Http\Method;
 
 return [
     'router' => [
@@ -16,10 +15,10 @@ return [
                         'controller' => Controller\UserController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
-                            'post' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
-                            'delete' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
-                            'get' => ['MANAGE_USER_READ','MANAGE_ORGANIZATION_READ','MANAGE_GROUP_READ']
+                            'put' => ['MANAGE_USER_WRITE', 'MANAGE_ORGANIZATION_WRITE', 'MANAGE_GROUP_WRITE'],
+                            'post' => ['MANAGE_USER_WRITE', 'MANAGE_ORGANIZATION_WRITE', 'MANAGE_GROUP_WRITE'],
+                            'delete' => ['MANAGE_USER_WRITE', 'MANAGE_ORGANIZATION_WRITE', 'MANAGE_GROUP_WRITE'],
+                            'get' => ['MANAGE_USER_READ', 'MANAGE_ORGANIZATION_READ', 'MANAGE_GROUP_READ'],
                         ],
                     ],
                 ],
@@ -38,7 +37,7 @@ return [
                     ],
                 ],
             ],
-            'saveMe'=> [
+            'saveMe' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/user/me/save',
@@ -85,7 +84,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',
-                        'action' => 'getUserAppsAndPrivileges'
+                        'action' => 'getUserAppsAndPrivileges',
                     ],
                 ],
             ],
@@ -171,7 +170,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'get',
-                        'action' => 'userLoginToken'
+                        'action' => 'userLoginToken',
                     ],
                 ],
             ],
@@ -182,7 +181,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'userSearch'
+                        'action' => 'userSearch',
                     ],
                 ],
             ],
@@ -193,7 +192,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'usersList'
+                        'action' => 'usersList',
                     ],
                 ],
             ],
@@ -204,7 +203,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'changePassword'
+                        'action' => 'changePassword',
                     ],
                 ],
             ],
@@ -213,7 +212,7 @@ return [
                 'options' => [
                     'route' => '/user/profile/:profileId',
                     'defaults' => [
-                        'controller' => Controller\ProfilePictureDownloadController::class
+                        'controller' => Controller\ProfilePictureDownloadController::class,
                     ],
                 ],
             ],
@@ -223,7 +222,7 @@ return [
                     'route' => '/user/profile/username/:username',
                     'defaults' => [
                         'controller' => Controller\ProfilePictureDownloadController::class,
-                        'action' => 'profilePictureByUsername'
+                        'action' => 'profilePictureByUsername',
                     ],
                 ],
             ],
@@ -234,7 +233,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\ProfilePictureController::class,
                         'method' => 'POST',
-                        'action' => 'updateProfile'
+                        'action' => 'updateProfile',
                     ],
                 ],
             ],
@@ -245,7 +244,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\ForgotPasswordController::class,
                         'method' => 'POST',
-                        'action' => 'forgotPassword'
+                        'action' => 'forgotPassword',
                     ],
                 ],
             ],
@@ -256,7 +255,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\ForgotPasswordController::class,
                         'method' => 'POST',
-                        'action' => 'resetPassword'
+                        'action' => 'resetPassword',
                     ],
                 ],
             ],
@@ -267,20 +266,20 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserSessionController::class,
                         'method' => 'GET',
-                        'action' => 'getSession'
+                        'action' => 'getSession',
                     ],
                 ],
             ],
             'getUserDetailList' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/organization/:orgId/user/:userId/profile',
+                    'route' => '/organization/:orgId/user/:userId/profile',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',
                         'action' => 'getUserDetailList',
                         'access' => [
-                            'getUserDetailList'=> ['MANAGE_USER_READ']
+                            'getUserDetailList' => ['MANAGE_USER_READ'],
                         ],
                     ],
                 ],
@@ -292,7 +291,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserSessionController::class,
                         'method' => 'POST',
-                        'action' => 'updateSession'
+                        'action' => 'updateSession',
                     ],
                 ],
             ],
@@ -303,7 +302,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',
-                        'action' => 'getuserproject'
+                        'action' => 'getuserproject',
                     ],
                 ],
             ],
@@ -312,6 +311,6 @@ return [
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];
