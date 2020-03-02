@@ -103,7 +103,12 @@ document.addEventListener("DOMContentLoaded", function() {
       Swal.fire({
         // position: "top-end",
         icon: "warning",
-        title: "Please enter your username and password",
+        title:
+          "Please enter your " +
+          (username ? "" : "username") +
+          (!username && !password ? " and " : "") +
+          (password ? "" : "password") +
+          ".",
         showConfirmButton: false,
         timer: 2200
       });
