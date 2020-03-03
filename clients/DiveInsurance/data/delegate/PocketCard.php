@@ -84,6 +84,9 @@ class PocketCard extends PolicyDocument
             $newData[$key]['state'] = $value['state'];
             $newData[$key]['zip'] = $value['zip'];
             $newData[$key]['entity_name'] = 'Pocket Card Job';
+            if(isset($value['business_name'])){
+                $newData[$key]['business_name'] = $value['business_name'];
+            }
         }
         $this->logger->info("New array data is : ".print_r($newData,true));
 
