@@ -37,7 +37,7 @@ ox_widget:
     name: 'combinedWithExpression'
     configuration: 'sample config3'
     version: 1
-    expression: '{"expression":["calcfield1=(field6-field5)*field6/100","calcfield2=(field6-field5)"]}'
+    expression: '{"expression":["calcfield1=round((field6-field5)*field6/35,2)","calcfield2=(field6-field5)"]}'
   -
     id: 14
     uuid: '31e881c3-040d-44d8-9295-f2c3130bafbc'
