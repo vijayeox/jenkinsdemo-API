@@ -18,7 +18,7 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
         $endorsementGroupCoverage = array();
         $endorsementGroupLiability = array();
         $policy =  array();
-        $data['previous_policy_data'] = array();
+        $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
         $policy['update_date'] =  date("Y-m-d H:i:s");
         $policy['previous_hull_market_value'] = $data['hull_market_value'];
         $policy['previous_hull_deductible'] = $data['hull_deductible'];
@@ -79,9 +79,9 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
         // $policy['update_date'] = $data['update_date'];        
 
 
-        // if(!isset($data['previous_excess_liability_coverage'])){
-        //     $data['previous_excess_liability_coverage'] = 'coverageNoneSelected';
-        // }
+        if(!isset($data['previous_excess_liability_coverage'])){
+            $data['previous_excess_liability_coverage'] = 'coverageNoneSelected';
+        }
 
 
         $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_excess_liability_coverage']."' AND start_date <= '".$policy['update_date']."' AND end_date >= '".$policy['update_date']."'";
@@ -91,9 +91,9 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
                 $rate = $resultCoverage->current();
                 if(isset($rate['key'])){
                     if($rate['key'] == $policy['previous_excess_liability_coverage']){
-                        // if($data['previous_excess_liability_coverage'] == 'coverageNoneSelected'){
-                        //     $data['previous_excess_liability_coverage'] = '';
-                        // }
+                        if($data['previous_excess_liability_coverage'] == 'coverageNoneSelected'){
+                            $data['previous_excess_liability_coverage'] = '';
+                        }
                         $data['excess_liability_coverage'] = $policy['previous_excess_liability_coverage'];
                     }
                     $endorsementCoverage[$rate['key']] = $rate['coverage'];
@@ -102,9 +102,9 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
             }
 
 
-        // if(!isset($data['previous_groupCoverageSelect'])){
-        //     $data['previous_groupCoverageSelect'] = 'groupCoverageNoneSelected';
-        // }
+        if(!isset($data['previous_groupCoverageSelect'])){
+            $data['previous_groupCoverageSelect'] = 'groupCoverageNoneSelected';
+        }
 
 
         $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_groupCoverageSelect']."' AND start_date <= '".$policy['update_date']."' AND end_date >= '".$policy['update_date']."'";
@@ -114,9 +114,9 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
                 $rate = $resultCoverage->current();
                 if(isset($rate['key'])){
                     if($rate['key'] == $policy['previous_groupCoverageSelect']){
-                        // if($data['previous_groupCoverageSelect'] == 'groupCoverageNoneSelected'){
-                        //         $data['previous_groupCoverageSelect'] = '';
-                        // }
+                        if($data['previous_groupCoverageSelect'] == 'groupCoverageNoneSelected'){
+                                $data['previous_groupCoverageSelect'] = '';
+                        }
                         $data['groupCoverageSelect'] = $policy['previous_groupCoverageSelect'];
                     }
                     $endorsementGroupCoverage[$rate['key']] = $rate['coverage'];
@@ -125,9 +125,9 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
             }
        
 
-         // if(!isset($data['previous_groupExcessLiabilitySelect'])){
-         //    $data['previous_groupExcessLiabilitySelect'] = 'groupLiabilityNoneSelected';
-         // }
+         if(!isset($data['previous_groupExcessLiabilitySelect'])){
+            $data['previous_groupExcessLiabilitySelect'] = 'groupLiabilityNoneSelected';
+         }
 
 
          // if(isset($data['previous_groupExcessLiabilitySelect'])){
@@ -138,9 +138,9 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
                     $rate = $resultCoverage->current();
                     if(isset($rate['key'])){
                         if($rate['key'] == $policy['previous_groupExcessLiabilitySelect']){
-                            // if($data['previous_groupExcessLiabilitySelect'] == 'groupCoverageNoneSelected'){
-                            //     $data['previous_groupExcessLiabilitySelect'] = '';
-                            // }
+                            if($data['previous_groupExcessLiabilitySelect'] == 'groupCoverageNoneSelected'){
+                                $data['previous_groupExcessLiabilitySelect'] = '';
+                            }
                             $data['groupExcessLiabilitySelect'] = $policy['previous_groupExcessLiabilitySelect'];
                         }
                         $endorsementGroupLiability[$rate['key']] = $rate['coverage'];

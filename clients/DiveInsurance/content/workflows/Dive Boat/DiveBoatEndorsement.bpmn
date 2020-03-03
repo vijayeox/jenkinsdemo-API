@@ -12,13 +12,13 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_074ybay</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="ServiceTask_0kfeda1" name="Policy and COI generation" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_0kfeda1" name="Policy and COI generation" camunda:asyncAfter="true" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
               <camunda:value>{"command" : "delegate", "delegate":"DiveBoatEndorsementPremiumCalculation"}</camunda:value>
-              <camunda:value>{"command"{"command" : "delegate", "delegate":"EndorsementDocument"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"EndorsementDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
             </camunda:list>
@@ -86,7 +86,6 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
               <camunda:value>{"command" : "delegate", "delegate":"DiveBoatEndorsementPremiumCalculation"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"EndorsementQuote"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
-              <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
@@ -105,6 +104,13 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
         <camunda:formData>
           <camunda:formField id="userApproved" type="boolean" defaultValue="false" />
         </camunda:formData>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="postCreate">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate" : "DispatchProposalDocument"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0ref3rx</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0efcxsl</bpmn:outgoing>
