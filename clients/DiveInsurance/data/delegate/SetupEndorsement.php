@@ -21,14 +21,15 @@ class SetupEndorsement extends AbstractAppDelegate
             unset($data['approved']);
         }
         if(isset($data['endorsement_options'])){
-           foreach($data['endorsement_options'] as $key=>$value){
-               $data['endorsement_options'][$key] = false;
-           }
+           foreach($data['endorsement_options'] as $key=>$value) {
+                if(isset($data['endorsement_options'][$key])) {
+                    unset($data['endorsement_options'][$key]);
+                }
+            }
            $data['endorsementCoverage'] = array();
            $data['endorsementCylinder'] = array();
            $data['endorsementExcessLiability'] = array();
         }
-        
         if(isset($data['careerCoverage'])){
             $data['careerCoveragePrice'] = 0;
         }

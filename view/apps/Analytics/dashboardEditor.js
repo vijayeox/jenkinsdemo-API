@@ -59,6 +59,33 @@ class DashboardEditor extends React.Component {
         };
     }
 
+    widgetDrillDownMessageHandler = (event) => {
+        let data = event['data'];
+        if (data['action'] !== 'oxzion-widget-drillDown') {
+            return;
+        }
+
+        let elementId = data['elementId'];
+        let widgetId = data['widgetId'];
+        let chart = this.renderedCharts[elementId];
+        if (chart) {
+            if (chart.dispose) {
+                chart.dispose();
+            }
+            this.renderedCharts[elementId] = null;
+        }
+        let replaceWidgetId = data['replaceWith'];
+        if (replaceWidgetId) {
+            widgetId = replaceWidgetId;
+            let iframeElement = document.querySelector('iframe.cke_wysiwyg_frame');
+            let iframeWindow = iframeElement.contentWindow;
+            let iframeDocument = iframeWindow.document;
+            let widgetElement = iframeDocument.querySelector('#' + elementId);
+            widgetElement.setAttribute('data-oxzion-widget-id', replaceWidgetId);
+        }
+        this.updateWidget(elementId, widgetId);
+    }
+
     inputChanged = (e) => {
         let thiz = this;
         let name = e.target.name;
@@ -378,6 +405,7 @@ class DashboardEditor extends React.Component {
 
     componentDidMount() {
         window.addEventListener('message', this.editorDialogMessageHandler, false);
+        window.addEventListener('message', this.widgetDrillDownMessageHandler, false);
         JavascriptLoader.loadScript(this.getJsLibraryList());
     }
 
@@ -392,6 +420,7 @@ class DashboardEditor extends React.Component {
             }
         }
         window.removeEventListener('message', this.editorDialogMessageHandler, false);
+        window.removeEventListener('message', this.widgetDrillDownMessageHandler, false);
         if (this.editor) {
             this.editor.destroy();
         }

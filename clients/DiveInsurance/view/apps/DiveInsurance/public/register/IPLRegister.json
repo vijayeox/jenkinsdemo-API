@@ -146,24 +146,25 @@
                 }
                 ,
                 {
-                    "input":true,
                     "label":"Validate PADI Membership",
-                    "tableView":false,
-                    "key":"panelColumnsValidatePadiMembership",
                     "action":"event",
+                    "showValidations":false,
                     "theme":"success",
-                    "type":"button",
+                    "customClass":"alignCenter",
+                    "tableView":false,
+                    "key":"validatePADIButton",
                     "properties": {
                         "commands":"{\"commands\":[{\"command\":\"verify_user\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]}"
                     }
                     ,
-                    "customClass":"alignCenter",
                     "overlay": {
                         "style": "text-align:center"
                     }
                     ,
-                    "custom":"data['padidata'] = data['padi']",
+                    "type":"button",
                     "event":"callCommands",
+                    "input":true,
+                    "custom":"data['padidata'] = data['padi']",
                     "hideOnChildrenHidden":false,
                     "validate": {
                         "unique": false, "multiple": false
@@ -1238,7 +1239,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":205,
+    "_vid":208,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -1254,7 +1255,7 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-02-26T14:23:26.167Z",
+    "modified":"2020-03-02T20:23:49.911Z",
     "machineName":"testdivehub:padiVerificationForm",
     "controller":""
 }

@@ -103,13 +103,17 @@ document.addEventListener("DOMContentLoaded", function() {
       Swal.fire({
         // position: "top-end",
         icon: "warning",
-        title: "Please enter your username and password",
+        title:
+          "Please enter your " +
+          (username ? "" : "username") +
+          (!username && !password ? " and " : "") +
+          (password ? "" : "password") +
+          ".",
         showConfirmButton: false,
         timer: 2200
       });
     }
   }
-
 
   function forgotPassword() {
     Swal.fire({
@@ -157,8 +161,8 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   }
-  
-    function autoLogin(data) {
+
+  function autoLogin(data) {
     localStorage.clear();
     localStorage.setItem(
       "User",
@@ -174,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
     );
     window.location.href = window.location.origin;
   }
+
   Formio.createForm(
     document.getElementById("formio"),
     JSON.parse(formContent),
@@ -181,6 +186,16 @@ document.addEventListener("DOMContentLoaded", function() {
   ).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
+
+    setTimeout(function() {
+      var padiField = $("input[name='data[padi]']");
+      padiField.keyup(function(e) {
+        if (e.keyCode === 13) {
+          $("button[name='data[validatePADIButton]']").trigger("click");
+        }
+      });
+    }, 500);
+
     form.on("submit", function(submission, next) {
       submission.data.app_id = appId;
       var response = fetch(baseUrl + "register", {
@@ -294,6 +309,9 @@ document.addEventListener("DOMContentLoaded", function() {
           }
         }
       }
+    });
+    form.on("resetPADI", changed => {
+      form.triggerChange();
     });
   });
 });
