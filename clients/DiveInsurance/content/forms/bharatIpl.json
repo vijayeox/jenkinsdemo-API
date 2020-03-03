@@ -2724,7 +2724,7 @@
                     "hideLabel":true,
                     "tableView":true,
                     "validate": {
-                        "unique": false, "multiple": false
+                        "unique": false, "multiple": false, "minLength": 1
                     }
                     ,
                     "key":"dataGrid",
@@ -3117,7 +3117,7 @@
                 "tableView":true,
                 "defaultValue":false,
                 "validate": {
-                    "required": true, "customMessage": "Please Acknowledge the GDPR Agreement", "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please acknowledge the GDPR Agreement", "unique": false, "multiple": false
                 }
                 ,
                 "key":"page4Panel2PanelIagree",
@@ -3853,7 +3853,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":582,
+    "_vid":584,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3875,7 +3875,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-26T15:07:16.853Z",
+    "modified":"2020-03-02T21:31:11.721Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

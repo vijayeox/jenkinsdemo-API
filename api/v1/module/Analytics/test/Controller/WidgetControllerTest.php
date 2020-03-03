@@ -327,12 +327,12 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['widget']['data'][0]['field3'],"cfield3text");
         $this->assertEquals($content['data']['widget']['data'][0]['field5'],35);
         $this->assertEquals($content['data']['widget']['data'][0]['field6'],45);
-        $this->assertEquals($content['data']['widget']['data'][0]['calcfield1'],4.5);
+        $this->assertEquals($content['data']['widget']['data'][0]['calcfield1'],12.86);
         $this->assertEquals($content['data']['widget']['data'][0]['calcfield2'],10);
         $this->assertEquals($content['data']['widget']['data'][1]['field3'],"cfield5text");
         $this->assertEquals($content['data']['widget']['data'][1]['field5'],40);
         $this->assertEquals($content['data']['widget']['data'][1]['field6'],70);
-        $this->assertEquals($content['data']['widget']['data'][1]['calcfield1'],21);
+        $this->assertEquals($content['data']['widget']['data'][1]['calcfield1'],60);
         $this->assertEquals($content['data']['widget']['data'][1]['calcfield2'],30);
         
     }
