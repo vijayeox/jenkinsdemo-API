@@ -340,6 +340,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else{
                 $data['documents'] = $documents;
             }
+            $data['endorsement_options']['modify_personalInformation'] = false;
+            $data['endorsement_options']['modify_coverage'] = false;
+            $data['endorsement_options']['modify_additionalInsured'] = false;
             $data['policyStatus'] = "In Force";
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
