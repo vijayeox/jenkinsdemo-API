@@ -14,11 +14,11 @@
 		<div class="main_div">
 			<div class = "details">
 				<p class = "email"><b>Your certificate and insurance policy <br>were emailed to :<br><u>{$individual.email}</u></b></p><br>
-				<p class = "email" align="left"><b>{$individual.firstname}&nbsp{$individual.lastname}<br>{$individual.address1}<br>
+				<p class = "email" align="left"><b>{$individual.lastname},&nbsp;{$individual.firstname}<br>{$individual.address1}<br>
 					{if isset($individual.address2)}
 						{$individual.address2}<br>
 					{/if}
-					{$individual.city}, {$individual.state},{$individual.zip} </b></p>
+					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip} </b></p>
 			</div>
 			<div class = "insure">
 				<div class = "header">

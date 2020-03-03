@@ -363,8 +363,8 @@ class FileService extends AbstractService
                 "isActive" => 1);
             $result = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
             if (count($result) > 0) {
-                $result[0]['data'] = json_decode($result[0]['data']);
-                $result[0]['data']->fileId = $result[0]['fileId'];
+                $result[0]['data'] = json_decode($result[0]['data'], true);
+                $result[0]['data']['fileId'] = $result[0]['fileId'];
                 $result[0]['data'] = json_encode($result[0]['data']);
                 return $result[0];
             }

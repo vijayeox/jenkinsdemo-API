@@ -19,7 +19,7 @@
     <bpmn:endEvent id="EndEvent_01jd5fx" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_0ockmtf</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:startEvent id="StartEvent_07wv3ff" name="Insure Fills Online Application">
+    <bpmn:startEvent id="StartEvent_07wv3ff" name="Insure Fills Online Application" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveBoat02" />
@@ -130,7 +130,7 @@
       <bpmn:outgoing>SequenceFlow_18q1h9a</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0l3lgxo</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="ServiceTask_0ae4glh" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_0ae4glh" name="Schedule a reminder mail for Auto Renewal" camunda:asyncAfter="true" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property />
