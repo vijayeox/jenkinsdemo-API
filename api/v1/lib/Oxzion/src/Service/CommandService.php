@@ -172,6 +172,10 @@ class CommandService extends AbstractService
                 $this->logger->info("Get User Identifiers By UserId");
                 return $this->getUserIdentifier($data);
                 break;
+            case 'getuserdata':
+                $this->logger->info("GET User Data");
+                return $this->getUserData($data);
+                break;
             case 'getuserlist':
                 $this->logger->info("GET User LIST");
                 return $this->getUserList($data);
@@ -552,6 +556,28 @@ class CommandService extends AbstractService
                 foreach ($result as $key => $value) {
                     $data[$value['identifier_name']] = $value['identifier'];
                 }
+                return $data;
+            } else {
+                $data['user_exists'] = '0';
+                return $data;
+            }
+        } else {
+            return $data;
+        }
+    }
+
+    public function getUserData(&$data)
+    {
+        $userId = isset($data['user_id']) ? $this->getIdFromUuid('ox_user', $data['user_id']) : AuthContext::get(AuthConstants::USER_ID);
+        if (isset($data['appId']) && isset($userId)) {
+            $select = "SELECT * from ox_wf_user_identifier where app_id = :appId AND user_id = :user_id";
+            $selectQuery = array("appId" => $data['app_id'], "user_id" => $userId);
+            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+            if (count($result) > 0) {
+                $result = $this->userService->getUserWithMinimumDetails($userId);
+                unset($result['uuid']);
+                unset($result['username']);
+                $data = array_merge($data, $result);
                 return $data;
             } else {
                 $data['user_exists'] = '0';
