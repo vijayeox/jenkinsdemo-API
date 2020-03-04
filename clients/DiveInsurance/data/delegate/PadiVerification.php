@@ -48,12 +48,23 @@ class PadiVerification extends AbstractAppDelegate
             }else{
                 $returnArray['businessPadiVerified'] = fasle;
             }
-            if(($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (!isset($response[0]['firstname']) || $response[0]['firstname'] == '')){
-                $returnArray['padiVerified'] = false;
-            }else if($data['product'] == 'Dive Store' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
-                $returnArray['businessPadiVerified'] = false;
-            }else if($data['product'] == 'Dive Boat' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
-                $returnArray['businessPadiVerified'] = false;
+            if(isset($data['product'])){
+                if(($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (!isset($response[0]['firstname']) || $response[0]['firstname'] == '')){
+                    $returnArray['padiVerified'] = false;
+                }else if($data['product'] == 'Dive Store' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
+                    $returnArray['businessPadiVerified'] = false;
+                }else if($data['product'] == 'Dive Boat' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
+                    $returnArray['businessPadiVerified'] = false;
+                }
+            } else {
+                $returnArray['address1'] = isset($data['address1']) ? $data['address1'] : "";
+                $returnArray['address2'] = isset($data['address2']) ? $data['address2'] : "";
+                $returnArray['city'] = isset($data['city']) ? $data['city'] : "";
+                $returnArray['state'] = isset($data['state']) ? $data['state'] : "";
+                $returnArray['zip'] = isset($data['zip']) ? $data['zip'] : "";
+                $returnArray['country_code'] = isset($data['country_code']) ? $data['country_code'] : "";
+                $returnArray['home_phone'] = isset($data['home_phone']) ? $data['home_phone'] : "";
+                $returnArray['work_phone'] = isset($data['work_phone']) ? $data['work_phone'] : "";
             }
             $returnArray['padiNotFound'] = false;
             $returnArray['verified'] = true;

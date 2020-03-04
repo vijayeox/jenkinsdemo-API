@@ -70,6 +70,11 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Controller\PaymentCallbackController::class => function ($container) {
+                    return new Controller\PaymentCallbackController(
+                        $container->get(PaymentService::class)
+                    );
+                },
             ],
         ];
     }

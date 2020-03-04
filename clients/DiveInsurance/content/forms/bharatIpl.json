@@ -2348,7 +2348,7 @@
                             ,
                             {
                                 "components":[ {
-                                    "label": "Total Price", "placeholder": "0.00", "prefix": "$", "hideLabel": true, "mask": false, "spellcheck": true, "tableView": true, "defaultValue": "0.00", "delimiter": false, "requireDecimal": true, "inputFormat": "plain", "clearOnHide": false, "calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);", "validate": {
+                                    "label": "Total Price", "placeholder": "0.00", "prefix": "$", "hideLabel": true, "mask": false, "spellcheck": true, "disabled": true, "tableView": true, "defaultValue": "0.00", "delimiter": false, "requireDecimal": true, "inputFormat": "plain", "clearOnHide": false, "calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);", "validate": {
                                         "multiple": false, "unique": false
                                     }
                                     ,
@@ -3853,7 +3853,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":584,
+    "_vid":585,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3875,7 +3875,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-03-02T21:31:11.721Z",
+    "modified":"2020-03-04T08:33:22.311Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }
