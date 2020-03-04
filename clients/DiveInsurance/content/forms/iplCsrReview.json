@@ -1286,7 +1286,7 @@
                                 "label": "ScubaFit Instructor (6)",
                                 "shortcut": ""
                             }, {
-                                "value": "0.00",
+                                "value": "scubaFitInstructorDeclined",
                                 "label": "ScubaFit Instructor - Declined",
                                 "shortcut": ""
                             }],
@@ -1410,7 +1410,7 @@
                                 "label": "Cylinder Inspector and Instructor (6)",
                                 "shortcut": ""
                             }, {
-                                "value": "0.00",
+                                "value": "cylinderInspectorOrInstructorDeclined",
                                 "label": "Cylinder Inspector Or Instructor - Declined",
                                 "shortcut": ""
                             }],
@@ -1551,7 +1551,7 @@
                                 "label": "Equipment Liability Coverage",
                                 "shortcut": ""
                             }, {
-                                "value": "0.00",
+                                "value": "equipmentLiabilityCoverageDeclined",
                                 "label": "Equipment Liability Coverage - Declined",
                                 "shortcut": ""
                             }],
@@ -1683,7 +1683,7 @@
                                 "label": "Excess Liability Coverage ($1,000,000)",
                                 "shortcut": ""
                             }, {
-                                "value": "0.00",
+                                "value": "excessLiabilityCoverageDeclined",
                                 "label": "Excess Liability Coverage - Declined",
                                 "shortcut": ""
                             }],
@@ -3064,35 +3064,41 @@
             "multiple": false
         }
     }, {
-        "type": "panel",
-        "title": "Payment",
+        "key": "page6Panel2",
+        "input": false,
+        "title": "Automatic Renewal",
+        "theme": "primary",
+        "tableView": false,
         "components": [{
-            "key": "page6Panel2",
-            "input": false,
-            "title": "Automatic Renewal",
-            "theme": "primary",
-            "tableView": false,
-            "components": [{
-                "label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
-                "tableView": true,
-                "defaultValue": false,
-                "validate": {
-                    "unique": false,
-                    "multiple": false
-                },
-                "key": "automatic_renewal",
-                "type": "checkbox",
-                "input": true,
-                "dataGridLabel": false,
-                "lockKey": true
-            }],
-            "type": "panel",
-            "label": "Panel",
+            "label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
+            "tableView": true,
+            "defaultValue": false,
             "validate": {
                 "unique": false,
                 "multiple": false
-            }
-        }, {
+            },
+            "key": "automatic_renewal",
+            "type": "checkbox",
+            "input": true,
+            "dataGridLabel": false,
+            "lockKey": true
+        }],
+        "type": "panel",
+        "label": "Panel",
+        "validate": {
+            "unique": false,
+            "multiple": false
+        }
+    }, {
+        "title": "Approval",
+        "theme": "primary",
+        "collapsible": false,
+        "tableView": false,
+        "key": "page6",
+        "type": "panel",
+        "label": "A",
+        "breadcrumb": "none",
+        "components": [{
             "key": "page6Pleaseprocessthepaymentandapprove",
             "label": "Please process the payment and approve",
             "input": false,
@@ -3174,11 +3180,6 @@
             "lockKey": true
         }],
         "input": false,
-        "key": "page6",
-        "theme": "primary",
-        "tableView": false,
-        "breadcrumb": "none",
-        "label": "Panel",
         "validate": {
             "unique": false,
             "multiple": false
@@ -3199,7 +3200,7 @@
         }
     }],
     "revisions": "current",
-    "_vid": 163,
+    "_vid": 165,
     "title": "IPL - CSR Review",
     "display": "form",
     "access": [{
@@ -3216,7 +3217,7 @@
     "path": "iplcsrreview",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-01T11:17:41.957Z",
-    "modified": "2020-03-04T12:18:42.918Z",
+    "modified": "2020-03-04T14:51:32.235Z",
     "machineName": "testdivehub:iplCsrReview",
     "controller": ""
 }
