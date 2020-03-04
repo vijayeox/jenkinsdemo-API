@@ -122,7 +122,7 @@
 			"allowMultipleMasks": false,
 			"fieldSet": false,
 			"inline": false,
-			"id": "e00k0id"
+			"id": "ex4hdxd"
 		}, {
 			"key": "page5Panel",
 			"input": false,
@@ -196,7 +196,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tag": "p",
-				"id": "eklm9ko"
+				"id": "esqlmv8"
 			}, {
 				"label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
 				"tableView": true,
@@ -262,7 +262,7 @@
 				"inputType": "checkbox",
 				"value": "",
 				"name": "",
-				"id": "ey2hh6"
+				"id": "e6hl7ya"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -322,7 +322,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "exz6q0t"
+			"id": "e2u2mgl"
 		}],
 		"path": "page8",
 		"placeholder": "",
@@ -373,7 +373,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "ecyro3"
+		"id": "epriu2"
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -483,7 +483,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "efi8rj6"
+						"id": "ey6m004"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -555,7 +555,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "esnjybs"
+				"id": "e9oycr5"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -615,7 +615,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "elp8efr"
+			"id": "ea19bp"
 		}, {
 			"key": "panelPanel4",
 			"input": false,
@@ -701,7 +701,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "emnk3ab"
+						"id": "eq9xrfa"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -781,7 +781,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "e4uh6s"
+						"id": "ecjft4"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -861,7 +861,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "euigme"
+						"id": "ecihqss"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -927,7 +927,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "e606twk"
+				"id": "e4b5gap"
 			}, {
 				"key": "panelPanel5",
 				"input": false,
@@ -1012,7 +1012,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "exxtd6k"
+							"id": "elr75ui"
 						}, {
 							"label": "Address 2",
 							"placeholder": "Address 2",
@@ -1085,7 +1085,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ezgyqln"
+							"id": "eyqel2p"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1165,7 +1165,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ea5h88"
+							"id": "emlzvbd"
 						}, {
 							"label": "Zip Code",
 							"placeholder": "Zip Code",
@@ -1239,7 +1239,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e8sf8hq"
+							"id": "egk67fj"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1335,7 +1335,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "eg6bgz"
+							"id": "eq4npkb"
 						}, {
 							"label": "State",
 							"widget": "choicesjs",
@@ -1427,7 +1427,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "ewczo2"
+							"id": "e6haof"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1494,7 +1494,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "exhxlvf"
+					"id": "er29cm"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -1552,7 +1552,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "e6210ug"
+				"id": "ew3n23"
 			}, {
 				"key": "panelPanel4Panel",
 				"input": false,
@@ -1624,7 +1624,7 @@
 					"inputType": "checkbox",
 					"value": "",
 					"name": "",
-					"id": "e5wvsxb"
+					"id": "ezzl9dn"
 				}, {
 					"label": "Columns",
 					"input": false,
@@ -1703,7 +1703,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ek9hzt7"
+							"id": "ec0pux9"
 						}, {
 							"label": "Text",
 							"placeholder": "Address2",
@@ -1776,7 +1776,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e2zhrk"
+							"id": "ejd5e"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1855,7 +1855,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "enzop8d"
+							"id": "em0wmd8"
 						}, {
 							"label": "Text",
 							"placeholder": "Zip Code",
@@ -1928,7 +1928,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ez4n47r"
+							"id": "ezpsbb7"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -2024,7 +2024,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "el5p0v"
+							"id": "e5vwhvl"
 						}, {
 							"label": "State",
 							"widget": "choicesjs",
@@ -2117,7 +2117,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "eh5aimp"
+							"id": "eu5mocg"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -2182,7 +2182,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "ew5ih6v"
+					"id": "eydupsg"
 				}],
 				"type": "panel",
 				"label": "Panel",
@@ -2242,7 +2242,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "eq2g69i"
+				"id": "e26xi5g"
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -2250,28 +2250,262 @@
 				"key": "panelPanel4Columns",
 				"columns": [{
 					"components": [{
-						"label": "Home Phone",
-						"placeholder": "Home Phone",
-						"hideLabel": true,
-						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Dial Code",
+								"widget": "choicesjs",
+								"placeholder": "Dial Code",
+								"hideLabel": true,
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{}],
+									"custom": "values = phoneList",
+									"json": "",
+									"url": "",
+									"resource": ""
+								},
+								"template": "<span>{{ item.dial_code }}</span>",
+								"selectThreshold": 0.3,
+								"calculateValue": "if(data.country){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"validate": {
+									"unique": false,
+									"multiple": false,
+									"required": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false
+								},
+								"key": "home_country_code",
+								"type": "select",
+								"input": true,
+								"hideOnChildrenHidden": false,
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": null,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"clearOnHide": true,
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"tabindex": "",
+								"disabled": false,
+								"autofocus": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"attributes": {},
+								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"clearOnRefresh": false,
+								"limit": 100,
+								"valueProperty": "",
+								"lazyLoad": true,
+								"filter": "",
+								"searchEnabled": true,
+								"searchField": "",
+								"minSearch": 0,
+								"readOnlyValue": false,
+								"authenticate": false,
+								"selectFields": "",
+								"searchThreshold": 0.3,
+								"fuseOptions": {
+									"include": "score",
+									"threshold": 0.3
+								},
+								"customOptions": {},
+								"id": "ee976e"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Home Phone",
+								"placeholder": "Home Phone",
+								"hideLabel": true,
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"unique": false,
+									"multiple": false,
+									"required": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false,
+									"minLength": "",
+									"maxLength": "",
+									"pattern": ""
+								},
+								"key": "home_phone_number",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": null,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"tabindex": "",
+								"disabled": false,
+								"autofocus": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"mask": false,
+								"inputType": "text",
+								"inputFormat": "plain",
+								"inputMask": "",
+								"id": "e1op9jo"
+							}, {
+								"label": "home_phone",
+								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
+								"key": "home_phone",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"validate": {
+									"unique": false,
+									"multiple": false,
+									"required": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false
+								},
+								"hideOnChildrenHidden": false,
+								"placeholder": "",
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": null,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"clearOnHide": true,
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"autofocus": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"inputType": "hidden",
+								"id": "e1ldzjr"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 8
+						}],
+						"tableView": false,
+						"key": "columns2",
+						"type": "columns",
+						"input": false,
 						"validate": {
 							"unique": false,
 							"multiple": false,
 							"required": false,
 							"custom": "",
 							"customPrivate": false,
-							"strictDateValidation": false,
-							"minLength": "",
-							"maxLength": "",
-							"pattern": ""
+							"strictDateValidation": false
 						},
-						"key": "home_phone",
-						"type": "textfield",
-						"input": true,
-						"lockKey": true,
+						"path": "columns2",
 						"hideOnChildrenHidden": false,
+						"placeholder": "",
 						"prefix": "",
 						"customClass": "",
 						"suffix": "",
@@ -2279,8 +2513,9 @@
 						"defaultValue": null,
 						"protected": false,
 						"unique": false,
-						"persistent": true,
+						"persistent": false,
 						"hidden": false,
+						"clearOnHide": false,
 						"refreshOn": "",
 						"redrawOn": "",
 						"modalEdit": false,
@@ -2288,15 +2523,14 @@
 						"description": "",
 						"errorLabel": "",
 						"tooltip": "",
+						"hideLabel": false,
 						"tabindex": "",
 						"disabled": false,
 						"autofocus": false,
 						"dbIndex": false,
 						"customDefaultValue": "",
 						"calculateValue": "",
-						"widget": {
-							"type": "input"
-						},
+						"widget": null,
 						"attributes": {},
 						"validateOn": "change",
 						"conditional": {
@@ -2317,35 +2551,267 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"mask": false,
-						"inputType": "text",
-						"inputFormat": "plain",
-						"inputMask": "",
-						"id": "ecty3qu"
+						"tree": false,
+						"autoAdjust": false,
+						"id": "e8trmmo"
 					}, {
-						"label": "Mobile Phone",
-						"placeholder": "Mobile Phone",
-						"hideLabel": true,
-						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Dial Code",
+								"widget": "choicesjs",
+								"placeholder": "Dial Code",
+								"hideLabel": true,
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{}],
+									"custom": "values = phoneList",
+									"json": "",
+									"url": "",
+									"resource": ""
+								},
+								"template": "<span>{{ item.dial_code }}</span>",
+								"selectThreshold": 0.3,
+								"calculateValue": "if(data.country){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"validate": {
+									"unique": false,
+									"multiple": false,
+									"required": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false
+								},
+								"key": "phone_country_code",
+								"type": "select",
+								"input": true,
+								"hideOnChildrenHidden": false,
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": null,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"clearOnHide": true,
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"tabindex": "",
+								"disabled": false,
+								"autofocus": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"attributes": {},
+								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"clearOnRefresh": false,
+								"limit": 100,
+								"valueProperty": "",
+								"lazyLoad": true,
+								"filter": "",
+								"searchEnabled": true,
+								"searchField": "",
+								"minSearch": 0,
+								"readOnlyValue": false,
+								"authenticate": false,
+								"selectFields": "",
+								"searchThreshold": 0.3,
+								"fuseOptions": {
+									"include": "score",
+									"threshold": 0.3
+								},
+								"customOptions": {},
+								"id": "e4rvb45"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Mobile Phone",
+								"placeholder": "Mobile Phone",
+								"hideLabel": true,
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please enter mobile phone number.",
+									"unique": false,
+									"multiple": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false,
+									"minLength": "",
+									"maxLength": "",
+									"pattern": ""
+								},
+								"key": "phone_number",
+								"type": "phoneNumber",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": null,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"tabindex": "",
+								"disabled": false,
+								"autofocus": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"mask": false,
+								"inputType": "tel",
+								"inputFormat": "plain",
+								"inputMask": "(999) 999-9999",
+								"id": "e08h5yk"
+							}, {
+								"label": "phone",
+								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
+								"key": "phone",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"validate": {
+									"unique": false,
+									"multiple": false,
+									"required": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false
+								},
+								"hideOnChildrenHidden": false,
+								"placeholder": "",
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": null,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"clearOnHide": true,
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"autofocus": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"inputType": "hidden",
+								"id": "edl27q"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 8
+						}],
+						"tableView": false,
+						"key": "columns3",
+						"type": "columns",
+						"input": false,
 						"validate": {
-							"required": true,
-							"customMessage": "Please enter mobile phone number.",
 							"unique": false,
 							"multiple": false,
+							"required": false,
 							"custom": "",
 							"customPrivate": false,
-							"strictDateValidation": false,
-							"minLength": "",
-							"maxLength": "",
-							"pattern": ""
+							"strictDateValidation": false
 						},
-						"key": "mobilephone",
-						"type": "phoneNumber",
-						"input": true,
-						"lockKey": true,
+						"path": "columns3",
 						"hideOnChildrenHidden": false,
+						"placeholder": "",
 						"prefix": "",
 						"customClass": "",
 						"suffix": "",
@@ -2353,8 +2819,9 @@
 						"defaultValue": null,
 						"protected": false,
 						"unique": false,
-						"persistent": true,
+						"persistent": false,
 						"hidden": false,
+						"clearOnHide": false,
 						"refreshOn": "",
 						"redrawOn": "",
 						"modalEdit": false,
@@ -2362,15 +2829,14 @@
 						"description": "",
 						"errorLabel": "",
 						"tooltip": "",
+						"hideLabel": false,
 						"tabindex": "",
 						"disabled": false,
 						"autofocus": false,
 						"dbIndex": false,
 						"customDefaultValue": "",
 						"calculateValue": "",
-						"widget": {
-							"type": "input"
-						},
+						"widget": null,
 						"attributes": {},
 						"validateOn": "change",
 						"conditional": {
@@ -2391,12 +2857,16 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"mask": false,
-						"inputType": "tel",
-						"inputFormat": "plain",
-						"inputMask": "(999) 999-9999",
-						"id": "ev9v0ry"
-					}, {
+						"tree": false,
+						"autoAdjust": false,
+						"id": "e2qap8d"
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
+				}, {
+					"components": [{
 						"label": "Fax",
 						"placeholder": "Fax",
 						"hideLabel": true,
@@ -2414,10 +2884,7 @@
 							"maxLength": "",
 							"pattern": ""
 						},
-						"key": "fax_value",
-						"properties": {
-							"target": "fax_calculated"
-						},
+						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
 						"lockKey": true,
@@ -2465,19 +2932,14 @@
 						"encrypted": false,
 						"showCharCount": false,
 						"showWordCount": false,
+						"properties": {},
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputType": "tel",
 						"inputFormat": "plain",
 						"inputMask": "(999) 999-9999",
-						"id": "e9yb0lm"
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0
-				}, {
-					"components": [{
+						"id": "enro9tr"
+					}, {
 						"label": "Email",
 						"placeholder": "Email",
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
@@ -2553,7 +3015,7 @@
 						"kickbox": {
 							"enabled": false
 						},
-						"id": "e160g1l"
+						"id": "e1q28ke"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2570,6 +3032,7 @@
 					"customPrivate": false,
 					"strictDateValidation": false
 				},
+				"path": "panelPanel4Columns",
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -2618,7 +3081,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "e1dyw8f"
+				"id": "eu0ll9"
 			}],
 			"type": "panel",
 			"conditional": {
@@ -2679,7 +3142,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "e172vb"
+			"id": "e8mxuqr"
 		}],
 		"nextPage": "next = (data['padiVerified'] ==true) ? 'panel2' : 'panel'",
 		"validate": {
@@ -2732,7 +3195,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "e2cr8fi"
+		"id": "e5pp0f"
 	}, {
 		"title": "Business & Policy Information",
 		"theme": "primary",
@@ -2811,7 +3274,6 @@
 						"maxDate": null
 					},
 					"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-					"isNew": false,
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -2862,7 +3324,7 @@
 					"timezone": "",
 					"datepickerMode": "day",
 					"customOptions": {},
-					"id": "evqyh9e"
+					"id": "ejp08op"
 				}],
 				"width": 5,
 				"offset": 0,
@@ -2889,7 +3351,6 @@
 						"customPrivate": false,
 						"strictDateValidation": false
 					},
-					"isNew": false,
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -2937,7 +3398,7 @@
 					"showWordCount": false,
 					"allowMultipleMasks": false,
 					"inputType": "hidden",
-					"id": "e2w534a"
+					"id": "e6ewmd8"
 				}, {
 					"input": true,
 					"tableView": true,
@@ -3005,7 +3466,7 @@
 					"showWordCount": false,
 					"allowMultipleMasks": false,
 					"inputType": "hidden",
-					"id": "e8ysouf"
+					"id": "eg3psti"
 				}],
 				"width": 5,
 				"offset": 0,
@@ -3070,7 +3531,7 @@
 			"tree": false,
 			"autoAdjust": false,
 			"hideOnChildrenHidden": false,
-			"id": "eaxvsya"
+			"id": "egh7b5k"
 		}, {
 			"key": "panelPanel",
 			"input": false,
@@ -3155,7 +3616,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "en6vmgu"
+						"id": "euwg0e"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3226,7 +3687,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "ezbtvpt"
+				"id": "egjz7i7"
 			}, {
 				"label": "well",
 				"tableView": false,
@@ -3311,7 +3772,7 @@
 					"inputType": "text",
 					"inputFormat": "plain",
 					"inputMask": "",
-					"id": "edfxw38"
+					"id": "e69ll27"
 				}, {
 					"clearOnHide": false,
 					"input": false,
@@ -3391,7 +3852,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "elw05s"
+								"id": "ecv0low"
 							}]
 						}, {
 							"components": [{
@@ -3465,7 +3926,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "eru5y5j"
+								"id": "ew3m3f"
 							}]
 						}],
 						[{
@@ -3540,7 +4001,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "ebl6kcv"
+								"id": "e4dgpt"
 							}]
 						}, {
 							"components": [{
@@ -3614,7 +4075,7 @@
 								"inputType": "tel",
 								"inputFormat": "plain",
 								"inputMask": "(999) 999-9999",
-								"id": "et48bxs"
+								"id": "erpps7s"
 							}]
 						}],
 						[{
@@ -3689,7 +4150,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "eaeu38p"
+								"id": "esnsmv"
 							}]
 						}, {
 							"components": [{
@@ -3767,7 +4228,7 @@
 								"inputType": "email",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "euq8819"
+								"id": "edpign"
 							}]
 						}],
 						[{
@@ -3861,7 +4322,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "eb961b"
+								"id": "e72pbps"
 							}]
 						}, {
 							"components": [{
@@ -3938,7 +4399,7 @@
 								"inputType": "email",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "ek0bcjc"
+								"id": "e3xhri9"
 							}]
 						}],
 						[{
@@ -4032,7 +4493,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "e3j7mj"
+								"id": "ecwp04l"
 							}]
 						}, {
 							"components": [{
@@ -4106,7 +4567,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "ef9v12a"
+								"id": "eoshtqj"
 							}]
 						}],
 						[{
@@ -4181,7 +4642,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "eb54fnvi"
+								"id": "eepyteg"
 							}]
 						}, {
 							"components": []
@@ -4252,7 +4713,7 @@
 					"bordered": false,
 					"hover": false,
 					"condensed": false,
-					"id": "e05375"
+					"id": "ei5z8c4"
 				}],
 				"hideLabel": true,
 				"validate": {
@@ -4303,7 +4764,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "e90y3f"
+				"id": "ezdb0r"
 			}, {
 				"clearOnHide": false,
 				"key": "panelPanelWell",
@@ -4414,7 +4875,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "ewyaz4m"
+							"id": "ekovd2o"
 						}],
 						"width": 6,
 						"offset": 0,
@@ -4493,7 +4954,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e7h13wr"
+							"id": "eyj6rh3"
 						}, {
 							"label": "Who are the shareholders?",
 							"placeholder": "Who are the shareholders?",
@@ -4567,7 +5028,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e82eq30b"
+							"id": "eklqdsc"
 						}, {
 							"label": "Other, Please Explain",
 							"placeholder": "Please Explain",
@@ -4641,7 +5102,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "eyw4gu"
+							"id": "egthxqb"
 						}],
 						"width": 6,
 						"offset": 0,
@@ -4706,7 +5167,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "escvpm"
+					"id": "e324t1"
 				}],
 				"tableView": false,
 				"type": "well",
@@ -4765,7 +5226,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "e6ywps4"
+				"id": "eybnbk3n"
 			}, {
 				"label": "Current Insurance Company",
 				"placeholder": "Current Insurance Company",
@@ -4837,7 +5298,7 @@
 				"inputType": "text",
 				"inputFormat": "plain",
 				"inputMask": "",
-				"id": "erz42d"
+				"id": "ee2cj1b"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -4897,7 +5358,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "eli975o"
+			"id": "eykt7o2"
 		}, {
 			"key": "panelColumnsPanel",
 			"input": false,
@@ -4992,7 +5453,7 @@
 					"threshold": 0.3
 				},
 				"customOptions": {},
-				"id": "ect2efk"
+				"id": "e3sgpeh"
 			}, {
 				"clearOnHide": false,
 				"key": "panelColumnsPanelWell",
@@ -5073,7 +5534,7 @@
 					"allowMultipleMasks": false,
 					"inputType": "radio",
 					"fieldSet": false,
-					"id": "e97jid"
+					"id": "ebi0v8"
 				}, {
 					"label": "Data Grid",
 					"disableAddingRemovingRows": false,
@@ -5175,7 +5636,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "ew9pjyr"
+						"id": "epupxse"
 					}, {
 						"label": "Date",
 						"format": "MM-dd-yyyy",
@@ -5284,7 +5745,7 @@
 						"timezone": "",
 						"datepickerMode": "day",
 						"customOptions": {},
-						"id": "eukbl8n"
+						"id": "e23g9qj"
 					}, {
 						"label": "Amounts",
 						"placeholder": "Amounts",
@@ -5358,7 +5819,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "e4docai"
+						"id": "e3ob0pu"
 					}],
 					"lockKey": true,
 					"placeholder": "",
@@ -5401,7 +5862,7 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tree": true,
-					"id": "ecpoqm7"
+					"id": "eup5voh"
 				}],
 				"tableView": false,
 				"type": "well",
@@ -5460,7 +5921,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "e229uk"
+				"id": "e79javb"
 			}, {
 				"label": "Has a marine insurance policy ever been cancelled or non renewed?",
 				"optionsLabelPosition": "right",
@@ -5535,7 +5996,7 @@
 				"allowMultipleMasks": false,
 				"inputType": "radio",
 				"fieldSet": false,
-				"id": "e83mb8l"
+				"id": "e0bodtf"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -5595,7 +6056,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "e169dk"
+			"id": "eyw743"
 		}],
 		"validate": {
 			"unique": false,
@@ -5647,7 +6108,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "en9c5jg9"
+		"id": "ev39k8p"
 	}, {
 		"title": "Boat Usage &  Captain & Crew Schedule",
 		"theme": "primary",
@@ -5747,7 +6208,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "ei0ts7b"
+						"id": "ei4f2pl"
 					}, {
 						"label": "Survey",
 						"hideLabel": true,
@@ -5839,7 +6300,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "eud3fhz"
+						"id": "es4dm1e"
 					}, {
 						"input": true,
 						"tableView": true,
@@ -5912,7 +6373,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "eyfvluv"
+						"id": "eq9d7mk"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -6029,7 +6490,7 @@
 							"threshold": 0.3
 						},
 						"customOptions": {},
-						"id": "erymjr3"
+						"id": "eywftt4"
 					}, {
 						"label": "Text",
 						"placeholder": "Please Specify",
@@ -6102,7 +6563,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "eupw2o"
+						"id": "eqhs12"
 					}, {
 						"label": "Certified for Maximum Number of Passengers:",
 						"placeholder": "Certified for Maximum Number of Passengers",
@@ -6176,7 +6637,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "ev1yk8"
+						"id": "eb6n4kn"
 					}, {
 						"label": "Percentage of trips for diving charters",
 						"placeholder": "Percentage of trips for diving charters",
@@ -6250,7 +6711,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "ebre6cn"
+						"id": "ecsfvan"
 					}, {
 						"label": "If less than 100%, Please explain",
 						"placeholder": "Percentage of trips for diving charters is less than 100%, Please explain",
@@ -6323,7 +6784,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "ev48qln"
+						"id": "ej0rmzc"
 					}, {
 						"label": "Columns",
 						"input": false,
@@ -6438,7 +6899,7 @@
 								"timezone": "",
 								"datepickerMode": "day",
 								"customOptions": {},
-								"id": "exjm02l"
+								"id": "eo8y85"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -6553,7 +7014,7 @@
 								"timezone": "",
 								"datepickerMode": "day",
 								"customOptions": {},
-								"id": "e9fm0fv"
+								"id": "eds5fzq"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -6618,7 +7079,7 @@
 						"allowMultipleMasks": false,
 						"tree": false,
 						"autoAdjust": false,
-						"id": "e0ftto"
+						"id": "eoaq0n"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -6683,7 +7144,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "elvph3y"
+				"id": "ebvjcsr"
 			}, {
 				"clearOnHide": false,
 				"input": false,
@@ -6757,7 +7218,7 @@
 							"inputType": "checkbox",
 							"value": "",
 							"name": "",
-							"id": "eojowu"
+							"id": "edliywi"
 						}]
 					}, {
 						"components": [{
@@ -6833,7 +7294,7 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"id": "epqmbtq"
+							"id": "ep6s5tb"
 						}]
 					}],
 					[{
@@ -6902,7 +7363,7 @@
 							"inputType": "checkbox",
 							"value": "",
 							"name": "",
-							"id": "e7s90s"
+							"id": "errsjg"
 						}]
 					}, {
 						"components": [{
@@ -6976,7 +7437,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "emk2o2b"
+							"id": "e4z8l1"
 						}]
 					}]
 				],
@@ -7043,7 +7504,7 @@
 				"bordered": false,
 				"hover": false,
 				"condensed": false,
-				"id": "eg6bmr6j"
+				"id": "ebvw6tl"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -7103,7 +7564,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "e68wowr"
+			"id": "e4e2cas"
 		}, {
 			"key": "pageNaNPanel",
 			"input": false,
@@ -7205,7 +7666,7 @@
 					"inputType": "text",
 					"inputFormat": "plain",
 					"inputMask": "",
-					"id": "eszj0p"
+					"id": "ew2nk6i"
 				}, {
 					"label": "Name",
 					"placeholder": "Name",
@@ -7279,7 +7740,7 @@
 					"inputType": "text",
 					"inputFormat": "plain",
 					"inputMask": "",
-					"id": "e6lrt0b"
+					"id": "ejxg6ga"
 				}, {
 					"label": "ft/pt",
 					"widget": "choicesjs",
@@ -7376,7 +7837,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "e0rv1c8"
+					"id": "edzpdo"
 				}, {
 					"label": "Do they have Professional Liability Insurance?",
 					"widget": "choicesjs",
@@ -7473,7 +7934,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "e5fvkoa"
+					"id": "e0dk15a"
 				}, {
 					"label": "PADI Number",
 					"placeholder": "PADI Number",
@@ -7547,7 +8008,7 @@
 					"inputType": "text",
 					"inputFormat": "plain",
 					"inputMask": "",
-					"id": "eb7rul"
+					"id": "eugdwx"
 				}],
 				"lockKey": true,
 				"placeholder": "",
@@ -7596,7 +8057,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": true,
-				"id": "e3vksd"
+				"id": "elk12dm"
 			}, {
 				"label": "Survey",
 				"hideLabel": true,
@@ -7682,7 +8143,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "eob4c9p"
+				"id": "e852ef"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -7742,7 +8203,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "ezbi35c"
+			"id": "e4pb36e"
 		}],
 		"input": false,
 		"validate": {
@@ -7801,7 +8262,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "ei8hr1h"
+		"id": "efwqrd"
 	}, {
 		"type": "panel",
 		"title": "Boat Details",
@@ -7889,7 +8350,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ek9el7b"
+							"id": "exyktf"
 						}]
 					}, {
 						"components": [{
@@ -7964,46 +8425,30 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "egr2yb"
+							"id": "ei529ib"
 						}]
 					}, {
 						"components": [{
 							"label": "Built Year",
 							"placeholder": "Built Year",
+							"inputMask": "9999",
 							"hideLabel": true,
+							"spellcheck": true,
 							"tableView": true,
-							"dataSrc": "url",
-							"data": {
-								"values": [{
-									"value": "",
-									"label": ""
-								}],
-								"url": "https://api.myjson.com/bins/12yund",
-								"headers": [{
-									"value": "",
-									"key": ""
-								}],
-								"json": "",
-								"resource": "",
-								"custom": ""
-							},
-							"valueProperty": "name",
-							"template": "<span>{{ item.name }}</span>",
-							"selectThreshold": 0.3,
-							"clearOnHide": false,
 							"validate": {
 								"unique": false,
 								"multiple": false,
 								"required": false,
 								"custom": "",
 								"customPrivate": false,
-								"strictDateValidation": false
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
 							},
 							"key": "built_year",
-							"type": "select",
+							"type": "phoneNumber",
 							"input": true,
-							"lockKey": true,
-							"disableLimit": false,
 							"prefix": "",
 							"customClass": "",
 							"suffix": "",
@@ -8013,6 +8458,7 @@
 							"unique": false,
 							"persistent": true,
 							"hidden": false,
+							"clearOnHide": true,
 							"refreshOn": "",
 							"redrawOn": "",
 							"modalEdit": false,
@@ -8026,7 +8472,9 @@
 							"dbIndex": false,
 							"customDefaultValue": "",
 							"calculateValue": "",
-							"widget": null,
+							"widget": {
+								"type": "input"
+							},
 							"attributes": {},
 							"validateOn": "change",
 							"conditional": {
@@ -8047,23 +8495,10 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"clearOnRefresh": false,
-							"limit": 100,
-							"lazyLoad": true,
-							"filter": "",
-							"searchEnabled": true,
-							"searchField": "",
-							"minSearch": 0,
-							"readOnlyValue": false,
-							"authenticate": false,
-							"selectFields": "",
-							"searchThreshold": 0.3,
-							"fuseOptions": {
-								"include": "score",
-								"threshold": 0.3
-							},
-							"customOptions": {},
-							"id": "eycxvbn"
+							"mask": false,
+							"inputType": "tel",
+							"inputFormat": "plain",
+							"id": "e9coz6p"
 						}]
 					}],
 					[{
@@ -8139,7 +8574,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "eyv5jt8"
+							"id": "eg732aj"
 						}]
 					}, {
 						"components": [{
@@ -8214,7 +8649,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "esnod1g"
+							"id": "eh219xg"
 						}]
 					}, {
 						"components": [{
@@ -8289,7 +8724,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e58rh3b"
+							"id": "e8k7kk"
 						}]
 					}],
 					[{
@@ -8365,7 +8800,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e4pa49w"
+							"id": "exxbawb"
 						}]
 					}, {
 						"components": [{
@@ -8440,7 +8875,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e4uoro"
+							"id": "ezma0ar"
 						}]
 					}, {
 						"components": [{
@@ -8515,7 +8950,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e4i2ut"
+							"id": "eeuqp93"
 						}]
 					}],
 					[{
@@ -8595,7 +9030,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "et87hhq"
+									"id": "eulsupn"
 								}],
 								"offset": 0,
 								"push": 0,
@@ -8670,7 +9105,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "ewdmxt"
+							"id": "eofp86a"
 						}, {
 							"label": "Columns",
 							"columns": [{
@@ -8781,7 +9216,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "egdl0gl"
+									"id": "egn3h9e"
 								}, {
 									"label": "If other, please specify",
 									"placeholder": "If other, please specify",
@@ -8858,7 +9293,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "e769yrt"
+									"id": "ewnsqnn"
 								}],
 								"width": 12,
 								"offset": 0,
@@ -8932,7 +9367,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "ez9i3qv"
+							"id": "ec5e4pf"
 						}]
 					}, {
 						"components": [{
@@ -9031,7 +9466,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "ezxq5gq"
+								"id": "e76pk7o"
 							}],
 							"placeholder": "",
 							"prefix": "",
@@ -9079,7 +9514,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"tree": true,
-							"id": "ekajp76"
+							"id": "etwfp6"
 						}, {
 							"label": "Date Time",
 							"format": "MM-dd-yyyy",
@@ -9192,7 +9627,7 @@
 							"timezone": "",
 							"datepickerMode": "day",
 							"customOptions": {},
-							"id": "e9gf3u"
+							"id": "epfr99"
 						}]
 					}, {
 						"components": [{
@@ -9203,12 +9638,14 @@
 							"columns": [{
 								"components": [{
 									"label": "Hull Market Value",
+									"placeholder": "Hull Market Value",
 									"prefix": "$",
+									"hideLabel": true,
 									"mask": false,
 									"spellcheck": true,
 									"tableView": false,
-									"delimiter": false,
-									"requireDecimal": false,
+									"delimiter": true,
+									"requireDecimal": true,
 									"inputFormat": "plain",
 									"validate": {
 										"unique": false,
@@ -9224,9 +9661,10 @@
 									},
 									"key": "hull_market_value",
 									"type": "number",
+									"decimalLimit": 2,
 									"input": true,
 									"hideOnChildrenHidden": false,
-									"placeholder": "",
+									"inputType": "number",
 									"customClass": "",
 									"suffix": "",
 									"multiple": false,
@@ -9243,7 +9681,6 @@
 									"description": "",
 									"errorLabel": "",
 									"tooltip": "",
-									"hideLabel": false,
 									"tabindex": "",
 									"disabled": false,
 									"autofocus": false,
@@ -9273,7 +9710,7 @@
 									"showWordCount": false,
 									"properties": {},
 									"allowMultipleMasks": false,
-									"id": "e4dppdz"
+									"id": "eiue24e"
 								}],
 								"width": 6,
 								"offset": 0,
@@ -9282,12 +9719,14 @@
 							}, {
 								"components": [{
 									"label": "Purchase Price",
+									"placeholder": "Purchase Price",
 									"prefix": "$",
+									"hideLabel": true,
 									"mask": false,
 									"spellcheck": true,
 									"tableView": false,
-									"delimiter": false,
-									"requireDecimal": false,
+									"delimiter": true,
+									"requireDecimal": true,
 									"inputFormat": "plain",
 									"validate": {
 										"unique": false,
@@ -9303,9 +9742,10 @@
 									},
 									"key": "purchase_price_currency",
 									"type": "number",
+									"decimalLimit": 2,
 									"input": true,
 									"hideOnChildrenHidden": false,
-									"placeholder": "",
+									"inputType": "number",
 									"customClass": "",
 									"suffix": "",
 									"multiple": false,
@@ -9322,7 +9762,6 @@
 									"description": "",
 									"errorLabel": "",
 									"tooltip": "",
-									"hideLabel": false,
 									"tabindex": "",
 									"disabled": false,
 									"autofocus": false,
@@ -9352,7 +9791,7 @@
 									"showWordCount": false,
 									"properties": {},
 									"allowMultipleMasks": false,
-									"id": "edqgn6"
+									"id": "er8aiga"
 								}],
 								"width": 6,
 								"offset": 0,
@@ -9418,7 +9857,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "eiryaos"
+							"id": "e6rfjz"
 						}, {
 							"label": "Date of Purchase",
 							"format": "MM-dd-yyyy",
@@ -9529,7 +9968,7 @@
 							"timezone": "",
 							"datepickerMode": "day",
 							"customOptions": {},
-							"id": "epg5t9i"
+							"id": "e2f6ouf"
 						}]
 					}]
 				],
@@ -9599,7 +10038,7 @@
 				"bordered": false,
 				"hover": false,
 				"condensed": false,
-				"id": "ez0cd5g"
+				"id": "egk1bw7"
 			}, {
 				"label": "DESCRIPTION OF BOAT",
 				"hideLabel": true,
@@ -9679,7 +10118,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "enjne9e"
+				"id": "e9gitvj"
 			}],
 			"type": "panel",
 			"lockKey": true,
@@ -9740,7 +10179,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "e2ijiv"
+			"id": "ec289vs"
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -9842,7 +10281,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "ebuxx1"
+					"id": "ecwe68v"
 				}, {
 					"key": "pageNaNPanel4",
 					"input": false,
@@ -9927,7 +10366,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "eezlqz4"
+								"id": "enle5"
 							}, {
 								"label": "Dinghy Length (Feet)",
 								"placeholder": "Dinghy Length",
@@ -10000,7 +10439,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "ew4szb"
+								"id": "e6vlvb8i"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -10008,16 +10447,16 @@
 							"pull": 0
 						}, {
 							"components": [{
-								"label": "Age",
-								"placeholder": "Age (Years)",
+								"label": "Built Year",
+								"placeholder": "Built Year",
+								"inputMask": "9999",
 								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"unique": false,
 									"multiple": false,
+									"required": false,
 									"custom": "",
 									"customPrivate": false,
 									"strictDateValidation": false,
@@ -10026,9 +10465,8 @@
 									"pattern": ""
 								},
 								"key": "dingy_age",
-								"type": "textfield",
+								"type": "phoneNumber",
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false,
 								"prefix": "",
 								"customClass": "",
@@ -10039,6 +10477,7 @@
 								"unique": false,
 								"persistent": true,
 								"hidden": false,
+								"clearOnHide": true,
 								"refreshOn": "",
 								"redrawOn": "",
 								"modalEdit": false,
@@ -10076,34 +10515,37 @@
 								"properties": {},
 								"allowMultipleMasks": false,
 								"mask": false,
-								"inputType": "text",
+								"inputType": "tel",
 								"inputFormat": "plain",
-								"inputMask": "",
-								"id": "evfpxw"
+								"id": "egwb1y9"
 							}, {
 								"label": "Value",
 								"placeholder": "Value",
+								"prefix": "$",
 								"hideLabel": true,
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
+								"tableView": false,
+								"delimiter": true,
+								"requireDecimal": true,
+								"inputFormat": "plain",
 								"validate": {
-									"required": true,
 									"unique": false,
 									"multiple": false,
+									"required": false,
 									"custom": "",
 									"customPrivate": false,
 									"strictDateValidation": false,
-									"minLength": "",
-									"maxLength": "",
-									"pattern": ""
+									"min": "",
+									"max": "",
+									"step": "any",
+									"integer": ""
 								},
 								"key": "dingy_value",
-								"type": "textfield",
+								"type": "number",
+								"decimalLimit": 2,
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false,
-								"prefix": "",
 								"customClass": "",
 								"suffix": "",
 								"multiple": false,
@@ -10112,6 +10554,7 @@
 								"unique": false,
 								"persistent": true,
 								"hidden": false,
+								"clearOnHide": true,
 								"refreshOn": "",
 								"redrawOn": "",
 								"modalEdit": false,
@@ -10148,11 +10591,7 @@
 								"showWordCount": false,
 								"properties": {},
 								"allowMultipleMasks": false,
-								"mask": false,
-								"inputType": "text",
-								"inputFormat": "plain",
-								"inputMask": "",
-								"id": "e8ra61"
+								"id": "erp3kd"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -10169,6 +10608,7 @@
 							"customPrivate": false,
 							"strictDateValidation": false
 						},
+						"path": "pageNaNPanel4Columns",
 						"placeholder": "",
 						"prefix": "",
 						"customClass": "",
@@ -10217,7 +10657,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "expghl7l"
+						"id": "e7ur9fu"
 					}],
 					"type": "panel",
 					"conditional": {
@@ -10276,7 +10716,7 @@
 					"allowMultipleMasks": false,
 					"tree": false,
 					"breadcrumb": "default",
-					"id": "e639ie"
+					"id": "eg4butd"
 				}],
 				"width": 6,
 				"offset": 0,
@@ -10378,7 +10818,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "en9i5dm"
+					"id": "eyksp3o"
 				}, {
 					"key": "pageNaNPanel5",
 					"input": false,
@@ -10463,35 +10903,28 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "eswmst8"
+								"id": "eea7z3z"
 							}, {
-								"label": "Year Built",
-								"placeholder": "Year Built",
+								"label": "Built Year",
+								"placeholder": "Built Year",
+								"inputMask": "9999",
 								"hideLabel": true,
-								"mask": false,
 								"spellcheck": true,
 								"tableView": true,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
-								"clearOnHide": false,
 								"validate": {
-									"required": true,
-									"min": null,
-									"max": null,
-									"multiple": false,
 									"unique": false,
+									"multiple": false,
+									"required": false,
 									"custom": "",
 									"customPrivate": false,
 									"strictDateValidation": false,
-									"step": "any",
-									"integer": ""
+									"minLength": "",
+									"maxLength": "",
+									"pattern": ""
 								},
 								"key": "trailer_year_built",
-								"type": "number",
+								"type": "phoneNumber",
 								"input": true,
-								"inputType": "number",
-								"lockKey": true,
 								"hideOnChildrenHidden": false,
 								"prefix": "",
 								"customClass": "",
@@ -10502,6 +10935,7 @@
 								"unique": false,
 								"persistent": true,
 								"hidden": false,
+								"clearOnHide": true,
 								"refreshOn": "",
 								"redrawOn": "",
 								"modalEdit": false,
@@ -10538,7 +10972,10 @@
 								"showWordCount": false,
 								"properties": {},
 								"allowMultipleMasks": false,
-								"id": "eol3f6n"
+								"mask": false,
+								"inputType": "tel",
+								"inputFormat": "plain",
+								"id": "eouvfpc"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -10548,12 +10985,13 @@
 							"components": [{
 								"label": "Value",
 								"placeholder": "Value",
+								"prefix": "$",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
 								"tableView": true,
-								"delimiter": false,
-								"requireDecimal": false,
+								"delimiter": true,
+								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"validate": {
@@ -10570,11 +11008,11 @@
 								},
 								"key": "trailer_value",
 								"type": "number",
+								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
 								"hideOnChildrenHidden": false,
-								"prefix": "",
 								"customClass": "",
 								"suffix": "",
 								"multiple": false,
@@ -10619,7 +11057,7 @@
 								"showWordCount": false,
 								"properties": {},
 								"allowMultipleMasks": false,
-								"id": "ep4axy"
+								"id": "e6jj65"
 							}, {
 								"label": "Serial Number",
 								"placeholder": "Serial Number",
@@ -10692,7 +11130,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "er5vzs"
+								"id": "ercl1mq"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -10709,6 +11147,7 @@
 							"customPrivate": false,
 							"strictDateValidation": false
 						},
+						"path": "pageNaNPanel5Columns",
 						"placeholder": "",
 						"prefix": "",
 						"customClass": "",
@@ -10757,7 +11196,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "enhv81l"
+						"id": "etpzxbp"
 					}],
 					"type": "panel",
 					"conditional": {
@@ -10816,7 +11255,7 @@
 					"allowMultipleMasks": false,
 					"tree": false,
 					"breadcrumb": "default",
-					"id": "eojrcna"
+					"id": "e9cwq6"
 				}],
 				"width": 6,
 				"offset": 0,
@@ -10881,7 +11320,7 @@
 			"tree": false,
 			"autoAdjust": false,
 			"hideOnChildrenHidden": false,
-			"id": "e2cpw5"
+			"id": "eeyjt3"
 		}],
 		"input": false,
 		"key": "pageNaN1",
@@ -10951,7 +11390,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "ennhutr"
+		"id": "erg7ej9"
 	}, {
 		"title": "Additional",
 		"theme": "primary",
@@ -11039,7 +11478,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tag": "p",
-				"id": "e30ukib"
+				"id": "es23fbs"
 			}, {
 				"label": "Select",
 				"placeholder": "Select according to your preference",
@@ -11134,7 +11573,7 @@
 					"threshold": 0.3
 				},
 				"customOptions": {},
-				"id": "enw447kh"
+				"id": "eiqjmg"
 			}, {
 				"key": "page4PanelPanel2",
 				"input": false,
@@ -11256,7 +11695,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "eh771sv"
+									"id": "ecagu6m"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -11335,7 +11774,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "ef6kz1v"
+									"id": "ego78oa"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -11414,7 +11853,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "elfe62"
+									"id": "e30pd9p"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -11479,7 +11918,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "esiax9"
+							"id": "e0821s"
 						}, {
 							"label": "Columns",
 							"input": false,
@@ -11575,7 +12014,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "e6marj"
+									"id": "eplm65s"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -11673,7 +12112,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "ez9dyjn"
+									"id": "e4s6cu"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -11754,7 +12193,7 @@
 									"showWordCount": false,
 									"properties": {},
 									"allowMultipleMasks": false,
-									"id": "ew5c8e"
+									"id": "evjfb49"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -11868,7 +12307,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "eyrn3et"
+									"id": "eztatn"
 								}, {
 									"label": "Please Mention",
 									"placeholder": "Please Mention",
@@ -11941,7 +12380,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "e6hh3di"
+									"id": "e8uxeve"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -12006,7 +12445,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "e8ie9kl"
+							"id": "ejsb60z"
 						}, {
 							"label": "Columns",
 							"input": false,
@@ -12091,7 +12530,7 @@
 									"rows": 3,
 									"wysiwyg": false,
 									"editor": "",
-									"id": "el5n7a"
+									"id": "ezi0pkk"
 								}],
 								"width": 12,
 								"offset": 0,
@@ -12162,7 +12601,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "ea5thxo"
+							"id": "ebd3lk"
 						}],
 						"inDataGrid": true,
 						"clearOnHide": false,
@@ -12212,7 +12651,7 @@
 						"properties": {},
 						"allowMultipleMasks": false,
 						"tree": false,
-						"id": "ez6qqy"
+						"id": "ef6fjio"
 					}],
 					"path": "additionalInsured",
 					"placeholder": "",
@@ -12260,7 +12699,7 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tree": true,
-					"id": "ejbv58"
+					"id": "ed26tgp"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -12319,7 +12758,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "euc5yxs"
+				"id": "ex22vpm"
 			}, {
 				"key": "additional_required_information",
 				"input": false,
@@ -12393,7 +12832,7 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tag": "p",
-					"id": "ed7y6ws"
+					"id": "enbn8f2"
 				}, {
 					"label": "Select",
 					"widget": "choicesjs",
@@ -12487,7 +12926,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "emmkmsx"
+					"id": "elxwhvb"
 				}],
 				"type": "panel",
 				"lockKey": true,
@@ -12549,7 +12988,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "emk2thb"
+				"id": "ezogcjo"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -12610,7 +13049,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "erapt6d"
+			"id": "e26pt59"
 		}, {
 			"label": "Additional Named Insureds",
 			"widget": "choicesjs",
@@ -12705,7 +13144,7 @@
 				"threshold": 0.3
 			},
 			"customOptions": {},
-			"id": "e54aps"
+			"id": "e3z60hy"
 		}, {
 			"key": "additional_named_insureds",
 			"input": false,
@@ -12826,7 +13265,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "eo8w18f"
+								"id": "e45vnc"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -12905,7 +13344,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "exqi4j"
+								"id": "e6uw51"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -12984,7 +13423,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "eeo3n07"
+								"id": "entf2dt"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -13049,7 +13488,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "ek8xyej"
+						"id": "ee7o43o"
 					}, {
 						"label": "Columns",
 						"input": false,
@@ -13145,7 +13584,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "et7j93"
+								"id": "el85mu"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -13243,7 +13682,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "e522dil"
+								"id": "etll9ph"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -13324,7 +13763,7 @@
 								"showWordCount": false,
 								"properties": {},
 								"allowMultipleMasks": false,
-								"id": "eias6en"
+								"id": "evmhixt"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -13389,7 +13828,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "e006hae"
+						"id": "errv19w"
 					}],
 					"inDataGrid": true,
 					"clearOnHide": false,
@@ -13439,7 +13878,7 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tree": false,
-					"id": "ei99ohg"
+					"id": "ea6actr"
 				}],
 				"path": "dataGrid",
 				"placeholder": "",
@@ -13488,7 +13927,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": true,
-				"id": "eqp3suk"
+				"id": "e8hjf9v"
 			}],
 			"type": "panel",
 			"conditional": {
@@ -13548,7 +13987,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "ewipp7a"
+			"id": "exu39oa"
 		}],
 		"input": false,
 		"validate": {
@@ -13602,7 +14041,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "efwd619"
+		"id": "ecfow6rt"
 	}, {
 		"title": "Loss Payees",
 		"theme": "primary",
@@ -13710,7 +14149,7 @@
 				"threshold": 0.3
 			},
 			"customOptions": {},
-			"id": "egkrzg9"
+			"id": "e6li2tb"
 		}, {
 			"label": "Data Grid",
 			"disableAddingRemovingRows": false,
@@ -13830,7 +14269,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "enkunzn"
+							"id": "e466grn"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -13909,7 +14348,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e6v2cim"
+							"id": "ek89weq"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -13988,7 +14427,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e4c6vc"
+							"id": "exdw53j"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -14084,7 +14523,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "eqmkhq"
+							"id": "e2ko0fq"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -14182,7 +14621,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "exjxcko"
+							"id": "eief9wk"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -14263,7 +14702,7 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"id": "ek814ue"
+							"id": "euf4qm"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -14329,7 +14768,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "eog8hsj"
+					"id": "e3zurql"
 				}],
 				"inDataGrid": true,
 				"clearOnHide": false,
@@ -14379,7 +14818,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "ef4zihm"
+				"id": "em3h01o"
 			}],
 			"path": "lossPayees",
 			"placeholder": "",
@@ -14423,7 +14862,7 @@
 			"properties": {},
 			"allowMultipleMasks": false,
 			"tree": true,
-			"id": "ei3y1m"
+			"id": "e1w7d3j"
 		}],
 		"path": "pageNaNPanel7",
 		"validate": {
@@ -14477,7 +14916,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "ez5njx"
+		"id": "esjtwei"
 	}, {
 		"title": "Group Professional Liability",
 		"theme": "primary",
@@ -14585,7 +15024,7 @@
 				"threshold": 0.3
 			},
 			"customOptions": {},
-			"id": "een7w95"
+			"id": "ek09vp"
 		}, {
 			"label": "Well",
 			"tableView": false,
@@ -14700,7 +15139,7 @@
 							"threshold": 0.3
 						},
 						"customOptions": {},
-						"id": "ea72rdg"
+						"id": "elusqv"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -14772,7 +15211,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "e966vyq"
+				"id": "ey1h69p"
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -14868,7 +15307,7 @@
 							"threshold": 0.3
 						},
 						"customOptions": {},
-						"id": "e63wov9"
+						"id": "eg7a06b"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -14939,7 +15378,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "ew5xwqf"
+				"id": "eqchu7n"
 			}, {
 				"title": "Add Members",
 				"theme": "primary",
@@ -15034,7 +15473,7 @@
 					"inputType": "text",
 					"inputFormat": "plain",
 					"inputMask": "",
-					"id": "ed9n40s"
+					"id": "e402239"
 				}, {
 					"key": "page7GpLformdownload",
 					"label": "GPL form download",
@@ -15101,7 +15540,7 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tag": "p",
-					"id": "esehobq"
+					"id": "ey209sa"
 				}, {
 					"label": "Validate and Add PADI Members!",
 					"action": "event",
@@ -15183,7 +15622,7 @@
 					"block": false,
 					"disableOnInvalid": false,
 					"dataGridLabel": true,
-					"id": "es56bpo"
+					"id": "e2pc4is"
 				}],
 				"path": "addMembers",
 				"placeholder": "",
@@ -15234,7 +15673,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "eblwnjq"
+				"id": "ei9od0s"
 			}, {
 				"label": "Members applicable for Group Liability",
 				"disableAddingRemovingRows": true,
@@ -15281,7 +15720,6 @@
 							"type": "textfield",
 							"input": true,
 							"hideOnChildrenHidden": false,
-							"isNew": false,
 							"placeholder": "",
 							"prefix": "",
 							"customClass": "",
@@ -15332,7 +15770,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ev0mmdw"
+							"id": "e124m8"
 						}, {
 							"label": "address",
 							"key": "address1",
@@ -15398,7 +15836,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "ezz8tn"
+							"id": "eqtnuwn"
 						}, {
 							"label": "address2",
 							"key": "address2",
@@ -15464,7 +15902,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "e0y5e57"
+							"id": "epog5r"
 						}, {
 							"input": true,
 							"tableView": true,
@@ -15530,7 +15968,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "elkfem"
+							"id": "exg66o9"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -15609,7 +16047,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "eumn3th"
+							"id": "ed3r7nn"
 						}, {
 							"label": "verified",
 							"defaultValue": "false",
@@ -15675,7 +16113,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "e9cj5yh"
+							"id": "e7onkv"
 						}, {
 							"label": "city",
 							"key": "city",
@@ -15741,7 +16179,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eo8uoxp"
+							"id": "enndqgt"
 						}, {
 							"label": "country",
 							"key": "country",
@@ -15807,7 +16245,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eyibx2l"
+							"id": "eyjv8lm"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -15886,7 +16324,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ergg3s7"
+							"id": "e86nhx"
 						}, {
 							"label": "home_phone",
 							"key": "home_phone",
@@ -15952,7 +16390,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eglihhe"
+							"id": "eac6oni"
 						}, {
 							"input": true,
 							"tableView": true,
@@ -16018,7 +16456,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "ed2xeyg"
+							"id": "e24d5ys"
 						}, {
 							"label": "email",
 							"key": "email",
@@ -16084,7 +16522,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eocpa9q"
+							"id": "eo4tvc"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -16163,7 +16601,7 @@
 							"inputType": "text",
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e14pzu"
+							"id": "e2zywq"
 						}, {
 							"label": "zip",
 							"key": "zip",
@@ -16229,7 +16667,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "e7b0tz8"
+							"id": "e4ewpqe"
 						}, {
 							"label": "state",
 							"key": "state",
@@ -16295,7 +16733,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "e47eieo"
+							"id": "emhpyvp"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -16363,7 +16801,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "eqod21v"
+					"id": "e2846j"
 				}, {
 					"label": "Document",
 					"hideLabel": true,
@@ -16439,10 +16877,9 @@
 					"fileMinSize": "0KB",
 					"fileMaxSize": "1GB",
 					"uploadOnly": false,
-					"id": "ecx1mb"
+					"id": "ejwxht"
 				}],
 				"path": "groupPL",
-				"isNew": false,
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -16493,71 +16930,7 @@
 				"defaultOpen": false,
 				"openWhenEmpty": false,
 				"inlineEdit": false,
-				"id": "eooehsm"
-			}, {
-				"label": "attachmentFields",
-				"customDefaultValue": "value = [[\"groupPL\",\"document\"]];",
-				"key": "attachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false,
-				"validate": {
-					"unique": false,
-					"multiple": false,
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false
-				},
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"tooltip": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"calculateValue": "",
-				"widget": {
-					"type": "input"
-				},
-				"attributes": {},
-				"validateOn": "change",
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"inputType": "hidden",
-				"id": "ean38or"
+				"id": "esj4dj"
 			}, {
 				"label": "Additional Insureds",
 				"widget": "choicesjs",
@@ -16652,7 +17025,7 @@
 					"threshold": 0.3
 				},
 				"customOptions": {},
-				"id": "e9tjuk5"
+				"id": "efr8wyi"
 			}, {
 				"key": "additional_insureds",
 				"input": false,
@@ -16764,7 +17137,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "eo9t9x5"
+									"id": "evduk85t"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -16843,7 +17216,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "ezy1s9h"
+									"id": "evnxa6n"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -16922,7 +17295,7 @@
 									"inputType": "text",
 									"inputFormat": "plain",
 									"inputMask": "",
-									"id": "ew7dk6"
+									"id": "ecbtav"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -17018,7 +17391,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "edj2x2q"
+									"id": "ehqnglc"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -17116,7 +17489,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "eus54f"
+									"id": "eckukm"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -17197,7 +17570,7 @@
 									"showWordCount": false,
 									"properties": {},
 									"allowMultipleMasks": false,
-									"id": "e1tsn2n"
+									"id": "elon8sc"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -17263,7 +17636,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "e1lgefe"
+							"id": "ey6gmjw"
 						}],
 						"tableView": false,
 						"type": "well",
@@ -17323,7 +17696,7 @@
 						"properties": {},
 						"allowMultipleMasks": false,
 						"tree": false,
-						"id": "efpt2gl"
+						"id": "ed92wrc"
 					}],
 					"lockKey": true,
 					"placeholder": "",
@@ -17371,7 +17744,7 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tree": true,
-					"id": "ejlada"
+					"id": "e2ykja3"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -17430,7 +17803,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "eaabma"
+				"id": "elusk2n"
 			}, {
 				"label": "Named Insureds",
 				"widget": "choicesjs",
@@ -17525,7 +17898,7 @@
 					"threshold": 0.3
 				},
 				"customOptions": {},
-				"id": "efvrrvu"
+				"id": "ezfd3i4"
 			}, {
 				"key": "page7Panel",
 				"input": false,
@@ -17603,7 +17976,7 @@
 					"inputType": "text",
 					"inputFormat": "plain",
 					"inputMask": "",
-					"id": "ehn7p3n"
+					"id": "ermsr5k"
 				}, {
 					"label": "Validate and Add Named Insureds",
 					"action": "event",
@@ -17684,7 +18057,7 @@
 					"block": false,
 					"disableOnInvalid": false,
 					"dataGridLabel": true,
-					"id": "e1odrzq"
+					"id": "ecogpql"
 				}, {
 					"label": "Edit Grid",
 					"disableAddingRemovingRows": true,
@@ -17786,7 +18159,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "evqrt0b"
+								"id": "eu0syx"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -17865,7 +18238,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "erwfu4p"
+								"id": "eipby0c"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -17944,7 +18317,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "epr9w0r"
+								"id": "ei6kwe"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -18010,7 +18383,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "e1hcyx"
+						"id": "eblajm"
 					}, {
 						"label": "verified",
 						"key": "verified",
@@ -18074,7 +18447,7 @@
 						"properties": {},
 						"allowMultipleMasks": false,
 						"inputType": "hidden",
-						"id": "einzdr5"
+						"id": "e0cicg9"
 					}],
 					"path": "namedInsureds",
 					"placeholder": "",
@@ -18126,7 +18499,7 @@
 					"defaultOpen": false,
 					"openWhenEmpty": false,
 					"inlineEdit": false,
-					"id": "e4lo8of"
+					"id": "epbykcg"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -18186,7 +18559,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "ev9g5fk"
+				"id": "ebm77sh"
 			}],
 			"path": "well2",
 			"clearOnHide": false,
@@ -18231,7 +18604,7 @@
 			"properties": {},
 			"allowMultipleMasks": false,
 			"tree": false,
-			"id": "e2iyv4h"
+			"id": "eths41r"
 		}],
 		"input": false,
 		"validate": {
@@ -18286,7 +18659,213 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "eaxtxj4"
+		"id": "eu1i51g"
+	}, {
+		"title": "Attachments",
+		"theme": "primary",
+		"collapsible": false,
+		"tableView": false,
+		"key": "attachments",
+		"type": "panel",
+		"label": "",
+		"input": false,
+		"validate": {
+			"unique": false,
+			"multiple": false,
+			"required": false,
+			"custom": "",
+			"customPrivate": false,
+			"strictDateValidation": false
+		},
+		"components": [{
+			"label": "Attachments",
+			"hideLabel": true,
+			"tableView": false,
+			"storage": "base64",
+			"image": true,
+			"webcam": false,
+			"fileTypes": [{
+				"label": "",
+				"value": ""
+			}],
+			"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+			"fileMaxSize": "10MB",
+			"multiple": true,
+			"validate": {
+				"unique": false,
+				"multiple": true,
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false
+			},
+			"key": "attachments1",
+			"type": "file",
+			"input": true,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"widget": null,
+			"attributes": {},
+			"validateOn": "change",
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"privateDownload": false,
+			"imageSize": "200",
+			"fileMinSize": "0KB",
+			"uploadOnly": false,
+			"id": "e8jixhv"
+		}, {
+			"label": "attachmentFields",
+			"customDefaultValue": "value = [[\"groupPL\",\"document\"],['attachments']];",
+			"key": "attachmentsFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false,
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false
+			},
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"calculateValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "e1shrs8"
+		}],
+		"path": "attachments",
+		"placeholder": "",
+		"prefix": "",
+		"customClass": "",
+		"suffix": "",
+		"multiple": false,
+		"defaultValue": null,
+		"protected": false,
+		"unique": false,
+		"persistent": false,
+		"hidden": false,
+		"clearOnHide": false,
+		"refreshOn": "",
+		"redrawOn": "",
+		"modalEdit": false,
+		"labelPosition": "top",
+		"description": "",
+		"errorLabel": "",
+		"tooltip": "",
+		"hideLabel": false,
+		"tabindex": "",
+		"disabled": false,
+		"autofocus": false,
+		"dbIndex": false,
+		"customDefaultValue": "",
+		"calculateValue": "",
+		"widget": null,
+		"attributes": {},
+		"validateOn": "change",
+		"conditional": {
+			"show": null,
+			"when": null,
+			"eq": ""
+		},
+		"overlay": {
+			"style": "",
+			"left": "",
+			"top": "",
+			"width": "",
+			"height": ""
+		},
+		"allowCalculateOverride": false,
+		"encrypted": false,
+		"showCharCount": false,
+		"showWordCount": false,
+		"properties": {},
+		"allowMultipleMasks": false,
+		"tree": false,
+		"breadcrumb": "default",
+		"id": "e7w4wsw"
 	}, {
 		"label": "Submit",
 		"showValidations": false,
@@ -18358,7 +18937,7 @@
 		"disableOnInvalid": false,
 		"theme": "primary",
 		"dataGridLabel": true,
-		"id": "ed6rjdu"
+		"id": "epd257"
 	}],
 	"controller": "",
 	"revisions": "",
@@ -18374,12 +18953,12 @@
 	"properties": {
 		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"delegate\",\"delegate\" : \"DiveBoatEndorsementCleanUp\"},{\"command\" : \"startWorkflow\"}]",
 		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveBoat\"},{\"command\" : \"delegate\" ,\"delegate\" : \"DiveBoatEndorsementCleanUp\"},{\"command\":\"delegate\",\"delegate\":\"DocumentFetchDelegate\"}]",
-		"target": "excess_liability_coverage,groupCoverageSelect,groupExcessLiabilitySelect"
+		"post_delegate_refresh": "excess_liability_coverage,groupCoverageSelect,groupExcessLiabilitySelect"
 	},
 	"name": "endorsementDiveBoat",
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-02-25T09:37:32.797Z",
+	"modified": "2020-03-02T14:04:45.978Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }

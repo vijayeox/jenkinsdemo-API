@@ -16,7 +16,7 @@
               vars[temp_var[0]] = decodeURI(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','single_limit','annual_aggregate'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','combinedSingalLimit','annualAggregate'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -100,8 +100,8 @@ Company</p>
             </div>
             <div class = "gin-type1"> 
                 <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
-                  <p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p>
-                  <p class = "ins_font">$2,000,000</p>
+                  <p class = "ins_font">$<span class ="combinedSingalLimit"></span>&nbsp&nbsp&nbsp(per occurrence)</p>
+                  <p class = "ins_font">$<span class ="annualAggregate"></span></p>
             </div>
           </div>
           <div class="gi_type2">

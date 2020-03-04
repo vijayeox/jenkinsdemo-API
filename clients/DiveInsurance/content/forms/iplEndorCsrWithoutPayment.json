@@ -2452,6 +2452,7 @@
                                                 "custom": "values = data['countryList'];"
                                             },
                                             "valueProperty": "country",
+                                            "template": "<span>{{ item.country }}</span>",
                                             "selectThreshold": 0.3,
                                             "clearOnHide": false,
                                             "validate": {
@@ -2718,7 +2719,11 @@
             "when": "endorsement_options",
             "eq": "modify_additionalInsured"
         },
-        "label": "Panel"
+        "label": "Panel",
+        "validate": {
+            "unique": false,
+            "multiple": false
+        }
     }, {
         "title": "Payment",
         "theme": "primary",
@@ -2885,7 +2890,7 @@
                 "tableView": true,
                 "validate": {
                     "required": true,
-                    "customMessage": "Please Provide the reason for Rejecting the Policy",
+                    "customMessage": "Please provide the reason for Rejecting the Policy",
                     "unique": false,
                     "multiple": false
                 },
@@ -2933,6 +2938,6 @@
     "path": "iplendorcsrwithoutpayment",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-02-20T06:27:49.035Z",
-    "modified": "2020-03-02T08:06:57.438Z",
+    "modified": "2020-03-03T07:07:03.104Z",
     "machineName": "testdivehub:iplEndorCsrWithoutPayment1"
 }
