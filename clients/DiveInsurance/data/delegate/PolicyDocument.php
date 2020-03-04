@@ -89,6 +89,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         );
             
         $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldnames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts','attachments', 'physical_state','autoRenewalJob');
+
+        $this->endorsementOptions = array('modify_personalInformation','modify_coverage','modify_additionalInsured','modify_businessAndPolicyInformation','modify_boatUsageCaptainCrewSchedule','modify_boatDeatails','modify_additionalInsured','modify_lossPayees','modify_groupProfessionalLiability');
     }
         
         public function execute(array $data,Persistence $persistenceService) 
@@ -300,13 +302,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->logger->info("Policy Documnet Generation");
                 if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
                     $endorsementFileName = 'Endorsement - '.$length;
-                    $documents[$endorsementFileName] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',$length);
+                    $documents[$endorsementFileName] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null,$length);
                 }else{
                     $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 {
-                    print_r("nikhil working");
                     $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
                 }
             }
@@ -341,9 +342,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else{
                 $data['documents'] = $documents;
             }
-            $data['endorsement_options']['modify_personalInformation'] = false;
-            $data['endorsement_options']['modify_coverage'] = false;
-            $data['endorsement_options']['modify_additionalInsured'] = false;
+            if(isset($data['endorsement_options'])){
+                foreach ($this->endorsementOptions as $val){
+                    if(isset($data['endorsementOptions'][$val])){
+                        $data['endorsementOptions'][$val] = false;
+                    }
+                }
+            }
             $data['policyStatus'] = "In Force";
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
