@@ -304,8 +304,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }else{
                     $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 }
-                if($this->type != 'quote' || $this->type != 'endorsementQuote')
+                if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 {
+                    print_r("nikhil working");
                     $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
                 }
             }
