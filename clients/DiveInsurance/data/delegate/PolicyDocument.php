@@ -306,7 +306,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 {
-                    print_r("nikhil working");
                     $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
                 }
             }
