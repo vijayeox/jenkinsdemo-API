@@ -76,9 +76,19 @@
                       "validate": { "unique": false, "multiple": false }
                     },
                     {
-                      "label": "disableUserInfoEditing",
+                      "label": "disableUserInfoEdit",
                       "customDefaultValue": "value = false;",
-                      "key": "disableUserInfoEditing",
+                      "key": "disableUserInfoEdit",
+                      "type": "hidden",
+                      "input": true,
+                      "tableView": false,
+                      "validate": { "unique": false, "multiple": false },
+                      "hideOnChildrenHidden": false
+                    },
+                    {
+                      "label": "Policy Status",
+                      "customDefaultValue": "value = \"Pending Approval\";",
+                      "key": "policyStatus",
                       "type": "hidden",
                       "input": true,
                       "tableView": false,
@@ -107,10 +117,12 @@
                       "validate": {
                         "required": true,
                         "customMessage": "Max Length is 6",
+                        "custom": "if\n  ((data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\")){\n    valid = true;\n  } else {\n    valid = false;\n  }",
                         "max": null,
                         "multiple": false,
                         "unique": false
                       },
+                      "errorLabel": "Please enter and validate your PADI number",
                       "key": "padi",
                       "logic": [
                         {
@@ -201,19 +213,20 @@
                       "customClass": "alignCenter",
                       "tableView": false,
                       "key": "changePadi",
+                      "properties": { "target": "render" },
                       "customConditional": "if (\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\") &&\n  (data.disableUserInfoEdit == false || data.disableUserInfoEdit == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
                       "logic": [
                         {
-                          "name": "Reset PADI",
+                          "name": "Event Handler",
                           "trigger": {
                             "type": "event",
                             "event": "triggerFormChange"
                           },
                           "actions": [
                             {
-                              "name": "Reset data values",
+                              "name": "Reset Form",
                               "type": "value",
-                              "value": "data.padiVerified = undefined;\ndata.verified = undefined;\ndata.policy_exists = undefined;\ndata.padiNotFound = undefined;\ndata.padi= undefined;"
+                              "value": "data.padiVerified = undefined;\ndata.verified = undefined;\ndata.policy_exists = undefined;\ndata.padiNotFound = undefined;"
                             }
                           ]
                         }
@@ -2521,7 +2534,7 @@
     }
   ],
   "revisions": "current",
-  "_vid": 303,
+  "_vid": 310,
   "title": "Emergency First Response Professional Liability",
   "display": "wizard",
   "access": [
@@ -2569,7 +2582,7 @@
   "path": "emergencyfirstresponseprofessionalliability",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-07-11T13:08:59.838Z",
-  "modified": "2020-03-02T19:15:56.595Z",
+  "modified": "2020-03-04T11:49:11.746Z",
   "machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
   "controller": ""
 }
