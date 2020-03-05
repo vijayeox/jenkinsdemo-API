@@ -484,6 +484,7 @@
                         "tableView": true,
                         "dataSrc": "custom",
                         "data": {
+                            "values": [{}],
                             "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
                         },
                         "template": "<span>{{ item }}</span>",
@@ -496,10 +497,10 @@
                         },
                         "key": "state",
                         "type": "select",
+                        "refreshOn": "country",
                         "input": true,
                         "lockKey": true,
                         "hideOnChildrenHidden": false,
-                        "refreshOn": "country",
                         "clearOnRefresh": true
                     }],
                     "width": 4,
@@ -2899,6 +2900,6 @@
     "path": "iplendorcsrwithoutpayment",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-02-20T06:27:49.035Z",
-    "modified": "2020-03-05T11:41:22.410Z",
+    "modified": "2020-03-05T12:09:53.786Z",
     "machineName": "testdivehub:iplEndorCsrWithoutPayment1"
 }
