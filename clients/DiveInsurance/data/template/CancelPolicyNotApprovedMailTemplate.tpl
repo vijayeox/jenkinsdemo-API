@@ -8,8 +8,7 @@
 				{$address2}<br/>
 				{$city},{$state},{$zip}<br/></p>
 				<br/>
-				<p>This mail is regarding the cancellation of your policy.</p><br/>
-				<p>The cancellation of your policy is not approved because of the following reason:<br/>{$reasonforRejection}.</p><br/>
+				<p>The cancellation of your policy is 'Not Approved' because of the following reason:<br/>{$reasonforRejection}.</p><br/>
 				<p>We thank you for your long-standing relationship with PADI and Vicencia & Buckley, a Division of HUB International Insurance Services Inc. If you have any questions feel free to give us a call or send us an email.</p>
 			 <br/>
 
