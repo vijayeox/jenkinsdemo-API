@@ -22,7 +22,9 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                 if (sizeof($fieldNamesArray) == 1) {
                     $this->logger->info("Document Save Entry fieldNamesArray size 1");
                     $fieldName = $fieldNamesArray[0];
+                    if((is_array($data[$fieldName]))){
                     $data[$fieldName] = $this->saveFile($data, $data[$fieldName]);
+                    }
                 } else if (sizeof($fieldNamesArray) == 2) {
                     $this->logger->info("Document Save Entry fieldNamesArray size 2");
                     $gridFieldName = $fieldNamesArray[0];
