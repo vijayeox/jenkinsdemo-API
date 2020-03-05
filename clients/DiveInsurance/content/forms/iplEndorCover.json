@@ -935,17 +935,18 @@
                 "theme": "primary",
                 "tableView": false,
                 "components": [{
-                    "input": true,
-                    "tableView": true,
                     "label": "Same as mailing address",
-                    "dataGridLabel": false,
-                    "key": "sameasmailingaddress",
+                    "tableView": true,
                     "defaultValue": "true",
+                    "clearOnHide": false,
                     "validate": {
                         "unique": false,
                         "multiple": false
                     },
+                    "key": "sameasmailingaddress",
                     "type": "checkbox",
+                    "input": true,
+                    "dataGridLabel": false,
                     "lockKey": true
                 }, {
                     "label": "Columns",
@@ -1461,6 +1462,7 @@
                                 "delimiter": false,
                                 "requireDecimal": true,
                                 "inputFormat": "plain",
+                                "clearOnHide": false,
                                 "customDefaultValue": "value = 0.00",
                                 "validate": {
                                     "multiple": false,
@@ -1674,6 +1676,7 @@
                                 "delimiter": false,
                                 "requireDecimal": true,
                                 "inputFormat": "plain",
+                                "clearOnHide": false,
                                 "calculateValue": "if(data['scubaFit'] && data[data['scubaFit']]){\nvalue = data[data['scubaFit']];\n}",
                                 "validate": {
                                     "multiple": false,
@@ -1764,6 +1767,7 @@
                                 "delimiter": false,
                                 "requireDecimal": true,
                                 "inputFormat": "plain",
+                                "clearOnHide": false,
                                 "validate": {
                                     "multiple": false,
                                     "unique": false
@@ -1844,7 +1848,7 @@
                                 "lockKey": true,
                                 "hideOnChildrenHidden": false
                             }, {
-                                "label": "Endorsement Equipment Liability Coverage",
+                                "label": "Endorsement Equipment Liability ",
                                 "attrs": [{
                                     "value": "",
                                     "attr": ""
@@ -1885,6 +1889,7 @@
                                 "delimiter": false,
                                 "requireDecimal": true,
                                 "inputFormat": "plain",
+                                "clearOnHide": false,
                                 "calculateValue": "if(data[data['equipment']] && data['equipment']){\nvalue = data[data['equipment']];\n}",
                                 "validate": {
                                     "multiple": false,
@@ -2817,7 +2822,7 @@
         }
     }],
     "revisions": "current",
-    "_vid": 43,
+    "_vid": 50,
     "title": "IPL - EndorCover",
     "display": "form",
     "access": [{
@@ -2834,7 +2839,7 @@
     "path": "iplendorcover",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-01-08T15:16:11.935Z",
-    "modified": "2020-03-05T07:35:48.242Z",
+    "modified": "2020-03-05T11:16:16.342Z",
     "machineName": "testdivehub:iplEndorCover",
     "controller": ""
 }

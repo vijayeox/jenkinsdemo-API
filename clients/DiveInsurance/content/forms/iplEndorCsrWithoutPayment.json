@@ -9,9 +9,6 @@
         "collapsible": false,
         "tableView": false,
         "key": "pageNaN",
-        "properties": {
-            "delegate": "EndorsementRatecard"
-        },
         "type": "panel",
         "label": "Endorsement Change",
         "breadcrumb": "none",
@@ -2833,6 +2830,8 @@
                     "value": "false",
                     "shortcut": ""
                 }],
+                "clearOnHide": false,
+                "customDefaultValue": "value = false",
                 "validate": {
                     "unique": false,
                     "multiple": false
@@ -2870,11 +2869,13 @@
             "multiple": false
         }
     }, {
-        "input": true,
         "label": "Submit",
+        "showValidations": false,
         "tableView": false,
         "key": "submit",
+        "customConditional": "if(data['approved'] !== '')\n{\n  component.disabled = false;\n}else{\n  component.disabled = true;\n}",
         "type": "button",
+        "input": true,
         "validate": {
             "unique": false,
             "multiple": false
@@ -2891,11 +2892,13 @@
     }],
     "submissionAccess": [],
     "settings": {},
-    "properties": {},
+    "properties": {
+        "delegate": "EndorsementRateCard"
+    },
     "name": "iplEndorCsrWithoutPayment",
     "path": "iplendorcsrwithoutpayment",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-02-20T06:27:49.035Z",
-    "modified": "2020-03-05T07:37:19.738Z",
+    "modified": "2020-03-05T11:41:22.410Z",
     "machineName": "testdivehub:iplEndorCsrWithoutPayment1"
 }
