@@ -178,8 +178,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($data['upgradecylinder']) && !is_array($data['upgradecylinder'])){    
                             $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
                             $data['upgradecylinder'] = $cylinderOnCsrReview;
-                            $data['cylinder'] = $data['upgradecylinder']['value'];  
-                        }   
+                            $data['cylinder'] = $data['upgradecylinder']['value'];
+                            $temp['cylinderPriceVal'] = $data['upgradecylinder']['label'];
+                        }
                         if(isset($data['upgradeExcessLiability']) && !is_array($data['upgradeExcessLiability'])){ 
                             $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
                             $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;
@@ -192,7 +193,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['scubaFit']])){
                             $temp['scubaFitVal'] = $result[$data['scubaFit']];
                         }
-                        if(isset($result[$data['cylinder']])){
+                        if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
                             $temp['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
                     }
