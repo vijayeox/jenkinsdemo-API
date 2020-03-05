@@ -818,21 +818,21 @@
                     "pull": 0
                 }, {
                     "components": [{
-                        "input": true,
-                        "tableView": true,
                         "label": "City",
-                        "key": "city",
                         "placeholder": "City",
-                        "clearOnHide": false,
+                        "hideLabel": true,
                         "spellcheck": true,
+                        "tableView": true,
+                        "clearOnHide": false,
                         "validate": {
+                            "required": true,
                             "customMessage": "Please enter your city.",
                             "unique": false,
-                            "multiple": false,
-                            "required": true
+                            "multiple": false
                         },
+                        "key": "city",
                         "type": "textfield",
-                        "hideLabel": true,
+                        "input": true,
                         "lockKey": true,
                         "hideOnChildrenHidden": false
                     }, {
@@ -2726,90 +2726,77 @@
                 "multiple": false
             }
         }, {
-            "key": "page6Panel2",
-            "input": false,
-            "title": "Payment",
-            "theme": "primary",
-            "tableView": false,
-            "components": [{
-                "label": "amount",
-                "defaultValue": "0",
-                "calculateValue": "value = parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00",
-                "key": "endorAmountPayable",
-                "properties": {
-                    "target": "convergepay-amount",
-                    "render": "page6"
-                },
-                "type": "hidden",
-                "input": true,
-                "tableView": true,
-                "lockKey": true,
-                "validate": {
-                    "unique": false,
-                    "multiple": false
-                }
-            }, {
-                "type": "convergepay",
-                "key": "custom",
-                "label": "custom",
-                "input": true,
-                "tableView": false,
-                "validate": {
-                    "unique": false,
-                    "multiple": false
-                }
-            }, {
-                "input": true,
-                "tableView": true,
-                "key": "transaction_status",
-                "label": "Transaction Status",
-                "type": "hidden",
-                "lockKey": true,
-                "validate": {
-                    "unique": false,
-                    "multiple": false
-                }
-            }, {
-                "input": true,
-                "tableView": true,
-                "key": "transaction_id",
-                "label": "Transaction Id",
-                "type": "hidden",
-                "lockKey": true,
-                "validate": {
-                    "unique": false,
-                    "multiple": false
-                }
-            }, {
-                "key": "page6Content",
-                "label": "Content",
-                "input": false,
-                "attrs": [{
-                    "value": "",
-                    "attr": ""
-                }],
-                "content": "</br><b><font color=\"red\">If you click \"Submit Form\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Form\" only once.</b></font>",
-                "type": "htmlelement",
-                "tableView": false,
-                "validate": {
-                    "unique": false,
-                    "multiple": false
-                },
-                "hideLabel": true
-            }],
-            "type": "panel",
-            "breadcrumb": "none",
-            "label": "Panel",
+            "label": "amount",
+            "defaultValue": "0",
+            "calculateValue": "value = parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00",
+            "key": "endorAmountPayable",
+            "properties": {
+                "target": "convergepay-amount",
+                "render": "page6"
+            },
+            "type": "hidden",
+            "input": true,
+            "tableView": true,
+            "lockKey": true,
             "validate": {
                 "unique": false,
                 "multiple": false
             }
+        }, {
+            "type": "convergepay",
+            "key": "custom",
+            "label": "custom",
+            "input": true,
+            "tableView": false,
+            "validate": {
+                "unique": false,
+                "multiple": false
+            }
+        }, {
+            "input": true,
+            "tableView": true,
+            "key": "transaction_id",
+            "label": "Transaction Id",
+            "type": "hidden",
+            "lockKey": true,
+            "validate": {
+                "unique": false,
+                "multiple": false
+            }
+        }, {
+            "input": true,
+            "tableView": true,
+            "key": "transaction_status",
+            "label": "Transaction Status",
+            "type": "hidden",
+            "lockKey": true,
+            "validate": {
+                "unique": false,
+                "multiple": false
+            }
+        }, {
+            "key": "page6Content",
+            "label": "Content",
+            "input": false,
+            "attrs": [{
+                "value": "",
+                "attr": ""
+            }],
+            "content": "</br><b><font color=\"red\">If you click \"Submit Form\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Form\" only once.</b></font>",
+            "type": "htmlelement",
+            "tableView": false,
+            "validate": {
+                "unique": false,
+                "multiple": false
+            },
+            "hideLabel": true
         }],
         "input": false,
         "validate": {
             "unique": false,
             "multiple": false
-        }
+        },
+        "path": "page6"
     }, {
         "input": true,
         "label": "Submit",
@@ -2822,7 +2809,7 @@
         }
     }],
     "revisions": "current",
-    "_vid": 50,
+    "_vid": 51,
     "title": "IPL - EndorCover",
     "display": "form",
     "access": [{
@@ -2839,7 +2826,7 @@
     "path": "iplendorcover",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-01-08T15:16:11.935Z",
-    "modified": "2020-03-05T11:16:16.342Z",
+    "modified": "2020-03-05T12:08:13.227Z",
     "machineName": "testdivehub:iplEndorCover",
     "controller": ""
 }
