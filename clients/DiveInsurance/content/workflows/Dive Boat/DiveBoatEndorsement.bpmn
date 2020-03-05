@@ -29,7 +29,7 @@
       <bpmn:incoming>SequenceFlow_1xkcn87</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0191gsl</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="ServiceTask_1e9s1xq" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_1e9s1xq" name="Schedule a reminder mail for Auto Renewal" camunda:asyncAfter="true" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">schedule</camunda:inputParameter>

@@ -31,9 +31,19 @@
 			"label": "Please select areas you want to modify",
 			"optionsLabelPosition": "right",
 			"tableView": false,
+			"defaultValue": {
+				"": false,
+				"modify_personinformation": false,
+				"modify_businessAndPolicyInformation": false,
+				"modify_boatUsageCaptainCrewSchedule": false,
+				"modify_boatDeatails": false,
+				"modify_additionalInsured": false,
+				"modify_lossPayees": false,
+				"modify_groupProfessionalLiability": false
+			},
 			"values": [{
 				"label": "Personal Information",
-				"value": "modify_personinformation",
+				"value": "modify_personalInformation",
 				"shortcut": ""
 			}, {
 				"label": "Business and Policy Information",
@@ -67,10 +77,7 @@
 			"key": "endorsement_options",
 			"type": "selectboxes",
 			"input": true,
-			"inputType": "checkbox",
-			"defaultValue": {
-				"": false
-			}
+			"inputType": "checkbox"
 		}, {
 			"key": "page5Panel3",
 			"input": false,
@@ -262,7 +269,6 @@
 					"components": [{
 						"label": "First Name",
 						"spellcheck": false,
-						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -284,7 +290,6 @@
 					"components": [{
 						"label": "Initial",
 						"spellcheck": false,
-						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -306,7 +311,6 @@
 					"components": [{
 						"label": "Last Name",
 						"spellcheck": false,
-						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -421,7 +425,6 @@
 							"widget": "choicesjs",
 							"tableView": true,
 							"dataSrc": "custom",
-							"defaultValue": "United States of America",
 							"data": {
 								"values": [{
 									"value": "",
@@ -590,7 +593,6 @@
 							"widget": "choicesjs",
 							"tableView": true,
 							"dataSrc": "custom",
-							"defaultValue": "United States of America",
 							"data": {
 								"values": [{
 									"value": "",
@@ -673,11 +675,12 @@
 								"dataSrc": "custom",
 								"data": {
 									"values": [{}],
-									"custom": "values = phoneList"
+									"custom": "values = data['phoneList']"
 								},
-								"template": "<span>{{ item.dial_code }}</span>",
+								"valueProperty": "dial_code",
+								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
-								"calculateValue": "if(data.country){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"validate": {
 									"unique": false,
 									"multiple": false
@@ -734,7 +737,8 @@
 							"unique": false,
 							"multiple": false
 						},
-						"path": "columns1"
+						"path": "columns1",
+						"hideLabel": true
 					}, {
 						"label": "Columns",
 						"columns": [{
@@ -747,11 +751,12 @@
 								"dataSrc": "custom",
 								"data": {
 									"values": [{}],
-									"custom": "values = phoneList"
+									"custom": "values = data['phoneList']"
 								},
-								"template": "<span>{{ item.dial_code }}</span>",
+								"valueProperty": "dial_code",
+								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
-								"calculateValue": "if(data.country){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"validate": {
 									"unique": false,
 									"multiple": false
@@ -808,7 +813,8 @@
 							"unique": false,
 							"multiple": false
 						},
-						"path": "columns2"
+						"path": "columns2",
+						"hideLabel": true
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1179,7 +1185,6 @@
 								"widget": "choicesjs",
 								"tableView": true,
 								"dataSrc": "custom",
-								"defaultValue": "United States of America",
 								"data": {
 									"values": [{}],
 									"custom": "values = data['countryList'];"
@@ -2321,16 +2326,20 @@
 						"components": [{
 							"label": "Built Year",
 							"placeholder": "Built Year",
-							"inputMask": "9999",
 							"hideLabel": true,
-							"spellcheck": true,
 							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+							},
+							"template": "<span>{{ item }}</span>",
+							"selectThreshold": 0.3,
 							"validate": {
 								"unique": false,
 								"multiple": false
 							},
 							"key": "built_year",
-							"type": "phoneNumber",
+							"type": "select",
 							"input": true
 						}]
 					}],
@@ -2889,17 +2898,22 @@
 						}, {
 							"components": [{
 								"label": "Built Year",
+								"widget": "choicesjs",
 								"placeholder": "Built Year",
-								"inputMask": "9999",
 								"hideLabel": true,
-								"spellcheck": true,
 								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+								},
+								"template": "<span>{{ item }}</span>",
+								"selectThreshold": 0.3,
 								"validate": {
 									"unique": false,
 									"multiple": false
 								},
 								"key": "dingy_age",
-								"type": "phoneNumber",
+								"type": "select",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -3007,17 +3021,22 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "Built Year",
+								"widget": "choicesjs",
 								"placeholder": "Built Year",
-								"inputMask": "9999",
 								"hideLabel": true,
-								"spellcheck": true,
 								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+								},
+								"template": "<span>{{ item }}</span>",
+								"selectThreshold": 0.3,
 								"validate": {
 									"unique": false,
 									"multiple": false
 								},
 								"key": "trailer_year_built",
-								"type": "phoneNumber",
+								"type": "select",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -5500,7 +5519,7 @@
 			"input": true
 		}, {
 			"label": "attachmentFields",
-			"customDefaultValue": "value = [[\"groupPL\",\"document\"],['attachments']];",
+			"customDefaultValue": "value = [[\"groupPL\",\"document\"],\"attachments\"];",
 			"key": "attachmentsFieldnames",
 			"type": "hidden",
 			"input": true,
@@ -9630,6 +9649,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-02T07:54:47.001Z",
+	"modified": "2020-03-05T05:02:06.250Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }
