@@ -1341,30 +1341,27 @@
 				"key": "page4PanelWell",
 				"input": false,
 				"components": [{
-					"input": true,
-					"tableView": true,
 					"label": "Please choose one of these options",
-					"key": "AdditionalInsuredOption",
+					"optionsLabelPosition": "right",
+					"inline": false,
+					"tableView": true,
+					"defaultValue": "noAdditionalInsureds",
 					"values": [{
-						"value": "asPerExistingPolicyIfRenewing",
-						"label": "As per existing policy (if renewing)",
-						"shortcut": ""
-					}, {
 						"value": "newListOfAdditionalInsureds",
-						"label": "New list of Additional Insureds",
+						"label": "Add Additional Insureds",
 						"shortcut": ""
 					}, {
 						"value": "noAdditionalInsureds",
 						"label": "No Additional Insureds",
 						"shortcut": ""
 					}],
-					"defaultValue": "noAdditionalInsureds",
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
+					"key": "AdditionalInsuredOption",
 					"type": "radio",
-					"optionsLabelPosition": "right",
+					"input": true,
 					"lockKey": true
 				}],
 				"tableView": false,
@@ -1987,7 +1984,7 @@
 									"unique": false,
 									"multiple": false
 								},
-								"key": "page5ColumnsPanel2ColumnsSurvey",
+								"key": "survey",
 								"type": "survey",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -2341,7 +2338,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 30,
+	"_vid": 32,
 	"title": "EFR CSR Review",
 	"display": "form",
 	"access": [{
@@ -2362,6 +2359,6 @@
 	"path": "efrcsrreview",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-02T14:54:05.531Z",
-	"modified": "2020-03-04T15:53:40.944Z",
+	"modified": "2020-03-05T07:14:48.176Z",
 	"machineName": "testdivehub:efrCsr222"
 }
