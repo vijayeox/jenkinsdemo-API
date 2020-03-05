@@ -138,6 +138,17 @@
                             "unique": false,
                             "multiple": false
                         }
+                    }, {
+                        "label": "padiEmpty",
+                        "key": "padiEmpty",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        },
+                        "hideOnChildrenHidden": false
                     }],
                     "width": 4,
                     "offset": 0,
@@ -167,6 +178,29 @@
                         "hideLabel": true,
                         "hideOnChildrenHidden": false
                     }, {
+                        "label": "Validate PADI Membership",
+                        "action": "event",
+                        "showValidations": false,
+                        "theme": "success",
+                        "customClass": "alignCenter",
+                        "tableView": false,
+                        "key": "panelColumnsValidatePadiMembership",
+                        "properties": {
+                            "commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
+                        },
+                        "overlay": {
+                            "style": "text-align:center"
+                        },
+                        "type": "button",
+                        "event": "callPipeline",
+                        "input": true,
+                        "custom": "data['padidata'] = data['padi']",
+                        "hideOnChildrenHidden": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        }
+                    }, {
                         "label": "HTML",
                         "attrs": [{
                             "attr": "style",
@@ -195,7 +229,7 @@
                         "refreshOnChange": false,
                         "tableView": false,
                         "key": "html2",
-                        "customConditional": "show = ((data['padiVerified']==false||data['padiVerified']=='false') && (data['verified'] == true || data['verified']=='true') && (data['padiNotFound']==false||data['padiNotFound']=='false') )",
+                        "customConditional": "show = (((data['padiVerified'] == false || data['padiVerified']=='false') && (data['businessPadiVerified'] == false || data['businessPadiVerified'] == 'false')) && (data['verified'] == true || data['verified']=='true') && (data['padiNotFound']==false||data['padiNotFound']=='false') )",
                         "type": "htmlelement",
                         "input": false,
                         "validate": {
@@ -229,42 +263,22 @@
                             "attr": "style",
                             "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
                         }],
-                        "content": "Policy exists for given PADI Number",
+                        "content": "PADI Number cannot be blank",
                         "refreshOnChange": false,
                         "tableView": false,
                         "key": "html4",
-                        "customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==true||data['policy_exists']=='true') )",
+                        "conditional": {
+                            "show": true,
+                            "when": "padiEmpty",
+                            "eq": "true"
+                        },
                         "type": "htmlelement",
                         "input": false,
                         "validate": {
                             "unique": false,
                             "multiple": false
                         },
-                        "hideOnChildrenHidden": false,
-                        "hideLabel": true
-                    }, {
-                        "label": "Validate PADI Membership",
-                        "action": "event",
-                        "showValidations": false,
-                        "theme": "success",
-                        "customClass": "alignCenter",
-                        "tableView": false,
-                        "key": "panelColumnsValidatePadiMembership",
-                        "properties": {
-                            "commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
-                        },
-                        "overlay": {
-                            "style": "text-align:center"
-                        },
-                        "type": "button",
-                        "event": "callPipeline",
-                        "input": true,
-                        "custom": "data['padidata'] = data['padi']",
-                        "hideOnChildrenHidden": false,
-                        "validate": {
-                            "unique": false,
-                            "multiple": false
-                        }
+                        "hideOnChildrenHidden": false
                     }, {
                         "label": "orgId",
                         "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
@@ -334,6 +348,17 @@
                             "unique": false,
                             "multiple": false
                         }
+                    }, {
+                        "label": "businessPadiVerified",
+                        "key": "businessPadiVerified1",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        },
+                        "hideOnChildrenHidden": false
                     }],
                     "width": 4,
                     "offset": 0,
@@ -355,11 +380,27 @@
                 "multiple": false
             }
         }, {
-            "key": "panelPanel4",
-            "input": false,
             "title": "Personal Information",
             "theme": "primary",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+                "previous": true,
+                "cancel": true,
+                "next": true
+            },
+            "collapsible": false,
+            "dataGridLabel": false,
             "tableView": false,
+            "key": "panelPanel4",
+            "customConditional": "show = ((data['padiVerified'] == true || data['businessPadiVerified'] == true) && (data['user_exists']==0||data['user_exists']=='0'))",
+            "conditional": {
+                "show": true,
+                "when": "padiVerified",
+                "eq": "true"
+            },
+            "type": "panel",
+            "label": "Personal Information",
+            "input": false,
             "components": [{
                 "label": "Columns",
                 "input": false,
@@ -542,7 +583,6 @@
                             "hideLabel": true,
                             "tableView": true,
                             "dataSrc": "custom",
-                            "defaultValue": "United States of America",
                             "data": {
                                 "values": [{}],
                                 "custom": "values = data['countryList'];"
@@ -712,7 +752,6 @@
                             "hideLabel": true,
                             "tableView": true,
                             "dataSrc": "custom",
-                            "defaultValue": "United States of America",
                             "data": {
                                 "values": [{}],
                                 "custom": "values = data['countryList'];"
@@ -790,12 +829,12 @@
                                 "dataSrc": "custom",
                                 "data": {
                                     "values": [{}],
-                                    "custom": "values = phoneList"
+                                    "custom": "values = data['phoneList']"
                                 },
                                 "valueProperty": "dial_code",
-                                "template": "<span>{{ item.dial_code }}</span>",
+                                "template": "<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold": 0.3,
-                                "calculateValue": "if(data.country){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validateOn": "blur",
                                 "validate": {
                                     "unique": false,
@@ -852,7 +891,8 @@
                             "unique": false,
                             "multiple": false
                         },
-                        "path": "columns2"
+                        "path": "columns2",
+                        "hideLabel": true
                     }, {
                         "label": "Columns",
                         "columns": [{
@@ -865,12 +905,12 @@
                                 "dataSrc": "custom",
                                 "data": {
                                     "values": [{}],
-                                    "custom": "values = phoneList"
+                                    "custom": "values = data['phoneList']"
                                 },
                                 "valueProperty": "dial_code",
-                                "template": "<span>{{ item.dial_code }}</span>",
+                                "template": "<span>{{item.name}}({{ item.dial_code }})</span>",
                                 "selectThreshold": 0.3,
-                                "calculateValue": "if(data.country){\n  let obj = phoneList.find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "validate": {
                                     "unique": false,
                                     "multiple": false
@@ -929,7 +969,8 @@
                             "unique": false,
                             "multiple": false
                         },
-                        "path": "columns3"
+                        "path": "columns3",
+                        "hideLabel": true
                     }],
                     "width": 6,
                     "offset": 0,
@@ -984,16 +1025,13 @@
                 },
                 "path": "panelPanel4Columns"
             }],
-            "type": "panel",
-            "conditional": {
-                "show": "true",
-                "when": "padiVerified",
-                "eq": "true"
-            },
             "lockKey": true,
             "source": "5d4ee6df800c612c49e802d3",
             "inDataGrid": true,
-            "label": "Panel"
+            "validate": {
+                "unique": false,
+                "multiple": false
+            }
         }],
         "type": "panel",
         "breadcrumb": "none",
@@ -1336,6 +1374,7 @@
                                     }],
                                     "custom": "values = data['countryList'];"
                                 },
+                                "valueProperty": "country",
                                 "template": "<span>{{ item.country }}</span>",
                                 "selectThreshold": 0.3,
                                 "validate": {
@@ -1344,8 +1383,7 @@
                                 },
                                 "key": "business_country",
                                 "type": "select",
-                                "input": true,
-                                "defaultValue": "United States of America"
+                                "input": true
                             }]
                         }, {
                             "components": [{
@@ -5523,6 +5561,6 @@
     "path": "diveboat02",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-01-23T10:59:00.323Z",
-    "modified": "2020-03-03T05:11:24.759Z",
+    "modified": "2020-03-05T04:42:28.652Z",
     "machineName": "testdivehub:diveBoat02"
 }

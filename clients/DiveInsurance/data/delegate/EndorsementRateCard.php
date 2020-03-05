@@ -28,16 +28,6 @@ class EndorsementRatecard extends AbstractAppDelegate
         }
         if(isset($data['liabilityCoverageName'])){
             $data['careerCoverage'] = $data['liabilityCoverageName'];
-        } else {
-            if(isset($data['careerCoverage'])){
-                $data['careerCoverage']= $data['careerCoverage'];
-            }
-        }
-        if(!isset($data['previous_scuba'])){
-            $data['previous_scuba'] = isset($data['scubaFit'])? $data['scubaFit']: '';
-        }
-        if(!isset($data['previous_equipmentLiability'])){
-            $data['previous_equipmentLiability'] = isset($data['equipment'])?$data['equipment'] :'' ;
         }
         
         if(isset($data['upgradeCareerCoverage']) && (!empty($data['upgradeCareerCoverage']))){
@@ -70,6 +60,9 @@ class EndorsementRatecard extends AbstractAppDelegate
         }
         
         if($data['product'] == 'Individual Professional Liability'){
+            $data['previous_scuba'] = isset($data['scubaFit'])? $data['scubaFit']: '';
+            $data['previous_equipmentLiability'] = isset($data['equipment'])?$data['equipment'] :'' ;
+
             $data['previous_excessLiability'] = (!isset($data['upgradeExcessLiability']) || empty($data['upgradeExcessLiability'])) ?
             $data['excessLiability'] : $data['upgradeExcessLiability']['value'];
             $premiumRateCardDetails[$data['previous_excessLiability']] = 0.00;        
@@ -144,9 +137,12 @@ class EndorsementRatecard extends AbstractAppDelegate
     unset($rate);
 }
 
-$selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_equipmentLiability']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+$selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['equipment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
 $this->logger->info("Executing Endorsement Rate Card Equipment Query".$selectEquipment);
 $resultEquipment= $persistenceService->selectQuery($selectEquipment);
+if($resultEquipment->count() == 0){
+    $premiumRateCardDetails[$data['equipment']] = 0;
+}
 while ($resultEquipment->next()) {
     $rate = $resultEquipment->current();
     if(isset($rate['key'])){
@@ -160,9 +156,12 @@ while ($resultEquipment->next()) {
     unset($rate);
 }
 
-$selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_scuba']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+$selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
 $this->logger->info("Executing Endorsement Rate Card Scuba fit Query".$selectScubafit);      
 $resultScubafit = $persistenceService->selectQuery($selectScubafit);
+if($resultScubafit->count() == 0){
+    $premiumRateCardDetails[$data['scubaFit']] = 0;
+}
 while ($resultScubafit->next()) {
     $rate = $resultScubafit->current();
     if(isset($rate['key'])){

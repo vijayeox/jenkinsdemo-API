@@ -14,6 +14,9 @@ class SetupEndorsement extends AbstractAppDelegate
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
         $rates = $this->getRates($data,$persistenceService);
         $data = array_merge($data,$rates);
+        if($data['product'] == 'Emergency First Response'){
+            $data['policyStatus'] = "Pending Approval";
+        }
         if(isset($data['liabilityCoverageName'])){
             $data['careerCoverage'] = $data['liabilityCoverageName'];
         }

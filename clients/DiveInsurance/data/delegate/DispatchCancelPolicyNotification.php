@@ -45,7 +45,7 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
                 $this->logger->error("Cancellation Document Not Found".$error);
                 throw new DelegateException('Cancellation Document Not Found','file.not.found');
             }
-            $data['subject'] = 'Cancel Policy';
+            $data['subject'] = 'Request for cancellation of policy';
             $data['document'] =$fileData;
             $response = $this->dispatch($data);
             return $response;
@@ -53,7 +53,7 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
         else{
             $this->logger->info("Dispatch Cancel Policy Notification -- not approved");
             $data['template'] = $this->template['NotApproved'];
-            $data['subject'] = 'Cancel Policy';
+            $data['subject'] = 'Request for cancellation of policy';
             $response = $this->dispatch($data);
             return $response;
         }

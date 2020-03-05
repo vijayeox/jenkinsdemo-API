@@ -168,6 +168,15 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
+                                name: Endorsement
+                                rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
                                 name: 'Cancel Policy'
                                 rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
@@ -369,8 +378,7 @@ menu:
                                 field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                                 multiFieldFilter:
-                                    -
-                                        lastname
+                                    - lastname
                             -
                                 title: Product
                                 field: entity_name
@@ -771,6 +779,11 @@ workflow:
         name: 'Dive Store'
         uuid: cb99e634-de00-468d-9230-d6f77d241c5b
         bpmn_file: 'Dive Store/NewApplication.bpmn'
+        entity: 'Dive Store'
+    -
+        name: 'Dive Store Endorsement'
+        uuid: 2bc1caaa-9628-486d-8b42-104534625994
+        bpmn_file: 'Dive Store/DiveStoreEndorsement.bpmn'
         entity: 'Dive Store'
 form:
     -

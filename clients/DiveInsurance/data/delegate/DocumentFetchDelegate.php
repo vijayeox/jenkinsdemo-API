@@ -15,6 +15,10 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
         $this->logger->info("DocumentFetchDelegate".print_r($data,true));
         if (isset($data['attachmentsFieldnames'])) {
             $attachmentsFieldnames = $data['attachmentsFieldnames'];
+            if(!is_array($attachmentsFieldnames)){
+                $attachmentsFieldnames = json_decode($data['attachmentsFieldnames']);
+            }
+
             for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
                 $fieldNamesArray = is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
                 if (sizeof($fieldNamesArray) == 1) {

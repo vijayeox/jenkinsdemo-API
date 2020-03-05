@@ -178,8 +178,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($data['upgradecylinder']) && !is_array($data['upgradecylinder'])){    
                             $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
                             $data['upgradecylinder'] = $cylinderOnCsrReview;
-                            $data['cylinder'] = $data['upgradecylinder']['value'];  
-                        }   
+                            $data['cylinder'] = $data['upgradecylinder']['value'];
+                            $temp['cylinderPriceVal'] = $data['upgradecylinder']['label'];
+                        }
                         if(isset($data['upgradeExcessLiability']) && !is_array($data['upgradeExcessLiability'])){ 
                             $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
                             $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;
@@ -192,7 +193,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['scubaFit']])){
                             $temp['scubaFitVal'] = $result[$data['scubaFit']];
                         }
-                        if(isset($result[$data['cylinder']])){
+                        if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
                             $temp['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
                     }
@@ -343,11 +344,24 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['documents'] = $documents;
             }
             if(isset($data['endorsement_options'])){
-                foreach ($this->endorsementOptions as $val){
-                    if(isset($data['endorsementOptions'][$val])){
-                        $data['endorsementOptions'][$val] = false;
-                    }
+                if(isset($data['endorsementCoverage'])){
+                    $data['endorsementCoverage'] = array();
                 }
+                if(isset($data['endorsementCylinder'])){
+                    $data['endorsementCylinder'] = array();
+                }
+                if(isset($data['endorsementExcessLiability'])){
+                    $data['endorsementExcessLiability'] = array();
+                }
+                // $data['endorsementOptions']['modify_coverage'] = false;
+                // $data['endorsementOptions']['modify_personalInformation'] = false;
+                // $data['endorsementOptions']['modify_additionalInsured'] = false;
+                foreach ($data['endorsement_options'] as $key => $val){
+                    // if(isset($data['endorsement_options'][$val])){
+                        $data['endorsement_options'][$key] = false;
+                    // }
+                }
+
             }
             $data['policyStatus'] = "In Force";
             $data['start_date'] = $startDate;

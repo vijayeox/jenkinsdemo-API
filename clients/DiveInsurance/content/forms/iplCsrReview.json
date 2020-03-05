@@ -311,7 +311,6 @@
                         "template": "<span>{{ item }}</span>",
                         "selectThreshold": 0.3,
                         "clearOnHide": false,
-                        "validateOn": "blur",
                         "validate": {
                             "required": true,
                             "unique": false,
@@ -1913,9 +1912,6 @@
                             }
                         }, {
                             "label": "Columns",
-                            "input": false,
-                            "tableView": false,
-                            "key": "page3PanelColumns5Columns2",
                             "columns": [{
                                 "components": [{
                                     "key": "iplBalanceAmount",
@@ -1972,9 +1968,15 @@
                                 "push": 0,
                                 "pull": 0
                             }],
-                            "type": "columns",
                             "hideLabel": true,
-                            "customConditional": "show = (data['balance'] > 0);"
+                            "tableView": false,
+                            "key": "page3PanelColumns5Columns2",
+                            "type": "columns",
+                            "input": false,
+                            "validate": {
+                                "unique": false,
+                                "multiple": false
+                            }
                         }],
                         "width": 6,
                         "offset": 0,
@@ -3200,7 +3202,7 @@
         }
     }],
     "revisions": "current",
-    "_vid": 165,
+    "_vid": 167,
     "title": "IPL - CSR Review",
     "display": "form",
     "access": [{
@@ -3217,7 +3219,7 @@
     "path": "iplcsrreview",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-01T11:17:41.957Z",
-    "modified": "2020-03-04T14:51:32.235Z",
+    "modified": "2020-03-05T08:00:11.359Z",
     "machineName": "testdivehub:iplCsrReview",
     "controller": ""
 }
