@@ -117,6 +117,25 @@
                     }
                     ,
                     "key":"padi",
+                    "logic":[ {
+                        "name":"Check PADI Verified",
+                        "trigger": {
+                            "type":"javascript",
+                            "javascript":"if (\n  data[\"padiVerified\"] == true &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  result = true;\n} else {\n  result = false;\n}"
+                        }
+                        ,
+                        "actions":[ {
+                            "name":"Disable editing",
+                            "type":"property",
+                            "property": {
+                                "label": "Disabled", "value": "disabled", "type": "boolean"
+                            }
+                            ,
+                            "state":true
+                        }
+                        ]
+                    }
+                    ],
                     "type":"number",
                     "decimalLimit":0,
                     "input":true,
@@ -157,6 +176,7 @@
                         "commands":"{\"commands\":[{\"command\":\"verify_user\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]}"
                     }
                     ,
+                    "customConditional":"if (\n  data[\"padiVerified\"] == true &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  show = false;\n} else {\n  show = true;\n}",
                     "overlay": {
                         "style": "text-align:center"
                     }
@@ -169,6 +189,38 @@
                     "validate": {
                         "unique": false, "multiple": false
                     }
+                }
+                ,
+                {
+                    "label":"Change PADI Number",
+                    "action":"event",
+                    "showValidations":false,
+                    "theme":"warning",
+                    "shortcut":"Enter",
+                    "customClass":"alignCenter",
+                    "tableView":false,
+                    "key":"changePadi",
+                    "customConditional":"if (\n  data[\"padiVerified\"] == true &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
+                    "logic":[ {
+                        "name":"Reset PADI",
+                        "trigger": {
+                            "type": "event", "event": "resetPADI"
+                        }
+                        ,
+                        "actions":[ {
+                            "name": "Reset data values", "type": "value", "value": "data.padiVerified = undefined;\ndata.user_exists = undefined;"
+                        }
+                        ]
+                    }
+                    ],
+                    "type":"button",
+                    "input":true,
+                    "validate": {
+                        "unique": false, "multiple": false
+                    }
+                    ,
+                    "event":"resetPADI",
+                    "hideOnChildrenHidden":false
                 }
                 ,
                 {
@@ -581,19 +633,19 @@
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
                         "label":"Address 2",
-                        "key":"address2",
                         "placeholder":"Address 2",
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "tableView":true,
                         "validate": {
                             "unique": false, "multiple": false
                         }
                         ,
+                        "key":"address2",
                         "type":"textfield",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -610,7 +662,6 @@
                         "hideLabel":true,
                         "spellcheck":true,
                         "tableView":true,
-                        "clearOnHide":false,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
@@ -692,7 +743,6 @@
                         ,
                         "template":"<span>{{ item }}</span>",
                         "selectThreshold":0.3,
-                        "clearOnHide":false,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
@@ -1165,19 +1215,20 @@
             ,
             {
                 "components":[ {
-                    "input":true,
-                    "tableView":true,
                     "label":"Fax",
-                    "key":"fax",
                     "placeholder":"Fax",
+                    "hideLabel":true,
+                    "spellcheck":true,
+                    "tableView":true,
                     "validate": {
                         "unique": false, "multiple": false
                     }
                     ,
-                    "type":"phoneNumber",
-                    "lockKey":true,
-                    "hideLabel":true,
                     "errorLabel":"Please enter a valid Fax number",
+                    "key":"fax",
+                    "type":"phoneNumber",
+                    "input":true,
+                    "lockKey":true,
                     "hideOnChildrenHidden":false
                 }
                 ,
@@ -1239,7 +1290,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":208,
+    "_vid":212,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -1255,7 +1306,7 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-03-02T20:23:49.911Z",
+    "modified":"2020-03-06T10:14:48.210Z",
     "machineName":"testdivehub:padiVerificationForm",
     "controller":""
 }
