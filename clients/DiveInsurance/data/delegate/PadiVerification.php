@@ -36,7 +36,7 @@ class PadiVerification extends AbstractAppDelegate
                 $response[] = $result->current();
             }
             $returnArray = array_merge($data,$response[0]);
-            if(isset($response[0]['firstname']) && (!isset($response[0]['business_name']) || $response[0]['business_name'] == '')){
+            if(isset($response[0]['firstname']) && (!isset($response[0]['business_name']) || ($response[0]['business_name'] == '') || ($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ))){
                 $returnArray['business_name'] = isset($data['business_name']) ? $data['business_name'] : "";
                 $returnArray['padiVerified'] = true;
             }else if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
@@ -46,7 +46,7 @@ class PadiVerification extends AbstractAppDelegate
                 $returnArray['businessPadiVerified'] = true;
                 $returnArray['padiVerified'] = true;
             }else{
-                $returnArray['businessPadiVerified'] = fasle;
+                $returnArray['businessPadiVerified'] = false;
             }
             if(isset($data['product'])){
                 if(($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (!isset($response[0]['firstname']) || $response[0]['firstname'] == '')){

@@ -91,7 +91,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_17xyewr" sourceRef="Task_0rtdhn2" targetRef="Task_1mka1rj" />
     <bpmn:sequenceFlow id="SequenceFlow_0d6flow" name="Approved" sourceRef="Task_1s7qzh3" targetRef="ExclusiveGateway_12lkytx">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true || approved == "true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Task_1s7qzh3" name="CSR Review" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR group">
       <bpmn:extensionElements>
@@ -102,8 +102,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
           <camunda:property name="template" value="iplCsrReview" />
         </camunda:properties>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable('CSRReviewRequired', false)
-</camunda:script>
+          <camunda:script scriptFormat="groovy">execution.setVariable('CSRReviewRequired', false)</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0gvf8c9</bpmn:incoming>
@@ -163,7 +162,7 @@ execution.setVariable('CSRReviewRequired', result3)</camunda:script>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_199pho8" name="Rejected" sourceRef="Task_1s7qzh3" targetRef="Task_1g3m6bq">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false || approved == "false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Task_1g3m6bq" name="CSR Cancel policy Mail" camunda:expression="0">
       <bpmn:extensionElements>

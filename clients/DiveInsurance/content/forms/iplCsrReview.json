@@ -2858,6 +2858,7 @@
                                     "valueProperty": "country",
                                     "template": "<span>{{ item.country }}</span>",
                                     "selectThreshold": 0.3,
+                                    "clearOnHide": false,
                                     "validate": {
                                         "required": true,
                                         "unique": false,
@@ -2890,6 +2891,7 @@
                                     },
                                     "template": "<span>{{ item }}</span>",
                                     "selectThreshold": 0.3,
+                                    "clearOnHide": false,
                                     "validate": {
                                         "unique": false,
                                         "multiple": false
@@ -2933,11 +2935,11 @@
                                 "pull": 0
                             }, {
                                 "components": [{
-                                    "input": true,
-                                    "tableView": true,
                                     "label": "Select",
-                                    "key": "businessRelation",
+                                    "widget": "choicesjs",
                                     "placeholder": "Business Relation",
+                                    "hideLabel": true,
+                                    "tableView": true,
                                     "data": {
                                         "values": [{
                                             "value": "Dive Store Owner",
@@ -2959,32 +2961,38 @@
                                             "label": "Other"
                                         }]
                                     },
+                                    "selectThreshold": 0.3,
+                                    "clearOnHide": false,
                                     "validate": {
                                         "required": true,
                                         "unique": false,
                                         "multiple": false
                                     },
+                                    "key": "businessRelation",
                                     "type": "select",
-                                    "hideLabel": true,
+                                    "input": true,
                                     "lockKey": true,
                                     "hideOnChildrenHidden": false
                                 }, {
-                                    "input": true,
-                                    "tableView": true,
                                     "label": "Please mention the same:",
-                                    "key": "businessRelationOther",
                                     "placeholder": "Please mention the same:",
+                                    "hideLabel": true,
                                     "spellcheck": true,
+                                    "tableView": true,
+                                    "clearOnHide": false,
                                     "validate": {
-                                        "required": true
+                                        "required": true,
+                                        "unique": false,
+                                        "multiple": false
                                     },
+                                    "key": "businessRelationOther",
                                     "conditional": {
-                                        "show": "true",
+                                        "show": true,
                                         "when": "businessRelation",
                                         "eq": "other"
                                     },
                                     "type": "textfield",
-                                    "hideLabel": true,
+                                    "input": true,
                                     "lockKey": true,
                                     "hideOnChildrenHidden": false
                                 }],
@@ -3000,21 +3008,22 @@
                                 "multiple": false
                             }
                         }, {
-                            "input": true,
-                            "tableView": true,
                             "label": "Additional Information",
-                            "key": "additionalInformation",
                             "placeholder": "Additional Information",
-                            "clearOnHide": false,
+                            "autoExpand": false,
+                            "hideLabel": true,
                             "spellcheck": false,
+                            "tableView": true,
+                            "inputFormat": "plain",
+                            "clearOnHide": false,
                             "validate": {
                                 "unique": false,
                                 "multiple": false
                             },
+                            "key": "additionalInformation",
                             "type": "textarea",
-                            "inputFormat": "plain",
-                            "lockKey": true,
-                            "hideLabel": true
+                            "input": true,
+                            "lockKey": true
                         }],
                         "inDataGrid": true,
                         "hideLabel": true,
@@ -3130,11 +3139,11 @@
                 "autofocus": true,
                 "tableView": true,
                 "values": [{
-                    "value": "true",
+                    "value": "accepted",
                     "label": "Approved",
                     "shortcut": ""
                 }, {
-                    "value": "false",
+                    "value": "rejected",
                     "label": "Rejected",
                     "shortcut": ""
                 }],
@@ -3165,6 +3174,7 @@
             "spellcheck": true,
             "tableView": true,
             "inputFormat": "plain",
+            "clearOnHide": false,
             "validate": {
                 "required": true,
                 "customMessage": "Please Provide the reason for Rejecting the Policy",
@@ -3175,7 +3185,7 @@
             "conditional": {
                 "show": true,
                 "when": "approved",
-                "eq": "false"
+                "eq": "rejected"
             },
             "type": "textarea",
             "input": true,
@@ -3202,7 +3212,7 @@
         }
     }],
     "revisions": "current",
-    "_vid": 167,
+    "_vid": 175,
     "title": "IPL - CSR Review",
     "display": "form",
     "access": [{
@@ -3219,7 +3229,7 @@
     "path": "iplcsrreview",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-01T11:17:41.957Z",
-    "modified": "2020-03-05T08:00:11.359Z",
+    "modified": "2020-03-06T14:03:06.943Z",
     "machineName": "testdivehub:iplCsrReview",
     "controller": ""
 }

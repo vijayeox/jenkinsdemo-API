@@ -950,9 +950,6 @@
         "collapsible": false,
         "tableView": false,
         "key": "page3",
-        "properties": {
-            "delegate": "EndorsementRatecard"
-        },
         "conditional": {
             "show": true,
             "when": "endorsement_options",
@@ -2326,6 +2323,24 @@
                     "theme": "primary",
                     "tableView": false,
                     "components": [{
+                        "label": "Data Grid",
+                        "disableAddingRemovingRows": false,
+                        "reorder": false,
+                        "addAnother": "Add More",
+                        "addAnotherPosition": "bottom",
+                        "defaultOpen": false,
+                        "layoutFixed": false,
+                        "enableRowGroups": false,
+                        "hideLabel": true,
+                        "tableView": true,
+                        "clearOnHide": false,
+                        "validate": {
+                            "minLength": 0,
+                            "unique": false,
+                            "multiple": false
+                        },
+                        "key": "additionalInsured",
+                        "type": "datagrid",
                         "input": true,
                         "components": [{
                             "title": " ",
@@ -2649,22 +2664,9 @@
                                 "multiple": false
                             }
                         }],
-                        "tableView": true,
-                        "label": "Data Grid",
-                        "key": "additionalInsured",
-                        "type": "datagrid",
-                        "addAnotherPosition": "bottom",
-                        "hideLabel": true,
                         "lockKey": true,
-                        "validate": {
-                            "minLength": 0,
-                            "unique": false,
-                            "multiple": false
-                        },
                         "condensed": true,
-                        "hover": false,
-                        "addAnother": "Add More",
-                        "clearOnHide": false
+                        "hover": false
                     }],
                     "type": "panel",
                     "conditional": {
@@ -2716,14 +2718,8 @@
         "collapsible": false,
         "tableView": false,
         "key": "page6",
-        "customConditional": "show = ((data['endorsement_options'].modify_coverage == 'true' || data['endorsement_options'].modify_coverage == true ) && data['endorsementTotal'] > 0);",
-        "conditional": {
-            "show": true,
-            "when": "endorsement_options",
-            "eq": "modify_coverage"
-        },
         "type": "panel",
-        "label": "A",
+        "label": "Approval",
         "breadcrumb": "none",
         "components": [{
             "input": true,
@@ -2824,11 +2820,11 @@
                 "tableView": false,
                 "values": [{
                     "label": "Approved",
-                    "value": "true",
+                    "value": "accepted",
                     "shortcut": ""
                 }, {
                     "label": "Rejected",
-                    "value": "false",
+                    "value": "rejected",
                     "shortcut": ""
                 }],
                 "clearOnHide": false,
@@ -2856,7 +2852,7 @@
                 "conditional": {
                     "show": true,
                     "when": "approved",
-                    "eq": "false"
+                    "eq": "rejected"
                 },
                 "type": "textarea",
                 "input": true
@@ -2900,6 +2896,6 @@
     "path": "iplendorcsrwithoutpayment",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-02-20T06:27:49.035Z",
-    "modified": "2020-03-05T12:09:53.786Z",
+    "modified": "2020-03-06T13:53:47.177Z",
     "machineName": "testdivehub:iplEndorCsrWithoutPayment1"
 }
