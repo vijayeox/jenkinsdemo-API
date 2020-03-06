@@ -41,13 +41,18 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
         $data['previous_PropTax'] = $data['PropTax'];
         $data['previous_LiaTax'] = $data['LiaTax'];
         $data['previous_AddILocPremium'] = $data['AddILocPremium'];
-         $data['previous_AddILocTax'] = $data['AddILocTax'];
+        $data['previous_AddILocTax'] = $data['AddILocTax'];
         $data['previous_groupProfessionalLiability'] = $data['groupProfessionalLiability'];
         $data['previous_padiFeePL'] = $data['padiFeePL'];
         $data['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
         $data['previous_PAORFee'] = $data['PAORFee'];
         $data['previous_totalAmount'] = $data['totalAmount'];
 
+
+        $data['previous_groupTaxAmount'] = $data['groupTaxAmount'];
+        $data['previous_groupPadiFeeAmount'] = $data['groupPadiFeeAmount'];
+        $data['previous_groupPAORfee'] = $data['groupPAORfee'];
+        $data['previous_groupTotalAmount'] = $data['groupTotalAmount'];
 
 
         $data['update_date'] = $data['update_date'];        
