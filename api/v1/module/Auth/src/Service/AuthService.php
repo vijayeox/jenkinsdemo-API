@@ -4,6 +4,7 @@ namespace Auth\Service;
 use Exception;
 use function GuzzleHttp\json_decode;
 use Oxzion\Service\AbstractService;
+use Oxzion\Utils\ArrayUtils;
 
 class AuthService extends AbstractService
 {
@@ -78,11 +79,12 @@ class AuthService extends AbstractService
 
     private function storeCacheData($data, $params, $rawData)
     {
-        if (isset($params['user']['username'])) {
+        if (is_array($params['user']) && ArrayUtils::isKeyDefined($params['user'], 'username')) {
             $user = $this->userService->getUserDetailsbyUserName($params['user']['username']);
-        }
-        if (isset($params['username'])) {
+        } elseif (ArrayUtils::isKeyDefined($params, 'username')) {
             $user = $this->userService->getUserDetailsbyUserName($params['username']);
+        } else {
+            throw new Exception("username is required", 1);
         }
         if (!isset($user)) {
             throw new Exception("Cache Creation Failed", 1);

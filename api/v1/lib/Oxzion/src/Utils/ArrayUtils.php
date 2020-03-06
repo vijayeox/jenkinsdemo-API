@@ -42,4 +42,14 @@ class ArrayUtils
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
+
+    public static function isKeyDefined($arr = array(),...$params)
+	{
+		foreach ($params as $key => $value) {
+			if(!isset($arr[$value]) || empty($arr[$value])) {
+				return false;
+			} 
+		}
+    	return true; 
+	}
 }
