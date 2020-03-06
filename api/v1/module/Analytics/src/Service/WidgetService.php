@@ -259,8 +259,12 @@ class WidgetService extends AbstractService
         }
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');
+        $filter = null;
         if(isset($params['data'])) {
-            $data = $this->queryService->runMultipleQueries($uuidList);
+            if (isset($params['filter'])) {
+                $filter = $params['filter'];
+            }
+            $data = $this->queryService->runMultipleQueries($uuidList,$filter);
 
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];
