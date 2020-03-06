@@ -58,6 +58,12 @@ class PocketCard extends PolicyDocument
             if($data['pocketCardProductType']['emergencyFirstResponse']){
                 $filter[] = array("field" => "product", "operator" => "eq", "value" => "Emergency First Response");
             }
+            if($data['pocketCardProductType']['diveBoat']){
+                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Boat");
+            }
+            if($data['pocketCardProductType']['diveStore']){
+                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Store");
+            }
             $filterParams = array(array("filter" => array("logic" => "OR", "filters" => $filter)));
             $files = $this->getFileList($params, $filterParams);
         }
@@ -84,7 +90,7 @@ class PocketCard extends PolicyDocument
             $newData[$key]['state'] = $value['state'];
             $newData[$key]['zip'] = $value['zip'];
             $newData[$key]['entity_name'] = 'Pocket Card Job';
-            if(isset($value['business_name'])){
+            if($value['business_name'] && isset($value['business_name'])){
                 $newData[$key]['business_name'] = $value['business_name'];
             }
         }

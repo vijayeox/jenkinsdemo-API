@@ -91,6 +91,7 @@
 				"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 				"widget": {
 					"type": "calendar",
+					"displayInTimezone": "viewer",
 					"language": "en",
 					"useLocaleSettings": false,
 					"allowInput": true,
@@ -132,6 +133,7 @@
 				"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 				"widget": {
 					"type": "calendar",
+					"displayInTimezone": "viewer",
 					"language": "en",
 					"useLocaleSettings": false,
 					"allowInput": true,
@@ -178,6 +180,14 @@
 			"label": "Emergency First Response",
 			"value": "emergencyFirstResponse",
 			"shortcut": ""
+		}, {
+			"label": "Dive Boat",
+			"value": "diveBoat",
+			"shortcut": ""
+		}, {
+			"label": "Dive Store",
+			"value": "diveStore",
+			"shortcut": ""
 		}],
 		"validate": {
 			"unique": false,
@@ -211,8 +221,8 @@
 		}
 	}],
 	"controller": "",
-	"revisions": "",
-	"_vid": 0,
+	"revisions": "original",
+	"_vid": 3,
 	"title": "Pocket Card",
 	"display": "form",
 	"access": [{
@@ -228,6 +238,6 @@
 	"path": "pocketcard",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-22T13:47:45.298Z",
-	"modified": "2020-02-11T06:35:52.792Z",
+	"modified": "2020-03-06T10:26:07.090Z",
 	"machineName": "testdivehub:pocketCard"
 }
