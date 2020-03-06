@@ -1,0 +1,46 @@
+ox_widget_query:
+  -
+    ox_query_id: 111
+    ox_widget_id: 111
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 112
+    ox_widget_id: 112
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 111
+    ox_widget_id: 112
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 111
+    ox_widget_id: 113
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 112
+    ox_widget_id: 113
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 114
+    ox_widget_id: 114
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 115
+    ox_widget_id: 114
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 114
+    ox_widget_id: 115
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 115
+    ox_widget_id: 115
+    sequence: 1
+    configuration: "Sample"

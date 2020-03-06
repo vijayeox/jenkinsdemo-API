@@ -21,53 +21,11 @@ class WidgetControllerTest extends ControllerTest
         $this->loadConfig();
         parent::setUp();
         $config = $this->getApplicationConfig();
-        if (isset($config['elasticsearch']['core'])) {
-            $this->index_pre = $config['elasticsearch']['core'].'_';
-        } else {
-            $this->index_pre = '';
-        }
     }
 
     public function tearDown()  : void {
         parent::tearDown();
         Mockery::close();
-    }
-
-    public function createIndex($indexer, $body)
-    {
-        $entity_name = 'test';
-        $app_name = $body['app_name'];
-        $id = $body['id'];
-        $return=$indexer->index($app_name, $id, $entity_name, $body);
-    }
-
-
-
-    private function setMockData($input,$output)
-    {
-            $mock =  Mockery::mock('overload:Elasticsearch\ClientBuilder');
-            $mock->shouldReceive('create')
-            ->once()
-            ->andReturn(0);
-            $mock->shouldReceive('search')
-            ->once()
-            ->with($input)
-            ->andReturn($output);
-    }
-
-    public function setElasticData()
-    {
-        $parser = new SymfonyYamlParser();
-        $eDataset = $parser->parseYaml(dirname(__FILE__)."/../Dataset/Elastic.yml");
-        $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
- //       $indexer->delete('sampleapp_index', 'all');
- //       $indexer->delete('crm_index', 'all');
- //       $indexer->delete('diveinsurance', 'all');
-        $dataset = $eDataset['ox_elastic'];
-        foreach ($dataset as $body) {
-            $this->createIndex($indexer, $body);
-        }
-        sleep(2);
     }
 
     public function getDataSet()
@@ -262,96 +220,6 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['widget']['ispublic'],1);
     }
 
-
-    public function testGetWithData() {
-        if (enableElastic!=0) {
-            $this->setElasticData();
-        } else {
-           $input =  json_decode('{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
-           $output = json_decode('{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]}}',true);
-           $this->setMockData($input,$output);
-        }
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget/0e57b45f-5938-4e26-acd8-d65fb89e8503?data=true', 'GET');
-
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['widget']['data'], 3);
-    }
-
-    public function testGetWithCombinedData() {
-        if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
-        }
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['widget']['data'][0]['field3'],"cfield3text");
-        $this->assertEquals($content['data']['widget']['data'][0]['field5'],35);
-        $this->assertEquals($content['data']['widget']['data'][0]['field6'],45);
-        $this->assertEquals($content['data']['widget']['data'][1]['field3'],"cfield5text");
-        $this->assertEquals($content['data']['widget']['data'][1]['field5'],40);
-        $this->assertEquals($content['data']['widget']['data'][1]['field6'],70);
-    }
-
-    public function testGetWithCombinedSingleData() {
-        if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
-        }
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget/11e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['widget']['data'][0]['q1'],"3");
-        $this->assertEquals($content['data']['widget']['data'][0]['q2'],"3");
-    }
-
-
-    public function testGetWithExpressionData() {
-        if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
-        }
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget/41e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['widget']['data'][0]['field3'],"cfield3text");
-        $this->assertEquals($content['data']['widget']['data'][0]['field5'],35);
-        $this->assertEquals($content['data']['widget']['data'][0]['field6'],45);
-        $this->assertEquals($content['data']['widget']['data'][0]['calcfield1'],12.86);
-        $this->assertEquals($content['data']['widget']['data'][0]['calcfield2'],10);
-        $this->assertEquals($content['data']['widget']['data'][1]['field3'],"cfield5text");
-        $this->assertEquals($content['data']['widget']['data'][1]['field5'],40);
-        $this->assertEquals($content['data']['widget']['data'][1]['field6'],70);
-        $this->assertEquals($content['data']['widget']['data'][1]['calcfield1'],60);
-        $this->assertEquals($content['data']['widget']['data'][1]['calcfield2'],30);
-        
-    }
-
-
-    public function testGetWithSingleExpressionData() {
-        if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
-        }
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget/66e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['widget']['data'][0]['q1'],"3");
-        $this->assertEquals($content['data']['widget']['data'][0]['q2'],"3");
-        $this->assertEquals($content['data']['widget']['data'][0]['sum'],"6");
-    }
 
 
     public function testGetWithConfig() {
