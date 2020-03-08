@@ -10,7 +10,7 @@ class RenewalRateCard extends RateCard
     public function __construct()
     {
         parent::__construct();
-        $this->unsetVariables = array('Individual Professional Liability' => array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents'));
+        $this->unsetVariables = array('Individual Professional Liability' => array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents','autoRenewalJob'));
         $this->coverages = array('Individual Professional Liability' => array('careerCoveragePrice'=>'careerCoverage','scubaFitPrice'=>'scubaFit','equipmentPrice'=>'equipment','cylinderPrice'=>'cylinder','excessLiabilityPrice'=>'excessLiability'));
     }
 

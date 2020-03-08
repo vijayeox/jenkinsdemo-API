@@ -311,6 +311,14 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
     form.on("resetPADI", changed => {
+      setTimeout(function() {
+        var padiField = $("input[name='data[padi]']");
+        padiField.keyup(function(e) {
+          if (e.keyCode === 13) {
+            $("button[name='data[validatePADIButton]']").trigger("click");
+          }
+        });
+      }, 500);
       form.triggerChange();
     });
   });

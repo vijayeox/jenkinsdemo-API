@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_16vqq5z" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_16vqq5z" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
   <bpmn:process id="Process_1mgkvtn" isExecutable="true">
     <bpmn:endEvent id="EndEvent_0rxtnh7" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_0yz4jp1</bpmn:incoming>
@@ -111,7 +111,12 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
           <camunda:script scriptFormat="groovy">execution.setVariable("policyStatus","Rejected")</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
-          <camunda:inputParameter name="commands" />
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate" : "CsrRejection"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0y308ra</bpmn:incoming>

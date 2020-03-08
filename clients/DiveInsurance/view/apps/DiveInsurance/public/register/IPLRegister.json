@@ -30,7 +30,8 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "hideOnChildrenHidden":false
+                    "hideOnChildrenHidden":false,
+                    "hideLabel":true
                 }
                 ],
                 "width":6,
@@ -60,7 +61,8 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "hideOnChildrenHidden":false
+                    "hideOnChildrenHidden":false,
+                    "hideLabel":true
                 }
                 ],
                 "width":4,
@@ -81,7 +83,9 @@
             "path":"columns2"
         }
         ],
-        "path":"html1"
+        "path":"html1",
+        "clearOnHide":false,
+        "hideLabel":true
     }
     ,
     {
@@ -117,6 +121,25 @@
                     }
                     ,
                     "key":"padi",
+                    "logic":[ {
+                        "name":"Check PADI Verified",
+                        "trigger": {
+                            "type":"javascript",
+                            "javascript":"if (\n  data[\"padiVerified\"] == true &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  result = true;\n} else {\n  result = false;\n}"
+                        }
+                        ,
+                        "actions":[ {
+                            "name":"Disable editing",
+                            "type":"property",
+                            "property": {
+                                "label": "Disabled", "value": "disabled", "type": "boolean"
+                            }
+                            ,
+                            "state":true
+                        }
+                        ]
+                    }
+                    ],
                     "type":"number",
                     "decimalLimit":0,
                     "input":true,
@@ -157,6 +180,7 @@
                         "commands":"{\"commands\":[{\"command\":\"verify_user\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]}"
                     }
                     ,
+                    "customConditional":"if (\n  data[\"padiVerified\"] == true &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  show = false;\n} else {\n  show = true;\n}",
                     "overlay": {
                         "style": "text-align:center"
                     }
@@ -169,6 +193,38 @@
                     "validate": {
                         "unique": false, "multiple": false
                     }
+                }
+                ,
+                {
+                    "label":"Change PADI Number",
+                    "action":"event",
+                    "showValidations":false,
+                    "theme":"warning",
+                    "shortcut":"Enter",
+                    "customClass":"alignCenter",
+                    "tableView":false,
+                    "key":"changePadi",
+                    "customConditional":"if (\n  data[\"padiVerified\"] == true &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
+                    "logic":[ {
+                        "name":"Reset PADI",
+                        "trigger": {
+                            "type": "event", "event": "resetPADI"
+                        }
+                        ,
+                        "actions":[ {
+                            "name": "Reset data values", "type": "value", "value": "data.padiVerified = undefined;\ndata.user_exists = undefined;"
+                        }
+                        ]
+                    }
+                    ],
+                    "type":"button",
+                    "input":true,
+                    "validate": {
+                        "unique": false, "multiple": false
+                    }
+                    ,
+                    "event":"resetPADI",
+                    "hideOnChildrenHidden":false
                 }
                 ,
                 {
@@ -247,7 +303,8 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "hideOnChildrenHidden":false
+                    "hideOnChildrenHidden":false,
+                    "hideLabel":true
                 }
                 ,
                 {
@@ -398,27 +455,13 @@
         }
         ,
         {
-            "input":true,
-            "tableView":true,
-            "key":"orgId",
-            "label":"orgId",
-            "type":"hidden",
-            "lockKey":true,
-            "defaultValue":"f0033dc0-126b-40ba-89e0-d3061bdeda4c",
-            "validate": {
+            "label": "orgId", "calculateValue": "value =  \"f0033dc0-126b-40ba-89e0-d3061bdeda4c\";", "key":"orgId", "type":"hidden", "input":true, "tableView":true, "lockKey":true, "validate": {
                 "unique": false, "multiple": false
             }
         }
         ,
         {
-            "input":true,
-            "tableView":true,
-            "key":"page",
-            "label":"page",
-            "type":"hidden",
-            "defaultValue":"1",
-            "lockKey":true,
-            "validate": {
+            "label": "page", "customDefaultValue": "value = \"1\";", "key":"page", "type":"hidden", "input":true, "tableView":true, "lockKey":true, "validate": {
                 "unique": false, "multiple": false
             }
         }
@@ -581,19 +624,19 @@
                     }
                     ,
                     {
-                        "input":true,
-                        "tableView":true,
                         "label":"Address 2",
-                        "key":"address2",
                         "placeholder":"Address 2",
+                        "hideLabel":true,
                         "spellcheck":true,
+                        "tableView":true,
                         "validate": {
                             "unique": false, "multiple": false
                         }
                         ,
+                        "key":"address2",
                         "type":"textfield",
+                        "input":true,
                         "lockKey":true,
-                        "hideLabel":true,
                         "hideOnChildrenHidden":false
                     }
                     ],
@@ -610,7 +653,6 @@
                         "hideLabel":true,
                         "spellcheck":true,
                         "tableView":true,
-                        "clearOnHide":false,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
@@ -692,7 +734,6 @@
                         ,
                         "template":"<span>{{ item }}</span>",
                         "selectThreshold":0.3,
-                        "clearOnHide":false,
                         "validate": {
                             "required": true, "unique": false, "multiple": false
                         }
@@ -782,8 +823,7 @@
                                 "type":"textfield",
                                 "input":true,
                                 "lockKey":true,
-                                "hideOnChildrenHidden":false,
-                                "isNew":false
+                                "hideOnChildrenHidden":false
                             }
                             ,
                             {
@@ -1064,7 +1104,8 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "path":"columns"
+                    "path":"columns",
+                    "hideLabel":true
                 }
                 ,
                 {
@@ -1154,7 +1195,8 @@
                         "unique": false, "multiple": false
                     }
                     ,
-                    "path":"columns1"
+                    "path":"columns1",
+                    "hideLabel":true
                 }
                 ],
                 "width":6,
@@ -1165,19 +1207,20 @@
             ,
             {
                 "components":[ {
-                    "input":true,
-                    "tableView":true,
                     "label":"Fax",
-                    "key":"fax",
                     "placeholder":"Fax",
+                    "hideLabel":true,
+                    "spellcheck":true,
+                    "tableView":true,
                     "validate": {
                         "unique": false, "multiple": false
                     }
                     ,
-                    "type":"phoneNumber",
-                    "lockKey":true,
-                    "hideLabel":true,
                     "errorLabel":"Please enter a valid Fax number",
+                    "key":"fax",
+                    "type":"phoneNumber",
+                    "input":true,
+                    "lockKey":true,
                     "hideOnChildrenHidden":false
                 }
                 ,
@@ -1239,7 +1282,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":208,
+    "_vid":215,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -1255,7 +1298,7 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-03-02T20:23:49.911Z",
+    "modified":"2020-03-06T12:26:50.195Z",
     "machineName":"testdivehub:padiVerificationForm",
     "controller":""
 }

@@ -56,6 +56,17 @@ return [
                     ],
                 ],
             ],
+            'paymentcallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/fortewebhook/callback',
+                    'defaults' => [
+                        'controller' => Controller\PaymentCallbackController::class,
+                        'method' => 'POST',
+                        'action' => 'forteWebhookCallback'
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

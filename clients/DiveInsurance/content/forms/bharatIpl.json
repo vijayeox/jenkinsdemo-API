@@ -137,6 +137,25 @@
                             }
                             ]
                         }
+                        ,
+                        {
+                            "name":"Check PADI Verified",
+                            "trigger": {
+                                "type":"javascript",
+                                "javascript":"if(\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\")){\n    result = true;\n  } else {\n    result = false;\n  }"
+                            }
+                            ,
+                            "actions":[ {
+                                "name":"Disable",
+                                "type":"property",
+                                "property": {
+                                    "label": "Disabled", "value": "disabled", "type": "boolean"
+                                }
+                                ,
+                                "state":true
+                            }
+                            ]
+                        }
                         ],
                         "type":"number",
                         "decimalLimit":0,
@@ -354,27 +373,80 @@
                 ,
                 {
                     "components":[ {
-                        "input":true,
+                        "label":"HTML",
+                        "attrs":[ {
+                            "attr": "", "value": ""
+                        }
+                        ],
+                        "content":"<style>\n  .alignCenter{\n    text-align:center\n  }\n</style>",
+                        "refreshOnChange":false,
+                        "tableView":false,
+                        "key":"html",
+                        "type":"htmlelement",
+                        "input":false,
+                        "validate": {
+                            "unique": false, "multiple": false
+                        }
+                        ,
+                        "hideOnChildrenHidden":false
+                    }
+                    ,
+                    {
                         "label":"Validate PADI Membership",
+                        "action":"event",
+                        "showValidations":false,
+                        "theme":"success",
+                        "customClass":"alignCenter",
                         "tableView":false,
                         "key":"panelColumnsValidatePadiMembership",
-                        "action":"event",
-                        "theme":"success",
-                        "type":"button",
                         "properties": {
                             "commands":"[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
                         }
                         ,
-                        "event":"callPipeline",
-                        "lockKey":true,
+                        "customConditional":"if(\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\")){\n    show = false;\n  } else {\n    show = true;\n  }",
                         "overlay": {
                             "style": "text-align:center"
                         }
                         ,
+                        "type":"button",
+                        "event":"callPipeline",
+                        "input":true,
+                        "lockKey":true,
                         "hideOnChildrenHidden":false,
                         "validate": {
                             "unique": false, "multiple": false
                         }
+                    }
+                    ,
+                    {
+                        "label":"Change PADI Number",
+                        "action":"event",
+                        "showValidations":false,
+                        "theme":"warning",
+                        "customClass":"alignCenter",
+                        "tableView":false,
+                        "key":"changePadi",
+                        "customConditional":"if (\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\") &&\n  (data.disableUserInfoEdit == false || data.disableUserInfoEdit == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
+                        "logic":[ {
+                            "name":"Event Handler",
+                            "trigger": {
+                                "type": "event", "event": "triggerFormChange"
+                            }
+                            ,
+                            "actions":[ {
+                                "name": "Reset Form", "type": "value", "value": "data.padiVerified = undefined;\ndata.verified = undefined;\ndata.policy_exists = undefined;\ndata.padiNotFound = undefined;"
+                            }
+                            ]
+                        }
+                        ],
+                        "type":"button",
+                        "event":"triggerFormChange",
+                        "input":true,
+                        "validate": {
+                            "unique": false, "multiple": false
+                        }
+                        ,
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -392,6 +464,8 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
+                ,
+                "path":"panelPanel2Columns"
             }
             ],
             "validate": {
@@ -415,6 +489,7 @@
                         "label":"First Name",
                         "placeholder":"First Name",
                         "hideLabel":true,
+                        "autofocus":true,
                         "spellcheck":true,
                         "disabled":true,
                         "tableView":false,
@@ -1168,6 +1243,7 @@
                 "widget":"choicesjs",
                 "placeholder":"Select a Policy Period",
                 "hideLabel":true,
+                "autofocus":true,
                 "tableView":false,
                 "dataSrc":"custom",
                 "data": {
@@ -1647,15 +1723,16 @@
                         }
                         ,
                         {
+                            "label":"withTecRecEndorsementForSelectionAbove",
+                            "defaultValue":"0",
+                            "persistent":false,
+                            "protected":true,
+                            "customDefaultValue":"value = \"0.00\"",
+                            "key":"withTecRecEndorsementForSelectionAbove",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"withTecRecEndorsementForSelectionAbove",
-                            "label":"withTecRecEndorsementForSelectionAbove",
-                            "protected":true,
-                            "persistent":false,
-                            "type":"hidden",
                             "lockKey":true,
-                            "defaultValue":"0",
                             "hideOnChildrenHidden":false,
                             "validate": {
                                 "unique": false, "multiple": false
@@ -1663,15 +1740,16 @@
                         }
                         ,
                         {
+                            "label":"withTecRecEndorsementForSelectionAboveDeclined",
+                            "defaultValue":"0",
+                            "persistent":false,
+                            "protected":true,
+                            "customDefaultValue":"value = \"0.00\"",
+                            "key":"withTecRecEndorsementForSelectionAboveDeclined",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"withTecRecEndorsementForSelectionAboveDeclined",
-                            "label":"withTecRecEndorsementForSelectionAboveDeclined",
-                            "protected":true,
-                            "persistent":false,
-                            "type":"hidden",
                             "lockKey":true,
-                            "defaultValue":"0",
                             "hideOnChildrenHidden":false,
                             "validate": {
                                 "unique": false, "multiple": false
@@ -1788,13 +1866,14 @@
                         }
                         ,
                         {
+                            "label":"scubaFitInstructorDeclined",
+                            "defaultValue":"0.00",
+                            "customDefaultValue":"value = \"0.00\"",
+                            "key":"scubaFitInstructorDeclined",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"scubaFitInstructorDeclined",
-                            "label":"scubaFitInstructorDeclined",
-                            "type":"hidden",
                             "lockKey":true,
-                            "defaultValue":"0.00",
                             "hideOnChildrenHidden":false,
                             "validate": {
                                 "unique": false, "multiple": false
@@ -1946,13 +2025,14 @@
                         }
                         ,
                         {
+                            "label":"cylinderInspectorOrInstructorDeclined",
+                            "defaultValue":"0.00",
+                            "customDefaultValue":"value = \"0.00\"",
+                            "key":"cylinderInspectorOrInstructorDeclined",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"cylinderInspectorOrInstructorDeclined",
-                            "label":"cylinderInspectorOrInstructorDeclined",
-                            "type":"hidden",
                             "lockKey":true,
-                            "defaultValue":"0.00",
                             "hideOnChildrenHidden":false,
                             "validate": {
                                 "unique": false, "multiple": false
@@ -2069,13 +2149,14 @@
                         }
                         ,
                         {
+                            "label":"equipmentLiabilityCoverageDeclined",
+                            "defaultValue":"0",
+                            "customDefaultValue":"value = \"0.00\"",
+                            "key":"equipmentLiabilityCoverageDeclined",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"equipmentLiabilityCoverageDeclined",
-                            "label":"equipmentLiabilityCoverageDeclined",
-                            "type":"hidden",
                             "lockKey":true,
-                            "defaultValue":"0",
                             "hideOnChildrenHidden":false,
                             "validate": {
                                 "unique": false, "multiple": false
@@ -2262,13 +2343,14 @@
                         }
                         ,
                         {
+                            "label":"excessLiabilityCoverageDeclined",
+                            "defaultValue":"0",
+                            "customDefaultValue":"value = \"0.00\"",
+                            "key":"excessLiabilityCoverageDeclined",
+                            "type":"hidden",
                             "input":true,
                             "tableView":true,
-                            "key":"excessLiabilityCoverageDeclined",
-                            "label":"excessLiabilityCoverageDeclined",
-                            "type":"hidden",
                             "lockKey":true,
-                            "defaultValue":"0",
                             "hideOnChildrenHidden":false,
                             "validate": {
                                 "unique": false, "multiple": false
@@ -2348,7 +2430,7 @@
                             ,
                             {
                                 "components":[ {
-                                    "label": "Total Price", "placeholder": "0.00", "prefix": "$", "hideLabel": true, "mask": false, "spellcheck": true, "tableView": true, "defaultValue": "0.00", "delimiter": false, "requireDecimal": true, "inputFormat": "plain", "clearOnHide": false, "calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);", "validate": {
+                                    "label": "Total Price", "placeholder": "0.00", "prefix": "$", "hideLabel": true, "mask": false, "spellcheck": true, "disabled": true, "tableView": true, "defaultValue": "0.00", "delimiter": false, "requireDecimal": true, "inputFormat": "plain", "clearOnHide": false, "calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);", "validate": {
                                         "multiple": false, "unique": false
                                     }
                                     ,
@@ -2426,7 +2508,7 @@
                 }
                 ,
                 {
-                    "label": "attachmentFields", "customDefaultValue": "value = [\"attachments\"];", "key":"attachmentsFieldnames", "type":"hidden", "input":true, "tableView":false, "validate": {
+                    "label": "attachmentFields", "calculateValue": "value = [\"attachments\"];", "key":"attachmentsFieldnames", "type":"hidden", "input":true, "tableView":false, "validate": {
                         "unique": false, "multiple": false
                     }
                 }
@@ -2751,6 +2833,7 @@
                                     "label":"Name of person injured",
                                     "placeholder":"Name of person injured",
                                     "hideLabel":true,
+                                    "autofocus":true,
                                     "spellcheck":true,
                                     "tableView":true,
                                     "validate": {
@@ -3853,7 +3936,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":584,
+    "_vid":591,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3875,7 +3958,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-03-02T21:31:11.721Z",
+    "modified":"2020-03-06T10:53:54.599Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

@@ -152,7 +152,7 @@
                   "hideOnChildrenHidden": false
                 },
                 {
-                  "label": "disableUserInfoEditing",
+                  "label": "disableUserInfoEdit",
                   "calculateValue": "value = true",
                   "key": "disableUserInfoEdit",
                   "type": "hidden",
@@ -673,7 +673,6 @@
                       "valueProperty": "country",
                       "template": "<span>{{ item.country }}</span>",
                       "selectThreshold": 0.3,
-                      "clearOnHide": false,
                       "validate": {
                         "required": true,
                         "unique": false,
@@ -1160,7 +1159,7 @@
     }
   ],
   "revisions": "current",
-  "_vid": 92,
+  "_vid": 94,
   "title": "Padi Verification Form - Emergency First Response",
   "display": "form",
   "access": [
@@ -1180,7 +1179,7 @@
   "path": "padiverificationformemergencyfirstresponse",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-05T12:05:39.142Z",
-  "modified": "2020-03-02T20:20:21.051Z",
+  "modified": "2020-03-03T14:24:13.116Z",
   "machineName": "testdivehub:padiVerificationFormEmergencyFirstResponse",
   "controller": ""
 }
