@@ -358,7 +358,8 @@
             "labelPosition": "top",
             "inputFormat": "plain",
             "tags": [],
-            "properties": {}
+            "properties": {},
+            "isNew": false
           }],
           "width": 4,
           "offset": 0,
@@ -14619,15 +14620,15 @@
         "label": "Approve/Reject",
         "key": "csrApproved",
         "values": [{
-          "value": "true",
+          "value": "accepted",
           "label": "Approved",
           "shortcut": ""
         }, {
-          "value": "false",
+          "value": "rejected",
           "label": "Rejected",
           "shortcut": ""
         }],
-        "defaultValue": "true",
+        "defaultValue": "",
         "type": "radio",
         "optionsLabelPosition": "right",
         "hideLabel": true,
@@ -14635,7 +14636,8 @@
         "lockKey": true,
         "validate": {
           "unique": false,
-          "multiple": false
+          "multiple": false,
+          "required": true
         },
         "autofocus": false,
         "inputType": "radio",
@@ -14651,7 +14653,8 @@
           "when": null,
           "eq": ""
         },
-        "properties": {}
+        "properties": {},
+        "isNew": false
       }, {
         "input": true,
         "tableView": true,
@@ -14723,7 +14726,7 @@
     "theme": "primary"
   }],
   "revisions": "original",
-  "_vid": 139,
+  "_vid": 141,
   "title": "Dive Store CSR Copy",
   "display": "form",
   "access": [{
@@ -14740,7 +14743,7 @@
   "path": "divestorecsrcopy",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-25T06:20:36.507Z",
-  "modified": "2020-03-06T07:32:05.709Z",
+  "modified": "2020-03-09T07:51:51.299Z",
   "machineName": "testdivehub:diveStoreCsrCopy",
   "controller": ""
 }
