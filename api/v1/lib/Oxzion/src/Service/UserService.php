@@ -1151,7 +1151,7 @@ class UserService extends AbstractService
         addr.zip
     FROM
         ox_user as user
-        JOIN ox_address as addr ON user.address_id = addr.id
+        LEFT JOIN ox_address as addr ON user.address_id = addr.id
         LEFT JOIN ox_user_org ON user.id = ox_user_org.user_id
         JOIN ox_organization as org ON ox_user_org.org_id = org.id
     WHERE
