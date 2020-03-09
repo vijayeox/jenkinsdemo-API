@@ -62,7 +62,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:endEvent id="EndEvent_0wnid44123" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_0191gsl123</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="UserTask_0vsw34x123" name="CSR Rating and Quoating" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR Group">
+    <bpmn:userTask id="UserTask_0vsw34x123" name="CSR Rating and Quoating" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="endorsementDiveStoreCsr" />
@@ -93,16 +93,13 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_0ref3rx123</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1ij66tv123" sourceRef="UserTask_0vsw34x123" targetRef="ServiceTask_1aqfyhm123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==true or csrApproved=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="UserTask_0cskr81123" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:assignee="{{padi}}">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="endorsementDiveStoreCsr" />
+          <camunda:property name="template" value="diveStoreUserApprovalForm" />
         </camunda:properties>
-        <camunda:formData>
-          <camunda:formField id="userApproved" type="boolean" defaultValue="false" />
-        </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0ref3rx123</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0efcxsl123</bpmn:outgoing>
@@ -115,10 +112,10 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0efcxsl123" sourceRef="UserTask_0cskr81123" targetRef="ExclusiveGateway_0zdc4wn123" />
     <bpmn:sequenceFlow id="SequenceFlow_184jheh123" name="Yes" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="ExclusiveGateway_055v5fg123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved==true || userApproved =="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_05el7yq123" name="No" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="UserTask_0vsw34x123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved== false || userApproved =="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0023djt123" name="Auto Renewal" camunda:asyncAfter="true">
       <bpmn:incoming>SequenceFlow_1ioni1f123</bpmn:incoming>
@@ -137,7 +134,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_1ioni1f123" name="Yes" sourceRef="ExclusiveGateway_055v5fg123" targetRef="ExclusiveGateway_0023djt123">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${payment == "true" or payment == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="UserTask_1hi2slz123" name="CSR Review" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR Group">
+    <bpmn:userTask id="UserTask_1hi2slz123" name="CSR Review" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="endorsementDiveStoreCsr" />
@@ -154,10 +151,10 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:incoming>SequenceFlow_06ntdwz123</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_06ntdwz123" name="Reject" sourceRef="UserTask_1hi2slz123" targetRef="EndEvent_0jbd512123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false or approved=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_089yrmu123" name="Approved" sourceRef="UserTask_1hi2slz123" targetRef="ExclusiveGateway_0023djt123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true or approved=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="ServiceTask_11gqa7t123" name="CSR Cancel policy Mail" camunda:expression="0">
       <bpmn:extensionElements>
@@ -177,7 +174,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_0i6edw3123</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1mw3pcp123" sourceRef="UserTask_0vsw34x123" targetRef="ServiceTask_11gqa7t123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==false or csrApproved=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0i6edw3123" sourceRef="ServiceTask_11gqa7t123" targetRef="UserTask_0vsw34x123" />
     <bpmn:sequenceFlow id="SequenceFlow_1xkcn87123" name="No" sourceRef="ExclusiveGateway_0023djt123" targetRef="ServiceTask_0kfeda1123">

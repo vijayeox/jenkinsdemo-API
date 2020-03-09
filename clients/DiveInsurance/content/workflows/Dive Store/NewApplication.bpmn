@@ -6,9 +6,6 @@
         <camunda:properties>
           <camunda:property name="template" value="diveStoreCsrCopy" />
         </camunda:properties>
-        <camunda:formData>
-          <camunda:formField id="csrApproved" type="boolean" defaultValue="false" />
-        </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1lnz46n</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0efnd8k</bpmn:incoming>
@@ -37,9 +34,6 @@
         <camunda:properties>
           <camunda:property name="template" value="diveStoreUserApprovalForm" />
         </camunda:properties>
-        <camunda:formData>
-          <camunda:formField id="userApproved" type="boolean" defaultValue="false" />
-        </camunda:formData>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">def assignee = execution.getVariable('email');</camunda:script>
         </camunda:executionListener>
@@ -147,20 +141,20 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_01j9dco</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1lnz46n" name="No" sourceRef="ExclusiveGateway_0q2tos6" targetRef="UserTask_1vfu0fp">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved==false || userApproved =="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0efnd8k" sourceRef="StartEvent_1wi0e7k" targetRef="UserTask_1vfu0fp" />
     <bpmn:sequenceFlow id="SequenceFlow_1ymyjug" sourceRef="ServiceTask_0xwp59s" targetRef="UserTask_1vfu0fp" />
     <bpmn:sequenceFlow id="SequenceFlow_1aycocc" sourceRef="UserTask_1vfu0fp" targetRef="ServiceTask_0xam12g">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1db4rc4" sourceRef="UserTask_1vfu0fp" targetRef="ServiceTask_0xwp59s">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_17dyxqd" sourceRef="ServiceTask_0s81m9v" targetRef="EndEvent_103enoz" />
     <bpmn:sequenceFlow id="SequenceFlow_12dghqu" sourceRef="UserTask_0ak903b" targetRef="ExclusiveGateway_0q2tos6" />
     <bpmn:sequenceFlow id="SequenceFlow_0am14xf" name="Yes" sourceRef="ExclusiveGateway_0q2tos6" targetRef="ExclusiveGateway_1y34p8k">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved==true || userApproved =="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1niav2g" sourceRef="ServiceTask_0xam12g" targetRef="UserTask_0ak903b" />
     <bpmn:sequenceFlow id="SequenceFlow_01bu3b1" name="Yes" sourceRef="ExclusiveGateway_1y34p8k" targetRef="ServiceTask_0s81m9v">
