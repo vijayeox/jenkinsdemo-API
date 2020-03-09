@@ -44,12 +44,7 @@
             "type":"selectboxes",
             "input":true,
             "lockKey":true,
-            "inputType":"checkbox",
-            "inline":false,
-            "protected":false,
-            "persistent":true,
-            "hidden":false,
-            "clearOnHide":true
+            "inputType":"checkbox"
         }
         ,
         {
@@ -61,28 +56,21 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
+            "label":"product",
+            "defaultValue":"Emergency First Response",
+            "key":"product",
+            "type":"hidden",
             "input":true,
             "tableView":true,
-            "key":"product",
-            "label":"product",
-            "type":"hidden",
             "lockKey":true,
-            "defaultValue":"Emergency First Response",
             "validate": {
                 "unique": false, "multiple": false
             }
             ,
-            "hideOnChildrenHidden":false,
-            "protected":false,
-            "unique":false,
-            "persistent":true
+            "hideOnChildrenHidden":false
         }
         ,
         {
@@ -94,10 +82,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -109,20 +93,12 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
             "label": "previousCareerCoverage", "calculateValue": "value = data['upgradeCareerCoverage'].value;\n// console.log(data['upgradeCareerCoverage']);", "key":"previous_careerCoverage", "type":"hidden", "input":true, "tableView":true, "lockKey":true, "hideOnChildrenHidden":false, "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -136,10 +112,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -153,10 +125,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -170,10 +138,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -187,10 +151,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -215,9 +175,6 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "tag":"p",
-                "className":""
             }
             ,
             {
@@ -232,16 +189,7 @@
                 "type":"checkbox",
                 "input":true,
                 "dataGridLabel":false,
-                "lockKey":true,
-                "autofocus":false,
-                "inputType":"checkbox",
-                "hideLabel":false,
-                "protected":false,
-                "persistent":true,
-                "hidden":false,
-                "name":"",
-                "value":"",
-                "clearOnHide":true
+                "lockKey":true
             }
             ],
             "type":"panel",
@@ -250,9 +198,7 @@
                 "unique": false, "multiple": false
             }
             ,
-            "path":"page6Panel",
-            "clearOnHide":false,
-            "hideLabel":false
+            "path":"page6Panel"
         }
         ],
         "input":false,
@@ -260,9 +206,7 @@
             "unique": false, "multiple": false
         }
         ,
-        "path":"page6",
-        "clearOnHide":false,
-        "hideLabel":false
+        "path":"page6"
     }
     ,
     {
@@ -311,13 +255,7 @@
                         "inputType":"number",
                         "customError":"Cannot set property 'maxLength' of null",
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "prefix":"",
-                        "suffix":"",
-                        "defaultValue":"",
-                        "protected":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -335,8 +273,6 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "clearOnHide":false
             }
             ],
             "type":"panel",
@@ -344,9 +280,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "clearOnHide":false,
-            "hideLabel":false
         }
         ,
         {
@@ -381,18 +314,7 @@
                         "type":"textfield",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"text",
-                        "inputMask":"",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -422,18 +344,7 @@
                         "type":"textfield",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"text",
-                        "inputMask":"",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -463,18 +374,7 @@
                         "type":"textfield",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"text",
-                        "inputMask":"",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":4,
@@ -488,8 +388,6 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "clearOnHide":false
             }
             ,
             {
@@ -520,21 +418,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -552,21 +436,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -591,21 +461,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -623,21 +479,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -654,7 +496,6 @@
                             "hideLabel":true,
                             "tableView":true,
                             "dataSrc":"custom",
-                            "defaultValue":"",
                             "data": {
                                 "values":[ {
                                     "value": "", "label": ""
@@ -681,23 +522,6 @@
                             "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "refreshOn":"",
-                            "filter":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "labelPosition":"top",
-                            "tags":[],
-                            "conditional": {
-                                "show": "", "when": null, "eq": ""
-                            }
-                            ,
-                            "properties": {}
-                            ,
                             "isNew":false
                         }
                         ,
@@ -735,24 +559,7 @@
                             "input":true,
                             "lockKey":true,
                             "clearOnRefresh":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "valueProperty":"",
-                            "defaultValue":"",
-                            "filter":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "labelPosition":"top",
-                            "tags":[],
-                            "conditional": {
-                                "show": "", "when": null, "eq": ""
-                            }
-                            ,
-                            "properties": {}
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -766,8 +573,6 @@
                     "validate": {
                         "unique": false, "multiple": false
                     }
-                    ,
-                    "clearOnHide":false
                 }
                 ],
                 "type":"panel",
@@ -776,9 +581,7 @@
                 }
                 ,
                 "label":"Panel",
-                "path":"panelPanel5",
-                "clearOnHide":false,
-                "hideLabel":false
+                "path":"panelPanel5"
             }
             ,
             {
@@ -800,15 +603,7 @@
                     "type":"checkbox",
                     "input":true,
                     "dataGridLabel":false,
-                    "lockKey":true,
-                    "autofocus":false,
-                    "inputType":"checkbox",
-                    "hideLabel":false,
-                    "protected":false,
-                    "persistent":true,
-                    "hidden":false,
-                    "name":"",
-                    "value":""
+                    "lockKey":true
                 }
                 ,
                 {
@@ -836,18 +631,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -865,21 +649,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -904,21 +674,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ,
                         {
@@ -936,21 +692,7 @@
                             "type":"textfield",
                             "input":true,
                             "lockKey":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "inputType":"text",
-                            "inputMask":"",
-                            "prefix":"",
-                            "suffix":"",
-                            "multiple":false,
-                            "defaultValue":"",
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "conditional": {
-                                "show": null, "when": null, "eq": ""
-                            }
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -989,24 +731,6 @@
                             "input":true,
                             "lockKey":true,
                             "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "defaultValue":"",
-                            "refreshOn":"",
-                            "filter":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "labelPosition":"top",
-                            "tags":[],
-                            "conditional": {
-                                "show": "", "when": null, "eq": ""
-                            }
-                            ,
-                            "properties": {}
-                            ,
                             "isNew":false
                         }
                         ,
@@ -1044,23 +768,7 @@
                             "input":true,
                             "lockKey":true,
                             "clearOnRefresh":true,
-                            "hideOnChildrenHidden":false,
-                            "autofocus":false,
-                            "defaultValue":"",
-                            "filter":"",
-                            "authenticate":false,
-                            "multiple":false,
-                            "protected":false,
-                            "unique":false,
-                            "persistent":true,
-                            "hidden":false,
-                            "labelPosition":"top",
-                            "tags":[],
-                            "conditional": {
-                                "show": "", "when": null, "eq": ""
-                            }
-                            ,
-                            "properties": {}
+                            "hideOnChildrenHidden":false
                         }
                         ],
                         "width":4,
@@ -1071,8 +779,7 @@
                     ],
                     "type":"columns",
                     "hideLabel":true,
-                    "customConditional":"show = (data['sameasmailingaddress'] == false)",
-                    "clearOnHide":false
+                    "customConditional":"show = (data['sameasmailingaddress'] == false)"
                 }
                 ],
                 "type":"panel",
@@ -1081,9 +788,7 @@
                 }
                 ,
                 "label":"Panel",
-                "path":"panelPanel3",
-                "clearOnHide":false,
-                "hideLabel":false
+                "path":"panelPanel3"
             }
             ,
             {
@@ -1118,18 +823,7 @@
                                 "key":"home_country_code",
                                 "type":"select",
                                 "input":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "defaultValue":"",
-                                "refreshOn":"",
-                                "filter":"",
-                                "authenticate":false,
-                                "template":"<span>{{ item.label }}</span>",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":3,
@@ -1154,18 +848,7 @@
                                 "type":"phoneNumber",
                                 "input":true,
                                 "lockKey":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "inputType":"tel",
-                                "inputMask":"(999) 999-9999",
-                                "prefix":"",
-                                "suffix":"",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false,
-                                "defaultValue":""
+                                "hideOnChildrenHidden":false
                             }
                             ,
                             {
@@ -1179,10 +862,7 @@
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "hideOnChildrenHidden":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":9,
@@ -1200,8 +880,7 @@
                         }
                         ,
                         "path":"columns",
-                        "hideLabel":true,
-                        "clearOnHide":false
+                        "hideLabel":true
                     }
                     ,
                     {
@@ -1230,18 +909,7 @@
                                 "key":"phone_country_code",
                                 "type":"select",
                                 "input":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "defaultValue":"",
-                                "refreshOn":"",
-                                "filter":"",
-                                "authenticate":false,
-                                "template":"<span>{{ item.label }}</span>",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":3,
@@ -1266,18 +934,7 @@
                                 "type":"phoneNumber",
                                 "input":true,
                                 "lockKey":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "inputType":"tel",
-                                "inputMask":"(999) 999-9999",
-                                "prefix":"",
-                                "suffix":"",
-                                "multiple":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true,
-                                "hidden":false,
-                                "defaultValue":""
+                                "hideOnChildrenHidden":false
                             }
                             ,
                             {
@@ -1291,10 +948,7 @@
                                     "unique": false, "multiple": false
                                 }
                                 ,
-                                "hideOnChildrenHidden":false,
-                                "protected":false,
-                                "unique":false,
-                                "persistent":true
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":9,
@@ -1312,8 +966,7 @@
                         }
                         ,
                         "path":"columns1",
-                        "hideLabel":true,
-                        "clearOnHide":false
+                        "hideLabel":true
                     }
                     ],
                     "width":6,
@@ -1338,18 +991,7 @@
                         "type":"phoneNumber",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"tel",
-                        "inputMask":"(999) 999-9999",
-                        "prefix":"",
-                        "suffix":"",
-                        "multiple":false,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false,
-                        "defaultValue":""
+                        "hideOnChildrenHidden":false
                     }
                     ,
                     {
@@ -1368,19 +1010,7 @@
                         "type":"email",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "inputType":"email",
-                        "prefix":"",
-                        "suffix":"",
-                        "defaultValue":"",
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false,
-                        "kickbox": {
-                            "enabled": false
-                        }
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":6,
@@ -1395,8 +1025,7 @@
                     "unique": false, "multiple": false
                 }
                 ,
-                "path":"panelPanel4Columns2",
-                "clearOnHide":false
+                "path":"panelPanel4Columns2"
             }
             ],
             "type":"panel",
@@ -1407,9 +1036,7 @@
             "lockKey":true,
             "source":"5d4ee6df800c612c49e802d3",
             "label":"Panel",
-            "path":"panelPanel4",
-            "clearOnHide":false,
-            "hideLabel":false
+            "path":"panelPanel4"
         }
         ],
         "type":"panel",
@@ -1418,9 +1045,7 @@
         }
         ,
         "label":"Panel",
-        "path":"panel",
-        "clearOnHide":false,
-        "hideLabel":false
+        "path":"panel"
     }
     ,
     {
@@ -1462,20 +1087,7 @@
                 "key":"start_date_range",
                 "type":"select",
                 "input":true,
-                "lockKey":true,
-                "autofocus":false,
-                "placeholder":"",
-                "valueProperty":"",
-                "defaultValue":"",
-                "refreshOn":"",
-                "filter":"",
-                "authenticate":false,
-                "template":"<span>{{ item.label }}</span>",
-                "multiple":false,
-                "protected":false,
-                "unique":false,
-                "persistent":true,
-                "hidden":false
+                "lockKey":true
             }
             ,
             {
@@ -1514,18 +1126,7 @@
                         "refreshOn":"endorsement_options",
                         "input":true,
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "valueProperty":"",
-                        "defaultValue":"",
-                        "filter":"",
-                        "authenticate":false,
-                        "template":"<span>{{ item.label }}</span>",
-                        "multiple":false,
-                        "protected":false,
-                        "unique":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":6,
@@ -1546,13 +1147,7 @@
                         "input":true,
                         "inputType":"number",
                         "lockKey":true,
-                        "hideOnChildrenHidden":false,
-                        "autofocus":false,
-                        "prefix":"",
-                        "suffix":"",
-                        "protected":false,
-                        "persistent":true,
-                        "hidden":false
+                        "hideOnChildrenHidden":false
                     }
                     ],
                     "width":6,
@@ -1566,8 +1161,6 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "clearOnHide":false
             }
             ,
             {
@@ -1602,9 +1195,6 @@
                                 "validate": {
                                     "unique": false, "multiple": false
                                 }
-                                ,
-                                "tag":"p",
-                                "className":""
                             }
                             ],
                             "width":4,
@@ -1642,13 +1232,7 @@
                                 "input":true,
                                 "inputType":"number",
                                 "lockKey":true,
-                                "hideOnChildrenHidden":false,
-                                "autofocus":false,
-                                "suffix":"",
-                                "protected":false,
-                                "persistent":true,
-                                "hidden":false,
-                                "clearOnHide":true
+                                "hideOnChildrenHidden":false
                             }
                             ],
                             "width":8,
@@ -1662,8 +1246,6 @@
                         "validate": {
                             "unique": false, "multiple": false
                         }
-                        ,
-                        "clearOnHide":false
                     }
                     ],
                     "width":8,
@@ -1677,8 +1259,6 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "clearOnHide":false
             }
             ,
             {
@@ -1717,23 +1297,10 @@
                     "key":"attachments",
                     "type":"file",
                     "input":true,
-                    "clearOnHide":false,
-                    "autofocus":false,
-                    "image":false,
-                    "imageSize":"200",
-                    "placeholder":"",
-                    "defaultValue":"",
-                    "protected":false,
-                    "persistent":true,
-                    "hidden":false,
-                    "filePattern":"*",
-                    "fileMinSize":"0KB",
-                    "fileMaxSize":"1GB"
+                    "clearOnHide":false
                 }
                 ],
-                "path":"page5Panel",
-                "clearOnHide":false,
-                "hideLabel":false
+                "path":"page5Panel"
             }
             ,
             {
@@ -1757,9 +1324,6 @@
                     "validate": {
                         "unique": false, "multiple": false
                     }
-                    ,
-                    "tag":"p",
-                    "className":""
                 }
                 ],
                 "type":"fieldset",
@@ -1781,9 +1345,7 @@
                 "unique": false, "multiple": false
             }
             ,
-            "path":"pageNaNPanel",
-            "clearOnHide":false,
-            "hideLabel":false
+            "path":"pageNaNPanel"
         }
         ],
         "input":false,
@@ -1791,9 +1353,6 @@
         "validate": {
             "unique": false, "multiple": false
         }
-        ,
-        "clearOnHide":false,
-        "hideLabel":false
     }
     ,
     {
@@ -1821,9 +1380,6 @@
                 "validate": {
                     "unique": false, "multiple": false
                 }
-                ,
-                "tag":"p",
-                "className":""
             }
             ,
             {
@@ -1850,14 +1406,7 @@
                     ,
                     "key":"AdditionalInsuredOption",
                     "type":"radio",
-                    "input":true,
-                    "autofocus":false,
-                    "inputType":"radio",
-                    "defaultValue":"",
-                    "protected":false,
-                    "fieldSet":false,
-                    "persistent":true,
-                    "hidden":false
+                    "input":true
                 }
                 ],
                 "tableView":false,
@@ -1918,21 +1467,7 @@
                                     "type":"textfield",
                                     "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "autofocus":false,
-                                    "inputType":"text",
-                                    "inputMask":"",
-                                    "prefix":"",
-                                    "suffix":"",
-                                    "multiple":false,
-                                    "defaultValue":"",
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false,
-                                    "conditional": {
-                                        "show": null, "when": null, "eq": ""
-                                    }
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":4,
@@ -1957,21 +1492,7 @@
                                     "type":"textfield",
                                     "input":true,
                                     "hideOnChildrenHidden":false,
-                                    "lockKey":true,
-                                    "autofocus":false,
-                                    "inputType":"text",
-                                    "inputMask":"",
-                                    "prefix":"",
-                                    "suffix":"",
-                                    "multiple":false,
-                                    "defaultValue":"",
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false,
-                                    "conditional": {
-                                        "show": null, "when": null, "eq": ""
-                                    }
+                                    "lockKey":true
                                 }
                                 ],
                                 "width":4,
@@ -1996,21 +1517,7 @@
                                     "type":"textfield",
                                     "input":true,
                                     "hideOnChildrenHidden":false,
-                                    "lockKey":true,
-                                    "autofocus":false,
-                                    "inputType":"text",
-                                    "inputMask":"",
-                                    "prefix":"",
-                                    "suffix":"",
-                                    "multiple":false,
-                                    "defaultValue":"",
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false,
-                                    "conditional": {
-                                        "show": null, "when": null, "eq": ""
-                                    }
+                                    "lockKey":true
                                 }
                                 ],
                                 "width":4,
@@ -2025,8 +1532,6 @@
                             "validate": {
                                 "unique": false, "multiple": false
                             }
-                            ,
-                            "clearOnHide":false
                         }
                         ,
                         {
@@ -2061,18 +1566,7 @@
                                     "type":"select",
                                     "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "autofocus":false,
-                                    "valueProperty":"",
-                                    "defaultValue":"",
-                                    "refreshOn":"",
-                                    "filter":"",
-                                    "authenticate":false,
-                                    "multiple":false,
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":3,
@@ -2109,17 +1603,7 @@
                                     "input":true,
                                     "lockKey":true,
                                     "clearOnRefresh":true,
-                                    "hideOnChildrenHidden":false,
-                                    "autofocus":false,
-                                    "valueProperty":"",
-                                    "defaultValue":"",
-                                    "filter":"",
-                                    "authenticate":false,
-                                    "multiple":false,
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":3,
@@ -2144,21 +1628,7 @@
                                     "type":"textfield",
                                     "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "autofocus":false,
-                                    "inputType":"text",
-                                    "inputMask":"",
-                                    "prefix":"",
-                                    "suffix":"",
-                                    "multiple":false,
-                                    "defaultValue":"",
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false,
-                                    "conditional": {
-                                        "show": null, "when": null, "eq": ""
-                                    }
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":3,
@@ -2203,20 +1673,7 @@
                                     "type":"select",
                                     "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "autofocus":false,
-                                    "dataSrc":"values",
-                                    "valueProperty":"",
-                                    "defaultValue":"",
-                                    "refreshOn":"",
-                                    "filter":"",
-                                    "authenticate":false,
-                                    "template":"<span>{{ item.label }}</span>",
-                                    "multiple":false,
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false
+                                    "hideOnChildrenHidden":false
                                 }
                                 ,
                                 {
@@ -2236,19 +1693,7 @@
                                     "type":"textfield",
                                     "input":true,
                                     "lockKey":true,
-                                    "hideOnChildrenHidden":false,
-                                    "autofocus":false,
-                                    "inputType":"text",
-                                    "inputMask":"",
-                                    "placeholder":"",
-                                    "prefix":"",
-                                    "suffix":"",
-                                    "multiple":false,
-                                    "defaultValue":"",
-                                    "protected":false,
-                                    "unique":false,
-                                    "persistent":true,
-                                    "hidden":false
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":3,
@@ -2262,8 +1707,6 @@
                             "validate": {
                                 "unique": false, "multiple": false
                             }
-                            ,
-                            "clearOnHide":false
                         }
                         ,
                         {
@@ -2284,17 +1727,7 @@
                                     "key":"additionalInformation",
                                     "type":"textarea",
                                     "input":true,
-                                    "hideOnChildrenHidden":false,
-                                    "autofocus":false,
-                                    "prefix":"",
-                                    "suffix":"",
-                                    "rows":3,
-                                    "multiple":false,
-                                    "defaultValue":"",
-                                    "protected":false,
-                                    "persistent":true,
-                                    "hidden":false,
-                                    "wysiwyg":false
+                                    "hideOnChildrenHidden":false
                                 }
                                 ],
                                 "width":12,
@@ -2315,7 +1748,6 @@
                                 "unique": false, "multiple": false
                             }
                             ,
-                            "clearOnHide":false,
                             "hideLabel":true
                         }
                         ],
@@ -2329,12 +1761,7 @@
                         }
                     }
                     ],
-                    "lockKey":true,
-                    "autofocus":false,
-                    "tree":true,
-                    "protected":false,
-                    "persistent":true,
-                    "hidden":false
+                    "lockKey":true
                 }
                 ],
                 "type":"panel",
@@ -2342,9 +1769,7 @@
                     "show": "true", "when": "AdditionalInsuredOption", "eq": "newListOfAdditionalInsureds"
                 }
                 ,
-                "label":"Panel",
-                "clearOnHide":false,
-                "hideLabel":false
+                "label":"Panel"
             }
             ],
             "type":"panel",
@@ -2352,9 +1777,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "clearOnHide":false,
-            "hideLabel":false
         }
         ],
         "input":false,
@@ -2365,9 +1787,7 @@
             "show": "true", "when": "endorsement_options", "eq": "modify_additionalInsured"
         }
         ,
-        "label":"Panel",
-        "clearOnHide":false,
-        "hideLabel":false
+        "label":"Panel"
     }
     ,
     {
@@ -2386,10 +1806,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -2402,10 +1818,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -2418,10 +1830,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "protected":false,
-            "unique":false,
-            "persistent":true
         }
         ,
         {
@@ -2450,9 +1858,6 @@
             "validate": {
                 "unique": false, "multiple": false
             }
-            ,
-            "tag":"p",
-            "className":""
         }
         ],
         "input":false,
@@ -2461,9 +1866,7 @@
         }
         ,
         "breadcrumbClickable":true,
-        "path":"page6",
-        "clearOnHide":false,
-        "hideLabel":false
+        "path":"page6"
     }
     ,
     {
@@ -2475,19 +1878,10 @@
         "validate": {
             "unique": false, "multiple": false
         }
-        ,
-        "autofocus":false,
-        "size":"md",
-        "leftIcon":"",
-        "rightIcon":"",
-        "block":false,
-        "action":"submit",
-        "disableOnInvalid":false,
-        "theme":"primary"
     }
     ],
     "revisions":"current",
-    "_vid":27,
+    "_vid":28,
     "title":"EFR - Endorsement",
     "display":"form",
     "access":[ {
@@ -2505,7 +1899,7 @@
     "path":"efrendorsement",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-04T12:28:50.556Z",
-    "modified":"2020-03-09T08:30:20.467Z",
+    "modified":"2020-03-09T14:42:11.077Z",
     "machineName":"testdivehub:efrEndorsement",
     "controller":""
 }
