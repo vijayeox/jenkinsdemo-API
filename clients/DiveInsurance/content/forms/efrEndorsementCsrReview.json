@@ -1778,11 +1778,11 @@
                 "inline": true,
                 "tableView": false,
                 "values": [{
-                    "value": "true",
+                    "value": "accepted",
                     "label": "Approved",
                     "shortcut": ""
                 }, {
-                    "value": "false",
+                    "value": "rejected",
                     "label": "Rejected",
                     "shortcut": ""
                 }],
@@ -1793,7 +1793,7 @@
                     "unique": false,
                     "multiple": false
                 },
-                "key": "endorApproved",
+                "key": "approved",
                 "type": "radio",
                 "input": true,
                 "lockKey": true
@@ -1822,8 +1822,8 @@
             "key": "rejectionReason",
             "conditional": {
                 "show": true,
-                "when": "endorApproved",
-                "eq": "false"
+                "when": "approved",
+                "eq": "rejected"
             },
             "type": "textarea",
             "input": true,
@@ -1847,10 +1847,11 @@
         "validate": {
             "unique": false,
             "multiple": false
-        }
+        },
+        "disabled": true
     }],
     "revisions": "current",
-    "_vid": 17,
+    "_vid": 18,
     "title": "EFR - Endorsement csr review",
     "display": "form",
     "access": [{
@@ -1866,7 +1867,7 @@
     "path": "efrendorsementcsrreview",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-01-06T11:18:27.838Z",
-    "modified": "2020-03-05T06:53:43.378Z",
+    "modified": "2020-03-09T07:29:12.065Z",
     "machineName": "testdivehub:efrEndorsementCsrReview",
     "controller": ""
 }

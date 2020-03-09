@@ -262,7 +262,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${product == "Individual Professional Liability"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1pbw1kb" name="Not Approved" sourceRef="Task_1vk8q6k" targetRef="EndEvent_1f7bqcc">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false || approved == "false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Task_07nprhc" name="Dive Boat CSR Review">
       <bpmn:extensionElements>
@@ -309,7 +309,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==true || csrApproved == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1t7gunt" name="Approved" sourceRef="Task_1vk8q6k" targetRef="ExclusiveGateway_1k37933">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true || approved == "true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0g4fm7i" name="Approved" sourceRef="Task_1rdb4rd" targetRef="ExclusiveGateway_1k37933">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "accepted"}</bpmn:conditionExpression>

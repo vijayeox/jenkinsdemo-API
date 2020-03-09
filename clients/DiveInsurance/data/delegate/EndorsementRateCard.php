@@ -109,6 +109,44 @@ class EndorsementRatecard extends AbstractAppDelegate
             }
             unset($rate);
         }
+
+        $selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['equipment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+        $this->logger->info("Executing Endorsement Rate Card Equipment Query".$selectEquipment);
+        $resultEquipment= $persistenceService->selectQuery($selectEquipment);
+        if($resultEquipment->count() == 0){
+            $premiumRateCardDetails[$data['equipment']] = 0;
+        }
+        while ($resultEquipment->next()) {
+            $rate = $resultEquipment->current();
+            if(isset($rate['key'])){
+                        // $endorsementCoverages[$rate['key']] = $rate['coverage'];
+                if(isset($rate['total'])){
+                    $premiumRateCardDetails[$rate['key']] = $rate['total'];
+                } else {
+                    $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                }
+            }
+            unset($rate);
+        }
+
+        $selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+        $this->logger->info("Executing Endorsement Rate Card Scuba fit Query".$selectScubafit);      
+        $resultScubafit = $persistenceService->selectQuery($selectScubafit);
+        if($resultScubafit->count() == 0){
+            $premiumRateCardDetails[$data['scubaFit']] = 0;
+        }
+        while ($resultScubafit->next()) {
+            $rate = $resultScubafit->current();
+            if(isset($rate['key'])){
+                        // $endorsementCoverages[$rate['key']] = $rate['coverage'];
+                if(isset($rate['total'])){
+                    $premiumRateCardDetails[$rate['key']] = $rate['total'];
+                } else {
+                    $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                }
+            }
+            unset($rate);
+        }
     }     
     
     $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$previousKey."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
@@ -137,43 +175,6 @@ class EndorsementRatecard extends AbstractAppDelegate
     unset($rate);
 }
 
-$selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['equipment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
-$this->logger->info("Executing Endorsement Rate Card Equipment Query".$selectEquipment);
-$resultEquipment= $persistenceService->selectQuery($selectEquipment);
-if($resultEquipment->count() == 0){
-    $premiumRateCardDetails[$data['equipment']] = 0;
-}
-while ($resultEquipment->next()) {
-    $rate = $resultEquipment->current();
-    if(isset($rate['key'])){
-                // $endorsementCoverages[$rate['key']] = $rate['coverage'];
-        if(isset($rate['total'])){
-            $premiumRateCardDetails[$rate['key']] = $rate['total'];
-        } else {
-            $premiumRateCardDetails[$rate['key']] = $rate['premium'];
-        }
-    }
-    unset($rate);
-}
-
-$selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
-$this->logger->info("Executing Endorsement Rate Card Scuba fit Query".$selectScubafit);      
-$resultScubafit = $persistenceService->selectQuery($selectScubafit);
-if($resultScubafit->count() == 0){
-    $premiumRateCardDetails[$data['scubaFit']] = 0;
-}
-while ($resultScubafit->next()) {
-    $rate = $resultScubafit->current();
-    if(isset($rate['key'])){
-                // $endorsementCoverages[$rate['key']] = $rate['coverage'];
-        if(isset($rate['total'])){
-            $premiumRateCardDetails[$rate['key']] = $rate['total'];
-        } else {
-            $premiumRateCardDetails[$rate['key']] = $rate['premium'];
-        }
-    }
-    unset($rate);
-}
 foreach ($data as $key => $value) {
     if(is_string($value))
     {
