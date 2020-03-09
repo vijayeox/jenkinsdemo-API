@@ -16,19 +16,20 @@
             "key":"panelColumns4",
             "columns":[ {
                 "components":[ {
-                    "key":"panelColumns4ColumnsContent",
                     "label":"Content",
-                    "input":false,
                     "attrs":[ {
                         "value": "", "attr": ""
                     }
                     ],
-                    "content":"<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2019.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+                    "content":"<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020  \t</font></b></center>\n</br>\n<br/>\n<center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2019.\n   THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> \n</center>\n</br>\n<br/>\n</br>\n<center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+                    "refreshOnChange":false,
+                    "tableView":false,
+                    "key":"panelColumns4ColumnsContent",
                     "type":"htmlelement",
+                    "input":false,
                     "hideLabel":true,
                     "lockKey":true,
                     "hideOnChildrenHidden":false,
-                    "tableView":false,
                     "validate": {
                         "unique": false, "multiple": false
                     }
@@ -46,19 +47,20 @@
             ,
             {
                 "components":[ {
-                    "key":"columnsContent",
                     "label":"Content",
-                    "input":false,
                     "attrs":[ {
                         "value": "", "attr": ""
                     }
                     ],
-                    "content":"<center><h3><b>CONTACT US!</b></h3></br>\n \t\n<i>Have questions?</br></br></i>\nCall us at \n<font color=\"blue\">1 800 223 9998 </font>\nor \n<font color=\"blue\">1 714 739 3177</font></br></br>\n\nFAX us at\n<font color=\"blue\">1 714 739 3188</font></br></br>\n\nEmail us at <font color=\"blue\">instructors@diveinsurance.com</font></center>",
+                    "content":"<center>\n   <h3><b>CONTACT US!</b></h3>\n   </br>\n   <i>Have questions?</br></br></i> Call us at\n   <font color=\"blue\">1 800 223 9998 </font> or\n   <font color=\"blue\">1 714 739 3177</font></br>\n   </br>\n   FAX us at\n   <font color=\"blue\">1 714 739 3188</font></br>\n   </br>\n   Email us at: <a style=\"color:blue\" href=\"mailto:instructors@diveinsurance.com?Subject=Registration%20Help%20IPL\"\n      target=\"_blank\">instructors@diveinsurance.com</a>\n</center>",
+                    "refreshOnChange":false,
+                    "tableView":false,
+                    "key":"columnsContent",
                     "type":"htmlelement",
+                    "input":false,
                     "hideLabel":true,
                     "lockKey":true,
                     "hideOnChildrenHidden":false,
-                    "tableView":false,
                     "validate": {
                         "unique": false, "multiple": false
                     }
@@ -2578,13 +2580,12 @@
             "tableView":false,
             "components":[ {
                 "label":"By checking this box",
-                "tableView":true,
+                "tableView":false,
                 "defaultValue":false,
                 "validate": {
                     "required": true, "customMessage": "Please accept these declarations", "unique": false, "multiple": false
                 }
                 ,
-                "errorLabel":"Please accept these declarations",
                 "key":"page3Panel4Bycheckingthisbox",
                 "type":"checkbox",
                 "input":true,
@@ -2619,10 +2620,6 @@
         "key":"coveragePage",
         "theme":"primary",
         "tableView":false,
-        "properties": {
-            "delegate": "RateCard"
-        }
-        ,
         "lockKey":true,
         "label":"Coverage",
         "validate": {
@@ -3293,7 +3290,8 @@
                             "key":"AdditionalInsuredOption",
                             "type":"radio",
                             "input":true,
-                            "lockKey":true
+                            "lockKey":true,
+                            "autofocus":true
                         }
                         ],
                         "tableView":false,
@@ -3592,6 +3590,7 @@
                                             "hideLabel":true,
                                             "spellcheck":true,
                                             "tableView":true,
+                                            "clearOnHide":false,
                                             "validate": {
                                                 "required": true, "unique": false, "multiple": false
                                             }
@@ -3936,7 +3935,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":591,
+    "_vid":598,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3958,7 +3957,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-03-06T10:53:54.599Z",
+    "modified":"2020-03-09T14:49:59.918Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

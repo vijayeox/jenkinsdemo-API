@@ -1214,14 +1214,13 @@
                 }
                 ,
                 "selectThreshold":0.3,
-                "persistent":false,
                 "validate": {
                     "required": true, "unique": false, "multiple": false
                 }
                 ,
                 "key":"start_date_range",
                 "properties": {
-                    "delegate": "RateCard"
+                    "delegate": "RateCard", "post_delegate_refresh": "liabilityCoverageName"
                 }
                 ,
                 "type":"select",
@@ -1613,16 +1612,18 @@
         "key":"pageNaN",
         "theme":"primary",
         "tableView":false,
-        "properties": {
-            "delegate": "RateCard"
-        }
-        ,
-        "label":"Panel",
+        "label":"Coverage",
         "validate": {
             "unique": false, "multiple": false
         }
         ,
-        "path":"pageNaN"
+        "path":"pageNaN",
+        "breadcrumbClickable":true,
+        "buttonSettings": {
+            "previous": true, "cancel": true, "next": true
+        }
+        ,
+        "collapsible":false
     }
     ,
     {
@@ -2748,7 +2749,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":347,
+    "_vid":350,
     "title":"Emergency First Response Professional Liability",
     "display":"wizard",
     "access":[ {
@@ -2853,7 +2854,7 @@
     "path":"emergencyfirstresponseprofessionalliability",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-07-11T13:08:59.838Z",
-    "modified":"2020-03-09T14:37:15.210Z",
+    "modified":"2020-03-09T15:23:12.993Z",
     "machineName":"testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
     "controller":""
 }
