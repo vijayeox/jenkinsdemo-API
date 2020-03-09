@@ -1215,7 +1215,6 @@
                 ,
                 "selectThreshold":0.3,
                 "persistent":false,
-                "protected":true,
                 "validate": {
                     "required": true, "unique": false, "multiple": false
                 }
@@ -2749,7 +2748,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":346,
+    "_vid":347,
     "title":"Emergency First Response Professional Liability",
     "display":"wizard",
     "access":[ {
@@ -2854,7 +2853,7 @@
     "path":"emergencyfirstresponseprofessionalliability",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-07-11T13:08:59.838Z",
-    "modified":"2020-03-09T14:25:10.804Z",
+    "modified":"2020-03-09T14:37:15.210Z",
     "machineName":"testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
     "controller":""
 }
