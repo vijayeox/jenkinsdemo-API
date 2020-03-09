@@ -259,8 +259,12 @@ class WidgetService extends AbstractService
         }
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');
+        $filter = null;
         if(isset($params['data'])) {
-            $data = $this->queryService->runMultipleQueries($uuidList);
+            if (isset($params['filter'])) {
+                $filter = $params['filter'];
+            }
+            $data = $this->queryService->runMultipleQueries($uuidList,$filter);
 
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];
@@ -287,7 +291,7 @@ class WidgetService extends AbstractService
         }
         foreach($data as $key1=>$dataset) {
             $m = new EvalMath;
-            $m->evaluate('round(x,y) = (((x*(10^y))+0.5)%(10^10))/(10^y)');
+            $m->evaluate('round(x,y) = (((x*(10^y))+0.5*(abs(x)/(x+0^abs(x))))%(10^10))/(10^y)');
             foreach($dataset as $key2=>$value) {
                 if (is_numeric($value)) {
                     $m->evaluate("$key2 = $value");

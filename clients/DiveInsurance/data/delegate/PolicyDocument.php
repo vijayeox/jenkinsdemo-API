@@ -353,15 +353,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['endorsementExcessLiability'])){
                     $data['endorsementExcessLiability'] = array();
                 }
-                // $data['endorsementOptions']['modify_coverage'] = false;
-                // $data['endorsementOptions']['modify_personalInformation'] = false;
-                // $data['endorsementOptions']['modify_additionalInsured'] = false;
-                foreach ($data['endorsement_options'] as $key => $val){
-                    // if(isset($data['endorsement_options'][$val])){
-                        $data['endorsement_options'][$key] = false;
-                    // }
+                if(is_string($data['endorsement_options'])){
+                    $data['endorsement_options'] = json_decode($data['endorsement_options'],true);
                 }
-
+                if(is_array($data['endorsement_options'])){
+                    foreach ($data['endorsement_options'] as $key => $val){
+                        $data['endorsement_options'][$key] = false;
+                    }
+                }
             }
             $data['policyStatus'] = "In Force";
             $data['start_date'] = $startDate;

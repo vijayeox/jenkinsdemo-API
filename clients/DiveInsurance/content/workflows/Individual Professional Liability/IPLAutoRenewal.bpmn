@@ -141,7 +141,7 @@ execution.setVariable("process_reminder",true)</camunda:script>
       <bpmn:incoming>SequenceFlow_1pbw1kb</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_06ys4y1" name="Not Approved" sourceRef="Task_1rdb4rd" targetRef="EndEvent_1f7bqcc">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false || approved == "false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Task_1rdb4rd" name="IPL CSR Review">
       <bpmn:extensionElements>
@@ -312,7 +312,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true || approved == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0g4fm7i" name="Approved" sourceRef="Task_1rdb4rd" targetRef="ExclusiveGateway_1k37933">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true || approved == "true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0ayxb2m" sourceRef="Task_11y1l03" targetRef="Task_1vk8q6k" />
     <bpmn:serviceTask id="Task_11y1l03" name="Policy Status Change during Review" camunda:expression="0">

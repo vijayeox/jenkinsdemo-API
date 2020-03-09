@@ -18,6 +18,8 @@ use Oxzion\Service\TemplateService;
 use Oxzion\Utils\BosUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Utils\ArrayUtils;
+
 
 class UserService extends AbstractService
 {
@@ -1169,7 +1171,7 @@ class UserService extends AbstractService
 
     public function checkAndCreateUser($params, &$data, $register = false)
     {
-        if (!isset($data['username'])) {
+        if (!ArrayUtils::isKeyDefined($data, 'username')) {
             $data['username'] = $data['email'];
         }
         if ($org = $this->getIdFromUuid('ox_organization', $data['orgId'])) {

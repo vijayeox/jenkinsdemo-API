@@ -19,7 +19,7 @@ export default class Register extends React.Component {
           type="text/css"
           dangerouslySetInnerHTML={{
             __html:
-              "\n   .logo{\n    text-align: center;\n    margin:50px;\n  }\n  .logo img{\n    width:auto;\n    height: 150px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
+              "\n   .logo{\n    text-align: center;\n    margin:25px;\n  }\n  .logo img{\n    width:auto;\n    height: 100px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
           }}
         />
         <div className="container">

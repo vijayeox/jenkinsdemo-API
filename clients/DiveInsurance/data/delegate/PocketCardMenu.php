@@ -22,7 +22,7 @@ class PocketCardMenu extends AbstractAppDelegate
         $params['entityName'] = 'Pocket Card Job';
         $filter = array("start" => "0", "limit" => "10");
         $filterParams = array("logic" => "AND", "filters" => $filter);
-        $sortParams = array("field" => "date_created", "dir" => "DESC");
+        $sortParams = array("field" => "date_created", "dir" => "desc");
         $finalFilterParams = array("filter" => $filterParams, "sort" => $sortParams);
         $files = $this->getFileList($params, $finalFilterParams);
         $this->logger->info("the total number of files fetched is : ".print_r($files['total'], true));
@@ -48,10 +48,16 @@ class PocketCardMenu extends AbstractAppDelegate
                     unset($value['pocketCardProductType']);
                     $value['pocketCardProductType'] = '';
                     if(isset($productName['individualProfessionalLiability']) && ($productName['individualProfessionalLiability'] == 1)){
-                        $value['pocketCardProductType'] .= 'Individual Professional Liability';
+                        $value['pocketCardProductType'] .= 'Individual Professional Liability | ';
                     }
                     if(isset($productName['emergencyFirstResponse']) && ($productName['emergencyFirstResponse'] == 1)){
-                        $value['pocketCardProductType'] .= 'Emergency First Response';
+                        $value['pocketCardProductType'] .= 'Emergency First Response | ';
+                    }
+                    if(isset($productName['diveBoat']) && ($productName['diveBoat'] == 1)){
+                        $value['pocketCardProductType'] .= 'Dive Boat | ';
+                    }
+                    if(isset($productName['diveStore']) && ($productName['diveStore'] == 1)){
+                        $value['pocketCardProductType'] .= ' Dive Store';
                     }
                 }
             }
