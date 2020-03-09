@@ -625,11 +625,7 @@ class FileService extends AbstractService
                         $filterParamsArray = $filterParams;
                     }
                 }
-                if (isset($filterParamsArray[0]) && is_array($filterParamsArray[0])) {
-                    if (array_key_exists("sort", $filterParamsArray[0])) {
-                        $sortParam = $filterParamsArray[0]['sort'];
-                    }
-                }
+                
                 $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
                 $cnt = 1;
                 $fieldParams = array();
@@ -657,13 +653,19 @@ class FileService extends AbstractService
                         $sortCount = 0;
                         $sortTable = "tblf" . $sortCount;
                         $sort = " ORDER BY ";
+
                         foreach ($filterParamsArray[0]['sort'] as $key => $value) {
+                            $fieldName = $value['field'];
                             if ($sortCount == 0) {
-                                $sort .= $value['field'] . " " . $value['dir'];
+                                $sort .= $fieldName . " " . $value['dir'];
                             } else {
-                                $sort .= "," . $value['field'] . " " . $value['dir'];
+                                $sort .= "," . $fieldName . " " . $value['dir'];
                             }
-                            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $value['field'];
+                            if($fieldName == 'date_created'){
+                                $field .= ", of.date_created";
+                            }else{
+                                $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $fieldName;
+                            }
                             $sortCount += 1;
                         }
                     }

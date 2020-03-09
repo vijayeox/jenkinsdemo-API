@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1nh2hni" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1nh2hni" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="Process_1y1yejq" isExecutable="true">
     <bpmn:endEvent id="EndEvent_0hzrlj6" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_1pwoes4</bpmn:incoming>
@@ -52,8 +52,9 @@
 def day = calendar.get(Calendar.DAY_OF_MONTH); 
 def hour = calendar.get(Calendar.HOUR_OF_DAY);
 def minute = calendar.get(Calendar.MINUTE);
-minute = minute == 55 ? 4 : minute+5
-hour = minute == 55 ? hour+1 : hour
+minute = minute+1
+hour = minute &gt; 59 ? hour+1 : hour
+minute = minute &gt; 59 ? minute - 60 : minute
 def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
           </camunda:inputParameter>
           <camunda:inputParameter name="send_reminder">true</camunda:inputParameter>
@@ -72,7 +73,11 @@ def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
           <camunda:formField id="approved" type="boolean" defaultValue="false" />
         </camunda:formData>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="Groovy">execution.setVariable("approved",false)</camunda:script>
+          <camunda:script scriptFormat="Groovy">execution.setVariable("approved","rejected")
+def autoRenewalJob = execution.getVariable('autoRenewalJob')
+if(!autoRenewalJob){
+  execution.setVariable('autoRenewalJob', null)
+}</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0hd4flu</bpmn:incoming>
@@ -87,13 +92,13 @@ def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_010xyrl" sourceRef="ServiceTask_1eqz313" targetRef="ServiceTask_02qqpqb" />
     <bpmn:sequenceFlow id="SequenceFlow_0h1kjkp" name="Approved" sourceRef="UserTask_0efijti" targetRef="ExclusiveGateway_1mm785e">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true || approved == "true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_13fsg24" name="Yes" sourceRef="ExclusiveGateway_1mm785e" targetRef="ServiceTask_1eqz313">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true and autoRenewalJob == null}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0jqs9wr" sourceRef="UserTask_0efijti" targetRef="Task_02q54h1">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false || approved == "false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Task_02q54h1" name="CSR Rejection of policy Mail" camunda:expression="0">
       <bpmn:extensionElements>
