@@ -781,7 +781,7 @@ class UserService extends AbstractService
      */
     public function getUserBaseProfile($username)
     {
-        $select = "SELECT ou.id,ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.orgid,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip from ox_user as ou join ox_address as oa on ou.address_id = oa.id where ou.username = '" . $username . "' OR ou.email = '" . $username . "'";
+        $select = "SELECT ou.id,ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.orgid,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip from ox_user as ou LEFT join ox_address as oa on ou.address_id = oa.id where ou.username = '" . $username . "' OR ou.email = '" . $username . "'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (!$response) {
             return 0;
