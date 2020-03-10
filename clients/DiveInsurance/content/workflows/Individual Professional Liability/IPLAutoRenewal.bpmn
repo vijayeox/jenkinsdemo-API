@@ -248,7 +248,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:userTask id="Task_1vk8q6k" name="EFR CSR Review">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="efrCsrReview2" />
+          <camunda:property name="template" value="efrCsrReview" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0ayxb2m</bpmn:incoming>

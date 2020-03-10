@@ -8,7 +8,7 @@
         "theme":"primary",
         "collapsible":false,
         "tableView":false,
-        "key":"page6",
+        "key":"page1",
         "type":"panel",
         "label":"Endorsement Change",
         "components":[ {
@@ -283,11 +283,18 @@
         }
         ,
         {
-            "key":"panelPanel4",
-            "input":false,
             "title":"Personal Information",
             "theme":"primary",
+            "collapsible":false,
             "tableView":false,
+            "key":"panelPanel4",
+            "conditional": {
+                "show": true, "when": "padiVerified", "eq": "true"
+            }
+            ,
+            "type":"panel",
+            "label":"Personal Information",
+            "input":false,
             "components":[ {
                 "label":"Columns",
                 "input":false,
@@ -1028,15 +1035,12 @@
                 "path":"panelPanel4Columns2"
             }
             ],
-            "type":"panel",
-            "conditional": {
-                "show": "true", "when": "padiVerified", "eq": "true"
-            }
-            ,
             "lockKey":true,
             "source":"5d4ee6df800c612c49e802d3",
-            "label":"Panel",
-            "path":"panelPanel4"
+            "path":"panelPanel4",
+            "validate": {
+                "unique": false, "multiple": false
+            }
         }
         ],
         "type":"panel",
@@ -1053,7 +1057,7 @@
         "theme":"primary",
         "collapsible":false,
         "tableView":false,
-        "key":"pageNaN",
+        "key":"page3",
         "conditional": {
             "show": true, "when": "endorsement_options", "eq": "modify_coverage"
         }
@@ -1223,10 +1227,6 @@
                                 }
                                 ,
                                 "key":"endorsementTotal",
-                                "properties": {
-                                    "render": "page6"
-                                }
-                                ,
                                 "type":"number",
                                 "decimalLimit":2,
                                 "input":true,
@@ -1791,7 +1791,19 @@
     }
     ,
     {
-        "title": "Payment Information", "theme": "primary", "collapsible": false, "tableView": false, "key": "page6", "customConditional": "show = ((data.endorsement_options.modify_coverage === 'true' || data.endorsement_options.modify_coverage === true ) && data.endorsementTotal > 0);", "type":"panel", "label":"Payment Information", "buttonSettings": {
+        "title":"Payment Information",
+        "theme":"primary",
+        "collapsible":false,
+        "tableView":false,
+        "key":"page6",
+        "properties": {
+            "payment_confirmation_page": "true"
+        }
+        ,
+        "customConditional":"show = ((data.endorsement_options.modify_coverage === 'true' || data.endorsement_options.modify_coverage === true ) && data.endorsementTotal > 0);",
+        "type":"panel",
+        "label":"Payment Information",
+        "buttonSettings": {
             "previous": true, "cancel": true, "next": true
         }
         ,
@@ -1881,7 +1893,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":28,
+    "_vid":31,
     "title":"EFR - Endorsement",
     "display":"form",
     "access":[ {
@@ -1899,7 +1911,7 @@
     "path":"efrendorsement",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-04T12:28:50.556Z",
-    "modified":"2020-03-09T14:42:11.077Z",
+    "modified":"2020-03-09T16:39:44.296Z",
     "machineName":"testdivehub:efrEndorsement",
     "controller":""
 }
