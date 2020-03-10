@@ -21,8 +21,10 @@ class PadiVerification extends AbstractAppDelegate
             $data['member_number'] = $data['business_padi'];
         }
         if(!isset($data['member_number'])){
+            $data['businessPadiEmpty'] = true;
             $data['padi_empty'] = true;
             $data['padiNotFound'] = false;
+            $data['businessPadiNotFound'] = false;
             $data['verified'] = false;
             $data['user_exists'] = 0;
             return $data;
@@ -67,8 +69,11 @@ class PadiVerification extends AbstractAppDelegate
                 $returnArray['work_phone'] = isset($data['work_phone']) ? $data['work_phone'] : "";
             }
             $returnArray['padiNotFound'] = false;
+            $returnArray['businessPadiNotFound'] = false;
             $returnArray['verified'] = true;
             $returnArray['padi_empty'] = false;
+            $returnArray['businessPadiEmpty'] = false;
+            // $returnArray['businessPadiVerified1'] = true;
             unset($returnArray['member_number']);
             return $returnArray;
         } else {
@@ -79,7 +84,10 @@ class PadiVerification extends AbstractAppDelegate
             }
             $returnArray['verified'] = true;
             $returnArray['padi_empty'] = false;
+            $returnArray['businessPadiEmpty'] = false;
             $returnArray['padiNotFound'] = true;
+            $returnArray['businessPadiNotFound'] = true;
+            // $returnArray['businessPadiVerified1'] = false;
             $data = array_merge($data,$returnArray);
             unset($data['member_number']);
             return $data;

@@ -76,7 +76,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'anifooter' => null,
                         'gtemplate' => 'Group_PL_COI',
                         'gheader' => 'Group_header.html',
-                        'gfooter' => 'Group_footer.html',),
+                        'gfooter' => 'Group_footer.html'),
             'Emergency First Response'
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',

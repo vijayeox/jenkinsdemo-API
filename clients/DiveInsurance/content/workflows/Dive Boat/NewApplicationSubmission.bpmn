@@ -90,7 +90,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved==false || userApproved =="false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0jieg4h" name="Approved" sourceRef="UserTask_0ny3kd4" targetRef="ServiceTask_1uhdnna">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==true or csrApproved=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved== "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1edvag4" sourceRef="StartEvent_07wv3ff" targetRef="UserTask_0ny3kd4" />
     <bpmn:sequenceFlow id="SequenceFlow_0ockmtf" sourceRef="ServiceTask_1n4t81n" targetRef="EndEvent_01jd5fx" />
@@ -105,7 +105,7 @@
           <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus',Rejected)</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==false or csrApproved=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved== "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Task_1jsrxln" name="CSR Cancel policy Mail" camunda:expression="0">
       <bpmn:extensionElements>
