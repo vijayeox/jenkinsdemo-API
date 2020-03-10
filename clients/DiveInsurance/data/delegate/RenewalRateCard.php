@@ -39,6 +39,7 @@ class RenewalRateCard extends RateCard
         $data['form_data'] = $this->rateCalculation($data['form_data']);
         //CLEAN FILE DATA FOR CURRENT YEAR
         $data['form_data'] = $this->cleanExistingData($data['form_data']);
+        $data['policyStatus'] = "Pending Approval";
         //END CLEAN FILE DATA FOR CURRENT YEAR
         $this->logger->info("CLEAN DATA END" . print_r($data, true));
 
