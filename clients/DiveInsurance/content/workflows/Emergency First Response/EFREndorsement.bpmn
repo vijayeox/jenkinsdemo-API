@@ -88,14 +88,14 @@ if(!autoRenewalJob){
     <bpmn:sequenceFlow id="SequenceFlow_1pwoes4" sourceRef="ServiceTask_02qqpqb" targetRef="EndEvent_0hzrlj6" />
     <bpmn:sequenceFlow id="SequenceFlow_0hd4flu" sourceRef="StartEvent_0gg9v2k" targetRef="UserTask_0efijti" />
     <bpmn:sequenceFlow id="SequenceFlow_0nuqtvp" name="No" sourceRef="ExclusiveGateway_1mm785e" targetRef="Task_11mfxyj">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false || automatic_renewal=="false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_010xyrl" sourceRef="ServiceTask_1eqz313" targetRef="ServiceTask_02qqpqb" />
     <bpmn:sequenceFlow id="SequenceFlow_0h1kjkp" name="Approved" sourceRef="UserTask_0efijti" targetRef="ExclusiveGateway_1mm785e">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_13fsg24" name="Yes" sourceRef="ExclusiveGateway_1mm785e" targetRef="ServiceTask_1eqz313">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true and autoRenewalJob == null}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(automatic_renewal==true or automatic_renewal=="true") and autoRenewalJob == null}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0jqs9wr" sourceRef="UserTask_0efijti" targetRef="Task_02q54h1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
