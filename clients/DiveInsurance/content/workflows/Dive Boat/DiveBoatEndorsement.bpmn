@@ -94,7 +94,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_0ref3rx</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1ij66tv" sourceRef="UserTask_0vsw34x" targetRef="ServiceTask_1aqfyhm">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==true or csrApproved=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved== "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="UserTask_0cskr81" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:assignee="{{padi}}">
       <bpmn:extensionElements>
@@ -165,10 +165,10 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:incoming>SequenceFlow_06ntdwz</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_06ntdwz" name="Reject" sourceRef="UserTask_1hi2slz" targetRef="EndEvent_0jbd512">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false or approved=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved=="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_089yrmu" name="Approved" sourceRef="UserTask_1hi2slz" targetRef="ExclusiveGateway_0023djt">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true or approved=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved== "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="ServiceTask_11gqa7t" name="CSR Cancel policy Mail" camunda:expression="0">
       <bpmn:extensionElements>
@@ -188,7 +188,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_0i6edw3</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1mw3pcp" sourceRef="UserTask_0vsw34x" targetRef="ServiceTask_11gqa7t">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==false or csrApproved=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved== "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0i6edw3" sourceRef="ServiceTask_11gqa7t" targetRef="UserTask_0vsw34x" />
   </bpmn:process>
