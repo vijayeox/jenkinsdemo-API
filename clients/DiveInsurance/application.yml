@@ -207,18 +207,18 @@ menu:
                                             url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
                                 -
                                     name: 'Dive Boat'
-                                    rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Boat\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
-                                -
-                                    name: 'Dive Store'
                                     rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Store\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
                                     details:
                                         -
                                             type: Form
                                             url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
+                                -
+                                    name: 'Dive Store'
+                                    rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Boat\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                                    details:
+                                        -
+                                            type: Form
+                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
                                 -
                                     name: 'Emergency First Response'
                                     rule: "listData.every((i)=>{\n    if (i.entity_name == \"Emergency First Response\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
@@ -328,12 +328,12 @@ menu:
                                             type: Form
                                             url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
                                 -
-                                    name: 'Dive Store'
+                                    name: 'Emergency First Response'
                                     rule: 'true'
                                     details:
                                         -
                                             type: Form
-                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                            url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
@@ -342,12 +342,12 @@ menu:
                                             type: Form
                                             url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
                                 -
-                                    name: 'Emergency First Response'
+                                    name: 'Dive Store'
                                     rule: 'true'
                                     details:
                                         -
                                             type: Form
-                                            url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
+                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
                         actions:
                             -
                                 name: Review
@@ -535,12 +535,12 @@ menu:
                                             type: Form
                                             url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
                                 -
-                                    name: 'Dive Store'
+                                    name: 'Emergency First Response'
                                     rule: 'true'
                                     details:
                                         -
                                             type: Form
-                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                            url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
@@ -549,12 +549,12 @@ menu:
                                             type: Form
                                             url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
                                 -
-                                    name: 'Emergency First Response'
+                                    name: 'Dive Store'
                                     rule: 'true'
                                     details:
                                         -
                                             type: Form
-                                            url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
+                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
                         columnConfig:
                             -
                                 title: PADI

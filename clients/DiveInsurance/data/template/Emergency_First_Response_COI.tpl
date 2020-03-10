@@ -34,9 +34,8 @@
 				<div class = "certificate_data1">
 					<p class = "p_margin">{$certificate_no}</p>
 					<p class = "p_margin">{$padi}</p>
-					<p class = "p_margin">{$start_date}</p>
-					<p class = "p_margin">{$end_date}</p>
-					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
+					<p class = "p_margin">{$start_date|date_format:"%d %B %Y"}</p>
+					<p class = "p_margin">{$end_date|date_format:"%d %B %Y"}&nbsp12:01:00 AM</p>      
 				</div>
 				<hr></hr>
 				<p class = "policy">Policy issued by &nbsp{$carrier}</p>
@@ -44,7 +43,7 @@
 				<hr></hr>
 				<p class = "efr_title"><b>Named Insured</b></p>
 					<p class ="efr_bold"><b>EFR</b></p>
-					<p class ="efr_title2">Emergency First Response Corporation</p>
+					<p class ="efr_title2"><b>Emergency First Response Corporation</b></p>
 					<p class ="efr_title2">30151 Tomas Street</p>
 					<p class ="efr_title2">Rancho Santa Margarita, CA 92688</p>
 			</div>
@@ -60,7 +59,7 @@
 			           <p class = "ins_font"><b class = "space">ANNUAL AGGREGATE:</b></p>
 		       	   </div>
 	        	</div>
-	        	<div class = "in-type1"> 
+	        	<div class = "in-type1" style="width: 60%"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
 			            <p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per accident)</p>
 			            <p class = "ins_font">$2,000,000</p>						
