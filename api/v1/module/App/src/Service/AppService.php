@@ -377,6 +377,37 @@ class AppService extends AbstractService
         }
     }
 
+    private function setLinkAndRunBuild($target,$link){
+        $flag = 0;
+        $folderCount = 0;
+        if (file_exists($target) && is_dir($target)) {
+            $files = new FileSystemIterator($target);
+            foreach ($files as $file) {
+                if ($file->isDir()) {
+                    $folderCount += 1;
+                }
+            }
+            foreach ($files as $file) {
+                $this->logger->info("\n Symlinking files" . print_r($file, true));
+                if ($file->isDir()) {
+                    $targetName = $file->getPathName();
+                    $linkName = $link . $file->getFilename();
+                    if (is_link($linkName)) {
+                        unlink($linkName);
+                    }
+                    if (file_exists($targetName)) {
+                        $this->setupLink($targetName, $linkName);
+                        $this->executeCommands($targetName);
+                        $flag = 1;
+                    }
+                }
+            }
+            if ($flag == 1) {
+                $runDiscover = $this->executePackageDiscover();
+            }
+        }
+    }
+
     private function setupLinks($path, $appName, $appId, $orgId = null)
     {
         $link = $this->config['DELEGATE_FOLDER'] . $appId;
@@ -405,39 +436,12 @@ class AppService extends AbstractService
                 $this->setupLink($target, $link);
             }
         }
-        $apps = $path . "view/apps/";
-        $flag = 0;
-        $folderCount = 0;
-        if (file_exists($apps) && is_dir($apps)) {
-            $files = new FileSystemIterator($apps);
-            foreach ($files as $file) {
-                if ($file->isDir()) {
-                    $folderCount += 1;
-                }
-            }
-            if ($folderCount == 1) {
-                foreach ($files as $file) {
-                    $this->logger->info("\n Symlinking files" . print_r($file, true));
-                    if ($file->isDir()) {
-                        $target = $file->getPathName();
-                        $link = $this->config['APPS_FOLDER'] . $file->getFilename();
-                        if (is_link($link)) {
-                            unlink($link);
-                        }
-                        if (file_exists($target)) {
-                            $this->setupLink($target, $link);
-                            $this->executeCommands($target);
-                            $flag = 1;
-                        }
-                    }
-                }
-            } else if ($folderCount > 1) {
-                throw new Exception("Cannot setup symlink as more than one app exists");
-            }
-            if ($flag == 1) {
-                $runDiscover = $this->executePackageDiscover();
-            }
-        }
+        $appTarget = $path . "view/apps/";
+        $themeTarget = $path."view/themes";
+        $themeLink = $this->config['THEME_FOLDER'];
+        $appLink = $this->config['APPS_FOLDER'];
+        $this->setLinkAndRunBuild($themeTarget,$themeLink);
+        $this->setLinkAndRunBuild($appTarget,$appLink);
     }
 
     private function executePackageDiscover()
