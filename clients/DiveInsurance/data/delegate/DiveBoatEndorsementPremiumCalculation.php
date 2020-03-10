@@ -13,18 +13,11 @@ class DiveBoatEndorsementPremiumCalculation extends AbstractAppDelegate
     {
         $this->logger->info("Premium Calculation".print_r($data,true));
 
-
-        $length = $data['previousPolicyLength'];
-        // print_r($data);
-        // print_r($length);
-        $policy = array();
+		$policy = array();
         $policy = json_decode($data['previous_policy_data'],true);
+        $length = sizeof($policy) - 1;
         $policy =  $policy[$length];
-        // print_r($policy[$length]);
-        // print_r($policy);
-        // print_r(json_decode($policy[0],true));
-        // exit;
-
+      
         unset($data['increased_hullValue'],$data['increased_deductible'],$data['increased_hullPremium'],$data['decreased_hullValue'],$data['decreased_hullPremium'],$data['increased_dinghyValue'],$data['increased_dinghyPremium'],$data['decreased_dinghyValue'],$data['decreased_dinghyPremium'],$data['increased_trailerValue'],$data['increased_trailerPremium'],$data['decreased_trailerValue'],$data['decreased_trailerPremium'],$data['increased_totalLiabilityLimitValue'],$data['decreased_totalLiabilityLimitValue'],$data['increased_passengers'],$data['decreased_passengers'],$data['increased_crewInBoat'],$data['decreased_crewInBoat'],$data['increased_crewInWater'],$data['decreased_crewInWater']);
 
         $data['update_date'] = $policy['update_date'];
