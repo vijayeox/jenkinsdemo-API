@@ -389,3 +389,15 @@ input:focus {
     background-color: #275362;
     border-color: #275362;
 }
+.padi{
+  float:right;
+  text-align: center;
+  width: auto;
+  height: 80px;
+}
+.padi img{
+  height:inherit;
+}
+.padi h4{
+  font-weight: bold;
+}
