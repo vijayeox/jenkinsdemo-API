@@ -79,7 +79,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'gfooter' => 'Group_footer.html',
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
-                        'alTemplate' => 'DiveStore_AdditionalLocations'),
+                        'alTemplate' => 'DiveStore_AdditionalLocations',
+                        'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf'),
             'Emergency First Response'
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
@@ -268,25 +269,29 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT lossPayees");
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                 }
-                
-                if(isset($temp['additionalLocations']) && $temp['additionalLocations']=="yes"){
-                    $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
-                    $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
+
+                if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
+                    for($i=0; $i<sizeof($temp['additionalLocations']);$i++){
+                        $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
+                        $temp["additionalLocationData"] = $temp['additionalLocations'][$i];
+                        $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
+                        unset($temp["additionalLocationData"]);
+                    }
                 }
 
-                if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
+                if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                     $this->logger->info("DOCUMENT groupPL");
                     $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
 
 
-                    if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                    if(isset($temp['additionalNamedInsured']) && $temp['group_additional_insureds_select'] == 'yes'){
                     $this->logger->info("DOCUMENT additionalNamedInsured");
                     $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                     }
 
-                    if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
-                    $this->logger->info("DOCUMENT namedInsured"); 
-                    $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                    if(isset($temp['namedInsureds']) && $temp['group_named_insureds_select'] == 'yes'){
+                        $this->logger->info("DOCUMENT namedInsured"); 
+                        $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
                     }
                 }
                 if(isset($this->template[$temp['product']]['cover_letter'])){
@@ -294,6 +299,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
                 }
 
+                if(isset($this->template[$temp['product']]['travelAgentEO']))   {
+                    if(isset($temp['TravelAgentEOFP']) && $temp['TravelAgentEOFP']){
+                        $this->logger->info("DOCUMENT TravelAgentEOFP");
+                        $documents['Travel_Agents_PL_Endorsement'] = $this->copyDocuments($temp,$dest['relativePath'],'travelAgentEO');
+                    }
+                }
 
             }
 
