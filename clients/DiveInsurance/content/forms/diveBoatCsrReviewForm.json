@@ -2224,18 +2224,19 @@
 					"lockKey": true
 				}, {
 					"label": "PADI Number",
+					"mask": false,
 					"spellcheck": true,
-					"dataGridLabel": false,
-					"tableView": true,
+					"tableView": false,
+					"delimiter": false,
+					"requireDecimal": false,
+					"inputFormat": "plain",
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
 					"key": "padi",
-					"type": "textfield",
-					"input": true,
-					"inDataGrid": true,
-					"lockKey": true
+					"type": "number",
+					"input": true
 				}],
 				"lockKey": true,
 				"path": "CrewGrid"
@@ -3140,7 +3141,8 @@
 				"tableView": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "lossPayees",
 				"type": "datagrid",
@@ -3430,7 +3432,8 @@
 					"tableView": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "additionalInsured",
 					"type": "datagrid",
@@ -3827,7 +3830,8 @@
 				"tableView": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "additionalNamedInsured",
 				"type": "datagrid",
@@ -4302,7 +4306,8 @@
 				"clearOnHide": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "groupPL",
 				"type": "editgrid",
@@ -4597,7 +4602,8 @@
 					"tableView": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "groupAdditionalInsured",
 					"type": "datagrid",
@@ -4861,7 +4867,8 @@
 					"clearOnHide": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "namedInsureds",
 					"type": "editgrid",
@@ -8378,7 +8385,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-03-11T07:09:44.887Z",
+	"modified": "2020-03-11T07:32:44.755Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }

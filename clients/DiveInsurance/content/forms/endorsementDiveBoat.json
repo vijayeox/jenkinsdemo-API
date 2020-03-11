@@ -212,11 +212,11 @@
 				"columns": [{
 					"components": [{
 						"label": "First Name",
-						"placeholder": "First Name",
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"customMessage": "Please enter your first name.",
 							"unique": false,
 							"multiple": false
@@ -234,7 +234,6 @@
 				}, {
 					"components": [{
 						"label": "Initial",
-						"placeholder": "Initial",
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
@@ -256,11 +255,11 @@
 				}, {
 					"components": [{
 						"label": "Last Name",
-						"placeholder": "Last Name",
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"customMessage": "Please enter your last name.",
 							"unique": false,
 							"multiple": false
@@ -297,12 +296,11 @@
 					"columns": [{
 						"components": [{
 							"label": "Address 1",
-							"placeholder": "Address 1",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -313,8 +311,6 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Address 2",
-							"placeholder": "Address 2",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -334,33 +330,30 @@
 						"pull": 0
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
 							"label": "City",
-							"key": "city",
-							"placeholder": "City",
-							"clearOnHide": false,
 							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please enter the city.",
 								"unique": false,
 								"multiple": false
 							},
+							"key": "city",
 							"type": "textfield",
+							"input": true,
 							"lockKey": true,
-							"hideLabel": true,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Zip Code",
-							"placeholder": "Zip Code",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter the zip code.",
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
 								"unique": false,
 								"multiple": false
 							},
@@ -378,8 +371,6 @@
 						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
-							"placeholder": "Country",
-							"hideLabel": true,
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -392,6 +383,7 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -402,8 +394,6 @@
 						}, {
 							"label": "State",
 							"widget": "choicesjs",
-							"placeholder": "State",
-							"hideLabel": true,
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -417,6 +407,7 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -472,9 +463,7 @@
 					"key": "panelPanel4PanelColumns",
 					"columns": [{
 						"components": [{
-							"label": "Text",
-							"placeholder": "Address1",
-							"hideLabel": true,
+							"label": "Address 1",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -489,9 +478,7 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "Text",
-							"placeholder": "Address2",
-							"hideLabel": true,
+							"label": "Address 2",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -511,9 +498,7 @@
 						"pull": 0
 					}, {
 						"components": [{
-							"label": "Text",
-							"placeholder": "City",
-							"hideLabel": true,
+							"label": "City",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -528,14 +513,14 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "Text",
-							"placeholder": "Zip Code",
-							"hideLabel": true,
+							"label": "Zip Code",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
 								"unique": false,
 								"multiple": false
 							},
@@ -553,8 +538,6 @@
 						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
-							"placeholder": "Country",
-							"hideLabel": true,
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -577,8 +560,6 @@
 						}, {
 							"label": "State",
 							"widget": "choicesjs",
-							"placeholder": "State",
-							"hideLabel": true,
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -630,8 +611,6 @@
 							"components": [{
 								"label": "Dial Code",
 								"widget": "choicesjs",
-								"placeholder": "Dial Code",
-								"hideLabel": true,
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
@@ -658,12 +637,12 @@
 						}, {
 							"components": [{
 								"label": "Home Phone",
-								"placeholder": "Home Phone",
-								"hideLabel": true,
+								"placeholder": "                   ",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -706,8 +685,6 @@
 							"components": [{
 								"label": "Dial Code",
 								"widget": "choicesjs",
-								"placeholder": "Dial Code",
-								"hideLabel": true,
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
@@ -734,8 +711,7 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"placeholder": "Mobile Phone",
-								"hideLabel": true,
+								"placeholder": "            ",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -786,8 +762,7 @@
 				}, {
 					"components": [{
 						"label": "Fax",
-						"placeholder": "Fax",
-						"hideLabel": true,
+						"placeholder": "        ",
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
@@ -974,9 +949,8 @@
 				"columns": [{
 					"components": [{
 						"label": "Business PADI Number",
-						"placeholder": "PADI Number",
-						"hideLabel": true,
 						"spellcheck": true,
+						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -1021,7 +995,6 @@
 				"input": false,
 				"components": [{
 					"label": "Legal Business Name",
-					"placeholder": "Legal Business Name",
 					"spellcheck": true,
 					"disabled": true,
 					"tableView": true,
@@ -1050,6 +1023,7 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -1059,23 +1033,6 @@
 								"lockKey": true
 							}]
 						}, {
-							"components": [{
-								"label": "Work Phone",
-								"placeholder": "Work Phone",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_work_phone",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true
-							}]
-						}],
-						[{
 							"components": [{
 								"label": "Adddress2",
 								"spellcheck": true,
@@ -1090,22 +1047,6 @@
 								"input": true,
 								"lockKey": true
 							}]
-						}, {
-							"components": [{
-								"label": "Fax",
-								"placeholder": "Fax",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_fax",
-								"type": "phoneNumber",
-								"input": true,
-								"lockKey": true
-							}]
 						}],
 						[{
 							"components": [{
@@ -1114,6 +1055,7 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -1124,8 +1066,78 @@
 							}]
 						}, {
 							"components": [{
-								"label": "Email Address",
-								"placeholder": "Email Address 1",
+								"label": "Country",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "values = data['countryList'];"
+								},
+								"valueProperty": "country",
+								"template": "<span>{{ item.country }}</span>",
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_country",
+								"type": "select",
+								"input": true
+							}]
+						}],
+						[{
+							"components": [{
+								"label": "State",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+								},
+								"template": "<span>{{ item }}</span>",
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_state",
+								"type": "select",
+								"input": true
+							}]
+						}, {
+							"components": [{
+								"label": "Zip Code",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"pattern": "[0-9\\s-]*",
+									"customMessage": "Please enter a valid Zip Code for your region.",
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_zip",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true
+							}]
+						}],
+						[{
+							"components": [{
+								"label": "Email Address 1",
 								"tooltip": "Primary Email",
 								"spellcheck": true,
 								"tableView": true,
@@ -1144,37 +1156,9 @@
 								"input": true,
 								"lockKey": true
 							}]
-						}],
-						[{
-							"components": [{
-								"label": "Country",
-								"widget": "choicesjs",
-								"placeholder": "Country",
-								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{
-										"label": "",
-										"value": ""
-									}],
-									"custom": "values = data['countryList'];"
-								},
-								"valueProperty": "country",
-								"template": "<span>{{ item.country }}</span>",
-								"selectThreshold": 0.3,
-								"clearOnHide": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_country",
-								"type": "select",
-								"input": true
-							}]
 						}, {
 							"components": [{
-								"label": "Email",
-								"placeholder": "Email Address 2",
+								"label": "Email Address 2",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -1193,33 +1177,23 @@
 						}],
 						[{
 							"components": [{
-								"label": "State",
-								"widget": "choicesjs",
-								"placeholder": "State",
+								"label": "Fax",
+								"placeholder": "             ",
+								"spellcheck": true,
 								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{
-										"label": "",
-										"value": ""
-									}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
-								},
-								"template": "<span>{{ item }}</span>",
-								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
 									"unique": false,
 									"multiple": false
 								},
-								"key": "business_state",
-								"type": "select",
-								"input": true
+								"key": "business_fax",
+								"type": "phoneNumber",
+								"input": true,
+								"lockKey": true
 							}]
 						}, {
 							"components": [{
 								"label": "Website",
-								"placeholder": "Website",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -1235,18 +1209,61 @@
 						}],
 						[{
 							"components": [{
-								"label": "Zip Code",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
+								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "Dial Code",
+										"tableView": true,
+										"dataSrc": "custom",
+										"data": {
+											"custom": "values = data['phoneList']"
+										},
+										"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+										"selectThreshold": 0.3,
+										"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+										"validate": {
+											"unique": false,
+											"multiple": false
+										},
+										"key": "work_country_code",
+										"type": "select",
+										"input": true,
+										"hideOnChildrenHidden": false
+									}],
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"width": 4
+								}, {
+									"components": [{
+										"label": "Work Phone",
+										"spellcheck": true,
+										"tableView": true,
+										"clearOnHide": false,
+										"validate": {
+											"unique": false,
+											"multiple": false
+										},
+										"key": "buisness_work_number",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"width": 8
+								}],
+								"tableView": false,
+								"key": "columns4",
+								"type": "columns",
+								"input": false,
 								"validate": {
 									"unique": false,
 									"multiple": false
 								},
-								"key": "business_zip",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true
+								"path": "columns4"
 							}]
 						}, {
 							"components": []
@@ -1261,12 +1278,24 @@
 						"multiple": false
 					},
 					"path": "panelPanelPanelTable"
+				}, {
+					"label": "business_work_phone",
+					"calculateValue": "value = data.work_country_code + \"\"+ data.buisness_work_number",
+					"key": "business_work_phone",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"hideLabel": true,
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "panelPanelWell2"
 			}, {
 				"clearOnHide": false,
 				"key": "panelPanelWell",
@@ -1278,11 +1307,9 @@
 					"key": "panelPanelColumns3",
 					"columns": [{
 						"components": [{
-							"input": true,
-							"tableView": true,
 							"label": "DBA",
-							"key": "dba",
-							"placeholder": "DBA",
+							"widget": "choicesjs",
+							"tableView": true,
 							"data": {
 								"values": [{
 									"value": "corporation",
@@ -1298,15 +1325,17 @@
 									"label": "Other"
 								}]
 							},
+							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"unique": false,
 								"multiple": false
 							},
+							"key": "dba",
 							"type": "select",
+							"input": true,
 							"lockKey": true,
-							"hideLabel": true,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 6,
@@ -1315,13 +1344,12 @@
 						"pull": 0
 					}, {
 						"components": [{
-							"label": "Text",
-							"placeholder": "Who are the partners?",
-							"hideLabel": true,
+							"label": "Partners",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -1336,9 +1364,7 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "Who are the shareholders?",
-							"placeholder": "Who are the shareholders?",
-							"hideLabel": true,
+							"label": "Shareholders",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -1360,8 +1386,6 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Other, Please Explain",
-							"placeholder": "Please Explain",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -1404,7 +1428,6 @@
 				}
 			}, {
 				"label": "Current Insurance Company",
-				"placeholder": "Current Insurance Company",
 				"spellcheck": true,
 				"tableView": true,
 				"clearOnHide": false,
@@ -1432,9 +1455,7 @@
 			"components": [{
 				"label": "Excess Liability Coverage",
 				"widget": "choicesjs",
-				"placeholder": "Excess Liability Coverage",
 				"tooltip": "Primary limit $1,000,000",
-				"hideLabel": true,
 				"tableView": true,
 				"dataSrc": "custom",
 				"data": {
@@ -1445,6 +1466,7 @@
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
+					"required": true,
 					"unique": false,
 					"multiple": false
 				},
@@ -1509,13 +1531,12 @@
 					"input": true,
 					"components": [{
 						"label": "Claims",
-						"placeholder": "Claims",
-						"hideLabel": true,
 						"spellcheck": true,
 						"dataGridLabel": false,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -1527,8 +1548,6 @@
 					}, {
 						"label": "Date",
 						"format": "MM-dd-yyyy",
-						"placeholder": "Date",
-						"hideLabel": true,
 						"dataGridLabel": false,
 						"tableView": true,
 						"datePicker": {
@@ -1540,6 +1559,7 @@
 						},
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -1566,24 +1586,25 @@
 						},
 						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 					}, {
-						"label": "Amounts",
-						"placeholder": "Amounts",
-						"hideLabel": true,
+						"label": "Amount",
+						"prefix": "$",
+						"mask": false,
 						"spellcheck": true,
-						"dataGridLabel": false,
-						"tableView": true,
-						"clearOnHide": false,
+						"tableView": false,
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
-						"key": "data_grid_amounts",
-						"type": "textfield",
-						"input": true,
-						"inDataGrid": true,
-						"lockKey": true
+						"key": "amount",
+						"type": "number",
+						"input": true
 					}],
-					"lockKey": true
+					"lockKey": true,
+					"path": "DataGrid"
 				}],
 				"tableView": false,
 				"type": "well",
@@ -1656,9 +1677,7 @@
 				"key": "pageNaNColumns",
 				"columns": [{
 					"components": [{
-						"label": "Text",
-						"placeholder": "Name of the Captain",
-						"hideLabel": true,
+						"label": "Name of the Captain",
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
@@ -1708,6 +1727,8 @@
 						}],
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
+							"customMessage": "Please answer all the questions.",
 							"unique": false,
 							"multiple": false
 						},
@@ -1717,18 +1738,16 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
 						"label": "Registry Number",
-						"key": "registry_number",
-						"placeholder": "Registry Number",
 						"spellcheck": true,
+						"tableView": true,
 						"validate": {
 							"unique": false,
 							"multiple": false
 						},
+						"key": "registry_number",
 						"type": "textfield",
-						"hideLabel": true,
+						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -1740,8 +1759,6 @@
 					"components": [{
 						"label": "Waters to be navigated",
 						"widget": "choicesjs",
-						"placeholder": "Waters to be navigated",
-						"hideLabel": true,
 						"tableView": true,
 						"data": {
 							"values": [{
@@ -1780,9 +1797,7 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "Text",
-						"placeholder": "Please Specify",
-						"hideLabel": true,
+						"label": "Please Specify",
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
@@ -1802,8 +1817,6 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Certified for Maximum Number of Passengers:",
-						"placeholder": "Certified for Maximum Number of Passengers",
-						"hideLabel": true,
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
@@ -1820,26 +1833,24 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Percentage of trips for diving charters",
-						"placeholder": "Percentage of trips for diving charters",
-						"hideLabel": true,
+						"suffix": "%",
+						"mask": false,
 						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the percentage of trips for diving charters.",
 							"unique": false,
 							"multiple": false
 						},
 						"key": "percentage_of_trips_for_diving_charters",
-						"type": "textfield",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "If less than 100%, Please explain",
-						"placeholder": "Percentage of trips for diving charters is less than 100%, Please explain",
-						"hideLabel": true,
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
@@ -1848,11 +1859,7 @@
 							"multiple": false
 						},
 						"key": "if_lessthan_100_please_explain",
-						"conditional": {
-							"show": true,
-							"when": "pageNaNColumnsPercentageoftripsfordivingcharters",
-							"eq": "less than 100"
-						},
+						"customConditional": "if(data['percentage_of_trips_for_diving_charters'] < 100 && data['percentage_of_trips_for_diving_charters'] != ''){\n  show = true;\n}",
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
@@ -1864,10 +1871,8 @@
 						"key": "pageNaNColumnsColumns",
 						"columns": [{
 							"components": [{
-								"label": "Date Time",
+								"label": "Layup Period From",
 								"format": "MM-dd-yyyy",
-								"placeholder": "Layup Period From",
-								"hideLabel": true,
 								"tableView": true,
 								"datePicker": {
 									"datepickerMode": "day"
@@ -1912,10 +1917,8 @@
 							"pull": 0
 						}, {
 							"components": [{
-								"label": "Date Time",
+								"label": "Layup Period To",
 								"format": "MM-dd-yyyy",
-								"placeholder": "To",
-								"hideLabel": true,
 								"tableView": true,
 								"datePicker": {
 									"datepickerMode": "day"
@@ -1976,7 +1979,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "pageNaNColumns"
 			}, {
 				"clearOnHide": false,
 				"input": false,
@@ -2045,24 +2049,21 @@
 						}]
 					}, {
 						"components": [{
-							"label": "How man Crew Members would you like to Cover ?",
+							"label": "How many Crew Members would you like to Cover ?",
+							"mask": false,
 							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
 							"validate": {
 								"required": true,
 								"unique": false,
 								"multiple": false
 							},
 							"key": "CrewInWaterCount",
-							"conditional": {
-								"show": true,
-								"when": "CrewInWaterYN",
-								"eq": "true"
-							},
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
+							"type": "number",
+							"input": true
 						}]
 					}]
 				],
@@ -2070,7 +2071,8 @@
 				"type": "table",
 				"customConditional": "show = (data['boat_usage_survey'].doYouWantCoverageForPassengersWhileInTheWaterGroupProfessionalLiability == 'yes')",
 				"hideLabel": true,
-				"label": "Table"
+				"label": "Table",
+				"path": "pageNaNPanelTable"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -2104,8 +2106,6 @@
 				"input": true,
 				"components": [{
 					"label": "Duty",
-					"placeholder": "Duty",
-					"hideLabel": true,
 					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": true,
@@ -2121,8 +2121,6 @@
 					"lockKey": true
 				}, {
 					"label": "Name",
-					"placeholder": "Name",
-					"hideLabel": true,
 					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": true,
@@ -2137,10 +2135,8 @@
 					"inDataGrid": true,
 					"lockKey": true
 				}, {
-					"label": "ft/pt",
+					"label": "FT/PT",
 					"widget": "choicesjs",
-					"placeholder": "FT/PT",
-					"hideLabel": true,
 					"dataGridLabel": false,
 					"tableView": true,
 					"data": {
@@ -2166,8 +2162,6 @@
 				}, {
 					"label": "Do they have Professional Liability Insurance?",
 					"widget": "choicesjs",
-					"placeholder": "Do they have Professional Liability Insurance?",
-					"hideLabel": true,
 					"dataGridLabel": false,
 					"tableView": true,
 					"data": {
@@ -2192,23 +2186,22 @@
 					"lockKey": true
 				}, {
 					"label": "PADI Number",
-					"placeholder": "PADI Number",
-					"hideLabel": true,
+					"mask": false,
 					"spellcheck": true,
-					"dataGridLabel": false,
-					"tableView": true,
-					"clearOnHide": false,
+					"tableView": false,
+					"delimiter": false,
+					"requireDecimal": false,
+					"inputFormat": "plain",
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
 					"key": "padi",
-					"type": "textfield",
-					"input": true,
-					"inDataGrid": true,
-					"lockKey": true
+					"type": "number",
+					"input": true
 				}],
-				"lockKey": true
+				"lockKey": true,
+				"path": "CrewGrid"
 			}, {
 				"label": "Survey",
 				"hideLabel": true,
@@ -2282,9 +2275,7 @@
 				"rows": [
 					[{
 						"components": [{
-							"label": "Name of Vessel",
-							"placeholder": "Name of the Vessel",
-							"hideLabel": true,
+							"label": "Name of the Vessel",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2301,8 +2292,6 @@
 					}, {
 						"components": [{
 							"label": "Manufacturer",
-							"placeholder": "Manufacturer",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2320,11 +2309,11 @@
 					}, {
 						"components": [{
 							"label": "Built Year",
-							"placeholder": "Built Year",
-							"hideLabel": true,
+							"widget": "choicesjs",
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
+								"values": [{}],
 								"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
 							},
 							"template": "<span>{{ item }}</span>",
@@ -2341,8 +2330,6 @@
 					[{
 						"components": [{
 							"label": "Serial Number",
-							"placeholder": "Serial Number",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2360,8 +2347,6 @@
 					}, {
 						"components": [{
 							"label": "Model",
-							"placeholder": "Model",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2378,9 +2363,7 @@
 						}]
 					}, {
 						"components": [{
-							"label": "Length Overall",
-							"placeholder": "Overall length",
-							"hideLabel": true,
+							"label": "Overall length",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2399,8 +2382,6 @@
 					[{
 						"components": [{
 							"label": "Material of Hull",
-							"placeholder": "Material of Hull",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2418,8 +2399,6 @@
 					}, {
 						"components": [{
 							"label": "Maximum range",
-							"placeholder": "Maximum range",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2437,8 +2416,6 @@
 					}, {
 						"components": [{
 							"label": "Engine Make",
-							"placeholder": "Engine Make",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -2460,21 +2437,21 @@
 							"columns": [{
 								"components": [{
 									"label": "Total Horsepower",
-									"placeholder": "Total Horsepower",
-									"hideLabel": true,
+									"suffix": "HP",
+									"mask": false,
 									"spellcheck": true,
-									"tableView": true,
-									"clearOnHide": false,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter the total horespower.",
 										"unique": false,
 										"multiple": false
 									},
 									"key": "vessel_hp",
-									"type": "textfield",
+									"type": "number",
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
@@ -2504,8 +2481,6 @@
 								"components": [{
 									"label": "Type of propulsion",
 									"widget": "choicesjs",
-									"placeholder": "Type of propulsion",
-									"hideLabel": true,
 									"tableView": true,
 									"data": {
 										"values": [{
@@ -2542,8 +2517,6 @@
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "If other, please specify",
-									"placeholder": "If other, please specify",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -2609,8 +2582,6 @@
 							"input": true,
 							"components": [{
 								"label": "Protective devices (automatic firefighting systems, etc)",
-								"placeholder": "Protective devices (automatic firefighting systems, etc)",
-								"hideLabel": true,
 								"spellcheck": true,
 								"dataGridLabel": false,
 								"tableView": true,
@@ -2628,10 +2599,8 @@
 								"lockKey": true
 							}]
 						}, {
-							"label": "Date Time",
+							"label": "Date of last survey",
 							"format": "MM-dd-yyyy",
-							"placeholder": "Date of last survey",
-							"hideLabel": true,
 							"tableView": true,
 							"datePicker": {
 								"datepickerMode": "day"
@@ -2683,9 +2652,7 @@
 							"columns": [{
 								"components": [{
 									"label": "Hull Market Value",
-									"placeholder": "Hull Market Value",
 									"prefix": "$",
-									"hideLabel": true,
 									"mask": false,
 									"spellcheck": true,
 									"tableView": false,
@@ -2710,9 +2677,7 @@
 							}, {
 								"components": [{
 									"label": "Purchase Price",
-									"placeholder": "Purchase Price",
 									"prefix": "$",
-									"hideLabel": true,
 									"mask": false,
 									"spellcheck": true,
 									"tableView": false,
@@ -2745,8 +2710,6 @@
 						}, {
 							"label": "Date of Purchase",
 							"format": "MM-dd-yyyy",
-							"placeholder": "Date of Purchase",
-							"hideLabel": true,
 							"tableView": true,
 							"datePicker": {
 								"datepickerMode": "day"
@@ -2846,8 +2809,7 @@
 			"columns": [{
 				"components": [{
 					"label": "Dinghy/Tender",
-					"placeholder": "Dinghy/Tender",
-					"hideLabel": true,
+					"widget": "choicesjs",
 					"tableView": true,
 					"data": {
 						"values": [{
@@ -2884,8 +2846,6 @@
 						"columns": [{
 							"components": [{
 								"label": "Manufacturer",
-								"placeholder": "Manufacturer",
-								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -2901,8 +2861,6 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "Dinghy Length (Feet)",
-								"placeholder": "Dinghy Length",
-								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -2925,11 +2883,10 @@
 							"components": [{
 								"label": "Built Year",
 								"widget": "choicesjs",
-								"placeholder": "Built Year",
-								"hideLabel": true,
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
+									"values": [{}],
 									"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
 								},
 								"template": "<span>{{ item }}</span>",
@@ -2944,9 +2901,7 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "Value",
-								"placeholder": "Value",
 								"prefix": "$",
-								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
 								"tableView": false,
@@ -2994,8 +2949,6 @@
 				"components": [{
 					"label": "Trailer",
 					"widget": "choicesjs",
-					"placeholder": "Trailer",
-					"hideLabel": true,
 					"tableView": true,
 					"data": {
 						"values": [{
@@ -3032,8 +2985,6 @@
 						"columns": [{
 							"components": [{
 								"label": "Manufacturer",
-								"placeholder": "Manufacturer",
-								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -3050,11 +3001,10 @@
 							}, {
 								"label": "Built Year",
 								"widget": "choicesjs",
-								"placeholder": "Built Year",
-								"hideLabel": true,
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
+									"values": [{}],
 									"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
 								},
 								"template": "<span>{{ item }}</span>",
@@ -3075,9 +3025,7 @@
 						}, {
 							"components": [{
 								"label": "Value",
-								"placeholder": "Value",
 								"prefix": "$",
-								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
 								"tableView": true,
@@ -3099,8 +3047,6 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "Serial Number",
-								"placeholder": "Serial Number",
-								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -3209,9 +3155,7 @@
 					"multiple": false
 				}
 			}, {
-				"label": "Select",
-				"placeholder": "Select according to your preference",
-				"hideLabel": true,
+				"label": "Select according to your preference",
 				"tableView": true,
 				"defaultValue": "noAdditionalInsureds",
 				"data": {
@@ -3254,7 +3198,8 @@
 					"clearOnHide": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "additionalInsured",
 					"type": "datagrid",
@@ -3277,8 +3222,6 @@
 							"columns": [{
 								"components": [{
 									"label": "Name",
-									"placeholder": "Name",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -3300,8 +3243,6 @@
 							}, {
 								"components": [{
 									"label": "Address",
-									"placeholder": "Address",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -3323,8 +3264,6 @@
 							}, {
 								"components": [{
 									"label": "City",
-									"placeholder": "City",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -3359,8 +3298,6 @@
 								"components": [{
 									"label": "Country",
 									"widget": "choicesjs",
-									"placeholder": "Country",
-									"hideLabel": true,
 									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
@@ -3373,6 +3310,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -3389,8 +3327,6 @@
 								"components": [{
 									"label": "State",
 									"widget": "choicesjs",
-									"placeholder": "State",
-									"hideLabel": true,
 									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
@@ -3418,26 +3354,19 @@
 								"pull": 0
 							}, {
 								"components": [{
-									"label": "Zip",
-									"placeholder": "Zip Code",
-									"hideLabel": true,
-									"mask": false,
+									"label": "Zip Code",
 									"spellcheck": true,
 									"tableView": true,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"clearOnHide": false,
 									"validate": {
 										"required": true,
-										"multiple": false,
-										"unique": false
+										"pattern": "[0-9\\s-]*",
+										"customMessage": "Please enter a valid Zip Code for your region.",
+										"unique": false,
+										"multiple": false
 									},
 									"key": "zip",
-									"type": "number",
+									"type": "textfield",
 									"input": true,
-									"inputType": "number",
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
@@ -3448,8 +3377,6 @@
 								"components": [{
 									"label": "Business Relation",
 									"widget": "choicesjs",
-									"placeholder": "Business Relation",
-									"hideLabel": true,
 									"tableView": true,
 									"data": {
 										"values": [{
@@ -3486,8 +3413,6 @@
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "Please Mention",
-									"placeholder": "Please Mention",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -3526,15 +3451,12 @@
 							"columns": [{
 								"components": [{
 									"label": "Addtional Information",
-									"placeholder": "Addtional Information",
 									"autoExpand": false,
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -3682,7 +3604,8 @@
 				"tableView": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "additionalNamedInsured",
 				"type": "datagrid",
@@ -3705,8 +3628,6 @@
 						"columns": [{
 							"components": [{
 								"label": "Name",
-								"placeholder": "Name",
-								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -3728,8 +3649,6 @@
 						}, {
 							"components": [{
 								"label": "Address",
-								"placeholder": "Address",
-								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -3751,8 +3670,6 @@
 						}, {
 							"components": [{
 								"label": "City",
-								"placeholder": "City",
-								"hideLabel": true,
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -3787,8 +3704,6 @@
 							"components": [{
 								"label": "Country",
 								"widget": "choicesjs",
-								"placeholder": "Country",
-								"hideLabel": true,
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
@@ -3817,8 +3732,6 @@
 							"components": [{
 								"label": "State",
 								"widget": "choicesjs",
-								"placeholder": "State",
-								"hideLabel": true,
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
@@ -3846,26 +3759,19 @@
 							"pull": 0
 						}, {
 							"components": [{
-								"label": "Zip",
-								"placeholder": "Zip Code",
-								"hideLabel": true,
-								"mask": false,
+								"label": "Zip Code",
 								"spellcheck": true,
 								"tableView": true,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
-								"clearOnHide": false,
 								"validate": {
 									"required": true,
-									"multiple": false,
-									"unique": false
+									"pattern": "[0-9\\s-]*",
+									"customMessage": "Please enter a valid Zip Code for your region.",
+									"unique": false,
+									"multiple": false
 								},
 								"key": "zip",
-								"type": "number",
+								"type": "textfield",
 								"input": true,
-								"inputType": "number",
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
@@ -3919,7 +3825,6 @@
 		"components": [{
 			"label": "Loss Payees",
 			"widget": "choicesjs",
-			"hideLabel": true,
 			"tableView": true,
 			"data": {
 				"values": [{
@@ -3952,7 +3857,8 @@
 			"tableView": false,
 			"validate": {
 				"unique": false,
-				"multiple": false
+				"multiple": false,
+				"minLength": 1
 			},
 			"key": "lossPayees",
 			"conditional": {
@@ -3980,8 +3886,6 @@
 					"columns": [{
 						"components": [{
 							"label": "Name",
-							"placeholder": "Name",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -4003,8 +3907,6 @@
 					}, {
 						"components": [{
 							"label": "Address",
-							"placeholder": "Address",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -4026,8 +3928,6 @@
 					}, {
 						"components": [{
 							"label": "City",
-							"placeholder": "City",
-							"hideLabel": true,
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
@@ -4050,8 +3950,6 @@
 						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
-							"placeholder": "Country",
-							"hideLabel": true,
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -4080,8 +3978,6 @@
 						"components": [{
 							"label": "State",
 							"widget": "choicesjs",
-							"placeholder": "State",
-							"hideLabel": true,
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -4109,26 +4005,19 @@
 						"pull": 0
 					}, {
 						"components": [{
-							"label": "Zip",
-							"placeholder": "Zip Code",
-							"hideLabel": true,
-							"mask": false,
+							"label": "Zip Code",
 							"spellcheck": true,
 							"tableView": true,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"multiple": false,
-								"unique": false
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"unique": false,
+								"multiple": false
 							},
 							"key": "zip",
-							"type": "number",
+							"type": "textfield",
 							"input": true,
-							"inputType": "number",
-							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
@@ -4171,7 +4060,6 @@
 		"components": [{
 			"label": "Would you like to apply for Group Professional Liability?",
 			"widget": "choicesjs",
-			"placeholder": "Group Professional Liability",
 			"tableView": true,
 			"data": {
 				"values": [{
@@ -4215,10 +4103,8 @@
 				"key": "page7Columns",
 				"columns": [{
 					"components": [{
-						"label": "Group Coverage",
+						"label": "Select Group Coverage",
 						"widget": "choicesjs",
-						"placeholder": "Select Group Coverage",
-						"hideLabel": true,
 						"tableView": true,
 						"dataSrc": "custom",
 						"data": {
@@ -4264,10 +4150,8 @@
 				"key": "page7Columns2",
 				"columns": [{
 					"components": [{
-						"label": "Excess Liability",
+						"label": "Select Excess Liability",
 						"widget": "choicesjs",
-						"placeholder": "Select Excess Liability",
-						"hideLabel": true,
 						"tableView": true,
 						"dataSrc": "custom",
 						"data": {
@@ -4324,9 +4208,7 @@
 					"multiple": false
 				},
 				"components": [{
-					"label": "PADI",
-					"placeholder": "Enter PADI Number",
-					"hideLabel": true,
+					"label": "Enter PADI Number",
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
@@ -4392,7 +4274,8 @@
 				"clearOnHide": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "groupPL",
 				"type": "editgrid",
@@ -4694,7 +4577,8 @@
 					"clearOnHide": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "groupAdditionalInsured",
 					"type": "datagrid",
@@ -4711,8 +4595,6 @@
 							"columns": [{
 								"components": [{
 									"label": "Name",
-									"placeholder": "Name",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -4733,8 +4615,6 @@
 							}, {
 								"components": [{
 									"label": "Address",
-									"placeholder": "Address",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -4755,8 +4635,6 @@
 							}, {
 								"components": [{
 									"label": "City",
-									"placeholder": "City",
-									"hideLabel": true,
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -4778,8 +4656,6 @@
 								"components": [{
 									"label": "Country",
 									"widget": "choicesjs",
-									"placeholder": "Country",
-									"hideLabel": true,
 									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
@@ -4808,8 +4684,6 @@
 								"components": [{
 									"label": "State",
 									"widget": "choicesjs",
-									"placeholder": "State",
-									"hideLabel": true,
 									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
@@ -4837,25 +4711,19 @@
 								"pull": 0
 							}, {
 								"components": [{
-									"label": "Zip",
-									"placeholder": "Zip Code",
-									"hideLabel": true,
-									"mask": false,
+									"label": "Zip Code",
 									"spellcheck": true,
 									"tableView": true,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"clearOnHide": false,
 									"validate": {
-										"multiple": false,
-										"unique": false
+										"required": true,
+										"pattern": "[0-9\\s-]*",
+										"customMessage": "Please enter a valid Zip Code for your region.",
+										"unique": false,
+										"multiple": false
 									},
 									"key": "zip",
-									"type": "number",
+									"type": "textfield",
 									"input": true,
-									"inputType": "number",
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
@@ -4894,7 +4762,6 @@
 			}, {
 				"label": "Named Insureds",
 				"widget": "choicesjs",
-				"placeholder": "Named Insureds",
 				"tableView": true,
 				"data": {
 					"values": [{
@@ -4922,9 +4789,7 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"label": "PADI Number",
-					"placeholder": "Enter PADI Number",
-					"hideLabel": true,
+					"label": "Enter PADI Number",
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
@@ -4973,7 +4838,8 @@
 					"clearOnHide": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "namedInsureds",
 					"type": "editgrid",
@@ -4985,8 +4851,7 @@
 						"key": "additionalNamedInsuredsColumns",
 						"columns": [{
 							"components": [{
-								"label": "PADI",
-								"placeholder": "Padi Number",
+								"label": "PADI Number",
 								"spellcheck": false,
 								"tableView": true,
 								"clearOnHide": false,
@@ -5007,7 +4872,6 @@
 						}, {
 							"components": [{
 								"label": "Name",
-								"placeholder": "Name",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -5028,7 +4892,6 @@
 						}, {
 							"components": [{
 								"label": "Satus",
-								"placeholder": "Satus",
 								"spellcheck": false,
 								"tableView": true,
 								"clearOnHide": false,
@@ -5166,6 +5029,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-04T18:51:30.880Z",
+	"modified": "2020-03-11T07:38:20.814Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }
