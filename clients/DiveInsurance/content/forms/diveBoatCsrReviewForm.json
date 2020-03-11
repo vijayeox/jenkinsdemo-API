@@ -206,6 +206,7 @@
 					"components": [{
 						"label": "First Name",
 						"spellcheck": false,
+						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -245,6 +246,7 @@
 					"components": [{
 						"label": "Initial",
 						"spellcheck": false,
+						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -283,6 +285,7 @@
 					"components": [{
 						"label": "Last Name",
 						"spellcheck": false,
+						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -887,6 +890,7 @@
 			"columns": [{
 				"components": [{
 					"label": "Policy Period",
+					"allowInput": false,
 					"format": "MM-dd-yyyy",
 					"tableView": false,
 					"datePicker": {
@@ -915,7 +919,7 @@
 						"displayInTimezone": "viewer",
 						"language": "en",
 						"useLocaleSettings": false,
-						"allowInput": true,
+						"allowInput": false,
 						"mode": "single",
 						"enableTime": false,
 						"noCalendar": false,
@@ -1241,6 +1245,7 @@
 										"tableView": true,
 										"dataSrc": "custom",
 										"data": {
+											"values": [{}],
 											"custom": "values = data['phoneList']"
 										},
 										"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
@@ -1269,6 +1274,7 @@
 										"clearOnHide": false,
 										"calculateValue": "value = data['mobilephone']",
 										"validate": {
+											"required": true,
 											"customMessage": "Please enter the phone number.",
 											"unique": false,
 											"multiple": false
@@ -1742,6 +1748,7 @@
 						}],
 						"validate": {
 							"required": true,
+							"customMessage": "Please answer all the questions.",
 							"unique": false,
 							"multiple": false
 						},
@@ -2261,6 +2268,7 @@
 				}],
 				"validate": {
 					"required": true,
+					"customMessage": "Please select Yes or No",
 					"unique": false,
 					"multiple": false
 				},
@@ -2465,18 +2473,20 @@
 								"components": [{
 									"label": "Total Horsepower",
 									"suffix": "HP",
+									"mask": false,
 									"spellcheck": true,
-									"tableView": true,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter total horsepower.",
 										"unique": false,
 										"multiple": false
 									},
 									"key": "vessel_hp",
-									"type": "textfield",
+									"type": "number",
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
@@ -8368,7 +8378,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-03-10T05:47:17.012Z",
+	"modified": "2020-03-11T07:09:44.887Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }

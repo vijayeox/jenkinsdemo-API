@@ -149,6 +149,18 @@
                             "multiple": false
                         },
                         "hideOnChildrenHidden": false
+                    }, {
+                        "label": "disableUserInfoEditing",
+                        "customDefaultValue": "value = false;",
+                        "key": "disableUserInfoEdit",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        },
+                        "hideOnChildrenHidden": false
                     }],
                     "width": 4,
                     "offset": 0,
@@ -178,6 +190,23 @@
                         "hideLabel": true,
                         "hideOnChildrenHidden": false
                     }, {
+                        "label": "HTML",
+                        "attrs": [{
+                            "attr": "",
+                            "value": ""
+                        }],
+                        "content": "<style>\n  .alignCenter{\n    text-align:center\n  }\n</style>",
+                        "refreshOnChange": false,
+                        "tableView": false,
+                        "key": "html7",
+                        "type": "htmlelement",
+                        "input": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        },
+                        "hideOnChildrenHidden": false
+                    }, {
                         "label": "Validate PADI Membership",
                         "action": "event",
                         "showValidations": false,
@@ -188,6 +217,7 @@
                         "properties": {
                             "commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
                         },
+                        "customConditional": "if(\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\")){\n    show = false;\n  } else {\n    show = true;\n  }",
                         "overlay": {
                             "style": "text-align:center"
                         },
@@ -200,6 +230,35 @@
                             "unique": false,
                             "multiple": false
                         }
+                    }, {
+                        "label": "Change PADI Number",
+                        "action": "event",
+                        "showValidations": false,
+                        "theme": "warning",
+                        "customClass": "alignCenter",
+                        "tableView": false,
+                        "key": "changePadi",
+                        "customConditional": "if (\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\") &&\n  (data.disableUserInfoEdit == false || data.disableUserInfoEdit == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
+                        "logic": [{
+                            "name": "Event Handler",
+                            "trigger": {
+                                "type": "event",
+                                "event": "triggerFormChange"
+                            },
+                            "actions": [{
+                                "name": "Reset Form",
+                                "type": "value",
+                                "value": "data.padiVerified = undefined;\ndata.verified = undefined;\ndata.policy_exists = undefined;\ndata.padiNotFound = undefined;"
+                            }]
+                        }],
+                        "type": "button",
+                        "input": true,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        },
+                        "event": "triggerFormChange",
+                        "hideOnChildrenHidden": false
                     }, {
                         "label": "HTML",
                         "attrs": [{
@@ -1076,6 +1135,7 @@
             "columns": [{
                 "components": [{
                     "label": "Policy period",
+                    "allowInput": false,
                     "format": "MM-dd-yyyy",
                     "autofocus": true,
                     "tableView": true,
@@ -1102,7 +1162,7 @@
                         "displayInTimezone": "viewer",
                         "language": "en",
                         "useLocaleSettings": false,
-                        "allowInput": true,
+                        "allowInput": false,
                         "mode": "single",
                         "enableTime": false,
                         "noCalendar": false,
@@ -2038,6 +2098,7 @@
                         }],
                         "validate": {
                             "required": true,
+                            "customMessage": "Please answer all the questions.",
                             "unique": false,
                             "multiple": false
                         },
@@ -2350,22 +2411,20 @@
                     }, {
                         "components": [{
                             "label": "How many Crew Members would you like to Cover ?",
+                            "mask": false,
                             "spellcheck": true,
-                            "tableView": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
                             "validate": {
                                 "required": true,
                                 "unique": false,
                                 "multiple": false
                             },
                             "key": "CrewInWaterCount",
-                            "conditional": {
-                                "show": true,
-                                "when": "CrewInWaterYN",
-                                "eq": "true"
-                            },
-                            "type": "textfield",
-                            "input": true,
-                            "lockKey": true
+                            "type": "number",
+                            "input": true
                         }]
                     }]
                 ],
@@ -2373,7 +2432,8 @@
                 "type": "table",
                 "customConditional": "show = (data['boat_usage_survey'].doYouWantCoverageForPassengersWhileInTheWaterGroupProfessionalLiability == 'yes')",
                 "hideLabel": true,
-                "label": "Table"
+                "label": "Table",
+                "path": "pageNaNPanelTable"
             }],
             "type": "panel",
             "label": "Panel",
@@ -2526,7 +2586,7 @@
                 }],
                 "validate": {
                     "required": true,
-                    "customMessage": "Please select Yes or No.",
+                    "customMessage": "Please select Yes or No",
                     "unique": false,
                     "multiple": false
                 },
@@ -2729,18 +2789,20 @@
                                 "components": [{
                                     "label": "Total Horsepower",
                                     "suffix": "HP",
+                                    "mask": false,
                                     "spellcheck": true,
-                                    "tableView": true,
+                                    "tableView": false,
+                                    "delimiter": false,
+                                    "requireDecimal": false,
+                                    "inputFormat": "plain",
                                     "validate": {
                                         "required": true,
-                                        "customMessage": "Please enter the total horespower.",
                                         "unique": false,
                                         "multiple": false
                                     },
                                     "key": "vessel_hp",
-                                    "type": "textfield",
+                                    "type": "number",
                                     "input": true,
-                                    "lockKey": true,
                                     "hideOnChildrenHidden": false
                                 }],
                                 "offset": 0,
@@ -5597,6 +5659,6 @@
     "path": "diveboat02",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-01-23T10:59:00.323Z",
-    "modified": "2020-03-10T06:04:22.231Z",
+    "modified": "2020-03-11T07:10:03.179Z",
     "machineName": "testdivehub:diveBoat02"
 }
