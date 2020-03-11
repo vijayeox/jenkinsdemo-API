@@ -673,7 +673,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Dial Code",
+								"label": "Country Code",
 								"widget": "choicesjs",
 								"tableView": true,
 								"dataSrc": "custom",
@@ -748,7 +748,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Dial Code",
+								"label": "Country Code",
 								"widget": "choicesjs",
 								"tableView": true,
 								"dataSrc": "custom",
@@ -1277,7 +1277,7 @@
 					"label": "Columns",
 					"columns": [{
 						"components": [{
-							"label": "Dial Code",
+							"label": "Country Code",
 							"widget": "choicesjs",
 							"tableView": true,
 							"dataSrc": "custom",
@@ -1770,6 +1770,8 @@
 						}],
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
+							"customMessage": "Please answer all the questions.",
 							"unique": false,
 							"multiple": false
 						},
@@ -1876,9 +1878,12 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Certified for Maximum Number of Passengers:",
+						"mask": false,
 						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter certified for maximum number of passengers.",
@@ -1886,25 +1891,26 @@
 							"multiple": false
 						},
 						"key": "certified_for_max_number_of_passengers",
-						"type": "textfield",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Percentage of trips for diving charters",
+						"suffix": "%",
+						"mask": false,
 						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter percentage of trips for diving charters.",
 							"unique": false,
 							"multiple": false
 						},
 						"key": "percentage_of_trips_for_diving_charters",
-						"type": "textfield",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "If less than 100%, Please explain",
@@ -1936,6 +1942,7 @@
 								"format": "MM-dd-yyyy",
 								"tableView": true,
 								"datePicker": {
+									"minDate": "moment().format('YYYY MM DD')",
 									"showWeeks": false,
 									"datepickerMode": "day"
 								},
@@ -1969,7 +1976,7 @@
 									"hourIncrement": 1,
 									"minuteIncrement": 1,
 									"time_24hr": true,
-									"minDate": null,
+									"minDate": "moment().format('YYYY MM DD')",
 									"maxDate": null
 								}
 							}],
@@ -2041,7 +2048,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "pageNaNColumns"
 			}, {
 				"clearOnHide": false,
 				"input": false,
@@ -2056,6 +2064,7 @@
 							"defaultValue": false,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -2077,6 +2086,7 @@
 							"inputFormat": "plain",
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -2099,6 +2109,7 @@
 							"defaultValue": false,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -2119,6 +2130,7 @@
 							"inputFormat": "plain",
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -2205,21 +2217,26 @@
 					"inDataGrid": true,
 					"lockKey": true
 				}, {
-					"label": "FT/PT",
-					"placeholder": "FT/PT",
-					"spellcheck": true,
-					"dataGridLabel": false,
+					"label": "Full Time/Part Time",
+					"widget": "choicesjs",
 					"tableView": true,
-					"clearOnHide": false,
+					"data": {
+						"values": [{
+							"label": "FT",
+							"value": "FT"
+						}, {
+							"label": "PT",
+							"value": "PT"
+						}]
+					},
+					"selectThreshold": 0.3,
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
-					"key": "ft_pt",
-					"type": "textfield",
-					"input": true,
-					"inDataGrid": true,
-					"lockKey": true
+					"key": "fullTimePartTime",
+					"type": "select",
+					"input": true
 				}, {
 					"label": "Do they have Professional Liability Insurance?",
 					"widget": "choicesjs",
@@ -2271,11 +2288,17 @@
 					"value": "hasAnyCrewHadDecompressionSicknessOrReceivedHyperbaricTreatmentInTheLastThree3Years",
 					"label": "Has any crew had decompression sickness or received hyperbaric treatment in the last three (3) years?"
 				}, {
-					"value": "doYouRequireAllInstructorsAndDivemastersOnBoardYourVesselToCarryProfessionalLiabilityInsurance",
-					"label": "Do you require all instructors and divemasters on board your vessel to carry professional liability insurance?"
+					"value": "doYouWantCoverageForPaidCrewWhileOnboardTheVessel",
+					"label": "Do you want coverage for Paid Crew while onboard the vessel?"
 				}, {
-					"value": "doYouRequireYourCaptainsToRemainOnTheBoatAtAllTimes",
-					"label": "Do you require your Captains to remain on the boat at all times?"
+					"value": "doYouWantCoverageForPaidCrewWhileTheyAreInTheWater",
+					"label": "Do you want coverage for Paid Crew while they are in the water?"
+				}, {
+					"label": "Do you require all instructors and divemasters on board your vessel to carry professional liability insurance?",
+					"value": "doYouRequireAllInstructorsAndDivemastersOnBoardYourVesselToCarryProfessionalLiabilityInsurance"
+				}, {
+					"label": "Do you require your Captains to remain on the boat at all times?",
+					"value": "doYouRequireYourCaptainsToRemainOnTheBoatAtAllTimes"
 				}],
 				"values": [{
 					"value": "yes",
@@ -2286,6 +2309,8 @@
 				}],
 				"clearOnHide": false,
 				"validate": {
+					"required": true,
+					"customMessage": "Please select Yes or No.",
 					"unique": false,
 					"multiple": false
 				},
@@ -2434,19 +2459,20 @@
 					}, {
 						"components": [{
 							"label": "Overall length",
+							"mask": false,
 							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter the overall length.",
 								"unique": false,
 								"multiple": false
 							},
 							"key": "vessel_length",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
+							"type": "number",
+							"input": true
 						}]
 					}],
 					[{
@@ -2469,19 +2495,20 @@
 					}, {
 						"components": [{
 							"label": "Maximum range",
+							"mask": false,
 							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter the maximum range.",
 								"unique": false,
 								"multiple": false
 							},
 							"key": "maximum_range",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
+							"type": "number",
+							"input": true
 						}]
 					}, {
 						"components": [{
@@ -2900,17 +2927,20 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "Dinghy Length (Feet)",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
 								"key": "dingy_length",
-								"type": "textfield",
+								"type": "number",
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -3182,30 +3212,41 @@
 					"multiple": false
 				}
 			}, {
-				"label": "Select",
-				"placeholder": "Select according to your preference",
-				"hideLabel": true,
-				"tableView": true,
-				"defaultValue": "noAdditionalInsureds",
-				"data": {
-					"values": [{
-						"value": "newListOfAdditionalInsureds",
-						"label": "New list of Additional Insureds"
-					}, {
-						"value": "noAdditionalInsureds",
-						"label": "No Additional Insureds"
-					}]
-				},
-				"selectThreshold": 0.3,
-				"clearOnHide": false,
+				"label": "well",
+				"tableView": false,
+				"key": "well6",
+				"type": "well",
+				"input": false,
 				"validate": {
 					"unique": false,
 					"multiple": false
 				},
-				"key": "additional_insured_select",
-				"type": "select",
-				"input": true,
-				"lockKey": true
+				"components": [{
+					"label": "Please choose one of these options",
+					"optionsLabelPosition": "right",
+					"inline": false,
+					"tableView": false,
+					"values": [{
+						"label": "Add Additional Insureds",
+						"value": "newListOfAdditionalInsureds",
+						"shortcut": ""
+					}, {
+						"label": "No Additional Insureds",
+						"value": "noAdditionalInsureds",
+						"shortcut": ""
+					}],
+					"validate": {
+						"required": true,
+						"customMessage": "Please choose whether you would like to add Additional Insured",
+						"unique": false,
+						"multiple": false
+					},
+					"errorLabel": "Please choose whether you would like to add Additional Insured",
+					"key": "additional_insured_select",
+					"type": "radio",
+					"input": true
+				}],
+				"path": "well6"
 			}, {
 				"key": "page4PanelPanel2",
 				"input": false,
@@ -3225,9 +3266,9 @@
 					"tableView": false,
 					"clearOnHide": false,
 					"validate": {
+						"minLength": 1,
 						"unique": false,
-						"multiple": false,
-						"minLength": 1
+						"multiple": false
 					},
 					"key": "additionalInsured",
 					"type": "datagrid",
@@ -3254,6 +3295,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -3274,6 +3316,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -3294,6 +3337,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -3338,6 +3382,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -3389,6 +3434,7 @@
 									"spellcheck": true,
 									"tableView": true,
 									"validate": {
+										"required": true,
 										"pattern": "[0-9\\s-]*",
 										"customMessage": "Please enter a valid Zip Code for your region.",
 										"unique": false,
@@ -3432,6 +3478,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -3590,7 +3637,8 @@
 			"validate": {
 				"unique": false,
 				"multiple": false
-			}
+			},
+			"path": "page4Panel"
 		}, {
 			"label": "Additional Named Insureds",
 			"tableView": true,
@@ -3606,6 +3654,7 @@
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
 			"validate": {
+				"required": true,
 				"unique": false,
 				"multiple": false
 			},
@@ -3661,6 +3710,7 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -3681,6 +3731,7 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -3701,6 +3752,7 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -3733,6 +3785,7 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -3784,6 +3837,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"validate": {
+									"required": true,
 									"pattern": "[0-9\\s-]*",
 									"customMessage": "Please enter a valid Zip Code for your region.",
 									"unique": false,
@@ -3867,6 +3921,7 @@
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
 			"validate": {
+				"required": true,
 				"unique": false,
 				"multiple": false
 			},
@@ -3923,6 +3978,7 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -3943,6 +3999,7 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -3963,6 +4020,7 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -3995,6 +4053,7 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -4046,6 +4105,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
+								"required": true,
 								"pattern": "[0-9\\s-]*",
 								"customMessage": "Please enter a valid Zip Code for your region.",
 								"unique": false,
@@ -4179,6 +4239,7 @@
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -4263,6 +4324,7 @@
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -4646,6 +4708,7 @@
 				},
 				"selectThreshold": 0.3,
 				"validate": {
+					"required": true,
 					"unique": false,
 					"multiple": false
 				},
@@ -4701,6 +4764,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -4721,6 +4785,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -4741,6 +4806,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -4773,6 +4839,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
@@ -4824,6 +4891,7 @@
 									"spellcheck": true,
 									"tableView": true,
 									"validate": {
+										"required": true,
 										"pattern": "[0-9\\s-]*",
 										"customMessage": "Please enter a valid Zip Code for your region.",
 										"unique": false,
@@ -4877,6 +4945,7 @@
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
+					"required": true,
 					"unique": false,
 					"multiple": false
 				},
@@ -9638,6 +9707,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-11T11:25:23.568Z",
+	"modified": "2020-03-11T18:11:04.162Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }

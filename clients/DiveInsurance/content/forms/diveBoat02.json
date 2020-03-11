@@ -904,10 +904,8 @@
                         "label": "Columns",
                         "columns": [{
                             "components": [{
-                                "label": "Dial Code",
+                                "label": "Country Code",
                                 "widget": "choicesjs",
-                                "placeholder": "Dial Code",
-                                "hideLabel": true,
                                 "tableView": false,
                                 "dataSrc": "custom",
                                 "data": {
@@ -979,10 +977,8 @@
                         "label": "Columns",
                         "columns": [{
                             "components": [{
-                                "label": "Dial Code",
+                                "label": "Country Code",
                                 "widget": "choicesjs",
-                                "placeholder": "Dial Code",
-                                "hideLabel": true,
                                 "tableView": false,
                                 "dataSrc": "custom",
                                 "data": {
@@ -1589,7 +1585,7 @@
                     "label": "Columns",
                     "columns": [{
                         "components": [{
-                            "label": "Dial Code",
+                            "label": "Country Code",
                             "widget": "choicesjs",
                             "tableView": true,
                             "dataSrc": "custom",
@@ -3733,6 +3729,7 @@
                         "shortcut": ""
                     }],
                     "validate": {
+                        "required": true,
                         "customMessage": "Please choose whether you would like to add Additional Insured",
                         "unique": false,
                         "multiple": false
@@ -4509,6 +4506,7 @@
                         "selectThreshold": 0.3,
                         "clearOnHide": false,
                         "validate": {
+                            "required": true,
                             "unique": false,
                             "multiple": false
                         },
@@ -5667,6 +5665,6 @@
     "path": "diveboat02",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-01-23T10:59:00.323Z",
-    "modified": "2020-03-11T12:24:00.539Z",
+    "modified": "2020-03-11T18:14:12.671Z",
     "machineName": "testdivehub:diveBoat02"
 }

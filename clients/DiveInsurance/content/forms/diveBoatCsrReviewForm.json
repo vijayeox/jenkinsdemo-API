@@ -658,7 +658,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Dial Code",
+								"label": "Country Code",
 								"widget": "choicesjs",
 								"tableView": true,
 								"dataSrc": "custom",
@@ -733,7 +733,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Dial Code",
+								"label": "Country Code",
 								"widget": "choicesjs",
 								"tableView": true,
 								"dataSrc": "custom",
@@ -1250,7 +1250,7 @@
 					"label": "Columns",
 					"columns": [{
 						"components": [{
-							"label": "Dial Code",
+							"label": "Country Code",
 							"widget": "choicesjs",
 							"tableView": true,
 							"dataSrc": "custom",
@@ -2244,11 +2244,11 @@
 					"value": "hasAnyCrewHadDecompressionSicknessOrReceivedHyperbaricTreatmentInTheLastThree3Years",
 					"label": "Has any crew had decompression sickness or received hyperbaric treatment in the last three (3) years?"
 				}, {
-					"value": "doYouRequireAllInstructorsAndDivemastersOnBoardYourVesselToCarryProfessionalLiabilityInsurance",
-					"label": "Do you require all instructors and divemasters on board your vessel to carry professional liability insurance?"
+					"value": "doYouWantCoverageForPaidCrewWhileOnboardTheVessel",
+					"label": "Do you want coverage for Paid Crew while onboard the vessel?"
 				}, {
-					"value": "doYouRequireYourCaptainsToRemainOnTheBoatAtAllTimes",
-					"label": "Do you require your Captains to remain on the boat at all times?"
+					"value": "doYouWantCoverageForPaidCrewWhileTheyAreInTheWater",
+					"label": "Do you want coverage for Paid Crew while they are in the water?"
 				}, {
 					"label": "Do you require all instructors and divemasters on board your vessel to carry professional liability insurance?",
 					"value": "doYouRequireAllInstructorsAndDivemastersOnBoardYourVesselToCarryProfessionalLiabilityInsurance"
@@ -4109,6 +4109,7 @@
 						},
 						"selectThreshold": 0.3,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -4192,6 +4193,7 @@
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -8381,7 +8383,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-03-11T12:25:50.789Z",
+	"modified": "2020-03-11T18:13:55.225Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }
