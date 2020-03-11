@@ -974,7 +974,7 @@
                         "label": "Columns",
                         "columns": [{
                             "components": [{
-                                "label": "Dial Code",
+                                "label": "Country Code",
                                 "widget": "choicesjs",
                                 "tableView": false,
                                 "dataSrc": "custom",
@@ -1049,7 +1049,7 @@
                         "label": "Columns",
                         "columns": [{
                             "components": [{
-                                "label": "Dial Code",
+                                "label": "Country Code",
                                 "widget": "choicesjs",
                                 "tableView": true,
                                 "dataSrc": "custom",
@@ -1207,7 +1207,7 @@
     "path": "padiverificationformdiveboat",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-05T12:23:24.281Z",
-    "modified": "2020-03-11T06:13:52.180Z",
+    "modified": "2020-03-11T12:04:23.593Z",
     "machineName": "testdivehub:padiVerificationFormDiveBoat",
     "controller": ""
 }
