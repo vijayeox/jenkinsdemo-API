@@ -76,7 +76,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'anifooter' => null,
                         'gtemplate' => 'Group_PL_COI',
                         'gheader' => 'Group_header.html',
-                        'gfooter' => 'Group_footer.html'),
+                        'gfooter' => 'Group_footer.html',
+                        'alheader' => 'DiveStore_AL_header.html',
+                        'alfooter' => 'DiveStore_AL_footer.html',
+                        'alTemplate' => 'DiveStore_AdditionalLocations'),
             'Emergency First Response'
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
@@ -268,18 +271,30 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 
                 if(isset($temp['additionalLocations']) && $temp['additionalLocations']=="yes"){
                     $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
-                    $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                    $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
                 }
 
-                if(isset($data['groupPL']) && $temp['groupProfessionalLiabilitySelect']=='yes'){
+                if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
                     $this->logger->info("DOCUMENT groupPL");
                     $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
-                }
 
+
+                    if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                    $this->logger->info("DOCUMENT additionalNamedInsured");
+                    $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                    }
+
+                    if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
+                    $this->logger->info("DOCUMENT namedInsured"); 
+                    $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                    }
+                }
                 if(isset($this->template[$temp['product']]['cover_letter'])){
                     $this->logger->info("DOCUMENT cover_letter");
                     $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
                 }
+
+
             }
 
             if($this->type != 'quote'){
