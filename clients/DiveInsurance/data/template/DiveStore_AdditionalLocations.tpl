@@ -1,4 +1,5 @@
 {assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
+{assign var=additionalLocationData value=$additionalLocationData|json_decode:true}
 <!DOCTYPE html>
 <html>
 
@@ -18,11 +19,11 @@
     {assign var=list value=$additionalInsured|json_decode:true}
     {foreach $list as $additional}
         <p class = "ai_list">
-            &nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state},{$additional.zip}
+            &nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.country},{$additional.city},{$additional.state},{$additional.zip}
         </p>
     {/foreach}
-    <p><b>Location Address: {$address1},{$address2},<br>
-    {$city},{$state_in_short} - {$zip}</p>
+    <p><b>Location Address: {$additionalLocationData.address},<br>
+    {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.additionalLocationState} - {$additionalLocationData.zip}</p>
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>
@@ -31,7 +32,7 @@
                         <th>Limits</th>
                     </tr>
                     <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
-                    <tr><td>Policy #: {liability_policy_no}</td></tr>
+                    <tr><td>Policy #: liability_policy_no</td></tr>
                     <tr>
                         <td>Contents Limit:</td>
                         <td>${$dspropTotal|number_format:2:".":","}</td>
@@ -106,7 +107,7 @@
                         <th>Limits</th>
                     </tr>
                     <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
-                    <tr><td>Policy #: {liability_policy_no}</td></tr>
+                    <tr><td>Policy #: liability_policy_no</td></tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
                         {if $poolLiability && (int)$poolLiability > 0}
