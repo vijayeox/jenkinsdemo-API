@@ -25,9 +25,8 @@ a:hover {
     background-color: #ffffff;
     border-color: #275262;
 }
-
 .form {
-  padding: 40px;
+  padding: 40px 40px 35px 40px;
   margin: 40px auto;
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
@@ -71,7 +70,7 @@ a:hover {
 
 h1 {
   text-align: center;
-  color: #ffffff;
+  color:#333;
   font-weight: 300;
   margin: 0 0 40px;
 }
