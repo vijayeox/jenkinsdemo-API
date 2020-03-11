@@ -7,8 +7,8 @@
   "singleton":true,
   "icon": "icon.png",
   "icon_white": "icon_white.png",
-  "autostart": true,
-  "hidden": true,
+  "autostart": false,
+  "hidden": false,
   "defaultAppforOrgs" : false,
   "server": "server.js",
   "title": {
