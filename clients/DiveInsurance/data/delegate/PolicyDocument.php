@@ -270,14 +270,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                 }
 
-                if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
-                    for($i=0; $i<sizeof($temp['additionalLocations']);$i++){
-                        $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
-                        $temp["additionalLocationData"] = $temp['additionalLocations'][$i];
-                        $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
-                        unset($temp["additionalLocationData"]);
-                    }
-                }
+                // if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
+                //     for($i=0; $i<sizeof($temp['additionalLocations']);$i++){
+                //         $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
+                //         $temp["additionalLocationData"] = $temp['additionalLocations'][$i];
+                //         $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
+                //         unset($temp["additionalLocationData"]);
+                //     }
+                // }
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                     $this->logger->info("DOCUMENT groupPL");
