@@ -63,13 +63,13 @@
     <bpmn:exclusiveGateway id="ExclusiveGateway_0qojjhv" camunda:asyncAfter="true" default="SequenceFlow_16e706u">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="Groovy">def reasonforUC = execution.getVariable('reasonforUserCancellation')
+          <camunda:script scriptFormat="Groovy">def reasonforUC = execution.getVariable('reasonForUserCancellation')
 if(reasonforUC){
-	execution.setVariable("reasonforCsrCancellation",reasonforUC)
-	if(reasonforUC=='others'){
-		def othersReason = execution.getVariable('othersUser')
-	  	execution.setVariable("othersCsr",othersReason)
-	}
+  execution.setVariable("csrCancellationReason",reasonforUC)
+}
+def CancellationStatus = execution.getVariable('cancellationStatus')
+if(!CancellationStatus){
+  execution.setVariable('cancellationStatus','')
 }</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
