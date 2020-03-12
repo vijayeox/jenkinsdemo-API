@@ -26,6 +26,11 @@ html {
   }
 }
 
+.GridCustomStyle .k-pager-wrap .k-link, .GridCustomStyle .k-pager-wrap .k-pager-nav
+{
+  color : #053b6d !important;
+}
+
 ::-webkit-scrollbar {
   width: 15px;
 }
