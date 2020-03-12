@@ -2477,6 +2477,7 @@
 						"template": "<span>{{ item }}</span>",
 						"selectThreshold": 0.3,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -8548,6 +8549,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-12T10:12:36.175Z",
+	"modified": "2020-03-12T10:25:44.004Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
