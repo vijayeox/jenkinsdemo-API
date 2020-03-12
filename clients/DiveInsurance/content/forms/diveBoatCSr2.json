@@ -1073,16 +1073,16 @@
 						"pull": 0
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
-							"label": "Adddress2",
-							"key": "business_address2",
+							"label": "Address2",
 							"spellcheck": true,
+							"tableView": true,
 							"validate": {
 								"unique": false,
 								"multiple": false
 							},
+							"key": "business_address2",
 							"type": "textfield",
+							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}],
@@ -8546,6 +8546,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-12T09:22:03.771Z",
+	"modified": "2020-03-12T09:42:40.839Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
