@@ -323,6 +323,11 @@ label {
   color: #9e9e9e;
 }
 
+.k-list .k-item {
+  background-color: #053b6d !important;
+  color: white;
+}
+
 .k-datepicker {
   margin-bottom: 8px;
 }
@@ -332,13 +337,13 @@ label {
   color: #fff;
 }
 .appmenu .app-bar .app {
-  border-bottom: 1px solid #275262;
+  border-bottom: 1px solid #053b6d;
 }
 .appmenu .app-bar .app .appcaption {
   color: #053b6d;
 }
 .profile-dropdown-div:hover {
-  color: #275262;
+  color: #053b6d;
 }
 .GridCustomStyle .k-pager-wrap .k-link, .GridCustomStyle .k-pager-wrap .k-pager-nav{
   color: #053b6d;
