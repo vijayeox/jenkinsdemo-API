@@ -2693,6 +2693,7 @@
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -2718,6 +2719,7 @@
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -8546,6 +8548,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-12T09:42:40.839Z",
+	"modified": "2020-03-12T10:12:36.175Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
