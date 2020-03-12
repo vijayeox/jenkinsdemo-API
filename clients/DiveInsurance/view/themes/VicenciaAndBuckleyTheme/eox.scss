@@ -10,7 +10,7 @@
         border-width: 0 !important;  
         box-shadow :0 0 4px rgba(0,0,0,0.15) !important;}
     .osjs-window-inner      { background-color: $white; overflow:hidden;}
-    .osjs-window-header     { background-color: $primary; color: $secondary;}
+    .osjs-window-header     { background-color: $secondary; color: $tertiary;}
     .osjs-window-title      { color: secondary }
 
 // Icon Fills
@@ -77,7 +77,7 @@ background-color: rgba(255,255,255,0.4);
     input[type="text"].osjs-search-input { margin-bottom: 0; border: none; padding: 5px 10px; height: auto; font-size: 20px; }
 
 //.osjs-notifications
-    .osjs-notification { border-radius: 4px; @extend .box-shadow; background-color: $primary}
+    .osjs-notification { border-radius: 4px; @extend .box-shadow; background-color: $tertiary}
 
 //Resizers
     .osjs-window-resize[data-direction="n"]  { cursor: n-resize;  top: 0; }

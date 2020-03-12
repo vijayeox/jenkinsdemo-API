@@ -16,8 +16,22 @@ html {
   background-image: url("./src/images/wallpaper.png");
 }
 
+.osjs-window[data-id="Window_DiveInsurance"] {
+  .sidenav---sidenav---_2tBP {
+    background-color: #043b6d;
+  }
+  .k-button.k-primary {
+    background-color: #053b6d;
+    border-color: #053b6d;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 15px;
+}
+
+.PageRender .breadcrumbs-item a {
+  color: #053b6d !important;
 }
 
 .osjs-panel-item .logo-here img {
@@ -32,7 +46,7 @@ html {
 
 .osjs-window {
   // @include window;
-  // background: #96CCFF;
+  // background: #053b6d;
   // padding :0px;
 
   &[data-focused="false"] {
@@ -43,7 +57,7 @@ html {
     pointer-events: none;
 
     &::after {
-      background: #96CCFF;
+      background: #053b6d;
     }
   }
 }
@@ -181,7 +195,7 @@ html {
 .osjs-panel-item[data-name="windows"] > div {
   border: 0px solid #333;
   background-color: transparent;
-  color: #053b6d;
+  color: #fff;
   border-radius: 0px;
   border-right: 1px solid rgb(99, 97, 97);
 }
@@ -225,7 +239,7 @@ html {
 .osjs-panel {
   height: 3.5em;
   min-height: 3.5em;
-  background-color: #ABD6FF
+  background-color: #fff;
 }
 
 .osjs-notification-title{
@@ -247,8 +261,9 @@ html {
 }
 .osjs-window-title {
   height: auto !important;
-  color: #053B6D;
+  color: #fff;
 }
+
 .osjs-panel-item[data-name="windows"] > div {
 
   font-size: 12px;
@@ -312,13 +327,13 @@ label {
   color: #fff;
 }
 .appmenu .app-bar .app {
-  border-bottom: 1px solid #96CCFF;
+  border-bottom: 1px solid #275262;
 }
 .appmenu .app-bar .app .appcaption {
   color: #053b6d;
 }
 .profile-dropdown-div:hover {
-  color: #96CCFF;
+  color: #275262;
 }
 
 
