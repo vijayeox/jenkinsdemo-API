@@ -42,14 +42,39 @@ class DispatchReinstatePolicyMail extends DispatchDocument
             FileUtils::copy($this->destination.$value, $fileName, $this->destination.$dest['relativePath']);
         }
         $this->logger->info("the document array consists of : ".print_r($data['documents'], true));
-        unset($data['reinstateDocuments']);
-        unset($data['userCancellationReason']);
-        unset($data['othersCsr']);
-        unset($data['reinstateAmount']);
-        unset($data['reasonforCsrCancellation']);
-        unset($data['cancellationStatus']);
-        unset($data['reasonforRejection']);
-        unset($data['othersUser']);
+        if(isset($data['reinstateDocuments'])){
+            $data['reinstateDocuments'] = '';
+        }
+        if(isset($data['reasonforRejection'])){
+            $data['reasonforRejection'] = '';
+        }
+        if(isset($data['userCancellationReason'])){
+            $data['userCancellationReason'] = '';
+        }
+        if(isset($data['othersCsr'])){
+            $data['othersCsr'] = '';
+        }
+        if(isset($data['reinstateAmount'])){
+            $data['reinstateAmount'] = '';
+        }
+        if(isset($data['reasonforCsrCancellation'])){
+            $data['reasonforCsrCancellation'] = '';
+        }
+        if(isset($data['cancellationStatus'])){
+            $data['cancellationStatus'] = '';
+        }
+        if(isset($data['csrCancellationReason'])){
+            $data['csrCancellationReason'] = '';
+        }
+        if(isset($data['othersUser'])){
+            $data['othersUser'] = '';
+        }
+        if(isset($data['reasonForUserCancellation'])){
+            $data['reasonForUserCancellation'] = '';
+        }
+        if(isset($data['userAgreement'])){
+            $data['userAgreement'] = '';
+        }
         $temp = $data;
         $temp['template'] = $this->template[$data['product']];
         $temp['subject'] = 'Your Policy has been Reinstated!';
