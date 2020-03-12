@@ -1,8 +1,8 @@
 {
-	"_id": "5db06c1a7e2c80818defdba7",
+	"_id": "5e69cfffe69958990f5032af",
 	"type": "form",
 	"tags": [],
-	"owner": "5cd2e0d62363f67ddc9489c6",
+	"owner": "5db28b688d7586b574a8f4f6",
 	"components": [{
 		"key": "panel",
 		"input": false,
@@ -206,6 +206,7 @@
 					"components": [{
 						"label": "First Name",
 						"spellcheck": false,
+						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -245,6 +246,7 @@
 					"components": [{
 						"label": "Initial",
 						"spellcheck": false,
+						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -283,6 +285,7 @@
 					"components": [{
 						"label": "Last Name",
 						"spellcheck": false,
+						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -655,7 +658,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Dial Code",
+								"label": "Country Code",
 								"widget": "choicesjs",
 								"tableView": true,
 								"dataSrc": "custom",
@@ -730,7 +733,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Dial Code",
+								"label": "Country Code",
 								"widget": "choicesjs",
 								"tableView": true,
 								"dataSrc": "custom",
@@ -887,10 +890,11 @@
 			"columns": [{
 				"components": [{
 					"label": "Policy Period",
+					"allowInput": false,
 					"format": "MM-dd-yyyy",
 					"tableView": false,
 					"datePicker": {
-						"minDate": "moment().format('YYYY MM DD')",
+						"minDate": "2020-03-11T18:30:00.000Z",
 						"datepickerMode": "day"
 					},
 					"enableTime": false,
@@ -915,7 +919,7 @@
 						"displayInTimezone": "viewer",
 						"language": "en",
 						"useLocaleSettings": false,
-						"allowInput": true,
+						"allowInput": false,
 						"mode": "single",
 						"enableTime": false,
 						"noCalendar": false,
@@ -923,7 +927,7 @@
 						"hourIncrement": 1,
 						"minuteIncrement": 1,
 						"time_24hr": true,
-						"minDate": "moment().format('YYYY MM DD')",
+						"minDate": "2020-03-11T18:30:00.000Z",
 						"maxDate": null
 					},
 					"hideOnChildrenHidden": false
@@ -1018,10 +1022,12 @@
 					"multiple": false
 				}
 			}, {
-				"label": "Well",
+				"theme": "primary",
+				"collapsible": false,
 				"tableView": false,
-				"key": "well1",
-				"type": "well",
+				"key": "panel1",
+				"type": "panel",
+				"label": "Panel",
 				"input": false,
 				"validate": {
 					"unique": false,
@@ -1044,269 +1050,360 @@
 					"input": true,
 					"lockKey": true
 				}, {
-					"clearOnHide": false,
-					"input": false,
-					"key": "panelPanelPanelTable",
-					"numRows": 6,
-					"numCols": 2,
-					"rows": [
-						[{
-							"components": [{
-								"label": "Address1",
-								"spellcheck": true,
-								"tableView": true,
-								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_address1",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true
-							}]
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"label": "Adddress2",
-								"key": "business_address2",
-								"spellcheck": true,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"type": "textfield",
-								"lockKey": true
-							}]
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "Address1",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_address1",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
 						}],
-						[{
-							"components": [{
-								"label": "City",
-								"spellcheck": true,
-								"tableView": true,
-								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_city",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true
-							}]
-						}, {
-							"components": [{
-								"label": "Country",
-								"widget": "choicesjs",
-								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{}],
-									"custom": "values = data['countryList'];"
-								},
-								"valueProperty": "country",
-								"dataType": "string",
-								"template": "<span>{{ item.country }}</span>",
-								"selectThreshold": 0.3,
-								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_country",
-								"type": "select",
-								"input": true
-							}]
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address2",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_address2",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
 						}],
-						[{
-							"components": [{
-								"label": "State",
-								"widget": "choicesjs",
-								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n}\n}"
-								},
-								"template": "<span>{{ item }}</span>",
-								"selectThreshold": 0.3,
-								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_state",
-								"type": "select",
-								"input": true
-							}]
-						}, {
-							"components": [{
-								"label": "Zip Code",
-								"spellcheck": true,
-								"tableView": true,
-								"validate": {
-									"required": true,
-									"pattern": "[0-9\\s-]*",
-									"customMessage": "Please enter a valid Zip Code for your region.",
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_zip",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true
-							}]
-						}],
-						[{
-							"components": [{
-								"label": "Email Address 1",
-								"tooltip": "Primary Email",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"kickbox": {
-									"enabled": true
-								},
-								"validate": {
-									"required": true,
-									"customMessage": "Please enter the email address.",
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_email",
-								"type": "email",
-								"input": true,
-								"lockKey": true
-							}]
-						}, {
-							"components": [{
-								"label": "Email Address 2",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"kickbox": {
-									"enabled": true
-								},
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_email1",
-								"type": "email",
-								"input": true,
-								"lockKey": true
-							}]
-						}],
-						[{
-							"components": [{
-								"label": "Fax",
-								"placeholder": "  ",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"calculateValue": "value = data['fax'];",
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_fax",
-								"type": "phoneNumber",
-								"input": true,
-								"lockKey": true
-							}]
-						}, {
-							"components": [{
-								"label": "Website",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"key": "business_website",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true
-							}]
-						}],
-						[{
-							"components": [{
-								"label": "Columns",
-								"columns": [{
-									"components": [{
-										"label": "Dial Code",
-										"widget": "choicesjs",
-										"tableView": true,
-										"dataSrc": "custom",
-										"data": {
-											"custom": "values = data['phoneList']"
-										},
-										"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
-										"selectThreshold": 0.3,
-										"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
-										"validate": {
-											"unique": false,
-											"multiple": false
-										},
-										"key": "work_country_code",
-										"type": "select",
-										"input": true,
-										"hideOnChildrenHidden": false
-									}],
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"width": 4
-								}, {
-									"components": [{
-										"label": "Work Phone",
-										"placeholder": "  ",
-										"tooltip": "Phone Number",
-										"spellcheck": true,
-										"tableView": true,
-										"clearOnHide": false,
-										"calculateValue": "value = data['mobilephone']",
-										"validate": {
-											"customMessage": "Please enter the phone number.",
-											"unique": false,
-											"multiple": false
-										},
-										"key": "buisness_work_number",
-										"type": "phoneNumber",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"width": 8
-								}],
-								"tableView": false,
-								"key": "columns3",
-								"type": "columns",
-								"input": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								},
-								"path": "columns3"
-							}]
-						}, {
-							"components": []
-						}]
-					],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}],
 					"tableView": false,
-					"type": "table",
-					"hideLabel": true,
-					"label": "Table",
+					"key": "columns4",
+					"type": "columns",
+					"input": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
-					"path": "panelPanelPanelTable"
+					"path": "columns4",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "City",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_city",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Country",
+							"widget": "choicesjs",
+							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"values": [{}],
+								"custom": "values = data['countryList'];"
+							},
+							"valueProperty": "country",
+							"dataType": "string",
+							"template": "<span>{{ item.country }}</span>",
+							"selectThreshold": 0.3,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_country",
+							"type": "select",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}],
+					"tableView": false,
+					"key": "columns5",
+					"type": "columns",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"path": "columns5",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "State",
+							"widget": "choicesjs",
+							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"values": [{}],
+								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n}\n}"
+							},
+							"template": "<span>{{ item }}</span>",
+							"selectThreshold": 0.3,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_state",
+							"type": "select",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Zip Code",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_zip",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}],
+					"tableView": false,
+					"key": "columns6",
+					"type": "columns",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"path": "columns6",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "Email Address 1",
+							"tooltip": "Primary Email",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"kickbox": {
+								"enabled": true
+							},
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter the email address.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_email",
+							"type": "email",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Email Address 2",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"kickbox": {
+								"enabled": true
+							},
+							"validate": {
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_email1",
+							"type": "email",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}],
+					"tableView": false,
+					"key": "columns7",
+					"type": "columns",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"path": "columns7",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "Fax",
+							"placeholder": "  ",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"calculateValue": "value = data['fax'];",
+							"validate": {
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_fax",
+							"type": "phoneNumber",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Website",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							},
+							"key": "business_website",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}],
+					"tableView": false,
+					"key": "columns8",
+					"type": "columns",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"path": "columns8",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "Country Code",
+							"widget": "choicesjs",
+							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"values": [{}],
+								"custom": "values = data['phoneList']"
+							},
+							"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+							"selectThreshold": 0.3,
+							"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+							"validate": {
+								"unique": false,
+								"multiple": false
+							},
+							"key": "work_country_code",
+							"type": "select",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}],
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"width": 2
+					}, {
+						"components": [{
+							"label": "Work Phone",
+							"placeholder": "  ",
+							"tooltip": "Phone Number",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"calculateValue": "value = data['mobilephone']",
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter the phone number.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "buisness_work_number",
+							"type": "phoneNumber",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"width": 4
+					}],
+					"tableView": false,
+					"key": "columns3",
+					"type": "columns",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"path": "columns3",
+					"hideLabel": true
 				}, {
 					"label": "business_work_phone",
 					"calculateValue": "value = data.work_country_code + \"\"+ data.buisness_work_number",
@@ -1319,8 +1416,7 @@
 						"multiple": false
 					}
 				}],
-				"path": "well1",
-				"clearOnHide": false,
+				"path": "panel1",
 				"hideLabel": true
 			}, {
 				"clearOnHide": false,
@@ -1618,6 +1714,10 @@
 						"time_24hr": true,
 						"minDate": null,
 						"maxDate": null
+					},
+					"inDataGrid": true,
+					"datePicker": {
+						"datepickerMode": "day"
 					}
 				}, {
 					"label": "Amount",
@@ -1635,7 +1735,9 @@
 					},
 					"key": "data_grid_amount",
 					"type": "number",
-					"input": true
+					"input": true,
+					"inDataGrid": true,
+					"inputType": "number"
 				}],
 				"lockKey": true,
 				"path": "DataGrid"
@@ -1742,6 +1844,7 @@
 						}],
 						"validate": {
 							"required": true,
+							"customMessage": "Please answer all the questions.",
 							"unique": false,
 							"multiple": false
 						},
@@ -1860,7 +1963,8 @@
 						"key": "certified_for_max_number_of_passengers",
 						"type": "number",
 						"input": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"inputType": "number"
 					}, {
 						"label": "Percentage of trips for diving charters",
 						"suffix": "%",
@@ -1879,7 +1983,8 @@
 						"key": "percentage_of_trips_for_diving_charters",
 						"type": "number",
 						"input": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"inputType": "number"
 					}, {
 						"label": "If less than 100%, Please explain",
 						"spellcheck": true,
@@ -1913,8 +2018,7 @@
 									"showMeridian": false
 								},
 								"validate": {
-									"required": true,
-									"customMessage": "please enter layup period.",
+									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_from_date_time']) >= moment(data['start_date'])) ? true : 'Please choose the date after '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 									"unique": false,
 									"multiple": false
 								},
@@ -1958,12 +2062,28 @@
 									"showMeridian": false
 								},
 								"validate": {
-									"required": true,
-									"customMessage": "please enter layup period.",
+									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_to_date_time']) > moment(data['layup_period_from_date_time'])) ? true : 'Please choose a date after '+moment(data.layup_period_from_date_time).format('MM-DD-YYYY');\n}",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "layup_period_to_date_time",
+								"logic": [{
+									"name": "Add Property",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "result = false;\nif(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  result = true;\n}"
+									},
+									"actions": [{
+										"name": "Change Property",
+										"type": "property",
+										"property": {
+											"label": "Required",
+											"value": "validate.required",
+											"type": "boolean"
+										},
+										"state": true
+									}]
+								}],
 								"type": "datetime",
 								"input": true,
 								"lockKey": true,
@@ -2190,7 +2310,8 @@
 					},
 					"key": "fullTimePartTime",
 					"type": "select",
-					"input": true
+					"input": true,
+					"inDataGrid": true
 				}, {
 					"label": "Do they have Professional Liability Insurance?",
 					"widget": "choicesjs",
@@ -2217,18 +2338,21 @@
 					"lockKey": true
 				}, {
 					"label": "PADI Number",
+					"mask": false,
 					"spellcheck": true,
-					"dataGridLabel": false,
-					"tableView": true,
+					"tableView": false,
+					"delimiter": false,
+					"requireDecimal": false,
+					"inputFormat": "plain",
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
 					"key": "padi",
-					"type": "textfield",
+					"type": "number",
 					"input": true,
 					"inDataGrid": true,
-					"lockKey": true
+					"inputType": "number"
 				}],
 				"lockKey": true,
 				"path": "CrewGrid"
@@ -2240,11 +2364,11 @@
 					"value": "hasAnyCrewHadDecompressionSicknessOrReceivedHyperbaricTreatmentInTheLastThree3Years",
 					"label": "Has any crew had decompression sickness or received hyperbaric treatment in the last three (3) years?"
 				}, {
-					"value": "doYouRequireAllInstructorsAndDivemastersOnBoardYourVesselToCarryProfessionalLiabilityInsurance",
-					"label": "Do you require all instructors and divemasters on board your vessel to carry professional liability insurance?"
+					"value": "doYouWantCoverageForPaidCrewWhileOnboardTheVessel",
+					"label": "Do you want coverage for Paid Crew while onboard the vessel?"
 				}, {
-					"value": "doYouRequireYourCaptainsToRemainOnTheBoatAtAllTimes",
-					"label": "Do you require your Captains to remain on the boat at all times?"
+					"value": "doYouWantCoverageForPaidCrewWhileTheyAreInTheWater",
+					"label": "Do you want coverage for Paid Crew while they are in the water?"
 				}, {
 					"label": "Do you require all instructors and divemasters on board your vessel to carry professional liability insurance?",
 					"value": "doYouRequireAllInstructorsAndDivemastersOnBoardYourVesselToCarryProfessionalLiabilityInsurance"
@@ -2261,6 +2385,7 @@
 				}],
 				"validate": {
 					"required": true,
+					"customMessage": "Please select Yes or No",
 					"unique": false,
 					"multiple": false
 				},
@@ -2296,464 +2421,570 @@
 			"theme": "primary",
 			"tableView": false,
 			"components": [{
-				"label": "Table",
-				"cellAlignment": "left",
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Name of Vessel",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter name of the vessel.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "vessel_name",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Manufacturer",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the manufacturer.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "hull_mfg",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Built Year",
+						"widget": "choicesjs",
+						"tableView": true,
+						"dataSrc": "custom",
+						"data": {
+							"values": [{}],
+							"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+						},
+						"template": "<span>{{ item }}</span>",
+						"selectThreshold": 0.3,
+						"validate": {
+							"required": true,
+							"unique": false,
+							"multiple": false
+						},
+						"key": "built_year",
+						"type": "select",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}],
 				"tableView": false,
-				"key": "built_year",
-				"type": "table",
-				"numRows": 4,
-				"clearOnHide": false,
+				"key": "columns9",
+				"type": "columns",
 				"input": false,
-				"rows": [
-					[{
-						"components": [{
-							"label": "Name of Vessel",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter name of the vessel.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "vessel_name",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
-						}]
-					}, {
-						"components": [{
-							"label": "Manufacturer",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the manufacturer.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "hull_mfg",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
-						}]
-					}, {
-						"components": [{
-							"label": "Built Year",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{}],
-								"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
-							},
-							"template": "<span>{{ item }}</span>",
-							"selectThreshold": 0.3,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"key": "built_year",
-							"type": "select",
-							"input": true
-						}]
-					}],
-					[{
-						"components": [{
-							"label": "Serial Number",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the serial number.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "vessel_sno",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
-						}]
-					}, {
-						"components": [{
-							"label": "Model",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the model.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "model",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
-						}]
-					}, {
-						"components": [{
-							"label": "Overall length",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the overall length.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "vessel_length",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
-						}]
-					}],
-					[{
-						"components": [{
-							"label": "Material of Hull",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the material of hull.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "hull_type",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
-						}]
-					}, {
-						"components": [{
-							"label": "Maximum range",
-							"mask": false,
-							"spellcheck": true,
-							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"key": "maximum_range",
-							"type": "number",
-							"input": true
-						}]
-					}, {
-						"components": [{
-							"label": "Engine Make",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the engine make.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "engine_make",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true
-						}]
-					}],
-					[{
-						"components": [{
-							"label": "Columns",
-							"columns": [{
-								"components": [{
-									"label": "Total Horsepower",
-									"suffix": "HP",
-									"spellcheck": true,
-									"tableView": true,
-									"validate": {
-										"required": true,
-										"customMessage": "Please enter total horsepower.",
-										"unique": false,
-										"multiple": false
-									},
-									"key": "vessel_hp",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"width": 12
-							}, {
-								"components": [],
-								"width": 6,
-								"offset": 0,
-								"push": 0,
-								"pull": 0
-							}],
-							"tableView": false,
-							"key": "columns",
-							"type": "columns",
-							"input": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"path": "columns",
-							"hideLabel": true
-						}, {
-							"label": "Type of propulsion",
-							"widget": "choicesjs",
-							"tableView": true,
-							"data": {
-								"values": [{
-									"value": "inboard",
-									"label": "Inboard"
-								}, {
-									"value": "outboard",
-									"label": "Outboard"
-								}, {
-									"value": "sail",
-									"label": "Sail"
-								}, {
-									"value": "inboardOutboard",
-									"label": "Inboard/Outboard"
-								}, {
-									"value": "other",
-									"label": "Other"
-								}]
-							},
-							"selectThreshold": 0.3,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"key": "type_of_propulsion",
-							"type": "select",
-							"input": true,
-							"style": {
-								"margin-top": "20px"
-							},
-							"lockKey": true
-						}, {
-							"label": "If other, please specify",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"customMessage": "If other, please specify.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "if_others_please_specify",
-							"conditional": {
-								"show": true,
-								"when": "type_of_propulsion",
-								"eq": "other"
-							},
-							"type": "textfield",
-							"input": true,
-							"style": {
-								"margin-top": "20px"
-							},
-							"lockKey": true
-						}]
-					}, {
-						"components": [{
-							"label": "Data Grid",
-							"disableAddingRemovingRows": false,
-							"reorder": false,
-							"addAnother": "Add More",
-							"addAnotherPosition": "bottom",
-							"defaultOpen": false,
-							"layoutFixed": false,
-							"enableRowGroups": false,
-							"hideLabel": true,
-							"tableView": true,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"key": "pageNaNPanel3DataGrid",
-							"type": "datagrid",
-							"input": true,
-							"components": [{
-								"label": "Protective devices (automatic firefighting systems, etc)",
-								"spellcheck": true,
-								"dataGridLabel": false,
-								"tableView": true,
-								"validate": {
-									"required": true,
-									"customMessage": "Please enter the Protective devices.",
-									"unique": false,
-									"multiple": false
-								},
-								"key": "protective_devices",
-								"type": "textfield",
-								"input": true,
-								"inDataGrid": true,
-								"lockKey": true
-							}]
-						}, {
-							"label": "Date of last survey",
-							"format": "MM-dd-yyyy",
-							"tableView": true,
-							"datePicker": {
-								"maxDate": "moment(). format('YYYY MM DD')",
-								"datepickerMode": "day"
-							},
-							"enableTime": false,
-							"timePicker": {
-								"showMeridian": false
-							},
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the date of last survey.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "date_of_last_survey",
-							"type": "datetime",
-							"input": true,
-							"labelWidth": 0,
-							"labelMargin": 0,
-							"style": {
-								"margin-top": "20px"
-							},
-							"lockKey": true,
-							"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-							"widget": {
-								"type": "calendar",
-								"displayInTimezone": "viewer",
-								"language": "en",
-								"useLocaleSettings": false,
-								"allowInput": true,
-								"mode": "single",
-								"enableTime": false,
-								"noCalendar": false,
-								"format": "MM-dd-yyyy",
-								"hourIncrement": 1,
-								"minuteIncrement": 1,
-								"time_24hr": true,
-								"minDate": null,
-								"maxDate": "moment(). format('YYYY MM DD')"
-							}
-						}]
-					}, {
-						"components": [{
-							"label": "Columns",
-							"input": false,
-							"tableView": false,
-							"key": "pageNaNFieldsetTableColumns",
-							"columns": [{
-								"components": [{
-									"label": "Hull Market Value",
-									"prefix": "$",
-									"mask": false,
-									"spellcheck": true,
-									"tableView": false,
-									"delimiter": true,
-									"requireDecimal": true,
-									"inputFormat": "plain",
-									"validate": {
-										"unique": false,
-										"multiple": false
-									},
-									"key": "hull_market_value",
-									"type": "number",
-									"decimalLimit": 2,
-									"input": true,
-									"hideOnChildrenHidden": false,
-									"inputType": "number"
-								}],
-								"width": 6,
-								"offset": 0,
-								"push": 0,
-								"pull": 0
-							}, {
-								"components": [{
-									"label": "Purchase Price",
-									"prefix": "$",
-									"mask": false,
-									"spellcheck": true,
-									"tableView": false,
-									"delimiter": true,
-									"requireDecimal": true,
-									"inputFormat": "plain",
-									"validate": {
-										"unique": false,
-										"multiple": false
-									},
-									"key": "purchase_price_currency",
-									"type": "number",
-									"decimalLimit": 2,
-									"input": true,
-									"hideOnChildrenHidden": false,
-									"inputType": "number"
-								}],
-								"width": 6,
-								"offset": 0,
-								"push": 0,
-								"pull": 0
-							}],
-							"type": "columns",
-							"hideLabel": true,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"path": "pageNaNFieldsetTableColumns"
-						}, {
-							"label": "Date of Purchase",
-							"format": "MM-dd-yyyy",
-							"tableView": true,
-							"datePicker": {
-								"maxDate": "moment(). format('YYYY MM DD')",
-								"datepickerMode": "day"
-							},
-							"enableTime": false,
-							"timePicker": {
-								"showMeridian": false
-							},
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the date of purchase.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "date_of_purchase",
-							"type": "datetime",
-							"input": true,
-							"style": {
-								"margin-top": "20px"
-							},
-							"lockKey": true,
-							"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-							"widget": {
-								"type": "calendar",
-								"displayInTimezone": "viewer",
-								"language": "en",
-								"useLocaleSettings": false,
-								"allowInput": true,
-								"mode": "single",
-								"enableTime": false,
-								"noCalendar": false,
-								"format": "MM-dd-yyyy",
-								"hourIncrement": 1,
-								"minuteIncrement": 1,
-								"time_24hr": true,
-								"minDate": null,
-								"maxDate": "moment(). format('YYYY MM DD')"
-							}
-						}]
-					}]
-				],
-				"hideLabel": true,
 				"validate": {
 					"unique": false,
 					"multiple": false
 				},
-				"path": "built_year"
+				"path": "columns9",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Serial Number",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the serial number.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "vessel_sno",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Model",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the model.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "model",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Overall length",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the overall length.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "vessel_length",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}],
+				"tableView": false,
+				"key": "columns10",
+				"type": "columns",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "columns10",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Material of Hull",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the material of hull.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "hull_type",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Maximum range",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"validate": {
+							"required": true,
+							"unique": false,
+							"multiple": false
+						},
+						"key": "maximum_range",
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false,
+						"inputType": "number"
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Engine Make",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the engine make.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "engine_make",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}],
+				"tableView": false,
+				"key": "columns11",
+				"type": "columns",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "columns11",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Total Horsepower",
+						"suffix": "HP",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"validate": {
+							"required": true,
+							"unique": false,
+							"multiple": false
+						},
+						"key": "vessel_hp",
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false,
+						"inputType": "number"
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Hull Market Value",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": true,
+						"requireDecimal": true,
+						"inputFormat": "plain",
+						"validate": {
+							"required": true,
+							"unique": false,
+							"multiple": false
+						},
+						"key": "hull_market_value",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"hideOnChildrenHidden": false,
+						"inputType": "number"
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Purchase Price",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": true,
+						"requireDecimal": true,
+						"inputFormat": "plain",
+						"validate": {
+							"required": true,
+							"unique": false,
+							"multiple": false
+						},
+						"key": "purchase_price_currency",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"hideOnChildrenHidden": false,
+						"inputType": "number"
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}],
+				"tableView": false,
+				"key": "columns12",
+				"type": "columns",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "columns12",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Date of last survey",
+						"format": "MM-dd-yyyy",
+						"tableView": true,
+						"datePicker": {
+							"maxDate": "2020-03-11T18:30:00.000Z",
+							"datepickerMode": "day"
+						},
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the date of last survey.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "date_of_last_survey",
+						"type": "datetime",
+						"input": true,
+						"labelWidth": 0,
+						"labelMargin": 0,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+						"widget": {
+							"type": "calendar",
+							"displayInTimezone": "viewer",
+							"language": "en",
+							"useLocaleSettings": false,
+							"allowInput": true,
+							"mode": "single",
+							"enableTime": false,
+							"noCalendar": false,
+							"format": "MM-dd-yyyy",
+							"hourIncrement": 1,
+							"minuteIncrement": 1,
+							"time_24hr": true,
+							"minDate": null,
+							"maxDate": "2020-03-11T18:30:00.000Z"
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Date of Purchase",
+						"format": "MM-dd-yyyy",
+						"tableView": true,
+						"datePicker": {
+							"maxDate": "2020-03-11T18:30:00.000Z",
+							"datepickerMode": "day"
+						},
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the date of purchase.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "date_of_purchase",
+						"type": "datetime",
+						"input": true,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+						"widget": {
+							"type": "calendar",
+							"displayInTimezone": "viewer",
+							"language": "en",
+							"useLocaleSettings": false,
+							"allowInput": true,
+							"mode": "single",
+							"enableTime": false,
+							"noCalendar": false,
+							"format": "MM-dd-yyyy",
+							"hourIncrement": 1,
+							"minuteIncrement": 1,
+							"time_24hr": true,
+							"minDate": null,
+							"maxDate": "2020-03-11T18:30:00.000Z"
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Type of propulsion",
+						"widget": "choicesjs",
+						"tableView": true,
+						"data": {
+							"values": [{
+								"value": "inboard",
+								"label": "Inboard"
+							}, {
+								"value": "outboard",
+								"label": "Outboard"
+							}, {
+								"value": "sail",
+								"label": "Sail"
+							}, {
+								"value": "inboardOutboard",
+								"label": "Inboard/Outboard"
+							}, {
+								"value": "other",
+								"label": "Other"
+							}]
+						},
+						"selectThreshold": 0.3,
+						"validate": {
+							"required": true,
+							"unique": false,
+							"multiple": false
+						},
+						"key": "type_of_propulsion",
+						"type": "select",
+						"input": true,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "If other, please specify",
+						"spellcheck": true,
+						"tableView": true,
+						"validate": {
+							"required": true,
+							"customMessage": "If other, please specify.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "if_others_please_specify",
+						"conditional": {
+							"show": true,
+							"when": "type_of_propulsion",
+							"eq": "other"
+						},
+						"type": "textfield",
+						"input": true,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}],
+				"tableView": false,
+				"key": "columns13",
+				"type": "columns",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "columns13",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Data Grid",
+						"disableAddingRemovingRows": false,
+						"reorder": false,
+						"addAnother": "Add More",
+						"addAnotherPosition": "bottom",
+						"defaultOpen": false,
+						"layoutFixed": false,
+						"enableRowGroups": false,
+						"hideLabel": true,
+						"tableView": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"key": "pageNaNPanel3DataGrid",
+						"type": "datagrid",
+						"input": true,
+						"components": [{
+							"label": "Protective devices (automatic firefighting systems, etc)",
+							"spellcheck": true,
+							"dataGridLabel": false,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter the Protective devices.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "protective_devices",
+							"type": "textfield",
+							"input": true,
+							"inDataGrid": true,
+							"lockKey": true
+						}],
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
+				}, {
+					"components": [],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
+				}],
+				"tableView": false,
+				"key": "columns14",
+				"type": "columns",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "columns14",
+				"hideLabel": true
 			}, {
 				"input": true,
 				"tableView": true,
@@ -2793,7 +3024,8 @@
 			"validate": {
 				"unique": false,
 				"multiple": false
-			}
+			},
+			"path": "pageNaNPanel3"
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -2866,7 +3098,8 @@
 								"key": "dingy_length",
 								"type": "number",
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "number"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -3130,7 +3363,8 @@
 				"tableView": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "lossPayees",
 				"type": "datagrid",
@@ -3392,7 +3626,9 @@
 					"type": "radio",
 					"input": true
 				}],
-				"path": "well4"
+				"path": "well4",
+				"clearOnHide": false,
+				"hideLabel": true
 			}, {
 				"title": "Information for each Additional Insured is required as follows",
 				"theme": "primary",
@@ -3420,7 +3656,8 @@
 					"tableView": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "additionalInsured",
 					"type": "datagrid",
@@ -3817,7 +4054,8 @@
 				"tableView": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "additionalNamedInsured",
 				"type": "datagrid",
@@ -4099,6 +4337,7 @@
 						},
 						"selectThreshold": 0.3,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -4182,6 +4421,7 @@
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
@@ -4292,7 +4532,8 @@
 				"clearOnHide": false,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "groupPL",
 				"type": "editgrid",
@@ -4587,7 +4828,8 @@
 					"tableView": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "groupAdditionalInsured",
 					"type": "datagrid",
@@ -4851,7 +5093,8 @@
 					"clearOnHide": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": false,
+						"minLength": 1
 					},
 					"key": "namedInsureds",
 					"type": "editgrid",
@@ -8286,89 +8529,26 @@
 			"multiple": false
 		}
 	}],
+	"controller": "",
 	"revisions": "",
 	"_vid": 0,
-	"title": "Dive Boat - CSR Review Form",
+	"title": "DiveBoatCSr2",
 	"display": "form",
 	"access": [{
-		"roles": [],
-		"type": "create_own"
-	}, {
-		"roles": [],
-		"type": "create_all"
-	}, {
-		"roles": [],
-		"type": "read_own"
-	}, {
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
 		"type": "read_all"
-	}, {
-		"roles": [],
-		"type": "update_own"
-	}, {
-		"roles": [],
-		"type": "update_all"
-	}, {
-		"roles": [],
-		"type": "delete_own"
-	}, {
-		"roles": [],
-		"type": "delete_all"
-	}, {
-		"roles": [],
-		"type": "team_read"
-	}, {
-		"roles": [],
-		"type": "team_write"
-	}, {
-		"roles": [],
-		"type": "team_admin"
 	}],
-	"submissionAccess": [{
-		"roles": [],
-		"type": "create_own"
-	}, {
-		"roles": [],
-		"type": "create_all"
-	}, {
-		"roles": [],
-		"type": "read_own"
-	}, {
-		"roles": [],
-		"type": "read_all"
-	}, {
-		"roles": [],
-		"type": "update_own"
-	}, {
-		"roles": [],
-		"type": "update_all"
-	}, {
-		"roles": [],
-		"type": "delete_own"
-	}, {
-		"roles": [],
-		"type": "delete_all"
-	}, {
-		"roles": [],
-		"type": "team_read"
-	}, {
-		"roles": [],
-		"type": "team_write"
-	}, {
-		"roles": [],
-		"type": "team_admin"
-	}],
+	"submissionAccess": [],
 	"settings": {},
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
 		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitActivity\"}]",
 		"post_delegate_refresh": "excess_liability_coverage"
 	},
-	"name": "diveBoatCsrReviewForm",
-	"path": "diveboatcsrreviewform",
+	"name": "diveBoatCSr2",
+	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
-	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-03-10T05:47:17.012Z",
-	"machineName": "testdivehub:diveBoatCsrReviewForm",
-	"controller": ""
+	"created": "2020-03-12T06:00:31.228Z",
+	"modified": "2020-03-12T10:25:44.004Z",
+	"machineName": "testdivehub:diveBoatCSr2"
 }

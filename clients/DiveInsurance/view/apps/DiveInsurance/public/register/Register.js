@@ -24,12 +24,10 @@ export default class Register extends React.Component {
         />
         <div className="container">
           <div className="logo">
-            <img src="../img/logo.png" style={{float:"left"}}/>
-            <div className="padi" style={{float:"right"}}>
-            <img src="../img/padi.png" />
-            <h4>
-            PADI ENDORSED INSURANCE 
-            </h4>
+            <img src="../img/logo.png" style={{ float: "left" }} />
+            <div className="padi" style={{ float: "right" }}>
+              <img src="../img/padi.png" />
+              <h4>PADI ENDORSED INSURANCE</h4>
             </div>
           </div>
           <section>

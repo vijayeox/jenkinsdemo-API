@@ -55,6 +55,9 @@ class QuoteDocument extends PolicyDocument
                      'gtemplate' => 'Group_PL_COI',
                      'gheader' => 'Group_header.html',
                      'gfooter' => 'Group_footer.html',
+                     'alheader' => 'DiveStore_AL_header.html',
+                     'alfooter' => 'DiveStore_AL_footer.html',
+                     'alTemplate' => 'DiveStore_AdditionalLocations'
                     ));
         
     }

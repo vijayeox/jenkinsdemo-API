@@ -4,7 +4,7 @@
     <bpmn:userTask id="UserTask_0ny3kd4" name="CSR Rating and Quoating" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="diveBoatCsrReviewForm" />
+          <camunda:property name="template" value="diveBoatCSr2" />
         </camunda:properties>
         <camunda:formData>
           <camunda:formField id="csrApproved" type="boolean" defaultValue="false" />
@@ -22,7 +22,7 @@
     <bpmn:startEvent id="StartEvent_07wv3ff" name="Insure Fills Online Application" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="diveBoat02" />
+          <camunda:property name="template" value="diveBoat02New" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1edvag4</bpmn:outgoing>
