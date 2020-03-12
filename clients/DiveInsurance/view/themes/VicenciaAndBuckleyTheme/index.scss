@@ -340,7 +340,18 @@ label {
 .profile-dropdown-div:hover {
   color: #275262;
 }
-
+.GridCustomStyle .k-pager-wrap .k-link, .GridCustomStyle .k-pager-wrap .k-pager-nav{
+  color: #053b6d;
+}
+.form-render .bg-primary {
+    background-color: #053b6d !important;
+    color: white;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #053b6d !important;
+    border-color: #053b6d !important;
+}
 
 @import "variables.scss";
 @import "eox.scss";
