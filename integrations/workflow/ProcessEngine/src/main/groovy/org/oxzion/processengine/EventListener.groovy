@@ -7,7 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
   
 class EventListener  implements ExecutionListener, Serializable {
-    static final long serialVersionUID = -687671492884005053L;
+    static final long serialVersionUID = -687671492884005053L
     private static Map instances = [:]
     private static final Logger logger = LoggerFactory.getLogger(EventListener.class);
 

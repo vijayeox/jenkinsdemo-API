@@ -10,7 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class CustomServiceTaskListener implements ExecutionListener, Serializable {
-  static final long serialVersionUID = -677991492884005036L;
+  static final long serialVersionUID = -677991492884005036L
   private static final Logger logger = LoggerFactory.getLogger(CustomServiceTaskListener.class)
 
   private static CustomServiceTaskListener instance = null
