@@ -487,6 +487,7 @@ class Module
                         $container->get(Service\TemplateService::class),
                         $container->get(AppDelegate\AppDelegateService::class),
                         $container->get(Service\FileService::class),
+                        $container->get(Service\JobService::class),
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(Service\WorkflowService::class),

@@ -19,6 +19,8 @@ class ElasticService
     private $config;
     private $client;
     private $logger;
+    private $filterFields;
+    private $filterTmpFields;
 
     public function __construct($config)
     {
@@ -184,6 +186,7 @@ class ElasticService
 
 
     protected function createFilter($filter) {
+        $subQuery = null;
         $symMapping = ['>'=>'gt','>='=>'gte','<'=>'lt','<='=>'lte'];
         $boolMapping = ['OR'=>'should','AND'=>'must'];
         if (!isset($filter[1]) && is_array($filter)) {
@@ -200,27 +203,35 @@ class ElasticService
         if (strtoupper($condition)=='OR' OR strtoupper($condition)=='AND') {
                  $tempQuery1 = $this->createFilter($column);
                  $tempQuery2 = $this->createFilter($value);
-                 $subQuery['bool'][$boolMapping[$condition]] = [$tempQuery1,$tempQuery2];
+                 if ($tempQuery1) {
+                    $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery1;
+                 }
+                 if ($tempQuery2) {
+                    $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery2;
+                 }
+                 
         } else {
         //    echo $column.' '.$condition.' '.$value;
-            if ($condition=="=="){                
-                    if (!is_array($value)) {
-                    $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
-                    } else {
-                        $subQuery['terms'] = array($column => array_values($value));
-                    }    
+            if (!in_array($column,$this->filterFields)) {
+                if ($condition=="=="){                
+                        if (!is_array($value)) {
+                        $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                        } else {
+                            $subQuery['terms'] = array($column => array_values($value));
+                        }    
                 } elseif ($condition=="<>" || $condition=="!=") {
-                    $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
+                        $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
+                }  else {
+                        if (strtolower(substr($value,0,5))=="date:") {
+                            $value = date("Y-m-d",strtotime(substr($value,5)));
+                            $subQuery['range'] = array($column => array($symMapping[$condition] => $value,"format" => "yyyy-MM-dd"));
+                        } else {
+                            $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
+                        }
+                        
                 }
-                else {
-                    if (strtolower(substr($value,0,5))=="date:") {
-                        $value = date("Y-m-d",strtotime(substr($value,5)));
-                        $subQuery['range'] = array($column => array($symMapping[$condition] => $value,"format" => "yyyy-MM-dd"));
-                    } else {
-                        $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
-                    }
-                    
-                }
+                $this->filterTmpFields[] = $column;
+            }
          }
         return $subQuery;
     }
@@ -306,11 +317,16 @@ class ElasticService
             $aggregates = $searchconfig['aggregates'];
             $mustquery['must'][] = array('exists' => array('field' => $aggregates[key($aggregates)]));
         }
+        $this->filterFields = array();
         if (!empty($searchconfig['filter'])) {
             foreach ($searchconfig['filter'] as $filter) {
            //     echo 'filter:';print_r($filter); echo '--';
+                $this->filterTmpFields = array();
                 $filterArry = $this->createFilter($filter);
-                $mustquery['must'][] = $filterArry;
+                if ($filterArry) {
+                    $mustquery['must'][] = $filterArry;
+                }
+                $this->filterFields=array_merge($this->filterFields,$this->filterTmpFields);
             }
         }
         if ($searchconfig['range']) {

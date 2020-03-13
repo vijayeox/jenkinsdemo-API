@@ -29,11 +29,13 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                     $this->logger->info("Document Save Entry fieldNamesArray size 2");
                     $gridFieldName = $fieldNamesArray[0];
                     $fieldName = $fieldNamesArray[1];
-                    for ($j = 0;$j < sizeof($data[$gridFieldName]);$j++) {
-                        if (isset($data[$gridFieldName][$j][$fieldName])  && is_array($data[$gridFieldName][$j][$fieldName]) ) {
-                            $data[$gridFieldName][$j][$fieldName] = $this->saveFile($data, $data[$gridFieldName][$j][$fieldName]);
+                    if(isset($data[$gridFieldName])){
+                        for ($j = 0;$j < sizeof($data[$gridFieldName]);$j++) {
+                            if (isset($data[$gridFieldName][$j][$fieldName])  && is_array($data[$gridFieldName][$j][$fieldName]) ) {
+                                $data[$gridFieldName][$j][$fieldName] = $this->saveFile($data, $data[$gridFieldName][$j][$fieldName]);
+                            }
                         }
-                    }
+                    } 
                 }
             }
         }

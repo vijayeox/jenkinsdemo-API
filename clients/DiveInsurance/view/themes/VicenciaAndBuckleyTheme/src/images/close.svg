@@ -1,3 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="0 0 640 640" width="640" height="640"><defs><path d="M61.29 7.31C72.28 -3.69 91.7 -2.09 104.67 10.88C157.12 63.34 576.68 483.06 629.13 535.53C642.09 548.5 643.69 567.93 632.7 578.92C627.32 584.3 584.32 627.32 578.95 632.69C567.95 643.69 548.53 642.09 535.57 629.12C483.12 576.66 63.56 156.94 11.11 104.47C-1.86 91.5 -3.45 72.07 7.54 61.07C18.29 50.32 55.91 12.68 61.29 7.31Z" id="b6h8HDzDL"></path><path d="M578.71 7.31C567.72 -3.69 548.29 -2.09 535.33 10.88C482.88 63.34 63.32 483.06 10.87 535.53C-2.09 548.5 -3.69 567.93 7.3 578.92C12.68 584.3 55.68 627.32 61.05 632.69C72.05 643.69 91.47 642.09 104.43 629.12C156.88 576.66 576.44 156.94 628.89 104.47C641.85 91.5 643.45 72.07 632.46 61.07C621.71 50.32 584.09 12.68 578.71 7.31Z" id="bRquSWdjK"></path></defs><g><g><g><use xlink:href="#b6h8HDzDL" opacity="1" fill="#053b6d" fill-opacity="1"></use><g><use xlink:href="#b6h8HDzDL" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="0"></use></g></g><g><use xlink:href="#bRquSWdjK" opacity="1" fill="#053b6d" fill-opacity="1"></use><g><use xlink:href="#bRquSWdjK" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="0"></use></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 2000 2000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Rounded_Rectangle_1" data-name="Rounded Rectangle 1" class="cls-1" d="M58.774,211.2L220.936,49.062c33.17-33.165,91.771-28.344,130.89,10.768L1934.17,1641.92c39.12,39.12,43.94,97.71,10.77,130.87l-162.16,162.14c-33.17,33.17-91.77,28.34-130.89-10.77L69.544,342.068C30.425,302.956,25.6,244.363,58.774,211.2Z"/>
+  <path id="Rounded_Rectangle_1_copy" data-name="Rounded Rectangle 1 copy" class="cls-1" d="M1944.23,211.2L1782.06,49.062c-33.17-33.165-91.77-28.344-130.89,10.768L68.831,1641.92c-39.118,39.12-43.94,97.71-10.77,130.87l162.162,162.14c33.17,33.17,91.771,28.34,130.89-10.77L1933.46,342.068C1972.57,302.956,1977.4,244.363,1944.23,211.2Z"/>
+</svg>

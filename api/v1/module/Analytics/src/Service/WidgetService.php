@@ -291,6 +291,7 @@ class WidgetService extends AbstractService
         }
         foreach($data as $key1=>$dataset) {
             $m = new EvalMath;
+            $m->suppress_errors = true;
             $m->evaluate('round(x,y) = (((x*(10^y))+0.5*(abs(x)/(x+0^abs(x))))%(10^10))/(10^y)');
             foreach($dataset as $key2=>$value) {
                 if (is_numeric($value)) {

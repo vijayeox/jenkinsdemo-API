@@ -178,22 +178,22 @@ menu:
                                 icon: 'fa fa-pencil'
                             -
                                 name: 'Cancel Policy'
-                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'') && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
                                         type: Form
-                                        url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        url: workflow/91cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                             -
                                 name: 'Cancel Policy'
-                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')  && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
                                         type: Form
-                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                         toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
                             title: 'Get Policy'
@@ -494,7 +494,7 @@ menu:
                                             page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
                             -
                                 name: 'Cancel Policy'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                                 rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
@@ -503,12 +503,30 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                             -
                                 name: 'Cancel Policy'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                                 rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
                                         url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/91cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                             -
                                 name: 'Reinstate Policy'
@@ -766,6 +784,16 @@ workflow:
         name: 'Cancel Policy'
         uuid: 81cb9e10-5845-4379-97c9-f9486b702bda
     -
+        bpmn_file: 'Cancel Policy/CancelPolicyDB.bpmn'
+        entity: 'Dive Boat'
+        name: 'Cancel Policy'
+        uuid: 91cb9e10-5845-4379-97c9-f9486b702bda
+    -
+        bpmn_file: 'Cancel Policy/CancelPolicyDS.bpmn'
+        entity: 'Dive Store'
+        name: 'Cancel Policy'
+        uuid: 61cb9e10-5845-4379-97c9-f9486b702bda
+    -
         name: 'Dive Boat'
         uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
         bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
@@ -798,15 +826,14 @@ form:
         description: 'Lets CSR generate and view Pocket Cards'
         template_file: pocketCard.json
         entity: 'Pocket Card Job'
-job:
-    -
-        import_padi:
-            -
-                stored_procedure_name: ox_padi_verification
-                upload_host_name: 206.107.76.164
-                upload_host_user: vbinsurance
-                upload_user_password: '<<InsureName>>'
-    -
-        autorenewal:
-            -
-                stored_procedure_name: ox_padi_verification
+# job:
+#     -
+#         uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
+#         name: 'Import Padi'
+#         url: /workflow/91cb9e10-5845-4379-97c9-f9486b702bd6
+#         cron: '0 4 12 18 * ? 2020'
+#         data:
+#             EFR2M: 204
+#             padi: 2165
+#             padiVerified: true
+#             internationalNonteachingSupervisoryInstructor: 99
