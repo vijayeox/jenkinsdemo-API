@@ -41,6 +41,9 @@ class DispatchReinstatePolicyMail extends DispatchDocument
             $this->logger->info("The destination relative path is : ".print_r($this->destination.$dest['relativePath'], true));
             FileUtils::copy($this->destination.$value, $fileName, $this->destination.$dest['relativePath']);
         }
+        if(isset($data[$data['jobName']])){
+            unset($data[$data['jobName']]);
+        }
         $this->logger->info("the document array consists of : ".print_r($data['documents'], true));
         if(isset($data['reinstateDocuments'])){
             $data['reinstateDocuments'] = '';
