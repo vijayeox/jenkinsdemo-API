@@ -22,6 +22,7 @@
               <camunda:value>{"command" : "cancelJob", "jobName" : "autoRenewalJob"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchCancelPolicyNotification"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>

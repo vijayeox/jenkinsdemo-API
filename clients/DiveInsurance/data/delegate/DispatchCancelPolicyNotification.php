@@ -48,14 +48,15 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
             $data['subject'] = 'Request for cancellation of policy';
             $data['document'] =$fileData;
             $response = $this->dispatch($data);
-            return $response;
+            $data['autoRenewalJob'] = '';
+            return $data;
         }
         else{
             $this->logger->info("Dispatch Cancel Policy Notification -- not approved");
             $data['template'] = $this->template['NotApproved'];
             $data['subject'] = 'Request for cancellation of policy';
             $response = $this->dispatch($data);
-            return $response;
+            return $data;
         }
     }
 }
