@@ -1022,12 +1022,13 @@
 					"multiple": false
 				}
 			}, {
+				"title": "             ",
 				"theme": "primary",
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel1",
 				"type": "panel",
-				"label": "Panel",
+				"label": "",
 				"input": false,
 				"validate": {
 					"unique": false,
@@ -1685,7 +1686,8 @@
 				"tableView": true,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "DataGrid",
 				"conditional": {
@@ -1753,9 +1755,10 @@
 					"prefix": "$",
 					"mask": false,
 					"spellcheck": true,
+					"dataGridLabel": false,
 					"tableView": false,
 					"delimiter": true,
-					"requireDecimal": false,
+					"requireDecimal": true,
 					"inputFormat": "plain",
 					"validate": {
 						"required": true,
@@ -1766,7 +1769,8 @@
 					"type": "number",
 					"input": true,
 					"inDataGrid": true,
-					"inputType": "number"
+					"inputType": "number",
+					"decimalLimit": 2
 				}],
 				"lockKey": true,
 				"path": "DataGrid"
@@ -2286,7 +2290,8 @@
 				"tableView": true,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "CrewGrid",
 				"type": "datagrid",
@@ -8557,6 +8562,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-16T08:32:57.302Z",
+	"modified": "2020-03-16T10:58:35.075Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }

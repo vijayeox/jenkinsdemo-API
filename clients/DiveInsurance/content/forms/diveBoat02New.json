@@ -1174,7 +1174,7 @@
                     "autofocus": true,
                     "tableView": true,
                     "datePicker": {
-                        "minDate": "2020-03-11T18:30:00.000Z",
+                        "minDate": "2020-03-15T18:30:00.000Z",
                         "datepickerMode": "day"
                     },
                     "enableTime": false,
@@ -1204,7 +1204,7 @@
                         "hourIncrement": 1,
                         "minuteIncrement": 1,
                         "time_24hr": true,
-                        "minDate": "2020-03-11T18:30:00.000Z",
+                        "minDate": "2020-03-15T18:30:00.000Z",
                         "maxDate": null
                     },
                     "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
@@ -1296,6 +1296,23 @@
                             "multiple": false
                         },
                         "key": "business_padi",
+                        "logic": [{
+                            "name": "Disable Field",
+                            "trigger": {
+                                "type": "javascript",
+                                "javascript": "result = false;\nif(data['businessPadiVerified'] == true || data['businessPadiVerified'] == 'true'){\n result = true; \n}"
+                            },
+                            "actions": [{
+                                "name": "Disable Action",
+                                "type": "property",
+                                "property": {
+                                    "label": "Disabled",
+                                    "value": "disabled",
+                                    "type": "boolean"
+                                },
+                                "state": true
+                            }]
+                        }],
                         "type": "number",
                         "input": true,
                         "hideOnChildrenHidden": false,
@@ -1403,6 +1420,7 @@
                 },
                 "path": "panelPanelColumns4"
             }, {
+                "title": "    ",
                 "theme": "primary",
                 "breadcrumb": "none",
                 "breadcrumbClickable": false,
@@ -1415,12 +1433,12 @@
                 "tableView": false,
                 "key": "pan",
                 "conditional": {
-                    "show": "true",
+                    "show": true,
                     "when": "businessPadiVerified",
                     "eq": "true"
                 },
                 "type": "panel",
-                "label": "Panel",
+                "label": "Business Detail",
                 "input": false,
                 "validate": {
                     "unique": false,
@@ -1994,7 +2012,8 @@
                 "unique": false,
                 "multiple": false
             },
-            "path": "panelPanel"
+            "path": "panelPanel",
+            "isNew": false
         }, {
             "title": "Policy Information",
             "theme": "primary",
@@ -2091,7 +2110,8 @@
                     "tableView": true,
                     "validate": {
                         "unique": false,
-                        "multiple": false
+                        "multiple": false,
+                        "minLength": 1
                     },
                     "key": "DataGrid",
                     "conditional": {
@@ -2123,7 +2143,8 @@
                         "dataGridLabel": false,
                         "tableView": true,
                         "datePicker": {
-                            "datepickerMode": "day"
+                            "datepickerMode": "day",
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "enableTime": false,
                         "timePicker": {
@@ -2153,7 +2174,7 @@
                             "minuteIncrement": 1,
                             "time_24hr": true,
                             "minDate": null,
-                            "maxDate": null
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
                     }, {
@@ -2163,7 +2184,7 @@
                         "spellcheck": true,
                         "tableView": false,
                         "delimiter": true,
-                        "requireDecimal": false,
+                        "requireDecimal": true,
                         "inputFormat": "plain",
                         "validate": {
                             "required": true,
@@ -2174,7 +2195,9 @@
                         "type": "number",
                         "input": true,
                         "inDataGrid": true,
-                        "inputType": "number"
+                        "inputType": "number",
+                        "dataGridLabel": false,
+                        "decimalLimit": 2
                     }],
                     "lockKey": true,
                     "path": "DataGrid"
@@ -2701,6 +2724,7 @@
                 "hideLabel": true,
                 "tableView": true,
                 "validate": {
+                    "minLength": 1,
                     "unique": false,
                     "multiple": false
                 },
@@ -3879,9 +3903,9 @@
                 "hideLabel": true,
                 "tableView": false,
                 "validate": {
+                    "minLength": 1,
                     "unique": false,
-                    "multiple": false,
-                    "minLength": 1
+                    "multiple": false
                 },
                 "key": "lossPayees",
                 "type": "datagrid",
@@ -4188,9 +4212,9 @@
                     "hideLabel": true,
                     "tableView": false,
                     "validate": {
+                        "minLength": 1,
                         "unique": false,
-                        "multiple": false,
-                        "minLength": 1
+                        "multiple": false
                     },
                     "key": "additionalInsured",
                     "type": "datagrid",
@@ -4652,9 +4676,9 @@
                 "hideLabel": true,
                 "tableView": false,
                 "validate": {
+                    "minLength": 1,
                     "unique": false,
-                    "multiple": false,
-                    "minLength": 1
+                    "multiple": false
                 },
                 "key": "additionalNamedInsured",
                 "type": "datagrid",
@@ -5112,7 +5136,8 @@
                 "modal": false,
                 "validate": {
                     "unique": false,
-                    "multiple": false
+                    "multiple": false,
+                    "minLength": 1
                 },
                 "key": "groupPL",
                 "type": "editgrid",
@@ -5421,9 +5446,9 @@
                     "hideLabel": true,
                     "tableView": true,
                     "validate": {
+                        "minLength": 1,
                         "unique": false,
-                        "multiple": false,
-                        "minLength": 1
+                        "multiple": false
                     },
                     "key": "groupAdditionalInsured",
                     "type": "datagrid",
@@ -5694,7 +5719,8 @@
                     "modal": false,
                     "validate": {
                         "unique": false,
-                        "multiple": false
+                        "multiple": false,
+                        "minLength": 1
                     },
                     "key": "namedInsureds",
                     "type": "editgrid",
@@ -6152,6 +6178,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T08:32:25.407Z",
+    "modified": "2020-03-16T10:56:28.136Z",
     "machineName": "testdivehub:diveBoat02New"
 }
