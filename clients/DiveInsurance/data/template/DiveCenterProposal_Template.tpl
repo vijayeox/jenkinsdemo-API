@@ -203,7 +203,7 @@
                     </tr>
                     <tr>
                         <td>Group Professional Liability:</td>
-                        {if $groupProfessionalLiability && (int)$groupProfessionalLiability > 0}
+                        {if isset($groupProfessionalLiability) && (int)$groupProfessionalLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -211,7 +211,7 @@
                     </tr>
                     <tr>
                         <td>Group Professional Liability Aggregate:</td>
-                        {if $groupProfessionalLiability && (int)$groupProfessionalLiability > 0}
+                        {if isset($groupProfessionalLiability) && (int)$groupProfessionalLiability > 0}
                             <td>$2,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -228,7 +228,8 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is ${$PropDeductibleCredit}}.</td>
+                            Mechanical breakdown is $2500. All other perils is {if isset($PropDeductibleCredit)}${$PropDeductibleCredit}}.{else}$0.00{/if}
+                            </td>
                     </tr>
                 </tbody>
             </table>
@@ -617,7 +618,7 @@
                 <p>${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}</p>
                 <p>&nbsp;</p>
                 <p>${(float)$groupTaxAmount|number_format:2:".":","}</p>
-                <p>${(float)$groupPadiFeeAmount|number_format:2:".":","}</p>
+                <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format:2:".":","}}.{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
@@ -631,7 +632,7 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-                <p>${$groupTotalAmount|number_format:2:".":","}</p>
+                <p>{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2:".":","}}.{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>
