@@ -691,7 +691,7 @@
                                     "label": "",
                                     "value": ""
                                 }],
-                                "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}\n}"
+                                "custom": "let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}"
                             },
                             "template": "<span>{{ item }}</span>",
                             "selectThreshold": 0.3,
@@ -968,6 +968,7 @@
                                 "spellcheck": true,
                                 "tableView": true,
                                 "validate": {
+                                    "customMessage": "Please enter a valid phone number",
                                     "unique": false,
                                     "multiple": false
                                 },
@@ -1041,7 +1042,7 @@
                                 "clearOnHide": false,
                                 "validate": {
                                     "required": true,
-                                    "customMessage": "Please enter mobile phone number.",
+                                    "customMessage": "Please enter a valid phone number",
                                     "unique": false,
                                     "multiple": false
                                 },
@@ -1670,6 +1671,7 @@
                                     "tableView": true,
                                     "validate": {
                                         "required": true,
+                                        "customMessage": "Please enter a valid phone number",
                                         "unique": false,
                                         "multiple": false
                                     },
@@ -3360,7 +3362,7 @@
                         "format": "MM-dd-yyyy",
                         "tableView": true,
                         "datePicker": {
-                            "maxDate": "moment(). format('YYYY MM DD')",
+                            "maxDate": "2020-03-15T18:30:00.000Z",
                             "datepickerMode": "day"
                         },
                         "enableTime": false,
@@ -3396,7 +3398,7 @@
                             "minuteIncrement": 1,
                             "time_24hr": true,
                             "minDate": null,
-                            "maxDate": "moment(). format('YYYY MM DD')"
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
                         "hideOnChildrenHidden": false
@@ -3411,7 +3413,7 @@
                         "format": "MM-dd-yyyy",
                         "tableView": true,
                         "datePicker": {
-                            "maxDate": "moment(). format('YYYY MM DD')",
+                            "maxDate": "2020-03-15T18:30:00.000Z",
                             "datepickerMode": "day"
                         },
                         "enableTime": false,
@@ -3445,7 +3447,7 @@
                             "minuteIncrement": 1,
                             "time_24hr": true,
                             "minDate": null,
-                            "maxDate": "moment(). format('YYYY MM DD')"
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
                         "hideOnChildrenHidden": false
@@ -6150,6 +6152,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T06:13:54.262Z",
+    "modified": "2020-03-16T08:32:25.407Z",
     "machineName": "testdivehub:diveBoat02New"
 }

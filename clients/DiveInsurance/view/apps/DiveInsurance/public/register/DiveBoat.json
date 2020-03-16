@@ -1010,6 +1010,7 @@
                                 "tableView": true,
                                 "clearOnHide": false,
                                 "validate": {
+                                    "customMessage": "Please enter a valid phone number",
                                     "unique": false,
                                     "multiple": false
                                 },
@@ -1084,6 +1085,7 @@
                                 "clearOnHide": false,
                                 "validate": {
                                     "required": true,
+                                    "customMessage": "Please enter a valid phone number",
                                     "unique": false,
                                     "multiple": false
                                 },
@@ -1208,7 +1210,7 @@
     "path": "padiverificationformdiveboat",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-05T12:23:24.281Z",
-    "modified": "2020-03-16T02:38:40.596Z",
+    "modified": "2020-03-16T08:31:43.372Z",
     "machineName": "testdivehub:padiVerificationFormDiveBoat",
     "controller": ""
 }

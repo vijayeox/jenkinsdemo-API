@@ -122,13 +122,17 @@
 			"properties": {},
 			"allowMultipleMasks": false,
 			"fieldSet": false,
-			"id": "e6mmasd"
+			"id": "euzhbxx"
 		}, {
-			"key": "page5Panel",
-			"input": false,
 			"title": "Automatic Renewal",
 			"theme": "primary",
+			"collapsible": false,
+			"hidden": true,
 			"tableView": false,
+			"key": "page5Panel",
+			"type": "panel",
+			"label": "Automatic Renewal",
+			"input": false,
 			"components": [{
 				"label": "Content",
 				"attrs": [{
@@ -197,7 +201,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "eudgw"
+				"id": "e1w2yz"
 			}, {
 				"label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
 				"tableView": true,
@@ -263,10 +267,8 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "e1yy45"
+				"id": "ehczoqt"
 			}],
-			"type": "panel",
-			"label": "Panel",
 			"validate": {
 				"unique": false,
 				"multiple": false,
@@ -286,7 +288,6 @@
 			"protected": false,
 			"unique": false,
 			"persistent": false,
-			"hidden": false,
 			"refreshOn": "",
 			"redrawOn": "",
 			"modalEdit": false,
@@ -323,7 +324,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "eimozx"
+			"id": "e4v0se3"
 		}],
 		"path": "page8",
 		"clearOnHide": false,
@@ -374,7 +375,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "ew173bn"
+		"id": "e37ekd"
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -484,7 +485,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "ea1yrwl"
+						"id": "e1yv49c"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -556,7 +557,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "etzgr08"
+				"id": "etut608"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -616,7 +617,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "e4x1jd9"
+			"id": "eh9e64"
 		}, {
 			"key": "panelPanel4",
 			"input": false,
@@ -702,7 +703,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "e62nwf"
+						"id": "e92255d"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -782,7 +783,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "ea68qri"
+						"id": "e73mhri"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -862,7 +863,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "et35ect"
+						"id": "efwfrpn"
 					}],
 					"width": 4,
 					"offset": 0,
@@ -928,7 +929,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "e1cpces"
+				"id": "evm99le"
 			}, {
 				"key": "panelPanel5",
 				"input": false,
@@ -941,312 +942,6 @@
 					"tableView": false,
 					"key": "panelpanelcolumns4",
 					"columns": [{
-						"components": [{
-							"label": "Address 1",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "address1",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "eoxniwd"
-						}, {
-							"label": "Address 2",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"unique": false,
-								"multiple": false,
-								"required": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "address2",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "e9dsgnp"
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"label": "City",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the city.",
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "city",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "edun1lo"
-						}, {
-							"label": "Zip Code",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"pattern": "[0-9\\s-]*",
-								"customMessage": "Please enter a valid Zip Code for your region.",
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": ""
-							},
-							"key": "zip",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "eblqcoh"
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
 						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
@@ -1336,7 +1031,160 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "ee95lyp"
+							"id": "efggdog"
+						}, {
+							"label": "City",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter the city.",
+								"unique": false,
+								"multiple": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "city",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "e3d0gz"
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address 1",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "address1",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "eelldgo"
 						}, {
 							"label": "State",
 							"widget": "choicesjs",
@@ -1347,7 +1195,7 @@
 									"label": "",
 									"value": ""
 								}],
-								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}",
+								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n} \n}",
 								"json": "",
 								"url": "",
 								"resource": ""
@@ -1371,7 +1219,7 @@
 							"placeholder": "",
 							"valueProperty": "",
 							"defaultValue": "",
-							"refreshOn": "",
+							"refreshOn": "country",
 							"filter": "",
 							"authenticate": false,
 							"multiple": false,
@@ -1379,12 +1227,19 @@
 							"unique": false,
 							"persistent": true,
 							"hidden": false,
+							"labelPosition": "top",
+							"tags": [],
+							"conditional": {
+								"show": "",
+								"when": null,
+								"eq": ""
+							},
+							"properties": {},
 							"prefix": "",
 							"customClass": "",
 							"suffix": "",
 							"redrawOn": "",
 							"modalEdit": false,
-							"labelPosition": "top",
 							"description": "",
 							"errorLabel": "",
 							"tooltip": "",
@@ -1396,11 +1251,6 @@
 							"calculateValue": "",
 							"attributes": {},
 							"validateOn": "change",
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
 							"overlay": {
 								"style": "",
 								"left": "",
@@ -1412,7 +1262,6 @@
 							"encrypted": false,
 							"showCharCount": false,
 							"showWordCount": false,
-							"properties": {},
 							"allowMultipleMasks": false,
 							"clearOnRefresh": false,
 							"limit": 100,
@@ -1428,7 +1277,160 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "e7ocvlm"
+							"id": "eumfmc"
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address 2",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"unique": false,
+								"multiple": false,
+								"required": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "address2",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "ed4kuh8"
+						}, {
+							"label": "Zip Code",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"unique": false,
+								"multiple": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": ""
+							},
+							"key": "zip",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "eao5rth"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1495,7 +1497,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "eie5q0k"
+					"id": "epwx11a"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -1553,7 +1555,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "etkptib"
+				"id": "e6kmph7"
 			}, {
 				"key": "panelPanel4Panel",
 				"input": false,
@@ -1625,318 +1627,13 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "e74lh1q"
+					"id": "ez3bns"
 				}, {
 					"label": "Columns",
 					"input": false,
 					"tableView": false,
 					"key": "panelPanel4PanelColumns",
 					"columns": [{
-						"components": [{
-							"label": "Address 1",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "mailaddress1",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "ei57lly"
-						}, {
-							"label": "Address 2",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"unique": false,
-								"multiple": false,
-								"required": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "mailaddress2",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "efdt2dp"
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"label": "City",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "physical_city",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "efv44x"
-						}, {
-							"label": "Zip Code",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"pattern": "[0-9\\s-]*",
-								"customMessage": "Please enter a valid Zip Code for your region.",
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": ""
-							},
-							"key": "physical_zip",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "edeosoj"
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
 						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
@@ -2026,7 +1723,159 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "eo4c0jm"
+							"id": "ehpbts"
+						}, {
+							"label": "City",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "physical_city",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "e05d3j5"
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address 1",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "mailaddress1",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "e4u4rxj"
 						}, {
 							"label": "State",
 							"widget": "choicesjs",
@@ -2037,7 +1886,7 @@
 									"label": "",
 									"value": ""
 								}],
-								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}",
+								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}\n}",
 								"json": "",
 								"url": "",
 								"resource": ""
@@ -2062,7 +1911,7 @@
 							"autofocus": false,
 							"placeholder": "",
 							"defaultValue": "",
-							"refreshOn": "",
+							"refreshOn": "physical_country",
 							"filter": "",
 							"authenticate": false,
 							"multiple": false,
@@ -2070,12 +1919,19 @@
 							"unique": false,
 							"persistent": true,
 							"hidden": false,
+							"labelPosition": "top",
+							"tags": [],
+							"conditional": {
+								"show": "",
+								"when": null,
+								"eq": ""
+							},
+							"properties": {},
 							"prefix": "",
 							"customClass": "",
 							"suffix": "",
 							"redrawOn": "",
 							"modalEdit": false,
-							"labelPosition": "top",
 							"description": "",
 							"errorLabel": "",
 							"tooltip": "",
@@ -2087,11 +1943,6 @@
 							"calculateValue": "",
 							"attributes": {},
 							"validateOn": "change",
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
 							"overlay": {
 								"style": "",
 								"left": "",
@@ -2103,7 +1954,6 @@
 							"encrypted": false,
 							"showCharCount": false,
 							"showWordCount": false,
-							"properties": {},
 							"allowMultipleMasks": false,
 							"clearOnRefresh": false,
 							"limit": 100,
@@ -2119,7 +1969,160 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "ezqtzo8"
+							"id": "ez6ch3"
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address 2",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"unique": false,
+								"multiple": false,
+								"required": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "mailaddress2",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "e7b68h"
+						}, {
+							"label": "Zip Code",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"unique": false,
+								"multiple": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": ""
+							},
+							"key": "physical_zip",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "efjhpo"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -2184,7 +2187,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "el6xy37"
+					"id": "e3qur7m"
 				}],
 				"type": "panel",
 				"label": "Panel",
@@ -2244,7 +2247,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "e4wxi5a"
+				"id": "efhllvi"
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -2342,7 +2345,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "efh9yt"
+								"id": "etww137"
 							}],
 							"offset": 0,
 							"push": 0,
@@ -2350,15 +2353,15 @@
 							"width": 4
 						}, {
 							"components": [{
-								"label": "Home Phone",
-								"placeholder": "                   ",
+								"label": "Home or Work Phone",
+								"placeholder": " ",
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
 								"validate": {
-									"required": true,
+									"customMessage": "Please enter a valid phone number",
 									"unique": false,
 									"multiple": false,
+									"required": false,
 									"custom": "",
 									"customPrivate": false,
 									"strictDateValidation": false,
@@ -2367,26 +2370,21 @@
 									"pattern": ""
 								},
 								"key": "home_phone_number",
-								"type": "textfield",
+								"type": "phoneNumber",
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false,
 								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
+								"inputType": "tel",
+								"inputMask": "(999) 999-9999",
 								"prefix": "",
 								"suffix": "",
 								"multiple": false,
-								"defaultValue": "",
 								"protected": false,
 								"unique": false,
 								"persistent": true,
 								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								},
+								"defaultValue": "",
+								"clearOnHide": true,
 								"customClass": "",
 								"refreshOn": "",
 								"redrawOn": "",
@@ -2406,6 +2404,11 @@
 								},
 								"attributes": {},
 								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
 								"overlay": {
 									"style": "",
 									"left": "",
@@ -2421,7 +2424,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "eg278k"
+								"id": "e24sqbu"
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -2486,7 +2489,7 @@
 								"properties": {},
 								"allowMultipleMasks": false,
 								"inputType": "hidden",
-								"id": "e2bleio"
+								"id": "e63pyxp"
 							}],
 							"offset": 0,
 							"push": 0,
@@ -2555,7 +2558,7 @@
 						"allowMultipleMasks": false,
 						"tree": false,
 						"autoAdjust": false,
-						"id": "ek33yme"
+						"id": "es8m6j8"
 					}, {
 						"label": "Columns",
 						"columns": [{
@@ -2647,7 +2650,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "ew5rka"
+								"id": "euaolyh"
 							}],
 							"offset": 0,
 							"push": 0,
@@ -2727,7 +2730,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "egs70tsj"
+								"id": "ewl1yv"
 							}, {
 								"label": "phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -2792,7 +2795,7 @@
 								"properties": {},
 								"allowMultipleMasks": false,
 								"inputType": "hidden",
-								"id": "e12erg7"
+								"id": "ev52kld"
 							}],
 							"offset": 0,
 							"push": 0,
@@ -2861,7 +2864,7 @@
 						"allowMultipleMasks": false,
 						"tree": false,
 						"autoAdjust": false,
-						"id": "evzjhfw"
+						"id": "ee1h9xq"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2940,7 +2943,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "exe3529"
+						"id": "ep18g4u"
 					}, {
 						"label": "Email",
 						"placeholder": "Email",
@@ -3017,7 +3020,7 @@
 						"mask": false,
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "ey6zbzl"
+						"id": "e7p7a1p"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3083,7 +3086,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "evhszj"
+				"id": "eorqppd"
 			}],
 			"type": "panel",
 			"conditional": {
@@ -3144,7 +3147,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "eenaz1f"
+			"id": "epf6v1s"
 		}],
 		"nextPage": "next = (data['padiVerified'] ==true) ? 'panel2' : 'panel'",
 		"validate": {
@@ -3197,7 +3200,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "etj4uq"
+		"id": "eenwtkq"
 	}, {
 		"title": "Business & Policy Information",
 		"theme": "primary",
@@ -3326,7 +3329,7 @@
 					"displayInTimezone": "viewer",
 					"timezone": "",
 					"customOptions": {},
-					"id": "e9nj7pk"
+					"id": "eh7xfxm"
 				}],
 				"width": 5,
 				"offset": 0,
@@ -3400,7 +3403,7 @@
 					"showWordCount": false,
 					"allowMultipleMasks": false,
 					"inputType": "hidden",
-					"id": "e3joiq"
+					"id": "e2c65lq"
 				}, {
 					"input": true,
 					"tableView": true,
@@ -3468,7 +3471,7 @@
 					"showWordCount": false,
 					"allowMultipleMasks": false,
 					"inputType": "hidden",
-					"id": "eiw9ie"
+					"id": "era1z6f"
 				}],
 				"width": 5,
 				"offset": 0,
@@ -3533,7 +3536,7 @@
 			"tree": false,
 			"autoAdjust": false,
 			"hideOnChildrenHidden": false,
-			"id": "evb4w7j"
+			"id": "eljjqth"
 		}, {
 			"key": "panelPanel",
 			"input": false,
@@ -3618,7 +3621,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "ejsjp4k"
+						"id": "eo8vrwe"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3689,7 +3692,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "ercr3gp"
+				"id": "egx0dr"
 			}, {
 				"theme": "primary",
 				"collapsible": false,
@@ -3778,273 +3781,992 @@
 					"allowMultipleMasks": false,
 					"mask": false,
 					"inputFormat": "plain",
-					"id": "ek44ix8"
+					"id": "ec54pzi"
+				}, {
+					"title": "Business Address",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "businessAddre",
+					"type": "panel",
+					"label": "",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false,
+						"required": false,
+						"custom": "",
+						"customPrivate": false,
+						"strictDateValidation": false
+					},
+					"components": [{
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Country",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "values = data['countryList'];",
+									"json": "",
+									"url": "",
+									"resource": ""
+								},
+								"valueProperty": "country",
+								"template": "<span>{{ item.country }}</span>",
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false
+								},
+								"key": "business_country",
+								"type": "select",
+								"input": true,
+								"hideOnChildrenHidden": false,
+								"autofocus": false,
+								"placeholder": "",
+								"defaultValue": "",
+								"refreshOn": "",
+								"filter": "",
+								"authenticate": false,
+								"multiple": false,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"attributes": {},
+								"validateOn": "change",
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"clearOnRefresh": false,
+								"limit": 100,
+								"lazyLoad": true,
+								"searchEnabled": true,
+								"searchField": "",
+								"minSearch": 0,
+								"readOnlyValue": false,
+								"selectFields": "",
+								"searchThreshold": 0.3,
+								"fuseOptions": {
+									"include": "score",
+									"threshold": 0.3
+								},
+								"customOptions": {},
+								"id": "e740sai"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Address1",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false,
+									"minLength": "",
+									"maxLength": "",
+									"pattern": ""
+								},
+								"key": "business_address1",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"autofocus": false,
+								"inputType": "text",
+								"inputMask": "",
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": "",
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"customClass": "",
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"mask": false,
+								"inputFormat": "plain",
+								"id": "eartcgj"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Adddress2",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"unique": false,
+									"multiple": false,
+									"required": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false,
+									"minLength": "",
+									"maxLength": "",
+									"pattern": ""
+								},
+								"key": "business_address2",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"autofocus": false,
+								"inputType": "text",
+								"inputMask": "",
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": "",
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"customClass": "",
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"mask": false,
+								"inputFormat": "plain",
+								"id": "eipv8ed"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}],
+						"tableView": false,
+						"key": "columns15",
+						"type": "columns",
+						"input": false,
+						"validate": {
+							"unique": false,
+							"multiple": false,
+							"required": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false
+						},
+						"path": "columns15",
+						"clearOnHide": false,
+						"hideLabel": true,
+						"placeholder": "",
+						"prefix": "",
+						"customClass": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": null,
+						"protected": false,
+						"unique": false,
+						"persistent": false,
+						"hidden": false,
+						"refreshOn": "",
+						"redrawOn": "",
+						"modalEdit": false,
+						"labelPosition": "top",
+						"description": "",
+						"errorLabel": "",
+						"tooltip": "",
+						"tabindex": "",
+						"disabled": false,
+						"autofocus": false,
+						"dbIndex": false,
+						"customDefaultValue": "",
+						"calculateValue": "",
+						"widget": null,
+						"attributes": {},
+						"validateOn": "change",
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						},
+						"overlay": {
+							"style": "",
+							"left": "",
+							"top": "",
+							"width": "",
+							"height": ""
+						},
+						"allowCalculateOverride": false,
+						"encrypted": false,
+						"showCharCount": false,
+						"showWordCount": false,
+						"properties": {},
+						"allowMultipleMasks": false,
+						"tree": false,
+						"autoAdjust": false,
+						"hideOnChildrenHidden": false,
+						"id": "ewsnmj"
+					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "City",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false,
+									"minLength": "",
+									"maxLength": "",
+									"pattern": ""
+								},
+								"key": "business_city",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"autofocus": false,
+								"inputType": "text",
+								"inputMask": "",
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": "",
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"customClass": "",
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"mask": false,
+								"inputFormat": "plain",
+								"id": "e1j98zp"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "State",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n} \n}",
+									"json": "",
+									"url": "",
+									"resource": ""
+								},
+								"template": "<span>{{ item }}</span>",
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false
+								},
+								"key": "business_state",
+								"type": "select",
+								"input": true,
+								"hideOnChildrenHidden": false,
+								"autofocus": false,
+								"placeholder": "",
+								"valueProperty": "",
+								"defaultValue": "",
+								"refreshOn": "business_country",
+								"filter": "",
+								"authenticate": false,
+								"multiple": false,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"labelPosition": "top",
+								"tags": [],
+								"conditional": {
+									"show": "",
+									"when": null,
+									"eq": ""
+								},
+								"properties": {},
+								"prefix": "",
+								"customClass": "",
+								"suffix": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"attributes": {},
+								"validateOn": "change",
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"allowMultipleMasks": false,
+								"clearOnRefresh": false,
+								"limit": 100,
+								"lazyLoad": true,
+								"searchEnabled": true,
+								"searchField": "",
+								"minSearch": 0,
+								"readOnlyValue": false,
+								"selectFields": "",
+								"searchThreshold": 0.3,
+								"fuseOptions": {
+									"include": "score",
+									"threshold": 0.3
+								},
+								"customOptions": {},
+								"id": "etgqc5"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Zip Code",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"pattern": "[0-9\\s-]*",
+									"customMessage": "Please enter a valid Zip Code for your region.",
+									"unique": false,
+									"multiple": false,
+									"custom": "",
+									"customPrivate": false,
+									"strictDateValidation": false,
+									"minLength": "",
+									"maxLength": ""
+								},
+								"key": "business_zip",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"autofocus": false,
+								"inputType": "text",
+								"inputMask": "",
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": "",
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
+								},
+								"customClass": "",
+								"refreshOn": "",
+								"redrawOn": "",
+								"modalEdit": false,
+								"labelPosition": "top",
+								"description": "",
+								"errorLabel": "",
+								"tooltip": "",
+								"hideLabel": false,
+								"tabindex": "",
+								"disabled": false,
+								"dbIndex": false,
+								"customDefaultValue": "",
+								"calculateValue": "",
+								"widget": {
+									"type": "input"
+								},
+								"attributes": {},
+								"validateOn": "change",
+								"overlay": {
+									"style": "",
+									"left": "",
+									"top": "",
+									"width": "",
+									"height": ""
+								},
+								"allowCalculateOverride": false,
+								"encrypted": false,
+								"showCharCount": false,
+								"showWordCount": false,
+								"properties": {},
+								"allowMultipleMasks": false,
+								"mask": false,
+								"inputFormat": "plain",
+								"id": "e9v2r39"
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}],
+						"tableView": false,
+						"key": "columns16",
+						"type": "columns",
+						"input": false,
+						"validate": {
+							"unique": false,
+							"multiple": false,
+							"required": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false
+						},
+						"path": "columns16",
+						"clearOnHide": false,
+						"hideLabel": true,
+						"placeholder": "",
+						"prefix": "",
+						"customClass": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": null,
+						"protected": false,
+						"unique": false,
+						"persistent": false,
+						"hidden": false,
+						"refreshOn": "",
+						"redrawOn": "",
+						"modalEdit": false,
+						"labelPosition": "top",
+						"description": "",
+						"errorLabel": "",
+						"tooltip": "",
+						"tabindex": "",
+						"disabled": false,
+						"autofocus": false,
+						"dbIndex": false,
+						"customDefaultValue": "",
+						"calculateValue": "",
+						"widget": null,
+						"attributes": {},
+						"validateOn": "change",
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						},
+						"overlay": {
+							"style": "",
+							"left": "",
+							"top": "",
+							"width": "",
+							"height": ""
+						},
+						"allowCalculateOverride": false,
+						"encrypted": false,
+						"showCharCount": false,
+						"showWordCount": false,
+						"properties": {},
+						"allowMultipleMasks": false,
+						"tree": false,
+						"autoAdjust": false,
+						"hideOnChildrenHidden": false,
+						"id": "eqidhzc"
+					}],
+					"path": "businessAddre",
+					"clearOnHide": false,
+					"hideLabel": false,
+					"placeholder": "",
+					"prefix": "",
+					"customClass": "",
+					"suffix": "",
+					"multiple": false,
+					"defaultValue": null,
+					"protected": false,
+					"unique": false,
+					"persistent": false,
+					"hidden": false,
+					"refreshOn": "",
+					"redrawOn": "",
+					"modalEdit": false,
+					"labelPosition": "top",
+					"description": "",
+					"errorLabel": "",
+					"tooltip": "",
+					"tabindex": "",
+					"disabled": false,
+					"autofocus": false,
+					"dbIndex": false,
+					"customDefaultValue": "",
+					"calculateValue": "",
+					"widget": null,
+					"attributes": {},
+					"validateOn": "change",
+					"conditional": {
+						"show": null,
+						"when": null,
+						"eq": ""
+					},
+					"overlay": {
+						"style": "",
+						"left": "",
+						"top": "",
+						"width": "",
+						"height": ""
+					},
+					"allowCalculateOverride": false,
+					"encrypted": false,
+					"showCharCount": false,
+					"showWordCount": false,
+					"properties": {},
+					"allowMultipleMasks": false,
+					"tree": false,
+					"breadcrumb": "default",
+					"id": "e8j1i4h"
 				}, {
 					"label": "Columns",
 					"columns": [{
 						"components": [{
-							"label": "Address1",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "business_address1",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "ebvg29"
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"label": "Adddress2",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Country Code",
+									"widget": "choicesjs",
+									"tableView": true,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{}],
+										"custom": "values = data['phoneList']",
+										"json": "",
+										"url": "",
+										"resource": ""
+									},
+									"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+									"selectThreshold": 0.3,
+									"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+									"validate": {
+										"unique": false,
+										"multiple": false,
+										"required": false,
+										"custom": "",
+										"customPrivate": false,
+										"strictDateValidation": false
+									},
+									"key": "work_country_code",
+									"type": "select",
+									"input": true,
+									"hideOnChildrenHidden": false,
+									"autofocus": false,
+									"placeholder": "",
+									"valueProperty": "",
+									"defaultValue": "",
+									"refreshOn": "",
+									"filter": "",
+									"authenticate": false,
+									"multiple": false,
+									"protected": false,
+									"unique": false,
+									"persistent": true,
+									"hidden": false,
+									"clearOnHide": true,
+									"prefix": "",
+									"customClass": "",
+									"suffix": "",
+									"redrawOn": "",
+									"modalEdit": false,
+									"labelPosition": "top",
+									"description": "",
+									"errorLabel": "",
+									"tooltip": "",
+									"hideLabel": false,
+									"tabindex": "",
+									"disabled": false,
+									"dbIndex": false,
+									"customDefaultValue": "",
+									"attributes": {},
+									"validateOn": "change",
+									"conditional": {
+										"show": null,
+										"when": null,
+										"eq": ""
+									},
+									"overlay": {
+										"style": "",
+										"left": "",
+										"top": "",
+										"width": "",
+										"height": ""
+									},
+									"allowCalculateOverride": false,
+									"encrypted": false,
+									"showCharCount": false,
+									"showWordCount": false,
+									"properties": {},
+									"allowMultipleMasks": false,
+									"clearOnRefresh": false,
+									"limit": 100,
+									"lazyLoad": true,
+									"searchEnabled": true,
+									"searchField": "",
+									"minSearch": 0,
+									"readOnlyValue": false,
+									"selectFields": "",
+									"searchThreshold": 0.3,
+									"fuseOptions": {
+										"include": "score",
+										"threshold": 0.3
+									},
+									"customOptions": {},
+									"id": "e8sfng"
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"width": 4
+							}, {
+								"components": [{
+									"label": "Work Phone",
+									"placeholder": " ",
+									"spellcheck": true,
+									"tableView": true,
+									"validate": {
+										"required": true,
+										"customMessage": "Please enter a valid phone number",
+										"unique": false,
+										"multiple": false,
+										"custom": "",
+										"customPrivate": false,
+										"strictDateValidation": false,
+										"minLength": "",
+										"maxLength": "",
+										"pattern": ""
+									},
+									"key": "buisness_work_number",
+									"type": "phoneNumber",
+									"input": true,
+									"hideOnChildrenHidden": false,
+									"autofocus": false,
+									"inputType": "tel",
+									"inputMask": "(999) 999-9999",
+									"prefix": "",
+									"suffix": "",
+									"multiple": false,
+									"protected": false,
+									"unique": false,
+									"persistent": true,
+									"hidden": false,
+									"defaultValue": "",
+									"clearOnHide": true,
+									"customClass": "",
+									"refreshOn": "",
+									"redrawOn": "",
+									"modalEdit": false,
+									"labelPosition": "top",
+									"description": "",
+									"errorLabel": "",
+									"tooltip": "",
+									"hideLabel": false,
+									"tabindex": "",
+									"disabled": false,
+									"dbIndex": false,
+									"customDefaultValue": "",
+									"calculateValue": "",
+									"widget": {
+										"type": "input"
+									},
+									"attributes": {},
+									"validateOn": "change",
+									"conditional": {
+										"show": null,
+										"when": null,
+										"eq": ""
+									},
+									"overlay": {
+										"style": "",
+										"left": "",
+										"top": "",
+										"width": "",
+										"height": ""
+									},
+									"allowCalculateOverride": false,
+									"encrypted": false,
+									"showCharCount": false,
+									"showWordCount": false,
+									"properties": {},
+									"allowMultipleMasks": false,
+									"mask": false,
+									"inputFormat": "plain",
+									"id": "e28h28m"
+								}, {
+									"label": "business_work_phone",
+									"calculateValue": "value = data.work_country_code + \"\"+ data.buisness_work_number",
+									"key": "business_work_phone",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
+									"validate": {
+										"unique": false,
+										"multiple": false,
+										"required": false,
+										"custom": "",
+										"customPrivate": false,
+										"strictDateValidation": false
+									},
+									"hideOnChildrenHidden": false,
+									"protected": false,
+									"unique": false,
+									"persistent": true,
+									"placeholder": "",
+									"prefix": "",
+									"customClass": "",
+									"suffix": "",
+									"multiple": false,
+									"defaultValue": null,
+									"hidden": false,
+									"clearOnHide": true,
+									"refreshOn": "",
+									"redrawOn": "",
+									"modalEdit": false,
+									"labelPosition": "top",
+									"description": "",
+									"errorLabel": "",
+									"tooltip": "",
+									"hideLabel": false,
+									"tabindex": "",
+									"disabled": false,
+									"autofocus": false,
+									"dbIndex": false,
+									"customDefaultValue": "",
+									"widget": {
+										"type": "input"
+									},
+									"attributes": {},
+									"validateOn": "change",
+									"conditional": {
+										"show": null,
+										"when": null,
+										"eq": ""
+									},
+									"overlay": {
+										"style": "",
+										"left": "",
+										"top": "",
+										"width": "",
+										"height": ""
+									},
+									"allowCalculateOverride": false,
+									"encrypted": false,
+									"showCharCount": false,
+									"showWordCount": false,
+									"properties": {},
+									"allowMultipleMasks": false,
+									"inputType": "hidden",
+									"id": "e63f2tp"
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"width": 8
+							}],
+							"hideLabel": true,
+							"tableView": false,
+							"key": "columns4",
+							"type": "columns",
+							"input": false,
 							"validate": {
 								"unique": false,
 								"multiple": false,
 								"required": false,
 								"custom": "",
 								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
+								"strictDateValidation": false
 							},
-							"key": "business_address2",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "ebdcdav"
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}],
-					"tableView": false,
-					"key": "columns5",
-					"type": "columns",
-					"input": false,
-					"validate": {
-						"unique": false,
-						"multiple": false,
-						"required": false,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false
-					},
-					"path": "columns5",
-					"clearOnHide": false,
-					"hideLabel": true,
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": false,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"widget": null,
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"tree": false,
-					"autoAdjust": false,
-					"hideOnChildrenHidden": false,
-					"id": "eck6y1"
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "City",
-							"spellcheck": true,
-							"tableView": true,
+							"path": "columns4",
 							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "business_city",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
 							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
 							"placeholder": "",
 							"prefix": "",
+							"customClass": "",
 							"suffix": "",
 							"multiple": false,
-							"defaultValue": "",
+							"defaultValue": null,
 							"protected": false,
 							"unique": false,
-							"persistent": true,
+							"persistent": false,
 							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
 							"refreshOn": "",
 							"redrawOn": "",
 							"modalEdit": false,
@@ -4052,17 +4774,20 @@
 							"description": "",
 							"errorLabel": "",
 							"tooltip": "",
-							"hideLabel": false,
 							"tabindex": "",
 							"disabled": false,
+							"autofocus": false,
 							"dbIndex": false,
 							"customDefaultValue": "",
 							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
+							"widget": null,
 							"attributes": {},
 							"validateOn": "change",
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
 							"overlay": {
 								"style": "",
 								"left": "",
@@ -4076,423 +4801,15 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "eb1rwui"
+							"tree": false,
+							"autoAdjust": false,
+							"id": "eqmtu9"
 						}],
 						"width": 6,
 						"offset": 0,
 						"push": 0,
 						"pull": 0
 					}, {
-						"components": [{
-							"label": "Country",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{
-									"label": "",
-									"value": ""
-								}],
-								"custom": "values = data['countryList'];",
-								"json": "",
-								"url": "",
-								"resource": ""
-							},
-							"valueProperty": "country",
-							"template": "<span>{{ item.country }}</span>",
-							"selectThreshold": 0.3,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false
-							},
-							"key": "business_country",
-							"type": "select",
-							"input": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"placeholder": "",
-							"defaultValue": "",
-							"refreshOn": "",
-							"filter": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"prefix": "",
-							"customClass": "",
-							"suffix": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"attributes": {},
-							"validateOn": "change",
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"clearOnRefresh": false,
-							"limit": 100,
-							"lazyLoad": true,
-							"searchEnabled": true,
-							"searchField": "",
-							"minSearch": 0,
-							"readOnlyValue": false,
-							"selectFields": "",
-							"searchThreshold": 0.3,
-							"fuseOptions": {
-								"include": "score",
-								"threshold": 0.3
-							},
-							"customOptions": {},
-							"id": "e9s3w9"
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}],
-					"tableView": false,
-					"key": "columns6",
-					"type": "columns",
-					"input": false,
-					"validate": {
-						"unique": false,
-						"multiple": false,
-						"required": false,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false
-					},
-					"path": "columns6",
-					"clearOnHide": false,
-					"hideLabel": true,
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": false,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"widget": null,
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"tree": false,
-					"autoAdjust": false,
-					"hideOnChildrenHidden": false,
-					"id": "e70sdgp"
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "State",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{
-									"label": "",
-									"value": ""
-								}],
-								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}",
-								"json": "",
-								"url": "",
-								"resource": ""
-							},
-							"template": "<span>{{ item }}</span>",
-							"selectThreshold": 0.3,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false
-							},
-							"key": "business_state",
-							"type": "select",
-							"input": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"placeholder": "",
-							"valueProperty": "",
-							"defaultValue": "",
-							"refreshOn": "",
-							"filter": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"prefix": "",
-							"customClass": "",
-							"suffix": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"attributes": {},
-							"validateOn": "change",
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"clearOnRefresh": false,
-							"limit": 100,
-							"lazyLoad": true,
-							"searchEnabled": true,
-							"searchField": "",
-							"minSearch": 0,
-							"readOnlyValue": false,
-							"selectFields": "",
-							"searchThreshold": 0.3,
-							"fuseOptions": {
-								"include": "score",
-								"threshold": 0.3
-							},
-							"customOptions": {},
-							"id": "e5b3d3"
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"label": "Zip Code",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"pattern": "[0-9\\s-]*",
-								"customMessage": "Please enter a valid Zip Code for your region.",
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": ""
-							},
-							"key": "business_zip",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "ews8lvn"
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}],
-					"tableView": false,
-					"key": "columns7",
-					"type": "columns",
-					"input": false,
-					"validate": {
-						"unique": false,
-						"multiple": false,
-						"required": false,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false
-					},
-					"path": "columns7",
-					"clearOnHide": false,
-					"hideLabel": true,
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": false,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"widget": null,
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"tree": false,
-					"autoAdjust": false,
-					"hideOnChildrenHidden": false,
-					"id": "exgotj4"
-				}, {
-					"label": "Columns",
-					"columns": [{
 						"components": [{
 							"label": "Email Address 1",
 							"tooltip": "Primary Email",
@@ -4569,7 +4886,152 @@
 							"mask": false,
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "ecnecu7"
+							"id": "eanxg4"
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}],
+					"tableView": false,
+					"key": "columns8",
+					"type": "columns",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false,
+						"required": false,
+						"custom": "",
+						"customPrivate": false,
+						"strictDateValidation": false
+					},
+					"path": "columns8",
+					"hideLabel": true,
+					"clearOnHide": false,
+					"placeholder": "",
+					"prefix": "",
+					"customClass": "",
+					"suffix": "",
+					"multiple": false,
+					"defaultValue": null,
+					"protected": false,
+					"unique": false,
+					"persistent": false,
+					"hidden": false,
+					"refreshOn": "",
+					"redrawOn": "",
+					"modalEdit": false,
+					"labelPosition": "top",
+					"description": "",
+					"errorLabel": "",
+					"tooltip": "",
+					"tabindex": "",
+					"disabled": false,
+					"autofocus": false,
+					"dbIndex": false,
+					"customDefaultValue": "",
+					"calculateValue": "",
+					"widget": null,
+					"attributes": {},
+					"validateOn": "change",
+					"conditional": {
+						"show": null,
+						"when": null,
+						"eq": ""
+					},
+					"overlay": {
+						"style": "",
+						"left": "",
+						"top": "",
+						"width": "",
+						"height": ""
+					},
+					"allowCalculateOverride": false,
+					"encrypted": false,
+					"showCharCount": false,
+					"showWordCount": false,
+					"properties": {},
+					"allowMultipleMasks": false,
+					"tree": false,
+					"autoAdjust": false,
+					"hideOnChildrenHidden": false,
+					"id": "eyf52nk"
+				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "Fax",
+							"placeholder": "             ",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"unique": false,
+								"multiple": false,
+								"required": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "business_fax",
+							"type": "phoneNumber",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"autofocus": false,
+							"inputType": "tel",
+							"inputMask": "(999) 999-9999",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"defaultValue": "",
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"hideLabel": false,
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "e20cvtq"
 						}],
 						"width": 6,
 						"offset": 0,
@@ -4651,7 +5113,7 @@
 							"mask": false,
 							"inputFormat": "plain",
 							"inputMask": "",
-							"id": "e8po2d"
+							"id": "e1riqwg"
 						}],
 						"width": 6,
 						"offset": 0,
@@ -4659,7 +5121,7 @@
 						"pull": 0
 					}],
 					"tableView": false,
-					"key": "columns8",
+					"key": "columns9",
 					"type": "columns",
 					"input": false,
 					"validate": {
@@ -4670,9 +5132,9 @@
 						"customPrivate": false,
 						"strictDateValidation": false
 					},
-					"path": "columns8",
-					"clearOnHide": false,
+					"path": "columns9",
 					"hideLabel": true,
+					"clearOnHide": false,
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -4720,89 +5182,10 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "eyhtv1"
+					"id": "efvd5md"
 				}, {
 					"label": "Columns",
 					"columns": [{
-						"components": [{
-							"label": "Fax",
-							"placeholder": "             ",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"unique": false,
-								"multiple": false,
-								"required": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "business_fax",
-							"type": "phoneNumber",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "tel",
-							"inputMask": "(999) 999-9999",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"defaultValue": "",
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "e9izurt"
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
 						"components": [{
 							"label": "Website",
 							"spellcheck": true,
@@ -4875,15 +5258,21 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "ezdnagq"
+							"id": "earspw"
 						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [],
 						"width": 6,
 						"offset": 0,
 						"push": 0,
 						"pull": 0
 					}],
 					"tableView": false,
-					"key": "columns9",
+					"key": "columns5",
 					"type": "columns",
 					"input": false,
 					"validate": {
@@ -4894,7 +5283,7 @@
 						"customPrivate": false,
 						"strictDateValidation": false
 					},
-					"path": "columns9",
+					"path": "columns5",
 					"clearOnHide": false,
 					"hideLabel": true,
 					"placeholder": "",
@@ -4944,324 +5333,12 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "et4szge"
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "Country Code",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{}],
-								"custom": "values = data['phoneList']",
-								"json": "",
-								"url": "",
-								"resource": ""
-							},
-							"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
-							"selectThreshold": 0.3,
-							"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
-							"validate": {
-								"unique": false,
-								"multiple": false,
-								"required": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false
-							},
-							"key": "work_country_code",
-							"type": "select",
-							"input": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"placeholder": "",
-							"valueProperty": "",
-							"defaultValue": "",
-							"refreshOn": "",
-							"filter": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"prefix": "",
-							"customClass": "",
-							"suffix": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"attributes": {},
-							"validateOn": "change",
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"clearOnRefresh": false,
-							"limit": 100,
-							"lazyLoad": true,
-							"searchEnabled": true,
-							"searchField": "",
-							"minSearch": 0,
-							"readOnlyValue": false,
-							"selectFields": "",
-							"searchThreshold": 0.3,
-							"fuseOptions": {
-								"include": "score",
-								"threshold": 0.3
-							},
-							"customOptions": {},
-							"id": "ezky81f"
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 2
-					}, {
-						"components": [{
-							"label": "Work Phone",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false,
-								"custom": "",
-								"customPrivate": false,
-								"strictDateValidation": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": ""
-							},
-							"key": "buisness_work_number",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
-							"customClass": "",
-							"refreshOn": "",
-							"redrawOn": "",
-							"modalEdit": false,
-							"labelPosition": "top",
-							"description": "",
-							"errorLabel": "",
-							"tooltip": "",
-							"hideLabel": false,
-							"tabindex": "",
-							"disabled": false,
-							"dbIndex": false,
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"widget": {
-								"type": "input"
-							},
-							"attributes": {},
-							"validateOn": "change",
-							"overlay": {
-								"style": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
-							"allowCalculateOverride": false,
-							"encrypted": false,
-							"showCharCount": false,
-							"showWordCount": false,
-							"properties": {},
-							"allowMultipleMasks": false,
-							"mask": false,
-							"inputFormat": "plain",
-							"id": "em8bq6"
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 4
-					}],
-					"tableView": false,
-					"key": "columns4",
-					"type": "columns",
-					"input": false,
-					"validate": {
-						"unique": false,
-						"multiple": false,
-						"required": false,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false
-					},
-					"path": "columns4",
-					"clearOnHide": false,
-					"hideLabel": true,
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": false,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"widget": null,
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"tree": false,
-					"autoAdjust": false,
-					"hideOnChildrenHidden": false,
-					"id": "e8rl2ej"
-				}, {
-					"label": "business_work_phone",
-					"calculateValue": "value = data.work_country_code + \"\"+ data.buisness_work_number",
-					"key": "business_work_phone",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false,
-						"required": false,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false
-					},
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"hidden": false,
-					"clearOnHide": true,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"widget": {
-						"type": "input"
-					},
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"inputType": "hidden",
-					"id": "e8yjies"
+					"id": "eqrwf2r"
 				}],
 				"path": "panel3",
+				"hideLabel": true,
 				"clearOnHide": false,
 				"title": "",
-				"hideLabel": true,
-				"breadcrumb": "default",
-				"tags": [],
-				"conditional": {
-					"show": "",
-					"when": null,
-					"eq": ""
-				},
-				"properties": {},
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -5288,6 +5365,11 @@
 				"widget": null,
 				"attributes": {},
 				"validateOn": "change",
+				"conditional": {
+					"show": null,
+					"when": null,
+					"eq": ""
+				},
 				"overlay": {
 					"style": "",
 					"left": "",
@@ -5299,9 +5381,11 @@
 				"encrypted": false,
 				"showCharCount": false,
 				"showWordCount": false,
+				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "e5q4e7m"
+				"breadcrumb": "default",
+				"id": "ebupx2b"
 			}, {
 				"clearOnHide": false,
 				"key": "panelPanelWell",
@@ -5413,7 +5497,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "ew3b3jo"
+							"id": "ew0svfw"
 						}],
 						"width": 6,
 						"offset": 0,
@@ -5492,7 +5576,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "enz8t1h"
+							"id": "ev1q3pq"
 						}, {
 							"label": "Shareholders",
 							"spellcheck": true,
@@ -5566,7 +5650,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "exmmji"
+							"id": "eefj0ln"
 						}, {
 							"label": "Other, Please Explain",
 							"spellcheck": true,
@@ -5640,7 +5724,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "e1siu0k"
+							"id": "ea5olz"
 						}],
 						"width": 6,
 						"offset": 0,
@@ -5705,7 +5789,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "e9vx3rs"
+					"id": "envryol"
 				}],
 				"tableView": false,
 				"type": "well",
@@ -5764,7 +5848,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "essv0l7"
+				"id": "edx6p8m"
 			}, {
 				"label": "Current Insurance Company",
 				"spellcheck": true,
@@ -5836,7 +5920,7 @@
 				"allowMultipleMasks": false,
 				"mask": false,
 				"inputFormat": "plain",
-				"id": "egl2of6"
+				"id": "epa3x2"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -5897,7 +5981,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "ednx4gh"
+			"id": "e2tlcdl"
 		}, {
 			"key": "panelColumnsPanel",
 			"input": false,
@@ -5992,7 +6076,7 @@
 					"threshold": 0.3
 				},
 				"customOptions": {},
-				"id": "e8r0sbb"
+				"id": "ey5b5jq"
 			}, {
 				"clearOnHide": false,
 				"key": "panelColumnsPanelWell",
@@ -6073,7 +6157,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "egh3ycl"
+					"id": "ea8h9zo"
 				}, {
 					"label": "Data Grid",
 					"disableAddingRemovingRows": false,
@@ -6175,7 +6259,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "ej20lns"
+						"id": "eozs5q9"
 					}, {
 						"label": "Date",
 						"format": "MM-dd-yyyy",
@@ -6284,7 +6368,7 @@
 						"displayInTimezone": "viewer",
 						"timezone": "",
 						"customOptions": {},
-						"id": "e1dtqci"
+						"id": "e15rfa8"
 					}, {
 						"label": "Amount",
 						"prefix": "$",
@@ -6310,8 +6394,8 @@
 						"type": "number",
 						"input": true,
 						"inDataGrid": true,
-						"autofocus": false,
 						"inputType": "number",
+						"autofocus": false,
 						"placeholder": "",
 						"suffix": "",
 						"defaultValue": "",
@@ -6358,7 +6442,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "egzvhxf"
+						"id": "e6el2ki"
 					}],
 					"lockKey": true,
 					"path": "DataGrid",
@@ -6402,7 +6486,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "ezas7q"
+					"id": "ekuwo2o"
 				}],
 				"tableView": false,
 				"type": "well",
@@ -6461,7 +6545,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "e6yban"
+				"id": "ehyg6zv"
 			}, {
 				"label": "Has a marine insurance policy ever been cancelled or non renewed?",
 				"optionsLabelPosition": "right",
@@ -6536,7 +6620,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "edrgy9"
+				"id": "e26a59"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -6596,7 +6680,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "er7po5o"
+			"id": "eg5b6gi"
 		}],
 		"validate": {
 			"unique": false,
@@ -6648,7 +6732,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "ec7vfx8"
+		"id": "ewwfw8h"
 	}, {
 		"title": "Boat Usage &  Captain & Crew Schedule",
 		"theme": "primary",
@@ -6748,7 +6832,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "e6n6ekt"
+						"id": "e38ni95"
 					}, {
 						"label": "Survey",
 						"hideLabel": true,
@@ -6841,7 +6925,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "euow4ro"
+						"id": "e39jf6i"
 					}, {
 						"label": "Registry Number",
 						"spellcheck": true,
@@ -6914,7 +6998,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "e2lww7"
+						"id": "ecu1iro"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -7031,7 +7115,7 @@
 							"threshold": 0.3
 						},
 						"customOptions": {},
-						"id": "eq6zhr9"
+						"id": "ew2e7jc"
 					}, {
 						"label": "Please Specify",
 						"spellcheck": true,
@@ -7104,7 +7188,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "efp9pe"
+						"id": "eygv0xt"
 					}, {
 						"label": "Certified for Maximum Number of Passengers:",
 						"mask": false,
@@ -7130,8 +7214,8 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"autofocus": false,
 						"inputType": "number",
+						"autofocus": false,
 						"placeholder": "",
 						"prefix": "",
 						"suffix": "",
@@ -7179,7 +7263,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "etwu7cq"
+						"id": "ee4bfv"
 					}, {
 						"label": "Percentage of trips for diving charters",
 						"suffix": "%",
@@ -7205,8 +7289,8 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"autofocus": false,
 						"inputType": "number",
+						"autofocus": false,
 						"placeholder": "",
 						"prefix": "",
 						"defaultValue": "",
@@ -7253,7 +7337,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "e4vhtrt"
+						"id": "ec3ffa"
 					}, {
 						"label": "If less than 100%, Please explain",
 						"spellcheck": true,
@@ -7327,7 +7411,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "eqq5a1o"
+						"id": "eqzvr3"
 					}, {
 						"label": "Columns",
 						"input": false,
@@ -7441,7 +7525,7 @@
 								"displayInTimezone": "viewer",
 								"timezone": "",
 								"customOptions": {},
-								"id": "ebmm38"
+								"id": "eqruezc"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -7572,7 +7656,7 @@
 								"displayInTimezone": "viewer",
 								"timezone": "",
 								"customOptions": {},
-								"id": "e6m4kme"
+								"id": "esj33uq"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -7637,7 +7721,7 @@
 						"allowMultipleMasks": false,
 						"tree": false,
 						"autoAdjust": false,
-						"id": "eykuha"
+						"id": "e6tlqi"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -7703,7 +7787,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "evma2zi"
+				"id": "ebo7u0c"
 			}, {
 				"clearOnHide": false,
 				"input": false,
@@ -7777,7 +7861,7 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"id": "efav64r"
+							"id": "esbu1dq"
 						}]
 					}, {
 						"components": [{
@@ -7853,7 +7937,7 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"id": "e5c7hrq"
+							"id": "eyhb7iq"
 						}]
 					}],
 					[{
@@ -7922,7 +8006,7 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"id": "egje2oe"
+							"id": "eh6fmxq"
 						}]
 					}, {
 						"components": [{
@@ -7953,8 +8037,8 @@
 							},
 							"type": "number",
 							"input": true,
-							"autofocus": false,
 							"inputType": "number",
+							"autofocus": false,
 							"placeholder": "",
 							"prefix": "",
 							"suffix": "",
@@ -7997,7 +8081,7 @@
 							"showWordCount": false,
 							"properties": {},
 							"allowMultipleMasks": false,
-							"id": "eh9eb5"
+							"id": "et3qpew"
 						}]
 					}]
 				],
@@ -8065,7 +8149,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"cloneRows": false,
-				"id": "ep85gu8"
+				"id": "eqdydj"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -8125,7 +8209,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "ecfw8b"
+			"id": "e3pm9da"
 		}, {
 			"key": "pageNaNPanel",
 			"input": false,
@@ -8227,7 +8311,7 @@
 					"allowMultipleMasks": false,
 					"mask": false,
 					"inputFormat": "plain",
-					"id": "e2ebofa"
+					"id": "egwpkr"
 				}, {
 					"label": "Name",
 					"spellcheck": true,
@@ -8301,7 +8385,7 @@
 					"allowMultipleMasks": false,
 					"mask": false,
 					"inputFormat": "plain",
-					"id": "en8ne39"
+					"id": "e8r9t5k"
 				}, {
 					"label": "Full Time/Part Time",
 					"widget": "choicesjs",
@@ -8398,7 +8482,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "e0jsrxo"
+					"id": "ep8ge0c"
 				}, {
 					"label": "Do they have Professional Liability Insurance?",
 					"widget": "choicesjs",
@@ -8495,7 +8579,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "eyewmwq"
+					"id": "em5n6e"
 				}, {
 					"label": "PADI Number",
 					"mask": false,
@@ -8520,8 +8604,8 @@
 					"type": "number",
 					"input": true,
 					"inDataGrid": true,
-					"autofocus": false,
 					"inputType": "number",
+					"autofocus": false,
 					"placeholder": "",
 					"prefix": "",
 					"suffix": "",
@@ -8569,7 +8653,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "eoyi9cm"
+					"id": "eo43k9"
 				}],
 				"lockKey": true,
 				"path": "CrewGrid",
@@ -8619,7 +8703,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "ek8gjtj"
+				"id": "ecvkkth"
 			}, {
 				"label": "Survey",
 				"hideLabel": true,
@@ -8705,7 +8789,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "eg91qk"
+				"id": "eao74qh"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -8765,7 +8849,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "e2t3t1l"
+			"id": "etzm8v"
 		}],
 		"input": false,
 		"validate": {
@@ -8824,7 +8908,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "e4uavsr"
+		"id": "eixijae"
 	}, {
 		"type": "panel",
 		"title": "Boat Details",
@@ -8909,7 +8993,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "e5b5ojk"
+						"id": "eoew25"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -8989,7 +9073,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "e4horon"
+						"id": "ex4kjtc"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9084,7 +9168,7 @@
 							"threshold": 0.3
 						},
 						"customOptions": {},
-						"id": "e1rp29l"
+						"id": "es31q6"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9104,8 +9188,8 @@
 					"strictDateValidation": false
 				},
 				"path": "columns10",
-				"clearOnHide": false,
 				"hideLabel": true,
+				"clearOnHide": false,
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -9153,7 +9237,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "evtw2nn"
+				"id": "e2p64bq"
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -9230,7 +9314,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "e2dfs3"
+						"id": "eltmhmk"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9310,7 +9394,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "ewders"
+						"id": "ewxmoj"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9341,8 +9425,8 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"autofocus": false,
 						"inputType": "number",
+						"autofocus": false,
 						"placeholder": "",
 						"prefix": "",
 						"suffix": "",
@@ -9390,7 +9474,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "el08le"
+						"id": "e9t4ym5"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9410,8 +9494,8 @@
 					"strictDateValidation": false
 				},
 				"path": "columns11",
-				"clearOnHide": false,
 				"hideLabel": true,
+				"clearOnHide": false,
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -9459,7 +9543,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "ei5wdok"
+				"id": "e7cusyd"
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -9536,7 +9620,7 @@
 						"allowMultipleMasks": false,
 						"mask": false,
 						"inputFormat": "plain",
-						"id": "eqvh1cg"
+						"id": "eccrn6r"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9567,8 +9651,8 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"autofocus": false,
 						"inputType": "number",
+						"autofocus": false,
 						"placeholder": "",
 						"prefix": "",
 						"suffix": "",
@@ -9616,7 +9700,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "ewhixw9"
+						"id": "e9sswaf"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9624,45 +9708,42 @@
 					"width": 4
 				}, {
 					"components": [{
-						"label": "Engine Make",
+						"label": "Total Horsepower",
+						"suffix": "HP",
+						"mask": false,
 						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the engine make.",
 							"unique": false,
 							"multiple": false,
 							"custom": "",
 							"customPrivate": false,
 							"strictDateValidation": false,
-							"minLength": "",
-							"maxLength": "",
-							"pattern": ""
+							"min": "",
+							"max": "",
+							"step": "any",
+							"integer": ""
 						},
-						"key": "engine_make",
-						"type": "textfield",
+						"key": "vessel_hp",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
 						"hideOnChildrenHidden": false,
+						"inputType": "number",
 						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
 						"placeholder": "",
 						"prefix": "",
-						"suffix": "",
-						"multiple": false,
 						"defaultValue": "",
 						"protected": false,
-						"unique": false,
 						"persistent": true,
 						"hidden": false,
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						},
+						"clearOnHide": true,
 						"customClass": "",
+						"multiple": false,
+						"unique": false,
 						"refreshOn": "",
 						"redrawOn": "",
 						"modalEdit": false,
@@ -9681,6 +9762,11 @@
 						},
 						"attributes": {},
 						"validateOn": "change",
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						},
 						"overlay": {
 							"style": "",
 							"left": "",
@@ -9694,9 +9780,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"mask": false,
-						"inputFormat": "plain",
-						"id": "e827yzr"
+						"id": "e7vi1f2"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -9716,8 +9800,8 @@
 					"strictDateValidation": false
 				},
 				"path": "columns12",
-				"clearOnHide": false,
 				"hideLabel": true,
+				"clearOnHide": false,
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -9765,90 +9849,10 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "e1f3fy6"
+				"id": "et47l5o"
 			}, {
 				"label": "Columns",
 				"columns": [{
-					"components": [{
-						"label": "Total Horsepower",
-						"suffix": "HP",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"validate": {
-							"required": true,
-							"unique": false,
-							"multiple": false,
-							"custom": "",
-							"customPrivate": false,
-							"strictDateValidation": false,
-							"min": "",
-							"max": "",
-							"step": "any",
-							"integer": ""
-						},
-						"key": "vessel_hp",
-						"type": "number",
-						"input": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "number",
-						"placeholder": "",
-						"prefix": "",
-						"defaultValue": "",
-						"protected": false,
-						"persistent": true,
-						"hidden": false,
-						"clearOnHide": true,
-						"customClass": "",
-						"multiple": false,
-						"unique": false,
-						"refreshOn": "",
-						"redrawOn": "",
-						"modalEdit": false,
-						"labelPosition": "top",
-						"description": "",
-						"errorLabel": "",
-						"tooltip": "",
-						"hideLabel": false,
-						"tabindex": "",
-						"disabled": false,
-						"dbIndex": false,
-						"customDefaultValue": "",
-						"calculateValue": "",
-						"widget": {
-							"type": "input"
-						},
-						"attributes": {},
-						"validateOn": "change",
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						},
-						"overlay": {
-							"style": "",
-							"left": "",
-							"top": "",
-							"width": "",
-							"height": ""
-						},
-						"allowCalculateOverride": false,
-						"encrypted": false,
-						"showCharCount": false,
-						"showWordCount": false,
-						"properties": {},
-						"allowMultipleMasks": false,
-						"id": "exxytcq"
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"width": 4
-				}, {
 					"components": [{
 						"label": "Hull Market Value",
 						"prefix": "$",
@@ -9923,7 +9927,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "ekv3nker"
+						"id": "esleqgn"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -10004,7 +10008,198 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "ez44vou"
+						"id": "ezio5h"
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Type of propulsion",
+						"widget": "choicesjs",
+						"tableView": true,
+						"data": {
+							"values": [{
+								"value": "inboard",
+								"label": "Inboard"
+							}, {
+								"value": "outboard",
+								"label": "Outboard"
+							}, {
+								"value": "sail",
+								"label": "Sail"
+							}, {
+								"value": "inboardOutboard",
+								"label": "Inboard/Outboard"
+							}, {
+								"value": "other",
+								"label": "Other"
+							}],
+							"json": "",
+							"url": "",
+							"resource": "",
+							"custom": ""
+						},
+						"selectThreshold": 0.3,
+						"clearOnHide": false,
+						"validate": {
+							"required": true,
+							"unique": false,
+							"multiple": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false
+						},
+						"key": "type_of_propulsion",
+						"type": "select",
+						"input": true,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"placeholder": "",
+						"dataSrc": "values",
+						"valueProperty": "",
+						"defaultValue": "",
+						"refreshOn": "",
+						"filter": "",
+						"authenticate": false,
+						"template": "<span>{{ item.label }}</span>",
+						"multiple": false,
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false,
+						"prefix": "",
+						"customClass": "",
+						"suffix": "",
+						"redrawOn": "",
+						"modalEdit": false,
+						"labelPosition": "top",
+						"description": "",
+						"errorLabel": "",
+						"tooltip": "",
+						"hideLabel": false,
+						"tabindex": "",
+						"disabled": false,
+						"dbIndex": false,
+						"customDefaultValue": "",
+						"calculateValue": "",
+						"attributes": {},
+						"validateOn": "change",
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						},
+						"overlay": {
+							"style": "",
+							"left": "",
+							"top": "",
+							"width": "",
+							"height": ""
+						},
+						"allowCalculateOverride": false,
+						"encrypted": false,
+						"showCharCount": false,
+						"showWordCount": false,
+						"properties": {},
+						"allowMultipleMasks": false,
+						"clearOnRefresh": false,
+						"limit": 100,
+						"lazyLoad": true,
+						"searchEnabled": true,
+						"searchField": "",
+						"minSearch": 0,
+						"readOnlyValue": false,
+						"selectFields": "",
+						"searchThreshold": 0.3,
+						"fuseOptions": {
+							"include": "score",
+							"threshold": 0.3
+						},
+						"customOptions": {},
+						"id": "eg8hdul"
+					}, {
+						"label": "If other, please specify",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"required": true,
+							"customMessage": "If other, please specify.",
+							"unique": false,
+							"multiple": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false,
+							"minLength": "",
+							"maxLength": "",
+							"pattern": ""
+						},
+						"key": "if_others_please_specify",
+						"conditional": {
+							"show": true,
+							"when": "type_of_propulsion",
+							"eq": "other"
+						},
+						"type": "textfield",
+						"input": true,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"inputType": "text",
+						"inputMask": "",
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": "",
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false,
+						"customClass": "",
+						"refreshOn": "",
+						"redrawOn": "",
+						"modalEdit": false,
+						"labelPosition": "top",
+						"description": "",
+						"errorLabel": "",
+						"tooltip": "",
+						"hideLabel": false,
+						"tabindex": "",
+						"disabled": false,
+						"dbIndex": false,
+						"customDefaultValue": "",
+						"calculateValue": "",
+						"widget": {
+							"type": "input"
+						},
+						"attributes": {},
+						"validateOn": "change",
+						"overlay": {
+							"style": "",
+							"left": "",
+							"top": "",
+							"width": "",
+							"height": ""
+						},
+						"allowCalculateOverride": false,
+						"encrypted": false,
+						"showCharCount": false,
+						"showWordCount": false,
+						"properties": {},
+						"allowMultipleMasks": false,
+						"mask": false,
+						"inputFormat": "plain",
+						"id": "ec8x36m"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -10024,8 +10219,8 @@
 					"strictDateValidation": false
 				},
 				"path": "columns13",
-				"clearOnHide": false,
 				"hideLabel": true,
+				"clearOnHide": false,
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -10073,7 +10268,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "e0f1gmp"
+				"id": "edj95vd"
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -10190,12 +10385,12 @@
 						"displayInTimezone": "viewer",
 						"timezone": "",
 						"customOptions": {},
-						"id": "egh3yjt"
+						"id": "ec03iu6"
 					}],
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
-					"width": 4
+					"width": 6
 				}, {
 					"components": [{
 						"label": "Date of Purchase",
@@ -10308,204 +10503,14 @@
 						"displayInTimezone": "viewer",
 						"timezone": "",
 						"customOptions": {},
-						"id": "e82ta3m"
+						"id": "eclk5ot"
 					}],
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
-					"width": 4
-				}, {
-					"components": [{
-						"label": "Type of propulsion",
-						"widget": "choicesjs",
-						"tableView": true,
-						"data": {
-							"values": [{
-								"value": "inboard",
-								"label": "Inboard"
-							}, {
-								"value": "outboard",
-								"label": "Outboard"
-							}, {
-								"value": "sail",
-								"label": "Sail"
-							}, {
-								"value": "inboardOutboard",
-								"label": "Inboard/Outboard"
-							}, {
-								"value": "other",
-								"label": "Other"
-							}],
-							"json": "",
-							"url": "",
-							"resource": "",
-							"custom": ""
-						},
-						"selectThreshold": 0.3,
-						"clearOnHide": false,
-						"validate": {
-							"required": true,
-							"unique": false,
-							"multiple": false,
-							"custom": "",
-							"customPrivate": false,
-							"strictDateValidation": false
-						},
-						"key": "type_of_propulsion",
-						"type": "select",
-						"input": true,
-						"style": {
-							"margin-top": "20px"
-						},
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"placeholder": "",
-						"dataSrc": "values",
-						"valueProperty": "",
-						"defaultValue": "",
-						"refreshOn": "",
-						"filter": "",
-						"authenticate": false,
-						"template": "<span>{{ item.label }}</span>",
-						"multiple": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"prefix": "",
-						"customClass": "",
-						"suffix": "",
-						"redrawOn": "",
-						"modalEdit": false,
-						"labelPosition": "top",
-						"description": "",
-						"errorLabel": "",
-						"tooltip": "",
-						"hideLabel": false,
-						"tabindex": "",
-						"disabled": false,
-						"dbIndex": false,
-						"customDefaultValue": "",
-						"calculateValue": "",
-						"attributes": {},
-						"validateOn": "change",
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						},
-						"overlay": {
-							"style": "",
-							"left": "",
-							"top": "",
-							"width": "",
-							"height": ""
-						},
-						"allowCalculateOverride": false,
-						"encrypted": false,
-						"showCharCount": false,
-						"showWordCount": false,
-						"properties": {},
-						"allowMultipleMasks": false,
-						"clearOnRefresh": false,
-						"limit": 100,
-						"lazyLoad": true,
-						"searchEnabled": true,
-						"searchField": "",
-						"minSearch": 0,
-						"readOnlyValue": false,
-						"selectFields": "",
-						"searchThreshold": 0.3,
-						"fuseOptions": {
-							"include": "score",
-							"threshold": 0.3
-						},
-						"customOptions": {},
-						"id": "eazlkjb"
-					}, {
-						"label": "If other, please specify",
-						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
-						"validate": {
-							"required": true,
-							"customMessage": "If other, please specify.",
-							"unique": false,
-							"multiple": false,
-							"custom": "",
-							"customPrivate": false,
-							"strictDateValidation": false,
-							"minLength": "",
-							"maxLength": "",
-							"pattern": ""
-						},
-						"key": "if_others_please_specify",
-						"conditional": {
-							"show": true,
-							"when": "type_of_propulsion",
-							"eq": "other"
-						},
-						"type": "textfield",
-						"input": true,
-						"style": {
-							"margin-top": "20px"
-						},
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
-						"placeholder": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"customClass": "",
-						"refreshOn": "",
-						"redrawOn": "",
-						"modalEdit": false,
-						"labelPosition": "top",
-						"description": "",
-						"errorLabel": "",
-						"tooltip": "",
-						"hideLabel": false,
-						"tabindex": "",
-						"disabled": false,
-						"dbIndex": false,
-						"customDefaultValue": "",
-						"calculateValue": "",
-						"widget": {
-							"type": "input"
-						},
-						"attributes": {},
-						"validateOn": "change",
-						"overlay": {
-							"style": "",
-							"left": "",
-							"top": "",
-							"width": "",
-							"height": ""
-						},
-						"allowCalculateOverride": false,
-						"encrypted": false,
-						"showCharCount": false,
-						"showWordCount": false,
-						"properties": {},
-						"allowMultipleMasks": false,
-						"mask": false,
-						"inputFormat": "plain",
-						"id": "eoga1l8"
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"width": 4
+					"width": 6
 				}],
+				"hideLabel": true,
 				"tableView": false,
 				"key": "columns1",
 				"type": "columns",
@@ -10520,7 +10525,6 @@
 				},
 				"path": "columns1",
 				"clearOnHide": false,
-				"hideLabel": true,
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -10568,7 +10572,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "erjq7q"
+				"id": "etwwawo"
 			}, {
 				"input": false,
 				"key": "columns14",
@@ -10577,7 +10581,7 @@
 				"type": "columns",
 				"columns": [{
 					"components": [{
-						"label": "Data Grid",
+						"label": "Protective devices (automatic firefighting systems, etc)",
 						"disableAddingRemovingRows": false,
 						"reorder": false,
 						"addAnother": "Add More",
@@ -10585,7 +10589,6 @@
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
-						"hideLabel": true,
 						"tableView": true,
 						"validate": {
 							"unique": false,
@@ -10600,6 +10603,7 @@
 						"input": true,
 						"components": [{
 							"label": "Protective devices (automatic firefighting systems, etc)",
+							"hideLabel": true,
 							"spellcheck": true,
 							"dataGridLabel": false,
 							"tableView": true,
@@ -10646,7 +10650,6 @@
 							"description": "",
 							"errorLabel": "",
 							"tooltip": "",
-							"hideLabel": false,
 							"tabindex": "",
 							"disabled": false,
 							"dbIndex": false,
@@ -10672,7 +10675,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "exh2yuh"
+							"id": "ecdymxj"
 						}],
 						"hideOnChildrenHidden": false,
 						"autofocus": false,
@@ -10695,6 +10698,7 @@
 						"description": "",
 						"errorLabel": "",
 						"tooltip": "",
+						"hideLabel": false,
 						"tabindex": "",
 						"disabled": false,
 						"dbIndex": false,
@@ -10721,22 +10725,177 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "ex5p7ib"
+						"id": "et4bplt"
 					}],
 					"width": 6,
 					"offset": 0,
 					"push": 0,
 					"pull": 0
 				}, {
-					"components": [],
+					"components": [{
+						"label": "Engine Make",
+						"disableAddingRemovingRows": false,
+						"reorder": false,
+						"addAnotherPosition": "bottom",
+						"defaultOpen": false,
+						"layoutFixed": false,
+						"enableRowGroups": false,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false,
+							"minLength": 1,
+							"required": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false
+						},
+						"key": "engine_make",
+						"type": "datagrid",
+						"input": true,
+						"components": [{
+							"label": "Engine Make",
+							"hideLabel": true,
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter the engine make.",
+								"unique": false,
+								"multiple": false,
+								"custom": "",
+								"customPrivate": false,
+								"strictDateValidation": false,
+								"minLength": "",
+								"maxLength": "",
+								"pattern": ""
+							},
+							"key": "engineMakeVal",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"inDataGrid": true,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							},
+							"customClass": "",
+							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
+							"labelPosition": "top",
+							"description": "",
+							"errorLabel": "",
+							"tooltip": "",
+							"tabindex": "",
+							"disabled": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"widget": {
+								"type": "input"
+							},
+							"attributes": {},
+							"validateOn": "change",
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
+							"allowCalculateOverride": false,
+							"encrypted": false,
+							"showCharCount": false,
+							"showWordCount": false,
+							"properties": {},
+							"allowMultipleMasks": false,
+							"mask": false,
+							"inputFormat": "plain",
+							"id": "ehyg11"
+						}],
+						"hideOnChildrenHidden": false,
+						"path": "engine_make",
+						"autofocus": false,
+						"tree": true,
+						"protected": false,
+						"persistent": true,
+						"hidden": false,
+						"clearOnHide": true,
+						"placeholder": "",
+						"prefix": "",
+						"customClass": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": null,
+						"unique": false,
+						"refreshOn": "",
+						"redrawOn": "",
+						"modalEdit": false,
+						"labelPosition": "top",
+						"description": "",
+						"errorLabel": "",
+						"tooltip": "",
+						"hideLabel": false,
+						"tabindex": "",
+						"disabled": false,
+						"dbIndex": false,
+						"customDefaultValue": "",
+						"calculateValue": "",
+						"widget": null,
+						"attributes": {},
+						"validateOn": "change",
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						},
+						"overlay": {
+							"style": "",
+							"left": "",
+							"top": "",
+							"width": "",
+							"height": ""
+						},
+						"allowCalculateOverride": false,
+						"encrypted": false,
+						"showCharCount": false,
+						"showWordCount": false,
+						"properties": {},
+						"allowMultipleMasks": false,
+						"id": "eskzvjw"
+					}],
 					"width": 6,
 					"offset": 0,
 					"push": 0,
 					"pull": 0
 				}],
 				"path": "columns14",
-				"clearOnHide": false,
 				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false,
+					"required": false,
+					"custom": "",
+					"customPrivate": false,
+					"strictDateValidation": false
+				},
+				"clearOnHide": false,
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -10763,14 +10922,6 @@
 				"widget": null,
 				"attributes": {},
 				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"unique": false,
-					"multiple": false
-				},
 				"conditional": {
 					"show": null,
 					"when": null,
@@ -10792,7 +10943,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "ef291v2o"
+				"id": "e5n4gb"
 			}, {
 				"label": "DESCRIPTION OF BOAT",
 				"hideLabel": true,
@@ -10872,7 +11023,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "eyu9jf"
+				"id": "etvd93"
 			}],
 			"type": "panel",
 			"lockKey": true,
@@ -10934,7 +11085,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "eiwt2rm"
+			"id": "elg2kmmt"
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -11036,7 +11187,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "e35sld"
+					"id": "em7q3bt"
 				}, {
 					"key": "pageNaNPanel4",
 					"input": false,
@@ -11121,7 +11272,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "e4gybq"
+								"id": "etnfl7m"
 							}, {
 								"label": "Dinghy Length (Feet)",
 								"mask": false,
@@ -11146,8 +11297,8 @@
 								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"autofocus": false,
 								"inputType": "number",
+								"autofocus": false,
 								"placeholder": "",
 								"prefix": "",
 								"suffix": "",
@@ -11195,7 +11346,7 @@
 								"showWordCount": false,
 								"properties": {},
 								"allowMultipleMasks": false,
-								"id": "eqbjgls"
+								"id": "e9f3kb"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -11290,7 +11441,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "ezazsyb"
+								"id": "e2s99ta"
 							}, {
 								"label": "Value",
 								"prefix": "$",
@@ -11365,7 +11516,7 @@
 								"showWordCount": false,
 								"properties": {},
 								"allowMultipleMasks": false,
-								"id": "e896y6"
+								"id": "eop1jmf"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -11431,7 +11582,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "e20fvk"
+						"id": "eov1on"
 					}],
 					"type": "panel",
 					"conditional": {
@@ -11490,7 +11641,7 @@
 					"allowMultipleMasks": false,
 					"tree": false,
 					"breadcrumb": "default",
-					"id": "eywq3t9"
+					"id": "emi552c"
 				}],
 				"width": 6,
 				"offset": 0,
@@ -11592,7 +11743,7 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "extnvtg"
+					"id": "evowu9"
 				}, {
 					"key": "pageNaNPanel5",
 					"input": false,
@@ -11677,7 +11828,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "ejl4k1"
+								"id": "e4q9f6re"
 							}, {
 								"label": "Built Year",
 								"widget": "choicesjs",
@@ -11766,7 +11917,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "efqp78b"
+								"id": "ebebc8"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -11848,7 +11999,7 @@
 								"showWordCount": false,
 								"properties": {},
 								"allowMultipleMasks": false,
-								"id": "eciotne"
+								"id": "ebiduca"
 							}, {
 								"label": "Serial Number",
 								"spellcheck": true,
@@ -11921,7 +12072,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "euxxs5"
+								"id": "euq7eef"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -11987,7 +12138,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "ez4ktn"
+						"id": "eyjv78g"
 					}],
 					"type": "panel",
 					"conditional": {
@@ -12046,7 +12197,7 @@
 					"allowMultipleMasks": false,
 					"tree": false,
 					"breadcrumb": "default",
-					"id": "ejgmcar"
+					"id": "e0ijq9n"
 				}],
 				"width": 6,
 				"offset": 0,
@@ -12111,7 +12262,7 @@
 			"tree": false,
 			"autoAdjust": false,
 			"hideOnChildrenHidden": false,
-			"id": "ej47h0d"
+			"id": "ep66sb"
 		}],
 		"input": false,
 		"key": "pageNaN1",
@@ -12181,7 +12332,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "e0c5vu"
+		"id": "eg1zxp8"
 	}, {
 		"title": "Additional",
 		"theme": "primary",
@@ -12270,7 +12421,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "eezyvw"
+				"id": "exfoh2"
 			}, {
 				"label": "well",
 				"tableView": false,
@@ -12359,7 +12510,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "erbplme"
+					"id": "etxzf1a"
 				}],
 				"path": "well4",
 				"clearOnHide": false,
@@ -12409,7 +12560,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "e4m9clj"
+				"id": "ebly9bn"
 			}, {
 				"key": "page4PanelPanel2",
 				"input": false,
@@ -12532,7 +12683,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "eo29q4"
+									"id": "epf4yir"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -12611,7 +12762,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "e38jzq"
+									"id": "efo6l1g"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -12690,7 +12841,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "e836if"
+									"id": "eef2hx"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -12755,7 +12906,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "eouauzo"
+							"id": "ew0pnt"
 						}, {
 							"label": "Columns",
 							"input": false,
@@ -12851,7 +13002,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "ea8ipx"
+									"id": "eh74o0n"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -12868,7 +13019,7 @@
 											"label": "",
 											"value": ""
 										}],
-										"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row['country']);\nconsole.log(obj);\n  if(obj){\n  values = obj.states\n  } else {\n  values = \"\"\n  }\n}",
+										"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row['country']);\nconsole.log(obj);\n  if(obj){\n  values = obj.states\n  } \n}",
 										"json": "",
 										"url": "",
 										"resource": ""
@@ -12892,7 +13043,7 @@
 									"placeholder": "",
 									"valueProperty": "",
 									"defaultValue": "",
-									"refreshOn": "",
+									"refreshOn": "country",
 									"filter": "",
 									"authenticate": false,
 									"multiple": false,
@@ -12900,12 +13051,19 @@
 									"unique": false,
 									"persistent": true,
 									"hidden": false,
+									"labelPosition": "top",
+									"tags": [],
+									"conditional": {
+										"show": "",
+										"when": null,
+										"eq": ""
+									},
+									"properties": {},
 									"prefix": "",
 									"customClass": "",
 									"suffix": "",
 									"redrawOn": "",
 									"modalEdit": false,
-									"labelPosition": "top",
 									"description": "",
 									"errorLabel": "",
 									"tooltip": "",
@@ -12917,11 +13075,6 @@
 									"calculateValue": "",
 									"attributes": {},
 									"validateOn": "change",
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									},
 									"overlay": {
 										"style": "",
 										"left": "",
@@ -12933,7 +13086,6 @@
 									"encrypted": false,
 									"showCharCount": false,
 									"showWordCount": false,
-									"properties": {},
 									"allowMultipleMasks": false,
 									"clearOnRefresh": false,
 									"limit": 100,
@@ -12949,7 +13101,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "epclliq"
+									"id": "e0zra5d"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -13028,7 +13180,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "efhdynr"
+									"id": "e5oerf9"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -13142,7 +13294,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "ehk091"
+									"id": "egang6p"
 								}, {
 									"label": "Please Mention",
 									"spellcheck": true,
@@ -13215,7 +13367,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "estbuh"
+									"id": "evd6wcu"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -13280,7 +13432,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "ewvqa79"
+							"id": "eonefkf"
 						}, {
 							"label": "Columns",
 							"input": false,
@@ -13365,7 +13517,7 @@
 									"inputType": "text",
 									"inputMask": "",
 									"editor": "",
-									"id": "epvc0c7"
+									"id": "e5u4h9n"
 								}],
 								"width": 12,
 								"offset": 0,
@@ -13436,7 +13588,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "ejpzcy9"
+							"id": "e1wwmre"
 						}],
 						"inDataGrid": true,
 						"clearOnHide": false,
@@ -13486,7 +13638,7 @@
 						"properties": {},
 						"allowMultipleMasks": false,
 						"tree": false,
-						"id": "e61tzhs"
+						"id": "eb066po"
 					}],
 					"path": "additionalInsured",
 					"autofocus": false,
@@ -13534,7 +13686,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "emqw8y7"
+					"id": "eac5r08"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -13595,7 +13747,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "eifaqy"
+				"id": "eim733f"
 			}, {
 				"key": "additional_required_information",
 				"input": false,
@@ -13670,7 +13822,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "e37269"
+					"id": "etpz3xn"
 				}, {
 					"label": "Select",
 					"widget": "choicesjs",
@@ -13764,7 +13916,213 @@
 						"threshold": 0.3
 					},
 					"customOptions": {},
-					"id": "e8nkd6n"
+					"id": "eoigtqc"
+				}, {
+					"title": "Attachments",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "attachments",
+					"type": "panel",
+					"label": "",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false,
+						"required": false,
+						"custom": "",
+						"customPrivate": false,
+						"strictDateValidation": false
+					},
+					"components": [{
+						"label": "Attachments",
+						"hideLabel": true,
+						"tableView": false,
+						"storage": "base64",
+						"image": true,
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+						"fileMaxSize": "10MB",
+						"multiple": true,
+						"validate": {
+							"unique": false,
+							"multiple": true,
+							"required": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false
+						},
+						"key": "attachments",
+						"type": "file",
+						"input": true,
+						"autofocus": false,
+						"imageSize": "200",
+						"placeholder": "",
+						"defaultValue": "",
+						"protected": false,
+						"persistent": true,
+						"hidden": false,
+						"clearOnHide": true,
+						"fileMinSize": "0KB",
+						"prefix": "",
+						"customClass": "",
+						"suffix": "",
+						"unique": false,
+						"refreshOn": "",
+						"redrawOn": "",
+						"modalEdit": false,
+						"labelPosition": "top",
+						"description": "",
+						"errorLabel": "",
+						"tooltip": "",
+						"tabindex": "",
+						"disabled": false,
+						"dbIndex": false,
+						"customDefaultValue": "",
+						"calculateValue": "",
+						"widget": null,
+						"attributes": {},
+						"validateOn": "change",
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						},
+						"overlay": {
+							"style": "",
+							"left": "",
+							"top": "",
+							"width": "",
+							"height": ""
+						},
+						"allowCalculateOverride": false,
+						"encrypted": false,
+						"showCharCount": false,
+						"showWordCount": false,
+						"properties": {},
+						"allowMultipleMasks": false,
+						"privateDownload": false,
+						"uploadOnly": false,
+						"id": "e2fcq0p"
+					}, {
+						"label": "attachmentFields",
+						"customDefaultValue": "value = [[\"groupPL\",\"document\"],\"attachments\"];",
+						"key": "attachmentsFieldnames",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false,
+							"required": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false
+						},
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"placeholder": "",
+						"prefix": "",
+						"customClass": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": null,
+						"hidden": false,
+						"clearOnHide": true,
+						"refreshOn": "",
+						"redrawOn": "",
+						"modalEdit": false,
+						"labelPosition": "top",
+						"description": "",
+						"errorLabel": "",
+						"tooltip": "",
+						"hideLabel": false,
+						"tabindex": "",
+						"disabled": false,
+						"autofocus": false,
+						"dbIndex": false,
+						"calculateValue": "",
+						"widget": {
+							"type": "input"
+						},
+						"attributes": {},
+						"validateOn": "change",
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						},
+						"overlay": {
+							"style": "",
+							"left": "",
+							"top": "",
+							"width": "",
+							"height": ""
+						},
+						"allowCalculateOverride": false,
+						"encrypted": false,
+						"showCharCount": false,
+						"showWordCount": false,
+						"properties": {},
+						"allowMultipleMasks": false,
+						"inputType": "hidden",
+						"id": "enq58mj"
+					}],
+					"path": "attachments",
+					"clearOnHide": false,
+					"hideLabel": false,
+					"placeholder": "",
+					"prefix": "",
+					"customClass": "",
+					"suffix": "",
+					"multiple": false,
+					"defaultValue": null,
+					"protected": false,
+					"unique": false,
+					"persistent": false,
+					"hidden": false,
+					"refreshOn": "",
+					"redrawOn": "",
+					"modalEdit": false,
+					"labelPosition": "top",
+					"description": "",
+					"errorLabel": "",
+					"tooltip": "",
+					"tabindex": "",
+					"disabled": false,
+					"autofocus": false,
+					"dbIndex": false,
+					"customDefaultValue": "",
+					"calculateValue": "",
+					"widget": null,
+					"attributes": {},
+					"validateOn": "change",
+					"conditional": {
+						"show": null,
+						"when": null,
+						"eq": ""
+					},
+					"overlay": {
+						"style": "",
+						"left": "",
+						"top": "",
+						"width": "",
+						"height": ""
+					},
+					"allowCalculateOverride": false,
+					"encrypted": false,
+					"showCharCount": false,
+					"showWordCount": false,
+					"properties": {},
+					"allowMultipleMasks": false,
+					"tree": false,
+					"breadcrumb": "default",
+					"id": "e0ni4po"
 				}],
 				"type": "panel",
 				"lockKey": true,
@@ -13826,7 +14184,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "e54v3wj"
+				"id": "erm6yoa"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -13887,7 +14245,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "eko3p6e"
+			"id": "ek5k8bd"
 		}, {
 			"label": "Additional Named Insureds",
 			"widget": "choicesjs",
@@ -13982,7 +14340,7 @@
 				"threshold": 0.3
 			},
 			"customOptions": {},
-			"id": "eg9r63e"
+			"id": "e1a7asa"
 		}, {
 			"key": "additional_named_insureds",
 			"input": false,
@@ -14104,7 +14462,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "e2hfiyn"
+								"id": "ew07hno"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -14183,7 +14541,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "e9mv4om"
+								"id": "ew7uva"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -14262,7 +14620,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "evynuvm"
+								"id": "e1a1z49"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -14327,7 +14685,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "evtrifd"
+						"id": "e6sae0s"
 					}, {
 						"label": "Columns",
 						"input": false,
@@ -14423,7 +14781,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "eb3729"
+								"id": "eo9ytz"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -14464,7 +14822,7 @@
 								"placeholder": "",
 								"valueProperty": "",
 								"defaultValue": "",
-								"refreshOn": "",
+								"refreshOn": "country",
 								"filter": "",
 								"authenticate": false,
 								"multiple": false,
@@ -14472,12 +14830,19 @@
 								"unique": false,
 								"persistent": true,
 								"hidden": false,
+								"labelPosition": "top",
+								"tags": [],
+								"conditional": {
+									"show": "",
+									"when": null,
+									"eq": ""
+								},
+								"properties": {},
 								"prefix": "",
 								"customClass": "",
 								"suffix": "",
 								"redrawOn": "",
 								"modalEdit": false,
-								"labelPosition": "top",
 								"description": "",
 								"errorLabel": "",
 								"tooltip": "",
@@ -14489,11 +14854,6 @@
 								"calculateValue": "",
 								"attributes": {},
 								"validateOn": "change",
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								},
 								"overlay": {
 									"style": "",
 									"left": "",
@@ -14505,7 +14865,6 @@
 								"encrypted": false,
 								"showCharCount": false,
 								"showWordCount": false,
-								"properties": {},
 								"allowMultipleMasks": false,
 								"clearOnRefresh": false,
 								"limit": 100,
@@ -14521,7 +14880,7 @@
 									"threshold": 0.3
 								},
 								"customOptions": {},
-								"id": "en4fcgo"
+								"id": "eybet6n"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -14600,7 +14959,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "ehmhkgj"
+								"id": "ecrr9i"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -14665,7 +15024,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "e13hatk"
+						"id": "et7u7o4"
 					}],
 					"inDataGrid": true,
 					"clearOnHide": false,
@@ -14715,7 +15074,7 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tree": false,
-					"id": "e9thiqj"
+					"id": "ejvv1rr"
 				}],
 				"path": "dataGrid",
 				"autofocus": false,
@@ -14764,7 +15123,7 @@
 				"showWordCount": false,
 				"properties": {},
 				"allowMultipleMasks": false,
-				"id": "ep3nqg4"
+				"id": "eo7uau8"
 			}],
 			"type": "panel",
 			"conditional": {
@@ -14824,7 +15183,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "en4c54i"
+			"id": "ez7jzp"
 		}],
 		"input": false,
 		"validate": {
@@ -14878,7 +15237,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"tree": false,
-		"id": "eypizxd"
+		"id": "e8ye5pi"
 	}, {
 		"title": "Loss Payees",
 		"theme": "primary",
@@ -14986,7 +15345,7 @@
 				"threshold": 0.3
 			},
 			"customOptions": {},
-			"id": "ejz2vmf"
+			"id": "e92viwa"
 		}, {
 			"label": "Data Grid",
 			"disableAddingRemovingRows": false,
@@ -15107,7 +15466,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "e3xxsq5"
+							"id": "e6791ik"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -15186,7 +15545,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "eruwq2"
+							"id": "eac2jmo"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -15265,7 +15624,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "ejphrt"
+							"id": "edrg3hm"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -15361,7 +15720,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "ehpwdoo"
+							"id": "e775fub"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -15402,7 +15761,7 @@
 							"placeholder": "",
 							"valueProperty": "",
 							"defaultValue": "",
-							"refreshOn": "",
+							"refreshOn": "country",
 							"filter": "",
 							"authenticate": false,
 							"multiple": false,
@@ -15410,12 +15769,19 @@
 							"unique": false,
 							"persistent": true,
 							"hidden": false,
+							"labelPosition": "top",
+							"tags": [],
+							"conditional": {
+								"show": "",
+								"when": null,
+								"eq": ""
+							},
+							"properties": {},
 							"prefix": "",
 							"customClass": "",
 							"suffix": "",
 							"redrawOn": "",
 							"modalEdit": false,
-							"labelPosition": "top",
 							"description": "",
 							"errorLabel": "",
 							"tooltip": "",
@@ -15427,11 +15793,6 @@
 							"calculateValue": "",
 							"attributes": {},
 							"validateOn": "change",
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							},
 							"overlay": {
 								"style": "",
 								"left": "",
@@ -15443,7 +15804,6 @@
 							"encrypted": false,
 							"showCharCount": false,
 							"showWordCount": false,
-							"properties": {},
 							"allowMultipleMasks": false,
 							"clearOnRefresh": false,
 							"limit": 100,
@@ -15459,7 +15819,7 @@
 								"threshold": 0.3
 							},
 							"customOptions": {},
-							"id": "erfozya"
+							"id": "epf5fg"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -15538,7 +15898,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "ef0zba"
+							"id": "erwbzcq"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -15604,7 +15964,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "eymire"
+					"id": "e1eu7v8"
 				}],
 				"inDataGrid": true,
 				"clearOnHide": false,
@@ -15654,7 +16014,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"tree": false,
-				"id": "e42zta"
+				"id": "ebpkv5"
 			}],
 			"path": "lossPayees",
 			"autofocus": false,
@@ -15698,7 +16058,7 @@
 			"showWordCount": false,
 			"properties": {},
 			"allowMultipleMasks": false,
-			"id": "epzozj7"
+			"id": "eaw5div"
 		}],
 		"path": "pageNaNPanel7",
 		"validate": {
@@ -15752,7 +16112,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "ervw25o"
+		"id": "ew9ftz"
 	}, {
 		"title": "Group Professional Liability",
 		"theme": "primary",
@@ -15767,7 +16127,7 @@
 		"type": "panel",
 		"label": "Group Professional Liability",
 		"components": [{
-			"label": "Would you like to apply for Group Professional Liability?",
+			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
 			"tableView": true,
 			"data": {
@@ -15860,7 +16220,7 @@
 				"threshold": 0.3
 			},
 			"customOptions": {},
-			"id": "e6liruu"
+			"id": "etc5vge"
 		}, {
 			"label": "Well",
 			"tableView": false,
@@ -15975,7 +16335,7 @@
 							"threshold": 0.3
 						},
 						"customOptions": {},
-						"id": "eafo5ej"
+						"id": "ed4vwi"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -16047,7 +16407,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "eae67k"
+				"id": "ebqydi"
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -16143,7 +16503,7 @@
 							"threshold": 0.3
 						},
 						"customOptions": {},
-						"id": "epp1rig"
+						"id": "e4v7ai"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -16214,7 +16574,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "eatbdqj"
+				"id": "exfkrmp"
 			}, {
 				"title": "Add Members",
 				"theme": "primary",
@@ -16309,7 +16669,7 @@
 					"allowMultipleMasks": false,
 					"mask": false,
 					"inputFormat": "plain",
-					"id": "efuikwg"
+					"id": "eyivzf"
 				}, {
 					"key": "page7GpLformdownload",
 					"label": "GPL form download",
@@ -16377,7 +16737,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "exv89pd"
+					"id": "equuis"
 				}, {
 					"label": "Validate and Add PADI Members!",
 					"action": "event",
@@ -16459,7 +16819,7 @@
 					"showWordCount": false,
 					"allowMultipleMasks": false,
 					"dataGridLabel": true,
-					"id": "exkepjr"
+					"id": "eujcu6p"
 				}],
 				"path": "addMembers",
 				"clearOnHide": false,
@@ -16510,7 +16870,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "e87vs6g"
+				"id": "eo864ce"
 			}, {
 				"label": "Members applicable for Group Liability",
 				"disableAddingRemovingRows": true,
@@ -16525,7 +16885,6 @@
 				"validate": {
 					"unique": false,
 					"multiple": false,
-					"minLength": 1,
 					"required": false,
 					"custom": "",
 					"customPrivate": false,
@@ -16608,7 +16967,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "em7dwda"
+							"id": "e0afx3j"
 						}, {
 							"label": "address",
 							"key": "address1",
@@ -16674,7 +17033,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eekbjn"
+							"id": "en60sin"
 						}, {
 							"label": "address2",
 							"key": "address2",
@@ -16740,7 +17099,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eyh0nng"
+							"id": "e5d6wie"
 						}, {
 							"input": true,
 							"tableView": true,
@@ -16806,7 +17165,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "e3bt2p3"
+							"id": "em1xu1e"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -16885,7 +17244,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "ek5nqga"
+							"id": "elsbred"
 						}, {
 							"label": "verified",
 							"defaultValue": "false",
@@ -16951,7 +17310,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "ey3f4hi"
+							"id": "exg3gw"
 						}, {
 							"label": "city",
 							"key": "city",
@@ -17017,7 +17376,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "exoqh4h"
+							"id": "epm3hp"
 						}, {
 							"label": "country",
 							"key": "country",
@@ -17083,7 +17442,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "evexth"
+							"id": "eibmdkh"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -17162,7 +17521,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "ek3dn4"
+							"id": "e7z7o9"
 						}, {
 							"label": "home_phone",
 							"key": "home_phone",
@@ -17228,7 +17587,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "edjs2c8"
+							"id": "e2nuult"
 						}, {
 							"input": true,
 							"tableView": true,
@@ -17294,7 +17653,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eraotci"
+							"id": "e3zzkw"
 						}, {
 							"label": "email",
 							"key": "email",
@@ -17360,7 +17719,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eyaol6"
+							"id": "enizsi"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -17439,7 +17798,7 @@
 							"allowMultipleMasks": false,
 							"mask": false,
 							"inputFormat": "plain",
-							"id": "eal9ayn"
+							"id": "e9e78f"
 						}, {
 							"label": "zip",
 							"key": "zip",
@@ -17505,7 +17864,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eazeccn"
+							"id": "equj58b"
 						}, {
 							"label": "state",
 							"key": "state",
@@ -17571,7 +17930,7 @@
 							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eqb5nj"
+							"id": "e43r51"
 						}],
 						"offset": 0,
 						"push": 0,
@@ -17639,7 +17998,7 @@
 					"tree": false,
 					"autoAdjust": false,
 					"hideOnChildrenHidden": false,
-					"id": "e6azq2c"
+					"id": "eak9219"
 				}, {
 					"label": "Document",
 					"hideLabel": true,
@@ -17715,7 +18074,7 @@
 					"allowMultipleMasks": false,
 					"privateDownload": false,
 					"uploadOnly": false,
-					"id": "e6euu4"
+					"id": "enh847"
 				}],
 				"path": "groupPL",
 				"tree": true,
@@ -17768,7 +18127,7 @@
 				"defaultOpen": false,
 				"openWhenEmpty": false,
 				"inlineEdit": false,
-				"id": "evwkqz"
+				"id": "eprf7lf"
 			}, {
 				"label": "Additional Insureds",
 				"widget": "choicesjs",
@@ -17863,7 +18222,7 @@
 					"threshold": 0.3
 				},
 				"customOptions": {},
-				"id": "eu07crn"
+				"id": "ert6gaw"
 			}, {
 				"key": "additional_insureds",
 				"input": false,
@@ -17976,7 +18335,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "efn1c5"
+									"id": "exwnv6"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -18055,7 +18414,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "e8coafn"
+									"id": "ei9dlo"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -18134,7 +18493,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "ehkmgss"
+									"id": "e5pw8sj"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -18230,7 +18589,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "ec9rgv"
+									"id": "efcfqjk"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -18271,7 +18630,7 @@
 									"placeholder": "",
 									"valueProperty": "",
 									"defaultValue": "",
-									"refreshOn": "",
+									"refreshOn": "country",
 									"filter": "",
 									"authenticate": false,
 									"multiple": false,
@@ -18279,12 +18638,19 @@
 									"unique": false,
 									"persistent": true,
 									"hidden": false,
+									"labelPosition": "top",
+									"tags": [],
+									"conditional": {
+										"show": "",
+										"when": null,
+										"eq": ""
+									},
+									"properties": {},
 									"prefix": "",
 									"customClass": "",
 									"suffix": "",
 									"redrawOn": "",
 									"modalEdit": false,
-									"labelPosition": "top",
 									"description": "",
 									"errorLabel": "",
 									"tooltip": "",
@@ -18296,11 +18662,6 @@
 									"calculateValue": "",
 									"attributes": {},
 									"validateOn": "change",
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									},
 									"overlay": {
 										"style": "",
 										"left": "",
@@ -18312,7 +18673,6 @@
 									"encrypted": false,
 									"showCharCount": false,
 									"showWordCount": false,
-									"properties": {},
 									"allowMultipleMasks": false,
 									"clearOnRefresh": false,
 									"limit": 100,
@@ -18328,7 +18688,7 @@
 										"threshold": 0.3
 									},
 									"customOptions": {},
-									"id": "eg8ooq"
+									"id": "ebyzpyd"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -18407,7 +18767,7 @@
 									"allowMultipleMasks": false,
 									"mask": false,
 									"inputFormat": "plain",
-									"id": "efczbht"
+									"id": "ezcp4hq"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -18473,7 +18833,7 @@
 							"tree": false,
 							"autoAdjust": false,
 							"hideOnChildrenHidden": false,
-							"id": "evsll6c"
+							"id": "etromhl"
 						}],
 						"tableView": false,
 						"type": "well",
@@ -18533,7 +18893,7 @@
 						"properties": {},
 						"allowMultipleMasks": false,
 						"tree": false,
-						"id": "ej6r4v8"
+						"id": "eaq5r5k"
 					}],
 					"lockKey": true,
 					"autofocus": false,
@@ -18581,7 +18941,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "eftg1fq"
+					"id": "e2pfhm"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -18640,7 +19000,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "el7sv5"
+				"id": "eieu27h"
 			}, {
 				"label": "Named Insureds",
 				"widget": "choicesjs",
@@ -18735,7 +19095,7 @@
 					"threshold": 0.3
 				},
 				"customOptions": {},
-				"id": "exx48rl"
+				"id": "ea8wr8n"
 			}, {
 				"key": "page7Panel",
 				"input": false,
@@ -18813,7 +19173,7 @@
 					"allowMultipleMasks": false,
 					"mask": false,
 					"inputFormat": "plain",
-					"id": "e1vfbks"
+					"id": "eqe1xc6"
 				}, {
 					"label": "Validate and Add Named Insureds",
 					"action": "event",
@@ -18894,7 +19254,7 @@
 					"showWordCount": false,
 					"allowMultipleMasks": false,
 					"dataGridLabel": true,
-					"id": "e7z8dfk"
+					"id": "etwxhgi"
 				}, {
 					"label": "Edit Grid",
 					"disableAddingRemovingRows": true,
@@ -18910,7 +19270,6 @@
 					"validate": {
 						"unique": false,
 						"multiple": false,
-						"minLength": 1,
 						"required": false,
 						"custom": "",
 						"customPrivate": false,
@@ -18997,7 +19356,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "ehtkpg"
+								"id": "e8i8tt"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -19076,7 +19435,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "eybscn5"
+								"id": "ebstdli"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -19155,7 +19514,7 @@
 								"allowMultipleMasks": false,
 								"mask": false,
 								"inputFormat": "plain",
-								"id": "ek2j9ao"
+								"id": "e4uwaf"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -19221,7 +19580,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "egk2gfm"
+						"id": "e6kpypr"
 					}, {
 						"label": "verified",
 						"key": "verified",
@@ -19285,7 +19644,7 @@
 						"properties": {},
 						"allowMultipleMasks": false,
 						"inputType": "hidden",
-						"id": "e5uajn"
+						"id": "enukcco"
 					}],
 					"path": "namedInsureds",
 					"tree": true,
@@ -19337,7 +19696,7 @@
 					"defaultOpen": false,
 					"openWhenEmpty": false,
 					"inlineEdit": false,
-					"id": "eh9z8sd"
+					"id": "e889bx"
 				}],
 				"type": "panel",
 				"conditional": {
@@ -19397,7 +19756,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "eaz9ba9"
+				"id": "euvc28"
 			}],
 			"path": "well2",
 			"clearOnHide": false,
@@ -19442,7 +19801,7 @@
 			"properties": {},
 			"allowMultipleMasks": false,
 			"tree": false,
-			"id": "ey4ab2"
+			"id": "echphkm"
 		}],
 		"input": false,
 		"validate": {
@@ -19497,213 +19856,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "eqm4xu"
-	}, {
-		"title": "Attachments",
-		"theme": "primary",
-		"collapsible": false,
-		"tableView": false,
-		"key": "attachments",
-		"type": "panel",
-		"label": "",
-		"input": false,
-		"validate": {
-			"unique": false,
-			"multiple": false,
-			"required": false,
-			"custom": "",
-			"customPrivate": false,
-			"strictDateValidation": false
-		},
-		"components": [{
-			"label": "Attachments",
-			"hideLabel": true,
-			"tableView": false,
-			"storage": "base64",
-			"image": true,
-			"webcam": false,
-			"fileTypes": [{
-				"label": "",
-				"value": ""
-			}],
-			"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
-			"fileMaxSize": "10MB",
-			"multiple": true,
-			"validate": {
-				"unique": false,
-				"multiple": true,
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false
-			},
-			"key": "attachments",
-			"type": "file",
-			"input": true,
-			"autofocus": false,
-			"imageSize": "200",
-			"placeholder": "",
-			"defaultValue": "",
-			"protected": false,
-			"persistent": true,
-			"hidden": false,
-			"clearOnHide": true,
-			"fileMinSize": "0KB",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"unique": false,
-			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"tabindex": "",
-			"disabled": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"widget": null,
-			"attributes": {},
-			"validateOn": "change",
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"privateDownload": false,
-			"uploadOnly": false,
-			"id": "eeljcod"
-		}, {
-			"label": "attachmentFields",
-			"customDefaultValue": "value = [[\"groupPL\",\"document\"],\"attachments\"];",
-			"key": "attachmentsFieldnames",
-			"type": "hidden",
-			"input": true,
-			"tableView": false,
-			"validate": {
-				"unique": false,
-				"multiple": false,
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false
-			},
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"placeholder": "",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"multiple": false,
-			"defaultValue": null,
-			"hidden": false,
-			"clearOnHide": true,
-			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"hideLabel": false,
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"dbIndex": false,
-			"calculateValue": "",
-			"widget": {
-				"type": "input"
-			},
-			"attributes": {},
-			"validateOn": "change",
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"inputType": "hidden",
-			"id": "e3z8c23"
-		}],
-		"path": "attachments",
-		"clearOnHide": false,
-		"hideLabel": false,
-		"placeholder": "",
-		"prefix": "",
-		"customClass": "",
-		"suffix": "",
-		"multiple": false,
-		"defaultValue": null,
-		"protected": false,
-		"unique": false,
-		"persistent": false,
-		"hidden": false,
-		"refreshOn": "",
-		"redrawOn": "",
-		"modalEdit": false,
-		"labelPosition": "top",
-		"description": "",
-		"errorLabel": "",
-		"tooltip": "",
-		"tabindex": "",
-		"disabled": false,
-		"autofocus": false,
-		"dbIndex": false,
-		"customDefaultValue": "",
-		"calculateValue": "",
-		"widget": null,
-		"attributes": {},
-		"validateOn": "change",
-		"conditional": {
-			"show": null,
-			"when": null,
-			"eq": ""
-		},
-		"overlay": {
-			"style": "",
-			"left": "",
-			"top": "",
-			"width": "",
-			"height": ""
-		},
-		"allowCalculateOverride": false,
-		"encrypted": false,
-		"showCharCount": false,
-		"showWordCount": false,
-		"properties": {},
-		"allowMultipleMasks": false,
-		"tree": false,
-		"breadcrumb": "default",
-		"id": "e8qh75"
+		"id": "egqmg6r"
 	}, {
 		"label": "Submit",
 		"showValidations": false,
@@ -19775,7 +19928,7 @@
 		"properties": {},
 		"allowMultipleMasks": false,
 		"dataGridLabel": true,
-		"id": "en2akcp"
+		"id": "ekl0x4"
 	}],
 	"controller": "",
 	"revisions": "",
@@ -19797,6 +19950,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-12T10:25:32.032Z",
+	"modified": "2020-03-16T08:33:29.036Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }
