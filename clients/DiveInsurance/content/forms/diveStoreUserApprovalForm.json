@@ -4,8 +4,21 @@
   "tags": [],
   "owner": "5cd2e0d62363f67ddc9489c6",
   "components": [{
-    "type": "panel",
     "title": "Quote Information",
+    "theme": "primary",
+    "breadcrumb": "none",
+    "breadcrumbClickable": true,
+    "buttonSettings": {
+      "previous": true,
+      "cancel": true,
+      "next": true
+    },
+    "collapsible": false,
+    "tableView": false,
+    "key": "page5Panel",
+    "type": "panel",
+    "label": "Rate Car",
+    "input": false,
     "components": [{
       "type": "documentviewer",
       "key": "documents",
@@ -24,173 +37,233 @@
         "multiple": false
       }
     }, {
-      "label": "<b>I hereby declare that I accept the proposal</b>",
-      "optionsLabelPosition": "right",
-      "inline": false,
+      "label": "orgId",
+      "key": "orgId",
+      "type": "hidden",
+      "input": true,
       "tableView": false,
-      "values": [{
-        "value": "accepted",
-        "label": "Accept",
-        "shortcut": ""
-      }, {
-        "value": "rejected",
-        "label": "Decline",
-        "shortcut": ""
-      }],
-      "clearOnHide": false,
       "validate": {
-        "required": true,
         "unique": false,
         "multiple": false
       },
-      "key": "userApproved",
-      "type": "radio",
-      "input": true,
-      "lockKey": true,
-      "isNew": false
+      "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
     }, {
-      "input": true,
-      "tableView": true,
-      "label": "Could you let us know the Reason for Rejecting the Quote?",
-      "key": "page2CouldyouletusknowtheReasonforRejectingtheQuote",
-      "spellcheck": true,
-      "type": "textarea",
-      "inputFormat": "plain",
-      "conditional": {
-        "show": "true",
-        "when": "userApproved",
-        "eq": "decline"
-      }
-    }],
-    "input": false,
-    "key": "page2",
-    "theme": "primary",
-    "tableView": false,
-    "label": "Panel",
-    "validate": {
-      "unique": false,
-      "multiple": false
-    }
-  }, {
-    "label": "amount",
-    "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
-    "key": "amount",
-    "type": "hidden",
-    "input": true,
-    "tableView": false,
-    "validate": {
-      "unique": false,
-      "multiple": false
-    }
-  }, {
-    "type": "panel",
-    "title": "Payment Information",
-    "components": [{
-      "key": "page7Panel2",
-      "input": false,
-      "title": "Payment Details",
+      "title": "Approval",
       "theme": "primary",
+      "collapsible": false,
       "tableView": false,
-      "components": [{
-        "label": "payment",
-        "calculateValue": "value = 'true';",
-        "key": "payment",
-        "type": "hidden",
-        "input": true,
-        "tableView": false,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        }
-      }, {
-        "input": true,
-        "tableView": true,
-        "key": "amountPayable",
-        "label": "amountPayable",
-        "type": "hidden",
-        "lockKey": true,
-        "calculateValue": "value = data['totalAmount']",
-        "validate": {
-          "unique": false,
-          "multiple": false
-        }
-      }, {
-        "input": true,
-        "tableView": true,
-        "key": "transaction_id",
-        "label": "transaction_id",
-        "type": "hidden",
-        "lockKey": true,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        }
-      }, {
-        "input": true,
-        "tableView": true,
-        "key": "transaction_status",
-        "label": "transaction_status",
-        "type": "hidden",
-        "lockKey": true,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        }
-      }, {
-        "type": "convergepay",
-        "key": "custom",
-        "label": "custom",
-        "input": true,
-        "tableView": false,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        }
-      }],
+      "key": "page5Panel2",
+      "attributes": {
+        "margin-bottom": "15px",
+        "margin-top": "15px"
+      },
       "type": "panel",
-      "label": "Panel",
+      "label": "Approval",
+      "input": false,
+      "components": [{
+        "label": "well",
+        "tableView": false,
+        "key": "well4",
+        "type": "well",
+        "input": false,
+        "validate": {
+          "unique": false,
+          "multiple": false
+        },
+        "components": [{
+          "label": "<b>I hereby declare that I accept the proposal</b>",
+          "optionsLabelPosition": "right",
+          "inline": false,
+          "tableView": true,
+          "values": [{
+            "value": "true",
+            "label": "Accept",
+            "shortcut": ""
+          }, {
+            "value": "false",
+            "label": "Decline",
+            "shortcut": ""
+          }],
+          "validate": {
+            "required": true,
+            "unique": false,
+            "multiple": false
+          },
+          "key": "userApproved",
+          "properties": {
+            "render": "page7"
+          },
+          "type": "radio",
+          "input": true,
+          "lockKey": true
+        }, {
+          "label": "Could you let us know the Reason for Rejecting the Quote?",
+          "autoExpand": false,
+          "spellcheck": true,
+          "tableView": true,
+          "validate": {
+            "required": true,
+            "unique": false,
+            "multiple": false
+          },
+          "key": "userRejectionReason",
+          "conditional": {
+            "show": true,
+            "when": "userApproved",
+            "eq": "false"
+          },
+          "type": "textarea",
+          "input": true
+        }],
+        "path": "well4",
+        "clearOnHide": false,
+        "hideLabel": true
+      }],
+      "lockKey": true,
       "validate": {
         "unique": false,
         "multiple": false
       },
-      "path": "page7Panel2"
+      "path": "page5Panel2"
     }, {
-      "key": "page7Content",
-      "label": "Content",
-      "input": false,
-      "attrs": [{
-        "value": "",
-        "attr": ""
-      }],
-      "content": "</br><b><font color=\"red\">If you click \"Submit Form\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Form\" only once.</b></font>",
-      "type": "htmlelement",
-      "hideLabel": true,
+      "label": "amount",
+      "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
+      "key": "amount",
+      "type": "hidden",
+      "input": true,
       "tableView": false,
       "validate": {
         "unique": false,
         "multiple": false
       }
+    }, {
+      "title": "Payment Information",
+      "theme": "primary",
+      "collapsible": false,
+      "tableView": false,
+      "key": "page7",
+      "properties": {
+        "payment_confirmation_page": "true"
+      },
+      "conditional": {
+        "show": true,
+        "when": "userApproved",
+        "eq": "true"
+      },
+      "type": "panel",
+      "label": "Payment Information",
+      "breadcrumb": "none",
+      "buttonSettings": {
+        "previous": true,
+        "cancel": true,
+        "next": true
+      },
+      "components": [{
+        "key": "page7Panel2",
+        "input": false,
+        "title": "Payment Details",
+        "theme": "primary",
+        "tableView": false,
+        "components": [{
+          "label": "payment",
+          "calculateValue": "value = 'true';",
+          "key": "payment",
+          "type": "hidden",
+          "input": true,
+          "tableView": false,
+          "validate": {
+            "unique": false,
+            "multiple": false
+          }
+        }, {
+          "input": true,
+          "tableView": true,
+          "key": "page7Panel2AmountPayable",
+          "label": "amountPayable",
+          "type": "hidden",
+          "calculateValue": "value = data['amount']",
+          "validate": {
+            "unique": false,
+            "multiple": false
+          }
+        }, {
+          "input": true,
+          "tableView": true,
+          "key": "transaction_id",
+          "label": "transaction_id",
+          "type": "hidden",
+          "lockKey": true,
+          "validate": {
+            "unique": false,
+            "multiple": false
+          }
+        }, {
+          "input": true,
+          "tableView": true,
+          "key": "transaction_status",
+          "label": "transaction_status",
+          "type": "hidden",
+          "lockKey": true,
+          "validate": {
+            "unique": false,
+            "multiple": false
+          }
+        }, {
+          "type": "convergepay",
+          "key": "custom",
+          "label": "custom",
+          "input": true,
+          "tableView": false,
+          "validate": {
+            "unique": false,
+            "multiple": false
+          }
+        }],
+        "type": "panel",
+        "label": "Panel",
+        "validate": {
+          "unique": false,
+          "multiple": false
+        },
+        "path": "page7Panel2"
+      }, {
+        "key": "page7Content",
+        "label": "Content",
+        "input": false,
+        "attrs": [{
+          "value": "",
+          "attr": ""
+        }],
+        "content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+        "type": "htmlelement",
+        "hideLabel": true,
+        "tableView": false,
+        "validate": {
+          "unique": false,
+          "multiple": false
+        }
+      }],
+      "input": false,
+      "lockKey": true,
+      "validate": {
+        "unique": false,
+        "multiple": false
+      },
+      "breadcrumbClickable": true
     }],
-    "input": false,
-    "key": "page7",
-    "theme": "primary",
-    "tableView": false,
-    "label": "Panel",
     "validate": {
       "unique": false,
       "multiple": false
     },
-    "properties": {
-      "payment_confirmation_page": "true"
-    },
-    "path": "page7"
+    "path": "page5Panel"
   }, {
-    "input": true,
     "label": "Submit",
+    "showValidations": false,
     "tableView": false,
     "key": "submit",
     "type": "button",
     "event": "submitForm",
+    "input": true,
     "validate": {
       "unique": false,
       "multiple": false
@@ -214,6 +287,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-16T04:59:18.086Z",
+  "modified": "2020-03-16T06:24:15.072Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
