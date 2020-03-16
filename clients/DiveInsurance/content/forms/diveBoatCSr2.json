@@ -3632,7 +3632,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<!DOCTYPE html>\n<html>\n<head>\n<style>\n\ntable, th, td {\n  \n  border-collapse: collapse;\n}\n</style>\n</head>\n<body>\n\n\n\n<table bgcolor = \"lightgrey\" width = \"100%\">\n<tr>\n<td><span style=\"color:black;\"><font face=\"Century Gothic\">Employees are automatically covered under your store or resort operator's policy (does not include Professional Liability).</font></span></td></tr>\n<tr>\n<td><font face=\"Century Gothic\"> Divemasters and Instructors may not be added as additional insureds.</font></td></tr>\n<tr>\n<td><font face=\"Century Gothic\"> Owners, officers and directors of your business are automatically covered under your policy and need not be added as additional insureds (does not include Professional Liability)</font></td></tr>\n\n\n</table>\n\n</body>\n</html>",
+				"content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "page_content",
@@ -8562,6 +8562,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-16T10:58:35.075Z",
+	"modified": "2020-03-16T11:11:28.408Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
