@@ -131,15 +131,23 @@ menu:
                             info: true
                         actions:
                             -
-                                name: View
+                                name: 'View Policy'
                                 rule: '''{{policyStatus}}'' == ''In Force'''
+                                icon: 'fa fa-envelope-open'
                                 details:
                                     -
-                                        type: View
+                                        type: Document
+                                        content: '<h4>{file.padi} - {file.firstname} {file.lastname}</h4><p> The Policy will expire on {moment(file.end_date).format(''Do MMMM YYYY'')} </p>'
                                         params:
                                             uuid: '{{uuid}}'
-                                            page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
-                                icon: 'fa fa-envelope-open'
+                                    -
+                                        type: DocumentViewer
+                                        params:
+                                            uuid: '{{uuid}}'
+                                            documentTypes:
+                                                -
+                                                    title: 'Policy Documents'
+                                                    field: field_value
                             -
                                 name: Endorsement
                                 rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
@@ -178,22 +186,22 @@ menu:
                                 icon: 'fa fa-pencil'
                             -
                                 name: 'Cancel Policy'
-                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'') && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
                                         type: Form
-                                        url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        url: workflow/91cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                             -
                                 name: 'Cancel Policy'
-                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')  && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
                                         type: Form
-                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                         toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
                             title: 'Get Policy'
@@ -483,18 +491,26 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
-                                name: View
+                                name: 'View Policy'
                                 icon: 'fa fa-envelope-open'
                                 rule: '''{{policyStatus}}'' != ''Rejected'''
                                 details:
                                     -
-                                        type: View
+                                        type: Document
+                                        content: '<h4>{file.padi} - {file.firstname} {file.lastname}</h4><p> The Policy will expire on {moment(file.end_date).format(''Do MMMM YYYY'')} </p>'
                                         params:
                                             uuid: '{{uuid}}'
-                                            page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
+                                    -
+                                        type: DocumentViewer
+                                        params:
+                                            uuid: '{{uuid}}'
+                                            documentTypes:
+                                                -
+                                                    title: 'Policy Documents'
+                                                    field: field_value
                             -
                                 name: 'Cancel Policy'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                                 rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
@@ -503,12 +519,30 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                             -
                                 name: 'Cancel Policy'
-                                icon: 'fa fa-window-close'
+                                icon: 'fa fa-ban'
                                 rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
                                         url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/91cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                             -
                                 name: 'Reinstate Policy'
@@ -608,15 +642,18 @@ menu:
                         resizable: true
                         actions:
                             -
-                                name: View
+                                name: 'View Pocket Card'
+                                icon: 'fa fa-envelope-open'
                                 rule: '''{{jobStatus}}'' == ''Completed'''
                                 details:
                                     -
-                                        type: View
+                                        type: DocumentViewer
                                         params:
                                             uuid: '{{uuid}}'
-                                            page_id: c9714cfd-2ae5-4f13-83eb-7d925c3b660d
-                                icon: 'fa fa-envelope-open'
+                                            documentTypes:
+                                                -
+                                                    title: 'Pocket Cards'
+                                                    field: field_value
                         operations:
                             title: 'Pocket Card'
                             actions:
@@ -702,28 +739,6 @@ menu:
                                 title: 'Policy End Date'
                                 field: end_date
         uuid: 3b396d26-c0cb-4436-8804-f22431d6ac8c
-pages:
-    -
-        page:
-            name: 'View Policy'
-            description: 'View Policy'
-            page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
-            content:
-                -
-                    content: '<h4>{{padi}} - {{firstname}} {{lastname}}</h4><p> The Policy will expire on {{end_date}} </p>'
-                    type: Document
-                -
-                    type: DocumentViewer
-        uuid: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
-    -
-        page:
-            name: 'View Pocket Card'
-            description: 'View Pocket Card'
-            page_id: c9714cfd-2ae5-4f13-83eb-7d925c3b660d
-            content:
-                -
-                    type: DocumentViewer
-        uuid: c9714cfd-2ae5-4f13-83eb-7d925c3b660d
 workflow:
     -
         name: 'Individual Liability'
@@ -766,6 +781,16 @@ workflow:
         name: 'Cancel Policy'
         uuid: 81cb9e10-5845-4379-97c9-f9486b702bda
     -
+        bpmn_file: 'Cancel Policy/CancelPolicyDB.bpmn'
+        entity: 'Dive Boat'
+        name: 'Cancel Policy'
+        uuid: 91cb9e10-5845-4379-97c9-f9486b702bda
+    -
+        bpmn_file: 'Cancel Policy/CancelPolicyDS.bpmn'
+        entity: 'Dive Store'
+        name: 'Cancel Policy'
+        uuid: 61cb9e10-5845-4379-97c9-f9486b702bda
+    -
         name: 'Dive Boat'
         uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
         bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
@@ -798,15 +823,3 @@ form:
         description: 'Lets CSR generate and view Pocket Cards'
         template_file: pocketCard.json
         entity: 'Pocket Card Job'
-job:
-    -
-        import_padi:
-            -
-                stored_procedure_name: ox_padi_verification
-                upload_host_name: 206.107.76.164
-                upload_host_user: vbinsurance
-                upload_user_password: '<<InsureName>>'
-    -
-        autorenewal:
-            -
-                stored_procedure_name: ox_padi_verification

@@ -11,7 +11,7 @@ import java.util.logging.Logger
 
 class CustomTaskCompleteListener implements TaskListener, Serializable {
 
-    static final long serialVersionUID = -787991492884005035L;
+    static final long serialVersionUID = -787991492884005035L
 
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 

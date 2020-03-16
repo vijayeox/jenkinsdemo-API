@@ -64,7 +64,7 @@
 					"multiple": false
 				},
 				"components": [{
-					"label": "Would you like to Proceed with the Quote?",
+					"label": "<b>I hereby declare that I accept the proposal</b>",
 					"optionsLabelPosition": "right",
 					"inline": false,
 					"tableView": true,
@@ -291,6 +291,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-03-03T05:20:00.094Z",
+	"modified": "2020-03-16T03:52:18.375Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

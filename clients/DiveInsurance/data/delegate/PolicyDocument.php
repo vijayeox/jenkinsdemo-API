@@ -92,7 +92,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'aifooter' => 'EFR_AI_footer.html')
         );
             
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldnames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts','attachments', 'physical_state','autoRenewalJob');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldnames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts','attachments', 'physical_state','autoRenewalJob','groupNamedInsureds');
 
         $this->endorsementOptions = array('modify_personalInformation','modify_coverage','modify_additionalInsured','modify_businessAndPolicyInformation','modify_boatUsageCaptainCrewSchedule','modify_boatDeatails','modify_additionalInsured','modify_lossPayees','modify_groupProfessionalLiability');
     }
@@ -151,7 +151,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp[$val] = json_encode($data[$val]);
                 }
             }
-
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
                 if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");

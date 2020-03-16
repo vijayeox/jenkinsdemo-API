@@ -342,80 +342,6 @@
 					"key": "panelpanelcolumns4",
 					"columns": [{
 						"components": [{
-							"label": "Address 1",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"key": "address1",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Address 2",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"key": "address2",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"label": "City",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the city.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "city",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Zip Code",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"pattern": "[0-9\\s-]*",
-								"customMessage": "Please enter a valid Zip Code for your region.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "zip",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
 							"tableView": true,
@@ -442,6 +368,43 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
+							"label": "City",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter the city.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "city",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address 1",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "address1",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
 							"label": "State",
 							"widget": "choicesjs",
 							"tableView": true,
@@ -462,6 +425,43 @@
 							},
 							"key": "state",
 							"type": "select",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address 2",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							},
+							"key": "address2",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip Code",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "zip",
+							"type": "textfield",
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
@@ -513,75 +513,6 @@
 					"key": "panelPanel4PanelColumns",
 					"columns": [{
 						"components": [{
-							"input": true,
-							"tableView": true,
-							"label": "Address1",
-							"key": "mailaddress1",
-							"spellcheck": true,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"type": "textfield",
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"input": true,
-							"tableView": true,
-							"label": "Address2",
-							"key": "mailaddress2",
-							"spellcheck": true,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"type": "textfield",
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"input": true,
-							"tableView": true,
-							"label": "City",
-							"key": "physical_city",
-							"spellcheck": true,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"type": "textfield",
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Zip Code",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"pattern": "[0-9\\s-]*",
-								"customMessage": "Please enter a valid Zip Code for your region.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "physical_zip",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
 							"tableView": true,
@@ -608,6 +539,40 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
+							"label": "City",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "physical_city",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address1",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "mailaddress1",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
 							"label": "State",
 							"widget": "choicesjs",
 							"tableView": true,
@@ -628,6 +593,41 @@
 							},
 							"key": "physical_state",
 							"type": "select",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0
+					}, {
+						"components": [{
+							"label": "Address2",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							},
+							"key": "mailaddress2",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip Code",
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "physical_zip",
+							"type": "textfield",
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
@@ -685,13 +685,12 @@
 							"width": 4
 						}, {
 							"components": [{
-								"label": "Home Phone",
+								"label": "Home or Work Phone",
 								"placeholder": " ",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please enter the home phone number.",
 									"unique": false,
 									"multiple": false
@@ -1050,22 +1049,258 @@
 					"input": true,
 					"lockKey": true
 				}, {
+					"title": "Business Address",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "businessAddress",
+					"type": "panel",
+					"label": "Pan",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"components": [{
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Country",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{}],
+									"custom": "values = data['countryList'];"
+								},
+								"valueProperty": "country",
+								"dataType": "string",
+								"template": "<span>{{ item.country }}</span>",
+								"selectThreshold": 0.3,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_country",
+								"type": "select",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Address1",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_address1",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Address2",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_address2",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}],
+						"tableView": false,
+						"key": "columns",
+						"type": "columns",
+						"input": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"path": "columns"
+					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "City",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_city",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "State",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{}],
+									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n}\n}"
+								},
+								"template": "<span>{{ item }}</span>",
+								"selectThreshold": 0.3,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_state",
+								"type": "select",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Zip Code",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"pattern": "[0-9\\s-]*",
+									"customMessage": "Please enter a valid Zip Code for your region.",
+									"unique": false,
+									"multiple": false
+								},
+								"key": "business_zip",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}],
+						"tableView": false,
+						"key": "columns15",
+						"type": "columns",
+						"input": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"path": "columns15"
+					}],
+					"path": "businessAddress"
+				}, {
 					"label": "Columns",
 					"columns": [{
 						"components": [{
-							"label": "Address1",
-							"spellcheck": true,
-							"tableView": true,
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Country Code",
+									"widget": "choicesjs",
+									"tableView": true,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{}],
+										"custom": "values = data['phoneList']"
+									},
+									"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+									"selectThreshold": 0.3,
+									"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+									"validate": {
+										"unique": false,
+										"multiple": false
+									},
+									"key": "work_country_code",
+									"type": "select",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"width": 4
+							}, {
+								"components": [{
+									"label": "Work Phone",
+									"placeholder": "  ",
+									"tooltip": "Phone Number",
+									"spellcheck": true,
+									"tableView": true,
+									"clearOnHide": false,
+									"calculateValue": "value = data['mobilephone']",
+									"validate": {
+										"required": true,
+										"customMessage": "Please enter the phone number.",
+										"unique": false,
+										"multiple": false
+									},
+									"key": "buisness_work_number",
+									"type": "phoneNumber",
+									"input": true,
+									"lockKey": true,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "business_work_phone",
+									"calculateValue": "value = data.work_country_code + \"\"+ data.buisness_work_number",
+									"key": "business_work_phone",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									},
+									"hideOnChildrenHidden": false
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"width": 8
+							}],
+							"hideLabel": true,
+							"tableView": false,
+							"key": "columns3",
+							"type": "columns",
+							"input": false,
 							"validate": {
-								"required": true,
 								"unique": false,
 								"multiple": false
 							},
-							"key": "business_address1",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"path": "columns3"
 						}],
 						"width": 6,
 						"offset": 0,
@@ -1073,15 +1308,22 @@
 						"pull": 0
 					}, {
 						"components": [{
-							"label": "Address2",
+							"label": "Email Address 1",
+							"tooltip": "Primary Email",
 							"spellcheck": true,
 							"tableView": true,
+							"clearOnHide": false,
+							"kickbox": {
+								"enabled": true
+							},
 							"validate": {
+								"required": true,
+								"customMessage": "Please enter the email address.",
 								"unique": false,
 								"multiple": false
 							},
-							"key": "business_address2",
-							"type": "textfield",
+							"key": "business_email",
+							"type": "email",
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
@@ -1105,144 +1347,18 @@
 					"label": "Columns",
 					"columns": [{
 						"components": [{
-							"label": "City",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"key": "business_city",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"label": "Country",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{}],
-								"custom": "values = data['countryList'];"
-							},
-							"valueProperty": "country",
-							"dataType": "string",
-							"template": "<span>{{ item.country }}</span>",
-							"selectThreshold": 0.3,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"key": "business_country",
-							"type": "select",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}],
-					"tableView": false,
-					"key": "columns5",
-					"type": "columns",
-					"input": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"path": "columns5",
-					"hideLabel": true
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "State",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{}],
-								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n}\n}"
-							},
-							"template": "<span>{{ item }}</span>",
-							"selectThreshold": 0.3,
-							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
-							},
-							"key": "business_state",
-							"type": "select",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
-						"components": [{
-							"label": "Zip Code",
-							"spellcheck": true,
-							"tableView": true,
-							"validate": {
-								"required": true,
-								"pattern": "[0-9\\s-]*",
-								"customMessage": "Please enter a valid Zip Code for your region.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "business_zip",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}],
-					"tableView": false,
-					"key": "columns6",
-					"type": "columns",
-					"input": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"path": "columns6",
-					"hideLabel": true
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "Email Address 1",
-							"tooltip": "Primary Email",
+							"label": "Fax",
+							"placeholder": "  ",
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
-							"kickbox": {
-								"enabled": true
-							},
+							"calculateValue": "value = data['fax'];",
 							"validate": {
-								"required": true,
-								"customMessage": "Please enter the email address.",
 								"unique": false,
 								"multiple": false
 							},
-							"key": "business_email",
-							"type": "email",
+							"key": "business_fax",
+							"type": "phoneNumber",
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
@@ -1276,40 +1392,18 @@
 						"pull": 0
 					}],
 					"tableView": false,
-					"key": "columns7",
+					"key": "columns5",
 					"type": "columns",
 					"input": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
-					"path": "columns7",
+					"path": "columns5",
 					"hideLabel": true
 				}, {
 					"label": "Columns",
 					"columns": [{
-						"components": [{
-							"label": "Fax",
-							"placeholder": "  ",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"calculateValue": "value = data['fax'];",
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"key": "business_fax",
-							"type": "phoneNumber",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0
-					}, {
 						"components": [{
 							"label": "Website",
 							"spellcheck": true,
@@ -1329,92 +1423,23 @@
 						"offset": 0,
 						"push": 0,
 						"pull": 0
-					}],
-					"tableView": false,
-					"key": "columns8",
-					"type": "columns",
-					"input": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"path": "columns8",
-					"hideLabel": true
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "Country Code",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{}],
-								"custom": "values = data['phoneList']"
-							},
-							"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
-							"selectThreshold": 0.3,
-							"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
-							"validate": {
-								"unique": false,
-								"multiple": false
-							},
-							"key": "work_country_code",
-							"type": "select",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 2
 					}, {
-						"components": [{
-							"label": "Work Phone",
-							"placeholder": "  ",
-							"tooltip": "Phone Number",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"calculateValue": "value = data['mobilephone']",
-							"validate": {
-								"required": true,
-								"customMessage": "Please enter the phone number.",
-								"unique": false,
-								"multiple": false
-							},
-							"key": "buisness_work_number",
-							"type": "phoneNumber",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
+						"components": [],
+						"width": 6,
 						"offset": 0,
 						"push": 0,
-						"pull": 0,
-						"width": 4
+						"pull": 0
 					}],
 					"tableView": false,
-					"key": "columns3",
+					"key": "columns6",
 					"type": "columns",
 					"input": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
-					"path": "columns3",
+					"path": "columns6",
 					"hideLabel": true
-				}, {
-					"label": "business_work_phone",
-					"calculateValue": "value = data.work_country_code + \"\"+ data.buisness_work_number",
-					"key": "business_work_phone",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
 				}],
 				"path": "panel1",
 				"hideLabel": true
@@ -2626,40 +2651,6 @@
 					"width": 4
 				}, {
 					"components": [{
-						"label": "Engine Make",
-						"spellcheck": true,
-						"tableView": true,
-						"validate": {
-							"required": true,
-							"customMessage": "Please enter the engine make.",
-							"unique": false,
-							"multiple": false
-						},
-						"key": "engine_make",
-						"type": "textfield",
-						"input": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"width": 4
-				}],
-				"tableView": false,
-				"key": "columns11",
-				"type": "columns",
-				"input": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				},
-				"path": "columns11",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
 						"label": "Total Horsepower",
 						"suffix": "HP",
 						"mask": false,
@@ -2683,7 +2674,20 @@
 					"push": 0,
 					"pull": 0,
 					"width": 4
-				}, {
+				}],
+				"tableView": false,
+				"key": "columns11",
+				"type": "columns",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "columns11",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
 						"label": "Hull Market Value",
 						"prefix": "$",
@@ -2730,119 +2734,6 @@
 						"input": true,
 						"hideOnChildrenHidden": false,
 						"inputType": "number"
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"width": 4
-				}],
-				"tableView": false,
-				"key": "columns12",
-				"type": "columns",
-				"input": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				},
-				"path": "columns12",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Date of last survey",
-						"format": "MM-dd-yyyy",
-						"tableView": true,
-						"datePicker": {
-							"maxDate": "2020-03-11T18:30:00.000Z",
-							"datepickerMode": "day"
-						},
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
-						"validate": {
-							"required": true,
-							"customMessage": "Please enter the date of last survey.",
-							"unique": false,
-							"multiple": false
-						},
-						"key": "date_of_last_survey",
-						"type": "datetime",
-						"input": true,
-						"labelWidth": 0,
-						"labelMargin": 0,
-						"style": {
-							"margin-top": "20px"
-						},
-						"lockKey": true,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"language": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": null,
-							"maxDate": "2020-03-11T18:30:00.000Z"
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"width": 4
-				}, {
-					"components": [{
-						"label": "Date of Purchase",
-						"format": "MM-dd-yyyy",
-						"tableView": true,
-						"datePicker": {
-							"maxDate": "2020-03-11T18:30:00.000Z",
-							"datepickerMode": "day"
-						},
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
-						"validate": {
-							"required": true,
-							"customMessage": "Please enter the date of purchase.",
-							"unique": false,
-							"multiple": false
-						},
-						"key": "date_of_purchase",
-						"type": "datetime",
-						"input": true,
-						"style": {
-							"margin-top": "20px"
-						},
-						"lockKey": true,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"language": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": null,
-							"maxDate": "2020-03-11T18:30:00.000Z"
-						},
-						"hideOnChildrenHidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2915,20 +2806,20 @@
 					"width": 4
 				}],
 				"tableView": false,
-				"key": "columns13",
+				"key": "columns12",
 				"type": "columns",
 				"input": false,
 				"validate": {
 					"unique": false,
 					"multiple": false
 				},
-				"path": "columns13",
+				"path": "columns12",
 				"hideLabel": true
 			}, {
 				"label": "Columns",
 				"columns": [{
 					"components": [{
-						"label": "Data Grid",
+						"label": "Protective devices (automatic firefighting systems, etc)",
 						"disableAddingRemovingRows": false,
 						"reorder": false,
 						"addAnother": "Add More",
@@ -2936,7 +2827,6 @@
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
-						"hideLabel": true,
 						"tableView": true,
 						"validate": {
 							"unique": false,
@@ -2947,6 +2837,7 @@
 						"input": true,
 						"components": [{
 							"label": "Protective devices (automatic firefighting systems, etc)",
+							"hideLabel": true,
 							"spellcheck": true,
 							"dataGridLabel": false,
 							"tableView": true,
@@ -2969,7 +2860,44 @@
 					"push": 0,
 					"pull": 0
 				}, {
-					"components": [],
+					"components": [{
+						"label": "Engine Make",
+						"disableAddingRemovingRows": false,
+						"reorder": false,
+						"addAnother": "Add More",
+						"addAnotherPosition": "bottom",
+						"defaultOpen": false,
+						"layoutFixed": false,
+						"enableRowGroups": false,
+						"tableView": false,
+						"validate": {
+							"minLength": 1,
+							"unique": false,
+							"multiple": false
+						},
+						"key": "engineMake",
+						"type": "datagrid",
+						"input": true,
+						"components": [{
+							"label": "Engine Make",
+							"hideLabel": true,
+							"spellcheck": true,
+							"tableView": true,
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter the engine make.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "engineMakeVal",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"hideOnChildrenHidden": false,
+						"path": "engineMake"
+					}],
 					"width": 6,
 					"offset": 0,
 					"push": 0,
@@ -2985,6 +2913,119 @@
 				},
 				"path": "columns14",
 				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Date of last survey",
+						"format": "MM-dd-yyyy",
+						"tableView": true,
+						"datePicker": {
+							"maxDate": "2020-03-11T18:30:00.000Z",
+							"datepickerMode": "day"
+						},
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the date of last survey.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "date_of_last_survey",
+						"type": "datetime",
+						"input": true,
+						"labelWidth": 0,
+						"labelMargin": 0,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+						"widget": {
+							"type": "calendar",
+							"displayInTimezone": "viewer",
+							"language": "en",
+							"useLocaleSettings": false,
+							"allowInput": true,
+							"mode": "single",
+							"enableTime": false,
+							"noCalendar": false,
+							"format": "MM-dd-yyyy",
+							"hourIncrement": 1,
+							"minuteIncrement": 1,
+							"time_24hr": true,
+							"minDate": null,
+							"maxDate": "2020-03-11T18:30:00.000Z"
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 6
+				}, {
+					"components": [{
+						"label": "Date of Purchase",
+						"format": "MM-dd-yyyy",
+						"tableView": true,
+						"datePicker": {
+							"maxDate": "2020-03-11T18:30:00.000Z",
+							"datepickerMode": "day"
+						},
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the date of purchase.",
+							"unique": false,
+							"multiple": false
+						},
+						"key": "date_of_purchase",
+						"type": "datetime",
+						"input": true,
+						"style": {
+							"margin-top": "20px"
+						},
+						"lockKey": true,
+						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+						"widget": {
+							"type": "calendar",
+							"displayInTimezone": "viewer",
+							"language": "en",
+							"useLocaleSettings": false,
+							"allowInput": true,
+							"mode": "single",
+							"enableTime": false,
+							"noCalendar": false,
+							"format": "MM-dd-yyyy",
+							"hourIncrement": 1,
+							"minuteIncrement": 1,
+							"time_24hr": true,
+							"minDate": null,
+							"maxDate": "2020-03-11T18:30:00.000Z"
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 6
+				}],
+				"hideLabel": true,
+				"tableView": false,
+				"key": "columns13",
+				"type": "columns",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "columns13"
 			}, {
 				"input": true,
 				"tableView": true,
@@ -3997,6 +4038,53 @@
 					"type": "select",
 					"hideLabel": true,
 					"lockKey": true
+				}, {
+					"title": "Attachments",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "attachments",
+					"type": "panel",
+					"label": "=",
+					"input": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"components": [{
+						"label": "Attachments",
+						"hideLabel": true,
+						"tableView": true,
+						"storage": "base64",
+						"image": true,
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+						"fileMaxSize": "10MB",
+						"multiple": true,
+						"validate": {
+							"unique": false,
+							"multiple": true
+						},
+						"key": "attachments",
+						"type": "file",
+						"input": true
+					}, {
+						"label": "attachmentFields",
+						"customDefaultValue": "value = [[\"groupPL\",\"document\"],'attachments'];",
+						"key": "attachmentsFieldnames",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
+					}],
+					"path": "attachments"
 				}],
 				"type": "panel",
 				"lockKey": true,
@@ -4004,7 +4092,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "additional_required_information"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -4259,7 +4348,7 @@
 		"type": "panel",
 		"title": "Group Professional Liability",
 		"components": [{
-			"label": "Would you like to apply for Group Professional Liability?",
+			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
 			"tableView": true,
 			"data": {
@@ -5194,10 +5283,13 @@
 				"label": "Panel",
 				"path": "page7Panel"
 			}, {
+				"label": "Table",
+				"cellAlignment": "left",
+				"tableView": false,
+				"key": "page7Table",
+				"type": "table",
 				"clearOnHide": false,
 				"input": false,
-				"key": "page7Table",
-				"numRows": 4,
 				"rows": [
 					[{
 						"components": [{
@@ -5315,52 +5407,6 @@
 					}],
 					[{
 						"components": [{
-							"key": "page7TablePaorFee",
-							"label": "PA/OR Fee",
-							"input": false,
-							"tag": "h4",
-							"attrs": [{
-								"value": "",
-								"attr": ""
-							}],
-							"content": "PA/OR Fee",
-							"type": "htmlelement",
-							"hideLabel": true,
-							"tableView": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							}
-						}]
-					}, {
-						"components": []
-					}, {
-						"components": [{
-							"label": "PA/OR Fee",
-							"prefix": "$",
-							"hideLabel": true,
-							"mask": false,
-							"spellcheck": true,
-							"tableView": true,
-							"defaultValue": "0",
-							"delimiter": true,
-							"requireDecimal": true,
-							"inputFormat": "plain",
-							"redrawOn": "data",
-							"validate": {
-								"multiple": false,
-								"unique": false
-							},
-							"key": "groupPAORfee",
-							"type": "number",
-							"decimalLimit": 2,
-							"input": true,
-							"inputType": "number",
-							"lockKey": true
-						}]
-					}],
-					[{
-						"components": [{
 							"key": "page7TableTotal",
 							"label": "Total",
 							"input": false,
@@ -5393,7 +5439,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "value = parseFloat(data[\"groupTaxAmount\"])+parseFloat(data[\"groupPadiFeeAmount\"])+(parseFloat(data[\"groupPAORfee\"]) || 0)+parseFloat(data[\"groupCoverage\"])+parseFloat(data[\"groupExcessLiability\"])",
+							"calculateValue": "value = parseFloat(data[\"groupTaxAmount\"])+parseFloat(data[\"groupPadiFeeAmount\"])+parseFloat(data[\"groupCoverage\"])+parseFloat(data[\"groupExcessLiability\"])",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -5407,14 +5453,12 @@
 						}]
 					}]
 				],
-				"tableView": false,
-				"type": "table",
 				"hideLabel": true,
-				"label": "Table",
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "page7Table"
 			}],
 			"path": "well2",
 			"clearOnHide": false,
@@ -5430,53 +5474,6 @@
 			"multiple": false
 		},
 		"path": "page7"
-	}, {
-		"title": "Attachments",
-		"theme": "primary",
-		"collapsible": false,
-		"tableView": false,
-		"key": "attachments",
-		"type": "panel",
-		"label": "=",
-		"input": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		},
-		"components": [{
-			"label": "Attachments",
-			"hideLabel": true,
-			"tableView": true,
-			"storage": "base64",
-			"image": true,
-			"webcam": false,
-			"fileTypes": [{
-				"label": "",
-				"value": ""
-			}],
-			"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
-			"fileMaxSize": "10MB",
-			"multiple": true,
-			"validate": {
-				"unique": false,
-				"multiple": true
-			},
-			"key": "attachments",
-			"type": "file",
-			"input": true
-		}, {
-			"label": "attachmentFields",
-			"customDefaultValue": "value = [[\"groupPL\",\"document\"],'attachments'];",
-			"key": "attachmentsFieldnames",
-			"type": "hidden",
-			"input": true,
-			"tableView": false,
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
-		}],
-		"path": "attachments"
 	}, {
 		"type": "panel",
 		"title": "Terms & Conditions",
@@ -5720,11 +5717,15 @@
 				"multiple": false
 			}
 		}, {
-			"key": "page5Panel3",
-			"input": false,
 			"title": "Automatic Renewal",
 			"theme": "primary",
+			"collapsible": false,
+			"hidden": true,
 			"tableView": false,
+			"key": "page5Panel3",
+			"type": "panel",
+			"label": "Automatic Renewal",
+			"input": false,
 			"components": [{
 				"key": "page5Panel3Content",
 				"label": "Content",
@@ -5755,8 +5756,6 @@
 				"type": "checkbox",
 				"lockKey": true
 			}],
-			"type": "panel",
-			"label": "Panel",
 			"validate": {
 				"unique": false,
 				"multiple": false
@@ -8486,7 +8485,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "page5Panel2Well"
 			}],
 			"type": "panel",
 			"lockKey": true,
@@ -8549,6 +8549,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-12T10:25:44.004Z",
+	"modified": "2020-03-16T05:27:04.869Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }

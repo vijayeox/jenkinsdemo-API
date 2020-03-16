@@ -9,13 +9,6 @@
     "components": [{
       "type": "documentviewer",
       "key": "documents",
-      "conditional": {
-        "show": "",
-        "when": null,
-        "eq": ""
-      },
-      "protected": false,
-      "persistent": true,
       "dtype": "documentviewer",
       "datype": "documentviewer",
       "dattype": "documentviewer",
@@ -31,12 +24,10 @@
         "multiple": false
       }
     }, {
-      "autofocus": false,
-      "input": true,
-      "tableView": true,
-      "inputType": "radio",
-      "label": "Would you like to Proceed with the Quote?",
-      "key": "userApproved",
+      "label": "<b>I hereby declare that I accept the proposal</b>",
+      "optionsLabelPosition": "right",
+      "inline": false,
+      "tableView": false,
       "values": [{
         "value": "accepted",
         "label": "Accept",
@@ -46,201 +37,72 @@
         "label": "Decline",
         "shortcut": ""
       }],
-      "defaultValue": "",
-      "protected": false,
-      "fieldSet": false,
-      "persistent": true,
-      "hidden": false,
       "clearOnHide": false,
       "validate": {
         "required": true,
-        "custom": "",
-        "customPrivate": false
+        "unique": false,
+        "multiple": false
       },
+      "key": "userApproved",
       "type": "radio",
-      "labelPosition": "top",
-      "optionsLabelPosition": "right",
-      "tags": [],
-      "conditional": {
-        "show": "",
-        "when": null,
-        "eq": ""
-      },
-      "properties": {},
+      "input": true,
       "lockKey": true,
       "isNew": false
     }, {
-      "autofocus": false,
       "input": true,
       "tableView": true,
       "label": "Could you let us know the Reason for Rejecting the Quote?",
       "key": "page2CouldyouletusknowtheReasonforRejectingtheQuote",
-      "placeholder": "",
-      "prefix": "",
-      "suffix": "",
-      "rows": 3,
-      "multiple": false,
-      "defaultValue": "",
-      "protected": false,
-      "persistent": true,
-      "hidden": false,
-      "wysiwyg": false,
-      "clearOnHide": true,
       "spellcheck": true,
-      "validate": {
-        "required": false,
-        "minLength": "",
-        "maxLength": "",
-        "pattern": "",
-        "custom": ""
-      },
       "type": "textarea",
-      "labelPosition": "top",
       "inputFormat": "plain",
-      "tags": [],
       "conditional": {
         "show": "true",
         "when": "userApproved",
         "eq": "decline"
-      },
-      "properties": {}
+      }
     }],
     "input": false,
     "key": "page2",
-    "clearOnHide": false,
     "theme": "primary",
     "tableView": false,
-    "hideLabel": false,
-    "breadcrumb": "default",
-    "tags": [],
-    "conditional": {
-      "show": "",
-      "when": null,
-      "eq": ""
-    },
-    "properties": {},
-    "nextPage": ""
+    "label": "Panel",
+    "validate": {
+      "unique": false,
+      "multiple": false
+    }
+  }, {
+    "label": "amount",
+    "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
+    "key": "amount",
+    "type": "hidden",
+    "input": true,
+    "tableView": false,
+    "validate": {
+      "unique": false,
+      "multiple": false
+    }
   }, {
     "type": "panel",
     "title": "Payment Information",
     "components": [{
-      "key": "page7Panel",
-      "input": false,
-      "title": "Automatic Renewal",
-      "theme": "primary",
-      "tableView": false,
-      "components": [{
-        "key": "page7PanelContent",
-        "label": "Content",
-        "input": false,
-        "attrs": [{
-          "value": "",
-          "attr": ""
-        }],
-        "content": "<h4><b>PADI  has made membership renewal simple.\nVicencia & Buckley is making AUTOMATIC RENEWAL for Professional Liability Insurance a reality!</b></h4>\n</br>",
-        "type": "htmlelement",
-        "hideLabel": true,
-        "tableView": false,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        },
-        "tag": "p",
-        "className": ""
-      }, {
-        "input": true,
-        "tableView": true,
-        "label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
-        "dataGridLabel": false,
-        "key": "automatic_renewal",
-        "defaultValue": false,
-        "type": "checkbox",
-        "lockKey": true,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        },
-        "autofocus": false,
-        "inputType": "checkbox",
-        "hideLabel": false,
-        "protected": false,
-        "persistent": true,
-        "hidden": false,
-        "name": "",
-        "value": "",
-        "clearOnHide": true
-      }, {
-        "label": "Click here for more information",
-        "tag": "a",
-        "attrs": [{
-          "value": "",
-          "attr": ""
-        }],
-        "content": "<a href=\"https://www.diveinsurance.com/pop_automatic_renewal.htm\">Click here for more information</a>",
-        "refreshOnChange": false,
-        "tableView": false,
-        "key": "page7PanelClickhereformoreinformation",
-        "type": "htmlelement",
-        "input": false,
-        "hideLabel": true,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        },
-        "className": ""
-      }],
-      "type": "panel",
-      "label": "Panel",
-      "validate": {
-        "unique": false,
-        "multiple": false
-      },
-      "clearOnHide": false,
-      "hideLabel": false
-    }, {
-      "input": true,
-      "tableView": true,
-      "key": "single_limit",
-      "label": "single_limit",
-      "type": "hidden",
-      "lockKey": true,
-      "defaultValue": "$1,000,000",
-      "validate": {
-        "unique": false,
-        "multiple": false
-      },
-      "protected": false,
-      "unique": false,
-      "persistent": true
-    }, {
-      "input": true,
-      "tableView": true,
-      "key": "annual_aggregate",
-      "label": "annual_aggregate",
-      "type": "hidden",
-      "lockKey": true,
-      "defaultValue": "$2,000,000",
-      "validate": {
-        "unique": false,
-        "multiple": false
-      },
-      "protected": false,
-      "unique": false,
-      "persistent": true,
-      "tags": [],
-      "conditional": {
-        "show": "",
-        "when": null,
-        "eq": ""
-      },
-      "properties": {}
-    }, {
       "key": "page7Panel2",
       "input": false,
       "title": "Payment Details",
       "theme": "primary",
       "tableView": false,
       "components": [{
+        "label": "payment",
+        "calculateValue": "value = 'true';",
+        "key": "payment",
+        "type": "hidden",
+        "input": true,
+        "tableView": false,
+        "validate": {
+          "unique": false,
+          "multiple": false
+        }
+      }, {
         "input": true,
         "tableView": true,
         "key": "amountPayable",
@@ -251,10 +113,7 @@
         "validate": {
           "unique": false,
           "multiple": false
-        },
-        "protected": false,
-        "unique": false,
-        "persistent": true
+        }
       }, {
         "input": true,
         "tableView": true,
@@ -265,10 +124,7 @@
         "validate": {
           "unique": false,
           "multiple": false
-        },
-        "protected": false,
-        "unique": false,
-        "persistent": true
+        }
       }, {
         "input": true,
         "tableView": true,
@@ -279,20 +135,10 @@
         "validate": {
           "unique": false,
           "multiple": false
-        },
-        "protected": false,
-        "unique": false,
-        "persistent": true
+        }
       }, {
         "type": "convergepay",
         "key": "custom",
-        "conditional": {
-          "show": "",
-          "when": null,
-          "eq": ""
-        },
-        "protected": false,
-        "persistent": true,
         "label": "custom",
         "input": true,
         "tableView": false,
@@ -307,8 +153,7 @@
         "unique": false,
         "multiple": false
       },
-      "clearOnHide": false,
-      "hideLabel": false
+      "path": "page7Panel2"
     }, {
       "key": "page7Content",
       "label": "Content",
@@ -324,9 +169,7 @@
       "validate": {
         "unique": false,
         "multiple": false
-      },
-      "tag": "p",
-      "className": ""
+      }
     }],
     "input": false,
     "key": "page7",
@@ -337,18 +180,10 @@
       "unique": false,
       "multiple": false
     },
-    "clearOnHide": false,
-    "hideLabel": false,
-    "breadcrumb": "default",
-    "tags": [],
-    "conditional": {
-      "show": "",
-      "when": null,
-      "eq": ""
-    },
     "properties": {
       "payment_confirmation_page": "true"
-    }
+    },
+    "path": "page7"
   }, {
     "input": true,
     "label": "Submit",
@@ -359,21 +194,13 @@
     "validate": {
       "unique": false,
       "multiple": false
-    },
-    "autofocus": false,
-    "size": "md",
-    "leftIcon": "",
-    "rightIcon": "",
-    "block": false,
-    "action": "submit",
-    "disableOnInvalid": false,
-    "theme": "primary"
+    }
   }],
   "controller": "",
   "revisions": "",
   "_vid": 0,
   "title": "Dive Store User Approval Form",
-  "display": "wizard",
+  "display": "form",
   "access": [{
     "roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
     "type": "read_all"
@@ -387,6 +214,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-09T10:35:38.952Z",
+  "modified": "2020-03-16T04:59:18.086Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

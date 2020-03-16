@@ -11,6 +11,7 @@ use Oxzion\Db\Migration\Migration;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\EntityService;
+use Oxzion\Service\JobService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
@@ -33,10 +34,12 @@ class AppService extends AbstractService
     private $privilegeService;
     private $menuItemService;
     private $pageService;
+    private $jobService;
+
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -49,6 +52,7 @@ class AppService extends AbstractService
         $this->roleService = $roleService;
         $this->menuItemService = $menuItemService;
         $this->pageService = $pageService;
+        $this->jobService = $jobService;
     }
 
     /**
@@ -215,9 +219,8 @@ class AppService extends AbstractService
             $this->processForm($path, $ymlData);
             $this->processMenu($ymlData, $path);
             $this->processPage($ymlData, $path);
-            //if job given setup quartz job
+            $this->processJob($ymlData, $appUuid);
             $this->updateyml($ymlData, $path);
-            //Move the app folder from given path to clients folder
             $appData['status'] = App::PUBLISHED;
             $this->logger->info("\n App Data before app update - ", print_r($appData, true));
             $this->updateApp($appData['uuid'], $appData);
@@ -226,8 +229,55 @@ class AppService extends AbstractService
         }
     }
 
+    private function processJob(&$yamlData, $appUuid) {
+        $this->logger->info("Deploy App - Process Job with YamlData ");
+        if(isset($yamlData['job'])){  
+            try
+            {
+                foreach ($yamlData['job'] as $data) 
+                {
+                    if(!isset($data['name']) || !isset($data['url']) || !isset($data['uuid']) || !isset($data['cron']) || !isset($data['data']))
+                    {
+                        throw new ServiceException('Job Name/url/uuid/cron/data not specified', 'job.details.not.specified');                    
+                    }
+                    $jobName = $data['uuid'];
+                    $jobGroup = $data['name'];
+                    $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $data['url'], "data" => $data['data']), "schedule" => array("cron" => $data['cron']));
+                    $cron = $data['cron'];
+                    $appId = isset($data['appId']) ? $data['appId'] : $appUuid;
+                    $appId = $this->getIdFromUuid('ox_app', $appId);
+                    $query = "SELECT id from ox_job where name = :jobName and group_name = :groupName and app_id = :appId";
+                    $params = array('jobName' => $jobName, 'groupName' => $jobGroup, 'appId' => $appId);
+                    $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
+                    if(isset($result) && !empty($result))
+                    {
+                        $cancel = $this->jobService->cancelJob($jobName, $jobGroup, $appUuid);
+                    }
+                }
+            }
+            catch (Exception $e) {
+                $this->logger->info("there is an exception: ");
+                $response = json_decode($e->getCode());
+                if($response == 404){
+                    $this->logger->info("deleting from db ");
+                    $query = "DELETE from ox_job where name = :jobName and group_name = :groupName and app_id = :appId";
+                    $params = array('jobName' => $jobName, 'groupName' => $jobGroup, 'appId' => $appId);
+                    $result = $this->executeQueryWithBindParameters($query, $params);
+                }
+                else
+                {
+                    $this->logger->info("Process Job ---- Exception" . print_r($e->getMessage(), true));
+                    throw $e;
+                }
+            }
+            $this->logger->info("executing schedule job ");
+            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
+        }     
+    }
+
     private function processMenu(&$yamlData, $path)
     {
+        $this->logger->info("Deploy App - Process Menu with YamlData ");
         if (isset($yamlData['menu'])) {
             $appId = $yamlData['app'][0]['uuid'];
             $sequence = 0;
@@ -259,6 +309,7 @@ class AppService extends AbstractService
 
     private function processPage(&$yamlData, $path)
     {
+        $this->logger->info("Deploy App - Process Page with YamlData ");
         if (isset($yamlData['pages'])) {
             $appId = $yamlData['app'][0]['uuid'];
             $sequence = 0;

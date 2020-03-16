@@ -150,7 +150,7 @@
             "customClass": "alignCenter",
             "tableView": false,
             "key": "changePadi",
-            "customConditional": "if (\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\") &&\n  (data.disableUserInfoEdit == false || data.disableUserInfoEdit == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
+            "customConditional": "if (\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
             "logic": [{
               "name": "Event Handler",
               "trigger": {
@@ -164,12 +164,12 @@
               }]
             }],
             "type": "button",
+            "event": "triggerFormChange",
             "input": true,
             "validate": {
               "unique": false,
               "multiple": false
             },
-            "event": "triggerFormChange",
             "hideOnChildrenHidden": false
           }, {
             "key": "panelPanel2ColumnsContent",
@@ -261,13 +261,13 @@
               "multiple": false
             }
           }, {
+            "label": "approverEmailId",
+            "calculateValue": "value = data['userprofile'].email;",
+            "key": "approverEmailId",
+            "type": "hidden",
             "input": true,
             "tableView": true,
-            "key": "approverEmailId",
-            "label": "approverEmailId",
-            "type": "hidden",
             "lockKey": true,
-            "calculateValue": "value = data['userprofile'].email;",
             "hideOnChildrenHidden": false,
             "validate": {
               "unique": false,
@@ -4094,7 +4094,7 @@
         "data": {
           "values": [{
             "value": "yes",
-            "label": "yes"
+            "label": "Yes"
           }, {
             "value": "no",
             "label": "No"
@@ -6401,33 +6401,32 @@
             "rows": [
               [{
                 "components": [{
-                  "input": true,
-                  "tableView": true,
-                  "inputType": "number",
                   "label": "Annual Estimated Scuba/Snorkeling/Swimming/Instructional/Supervisory Receipts",
-                  "key": "estimatedAnnualReceipts",
-                  "placeholder": "Annual Estimated Scuba/Snorkeling/Swimming/Instructional/Supervisory Receipts",
                   "prefix": "$",
+                  "mask": false,
+                  "spellcheck": true,
+                  "tableView": true,
+                  "defaultValue": "0.00",
+                  "delimiter": false,
+                  "requireDecimal": true,
+                  "inputFormat": "plain",
                   "clearOnHide": false,
-                  "type": "number",
-                  "labelPosition": "bottom",
-                  "labelWidth": 0,
-                  "labelMargin": 5,
-                  "tooltip": "Annual Estimated Scuba/Snorkeling/Swimming/Instructional/Supervisory Receipts:",
                   "validate": {
                     "multiple": false,
                     "unique": false
                   },
-                  "defaultValue": "0.00",
-                  "requireDecimal": true,
+                  "key": "estimatedAnnualReceipts",
+                  "type": "number",
                   "decimalLimit": 2,
+                  "input": true,
+                  "inputType": "number",
+                  "labelWidth": 0,
+                  "labelMargin": 5,
                   "lockKey": true
                 }]
               }, {
                 "components": [{
                   "label": "Annual Estimated Emergency First Response Instructional Receipts",
-                  "labelPosition": "bottom",
-                  "tooltip": "Annual Estimated Emergency First Response Instructional Receipts",
                   "prefix": "$",
                   "mask": false,
                   "spellcheck": true,
@@ -6451,7 +6450,6 @@
               }, {
                 "components": [{
                   "label": "Number of Instructors",
-                  "labelPosition": "bottom",
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
@@ -6472,11 +6470,9 @@
               }, {
                 "components": [{
                   "label": "Divemaster/Assistant Instructors",
-                  "labelPosition": "bottom",
-                  "tooltip": "Divemaster/Assistant Instructors",
                   "mask": false,
-                  "spellcheck": true,
-                  "tableView": true,
+                  "spellcheck": false,
+                  "tableView": false,
                   "delimiter": false,
                   "requireDecimal": false,
                   "inputFormat": "plain",
@@ -7144,10 +7140,9 @@
               "pull": 0
             }, {
               "components": [{
-                "input": true,
-                "tableView": true,
                 "label": "Country",
-                "key": "country",
+                "tableView": true,
+                "dataSrc": "custom",
                 "data": {
                   "values": [{
                     "value": "",
@@ -7155,16 +7150,18 @@
                   }],
                   "custom": "values = data['countryList'];"
                 },
-                "dataSrc": "custom",
+                "template": "<span>{{ item.country }}</span>",
+                "selectThreshold": 0.3,
                 "clearOnHide": false,
                 "validate": {
                   "unique": false,
                   "multiple": false
                 },
+                "key": "country",
                 "type": "select",
+                "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false,
-                "template": "<span>{{ item.country }}</span>",
                 "isNew": false
               }],
               "width": 4,
@@ -7436,9 +7433,6 @@
     "title": "Terms & Conditions",
     "components": [{
       "label": "Columns",
-      "input": false,
-      "tableView": false,
-      "key": "page5Columns",
       "columns": [{
         "components": [{
           "key": "page5ColumnsPanel",
@@ -7551,13 +7545,7 @@
             "unique": false,
             "multiple": false
           }
-        }],
-        "width": 6,
-        "offset": 0,
-        "push": 0,
-        "pull": 0
-      }, {
-        "components": [{
+        }, {
           "key": "page5ColumnsPanel2",
           "input": false,
           "title": "PAYMENT INFORMATION",
@@ -7661,20 +7649,34 @@
             "multiple": false
           }
         }],
+        "width": 12,
+        "offset": 0,
+        "push": 0,
+        "pull": 0
+      }, {
+        "components": [],
         "width": 6,
         "offset": 0,
         "push": 0,
         "pull": 0
       }],
-      "type": "columns",
       "hideLabel": true,
+      "tableView": false,
+      "key": "page5Columns",
+      "type": "columns",
+      "input": false,
       "validate": {
         "unique": false,
         "multiple": false
-      }
+      },
+      "path": "page5Columns"
     }, {
-      "clearOnHide": false,
+      "label": "well  ",
+      "hidden": true,
+      "tableView": false,
       "key": "rateCard",
+      "type": "well",
+      "clearOnHide": false,
       "input": false,
       "components": [{
         "input": true,
@@ -8932,11 +8934,8 @@
           "multiple": false
         }
       }],
-      "tableView": false,
-      "type": "well",
       "hideLabel": true,
       "lockKey": true,
-      "label": "",
       "validate": {
         "unique": false,
         "multiple": false
@@ -8973,7 +8972,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 55,
+  "_vid": 58,
   "title": "Dive Store New Application",
   "display": "wizard",
   "access": [{
@@ -8992,6 +8991,6 @@
   "path": "divestorenewapplication",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T10:43:52.525Z",
-  "modified": "2020-03-12T07:26:05.117Z",
+  "modified": "2020-03-12T14:35:57.280Z",
   "machineName": "testdivehub:diveStoreCsrReview"
 }

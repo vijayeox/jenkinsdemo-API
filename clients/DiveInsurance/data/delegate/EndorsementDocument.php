@@ -30,8 +30,19 @@ class EndorsementDocument extends PolicyDocument
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
                      'lpfooter' => 'DiveBoat_LP_footer.html',
-                     'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf')
-      );
-        
+                     'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf'),
+        'Dive Store' 
+            => array(
+                     'template' => 'DiveStoreEndorsement', 
+                     'header' => 'DiveStoreEndorsement_header.html',
+                     'footer' => 'DiveStoreEndorsement_footer.html', 
+                     'cover_letter' => 'Dive_Store_Cover_Letter',
+                     'lheader' => 'letter_header.html',
+                     'lfooter' => 'letter_footer.html',
+                     'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
+                     'gtemplate' => 'Group_PL_COI',
+                     'gheader' => 'Group_header.html',
+                     'gfooter' => 'Group_footer.html'
+                    ));        
     }
 }
