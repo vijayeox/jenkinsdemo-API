@@ -349,19 +349,6 @@
                         },
                         "hideOnChildrenHidden": false,
                         "hideLabel": true
-                    }, {
-                        "label": "orgId",
-                        "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
-                        "key": "orgId",
-                        "type": "hidden",
-                        "input": true,
-                        "tableView": true,
-                        "lockKey": true,
-                        "hideOnChildrenHidden": false,
-                        "validate": {
-                            "unique": false,
-                            "multiple": false
-                        }
                     }],
                     "width": 4,
                     "offset": 0,
@@ -429,6 +416,19 @@
                             "multiple": false
                         },
                         "hideOnChildrenHidden": false
+                    }, {
+                        "label": "orgId",
+                        "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
+                        "key": "orgId",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": true,
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        }
                     }],
                     "width": 4,
                     "offset": 0,
@@ -451,6 +451,7 @@
             "title": "Personal Information",
             "theme": "primary",
             "breadcrumb": "none",
+            "breadcrumbClickable": true,
             "buttonSettings": {
                 "previous": true,
                 "cancel": true,
@@ -460,12 +461,7 @@
             "dataGridLabel": false,
             "tableView": false,
             "key": "panelPanel4",
-            "customConditional": "show = ((data['padiVerified'] == true || data['businessPadiVerified'] == true) && (data['user_exists']==0||data['user_exists']=='0'))",
-            "conditional": {
-                "show": true,
-                "when": "padiVerified",
-                "eq": "true"
-            },
+            "customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==false||data['policy_exists']=='false') && (data['padiVerified']==true||data['padiVerified']=='true') ) && (data['padiNotFound'] == false || data['padiNotFound'] == 'false')",
             "type": "panel",
             "label": "Personal Information",
             "input": false,
@@ -4930,49 +4926,22 @@
                 "key": "page7Columns",
                 "columns": [{
                     "components": [{
-                        "label": "Select Group Coverage",
-                        "tableView": true,
-                        "data": {
-                            "values": [{
-                                "value": "groupCoverageMoreThan0",
-                                "label": "0 to $25,000"
-                            }, {
-                                "value": "groupCoverageMoreThan25000",
-                                "label": "$25,001 to $50,000"
-                            }, {
-                                "value": "groupCoverageMoreThan50000",
-                                "label": "$50,001 to $100,000"
-                            }, {
-                                "value": "groupCoverageMoreThan100000",
-                                "label": "$100,001 to $150,000"
-                            }, {
-                                "value": "groupCoverageMoreThan150000",
-                                "label": "$150,001 to $200,000"
-                            }, {
-                                "value": "groupCoverageMoreThan200000",
-                                "label": "$200,001 to $250,000"
-                            }, {
-                                "value": "groupCoverageMoreThan250000",
-                                "label": "$250,001 to $350,000"
-                            }, {
-                                "value": "groupCoverageMoreThan350000",
-                                "label": "$350,001 to $500,000"
-                            }, {
-                                "value": "groupCoverageMoreThan500000",
-                                "label": "$500,001 and up"
-                            }]
-                        },
-                        "selectThreshold": 0.3,
-                        "clearOnHide": false,
+                        "label": "What was your annual receipt for  supervision?",
+                        "mask": false,
+                        "spellcheck": true,
+                        "tableView": false,
+                        "delimiter": true,
+                        "requireDecimal": true,
+                        "inputFormat": "plain",
                         "validate": {
                             "required": true,
                             "unique": false,
                             "multiple": false
                         },
-                        "key": "groupCoverageSelect",
-                        "type": "select",
+                        "key": "annualReceipt",
+                        "type": "number",
+                        "decimalLimit": 2,
                         "input": true,
-                        "lockKey": true,
                         "hideOnChildrenHidden": false
                     }],
                     "width": 6,
@@ -6178,6 +6147,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T11:11:22.874Z",
+    "modified": "2020-03-16T13:16:53.646Z",
     "machineName": "testdivehub:diveBoat02New"
 }

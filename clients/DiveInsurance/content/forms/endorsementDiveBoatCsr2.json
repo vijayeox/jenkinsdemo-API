@@ -4515,6 +4515,17 @@
 			"type": "select",
 			"input": true
 		}, {
+			"label": "groupCoverageSelect",
+			"calculateValue": "if(parseFloat(data['annualReceipt']) >= 0 && parseFloat(data['annualReceipt']) <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']) >= 25001 && parseFloat(data['annualReceipt']) <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']) >= 50001 && parseFloat(data['annualReceipt']) <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']) >= 100001 && parseFloat(data['annualReceipt']) <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']) >= 150001 && parseFloat(data['annualReceipt']) <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']) >= 200001 && parseFloat(data['annualReceipt']) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']) >= 250001 && data['annualReceipt'] <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']) >= 350001 && data['annualReceipt'] <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
+			"key": "groupCoverageSelect",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
+		}, {
 			"label": "well",
 			"tableView": false,
 			"key": "well2",
@@ -4536,50 +4547,22 @@
 				"key": "page7Columns",
 				"columns": [{
 					"components": [{
-						"label": "Group Coverage",
-						"widget": "choicesjs",
-						"tableView": true,
-						"data": {
-							"values": [{
-								"value": "groupCoverageMoreThan0",
-								"label": "0 to $25,000"
-							}, {
-								"value": "groupCoverageMoreThan25000",
-								"label": "$25,001 to $50,000"
-							}, {
-								"value": "groupCoverageMoreThan50000",
-								"label": "$50,001 to $100,000"
-							}, {
-								"value": "groupCoverageMoreThan100000",
-								"label": "$100,001 to $150,000"
-							}, {
-								"value": "groupCoverageMoreThan150000",
-								"label": "$150,001 to $200,000"
-							}, {
-								"value": "groupCoverageMoreThan200000",
-								"label": "$200,001 to $250,000"
-							}, {
-								"value": "groupCoverageMoreThan250000",
-								"label": "$250,001 to $350,000"
-							}, {
-								"value": "groupCoverageMoreThan350000",
-								"label": "$350,001 to $500,000"
-							}, {
-								"value": "groupCoverageMoreThan500000",
-								"label": "$500,001 and up"
-							}]
-						},
-						"selectThreshold": 0.3,
-						"clearOnHide": false,
+						"label": "What was your annual receipt for  supervision?",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": true,
+						"requireDecimal": true,
+						"inputFormat": "plain",
 						"validate": {
 							"required": true,
 							"unique": false,
 							"multiple": false
 						},
-						"key": "groupCoverageSelect",
-						"type": "select",
+						"key": "annualReceipt",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
+						"decimalLimit": 2,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -9927,6 +9910,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-16T11:11:48.777Z",
+	"modified": "2020-03-16T13:17:31.933Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }

@@ -4440,26 +4440,22 @@
 				"key": "page7Columns",
 				"columns": [{
 					"components": [{
-						"label": "Select Group Coverage",
-						"widget": "choicesjs",
-						"tableView": true,
-						"dataSrc": "custom",
-						"data": {
-							"values": [{}],
-							"custom": "if(data['endorsementGroupCoverage']){\n  for(var key in data['endorsementGroupCoverage']){\nvar item = {}\nitem.label = data['endorsementGroupCoverage'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
-						},
-						"valueProperty": "value",
-						"selectThreshold": 0.3,
-						"clearOnHide": false,
+						"label": "What was your annual receipt for  supervision?",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": true,
+						"requireDecimal": true,
+						"inputFormat": "plain",
 						"validate": {
 							"required": true,
 							"unique": false,
 							"multiple": false
 						},
-						"key": "groupCoverageSelect",
-						"type": "select",
+						"key": "annualReceipt",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
+						"decimalLimit": 2,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -5325,6 +5321,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-16T11:11:38.946Z",
+	"modified": "2020-03-16T13:17:20.660Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }
