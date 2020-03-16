@@ -713,21 +713,38 @@ class FileService extends AbstractService
         inner join ox_file_attribute on ox_file_attribute.file_id = ox_file.id
         inner join ox_field on ox_field.id = ox_file_attribute.field_id
         inner join ox_app on ox_field.app_id = ox_app.id
-        where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.data_type=:dataType
+        where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.data_type in (:dataType1 , :dataType2)
         and ox_file.uuid=:fileUuid';
         $selectQueryParams = array('organization' => AuthContext::get(AuthConstants::ORG_ID),
             'appUuid' => $params['appId'],
             'fileUuid' => $params['fileId'],
-            'dataType' => 'document');
+            'dataType1' => 'document',
+            'dataType2' => 'file');
         $this->logger->info("Executing query $selectQuery with params - " . json_encode($selectQueryParams));
+        $documentsArray = array();
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
-            if (count($selectResultSet) > 0 && isset($selectResultSet[0])) {
-                $selectResultSet[0]['field_value'] = json_decode($selectResultSet[0]['field_value'], true);
-                return $selectResultSet[0];
-            } else {
-                return array();
+            foreach ($selectResultSet as $result) {
+                $documentsArray[$result['name']] =  json_decode($result['field_value'], true);
             }
+            foreach ($documentsArray as $key=>$docItem) {
+                   if(isset($docItem) && !isset($docItem[0]['file']) ){
+                     $parseDocData = array();
+                    foreach ($docItem as $document) {
+                        $fileType = explode(".", $document);
+                        $fileName = explode("/", $document);
+                        array_push($parseDocData, 
+                            array('file' => $document, 
+                                  'type'=> 'file/' . $fileType[1],
+                                  'originalName'=> end($fileName)
+                                ));
+                    }
+                   $documentsArray[$key] =$parseDocData;
+                   } else {
+                    $documentsArray[$key] =$docItem;
+                   }
+            }
+            return $documentsArray;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             return 0;
