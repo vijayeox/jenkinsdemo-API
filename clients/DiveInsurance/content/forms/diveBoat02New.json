@@ -1285,6 +1285,7 @@
                         "delimiter": false,
                         "requireDecimal": false,
                         "inputFormat": "plain",
+                        "customDefaultValue": "if(data['business_name'] && data['business_name'] != ''){\n  value = data['padi'];\n}",
                         "calculateValue": "if(data['business_name'] && data['business_padi'] == ''){\n  value = data['padi'];\n}",
                         "validate": {
                             "required": true,
@@ -6119,6 +6120,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T03:18:02.758Z",
+    "modified": "2020-03-16T05:20:16.161Z",
     "machineName": "testdivehub:diveBoat02New"
 }
