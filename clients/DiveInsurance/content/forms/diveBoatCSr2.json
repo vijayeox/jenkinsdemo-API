@@ -138,7 +138,6 @@
 						"inputType": "number",
 						"label": "PADI Number",
 						"key": "padi",
-						"placeholder": "PADI Number",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
@@ -427,7 +426,8 @@
 							"type": "select",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"refreshOn": "country"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -595,7 +595,8 @@
 							"type": "select",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"refreshOn": "physical_country"
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1139,7 +1140,8 @@
 							"unique": false,
 							"multiple": false
 						},
-						"path": "columns"
+						"path": "columns",
+						"hideLabel": true
 					}, {
 						"label": "Columns",
 						"columns": [{
@@ -1182,7 +1184,8 @@
 								"key": "business_state",
 								"type": "select",
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"refreshOn": "business_country"
 							}],
 							"offset": 0,
 							"push": 0,
@@ -1219,7 +1222,8 @@
 							"unique": false,
 							"multiple": false
 						},
-						"path": "columns15"
+						"path": "columns15",
+						"hideLabel": true
 					}],
 					"path": "businessAddress"
 				}, {
@@ -2875,13 +2879,14 @@
 							"unique": false,
 							"multiple": false
 						},
-						"key": "engineMake",
+						"key": "engine_make",
 						"type": "datagrid",
 						"input": true,
 						"components": [{
 							"label": "Engine Make",
 							"hideLabel": true,
 							"spellcheck": true,
+							"dataGridLabel": false,
 							"tableView": true,
 							"validate": {
 								"required": true,
@@ -2893,7 +2898,8 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"inDataGrid": true
 						}],
 						"hideOnChildrenHidden": false,
 						"path": "engineMake"
@@ -3543,7 +3549,8 @@
 								"input": true,
 								"lockKey": true,
 								"clearOnRefresh": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"refreshOn": "country"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -3848,7 +3855,8 @@
 									"input": true,
 									"lockKey": true,
 									"clearOnRefresh": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"refreshOn": "country"
 								}],
 								"width": 3,
 								"offset": 0,
@@ -4282,7 +4290,8 @@
 								"input": true,
 								"lockKey": true,
 								"clearOnRefresh": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"refreshOn": "country"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -4621,8 +4630,7 @@
 				"clearOnHide": false,
 				"validate": {
 					"unique": false,
-					"multiple": false,
-					"minLength": 1
+					"multiple": false
 				},
 				"key": "groupPL",
 				"type": "editgrid",
@@ -5056,7 +5064,8 @@
 									"input": true,
 									"lockKey": true,
 									"clearOnRefresh": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"refreshOn": "country"
 								}],
 								"width": 4,
 								"offset": 0,
@@ -5182,8 +5191,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"unique": false,
-						"multiple": false,
-						"minLength": 1
+						"multiple": false
 					},
 					"key": "namedInsureds",
 					"type": "editgrid",
@@ -8549,6 +8557,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-16T05:27:04.869Z",
+	"modified": "2020-03-16T06:13:37.671Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }

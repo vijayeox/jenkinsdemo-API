@@ -701,6 +701,7 @@
                             },
                             "key": "state",
                             "type": "select",
+                            "refreshOn": "country",
                             "input": true,
                             "hideOnChildrenHidden": false
                         }],
@@ -872,7 +873,8 @@
                             "key": "physical_state",
                             "type": "select",
                             "input": true,
-                            "hideOnChildrenHidden": false
+                            "hideOnChildrenHidden": false,
+                            "refreshOn": "physical_country"
                         }],
                         "width": 4,
                         "offset": 0,
@@ -1539,7 +1541,8 @@
                             "unique": false,
                             "multiple": false
                         },
-                        "path": "columns15"
+                        "path": "columns15",
+                        "hideLabel": true
                     }, {
                         "label": "Columns",
                         "columns": [{
@@ -1585,7 +1588,8 @@
                                 "key": "business_state",
                                 "type": "select",
                                 "input": true,
-                                "hideOnChildrenHidden": false
+                                "hideOnChildrenHidden": false,
+                                "refreshOn": "business_country"
                             }],
                             "offset": 0,
                             "push": 0,
@@ -1622,7 +1626,8 @@
                             "unique": false,
                             "multiple": false
                         },
-                        "path": "columns16"
+                        "path": "columns16",
+                        "hideLabel": true
                     }],
                     "path": "panel1"
                 }, {
@@ -2401,7 +2406,8 @@
                         "key": "certified_for_max_number_of_passengers",
                         "type": "number",
                         "input": true,
-                        "hideOnChildrenHidden": false
+                        "hideOnChildrenHidden": false,
+                        "inputType": "number"
                     }, {
                         "label": "Percentage of trips for diving charters",
                         "suffix": "%",
@@ -2421,7 +2427,8 @@
                         "key": "percentage_of_trips_for_diving_charters",
                         "type": "number",
                         "input": true,
-                        "hideOnChildrenHidden": false
+                        "hideOnChildrenHidden": false,
+                        "inputType": "number"
                     }, {
                         "label": "If less than 100%, Please explain",
                         "spellcheck": true,
@@ -2647,7 +2654,8 @@
                                 "eq": "true"
                             },
                             "type": "number",
-                            "input": true
+                            "input": true,
+                            "inputType": "number"
                         }]
                     }]
                 ],
@@ -2787,7 +2795,9 @@
                     },
                     "key": "padi",
                     "type": "number",
-                    "input": true
+                    "input": true,
+                    "inDataGrid": true,
+                    "inputType": "number"
                 }],
                 "lockKey": true,
                 "path": "CrewGrid"
@@ -2949,7 +2959,8 @@
                     "unique": false,
                     "multiple": false
                 },
-                "path": "columns10"
+                "path": "columns10",
+                "hideLabel": true
             }, {
                 "label": "Columns",
                 "columns": [{
@@ -3011,7 +3022,8 @@
                         "key": "vessel_length",
                         "type": "number",
                         "input": true,
-                        "hideOnChildrenHidden": false
+                        "hideOnChildrenHidden": false,
+                        "inputType": "number"
                     }],
                     "offset": 0,
                     "push": 0,
@@ -3026,7 +3038,8 @@
                     "unique": false,
                     "multiple": false
                 },
-                "path": "columns11"
+                "path": "columns11",
+                "hideLabel": true
             }, {
                 "label": "Columns",
                 "columns": [{
@@ -3067,7 +3080,8 @@
                         "key": "maximum_range",
                         "type": "number",
                         "input": true,
-                        "hideOnChildrenHidden": false
+                        "hideOnChildrenHidden": false,
+                        "inputType": "number"
                     }],
                     "offset": 0,
                     "push": 0,
@@ -3091,7 +3105,8 @@
                         "key": "vessel_hp",
                         "type": "number",
                         "input": true,
-                        "hideOnChildrenHidden": false
+                        "hideOnChildrenHidden": false,
+                        "inputType": "number"
                     }],
                     "offset": 0,
                     "push": 0,
@@ -3106,7 +3121,8 @@
                     "unique": false,
                     "multiple": false
                 },
-                "path": "columns12"
+                "path": "columns12",
+                "hideLabel": true
             }, {
                 "label": "Columns",
                 "columns": [{
@@ -3235,7 +3251,8 @@
                     "unique": false,
                     "multiple": false
                 },
-                "path": "columns13"
+                "path": "columns13",
+                "hideLabel": true
             }, {
                 "label": "Columns",
                 "columns": [{
@@ -3314,7 +3331,8 @@
                             "type": "textfield",
                             "input": true,
                             "lockKey": true,
-                            "hideOnChildrenHidden": false
+                            "hideOnChildrenHidden": false,
+                            "inDataGrid": true
                         }],
                         "hideOnChildrenHidden": false,
                         "path": "engineMake"
@@ -3332,7 +3350,8 @@
                     "unique": false,
                     "multiple": false
                 },
-                "path": "columns1"
+                "path": "columns1",
+                "hideLabel": true
             }, {
                 "label": "Columns",
                 "columns": [{
@@ -3444,7 +3463,8 @@
                     "unique": false,
                     "multiple": false
                 },
-                "path": "columns14"
+                "path": "columns14",
+                "hideLabel": true
             }, {
                 "input": true,
                 "tableView": true,
@@ -3570,7 +3590,8 @@
                                 "key": "dingy_length",
                                 "type": "number",
                                 "input": true,
-                                "hideOnChildrenHidden": false
+                                "hideOnChildrenHidden": false,
+                                "inputType": "number"
                             }],
                             "width": 6,
                             "offset": 0,
@@ -3615,7 +3636,8 @@
                                 "type": "number",
                                 "decimalLimit": 2,
                                 "input": true,
-                                "hideOnChildrenHidden": false
+                                "hideOnChildrenHidden": false,
+                                "inputType": "number"
                             }],
                             "width": 6,
                             "offset": 0,
@@ -3988,7 +4010,8 @@
                                 "key": "state",
                                 "type": "select",
                                 "input": true,
-                                "hideOnChildrenHidden": false
+                                "hideOnChildrenHidden": false,
+                                "refreshOn": "country"
                             }],
                             "width": 4,
                             "offset": 0,
@@ -4127,7 +4150,9 @@
                     "type": "radio",
                     "input": true
                 }],
-                "path": "well3"
+                "path": "well3",
+                "clearOnHide": false,
+                "hideLabel": true
             }, {
                 "title": "Information for each Additional Insured is required as follows",
                 "theme": "primary",
@@ -4306,7 +4331,8 @@
                                     "key": "state",
                                     "type": "select",
                                     "input": true,
-                                    "hideOnChildrenHidden": false
+                                    "hideOnChildrenHidden": false,
+                                    "refreshOn": "country"
                                 }],
                                 "width": 3,
                                 "offset": 0,
@@ -4769,7 +4795,8 @@
                                 "key": "state",
                                 "type": "select",
                                 "input": true,
-                                "hideOnChildrenHidden": false
+                                "hideOnChildrenHidden": false,
+                                "refreshOn": "country"
                             }],
                             "width": 4,
                             "offset": 0,
@@ -5519,7 +5546,8 @@
                                     "key": "state",
                                     "type": "select",
                                     "input": true,
-                                    "hideOnChildrenHidden": false
+                                    "hideOnChildrenHidden": false,
+                                    "refreshOn": "country"
                                 }],
                                 "width": 4,
                                 "offset": 0,
@@ -6122,6 +6150,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T05:27:08.824Z",
+    "modified": "2020-03-16T06:13:54.262Z",
     "machineName": "testdivehub:diveBoat02New"
 }
