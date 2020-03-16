@@ -2864,15 +2864,16 @@
 						"label": "Engine Make",
 						"disableAddingRemovingRows": false,
 						"reorder": false,
+						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
 						"tableView": false,
 						"validate": {
+							"minLength": 1,
 							"unique": false,
-							"multiple": false,
-							"minLength": 1
+							"multiple": false
 						},
 						"key": "engineMake",
 						"type": "datagrid",
@@ -8484,7 +8485,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "page5Panel2Well"
 			}],
 			"type": "panel",
 			"lockKey": true,
@@ -8547,6 +8549,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-16T03:18:06.189Z",
+	"modified": "2020-03-16T05:27:04.869Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
