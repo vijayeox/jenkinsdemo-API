@@ -330,11 +330,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $endorsementFileName = 'Endorsement - '.$length;
                     $documents[$endorsementFileName] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null,$length);
                 }else{
-                    $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                    $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                    foreach ($policyDocuments as $key => $value) {
+                        $documents[$key] = $value;
+                    }
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 {
-                    $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
+                    $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
+                    foreach ($policyDocuments as $key => $value) {
+                        $documents[$key] = $value;
+                    }
                 }
             }
             
@@ -525,7 +531,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $template =  $this->template[$data['product']][$templateKey];
             }
             $this->logger->info("template slected: ".print_r($template, true));
-            $docDest = $dest['absolutePath'].$template.'.pdf';
+            if(is_array($template)){
+                $docDest = array();
+                foreach ($template as $key => $value) {
+                    $docDest[$value] = $dest['absolutePath'].$value.'.pdf';
+                }
+            } else {
+                $docDest = $dest['absolutePath'].$template.'.pdf';
+            }
             
             if($template == 'Group_PL_COI'){
                 $options['generateOptions'] = array('disable_smart_shrinking' => 1);
@@ -537,8 +550,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($headerKey) && $footerKey !=null){ 
                 $options['footer'] =  $this->template[$data['product']][$footerKey];
             }
-            if(!file_exists($docDest)){
+            if(!is_array($docDest) && !file_exists($docDest)){
                 $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
+            } else {
+                if(is_array($docDest)){
+                    foreach($docDest as $key => $doc){
+                        $this->documentBuilder->generateDocument($key,$data,$doc,$options);
+                    }
+                }
             }
             if($this->type == 'lapse'){
                 $data['documents']['lapse_document'] = $dest['relativePath'].$template.'.pdf'; 
@@ -547,7 +566,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
                 return $dest['relativePath'].$template.'-'.$length.'.pdf';
             }else{
-                return $dest['relativePath'].$template.'.pdf';
+                if(is_array($docDest)){
+                    $filesCreated = array();
+                    foreach($docDest as $key => $doc){
+                        $filesCreated[$key] = $dest['relativePath'].$key.'.pdf';
+                    }
+                    return $filesCreated;
+                } else {
+                    return $dest['relativePath'].$template.'.pdf';
+                }
             }
             
         }
@@ -559,9 +586,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $file =  $this->template[$data['product']][$fileKey];
             }
             if(!file_exists($dest)){
-                $this->documentBuilder->copyTemplateToDestination($file,$dest);
+                if(is_array($file)){
+                    $returnFiles = array();
+                    foreach ($file as $k => $v) {
+                        $this->documentBuilder->copyTemplateToDestination($v,$dest);
+                        $returnFiles[$v] = $dest.$v;
+                    }
+                    return $returnFiles;
+                } else {
+                    $this->documentBuilder->copyTemplateToDestination($file,$dest);
+                    return $dest.$file;
+                }
             }
-            return $dest.$file;
         }
     }
         

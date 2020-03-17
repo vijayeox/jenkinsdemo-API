@@ -10,6 +10,17 @@
     "theme": "primary",
     "tableView": false,
     "components": [{
+      "label": "automatic_renewal",
+      "customDefaultValue": "value = false",
+      "key": "automatic_renewal",
+      "type": "hidden",
+      "input": true,
+      "tableView": false,
+      "validate": {
+        "unique": false,
+        "multiple": false
+      }
+    }, {
       "title": "PADI Validation",
       "theme": "primary",
       "collapsible": false,
@@ -309,76 +320,6 @@
         "key": "panelPanelColumns",
         "columns": [{
           "components": [{
-            "label": "Address 1",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "validate": {
-              "unique": false,
-              "multiple": false
-            },
-            "key": "address1",
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "hideOnChildrenHidden": false
-          }, {
-            "label": "Address 2",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "validate": {
-              "unique": false,
-              "multiple": false
-            },
-            "key": "address2",
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "hideOnChildrenHidden": false
-          }],
-          "width": 4,
-          "offset": 0,
-          "push": 0,
-          "pull": 0
-        }, {
-          "components": [{
-            "label": "City",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "validate": {
-              "required": true,
-              "unique": false,
-              "multiple": false
-            },
-            "key": "city",
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "hideOnChildrenHidden": false
-          }, {
-            "label": "Zip Code",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "validate": {
-              "required": true,
-              "unique": false,
-              "multiple": false
-            },
-            "key": "zip",
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "hideOnChildrenHidden": false
-          }],
-          "width": 4,
-          "offset": 0,
-          "push": 0,
-          "pull": 0
-        }, {
-          "components": [{
             "label": "Country",
             "widget": "choicesjs",
             "placeholder": "Country",
@@ -412,6 +353,41 @@
             "clearOnRefresh": true,
             "hideOnChildrenHidden": false
           }, {
+            "label": "City",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "validate": {
+              "required": true,
+              "unique": false,
+              "multiple": false
+            },
+            "key": "city",
+            "type": "textfield",
+            "input": true,
+            "lockKey": true,
+            "hideOnChildrenHidden": false
+          }],
+          "width": 4,
+          "offset": 0,
+          "push": 0,
+          "pull": 0
+        }, {
+          "components": [{
+            "label": "Address 1",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            },
+            "key": "address1",
+            "type": "textfield",
+            "input": true,
+            "lockKey": true,
+            "hideOnChildrenHidden": false
+          }, {
             "label": "State",
             "widget": "choicesjs",
             "tableView": true,
@@ -436,6 +412,42 @@
             "hideOnChildrenHidden": false,
             "indexeddb": {},
             "clearOnRefresh": true
+          }],
+          "width": 4,
+          "offset": 0,
+          "push": 0,
+          "pull": 0
+        }, {
+          "components": [{
+            "label": "Address 2",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            },
+            "key": "address2",
+            "type": "textfield",
+            "input": true,
+            "lockKey": true,
+            "hideOnChildrenHidden": false
+          }, {
+            "label": "Zip Code",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "validate": {
+              "required": true,
+              "pattern": "[0-9\\s-]*",
+              "unique": false,
+              "multiple": false
+            },
+            "key": "zip",
+            "type": "textfield",
+            "input": true,
+            "lockKey": true,
+            "hideOnChildrenHidden": false
           }],
           "width": 4,
           "offset": 0,
@@ -482,97 +494,6 @@
         "key": "panelPanel3Columns",
         "columns": [{
           "components": [{
-            "label": "Address 1",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "validate": {
-              "unique": false,
-              "multiple": false
-            },
-            "key": "mailaddress1",
-            "conditional": {
-              "show": false,
-              "when": "sameasmailingaddress",
-              "eq": "true"
-            },
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "labelWidth": 30,
-            "labelMargin": 3,
-            "hideOnChildrenHidden": false
-          }, {
-            "label": "Address 2",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "validate": {
-              "unique": false,
-              "multiple": false
-            },
-            "key": "mailaddress2",
-            "conditional": {
-              "show": false,
-              "when": "sameasmailingaddress",
-              "eq": "true"
-            },
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "hideOnChildrenHidden": false
-          }],
-          "width": 4,
-          "offset": 0,
-          "push": 0,
-          "pull": 0
-        }, {
-          "components": [{
-            "label": "City",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "validate": {
-              "unique": false,
-              "multiple": false
-            },
-            "key": "physical_city",
-            "conditional": {
-              "show": false,
-              "when": "sameasmailingaddress",
-              "eq": "true"
-            },
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "hideOnChildrenHidden": false
-          }, {
-            "label": "Zip Code",
-            "spellcheck": true,
-            "tableView": true,
-            "clearOnHide": false,
-            "calculateValue": "value = data[\"zip\"]",
-            "validate": {
-              "unique": false,
-              "multiple": false
-            },
-            "key": "physical_zip",
-            "conditional": {
-              "show": false,
-              "when": "sameasmailingaddress",
-              "eq": "true"
-            },
-            "type": "textfield",
-            "input": true,
-            "lockKey": true,
-            "hideOnChildrenHidden": false
-          }],
-          "width": 4,
-          "offset": 0,
-          "push": 0,
-          "pull": 0
-        }, {
-          "components": [{
             "label": "Country",
             "widget": "choicesjs",
             "placeholder": "Country",
@@ -604,6 +525,52 @@
             },
             "type": "select",
             "refreshOn": "data",
+            "input": true,
+            "lockKey": true,
+            "labelWidth": 30,
+            "labelMargin": 3,
+            "hideOnChildrenHidden": false
+          }, {
+            "label": "City",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            },
+            "key": "physical_city",
+            "conditional": {
+              "show": false,
+              "when": "sameasmailingaddress",
+              "eq": "true"
+            },
+            "type": "textfield",
+            "input": true,
+            "lockKey": true,
+            "hideOnChildrenHidden": false
+          }],
+          "width": 4,
+          "offset": 0,
+          "push": 0,
+          "pull": 0
+        }, {
+          "components": [{
+            "label": "Address 1",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            },
+            "key": "mailaddress1",
+            "conditional": {
+              "show": false,
+              "when": "sameasmailingaddress",
+              "eq": "true"
+            },
+            "type": "textfield",
             "input": true,
             "lockKey": true,
             "labelWidth": 30,
@@ -642,6 +609,52 @@
             "input": true,
             "lockKey": true,
             "clearOnRefresh": true,
+            "hideOnChildrenHidden": false
+          }],
+          "width": 4,
+          "offset": 0,
+          "push": 0,
+          "pull": 0
+        }, {
+          "components": [{
+            "label": "Address 2",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            },
+            "key": "mailaddress2",
+            "conditional": {
+              "show": false,
+              "when": "sameasmailingaddress",
+              "eq": "true"
+            },
+            "type": "textfield",
+            "input": true,
+            "lockKey": true,
+            "hideOnChildrenHidden": false
+          }, {
+            "label": "Zip Code",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "calculateValue": "value = data[\"zip\"]",
+            "validate": {
+              "pattern": "[0-9\\s-]*",
+              "unique": false,
+              "multiple": false
+            },
+            "key": "physical_zip",
+            "conditional": {
+              "show": false,
+              "when": "sameasmailingaddress",
+              "eq": "true"
+            },
+            "type": "textfield",
+            "input": true,
+            "lockKey": true,
             "hideOnChildrenHidden": false
           }],
           "width": 4,
@@ -890,7 +903,8 @@
     "validate": {
       "unique": false,
       "multiple": false
-    }
+    },
+    "path": "panelPanel4"
   }, {
     "key": "panelPanel",
     "input": false,
@@ -996,73 +1010,6 @@
           "label": "Columns",
           "columns": [{
             "components": [{
-              "label": "Address 1",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_address1",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Adddress 2",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_address2",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "width": 4,
-            "offset": 0,
-            "push": 0,
-            "pull": 0
-          }, {
-            "components": [{
-              "label": "City",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_city",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Zip Code",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_zip",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "width": 4,
-            "offset": 0,
-            "push": 0,
-            "pull": 0
-          }, {
-            "components": [{
               "label": "Country",
               "widget": "choicesjs",
               "placeholder": "Country",
@@ -1086,6 +1033,40 @@
               },
               "key": "business_country",
               "type": "select",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }, {
+              "label": "City",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "required": true,
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_city",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }],
+            "width": 4,
+            "offset": 0,
+            "push": 0,
+            "pull": 0
+          }, {
+            "components": [{
+              "label": "Address 1",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "required": true,
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_address1",
+              "type": "textfield",
               "input": true,
               "lockKey": true,
               "hideOnChildrenHidden": false
@@ -1114,6 +1095,39 @@
               "input": true,
               "lockKey": true,
               "clearOnRefresh": true,
+              "hideOnChildrenHidden": false
+            }],
+            "width": 4,
+            "offset": 0,
+            "push": 0,
+            "pull": 0
+          }, {
+            "components": [{
+              "label": "Adddress 2",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_address2",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }, {
+              "label": "Zip Code",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "required": true,
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_zip",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
               "hideOnChildrenHidden": false
             }],
             "width": 4,
@@ -1299,13 +1313,17 @@
       "columns": [{
         "components": [{
           "label": "Requested Policy Period",
-          "format": "yyyy-MM-dd HH:mm a",
+          "allowInput": false,
+          "format": "MM-dd-yyyy",
           "tableView": true,
           "datePicker": {
-            "minDate": "2020-01-31T07:32:21.738Z",
+            "minDate": "moment(). format('MM-dd-yyyy');",
             "datepickerMode": "month"
           },
-          "defaultDate": "2020-01-10T12:00:00+05:30",
+          "enableTime": false,
+          "timePicker": {
+            "showMeridian": false
+          },
           "clearOnHide": false,
           "validate": {
             "required": true,
@@ -1323,15 +1341,15 @@
             "displayInTimezone": "viewer",
             "language": "en",
             "useLocaleSettings": false,
-            "allowInput": true,
+            "allowInput": false,
             "mode": "single",
-            "enableTime": true,
+            "enableTime": false,
             "noCalendar": false,
-            "format": "yyyy-MM-dd HH:mm a",
+            "format": "MM-dd-yyyy",
             "hourIncrement": 1,
             "minuteIncrement": 1,
-            "time_24hr": false,
-            "minDate": "2020-01-31T07:32:21.738Z",
+            "time_24hr": true,
+            "minDate": "moment(). format('MM-dd-yyyy');",
             "maxDate": null
           }
         }, {
@@ -2799,15 +2817,38 @@
           "optionsLabelPosition": "right",
           "lockKey": true
         }, {
+          "label": "Please list the date of the claim, the amount paid and any amounts outstanding",
+          "disableAddingRemovingRows": false,
+          "reorder": false,
+          "addAnotherPosition": "bottom",
+          "defaultOpen": false,
+          "layoutFixed": false,
+          "enableRowGroups": false,
+          "tableView": true,
+          "clearOnHide": false,
+          "validate": {
+            "unique": false,
+            "multiple": false,
+            "minLength": 1
+          },
+          "key": "dsglClaimAmountpaidanyamountsoutstanding",
+          "conditional": {
+            "show": true,
+            "when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
+            "eq": "yes"
+          },
+          "type": "datagrid",
           "input": true,
           "components": [{
             "label": "Date of the claim",
-            "format": "yyyy-MM-dd hh:mm",
+            "format": "MM-dd-yyyy",
             "dataGridLabel": false,
             "tableView": false,
             "datePicker": {
+              "maxDate": "moment(). format('MM-dd-yyyy');",
               "datepickerMode": "day"
             },
+            "enableTime": false,
             "timePicker": {
               "showMeridian": false
             },
@@ -2829,14 +2870,14 @@
               "useLocaleSettings": false,
               "allowInput": true,
               "mode": "single",
-              "enableTime": true,
+              "enableTime": false,
               "noCalendar": false,
-              "format": "yyyy-MM-dd hh:mm",
+              "format": "MM-dd-yyyy",
               "hourIncrement": 1,
               "minuteIncrement": 1,
               "time_24hr": true,
               "minDate": null,
-              "maxDate": null
+              "maxDate": "moment(). format('MM-dd-yyyy');"
             },
             "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
           }, {
@@ -2886,17 +2927,6 @@
             "labelWidth": 0,
             "labelMargin": 3
           }],
-          "tableView": true,
-          "label": "Please list the date of the claim, the amount paid and any amounts outstanding",
-          "key": "dsglClaimAmountpaidanyamountsoutstanding",
-          "clearOnHide": false,
-          "type": "datagrid",
-          "addAnotherPosition": "bottom",
-          "conditional": {
-            "show": "true",
-            "when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
-            "eq": "yes"
-          },
           "lockKey": true
         }, {
           "label": "Previous Insurance Company",
@@ -3009,9 +3039,9 @@
           "tableView": true,
           "clearOnHide": false,
           "validate": {
+            "minLength": 1,
             "unique": false,
-            "multiple": false,
-            "minLength": 1
+            "multiple": false
           },
           "key": "additionalInsured",
           "conditional": {
@@ -3131,7 +3161,7 @@
                   "unique": false,
                   "multiple": false
                 },
-                "key": "address4",
+                "key": "address",
                 "type": "textfield",
                 "input": true,
                 "lockKey": true,
@@ -3146,7 +3176,7 @@
                   "unique": false,
                   "multiple": false
                 },
-                "key": "zip1",
+                "key": "zip",
                 "type": "textfield",
                 "input": true,
                 "lockKey": true,
@@ -3285,9 +3315,9 @@
           "tableView": true,
           "clearOnHide": false,
           "validate": {
+            "minLength": 1,
             "unique": false,
-            "multiple": false,
-            "minLength": 1
+            "multiple": false
           },
           "key": "lossPayees",
           "type": "datagrid",
@@ -3403,7 +3433,7 @@
                   "unique": false,
                   "multiple": false
                 },
-                "key": "address3",
+                "key": "address",
                 "type": "textfield",
                 "input": true,
                 "lockKey": true,
@@ -4819,10 +4849,16 @@
                   "columns": [{
                     "components": [{
                       "label": "Date of the claim",
-                      "format": "yyyy-MM-dd HH:mm a",
+                      "allowInput": false,
+                      "format": "MM-dd-yyyy",
                       "tableView": true,
                       "datePicker": {
+                        "maxDate": "moment(). format('MM-dd-yyyy');",
                         "datepickerMode": "day"
+                      },
+                      "enableTime": false,
+                      "timePicker": {
+                        "showMeridian": false
                       },
                       "validate": {
                         "required": true,
@@ -4838,16 +4874,16 @@
                         "displayInTimezone": "viewer",
                         "language": "en",
                         "useLocaleSettings": false,
-                        "allowInput": true,
+                        "allowInput": false,
                         "mode": "single",
-                        "enableTime": true,
+                        "enableTime": false,
                         "noCalendar": false,
-                        "format": "yyyy-MM-dd HH:mm a",
+                        "format": "MM-dd-yyyy",
                         "hourIncrement": 1,
                         "minuteIncrement": 1,
-                        "time_24hr": false,
+                        "time_24hr": true,
                         "minDate": null,
-                        "maxDate": null
+                        "maxDate": "moment(). format('MM-dd-yyyy');"
                       },
                       "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
                     }],
@@ -10471,7 +10507,7 @@
     }
   }],
   "revisions": "original",
-  "_vid": 178,
+  "_vid": 181,
   "title": "Dive Store CSR Copy",
   "display": "form",
   "access": [{
@@ -10488,7 +10524,7 @@
   "path": "divestorecsrcopy",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-25T06:20:36.507Z",
-  "modified": "2020-03-17T09:04:33.867Z",
+  "modified": "2020-03-17T10:23:52.682Z",
   "machineName": "testdivehub:diveStoreCsrCopy",
   "controller": ""
 }
