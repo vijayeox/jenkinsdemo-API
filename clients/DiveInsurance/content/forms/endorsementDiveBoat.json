@@ -28,7 +28,8 @@
 				"modify_boatUsageCaptainCrewSchedule": false,
 				"modify_additionalInsured": false,
 				"modify_lossPayees": false,
-				"modify_groupProfessionalLiability": false
+				"modify_groupProfessionalLiability": false,
+				"modify_personalInformation": false
 			},
 			"values": [{
 				"label": "Personal Information",
@@ -66,7 +67,8 @@
 			"key": "endorsement_options",
 			"type": "selectboxes",
 			"input": true,
-			"inputType": "checkbox"
+			"inputType": "checkbox",
+			"clearOnHide": false
 		}, {
 			"title": "Automatic Renewal",
 			"theme": "primary",
@@ -93,7 +95,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"clearOnHide": false
 			}, {
 				"label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
 				"tableView": true,
@@ -106,7 +109,8 @@
 				"type": "checkbox",
 				"input": true,
 				"dataGridLabel": false,
-				"lockKey": true
+				"lockKey": true,
+				"clearOnHide": false
 			}],
 			"validate": {
 				"unique": false,
@@ -123,7 +127,7 @@
 		"conditional": {
 			"show": true,
 			"when": "endorsement_options",
-			"eq": "modify_personinformation"
+			"eq": "modify_personalInformation"
 		},
 		"type": "panel",
 		"label": "Personal Information",
@@ -626,6 +630,7 @@
 								"valueProperty": "dial_code",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"validate": {
 									"unique": false,
@@ -646,6 +651,7 @@
 								"placeholder": " ",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"validate": {
 									"customMessage": "Please enter a valid phone number",
 									"unique": false,
@@ -698,6 +704,7 @@
 								"valueProperty": "dial_code",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"validate": {
 									"unique": false,
@@ -1218,6 +1225,7 @@
 									},
 									"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 									"selectThreshold": 0.3,
+									"clearOnHide": false,
 									"calculateValue": "if(data.business_country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.business_country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 									"validate": {
 										"unique": false,
@@ -1238,6 +1246,7 @@
 									"placeholder": " ",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"validate": {
 										"required": true,
 										"customMessage": "Please enter a valid phone number",
@@ -1718,6 +1727,7 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -1725,10 +1735,10 @@
 						},
 						"key": "amount",
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inDataGrid": true,
-						"inputType": "number",
-						"decimalLimit": 2
+						"inputType": "number"
 					}],
 					"lockKey": true,
 					"path": "DataGrid"
@@ -1868,6 +1878,7 @@
 						"label": "Registry Number",
 						"spellcheck": true,
 						"tableView": true,
+						"clearOnHide": false,
 						"validate": {
 							"unique": false,
 							"multiple": false
@@ -1950,6 +1961,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter certified for maximum number of passengers.",
@@ -1970,6 +1982,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"max": 100,
@@ -2206,6 +2219,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"unique": false,
@@ -2253,10 +2267,11 @@
 				"enableRowGroups": false,
 				"hideLabel": true,
 				"tableView": true,
+				"clearOnHide": false,
 				"validate": {
+					"minLength": 1,
 					"unique": false,
-					"multiple": false,
-					"minLength": 1
+					"multiple": false
 				},
 				"key": "CrewGrid",
 				"type": "datagrid",
@@ -2345,10 +2360,12 @@
 					"label": "PADI Number",
 					"mask": false,
 					"spellcheck": true,
+					"dataGridLabel": false,
 					"tableView": false,
 					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
+					"clearOnHide": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
@@ -2483,6 +2500,7 @@
 						},
 						"template": "<span>{{ item }}</span>",
 						"selectThreshold": 0.3,
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2563,6 +2581,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2622,6 +2641,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2647,6 +2667,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2685,6 +2706,7 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2711,6 +2733,7 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2937,6 +2960,7 @@
 						"layoutFixed": false,
 						"enableRowGroups": false,
 						"tableView": true,
+						"clearOnHide": false,
 						"validate": {
 							"unique": false,
 							"multiple": false
@@ -2979,10 +3003,11 @@
 						"layoutFixed": false,
 						"enableRowGroups": false,
 						"tableView": false,
+						"clearOnHide": false,
 						"validate": {
+							"minLength": 1,
 							"unique": false,
-							"multiple": false,
-							"minLength": 1
+							"multiple": false
 						},
 						"key": "engine_make",
 						"type": "datagrid",
@@ -2991,6 +3016,7 @@
 							"label": "Engine Make",
 							"hideLabel": true,
 							"spellcheck": true,
+							"dataGridLabel": false,
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
@@ -3127,6 +3153,7 @@
 								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
 									"unique": false,
@@ -3154,6 +3181,7 @@
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"validate": {
 									"unique": false,
 									"multiple": false
@@ -3171,6 +3199,7 @@
 								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
 									"unique": false,
@@ -3273,6 +3302,7 @@
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
 									"unique": false,
@@ -3444,6 +3474,7 @@
 						"value": "noAdditionalInsureds",
 						"shortcut": ""
 					}],
+					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"customMessage": "Please choose whether you would like to add Additional Insured",
@@ -3486,6 +3517,7 @@
 					"input": true,
 					"components": [{
 						"label": "Well",
+						"dataGridLabel": false,
 						"tableView": false,
 						"key": "well1",
 						"type": "well",
@@ -3625,9 +3657,9 @@
 									},
 									"key": "state",
 									"type": "select",
+									"refreshOn": "country",
 									"input": true,
-									"hideOnChildrenHidden": false,
-									"refreshOn": "country"
+									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
 								"offset": 0,
@@ -3638,6 +3670,7 @@
 									"label": "Zip Code",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"validate": {
 										"required": true,
 										"pattern": "[0-9\\s-]*",
@@ -3934,10 +3967,11 @@
 				"enableRowGroups": false,
 				"hideLabel": true,
 				"tableView": false,
+				"clearOnHide": false,
 				"validate": {
+					"minLength": 1,
 					"unique": false,
-					"multiple": false,
-					"minLength": 1
+					"multiple": false
 				},
 				"key": "additionalNamedInsured",
 				"type": "datagrid",
@@ -4096,6 +4130,7 @@
 								"label": "Zip Code",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
 									"pattern": "[0-9\\s-]*",
@@ -4190,10 +4225,11 @@
 			"enableRowGroups": false,
 			"hideLabel": true,
 			"tableView": false,
+			"clearOnHide": false,
 			"validate": {
+				"minLength": 1,
 				"unique": false,
-				"multiple": false,
-				"minLength": 1
+				"multiple": false
 			},
 			"key": "lossPayees",
 			"conditional": {
@@ -4345,6 +4381,7 @@
 							"label": "Zip Code",
 							"spellcheck": true,
 							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"pattern": "[0-9\\s-]*",
@@ -4447,6 +4484,7 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -4454,8 +4492,8 @@
 						},
 						"key": "annualReceipt",
 						"type": "number",
-						"input": true,
 						"decimalLimit": 2,
+						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -4910,9 +4948,9 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
+						"minLength": 1,
 						"unique": false,
-						"multiple": false,
-						"minLength": 1
+						"multiple": false
 					},
 					"key": "groupAdditionalInsured",
 					"type": "datagrid",
@@ -5321,6 +5359,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-16T13:17:20.660Z",
+	"modified": "2020-03-16T15:49:36.780Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }
