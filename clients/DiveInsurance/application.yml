@@ -558,6 +558,8 @@ menu:
                             - padi
                             - firstname
                             - lastname
+                            - product
+                            - phone
                         operations:
                             title: 'Create Policy'
                             actions:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0s90c27" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0s90c27" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="Process_1jsc7lc" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Auto Renewal Process" camunda:asyncAfter="true">
       <bpmn:outgoing>SequenceFlow_1xtw30t</bpmn:outgoing>
@@ -146,7 +146,7 @@ execution.setVariable("process_reminder",true)</camunda:script>
     <bpmn:userTask id="Task_1rdb4rd" name="IPL CSR Review">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="iplCsrReview" />
+          <camunda:property name="template" value="csrInitiatesIpl" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_02fzixm</bpmn:incoming>
