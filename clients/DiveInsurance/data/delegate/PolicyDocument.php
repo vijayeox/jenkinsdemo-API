@@ -387,6 +387,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
             }
+            $data['CSRReviewRequired'] = "";
+            $data['rejectionReason'] = "";
             $data['policyStatus'] = "In Force";
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;

@@ -2,6 +2,7 @@
 
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
+use Oxzion\AppDelegate\UserContextTrait;
 
 class SetupEndorsement extends AbstractAppDelegate
 {
@@ -12,52 +13,57 @@ class SetupEndorsement extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
-        $rates = $this->getRates($data,$persistenceService);
-        $data = array_merge($data,$rates);
-        $data['policyStatus'] = "Pending Approval";
-        if(isset($data['liabilityCoverageName'])){
-            $data['careerCoverage'] = $data['liabilityCoverageName'];
-        }
-        if(isset($data['approved'])){
-            unset($data['approved']);
-        }
-        if(isset($data['endorsement_options'])){
-           foreach($data['endorsement_options'] as $key=>$value) {
-                if(isset($data['endorsement_options'][$key])) {
-                    unset($data['endorsement_options'][$key]);
+        $data['privilege'] = $this->getPrivilege();
+        if(isset($data['privilege']['MANAGE_MY_POLICY_WRITE']) && 
+            $data['privilege']['MANAGE_MY_POLICY_WRITE'] == true){
+             $rates = $this->getRates($data,$persistenceService);
+                $data = array_merge($data,$rates);
+                $data['policyStatus'] = "Pending Approval";
+                if(isset($data['liabilityCoverageName'])){
+                    $data['careerCoverage'] = $data['liabilityCoverageName'];
                 }
-            }
-           $data['endorsementCoverage'] = array();
-           $data['endorsementCylinder'] = array();
-           $data['endorsementExcessLiability'] = array();
-        }
-        if(isset($data['careerCoverage'])){
-            $data['careerCoveragePrice'] = 0;
-        }
-        if(isset($data['scubaFit']) && isset($data[$data['scubaFit']])){
-            $data['scubaFitPrice'] = 0;
-            $data['previousScubafit'] = $data['scubaFit'];
-        }
-        if(isset($data['cylinder']) && isset($data[$data['cylinder']])){
-            $data['cylinderPrice'] = 0;
-        }
-        if(isset($data['equipment']) && isset($data[$data['equipment']])){
-            $data['equipmentPrice'] = 0;
-            $data['previous_equipmentLiability'] = $data['equipment'];
-        }
+                if(isset($data['approved'])){
+                    unset($data['approved']);
+                }
+                if(isset($data['endorsement_options'])){
+                   foreach($data['endorsement_options'] as $key=>$value) {
+                        if(isset($data['endorsement_options'][$key])) {
+                            unset($data['endorsement_options'][$key]);
+                        }
+                    }
+                   $data['endorsementCoverage'] = array();
+                   $data['endorsementCylinder'] = array();
+                   $data['endorsementExcessLiability'] = array();
+                }
+                if(isset($data['careerCoverage'])){
+                    $data['careerCoveragePrice'] = 0;
+                }
+                if(isset($data['scubaFit']) && isset($data[$data['scubaFit']])){
+                    $data['scubaFitPrice'] = 0;
+                    $data['previousScubafit'] = $data['scubaFit'];
+                }
+                if(isset($data['cylinder']) && isset($data[$data['cylinder']])){
+                    $data['cylinderPrice'] = 0;
+                }
+                if(isset($data['equipment']) && isset($data[$data['equipment']])){
+                    $data['equipmentPrice'] = 0;
+                    $data['previous_equipmentLiability'] = $data['equipment'];
+                }
 
-        if(isset($data['excessLiability']) && isset($data[$data['excessLiability']])){
-            $data['excessLiabilityPrice'] = 0;
+                if(isset($data['excessLiability']) && isset($data[$data['excessLiability']])){
+                    $data['excessLiabilityPrice'] = 0;
+                }
+                $data['update_date'] = date("Y-m-d");
+                if(isset($data['start_date_range'])){
+                    if(is_string($data['start_date_range'])){
+                        $startDateRange = json_decode($data['start_date_range'],true);
+                    } else {
+                        $startDateRange = $data['start_date_range'];
+                    }
+                    $data['startDateRange'] = $startDateRange['label'];
+                }
         }
-        $data['update_date'] = date("Y-m-d");
-        if(isset($data['start_date_range'])){
-            if(is_string($data['start_date_range'])){
-                $startDateRange = json_decode($data['start_date_range'],true);
-            } else {
-                $startDateRange = $data['start_date_range'];
-            }
-            $data['startDateRange'] = $startDateRange['label'];
-        }
+        unset($data['privilege']);
         return $data;
     }
     protected function getRates($data,$persistenceService){
