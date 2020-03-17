@@ -147,7 +147,10 @@ menu:
                                             documentTypes:
                                                 -
                                                     title: 'Policy Documents'
-                                                    field: field_value
+                                                    field: documents
+                                                -
+                                                    title: 'Attachments'
+                                                    field: attachments
                             -
                                 name: Endorsement
                                 rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
@@ -507,7 +510,10 @@ menu:
                                             documentTypes:
                                                 -
                                                     title: 'Policy Documents'
-                                                    field: field_value
+                                                    field: documents
+                                                -
+                                                    title: 'Attachments'
+                                                    field: attachments
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
@@ -655,7 +661,7 @@ menu:
                                             documentTypes:
                                                 -
                                                     title: 'Pocket Cards'
-                                                    field: field_value
+                                                    field: documents
                         operations:
                             title: 'Pocket Card'
                             actions:
