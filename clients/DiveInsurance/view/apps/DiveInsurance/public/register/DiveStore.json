@@ -661,7 +661,6 @@
             },
             "template": "<span>{{ item }}</span>",
             "selectThreshold": 0.3,
-            "clearOnHide": false,
             "validate": {
               "required": true,
               "unique": false,
@@ -760,7 +759,6 @@
             "label": "Zip Code",
             "spellcheck": true,
             "tableView": true,
-            "clearOnHide": false,
             "validate": {
               "required": true,
               "pattern": "[0-9\\s-]*",
@@ -837,8 +835,8 @@
             },
             "template": "<span>{{ item }}</span>",
             "selectThreshold": 0.3,
-            "clearOnHide": false,
             "validate": {
+              "required": true,
               "unique": false,
               "multiple": false
             },
@@ -857,6 +855,7 @@
             "spellcheck": true,
             "tableView": true,
             "validate": {
+              "required": true,
               "unique": false,
               "multiple": false
             },
@@ -880,6 +879,7 @@
             "spellcheck": true,
             "tableView": true,
             "validate": {
+              "required": true,
               "unique": false,
               "multiple": false
             },
@@ -911,8 +911,8 @@
             },
             "template": "<span>{{ item }}</span>",
             "selectThreshold": 0.3,
-            "clearOnHide": false,
             "validate": {
+              "required": true,
               "unique": false,
               "multiple": false
             },
@@ -956,6 +956,7 @@
             "spellcheck": true,
             "tableView": true,
             "validate": {
+              "required": true,
               "pattern": "[0-9\\s-]*",
               "customMessage": "Please enter a valid Zip Code for your region.",
               "unique": false,
@@ -1216,7 +1217,7 @@
     }
   }],
   "revisions": "current",
-  "_vid": 39,
+  "_vid": 40,
   "title": "Registration Dive Store Copy",
   "display": "form",
   "access": [{
@@ -1230,7 +1231,7 @@
   "path": "registrationdivestorecopy",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-08T14:11:51.133Z",
-  "modified": "2020-03-17T06:02:44.248Z",
+  "modified": "2020-03-17T09:35:26.716Z",
   "machineName": "testdivehub:registrationDiveStoreCopy",
   "controller": ""
 }

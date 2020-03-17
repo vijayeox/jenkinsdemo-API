@@ -357,6 +357,13 @@ label {
     background-color: #053b6d !important;
     border-color: #053b6d !important;
 }
+.card .card-header{
+  background-color: #053b6d !important;
+}
+
+.docViewerComponent .image-download-button{
+  background-color: #053b6d !important;
+}
 
 @import "variables.scss";
 @import "eox.scss";

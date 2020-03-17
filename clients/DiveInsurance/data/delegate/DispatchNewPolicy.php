@@ -26,7 +26,7 @@ class DispatchNewPolicy extends DispatchDocument {
         $this->required = array(
             'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','blanket_document']),
             'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
-            'Dive Store' => array('docs' => ['liability_policy_document','property_policy_document','property_coi_document','liability_coi_document','cover_letter']),
+            'Dive Store' => array('docs' => ['Dive_Store_Liability_Policy.pdf','Dive_Store_Property_Policy.pdf','DiveStore_Property_COI','DiveStore_Liability_COI','cover_letter']),
             'Emergency First Response' => array('docs' => ['policy_document','coi_document']));
         parent::__construct();
     }
