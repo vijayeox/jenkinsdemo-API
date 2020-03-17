@@ -331,15 +331,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents[$endorsementFileName] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null,$length);
                 }else{
                     $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-                    foreach ($policyDocuments as $key => $value) {
-                        $documents[$key] = $value;
+                    if(is_array($policyDocuments)){
+                        foreach ($policyDocuments as $key => $value) {
+                            $documents[$key] = $value;
+                        }
+                    } else {
+                        $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     }
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 {
                     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
-                    foreach ($policyDocuments as $key => $value) {
-                        $documents[$key] = $value;
+                    if(is_array($policyDocuments)){
+                        foreach ($policyDocuments as $key => $value) {
+                            $documents[$key] = $value;
+                        } 
+                    } else {
+                        $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
                     }
                 }
             }
