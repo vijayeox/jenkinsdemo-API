@@ -7454,6 +7454,22 @@
             "multiple": false
           }
         }, {
+          "label": "Edit Grid",
+          "disableAddingRemovingRows": false,
+          "hideLabel": true,
+          "tableView": true,
+          "templates": {
+            "header": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ component.label }} \n    </div> \n  {% }) %} \n</div>",
+            "row": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ getView(component, row[component.key]) }} \n    </div> \n  {% }) %} \n  <div class=\"col-sm-2\"> \n    <div class=\"btn-group pull-right\"> \n      <div class=\"btn btn-default editRow\">Edit</div> \n      <div class=\"btn btn-danger removeRow\">Delete</div> \n    </div> \n  </div> \n</div>"
+          },
+          "modal": false,
+          "clearOnHide": false,
+          "validate": {
+            "unique": false,
+            "multiple": false
+          },
+          "key": "groupNamedInsureds",
+          "type": "editgrid",
           "input": true,
           "components": [{
             "label": "Columns",
@@ -7519,21 +7535,7 @@
             "type": "hidden",
             "lockKey": true
           }],
-          "tableView": true,
-          "label": "Edit Grid",
-          "key": "namedInsureds",
-          "clearOnHide": false,
-          "templates": {
-            "header": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ component.label }} \n    </div> \n  {% }) %} \n</div>",
-            "row": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ getView(component, row[component.key]) }} \n    </div> \n  {% }) %} \n  <div class=\"col-sm-2\"> \n    <div class=\"btn-group pull-right\"> \n      <div class=\"btn btn-default editRow\">Edit</div> \n      <div class=\"btn btn-danger removeRow\">Delete</div> \n    </div> \n  </div> \n</div>"
-          },
-          "type": "editgrid",
           "lockKey": true,
-          "hideLabel": true,
-          "validate": {
-            "unique": false,
-            "multiple": false
-          },
           "isNew": false
         }],
         "type": "panel",
@@ -10507,7 +10509,7 @@
     }
   }],
   "revisions": "original",
-  "_vid": 181,
+  "_vid": 182,
   "title": "Dive Store CSR Copy",
   "display": "form",
   "access": [{
@@ -10524,7 +10526,7 @@
   "path": "divestorecsrcopy",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-25T06:20:36.507Z",
-  "modified": "2020-03-17T10:23:52.682Z",
+  "modified": "2020-03-18T10:51:27.941Z",
   "machineName": "testdivehub:diveStoreCsrCopy",
   "controller": ""
 }
