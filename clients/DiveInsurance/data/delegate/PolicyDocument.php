@@ -336,7 +336,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents[$key] = $value;
                         }
                     } else {
-                        $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                        $documents['coi_document']  = $policyDocuments;
                     }
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
@@ -347,7 +347,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents[$key] = $value;
                         } 
                     } else {
-                        $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
+                        $documents['policy_document'] = $policyDocuments;
                     }
                 }
             }
