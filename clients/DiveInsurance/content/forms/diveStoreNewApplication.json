@@ -321,6 +321,19 @@
               "multiple": false
             },
             "hideOnChildrenHidden": false
+          }, {
+            "input": true,
+            "tableView": true,
+            "key": "product",
+            "label": "product",
+            "type": "hidden",
+            "defaultValue": "Dive Store",
+            "lockKey": true,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            },
+            "hideOnChildrenHidden": false
           }],
           "width": 4,
           "offset": 0,
@@ -502,76 +515,6 @@
           "key": "panelPanelColumns",
           "columns": [{
             "components": [{
-              "label": "Address 1",
-              "spellcheck": false,
-              "tableView": false,
-              "clearOnHide": false,
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "address1",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Address 2",
-              "spellcheck": true,
-              "tableView": true,
-              "clearOnHide": false,
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "address2",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "width": 4,
-            "offset": 0,
-            "push": 0,
-            "pull": 0
-          }, {
-            "components": [{
-              "label": "City",
-              "spellcheck": true,
-              "tableView": true,
-              "clearOnHide": false,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "city",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Zip Code",
-              "spellcheck": true,
-              "tableView": true,
-              "clearOnHide": false,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "zip",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "width": 4,
-            "offset": 0,
-            "push": 0,
-            "pull": 0
-          }, {
-            "components": [{
               "label": "Country",
               "widget": "choicesjs",
               "placeholder": "Country",
@@ -598,12 +541,47 @@
                 "unique": false,
                 "multiple": false
               },
-              "key": "country",
+              "key": "country1",
               "type": "select",
               "refreshOn": "countrylist",
               "input": true,
               "lockKey": true,
               "clearOnRefresh": true,
+              "hideOnChildrenHidden": false
+            }, {
+              "label": "City",
+              "spellcheck": true,
+              "tableView": true,
+              "clearOnHide": false,
+              "validate": {
+                "required": true,
+                "unique": false,
+                "multiple": false
+              },
+              "key": "city",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }],
+            "width": 4,
+            "offset": 0,
+            "push": 0,
+            "pull": 0
+          }, {
+            "components": [{
+              "label": "Address 1",
+              "spellcheck": false,
+              "tableView": false,
+              "clearOnHide": false,
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "address1",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
               "hideOnChildrenHidden": false
             }, {
               "label": "State",
@@ -630,6 +608,41 @@
               "hideOnChildrenHidden": false,
               "indexeddb": {},
               "clearOnRefresh": true
+            }],
+            "width": 4,
+            "offset": 0,
+            "push": 0,
+            "pull": 0
+          }, {
+            "components": [{
+              "label": "Address 2",
+              "spellcheck": true,
+              "tableView": true,
+              "clearOnHide": false,
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "address2",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }, {
+              "label": "Zip Code",
+              "spellcheck": true,
+              "tableView": true,
+              "clearOnHide": false,
+              "validate": {
+                "required": true,
+                "unique": false,
+                "multiple": false
+              },
+              "key": "zip",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
             }],
             "width": 4,
             "offset": 0,
@@ -676,77 +689,6 @@
           "key": "panelPanel3Columns",
           "columns": [{
             "components": [{
-              "label": "Address 1",
-              "spellcheck": true,
-              "tableView": true,
-              "clearOnHide": false,
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "mailaddress1",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "labelWidth": 30,
-              "labelMargin": 3,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Address 2",
-              "spellcheck": true,
-              "tableView": true,
-              "clearOnHide": false,
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "mailaddress2",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "width": 4,
-            "offset": 0,
-            "push": 0,
-            "pull": 0
-          }, {
-            "components": [{
-              "label": "City",
-              "spellcheck": true,
-              "tableView": true,
-              "clearOnHide": false,
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "physical_city",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Zip code",
-              "spellcheck": true,
-              "tableView": true,
-              "clearOnHide": false,
-              "calculateValue": "value = data[\"zip\"]",
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "physical_zip",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "width": 4,
-            "offset": 0,
-            "push": 0,
-            "pull": 0
-          }, {
-            "components": [{
               "label": "Country",
               "widget": "choicesjs",
               "placeholder": "Country",
@@ -782,6 +724,42 @@
               "clearOnRefresh": true,
               "hideOnChildrenHidden": false
             }, {
+              "label": "City",
+              "spellcheck": true,
+              "tableView": true,
+              "clearOnHide": false,
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "physical_city",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }],
+            "width": 4,
+            "offset": 0,
+            "push": 0,
+            "pull": 0
+          }, {
+            "components": [{
+              "label": "Address 1",
+              "spellcheck": true,
+              "tableView": true,
+              "clearOnHide": false,
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "mailaddress1",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "labelWidth": 30,
+              "labelMargin": 3,
+              "hideOnChildrenHidden": false
+            }, {
               "label": "State",
               "widget": "choicesjs",
               "tableView": true,
@@ -811,6 +789,41 @@
               "input": true,
               "lockKey": true,
               "clearOnRefresh": true,
+              "hideOnChildrenHidden": false
+            }],
+            "width": 4,
+            "offset": 0,
+            "push": 0,
+            "pull": 0
+          }, {
+            "components": [{
+              "label": "Address 2",
+              "spellcheck": true,
+              "tableView": true,
+              "clearOnHide": false,
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "mailaddress2",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }, {
+              "label": "Zip code",
+              "spellcheck": true,
+              "tableView": true,
+              "clearOnHide": false,
+              "calculateValue": "value = data[\"zip\"]",
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "physical_zip",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
               "hideOnChildrenHidden": false
             }],
             "width": 4,
@@ -1129,6 +1142,25 @@
               "multiple": false
             }
           }, {
+            "label": "Content",
+            "attrs": [{
+              "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
+              "attr": "style"
+            }],
+            "content": "Business PADI is not Valid!",
+            "refreshOnChange": false,
+            "tableView": false,
+            "key": "panelPanel2ColumnsContent1",
+            "customConditional": "show = ((data['businessPadiVerified']==false||data['businessPadiVerified']=='false'))",
+            "type": "htmlelement",
+            "input": false,
+            "hideLabel": true,
+            "hideOnChildrenHidden": false,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            }
+          }, {
             "input": true,
             "tableView": true,
             "key": "businessPadiVerified",
@@ -1194,73 +1226,6 @@
         }, {
           "label": "Columns",
           "columns": [{
-            "components": [{
-              "label": "Address 1",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_address1",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Address 2",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_address2",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "offset": 0,
-            "push": 0,
-            "pull": 0,
-            "width": 4
-          }, {
-            "components": [{
-              "label": "City",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_city",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }, {
-              "label": "Zip Code",
-              "spellcheck": true,
-              "tableView": true,
-              "validate": {
-                "required": true,
-                "unique": false,
-                "multiple": false
-              },
-              "key": "business_zip",
-              "type": "textfield",
-              "input": true,
-              "lockKey": true,
-              "hideOnChildrenHidden": false
-            }],
-            "width": 4,
-            "offset": 0,
-            "push": 0,
-            "pull": 0
-          }, {
             "components": [{
               "label": "Country",
               "widget": "choicesjs",
@@ -1863,6 +1828,40 @@
               "lockKey": true,
               "hideOnChildrenHidden": false
             }, {
+              "label": "City",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "required": true,
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_city",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }],
+            "offset": 0,
+            "push": 0,
+            "pull": 0,
+            "width": 4
+          }, {
+            "components": [{
+              "label": "Address 1",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "required": true,
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_address1",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }, {
               "label": "State",
               "widget": "choicesjs",
               "tableView": true,
@@ -1887,6 +1886,40 @@
               "input": true,
               "lockKey": true,
               "clearOnRefresh": true,
+              "hideOnChildrenHidden": false
+            }],
+            "width": 4,
+            "offset": 0,
+            "push": 0,
+            "pull": 0
+          }, {
+            "components": [{
+              "label": "Address 2",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_address2",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
+              "hideOnChildrenHidden": false
+            }, {
+              "label": "Zip Code",
+              "spellcheck": true,
+              "tableView": true,
+              "validate": {
+                "required": true,
+                "pattern": "[0-9\\s-]*",
+                "unique": false,
+                "multiple": false
+              },
+              "key": "business_zip",
+              "type": "textfield",
+              "input": true,
+              "lockKey": true,
               "hideOnChildrenHidden": false
             }],
             "width": 4,
@@ -1951,18 +1984,17 @@
                 "pull": 0
               }, {
                 "components": [{
-                  "input": true,
-                  "tableView": true,
                   "label": "Work Phone",
-                  "key": "buisness_work_number",
-                  "clearOnHide": false,
+                  "spellcheck": false,
+                  "tableView": false,
                   "validate": {
                     "unique": false,
                     "multiple": false
                   },
+                  "key": "buisness_work_number",
                   "type": "phoneNumber",
+                  "input": true,
                   "lockKey": true,
-                  "tooltip": "Phone Number",
                   "hideOnChildrenHidden": false
                 }],
                 "width": 8,
@@ -2076,12 +2108,17 @@
         "components": [{
           "label": "Requested Policy Period",
           "allowInput": false,
+          "format": "MM-dd-yyyy",
           "tableView": true,
           "datePicker": {
-            "minDate": "2020-01-31T07:32:21.738Z",
+            "minDate": "moment(). format('MM-dd-yyyy');",
             "datepickerMode": "month"
           },
-          "defaultDate": "2020-01-10T12:00:00+05:30",
+          "enableTime": false,
+          "timePicker": {
+            "showMeridian": false
+          },
+          "defaultDate": "moment()",
           "clearOnHide": false,
           "validate": {
             "required": true,
@@ -2101,13 +2138,13 @@
             "useLocaleSettings": false,
             "allowInput": false,
             "mode": "single",
-            "enableTime": true,
+            "enableTime": false,
             "noCalendar": false,
-            "format": "yyyy-MM-dd hh:mm a",
+            "format": "MM-dd-yyyy",
             "hourIncrement": 1,
             "minuteIncrement": 1,
-            "time_24hr": false,
-            "minDate": "2020-01-31T07:32:21.738Z",
+            "time_24hr": true,
+            "minDate": "moment(). format('MM-dd-yyyy');",
             "maxDate": null
           }
         }, {
@@ -2323,7 +2360,8 @@
       "cancel": true,
       "next": true
     },
-    "collapsible": false
+    "collapsible": false,
+    "nextPage": "next = data.businessPadiVerified ? 'pageNaN' : 'panelPanel'"
   }, {
     "type": "panel",
     "title": "Property Information",
@@ -3631,13 +3669,35 @@
           "optionsLabelPosition": "right",
           "lockKey": true
         }, {
+          "label": "Please list the date of the claim, the amount paid and any amounts outstanding",
+          "disableAddingRemovingRows": false,
+          "reorder": false,
+          "addAnotherPosition": "bottom",
+          "defaultOpen": false,
+          "layoutFixed": false,
+          "enableRowGroups": false,
+          "tableView": true,
+          "clearOnHide": false,
+          "validate": {
+            "unique": false,
+            "multiple": false,
+            "minLength": 1
+          },
+          "key": "dsglClaimAmountpaidanyamountsoutstanding",
+          "conditional": {
+            "show": true,
+            "when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
+            "eq": "yes"
+          },
+          "type": "datagrid",
           "input": true,
           "components": [{
             "label": "Date of the claim",
-            "format": "yyyy-MM-dd HH:mm a",
+            "format": "MM-dd-yyyy",
             "dataGridLabel": false,
             "tableView": true,
             "datePicker": {
+              "maxDate": "moment(). format('MM-dd-yyyy');",
               "datepickerMode": "day"
             },
             "clearOnHide": false,
@@ -3660,12 +3720,12 @@
               "mode": "single",
               "enableTime": true,
               "noCalendar": false,
-              "format": "yyyy-MM-dd HH:mm a",
+              "format": "MM-dd-yyyy",
               "hourIncrement": 1,
               "minuteIncrement": 1,
               "time_24hr": false,
               "minDate": null,
-              "maxDate": null
+              "maxDate": "moment(). format('MM-dd-yyyy');"
             },
             "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
           }, {
@@ -3715,17 +3775,6 @@
             "labelWidth": 0,
             "labelMargin": 3
           }],
-          "tableView": true,
-          "label": "Please list the date of the claim, the amount paid and any amounts outstanding",
-          "key": "dsglClaimAmountpaidanyamountsoutstanding",
-          "clearOnHide": false,
-          "type": "datagrid",
-          "addAnotherPosition": "bottom",
-          "conditional": {
-            "show": "true",
-            "when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
-            "eq": "yes"
-          },
           "lockKey": true
         }, {
           "label": "Previous Insurance Company",
@@ -3835,12 +3884,26 @@
         "theme": "primary",
         "tableView": false,
         "components": [{
+          "label": "Information for each Additional Insured is required as follows",
+          "disableAddingRemovingRows": false,
+          "reorder": false,
+          "addAnotherPosition": "bottom",
+          "defaultOpen": false,
+          "layoutFixed": false,
+          "enableRowGroups": false,
+          "hideLabel": true,
+          "tableView": true,
+          "clearOnHide": false,
+          "validate": {
+            "minLength": 1,
+            "unique": false,
+            "multiple": false
+          },
+          "key": "additionalInsured",
+          "type": "datagrid",
           "input": true,
           "components": [{
             "label": "Columns",
-            "input": false,
-            "tableView": false,
-            "key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
             "columns": [{
               "components": [{
                 "label": "Name",
@@ -3857,34 +3920,7 @@
                 "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
-                "label": "Address",
-                "spellcheck": true,
-                "tableView": true,
-                "clearOnHide": false,
-                "validate": {
-                  "required": true,
-                  "unique": false,
-                  "multiple": false
-                },
-                "key": "address",
-                "type": "textfield",
-                "input": true,
-                "lockKey": true,
-                "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
+              }, {
                 "label": "City",
                 "spellcheck": true,
                 "tableView": true,
@@ -3907,6 +3943,7 @@
             }, {
               "components": [{
                 "label": "Country",
+                "widget": "choicesjs",
                 "tableView": true,
                 "dataSrc": "custom",
                 "data": {
@@ -3916,6 +3953,7 @@
                   }],
                   "custom": "values = data['countryList'];"
                 },
+                "valueProperty": "country",
                 "template": "<span>{{ item.country }}</span>",
                 "selectThreshold": 0.3,
                 "clearOnHide": false,
@@ -3925,17 +3963,14 @@
                   "multiple": false
                 },
                 "key": "country",
+                "properties": {
+                  "clear_field": "state"
+                },
                 "type": "select",
                 "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
+              }, {
                 "label": "State",
                 "widget": "choicesjs",
                 "tableView": true,
@@ -3945,12 +3980,11 @@
                     "value": "",
                     "label": ""
                   }],
-                  "url": "https://api.myjson.com/bins/1b647j",
                   "headers": [{
                     "value": "",
                     "key": ""
                   }],
-                  "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n}\n}"
+                  "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n  value = \"\";\n} else {\n  value = \"\";\n}\n}"
                 },
                 "template": "<span>{{ item }}</span>",
                 "selectThreshold": 0.3,
@@ -3962,7 +3996,8 @@
                 },
                 "key": "state",
                 "type": "select",
-                "refreshOn": "country",
+                "refreshOn": "row.country",
+                "redrawOn": "row.country",
                 "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false,
@@ -3974,12 +4009,27 @@
               "pull": 0
             }, {
               "components": [{
-                "label": "Zip",
+                "label": "Address",
                 "spellcheck": true,
                 "tableView": true,
                 "clearOnHide": false,
                 "validate": {
                   "required": true,
+                  "unique": false,
+                  "multiple": false
+                },
+                "key": "address",
+                "type": "textfield",
+                "input": true,
+                "lockKey": true,
+                "hideOnChildrenHidden": false
+              }, {
+                "label": "Zip",
+                "spellcheck": true,
+                "tableView": true,
+                "validate": {
+                  "required": true,
+                  "pattern": "[0-9\\s-]*",
                   "unique": false,
                   "multiple": false
                 },
@@ -4031,7 +4081,7 @@
                 "lockKey": true,
                 "hideOnChildrenHidden": false
               }],
-              "width": 6,
+              "width": 4,
               "offset": 0,
               "push": 0,
               "pull": 0
@@ -4053,31 +4103,25 @@
                 "lockKey": true,
                 "hideOnChildrenHidden": false
               }],
-              "width": 6,
+              "width": 8,
               "offset": 0,
               "push": 0,
               "pull": 0
             }],
-            "type": "columns",
-            "inDataGrid": true,
             "hideLabel": true,
+            "dataGridLabel": false,
+            "tableView": false,
+            "key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
+            "type": "columns",
+            "input": false,
+            "inDataGrid": true,
             "validate": {
               "unique": false,
               "multiple": false
             }
           }],
-          "tableView": true,
-          "label": "Information for each Additional Insured is required as follows",
-          "key": "additionalInsured",
-          "clearOnHide": false,
-          "type": "datagrid",
-          "addAnotherPosition": "bottom",
-          "hideLabel": true,
           "lockKey": true,
-          "validate": {
-            "unique": false,
-            "multiple": false
-          }
+          "path": "additionalInsured"
         }],
         "type": "panel",
         "conditional": {
@@ -4118,12 +4162,26 @@
         "theme": "primary",
         "tableView": false,
         "components": [{
+          "label": "Loss Payees",
+          "disableAddingRemovingRows": false,
+          "reorder": false,
+          "addAnotherPosition": "bottom",
+          "defaultOpen": false,
+          "layoutFixed": false,
+          "enableRowGroups": false,
+          "hideLabel": true,
+          "tableView": true,
+          "clearOnHide": false,
+          "validate": {
+            "minLength": 1,
+            "unique": false,
+            "multiple": false
+          },
+          "key": "lossPayees",
+          "type": "datagrid",
           "input": true,
           "components": [{
             "label": "Columns",
-            "input": false,
-            "tableView": false,
-            "key": "lossPayeesColumns",
             "columns": [{
               "components": [{
                 "label": "Name",
@@ -4140,34 +4198,7 @@
                 "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
-                "label": "Address",
-                "spellcheck": true,
-                "tableView": true,
-                "clearOnHide": false,
-                "validate": {
-                  "required": true,
-                  "unique": false,
-                  "multiple": false
-                },
-                "key": "address",
-                "type": "textfield",
-                "input": true,
-                "lockKey": true,
-                "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
+              }, {
                 "label": "City",
                 "spellcheck": true,
                 "tableView": true,
@@ -4190,6 +4221,7 @@
             }, {
               "components": [{
                 "label": "Country",
+                "widget": "choicesjs",
                 "tableView": true,
                 "dataSrc": "custom",
                 "data": {
@@ -4199,6 +4231,7 @@
                   }],
                   "custom": "values = data['countryList'];"
                 },
+                "valueProperty": "country",
                 "template": "<span>{{ item.country }}</span>",
                 "selectThreshold": 0.3,
                 "validate": {
@@ -4207,17 +4240,14 @@
                   "multiple": false
                 },
                 "key": "country",
+                "properties": {
+                  "clear_field": "state"
+                },
                 "type": "select",
                 "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
+              }, {
                 "label": "State",
                 "widget": "choicesjs",
                 "tableView": true,
@@ -4227,14 +4257,12 @@
                     "value": "",
                     "label": ""
                   }],
-                  "url": "https://api.myjson.com/bins/1b647j",
                   "headers": [{
                     "value": "",
                     "key": ""
                   }],
-                  "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+                  "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n  value = \"\";\n} else {\n  value = \"\";\n}\n}"
                 },
-                "valueProperty": "name",
                 "template": "<span>{{ item }}</span>",
                 "selectThreshold": 0.3,
                 "clearOnHide": false,
@@ -4245,7 +4273,8 @@
                 },
                 "key": "state",
                 "type": "select",
-                "refreshOn": "country",
+                "refreshOn": "row.country",
+                "redrawOn": "row.country",
                 "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false,
@@ -4257,6 +4286,21 @@
               "pull": 0
             }, {
               "components": [{
+                "label": "Address",
+                "spellcheck": true,
+                "tableView": true,
+                "clearOnHide": false,
+                "validate": {
+                  "required": true,
+                  "unique": false,
+                  "multiple": false
+                },
+                "key": "address",
+                "type": "textfield",
+                "input": true,
+                "lockKey": true,
+                "hideOnChildrenHidden": false
+              }, {
                 "label": "Zip",
                 "mask": false,
                 "spellcheck": true,
@@ -4282,26 +4326,19 @@
               "push": 0,
               "pull": 0
             }],
-            "type": "columns",
-            "inDataGrid": true,
             "hideLabel": true,
+            "dataGridLabel": false,
+            "tableView": false,
+            "key": "lossPayeesColumns",
+            "type": "columns",
+            "input": false,
+            "inDataGrid": true,
             "validate": {
               "unique": false,
               "multiple": false
             }
           }],
-          "tableView": true,
-          "label": "Loss Payees",
-          "key": "lossPayees",
-          "clearOnHide": false,
-          "type": "datagrid",
-          "addAnotherPosition": "bottom",
-          "hideLabel": true,
-          "lockKey": true,
-          "validate": {
-            "unique": false,
-            "multiple": false
-          }
+          "lockKey": true
         }],
         "type": "panel",
         "conditional": {
@@ -4342,6 +4379,23 @@
         "theme": "primary",
         "tableView": false,
         "components": [{
+          "label": "Information for each Additional Location is required as follows. (You will need to complete another application for these locations.)",
+          "disableAddingRemovingRows": false,
+          "reorder": false,
+          "addAnother": "Add another location",
+          "addAnotherPosition": "bottom",
+          "defaultOpen": false,
+          "layoutFixed": false,
+          "enableRowGroups": false,
+          "tableView": true,
+          "clearOnHide": false,
+          "validate": {
+            "unique": false,
+            "multiple": false,
+            "minLength": 1
+          },
+          "key": "additionalLocations",
+          "type": "datagrid",
           "input": true,
           "components": [{
             "key": "page4PanelPanelPanel2",
@@ -4351,9 +4405,6 @@
             "tableView": false,
             "components": [{
               "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumns",
               "columns": [{
                 "components": [{
                   "label": "Name",
@@ -4370,33 +4421,7 @@
                   "input": true,
                   "lockKey": true,
                   "hideOnChildrenHidden": false
-                }],
-                "width": 4,
-                "offset": 0,
-                "push": 0,
-                "pull": 0
-              }, {
-                "components": [{
-                  "input": true,
-                  "tableView": true,
-                  "label": "Address",
-                  "key": "address",
-                  "spellcheck": true,
-                  "validate": {
-                    "required": true,
-                    "unique": false,
-                    "multiple": false
-                  },
-                  "type": "textfield",
-                  "lockKey": true,
-                  "hideOnChildrenHidden": false
-                }],
-                "width": 4,
-                "offset": 0,
-                "push": 0,
-                "pull": 0
-              }, {
-                "components": [{
+                }, {
                   "label": "City",
                   "spellcheck": true,
                   "tableView": true,
@@ -4419,6 +4444,7 @@
               }, {
                 "components": [{
                   "label": "Country",
+                  "widget": "choicesjs",
                   "tableView": true,
                   "dataSrc": "custom",
                   "data": {
@@ -4428,6 +4454,7 @@
                     }],
                     "custom": "values = data['countryList'];"
                   },
+                  "valueProperty": "country",
                   "template": "<span>{{ item.country }}</span>",
                   "selectThreshold": 0.3,
                   "validate": {
@@ -4436,17 +4463,14 @@
                     "multiple": false
                   },
                   "key": "country",
+                  "properties": {
+                    "clear_field": "state"
+                  },
                   "type": "select",
                   "input": true,
                   "lockKey": true,
                   "hideOnChildrenHidden": false
-                }],
-                "width": 4,
-                "offset": 0,
-                "push": 0,
-                "pull": 0
-              }, {
-                "components": [{
+                }, {
                   "label": "State",
                   "widget": "choicesjs",
                   "tableView": true,
@@ -4456,17 +4480,14 @@
                       "value": "",
                       "label": ""
                     }],
-                    "url": "https://api.myjson.com/bins/1b647j",
                     "headers": [{
                       "value": "",
                       "key": ""
                     }],
-                    "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+                    "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n  value = \"\";\n} else {\n  value = \"\";\n}\n}"
                   },
-                  "valueProperty": "name",
                   "template": "<span>{{ item }}</span>",
                   "selectThreshold": 0.3,
-                  "clearOnHide": false,
                   "validate": {
                     "required": true,
                     "unique": false,
@@ -4474,7 +4495,8 @@
                   },
                   "key": "additionalLocationState",
                   "type": "select",
-                  "refreshOn": "country",
+                  "refreshOn": "row.country",
+                  "redrawOn": "row.country",
                   "input": true,
                   "lockKey": true,
                   "hideOnChildrenHidden": false,
@@ -4486,6 +4508,20 @@
                 "pull": 0
               }, {
                 "components": [{
+                  "label": "Address",
+                  "spellcheck": true,
+                  "tableView": true,
+                  "validate": {
+                    "required": true,
+                    "unique": false,
+                    "multiple": false
+                  },
+                  "key": "address",
+                  "type": "textfield",
+                  "input": true,
+                  "lockKey": true,
+                  "hideOnChildrenHidden": false
+                }, {
                   "label": "Zip",
                   "mask": false,
                   "spellcheck": true,
@@ -4511,9 +4547,13 @@
                 "push": 0,
                 "pull": 0
               }],
-              "type": "columns",
-              "inDataGrid": true,
               "hideLabel": true,
+              "dataGridLabel": false,
+              "tableView": false,
+              "key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumns",
+              "type": "columns",
+              "input": false,
+              "inDataGrid": true,
               "validate": {
                 "unique": false,
                 "multiple": false
@@ -5681,6 +5721,26 @@
                   "multiple": false
                 }
               }, {
+                "label": "Please list the date of the claim, the amount paid and any amounts outstanding",
+                "disableAddingRemovingRows": false,
+                "reorder": false,
+                "addAnotherPosition": "bottom",
+                "defaultOpen": false,
+                "layoutFixed": false,
+                "enableRowGroups": false,
+                "tableView": true,
+                "validate": {
+                  "minLength": 1,
+                  "unique": false,
+                  "multiple": false
+                },
+                "key": "claimsMade",
+                "conditional": {
+                  "show": true,
+                  "when": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2Panel2HaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
+                  "eq": "yes"
+                },
+                "type": "datagrid",
                 "input": true,
                 "components": [{
                   "label": "Columns",
@@ -5690,9 +5750,10 @@
                   "columns": [{
                     "components": [{
                       "label": "Date of the claim",
-                      "format": "yyyy-MM-dd HH:mm a",
+                      "format": "MM-dd-yyyy",
                       "tableView": true,
                       "datePicker": {
+                        "maxDate": "moment(). format('MM-dd-yyyy');",
                         "datepickerMode": "day"
                       },
                       "validate": {
@@ -5713,12 +5774,12 @@
                         "mode": "single",
                         "enableTime": true,
                         "noCalendar": false,
-                        "format": "yyyy-MM-dd HH:mm a",
+                        "format": "MM-dd-yyyy",
                         "hourIncrement": 1,
                         "minuteIncrement": 1,
                         "time_24hr": false,
                         "minDate": null,
-                        "maxDate": null
+                        "maxDate": "moment(). format('MM-dd-yyyy');"
                       },
                       "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
                     }],
@@ -5792,16 +5853,6 @@
                     "multiple": false
                   }
                 }],
-                "tableView": true,
-                "label": "Please list the date of the claim, the amount paid and any amounts outstanding",
-                "key": "claimsMade",
-                "type": "datagrid",
-                "addAnotherPosition": "bottom",
-                "conditional": {
-                  "show": "true",
-                  "when": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2Panel2HaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
-                  "eq": "yes"
-                },
                 "lockKey": true
               }, {
                 "label": "Previous Insurance Company",
@@ -5997,18 +6048,7 @@
             },
             "hideLabel": true
           }],
-          "tableView": true,
-          "label": "Information for each Additional Location is required as follows. (You will need to complete another application for these locations.)",
-          "key": "additionalLocations",
-          "clearOnHide": false,
-          "type": "datagrid",
-          "addAnotherPosition": "bottom",
-          "addAnother": "Add another location",
-          "lockKey": true,
-          "validate": {
-            "unique": false,
-            "multiple": false
-          }
+          "lockKey": true
         }],
         "type": "panel",
         "conditional": {
@@ -6432,7 +6472,7 @@
                   "spellcheck": true,
                   "tableView": true,
                   "delimiter": false,
-                  "requireDecimal": false,
+                  "requireDecimal": true,
                   "inputFormat": "plain",
                   "clearOnHide": false,
                   "validate": {
@@ -6445,7 +6485,8 @@
                   "inputType": "number",
                   "labelWidth": 0,
                   "labelMargin": 5,
-                  "lockKey": true
+                  "lockKey": true,
+                  "decimalLimit": 2
                 }]
               }, {
                 "components": [{
@@ -6802,13 +6843,13 @@
         "modal": false,
         "saveRow": "Update",
         "removeRow": "Remove",
-        "clearOnHide": false,
         "validate": {
+          "minLength": 1,
           "unique": false,
           "multiple": false
         },
         "key": "groupPL",
-        "customConditional": "show = (row.count() > 0)",
+        "customConditional": "show = (data.groupPL.length > 0)",
         "type": "editgrid",
         "input": true,
         "components": [{
@@ -6999,6 +7040,7 @@
             "push": 0,
             "pull": 0
           }],
+          "hideLabel": true,
           "tableView": false,
           "key": "columns",
           "type": "columns",
@@ -7006,8 +7048,7 @@
           "validate": {
             "unique": false,
             "multiple": false
-          },
-          "hideLabel": true
+          }
         }, {
           "label": "Upload",
           "hideLabel": true,
@@ -7072,65 +7113,52 @@
         "label": "Additional Insureds",
         "input": false,
         "components": [{
+          "label": "Data Grid",
+          "disableAddingRemovingRows": false,
+          "reorder": false,
+          "addAnotherPosition": "bottom",
+          "defaultOpen": false,
+          "layoutFixed": false,
+          "enableRowGroups": false,
+          "hideLabel": true,
+          "tableView": true,
+          "validate": {
+            "unique": false,
+            "multiple": false,
+            "minLength": 1
+          },
+          "key": "groupAdditionalInsured",
+          "type": "datagrid",
           "input": true,
           "components": [{
             "label": "Columns",
-            "input": false,
-            "tableView": false,
-            "key": "groupAdditionalInsuredColumns",
             "columns": [{
               "components": [{
-                "input": true,
-                "tableView": true,
                 "label": "Name",
+                "spellcheck": true,
+                "tableView": true,
+                "clearOnHide": false,
+                "validate": {
+                  "unique": false,
+                  "multiple": false
+                },
                 "key": "name",
-                "clearOnHide": false,
-                "spellcheck": true,
-                "validate": {
-                  "unique": false,
-                  "multiple": false
-                },
                 "type": "textfield",
+                "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
-                "input": true,
-                "tableView": true,
-                "label": "Address",
-                "key": "address",
-                "clearOnHide": false,
-                "spellcheck": true,
-                "validate": {
-                  "unique": false,
-                  "multiple": false
-                },
-                "type": "textfield",
-                "lockKey": true,
-                "hideOnChildrenHidden": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
-                "input": true,
-                "tableView": true,
+              }, {
                 "label": "City",
-                "key": "city",
-                "clearOnHide": false,
                 "spellcheck": true,
+                "tableView": true,
+                "clearOnHide": false,
                 "validate": {
                   "unique": false,
                   "multiple": false
                 },
+                "key": "city",
                 "type": "textfield",
+                "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false
               }],
@@ -7141,6 +7169,7 @@
             }, {
               "components": [{
                 "label": "Country",
+                "widget": "choicesjs",
                 "tableView": true,
                 "dataSrc": "custom",
                 "data": {
@@ -7150,6 +7179,7 @@
                   }],
                   "custom": "values = data['countryList'];"
                 },
+                "valueProperty": "country",
                 "template": "<span>{{ item.country }}</span>",
                 "selectThreshold": 0.3,
                 "clearOnHide": false,
@@ -7158,18 +7188,15 @@
                   "multiple": false
                 },
                 "key": "country",
+                "properties": {
+                  "clear_field": "state"
+                },
                 "type": "select",
                 "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false,
                 "isNew": false
-              }],
-              "width": 4,
-              "offset": 0,
-              "push": 0,
-              "pull": 0
-            }, {
-              "components": [{
+              }, {
                 "label": "State",
                 "widget": "choicesjs",
                 "tableView": true,
@@ -7202,17 +7229,36 @@
               "pull": 0
             }, {
               "components": [{
-                "input": true,
+                "label": "Address",
+                "spellcheck": true,
                 "tableView": true,
-                "inputType": "number",
+                "clearOnHide": false,
+                "validate": {
+                  "unique": false,
+                  "multiple": false
+                },
+                "key": "address",
+                "type": "textfield",
+                "input": true,
+                "lockKey": true,
+                "hideOnChildrenHidden": false
+              }, {
                 "label": "Zip Code",
-                "key": "zip",
+                "mask": false,
+                "spellcheck": true,
+                "tableView": true,
+                "delimiter": false,
+                "requireDecimal": false,
+                "inputFormat": "plain",
                 "clearOnHide": false,
                 "validate": {
                   "multiple": false,
                   "unique": false
                 },
+                "key": "zip",
                 "type": "number",
+                "input": true,
+                "inputType": "number",
                 "lockKey": true,
                 "hideOnChildrenHidden": false
               }],
@@ -7221,25 +7267,19 @@
               "push": 0,
               "pull": 0
             }],
-            "type": "columns",
-            "inDataGrid": true,
             "hideLabel": true,
+            "dataGridLabel": false,
+            "tableView": false,
+            "key": "groupAdditionalInsuredColumns",
+            "type": "columns",
+            "input": false,
+            "inDataGrid": true,
             "validate": {
               "unique": false,
               "multiple": false
             }
           }],
-          "tableView": true,
-          "label": "Data Grid",
-          "key": "groupAdditionalInsured",
-          "type": "datagrid",
-          "addAnotherPosition": "bottom",
-          "hideLabel": true,
-          "lockKey": true,
-          "validate": {
-            "unique": false,
-            "multiple": false
-          }
+          "lockKey": true
         }],
         "lockKey": true,
         "validate": {
@@ -7309,6 +7349,22 @@
             "multiple": false
           }
         }, {
+          "label": "Edit Grid",
+          "disableAddingRemovingRows": false,
+          "hideLabel": true,
+          "tableView": true,
+          "templates": {
+            "header": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ component.label }} \n    </div> \n  {% }) %} \n</div>",
+            "row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-4\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+          },
+          "modal": false,
+          "validate": {
+            "minLength": 1,
+            "unique": false,
+            "multiple": false
+          },
+          "key": "groupNamedInsureds",
+          "type": "editgrid",
           "input": true,
           "components": [{
             "label": "Columns",
@@ -7325,7 +7381,11 @@
                 "spellcheck": true,
                 "type": "textfield",
                 "lockKey": true,
-                "hideOnChildrenHidden": false
+                "hideOnChildrenHidden": false,
+                "validate": {
+                  "unique": false,
+                  "multiple": false
+                }
               }],
               "width": 4,
               "offset": 0,
@@ -7333,13 +7393,17 @@
               "pull": 0
             }, {
               "components": [{
-                "input": true,
-                "tableView": true,
                 "label": "Name",
-                "key": "name",
-                "clearOnHide": false,
                 "spellcheck": true,
+                "tableView": true,
+                "clearOnHide": false,
+                "validate": {
+                  "unique": false,
+                  "multiple": false
+                },
+                "key": "name",
                 "type": "textfield",
+                "input": true,
                 "lockKey": true,
                 "hideOnChildrenHidden": false
               }],
@@ -7357,7 +7421,11 @@
                 "spellcheck": true,
                 "type": "textfield",
                 "lockKey": true,
-                "hideOnChildrenHidden": false
+                "hideOnChildrenHidden": false,
+                "validate": {
+                  "unique": false,
+                  "multiple": false
+                }
               }],
               "width": 4,
               "offset": 0,
@@ -7374,21 +7442,7 @@
             "type": "hidden",
             "lockKey": true
           }],
-          "tableView": true,
-          "label": "Edit Grid",
-          "key": "groupNamedInsureds",
-          "clearOnHide": false,
-          "templates": {
-            "header": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ component.label }} \n    </div> \n  {% }) %} \n</div>",
-            "row": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ getView(component, row[component.key]) }} \n    </div> \n  {% }) %} \n  <div class=\"col-sm-2\"> \n    <div class=\"btn-group pull-right\"> \n      <div class=\"btn btn-default editRow\">Edit</div> \n      <div class=\"btn btn-danger removeRow\">Delete</div> \n    </div> \n  </div> \n</div>"
-          },
-          "type": "editgrid",
-          "lockKey": true,
-          "hideLabel": true,
-          "validate": {
-            "unique": false,
-            "multiple": false
-          }
+          "lockKey": true
         }],
         "type": "panel",
         "conditional": {
@@ -7679,18 +7733,6 @@
       "clearOnHide": false,
       "input": false,
       "components": [{
-        "input": true,
-        "tableView": true,
-        "key": "product",
-        "label": "product",
-        "type": "hidden",
-        "defaultValue": "Dive Store",
-        "lockKey": true,
-        "validate": {
-          "unique": false,
-          "multiple": false
-        }
-      }, {
         "input": true,
         "tableView": true,
         "key": "attachmentsFieldnames",
@@ -8972,7 +9014,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 58,
+  "_vid": 85,
   "title": "Dive Store New Application",
   "display": "wizard",
   "access": [{
@@ -8982,7 +9024,6 @@
   "submissionAccess": [],
   "settings": {},
   "properties": {
-    "delegate": "RateCard",
     "submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"startWorkflow\"}]",
     "clickable": "false",
     "showNext": "true"
@@ -8991,6 +9032,6 @@
   "path": "divestorenewapplication",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T10:43:52.525Z",
-  "modified": "2020-03-12T14:35:57.280Z",
+  "modified": "2020-03-17T10:06:29.504Z",
   "machineName": "testdivehub:diveStoreCsrReview"
 }

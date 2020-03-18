@@ -136,7 +136,7 @@
 		"conditional": {
 			"show": true,
 			"when": "endorsement_options",
-			"eq": "modify_personinformation"
+			"eq": "modify_personalInformation"
 		},
 		"type": "panel",
 		"label": "Personal Information",
@@ -368,6 +368,7 @@
 							"dataType": "string",
 							"template": "<span>{{ item.country }}</span>",
 							"selectThreshold": 0.3,
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"unique": false,
@@ -429,6 +430,7 @@
 							},
 							"template": "<span>{{ item }}</span>",
 							"selectThreshold": 0.3,
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"unique": false,
@@ -436,10 +438,10 @@
 							},
 							"key": "state",
 							"type": "select",
+							"refreshOn": "country",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"refreshOn": "country"
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -506,17 +508,18 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"input": true,
-					"tableView": true,
 					"label": "Same as mailing address",
-					"dataGridLabel": false,
-					"key": "sameasmailingaddress",
+					"tableView": true,
 					"defaultValue": "true",
+					"clearOnHide": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
+					"key": "sameasmailingaddress",
 					"type": "checkbox",
+					"input": true,
+					"dataGridLabel": false,
 					"lockKey": true
 				}, {
 					"label": "Columns",
@@ -689,6 +692,7 @@
 								"valueProperty": "dial_code",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"validate": {
 									"unique": false,
@@ -763,6 +767,7 @@
 								"valueProperty": "dial_code",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"validate": {
 									"unique": false,
@@ -1214,9 +1219,9 @@
 								},
 								"key": "business_state",
 								"type": "select",
+								"refreshOn": "business_country",
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"refreshOn": "business_country",
 								"isNew": false
 							}],
 							"offset": 0,
@@ -1228,6 +1233,7 @@
 								"label": "Zip Code",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
 									"pattern": "[0-9\\s-]*",
@@ -1277,6 +1283,7 @@
 									"dataType": "auto",
 									"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 									"selectThreshold": 0.3,
+									"clearOnHide": false,
 									"validate": {
 										"unique": false,
 										"multiple": false
@@ -1680,10 +1687,12 @@
 				"input": true,
 				"lockKey": true
 			}, {
-				"input": true,
-				"tableView": true,
 				"label": "Any Boat Claims?",
-				"key": "any_boat_claims",
+				"labelPosition": "left-left",
+				"optionsLabelPosition": "right",
+				"inline": false,
+				"tableView": true,
+				"defaultValue": "no",
 				"values": [{
 					"value": "yes",
 					"label": "Yes",
@@ -1693,15 +1702,14 @@
 					"label": "No",
 					"shortcut": ""
 				}],
-				"defaultValue": "no",
 				"clearOnHide": false,
 				"validate": {
 					"unique": false,
 					"multiple": false
 				},
+				"key": "any_boat_claims",
 				"type": "radio",
-				"labelPosition": "left-left",
-				"optionsLabelPosition": "right",
+				"input": true,
 				"labelWidth": 26,
 				"labelMargin": 4,
 				"lockKey": true
@@ -1748,11 +1756,16 @@
 				}, {
 					"label": "Date",
 					"format": "MM-dd-yyyy",
+					"dataGridLabel": false,
 					"tableView": false,
+					"datePicker": {
+						"datepickerMode": "day"
+					},
 					"enableTime": false,
 					"timePicker": {
 						"showMeridian": false
 					},
+					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"unique": false,
@@ -1778,10 +1791,7 @@
 						"minDate": null,
 						"maxDate": null
 					},
-					"inDataGrid": true,
-					"datePicker": {
-						"datepickerMode": "day"
-					}
+					"inDataGrid": true
 				}, {
 					"label": "Amount",
 					"prefix": "$",
@@ -1792,6 +1802,7 @@
 					"delimiter": true,
 					"requireDecimal": true,
 					"inputFormat": "plain",
+					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"unique": false,
@@ -1799,10 +1810,10 @@
 					},
 					"key": "data_grid_amount",
 					"type": "number",
+					"decimalLimit": 2,
 					"input": true,
 					"inDataGrid": true,
-					"inputType": "number",
-					"decimalLimit": 2
+					"inputType": "number"
 				}],
 				"lockKey": true,
 				"path": "DataGrid"
@@ -1860,6 +1871,7 @@
 						"label": "Name of the Captain",
 						"spellcheck": true,
 						"tableView": true,
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter the name of captain.",
@@ -2020,6 +2032,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter certified for maximum number of passengers.",
@@ -2040,6 +2053,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2373,6 +2387,7 @@
 				}, {
 					"label": "Full Time/Part Time",
 					"widget": "choicesjs",
+					"dataGridLabel": false,
 					"tableView": true,
 					"data": {
 						"values": [{
@@ -2384,6 +2399,7 @@
 						}]
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
@@ -2421,10 +2437,12 @@
 					"label": "PADI Number",
 					"mask": false,
 					"spellcheck": true,
+					"dataGridLabel": false,
 					"tableView": false,
 					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
+					"clearOnHide": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
@@ -2572,6 +2590,7 @@
 						},
 						"template": "<span>{{ item }}</span>",
 						"selectThreshold": 0.3,
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2652,6 +2671,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2711,6 +2731,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2736,6 +2757,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2774,6 +2796,7 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -2800,6 +2823,7 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -3020,6 +3044,7 @@
 						"layoutFixed": false,
 						"enableRowGroups": false,
 						"tableView": true,
+						"clearOnHide": false,
 						"validate": {
 							"unique": false,
 							"multiple": false
@@ -3062,10 +3087,11 @@
 						"layoutFixed": false,
 						"enableRowGroups": false,
 						"tableView": false,
+						"clearOnHide": false,
 						"validate": {
+							"minLength": 1,
 							"unique": false,
-							"multiple": false,
-							"minLength": 1
+							"multiple": false
 						},
 						"key": "engine_make",
 						"type": "datagrid",
@@ -3075,6 +3101,7 @@
 							"label": "Engine Make",
 							"hideLabel": true,
 							"spellcheck": true,
+							"dataGridLabel": false,
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
@@ -3212,6 +3239,7 @@
 								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
 									"unique": false,
@@ -3239,6 +3267,7 @@
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"validate": {
 									"unique": false,
 									"multiple": false
@@ -3311,6 +3340,7 @@
 						}]
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
@@ -3357,6 +3387,7 @@
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"validate": {
 									"unique": false,
 									"multiple": false
@@ -3515,6 +3546,7 @@
 						"value": "noAdditionalInsureds",
 						"shortcut": ""
 					}],
+					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"customMessage": "Please choose whether you would like to add Additional Insured",
@@ -3716,6 +3748,7 @@
 									"label": "Zip Code",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"validate": {
 										"required": true,
 										"pattern": "[0-9\\s-]*",
@@ -4168,6 +4201,7 @@
 								"label": "Zip Code",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
 									"pattern": "[0-9\\s-]*",
@@ -4437,6 +4471,7 @@
 							"label": "Zip Code",
 							"spellcheck": true,
 							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"pattern": "[0-9\\s-]*",
@@ -4554,6 +4589,7 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -4561,8 +4597,8 @@
 						},
 						"key": "annualReceipt",
 						"type": "number",
-						"input": true,
 						"decimalLimit": 2,
+						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -5586,6 +5622,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupTaxAmount'];",
 							"validate": {
 								"unique": false,
@@ -5655,6 +5692,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupPadiFeeAmount'];",
 							"validate": {
 								"unique": false,
@@ -5724,6 +5762,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupTotalAmount'];",
 							"validate": {
 								"unique": false,
@@ -6612,6 +6651,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_hullRate'];",
 							"validate": {
 								"multiple": false,
@@ -6639,6 +6679,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "if(parseFloat(data['boat_age'])<5){\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000LessThan5']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000LessThan5']);\n\t}\n} else if(parseFloat(data['boat_age']) > 5 && parseFloat(data['boat_age']) <= 11) {\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000LessThan11']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000LessThan11']);\n\t}\n}else if(parseFloat(data['boat_age']) > 11 && parseFloat(data['boat_age']) <= 25) {\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000LessThan25']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000LessThan25']);\n\t}\n} else {\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000GreaterThan25']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000GreaterThan25']);\n\t}\n}",
 							"validate": {
 								"multiple": false,
@@ -6687,6 +6728,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_HullPremium'];",
 							"validate": {
 								"multiple": false,
@@ -6714,6 +6756,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "if((parseFloat(data['hull_market_value']) * parseFloat(data['hullRate'])/100)<500){\nvalue = 500\n} else {\nvalue = (parseFloat(data['hull_market_value']) * parseFloat(data['hullRate'])/100)\n}",
 							"validate": {
 								"multiple": false,
@@ -6762,6 +6805,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_hull_deductible'];",
 							"validate": {
 								"multiple": false,
@@ -6789,6 +6833,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "if(data['boat_age'] > 25){\n  value = parseFloat(data['hull_market_value']) * (parseFloat(data['DeductibleGreaterthan24']) /100)  \n}else{\n  value = parseFloat(data['hull_market_value']) * (parseFloat(data['DeductibleLessthan25']) /100)  \n}",
 							"validate": {
 								"multiple": false,
@@ -6837,6 +6882,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_DingyTenderPremium'];",
 							"validate": {
 								"multiple": false,
@@ -6864,6 +6910,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data['dingy_value']) * parseFloat(data['hullRate'])/100)",
 							"validate": {
 								"multiple": false,
@@ -6912,6 +6959,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_TrailerPremium'];",
 							"validate": {
 								"multiple": false,
@@ -6939,6 +6987,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data['trailer_value']) * parseFloat(data['hullRate'])/100)",
 							"validate": {
 								"multiple": false,
@@ -7062,6 +7111,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_Age25Surcharge'];",
 							"validate": {
 								"multiple": false,
@@ -7089,6 +7139,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "if(parseFloat(data['boat_age']>24)){\nvalue = (parseFloat(data['PropertyBasePremium']) * parseFloat(data['AgeSurcharge'])/100)\n} else {\nvalue = 0\n}",
 							"validate": {
 								"multiple": false,
@@ -7129,6 +7180,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_NavWaterSurchargeYN'];",
 							"validate": {
 								"unique": false,
@@ -7152,6 +7204,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_NavWaterSurchargePremium'];",
 							"validate": {
 								"multiple": false,
@@ -7167,17 +7220,18 @@
 						}]
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
 							"label": "Nav Water Surcharge",
-							"dataGridLabel": false,
-							"key": "NavWaterSurchargeYN",
+							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"validate": {
 								"unique": false,
 								"multiple": false
 							},
+							"key": "NavWaterSurchargeYN",
 							"type": "checkbox",
+							"input": true,
+							"dataGridLabel": false,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -7192,6 +7246,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['NavWaterSurchargeYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['NavWaterSurcharge'])/100):0",
 							"validate": {
 								"multiple": false,
@@ -7232,6 +7287,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PortRiskYN'];",
 							"validate": {
 								"unique": false,
@@ -7255,6 +7311,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PortRiskCredit'];",
 							"validate": {
 								"multiple": false,
@@ -7270,17 +7327,18 @@
 						}]
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
 							"label": "Port Risk Credit",
-							"dataGridLabel": false,
-							"key": "PortRiskYN",
+							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"validate": {
 								"unique": false,
 								"multiple": false
 							},
+							"key": "PortRiskYN",
 							"type": "checkbox",
+							"input": true,
+							"dataGridLabel": false,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -7295,6 +7353,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['PortRiskYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['PortRisk'])/100):0",
 							"validate": {
 								"multiple": false,
@@ -7335,6 +7394,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_NavigationCreditYN'];",
 							"validate": {
 								"unique": false,
@@ -7374,17 +7434,18 @@
 						}]
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
 							"label": "Navigation Credit",
-							"dataGridLabel": false,
-							"key": "NavigationCreditYN",
+							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"validate": {
 								"unique": false,
 								"multiple": false
 							},
+							"key": "NavigationCreditYN",
 							"type": "checkbox",
+							"input": true,
+							"dataGridLabel": false,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -7440,6 +7501,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_SuperiorRiskCreditYN'];",
 							"validate": {
 								"unique": false,
@@ -7463,6 +7525,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_SuperiorRiskCredit'];",
 							"validate": {
 								"multiple": false,
@@ -7478,17 +7541,18 @@
 						}]
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
 							"label": "Superior Risk Credit",
-							"dataGridLabel": false,
-							"key": "SuperiorRiskCreditYN",
+							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"validate": {
 								"unique": false,
 								"multiple": false
 							},
+							"key": "SuperiorRiskCreditYN",
 							"type": "checkbox",
+							"input": true,
+							"dataGridLabel": false,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -7503,6 +7567,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['SuperiorRiskCreditYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['SuperiorRisk'])/100):0",
 							"validate": {
 								"multiple": false,
@@ -7551,6 +7616,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PropertySubTotal'];",
 							"validate": {
 								"multiple": false,
@@ -7578,6 +7644,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value =(parseFloat(data['PropertyBasePremium'])+(parseFloat(data['Age25Surcharge']) || 0)+(parseFloat(data['NavWaterSurchargePremium']) || 0)) -  ((parseFloat(data['PortRiskCredit']) || 0) + (parseFloat(data['SuperiorRiskCredit']) || 0) + (parseFloat(data['NavigationCredit']) || 0))",
 							"validate": {
 								"multiple": false,
@@ -7626,6 +7693,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PropertySubTotalProRated'];",
 							"validate": {
 								"multiple": false,
@@ -7653,6 +7721,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data['ProRataFactor'])*parseFloat(data['PropertySubTotal'])) - (parseFloat(data['layupDeductible']) || 0)",
 							"validate": {
 								"multiple": false,
@@ -7786,6 +7855,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_LiabilityPremiumCost'];",
 							"validate": {
 								"multiple": false,
@@ -7813,6 +7883,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = parseFloat(data['LiabilityPremium1M'])",
 							"validate": {
 								"multiple": false,
@@ -7861,6 +7932,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "excess_liability_coverage",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_ExcessLiabilityPremium'];",
 							"validate": {
 								"multiple": false,
@@ -7888,6 +7960,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "excess_liability_coverage",
+							"clearOnHide": false,
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8010,6 +8083,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_PassengerPremiumCost'];",
 							"validate": {
 								"multiple": false,
@@ -8037,6 +8111,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = parseFloat(data['PassengerPremium']) * (parseFloat(data['certified_for_max_number_of_passengers']) || 0)",
 							"validate": {
 								"multiple": false,
@@ -8085,6 +8160,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_CrewOnBoatPremium'];",
 							"validate": {
 								"multiple": false,
@@ -8112,6 +8188,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = ((parseFloat(data['CrewInBoatCount']) || 0)* (parseFloat(data['CrewInBoat']) || 0))",
 							"validate": {
 								"multiple": false,
@@ -8160,6 +8237,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_CrewMembersinWaterPremium'];",
 							"validate": {
 								"multiple": false,
@@ -8185,6 +8263,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = ((parseFloat(data['CrewInWaterCount']) || 0) * (parseFloat(data['CrewInWater']) || 0))",
 							"validate": {
 								"multiple": false,
@@ -8224,6 +8303,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['prevoius_FL-HISurchargeYN'];",
 							"validate": {
 								"unique": false,
@@ -8247,6 +8327,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_FlHiSurchargePremium'];",
 							"validate": {
 								"multiple": false,
@@ -8262,17 +8343,18 @@
 						}]
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
 							"label": "FL - HI Surcharge",
-							"dataGridLabel": false,
-							"key": "FL-HISurchargeYN",
+							"tableView": true,
 							"defaultValue": false,
+							"clearOnHide": false,
 							"validate": {
 								"unique": false,
 								"multiple": false
 							},
+							"key": "FL-HISurchargeYN",
 							"type": "checkbox",
+							"input": true,
+							"dataGridLabel": false,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -8287,6 +8369,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "if(data['FL-HISurchargeYN']){\nvalue = (parseFloat(data['totalLiability'])*parseFloat(data['FL-HISurcharge']))/100\n} else {\nvalue = 0\n}",
 							"validate": {
 								"multiple": false,
@@ -8335,6 +8418,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_LiabilitySubTotal'];",
 							"validate": {
 								"multiple": false,
@@ -8362,6 +8446,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "console.log('ExcessLiabilityPremium ==== '+data['ExcessLiabilityPremium']);\nvalue = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
 							"validate": {
 								"multiple": false,
@@ -8409,6 +8494,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_LiabilitySubTotalProRated'];",
 							"validate": {
 								"multiple": false,
@@ -8435,6 +8521,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data['ProRataFactor'])*parseFloat(data['LiabilitySubTotal']))",
 							"validate": {
 								"multiple": false,
@@ -8623,6 +8710,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_ProRataFactor'];",
 							"validate": {
 								"multiple": false,
@@ -8649,6 +8737,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data['ProRataDays'])/365)",
 							"validate": {
 								"multiple": false,
@@ -8696,6 +8785,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_premiumTotalProRated'];",
 							"validate": {
 								"multiple": false,
@@ -8721,6 +8811,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data['PropertySubTotalProRated']) || 0)+(parseFloat(data['LiabilitySubTotalProRated']) || 0);",
 							"validate": {
 								"multiple": false,
@@ -8767,6 +8858,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupProfessionalLiabilityPrice'];",
 							"validate": {
 								"multiple": false,
@@ -8792,6 +8884,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data[\"groupTotalAmount\"]) || 0)",
 							"validate": {
 								"multiple": false,
@@ -8840,6 +8933,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"calculateValue": "value = data['previous_policy_data'][data['previousPolicyLength']]['previous_padiFee'];",
 							"validate": {
 								"multiple": false,
@@ -8866,6 +8960,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
+							"clearOnHide": false,
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8987,6 +9082,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"calculateValue": "value = parseFloat(data['total']) - parseFloat(data['previous_total'])",
 							"validate": {
 								"unique": false,
@@ -9616,6 +9712,7 @@
 					"timePicker": {
 						"showMeridian": false
 					},
+					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"unique": false,
@@ -9749,6 +9846,7 @@
 								}]
 							},
 							"selectThreshold": 0.3,
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"unique": false,
@@ -9763,6 +9861,7 @@
 							"label": "Please Mention",
 							"spellcheck": true,
 							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"unique": false,
@@ -9825,6 +9924,7 @@
 				"label": "Approve/Reject",
 				"optionsLabelPosition": "right",
 				"inline": true,
+				"hideLabel": true,
 				"tableView": true,
 				"values": [{
 					"value": "true",
@@ -9835,6 +9935,7 @@
 					"label": "Rejected",
 					"shortcut": ""
 				}],
+				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"unique": false,
@@ -9843,24 +9944,27 @@
 				"key": "csrApproved",
 				"type": "radio",
 				"input": true,
-				"lockKey": true,
-				"hideLabel": true
+				"lockKey": true
 			}, {
-				"input": true,
-				"tableView": true,
 				"label": "Rejection Reason",
-				"key": "rejectionReason",
+				"autoExpand": false,
 				"spellcheck": true,
-				"validate": {
-					"required": true
-				},
-				"type": "textarea",
+				"tableView": true,
 				"inputFormat": "plain",
+				"clearOnHide": false,
+				"validate": {
+					"required": true,
+					"unique": false,
+					"multiple": false
+				},
+				"key": "rejectionReason",
 				"conditional": {
-					"show": "true",
+					"show": true,
 					"when": "csrApproved",
 					"eq": "false"
 				},
+				"type": "textarea",
+				"input": true,
 				"lockKey": true
 			}],
 			"tableView": false,
@@ -9896,10 +10000,73 @@
 	"title": "Endorsement_Dive Boat_CSR2",
 	"display": "form",
 	"access": [{
+		"roles": [],
+		"type": "create_own"
+	}, {
+		"roles": [],
+		"type": "create_all"
+	}, {
+		"roles": [],
+		"type": "read_own"
+	}, {
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
 		"type": "read_all"
+	}, {
+		"roles": [],
+		"type": "update_own"
+	}, {
+		"roles": [],
+		"type": "update_all"
+	}, {
+		"roles": [],
+		"type": "delete_own"
+	}, {
+		"roles": [],
+		"type": "delete_all"
+	}, {
+		"roles": [],
+		"type": "team_read"
+	}, {
+		"roles": [],
+		"type": "team_write"
+	}, {
+		"roles": [],
+		"type": "team_admin"
 	}],
-	"submissionAccess": [],
+	"submissionAccess": [{
+		"roles": [],
+		"type": "create_own"
+	}, {
+		"roles": [],
+		"type": "create_all"
+	}, {
+		"roles": [],
+		"type": "read_own"
+	}, {
+		"roles": [],
+		"type": "read_all"
+	}, {
+		"roles": [],
+		"type": "update_own"
+	}, {
+		"roles": [],
+		"type": "update_all"
+	}, {
+		"roles": [],
+		"type": "delete_own"
+	}, {
+		"roles": [],
+		"type": "delete_all"
+	}, {
+		"roles": [],
+		"type": "team_read"
+	}, {
+		"roles": [],
+		"type": "team_write"
+	}, {
+		"roles": [],
+		"type": "team_admin"
+	}],
 	"settings": {},
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"}]",
@@ -9910,6 +10077,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-16T13:17:31.933Z",
+	"modified": "2020-03-17T05:19:31.353Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }

@@ -199,6 +199,10 @@ class CommandService extends AbstractService
                 $this->logger->info("DEACTIVATE File ID");
                 return $this->deactivateFile($data);
                 break;
+            case 'submitWorkflow':
+                $this->logger->info("SUBMIT WORKFLOW");
+                return $this->submitWorkflow($data);
+                break;
             default:
                 break;
         };
@@ -620,6 +624,14 @@ class CommandService extends AbstractService
     {
         $submitActivity = $this->workflowInstanceService->submitActivity($data);
         return $submitActivity;
+    }
+
+    protected function submitWorkflow(&$data)
+    {
+        if(isset($data['activityInstanceId'])){
+           return $this->submitActivity($data);
+        }
+        return $this->startWorkflow($data);
     }
 
     protected function processFileData(&$data){

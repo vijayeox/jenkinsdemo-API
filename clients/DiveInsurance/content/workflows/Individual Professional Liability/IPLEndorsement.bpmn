@@ -4,7 +4,7 @@
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="iplEndorCover" />
+          <camunda:property name="template" value="endorsementConsolidationIpl" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1m44nyk</bpmn:outgoing>
@@ -22,16 +22,24 @@ def personalInfo = endorsementOptions.modify_personalInformation
 def additionalIn = endorsementOptions.modify_additionalInsured
 def upgradeInternationalCoverages = execution.getVariable('upgradeCareerCoverage')
 def autoRenewalJob = execution.getVariable('autoRenewalJob')
+def scubaFit = execution.getVariable('scubaFit')
+def cylinder = execution.getVariable('upgradecylinder')
 
 boolean result1 = false
 boolean result3 = false
 boolean result4 = false
+boolean result5 = false
 
 if(personalInfo){
     if(country != "United States of America"){
        result3=true 
     }
     execution.setVariable('CSRReviewRequired', result3)
+}
+if(cylinder){
+  if(cylinder == "cylinderInspector" || cylinder == "cylinderInstructor"){
+    result5 = true
+  }  
 }
 if(coverage || additionalIn){
 if (additionalInsured) {
@@ -45,7 +53,7 @@ if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternat
 	result4 = true
 }
 
-if (tecRecEndorsment == "accepted" || result1 || result4) {
+if (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5) {
   result3=true
 }
 
@@ -131,7 +139,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:userTask id="UserTask_14i3m9l" name="CSR Review" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR Group">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="iplEndorCsrWithoutPayment" />
+          <camunda:property name="template" value="endorsementConsolidationIpl" />
         </camunda:properties>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')</camunda:script>

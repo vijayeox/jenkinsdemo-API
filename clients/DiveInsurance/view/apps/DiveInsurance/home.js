@@ -27,7 +27,7 @@ class Home extends React.Component {
       var cache = cacheResponse.data;
       if (cache) {
         if (cache.workflow_uuid) {
-          this.setState({workflowId:cache.workflow_uuid});
+          this.setState({ workflowId: cache.workflow_uuid });
           this.getFormData(cache.workflow_uuid).then(formResponse => {
             if (formResponse.data) {
               this.setState({
@@ -131,6 +131,9 @@ class Home extends React.Component {
             appId={application_id}
           />
         ) : null}
+        <div id="floater">
+          <img src="./public/img/poweredby.png"></img>
+        </div>
       </div>
     );
   }

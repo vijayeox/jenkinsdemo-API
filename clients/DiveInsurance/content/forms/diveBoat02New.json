@@ -2105,9 +2105,9 @@
                     "hideLabel": true,
                     "tableView": true,
                     "validate": {
+                        "minLength": 1,
                         "unique": false,
-                        "multiple": false,
-                        "minLength": 1
+                        "multiple": false
                     },
                     "key": "DataGrid",
                     "conditional": {
@@ -6147,6 +6147,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T13:16:53.646Z",
+    "modified": "2020-03-16T15:11:03.529Z",
     "machineName": "testdivehub:diveBoat02New"
 }
