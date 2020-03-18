@@ -709,7 +709,7 @@ class FileService extends AbstractService
 
     public function getFileDocumentList($params)
     {
-        $selectQuery = 'select ox_field.name, ox_file_attribute.* from ox_file
+        $selectQuery = 'select ox_field.text, ox_file_attribute.* from ox_file
         inner join ox_file_attribute on ox_file_attribute.file_id = ox_file.id
         inner join ox_field on ox_field.id = ox_file_attribute.field_id
         inner join ox_app on ox_field.app_id = ox_app.id
@@ -725,7 +725,7 @@ class FileService extends AbstractService
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             foreach ($selectResultSet as $result) {
-                $documentsArray[$result['name']] =  json_decode($result['field_value'], true);
+                $documentsArray[$result['text']] =  json_decode($result['field_value'], true);
             }
             foreach ($documentsArray as $key=>$docItem) {
                    if(isset($docItem) && !isset($docItem[0]['file']) ){
