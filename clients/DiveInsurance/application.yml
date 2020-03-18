@@ -59,7 +59,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: Document
+                text: 'Policy Documents'
                 data_type: document
     -
         name: 'Dive Store'
@@ -70,7 +70,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: Document
+                text: 'Policy Documents'
                 data_type: document
     -
         name: 'Dive Boat'
@@ -81,7 +81,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: Document
+                text: 'Policy Documents'
                 data_type: document
     -
         name: 'Emergency First Response'
@@ -92,7 +92,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: Document
+                text: Policy Documents
                 data_type: document
     -
         name: 'Pocket Card Job'
@@ -137,20 +137,11 @@ menu:
                                 details:
                                     -
                                         type: Document
-                                        content: '<h4>{file.padi} - {file.firstname} {file.lastname}</h4><p> The Policy will expire on {moment(file.end_date).format(''Do MMMM YYYY'')} </p>'
-                                        params:
-                                            uuid: '{{uuid}}'
+                                        content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''Do MMMM YYYY'')} </p>'
+                                        useFileData: true
                                     -
                                         type: DocumentViewer
-                                        params:
-                                            uuid: '{{uuid}}'
-                                            documentTypes:
-                                                -
-                                                    title: 'Policy Documents'
-                                                    field: documents
-                                                -
-                                                    title: 'Attachments'
-                                                    field: attachments
+                                        url: 'file/{{uuid}}/document'
                             -
                                 name: Endorsement
                                 rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
@@ -500,20 +491,11 @@ menu:
                                 details:
                                     -
                                         type: Document
-                                        content: '<h4>{file.padi} - {file.firstname} {file.lastname}</h4><p> The Policy will expire on {moment(file.end_date).format(''Do MMMM YYYY'')} </p>'
-                                        params:
-                                            uuid: '{{uuid}}'
+                                        content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''Do MMMM YYYY'')} </p>'
+                                        useFileData: true
                                     -
                                         type: DocumentViewer
-                                        params:
-                                            uuid: '{{uuid}}'
-                                            documentTypes:
-                                                -
-                                                    title: 'Policy Documents'
-                                                    field: documents
-                                                -
-                                                    title: 'Attachments'
-                                                    field: attachments
+                                        url: 'file/{{uuid}}/document'
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
@@ -656,12 +638,7 @@ menu:
                                 details:
                                     -
                                         type: DocumentViewer
-                                        params:
-                                            uuid: '{{uuid}}'
-                                            documentTypes:
-                                                -
-                                                    title: 'Pocket Cards'
-                                                    field: documents
+                                        url: 'file/{{uuid}}/document'
                         operations:
                             title: 'Pocket Card'
                             actions:
