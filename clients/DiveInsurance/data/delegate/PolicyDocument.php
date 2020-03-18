@@ -71,6 +71,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'lpTemplate' => 'DiveStore_LP',
                         'lpheader' => 'DiveStore_LP_header.html',
                         'lpfooter' => 'DiveStore_LP_footer.html',
+                        'nTemplate' => 'Group_PL_NI',
+                        'nheader' => 'Group_NI_header.html',
+                        'nfooter' => 'Group_NI_footer.html',
                         'aniTemplate' => 'DiveStore_ANI',
                         'aniheader' => 'DS_Quote_ANI_header.html',
                         'anifooter' => null,
@@ -240,7 +243,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
 
                     if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
-                    $this->logger->info("DOCUMENT namedInsured"); 
+                    $this->logger->info("DOCUMENT namedInsured");
                     $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
                     }
                 }
@@ -269,7 +272,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                 }
 
-                if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
+                if(isset($temp['additionalLocations']) && is_array($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
                     for($i=0; $i<sizeof($temp['additionalLocations']);$i++){
                         $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
                         $temp["additionalLocationData"] = $temp['additionalLocations'][$i];
@@ -403,10 +406,16 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             $data['CSRReviewRequired'] = "";
             $data['rejectionReason'] = "";
-            $data['policyStatus'] = "In Force";
+            if($this->type == 'quote' || $this->type == 'endorsementQuote'){
+                $data['policyStatus'] = "Quote Approval Pending";
+            } else if($this->type == 'lapse'){
+                $data['policyStatus'] = "Lapsed";
+            } else {
+                $data['policyStatus'] = "In Force";
+            }
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
-            $this->logger->info("Policy Documnet Generation",print_r($data,true));
+            $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }
                  
@@ -607,5 +616,4 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
         }
-    }
-        
+}
