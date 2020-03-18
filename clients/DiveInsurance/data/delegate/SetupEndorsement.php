@@ -6,6 +6,7 @@ use Oxzion\AppDelegate\UserContextTrait;
 
 class SetupEndorsement extends AbstractAppDelegate
 {
+    use UserContextTrait;
     public function __construct(){
         parent::__construct();
     }
@@ -13,9 +14,9 @@ class SetupEndorsement extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
-        $data['privilege'] = $this->getPrivilege();
-        if(isset($data['privilege']['MANAGE_MY_POLICY_WRITE']) && 
-            $data['privilege']['MANAGE_MY_POLICY_WRITE'] == true){
+        $privileges = $this->getPrivilege();
+        if(isset($privileges['MANAGE_MY_POLICY_WRITE']) && 
+            $privileges['MANAGE_MY_POLICY_WRITE'] == true){
              $rates = $this->getRates($data,$persistenceService);
                 $data = array_merge($data,$rates);
                 $data['policyStatus'] = "Pending Approval";
@@ -63,7 +64,7 @@ class SetupEndorsement extends AbstractAppDelegate
                     $data['startDateRange'] = $startDateRange['label'];
                 }
         }
-        unset($data['privilege']);
+        unset($privileges);
         return $data;
     }
     protected function getRates($data,$persistenceService){

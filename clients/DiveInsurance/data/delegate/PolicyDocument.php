@@ -71,6 +71,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'lpTemplate' => 'DiveStore_LP',
                         'lpheader' => 'DiveStore_LP_header.html',
                         'lpfooter' => 'DiveStore_LP_footer.html',
+                        'nTemplate' => 'Group_PL_NI',
+                        'nheader' => 'Group_NI_header.html',
+                        'nfooter' => 'Group_NI_footer.html',
                         'aniTemplate' => 'DiveStore_ANI',
                         'aniheader' => 'DS_Quote_ANI_header.html',
                         'anifooter' => null,
@@ -92,7 +95,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'aifooter' => 'EFR_AI_footer.html')
         );
             
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldnames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts','attachments', 'physical_state','autoRenewalJob','groupNamedInsureds');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldnames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts','attachments', 'physical_state','autoRenewalJob','groupNamedInsureds','scubaFit_attachments','cylinderInstructor_attachments','cylinderInspector_attachments','techRec_attachments');
 
         $this->endorsementOptions = array('modify_personalInformation','modify_coverage','modify_additionalInsured','modify_businessAndPolicyInformation','modify_boatUsageCaptainCrewSchedule','modify_boatDeatails','modify_additionalInsured','modify_lossPayees','modify_groupProfessionalLiability');
     }
@@ -240,7 +243,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
 
                     if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
-                    $this->logger->info("DOCUMENT namedInsured"); 
+                    $this->logger->info("DOCUMENT namedInsured");
                     $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
                     }
                 }
@@ -269,14 +272,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                 }
 
-                // if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
-                //     for($i=0; $i<sizeof($temp['additionalLocations']);$i++){
-                //         $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
-                //         $temp["additionalLocationData"] = $temp['additionalLocations'][$i];
-                //         $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
-                //         unset($temp["additionalLocationData"]);
-                //     }
-                // }
+                if(isset($temp['additionalLocations']) && is_array($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
+                    for($i=0; $i<sizeof($temp['additionalLocations']);$i++){
+                        $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
+                        $temp["additionalLocationData"] = $temp['additionalLocations'][$i];
+                        $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
+                        unset($temp["additionalLocationData"]);
+                    }
+                }
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                     $this->logger->info("DOCUMENT groupPL");
@@ -336,7 +339,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents[$key] = $value;
                         }
                     } else {
-                        $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                        $documents['coi_document']  = $policyDocuments;
                     }
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
@@ -347,7 +350,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents[$key] = $value;
                         } 
                     } else {
-                        $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
+                        $documents['policy_document'] = $policyDocuments;
                     }
                 }
             }
@@ -403,10 +406,16 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             $data['CSRReviewRequired'] = "";
             $data['rejectionReason'] = "";
-            $data['policyStatus'] = "In Force";
+            if($this->type == 'quote' || $this->type == 'endorsementQuote'){
+                $data['policyStatus'] = "Quote Approval Pending";
+            } else if($this->type == 'lapse'){
+                $data['policyStatus'] = "Lapsed";
+            } else {
+                $data['policyStatus'] = "In Force";
+            }
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
-            $this->logger->info("Policy Documnet Generation",print_r($data,true));
+            $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }
                  
@@ -607,5 +616,4 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
         }
-    }
-        
+}
