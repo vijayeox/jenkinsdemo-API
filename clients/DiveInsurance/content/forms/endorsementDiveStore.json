@@ -1912,16 +1912,16 @@
 					"label": "Requested Policy Period",
 					"allowInput": false,
 					"format": "MM-dd-yyyy",
-					"disabled": true,
-					"tableView": false,
+					"tableView": true,
 					"datePicker": {
+						"minDate": "moment(). format('MM-dd-yyyy');",
 						"datepickerMode": "month"
 					},
 					"enableTime": false,
 					"timePicker": {
 						"showMeridian": false
 					},
-					"defaultDate": "2020-01-10T12:00:00+05:30",
+					"defaultDate": "moment()",
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
@@ -1947,7 +1947,7 @@
 						"hourIncrement": 1,
 						"minuteIncrement": 1,
 						"time_24hr": true,
-						"minDate": null,
+						"minDate": "moment(). format('MM-dd-yyyy');",
 						"maxDate": null
 					}
 				}, {
@@ -2160,7 +2160,8 @@
 			"show": "true",
 			"when": "endorsement_options",
 			"eq": "modify_businessAndPolicyInformation"
-		}
+		},
+		"path": "panelPanel"
 	}, {
 		"type": "panel",
 		"title": "Property Information",
@@ -8774,7 +8775,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 61,
+	"_vid": 62,
 	"title": "Endorsement - Dive Store",
 	"display": "wizard",
 	"access": [{
@@ -8855,6 +8856,6 @@
 	"path": "endorsementdivestore",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-18T10:47:06.922Z",
-	"modified": "2020-03-18T14:32:45.638Z",
+	"modified": "2020-03-19T04:05:15.559Z",
 	"machineName": "testdivehub:endorsementDiveStore"
 }
