@@ -1914,14 +1914,12 @@
 					"format": "MM-dd-yyyy",
 					"tableView": true,
 					"datePicker": {
-						"minDate": "moment(). format('MM-dd-yyyy');",
 						"datepickerMode": "month"
 					},
 					"enableTime": false,
 					"timePicker": {
 						"showMeridian": false
 					},
-					"defaultDate": "moment()",
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
@@ -1947,7 +1945,7 @@
 						"hourIncrement": 1,
 						"minuteIncrement": 1,
 						"time_24hr": true,
-						"minDate": "moment(). format('MM-dd-yyyy');",
+						"minDate": null,
 						"maxDate": null
 					}
 				}, {
@@ -1976,6 +1974,9 @@
 					"disabled": true,
 					"tableView": false,
 					"enableDate": false,
+					"datePicker": {
+						"datepickerMode": "day"
+					},
 					"enableTime": false,
 					"defaultValue": "2020-06-30T00:00:00+05:30",
 					"validate": {
@@ -2002,10 +2003,7 @@
 						"minDate": null,
 						"maxDate": null
 					},
-					"hideOnChildrenHidden": false,
-					"datePicker": {
-						"datepickerMode": "day"
-					}
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -8775,7 +8773,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 62,
+	"_vid": 63,
 	"title": "Endorsement - Dive Store",
 	"display": "wizard",
 	"access": [{
@@ -8856,6 +8854,6 @@
 	"path": "endorsementdivestore",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-18T10:47:06.922Z",
-	"modified": "2020-03-19T04:05:15.559Z",
+	"modified": "2020-03-19T04:37:54.251Z",
 	"machineName": "testdivehub:endorsementDiveStore"
 }
