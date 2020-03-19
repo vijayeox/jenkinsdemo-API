@@ -1572,7 +1572,7 @@
 					"tableView": false,
 					"defaultValue": false,
 					"validate": {
-						"customMessage": "Please let us know if any Incidents have occured in the past!",
+						"customMessage": "Please let us know if any incidents have occured in the past!",
 						"custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)",
 						"unique": false,
 						"multiple": false
@@ -1581,8 +1581,27 @@
 					"properties": {
 						"negate": "section2Agreement"
 					},
+					"logic": [{
+						"name": "disableFieldEdit",
+						"trigger": {
+							"type": "javascript",
+							"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
+						},
+						"actions": [{
+							"name": "disableFieldEdit",
+							"type": "property",
+							"property": {
+								"label": "Disabled",
+								"value": "disabled",
+								"type": "boolean"
+							},
+							"state": true
+						}]
+					}],
 					"type": "checkbox",
-					"input": true
+					"input": true,
+					"dataGridLabel": false,
+					"lockKey": true
 				}],
 				"type": "panel",
 				"label": "Panel",
@@ -1724,7 +1743,7 @@
 					"input": true,
 					"components": [{
 						"label": "_",
-						"tableView": true,
+						"tableView": false,
 						"key": "f1",
 						"type": "well",
 						"input": false,
@@ -2000,11 +2019,10 @@
 					"path": "incidentReport"
 				}, {
 					"label": "I Agree",
-					"tableView": true,
+					"tableView": false,
 					"defaultValue": false,
-					"customDefaultValue": "value = false;",
 					"validate": {
-						"customMessage": "Please let us know if any Incidents have occured in the past!",
+						"customMessage": "Please let us know if any incidents have occured in the past!",
 						"custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)",
 						"unique": false,
 						"multiple": false
@@ -2013,6 +2031,26 @@
 					"properties": {
 						"negate": "section1Agreement"
 					},
+					"logic": [{
+						"name": "disableFieldEdit",
+						"trigger": {
+							"type": "javascript",
+							"simple": {
+								"show": true
+							},
+							"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
+						},
+						"actions": [{
+							"name": "diableField",
+							"type": "property",
+							"property": {
+								"label": "Disabled",
+								"value": "disabled",
+								"type": "boolean"
+							},
+							"state": true
+						}]
+					}],
 					"type": "checkbox",
 					"input": true,
 					"dataGridLabel": false,
@@ -2081,6 +2119,23 @@
 				},
 				"errorLabel": "Please Acknowledge the Agreements",
 				"key": "signatureAcknowledged",
+				"logic": [{
+					"name": "disableFieldEdit",
+					"trigger": {
+						"type": "javascript",
+						"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
+					},
+					"actions": [{
+						"name": "diableField",
+						"type": "property",
+						"property": {
+							"label": "Disabled",
+							"value": "disabled",
+							"type": "boolean"
+						},
+						"state": true
+					}]
+				}],
 				"type": "checkbox",
 				"input": true,
 				"dataGridLabel": false
@@ -2132,15 +2187,32 @@
 				"defaultValue": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Please Acknowledge the GDPR Agreements",
+					"customMessage": "Please acknowledge the GDPR Agreement",
 					"unique": false,
 					"multiple": false
 				},
-				"errorLabel": "Please Acknowledge the GDPR Agreements",
-				"key": "GDPRAgreement",
+				"key": "page4Panel2PanelIagree",
+				"logic": [{
+					"name": "disableFieldEdit",
+					"trigger": {
+						"type": "javascript",
+						"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
+					},
+					"actions": [{
+						"name": "disableField",
+						"type": "property",
+						"property": {
+							"label": "Disabled",
+							"value": "disabled",
+							"type": "boolean"
+						},
+						"state": true
+					}]
+				}],
 				"type": "checkbox",
 				"input": true,
-				"dataGridLabel": false
+				"dataGridLabel": false,
+				"lockKey": true
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -2702,26 +2774,118 @@
 		"properties": {
 			"payment_confirmation_page": "true"
 		},
-		"breadcrumbClickable": true,
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? false: true;\n}"
+	}, {
+		"input": false,
+		"label": "Approval",
+		"tableView": false,
+		"key": "csrapprovalscreen",
+		"type": "panel",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		},
+		"size": "md",
+		"block": false,
+		"action": "submit",
+		"disableOnInvalid": false,
+		"theme": "primary",
+		"dataGridLabel": true,
+		"title": "Approval",
+		"components": [{
+			"label": "Please process the payment and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the payment and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page6Pleaseprocessthepaymentandapprove",
+			"type": "htmlelement",
+			"input": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
+		}, {
+			"label": "la",
+			"tableView": false,
+			"key": "pagenew",
+			"type": "well",
+			"input": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			},
+			"components": [{
+				"label": "Approve/Reject the Application",
+				"optionsLabelPosition": "right",
+				"inline": true,
+				"hideLabel": true,
+				"autofocus": true,
+				"tableView": true,
+				"values": [{
+					"label": "Approved",
+					"value": "accepted",
+					"shortcut": ""
+				}, {
+					"label": "Rejected",
+					"value": "rejected",
+					"shortcut": ""
+				}],
+				"validate": {
+					"required": true,
+					"customMessage": "Please Approve/Reject the Application",
+					"unique": false,
+					"multiple": false
+				},
+				"key": "approved",
+				"type": "radio",
+				"input": true
+			}],
+			"path": "la"
+		}, {
+			"label": "Rejection Reason",
+			"placeholder": "Please enter the reason for Rejection",
+			"autoExpand": false,
+			"spellcheck": true,
+			"tableView": true,
+			"inputFormat": "plain",
+			"validate": {
+				"required": true,
+				"customMessage": "Please Provide the reason for Rejecting the Policy",
+				"unique": false,
+				"multiple": false
+			},
+			"key": "rejectionReason",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "rejected"
+			},
+			"type": "textarea",
+			"input": true
+		}],
+		"breadcrumbClickable": false,
 		"buttonSettings": {
 			"previous": true,
 			"cancel": true,
 			"next": true
 		},
-		"collapsible": false
-	}, {
-		"input": true,
-		"label": "Submit",
-		"tableView": false,
-		"key": "submit",
-		"type": "button",
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"collapsible": false,
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 371,
+	"_vid": 375,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -2798,13 +2962,14 @@
 		"clickable": "false",
 		"showNext": "true",
 		"showPrevious": "true",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"startWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]"
 	},
 	"name": "emergencyFirstResponseProfessionalLiability",
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-03-17T20:19:16.419Z",
+	"modified": "2020-03-18T22:06:11.761Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

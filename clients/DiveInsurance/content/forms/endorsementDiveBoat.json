@@ -1733,7 +1733,7 @@
 							"unique": false,
 							"multiple": false
 						},
-						"key": "amount",
+						"key": "data_grid_amount",
 						"type": "number",
 						"decimalLimit": 2,
 						"input": true,
@@ -3667,7 +3667,7 @@
 								"pull": 0
 							}, {
 								"components": [{
-									"label": "Zip Code",
+									"label": "Zip",
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -5088,7 +5088,7 @@
 								"pull": 0
 							}, {
 								"components": [{
-									"label": "Zip Code",
+									"label": "Zip",
 									"spellcheck": true,
 									"tableView": true,
 									"validate": {
@@ -5359,6 +5359,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-16T15:49:36.780Z",
+	"modified": "2020-03-18T11:18:47.428Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }
