@@ -19,7 +19,7 @@
         "columns": [{
           "components": [{
             "label": "verified",
-            "key": "verified1",
+            "key": "verified",
             "type": "hidden",
             "input": true,
             "tableView": false,
@@ -29,12 +29,12 @@
             },
             "hideOnChildrenHidden": false
           }, {
+            "label": "padiVerified",
+            "defaultValue": "false",
+            "key": "padiVerified",
+            "type": "hidden",
             "input": true,
             "tableView": true,
-            "key": "padiVerified",
-            "label": "padiVerified",
-            "type": "hidden",
-            "defaultValue": "false",
             "lockKey": true,
             "hideOnChildrenHidden": false,
             "validate": {
@@ -185,6 +185,25 @@
             "customConditional": "show = ((data['user_exists']==1||data['user_exists']=='1'))",
             "hideOnChildrenHidden": false,
             "tableView": false
+          }, {
+            "label": "Content",
+            "attrs": [{
+              "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
+              "attr": "style"
+            }],
+            "content": "Policy exists for given PADI Number",
+            "refreshOnChange": false,
+            "tableView": false,
+            "key": "panelPanel2ColumnsContent4",
+            "customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==true||data['policy_exists']=='true') )",
+            "type": "htmlelement",
+            "input": false,
+            "hideLabel": true,
+            "hideOnChildrenHidden": false,
+            "validate": {
+              "unique": false,
+              "multiple": false
+            }
           }, {
             "label": "Content",
             "attrs": [{
@@ -2500,7 +2519,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -2525,7 +2543,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -2551,7 +2568,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -2576,7 +2592,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -2602,7 +2617,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -2627,7 +2641,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -2653,7 +2666,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -2694,10 +2706,9 @@
                 "label": "Total:",
                 "prefix": "$",
                 "mask": false,
-                "spellcheck": true,
+                "spellcheck": false,
                 "disabled": true,
-                "tableView": true,
-                "defaultValue": "0.00",
+                "tableView": false,
                 "delimiter": false,
                 "requireDecimal": true,
                 "inputFormat": "plain",
@@ -2775,13 +2786,11 @@
               [{
                 "components": [{
                   "label": "What is the replacement value?",
-                  "placeholder": "What is the replacement value?",
                   "tooltip": "What is the replacement value?",
                   "prefix": "$",
                   "mask": false,
-                  "spellcheck": true,
-                  "tableView": true,
-                  "defaultValue": "0.00",
+                  "spellcheck": false,
+                  "tableView": false,
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -3016,14 +3025,12 @@
       "tableView": false,
       "components": [{
         "label": "Estimated 12 month retail receipts",
-        "placeholder": "Estimated 12 month retail receipts",
         "description": "Except Instructional/Supervisory & Travel Receipts.This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
         "tooltip": "Estimated 12 month retail receipts",
         "prefix": "$",
         "mask": false,
         "spellcheck": true,
         "tableView": true,
-        "defaultValue": "0.00",
         "delimiter": false,
         "requireDecimal": true,
         "inputFormat": "plain",
@@ -3124,12 +3131,10 @@
         }, {
           "components": [{
             "label": "Pool Liability",
-            "placeholder": "Pool Liability",
             "prefix": "$",
             "mask": false,
             "spellcheck": true,
             "tableView": true,
-            "defaultValue": "0.00",
             "delimiter": false,
             "requireDecimal": true,
             "inputFormat": "plain",
@@ -4704,146 +4709,160 @@
                     "rows": [
                       [{
                         "components": [{
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
                           "label": "Furniture, fixtures and equipment:",
+                          "prefix": "$",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
+                          "requireDecimal": true,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
+                          "validate": {
+                            "multiple": false,
+                            "unique": false
+                          },
                           "key": "additionalLocationFurniturefixturesAndEquipment",
-                          "placeholder": "Furniture, fixtures and equipment:",
-                          "prefix": "$",
-                          "defaultValue": "0.00",
-                          "clearOnHide": false,
                           "type": "number",
-                          "lockKey": true,
-                          "requireDecimal": true,
                           "decimalLimit": 2,
-                          "validate": {
-                            "multiple": false,
-                            "unique": false
-                          }
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
                         }]
                       }, {
                         "components": [{
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
                           "label": "Inventory/Stock:",
+                          "prefix": "$",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
+                          "requireDecimal": true,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
+                          "validate": {
+                            "multiple": false,
+                            "unique": false
+                          },
                           "key": "additionalLocationTableInventoryStock",
-                          "placeholder": "Inventory/Stock:",
-                          "prefix": "$",
-                          "defaultValue": "0.00",
-                          "clearOnHide": false,
                           "type": "number",
-                          "lockKey": true,
-                          "requireDecimal": true,
                           "decimalLimit": 2,
-                          "validate": {
-                            "multiple": false,
-                            "unique": false
-                          }
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
                         }]
                       }],
                       [{
                         "components": [{
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
                           "label": "Property of others",
+                          "prefix": "$",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
+                          "requireDecimal": true,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
+                          "validate": {
+                            "multiple": false,
+                            "unique": false
+                          },
                           "key": "additionalLocationPropertyOfOthers",
-                          "placeholder": "Property of others",
-                          "prefix": "$",
-                          "defaultValue": "0.00",
-                          "clearOnHide": false,
                           "type": "number",
-                          "lockKey": true,
                           "decimalLimit": 2,
-                          "requireDecimal": true,
-                          "validate": {
-                            "multiple": false,
-                            "unique": false
-                          }
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
                         }]
                       }, {
                         "components": [{
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
                           "label": "Signs (Attached or Detached)",
-                          "key": "additionalLocationSignsAttachedOrDetached",
-                          "placeholder": "Signs (Attached or Detached)",
                           "prefix": "$",
-                          "defaultValue": "0.00",
-                          "clearOnHide": false,
-                          "type": "number",
-                          "lockKey": true,
-                          "decimalLimit": 2,
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
                           "requireDecimal": true,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
                           "validate": {
                             "multiple": false,
                             "unique": false
-                          }
+                          },
+                          "key": "additionalLocationSignsAttachedOrDetached",
+                          "type": "number",
+                          "decimalLimit": 2,
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
                         }]
                       }],
                       [{
                         "components": [{
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
                           "label": "Tenant Improvements",
-                          "key": "additionalLocationTenantImprovements",
-                          "placeholder": "Tenant Improvements",
                           "prefix": "$",
-                          "defaultValue": "0.00",
-                          "clearOnHide": false,
-                          "type": "number",
-                          "lockKey": true,
-                          "decimalLimit": 2,
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
                           "requireDecimal": true,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
                           "validate": {
                             "multiple": false,
                             "unique": false
-                          }
+                          },
+                          "key": "additionalLocationTenantImprovements",
+                          "type": "number",
+                          "decimalLimit": 2,
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
                         }]
                       }, {
                         "components": [{
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
                           "label": "Other",
-                          "key": "additionalLocationOther",
-                          "placeholder": "Other",
                           "prefix": "$",
-                          "defaultValue": "0.00",
-                          "clearOnHide": false,
-                          "type": "number",
-                          "lockKey": true,
-                          "decimalLimit": 2,
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
                           "requireDecimal": true,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
                           "validate": {
                             "multiple": false,
                             "unique": false
-                          }
+                          },
+                          "key": "additionalLocationOther",
+                          "type": "number",
+                          "decimalLimit": 2,
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
                         }]
                       }],
                       [{
                         "components": [{
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
                           "label": "Do you own property, including compressors, off premises",
-                          "key": "additionalLocationDoYouOwnPropertyIncludingCompressorsOffPremises",
-                          "placeholder": "Do you own property, including compressors, off premises",
                           "prefix": "$",
-                          "defaultValue": "0.00",
-                          "clearOnHide": false,
-                          "type": "number",
-                          "lockKey": true,
-                          "decimalLimit": 2,
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
                           "requireDecimal": true,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
                           "validate": {
                             "multiple": false,
                             "unique": false
-                          }
+                          },
+                          "key": "additionalLocationDoYouOwnPropertyIncludingCompressorsOffPremises",
+                          "type": "number",
+                          "decimalLimit": 2,
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
                         }]
                       }, {
                         "components": []
@@ -4866,13 +4885,11 @@
                     "columns": [{
                       "components": [{
                         "label": "Total",
-                        "placeholder": "Total",
                         "prefix": "$",
                         "mask": false,
                         "spellcheck": true,
                         "disabled": true,
                         "tableView": true,
-                        "defaultValue": "0.00",
                         "delimiter": false,
                         "requireDecimal": true,
                         "inputFormat": "plain",
@@ -4946,27 +4963,29 @@
                     "key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
                     "columns": [{
                       "components": [{
-                        "input": true,
-                        "tableView": true,
-                        "inputType": "number",
                         "label": "What is the replacement value?",
-                        "key": "ALBuildingReplacementValue",
-                        "placeholder": "What is the replacement value?",
                         "prefix": "$",
-                        "defaultValue": "0.00",
+                        "mask": false,
+                        "spellcheck": true,
+                        "tableView": true,
+                        "delimiter": false,
+                        "requireDecimal": true,
+                        "inputFormat": "plain",
                         "clearOnHide": false,
                         "validate": {
                           "required": true,
                           "unique": false,
                           "multiple": false
                         },
-                        "type": "number",
+                        "key": "ALBuildingReplacementValue",
                         "conditional": {
-                          "show": "true"
+                          "show": true
                         },
-                        "lockKey": true,
-                        "requireDecimal": true,
+                        "type": "number",
                         "decimalLimit": 2,
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
                         "hideOnChildrenHidden": false
                       }, {
                         "label": "What is the square footage of your building?",
@@ -5098,24 +5117,26 @@
                 "theme": "primary",
                 "tableView": false,
                 "components": [{
-                  "input": true,
-                  "tableView": true,
-                  "inputType": "number",
                   "label": "Estimated 12 month retail receipts",
-                  "key": "estimatedMonthlyReceipts",
-                  "placeholder": "Estimated 12 month retail receipts",
+                  "description": "Except Instructional/Supervisory & Travel Receipts.This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
                   "prefix": "$",
-                  "defaultValue": "0.00",
+                  "mask": false,
+                  "spellcheck": true,
+                  "tableView": true,
+                  "delimiter": false,
+                  "requireDecimal": true,
+                  "inputFormat": "plain",
                   "clearOnHide": false,
                   "validate": {
                     "required": true,
                     "unique": false,
                     "multiple": false
                   },
+                  "key": "estimatedMonthlyReceipts",
                   "type": "number",
-                  "description": "Except Instructional/Supervisory & Travel Receipts.This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
-                  "requireDecimal": true,
                   "decimalLimit": 2,
+                  "input": true,
+                  "inputType": "number",
                   "lockKey": true
                 }, {
                   "input": true,
@@ -5199,7 +5220,6 @@
                       "key": "ALPoolLiability",
                       "placeholder": "Pool Liability",
                       "prefix": "$",
-                      "defaultValue": "0.00",
                       "clearOnHide": false,
                       "validate": {
                         "required": true
@@ -5794,7 +5814,6 @@
                       "mask": false,
                       "spellcheck": true,
                       "tableView": true,
-                      "defaultValue": "0.00",
                       "delimiter": false,
                       "requireDecimal": true,
                       "inputFormat": "plain",
@@ -5823,7 +5842,6 @@
                       "mask": false,
                       "spellcheck": true,
                       "tableView": true,
-                      "defaultValue": "0.00",
                       "delimiter": false,
                       "requireDecimal": true,
                       "inputFormat": "plain",
@@ -5934,7 +5952,6 @@
                     "delimiter": false,
                     "requireDecimal": true,
                     "inputFormat": "plain",
-                    "clearOnHide": false,
                     "validate": {
                       "required": true,
                       "unique": false,
@@ -6113,7 +6130,6 @@
               "mask": false,
               "spellcheck": true,
               "tableView": true,
-              "defaultValue": "0.00",
               "delimiter": false,
               "requireDecimal": true,
               "inputFormat": "plain",
@@ -6181,8 +6197,8 @@
               "description": "$40,000 included in standard policy",
               "prefix": "$",
               "mask": false,
-              "spellcheck": true,
-              "tableView": true,
+              "spellcheck": false,
+              "tableView": false,
               "defaultValue": "40000.00",
               "delimiter": false,
               "requireDecimal": true,
@@ -6310,9 +6326,6 @@
               "tableView": true,
               "data": {
                 "values": [{
-                  "value": "no",
-                  "label": "No"
-                }, {
                   "value": "excessLiabilityCoverage1M",
                   "label": "1M"
                 }, {
@@ -6446,7 +6459,6 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": true,
-                  "defaultValue": "0.00",
                   "delimiter": false,
                   "requireDecimal": true,
                   "inputFormat": "plain",
@@ -6616,7 +6628,6 @@
         "label": "Estimated annual group receipts",
         "key": "groupReceipts",
         "prefix": "$",
-        "defaultValue": "0.00",
         "clearOnHide": false,
         "validate": {
           "required": true,
@@ -6927,7 +6938,7 @@
               "hideOnChildrenHidden": false
             }, {
               "label": "state",
-              "key": "state2",
+              "key": "state",
               "type": "hidden",
               "input": true,
               "tableView": false,
@@ -6938,7 +6949,7 @@
               "hideOnChildrenHidden": false
             }, {
               "label": "city",
-              "key": "city3",
+              "key": "city",
               "type": "hidden",
               "input": true,
               "tableView": false,
@@ -7123,9 +7134,9 @@
           "hideLabel": true,
           "tableView": true,
           "validate": {
+            "minLength": 1,
             "unique": false,
-            "multiple": false,
-            "minLength": 1
+            "multiple": false
           },
           "key": "groupAdditionalInsured",
           "type": "datagrid",
@@ -7139,6 +7150,7 @@
                 "tableView": true,
                 "clearOnHide": false,
                 "validate": {
+                  "required": true,
                   "unique": false,
                   "multiple": false
                 },
@@ -7153,6 +7165,7 @@
                 "tableView": true,
                 "clearOnHide": false,
                 "validate": {
+                  "required": true,
                   "unique": false,
                   "multiple": false
                 },
@@ -7184,6 +7197,7 @@
                 "selectThreshold": 0.3,
                 "clearOnHide": false,
                 "validate": {
+                  "required": true,
                   "unique": false,
                   "multiple": false
                 },
@@ -7212,6 +7226,7 @@
                 "selectThreshold": 0.3,
                 "clearOnHide": false,
                 "validate": {
+                  "required": true,
                   "unique": false,
                   "multiple": false
                 },
@@ -7234,6 +7249,7 @@
                 "tableView": true,
                 "clearOnHide": false,
                 "validate": {
+                  "required": true,
                   "unique": false,
                   "multiple": false
                 },
@@ -7252,6 +7268,7 @@
                 "inputFormat": "plain",
                 "clearOnHide": false,
                 "validate": {
+                  "required": true,
                   "multiple": false,
                   "unique": false
                 },
@@ -7327,22 +7344,23 @@
           "type": "textfield",
           "lockKey": true
         }, {
-          "input": true,
           "label": "Validate and Add Named Insureds",
+          "action": "event",
+          "showValidations": false,
+          "theme": "success",
           "tableView": false,
           "key": "validatePadiNI",
-          "action": "event",
-          "theme": "success",
-          "type": "button",
           "properties": {
             "delegate": "NamedInsuredPadiVerification",
             "sourceDataKey": "namedPadi",
             "destinationDataKey": "groupNamedInsureds",
             "valueKey": "padi",
             "validationKey": "padiVerified",
-            "cleanSource": "true"
+            "clearSource": "true"
           },
+          "type": "button",
           "event": "callDelegate",
+          "input": true,
           "lockKey": true,
           "validate": {
             "unique": false,
@@ -7350,12 +7368,12 @@
           }
         }, {
           "label": "Edit Grid",
-          "disableAddingRemovingRows": false,
+          "disableAddingRemovingRows": true,
           "hideLabel": true,
           "tableView": true,
           "templates": {
             "header": "<div class=\"row\"> \n  {%util.eachComponent(components, function(component) { %} \n    <div class=\"col-sm-2\"> \n      {{ component.label }} \n    </div> \n  {% }) %} \n</div>",
-            "row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-4\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+            "row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-4\">\n      <div class=\"btn-group pull-right\">\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
           },
           "modal": false,
           "validate": {
@@ -9014,7 +9032,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 85,
+  "_vid": 91,
   "title": "Dive Store New Application",
   "display": "wizard",
   "access": [{
@@ -9032,6 +9050,6 @@
   "path": "divestorenewapplication",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T10:43:52.525Z",
-  "modified": "2020-03-17T10:06:29.504Z",
+  "modified": "2020-03-18T13:22:23.857Z",
   "machineName": "testdivehub:diveStoreCsrReview"
 }
