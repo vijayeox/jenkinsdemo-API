@@ -480,8 +480,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
 
                 if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
-                    $group = 'Group Professional Liability';
-                    $policyDetails = $this->getPolicyDetails($data,$persistenceService,$group);
+                    $product = 'Group Professional Liability';
+                    $policyDetails = $this->getPolicyDetails($data,$persistenceService,$product);
                     if($policyDetails){
                         $data['group_policy_id'] = $policyDetails['policy_number'];
                         $data['group_carrier'] = $policyDetails['carrier'];
@@ -549,11 +549,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             return "";
         }
         
-        private function getPolicyDetails($data,$persistenceService,$group = null)
+        private function getPolicyDetails($data,$persistenceService,$product = null)
         {  
-            $product = $data['product'];
-            if(isset($group)){
-                $product = $group;
+            if(!isset($product)){
+                $product = $data['product'];
             }
             $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' AND now() BETWEEN start_date AND end_date;";
             $resultQuery = $persistenceService->selectQuery($selectQuery); 
