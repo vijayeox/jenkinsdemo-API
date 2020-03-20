@@ -2908,7 +2908,6 @@
 							[{
 								"components": [{
 									"label": "What is the replacement value?",
-									"tooltip": "What is the replacement value?",
 									"prefix": "$",
 									"mask": false,
 									"spellcheck": true,
@@ -2937,37 +2936,30 @@
 								}]
 							}, {
 								"components": [{
-									"label": "Year built?",
-									"tooltip": "Year built?",
-									"mask": false,
-									"spellcheck": true,
+									"label": "Year Built?",
+									"widget": "choicesjs",
 									"tableView": true,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"clearOnHide": false,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{}],
+										"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+									},
+									"template": "<span>{{ item }}</span>",
+									"selectThreshold": 0.3,
 									"validate": {
-										"min": null,
-										"max": null,
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
-									"key": "pageNaNColumnsTable2Yearbuilt",
-									"conditional": {
-										"show": true,
-										"when": "pageNaNColumnsDoyouownthebuilding"
-									},
-									"type": "number",
+									"key": "built_year",
+									"type": "select",
 									"input": true,
-									"inputType": "number",
-									"labelWidth": 2,
-									"labelMargin": 3
+									"hideOnChildrenHidden": false
 								}]
 							}],
 							[{
 								"components": [{
 									"label": "What is the square footage of your building?",
-									"tooltip": "What is the square footage of your building?",
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -2989,7 +2981,6 @@
 							}, {
 								"components": [{
 									"label": "Updates on plumbing, electrical, roof, etc.",
-									"tooltip": "Updates on plumbing, electrical, roof, etc.",
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
@@ -5070,25 +5061,24 @@
 											"pull": 0
 										}, {
 											"components": [{
-												"label": "Year built?",
-												"mask": false,
-												"spellcheck": true,
+												"label": "Year Built?",
+												"widget": "choicesjs",
 												"tableView": true,
-												"delimiter": false,
-												"requireDecimal": false,
-												"inputFormat": "plain",
+												"dataSrc": "custom",
+												"data": {
+													"values": [{}],
+													"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+												},
+												"template": "<span>{{ item }}</span>",
+												"selectThreshold": 0.3,
 												"validate": {
-													"multiple": false,
-													"unique": false
+													"required": true,
+													"unique": false,
+													"multiple": false
 												},
-												"key": "yearBuildAL",
-												"conditional": {
-													"show": true
-												},
-												"type": "number",
+												"key": "built_year",
+												"type": "select",
 												"input": true,
-												"inputType": "number",
-												"lockKey": true,
 												"hideOnChildrenHidden": false
 											}, {
 												"label": "Updates on plumbing, electrical, roof, etc.",
@@ -11512,6 +11502,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-03-20T08:56:04.784Z",
+	"modified": "2020-03-20T12:00:58.308Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

@@ -2796,30 +2796,25 @@
 								}]
 							}, {
 								"components": [{
-									"label": "Year built?",
-									"mask": false,
-									"spellcheck": true,
+									"label": "Year Built?",
+									"widget": "choicesjs",
 									"tableView": true,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"clearOnHide": false,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{}],
+										"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+									},
+									"template": "<span>{{ item }}</span>",
+									"selectThreshold": 0.3,
 									"validate": {
-										"min": null,
-										"max": null,
+										"required": true,
 										"unique": false,
 										"multiple": false
 									},
-									"key": "pageNaNColumnsTable2Yearbuilt",
-									"conditional": {
-										"show": true,
-										"when": "pageNaNColumnsDoyouownthebuilding"
-									},
-									"type": "number",
+									"key": "built_year",
+									"type": "select",
 									"input": true,
-									"inputType": "number",
-									"labelWidth": 2,
-									"labelMargin": 3
+									"hideOnChildrenHidden": false
 								}]
 							}],
 							[{
@@ -5016,25 +5011,24 @@
 										"pull": 0
 									}, {
 										"components": [{
-											"label": "Year built?",
-											"mask": false,
-											"spellcheck": true,
+											"label": "Year Built?",
+											"widget": "choicesjs",
 											"tableView": true,
-											"delimiter": false,
-											"requireDecimal": false,
-											"inputFormat": "plain",
+											"dataSrc": "custom",
+											"data": {
+												"values": [{}],
+												"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+											},
+											"template": "<span>{{ item }}</span>",
+											"selectThreshold": 0.3,
 											"validate": {
-												"multiple": false,
-												"unique": false
+												"required": true,
+												"unique": false,
+												"multiple": false
 											},
-											"key": "yearBuildAL",
-											"conditional": {
-												"show": true
-											},
-											"type": "number",
+											"key": "built_year",
+											"type": "select",
 											"input": true,
-											"inputType": "number",
-											"lockKey": true,
 											"hideOnChildrenHidden": false
 										}, {
 											"label": "Updates on plumbing, electrical, roof, etc.",
@@ -11616,6 +11610,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-03-20T08:12:13.969Z",
+	"modified": "2020-03-20T12:01:35.290Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
