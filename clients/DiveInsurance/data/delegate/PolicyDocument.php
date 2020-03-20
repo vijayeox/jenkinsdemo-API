@@ -233,11 +233,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-                         $document['roaster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roaster','roasterHeader','roasterFooter');
+                         $document['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
                     }
                     else{
-                
-                        $data['group_certificate_no'] = $temp['group_certificate_no'] = 'S'.$temp['certificate_no'];
                         $this->logger->info("DOCUMENT groupPL");
                         $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
 
@@ -263,14 +261,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
                 }
 
-                if(!isset($temp['CrewInBoatCount']) || $temp['CrewInBoatCount'] == ''){
-                    $documents['boat_acknowledgement'] = $this->copyDocuments($temp,$dest['relativePath'],'boatAcknowledgement');
+                if($this->type == 'quote'){
+                    if(!isset($temp['CrewInBoatCount']) || $temp['CrewInBoatCount'] == ''){
+                        $documents['boat_acknowledgement'] = $this->copyDocuments($temp,$dest['relativePath'],'boatAcknowledgement');
+                    }
+                    if(!isset($temp['CrewInWaterCount']) || $temp['CrewInWaterCount'] == ''){
+                         $documents['water_acknowledgement'] = $this->copyDocuments($temp,$dest['relativePath'],'waterAcknowledgement');
+                    }
                 }
+
+
                 if(isset($temp['CrewInWaterCount']) && $temp['CrewInWaterCount'] != ''){
                     $documents['water_endorsement_certificate'] = $this->copyDocuments($temp,$dest['relativePath'],'waterEndorsement');
-                }else {
-                    $documents['water_acknowledgement'] = $this->copyDocuments($temp,$dest['relativePath'],'waterAcknowledgement');
                 }
+                   
 
                  if(isset($this->template[$temp['product']]['blanketForm'])){
                     $this->logger->info("DOCUMENT blanketForm");
@@ -298,15 +302,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
-                    if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-                         $document['roaster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roaster','roasterHeader','roasterFooter');
+
+                   if($this->type == 'quote' || $this->type == 'endorsementQuote'){
+                         $document['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
                     }
                     else{
-                
-                        $data['group_certificate_no'] = $temp['group_certificate_no'] = 'S'.$temp['certificate_no'];
                         $this->logger->info("DOCUMENT groupPL");
                         $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
-
 
                         if(isset($temp['additionalNamedInsured']) && $temp['group_additional_insureds_select'] == 'yes'){
                         $this->logger->info("DOCUMENT additionalNamedInsured");
@@ -444,6 +446,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $data['certificate_no'] = $data['certificate_no'].' - '.$length;
                     }else{
                         $data['certificate_no'] = $coi_number;
+                        if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
+                            $data['group_certificate_no'] = 'S'.$coi_number;
+                        }
                     }
                     
                 }
@@ -472,6 +477,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $data['policy_id'] = $policyDetails['policy_number'];
                         $data['carrier'] = $policyDetails['carrier'];
                     } 
+                }
+
+                if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
+                    $group = 'Group Professional Liability';
+                    $policyDetails = $this->getPolicyDetails($data,$persistenceService,$group);
+                    if($policyDetails){
+                        $data['group_policy_id'] = $policyDetails['policy_number'];
+                        $data['group_carrier'] = $policyDetails['carrier'];
+                    }    
                 }
                 
                 $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
@@ -535,9 +549,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             return "";
         }
         
-        private function getPolicyDetails($data,$persistenceService)
+        private function getPolicyDetails($data,$persistenceService,$group = null)
         {  
-            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$data['product']."' AND now() BETWEEN start_date AND end_date;";
+            $product = $data['product'];
+            if(isset($group)){
+                $product = $group;
+            }
+            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' AND now() BETWEEN start_date AND end_date;";
             $resultQuery = $persistenceService->selectQuery($selectQuery); 
             while ($resultQuery->next()) {
                 $policyDetails[] = $resultQuery->current();
