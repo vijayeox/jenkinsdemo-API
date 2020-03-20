@@ -3,9 +3,11 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\Country;
+use Oxzion\AppDelegate\UserContextTrait;
 
 class PadiVerification extends AbstractAppDelegate
 {
+    use UserContextTrait;
     public function __construct(){
         parent::__construct();
     }
@@ -13,7 +15,15 @@ class PadiVerification extends AbstractAppDelegate
     // Padi Verification is performed here
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("Padi Verification");
+        $this->logger->info("Padi Verification new".json_encode($data));
+        $privileges = $this->getPrivilege();
+        
+        if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
+            $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
+            $data['initiatedByCsr'] = true;
+        }else{
+            $data['initiatedByCsr'] = false;
+        }
         if(isset($data['padi']) && $data['padi'] != ''){
             $data['member_number'] = $data['padi'];
         } 
@@ -75,6 +85,7 @@ class PadiVerification extends AbstractAppDelegate
             $returnArray['businessPadiEmpty'] = false;
             // $returnArray['businessPadiVerified1'] = true;
             unset($returnArray['member_number']);
+            unset($privileges);
             return $returnArray;
         } else {
             if(isset($response[0]['firstname']) && (!isset($response[0]['business_name']) || $response[0]['business_name'] == '')){
@@ -90,6 +101,7 @@ class PadiVerification extends AbstractAppDelegate
             // $returnArray['businessPadiVerified1'] = false;
             $data = array_merge($data,$returnArray);
             unset($data['member_number']);
+            unset($privileges);
             return $data;
         }
     }

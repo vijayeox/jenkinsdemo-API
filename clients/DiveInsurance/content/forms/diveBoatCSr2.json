@@ -692,7 +692,7 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"customMessage": "Please enter the home phone number.",
+									"customMessage": "Please enter a valid phone number",
 									"unique": false,
 									"multiple": false
 								},
@@ -767,7 +767,7 @@
 								"clearOnHide": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter the mobile phone number.",
+									"customMessage": "Please enter a valid phone number",
 									"unique": false,
 									"multiple": false
 								},
@@ -1022,12 +1022,13 @@
 					"multiple": false
 				}
 			}, {
+				"title": "             ",
 				"theme": "primary",
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel1",
 				"type": "panel",
-				"label": "Panel",
+				"label": "",
 				"input": false,
 				"validate": {
 					"unique": false,
@@ -1268,7 +1269,7 @@
 									"calculateValue": "value = data['mobilephone']",
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter the phone number.",
+										"customMessage": "Please enter a valid phone number",
 										"unique": false,
 										"multiple": false
 									},
@@ -1685,7 +1686,8 @@
 				"tableView": true,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "DataGrid",
 				"conditional": {
@@ -1753,9 +1755,10 @@
 					"prefix": "$",
 					"mask": false,
 					"spellcheck": true,
+					"dataGridLabel": false,
 					"tableView": false,
 					"delimiter": true,
-					"requireDecimal": false,
+					"requireDecimal": true,
 					"inputFormat": "plain",
 					"validate": {
 						"required": true,
@@ -1766,7 +1769,8 @@
 					"type": "number",
 					"input": true,
 					"inDataGrid": true,
-					"inputType": "number"
+					"inputType": "number",
+					"decimalLimit": 2
 				}],
 				"lockKey": true,
 				"path": "DataGrid"
@@ -2286,7 +2290,8 @@
 				"tableView": true,
 				"validate": {
 					"unique": false,
-					"multiple": false
+					"multiple": false,
+					"minLength": 1
 				},
 				"key": "CrewGrid",
 				"type": "datagrid",
@@ -2322,6 +2327,7 @@
 				}, {
 					"label": "Full Time/Part Time                                            ",
 					"widget": "choicesjs",
+					"dataGridLabel": false,
 					"tableView": true,
 					"data": {
 						"values": [{
@@ -2337,7 +2343,7 @@
 						"unique": false,
 						"multiple": false
 					},
-					"key": "fullTimePartTime",
+					"key": "ft_pt",
 					"type": "select",
 					"input": true,
 					"inDataGrid": true
@@ -3627,7 +3633,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<!DOCTYPE html>\n<html>\n<head>\n<style>\n\ntable, th, td {\n  \n  border-collapse: collapse;\n}\n</style>\n</head>\n<body>\n\n\n\n<table bgcolor = \"lightgrey\" width = \"100%\">\n<tr>\n<td><span style=\"color:black;\"><font face=\"Century Gothic\">Employees are automatically covered under your store or resort operator's policy (does not include Professional Liability).</font></span></td></tr>\n<tr>\n<td><font face=\"Century Gothic\"> Divemasters and Instructors may not be added as additional insureds.</font></td></tr>\n<tr>\n<td><font face=\"Century Gothic\"> Owners, officers and directors of your business are automatically covered under your policy and need not be added as additional insureds (does not include Professional Liability)</font></td></tr>\n\n\n</table>\n\n</body>\n</html>",
+				"content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "page_content",
@@ -4379,6 +4385,17 @@
 			"type": "select",
 			"input": true
 		}, {
+			"label": "groupCoverageSelect",
+			"calculateValue": "if(parseFloat(data['annualReceipt']) >= 0 && parseFloat(data['annualReceipt']) <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']) >= 25001 && parseFloat(data['annualReceipt']) <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']) >= 50001 && parseFloat(data['annualReceipt']) <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']) >= 100001 && parseFloat(data['annualReceipt']) <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']) >= 150001 && parseFloat(data['annualReceipt']) <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']) >= 200001 && parseFloat(data['annualReceipt']) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']) >= 250001 && data['annualReceipt'] <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']) >= 350001 && data['annualReceipt'] <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
+			"key": "groupCoverageSelect",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
+		}, {
 			"label": "well",
 			"tableView": false,
 			"key": "well2",
@@ -4400,49 +4417,22 @@
 				"key": "page7Columns",
 				"columns": [{
 					"components": [{
-						"label": "Group Coverage",
-						"widget": "choicesjs",
-						"tableView": true,
-						"data": {
-							"values": [{
-								"value": "groupCoverageMoreThan0",
-								"label": "0 to $25,000"
-							}, {
-								"value": "groupCoverageMoreThan25000",
-								"label": "$25,001 to $50,000"
-							}, {
-								"value": "groupCoverageMoreThan50000",
-								"label": "$50,001 to $100,000"
-							}, {
-								"value": "groupCoverageMoreThan100000",
-								"label": "$100,001 to $150,000"
-							}, {
-								"value": "groupCoverageMoreThan150000",
-								"label": "$150,001 to $200,000"
-							}, {
-								"value": "groupCoverageMoreThan200000",
-								"label": "$200,001 to $250,000"
-							}, {
-								"value": "groupCoverageMoreThan250000",
-								"label": "$250,001 to $350,000"
-							}, {
-								"value": "groupCoverageMoreThan350000",
-								"label": "$350,001 to $500,000"
-							}, {
-								"value": "groupCoverageMoreThan500000",
-								"label": "$500,001 and up"
-							}]
-						},
-						"selectThreshold": 0.3,
+						"label": "What was your annual receipt for  supervision?",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": true,
+						"requireDecimal": true,
+						"inputFormat": "plain",
 						"validate": {
 							"required": true,
 							"unique": false,
 							"multiple": false
 						},
-						"key": "groupCoverageSelect",
-						"type": "select",
+						"key": "annualReceipt",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
+						"decimalLimit": 2,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -8557,6 +8547,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-16T06:13:37.671Z",
+	"modified": "2020-03-16T15:45:32.435Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }

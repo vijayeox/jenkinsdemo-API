@@ -73,14 +73,14 @@
         "components": [{
           "label": "<b>I hereby declare that I accept the proposal</b>",
           "optionsLabelPosition": "right",
-          "inline": false,
-          "tableView": true,
+          "inline": true,
+          "tableView": false,
           "values": [{
-            "value": "true",
+            "value": "accepted",
             "label": "Accept",
             "shortcut": ""
           }, {
-            "value": "false",
+            "value": "rejected",
             "label": "Decline",
             "shortcut": ""
           }],
@@ -110,7 +110,7 @@
           "conditional": {
             "show": true,
             "when": "userApproved",
-            "eq": "false"
+            "eq": "rejected"
           },
           "type": "textarea",
           "input": true
@@ -127,7 +127,7 @@
       "path": "page5Panel2"
     }, {
       "label": "amount",
-      "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
+      "calculateValue": "value = parseFloat(data['totalAmount']).toFixed(2);",
       "key": "amount",
       "type": "hidden",
       "input": true,
@@ -176,12 +176,12 @@
             "multiple": false
           }
         }, {
+          "label": "amountPayable",
+          "calculateValue": "value = data['amount']",
+          "key": "page7Panel2AmountPayable",
+          "type": "hidden",
           "input": true,
           "tableView": true,
-          "key": "page7Panel2AmountPayable",
-          "label": "amountPayable",
-          "type": "hidden",
-          "calculateValue": "value = data['amount']",
           "validate": {
             "unique": false,
             "multiple": false
@@ -287,6 +287,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-16T06:24:15.072Z",
+  "modified": "2020-03-17T10:20:42.875Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

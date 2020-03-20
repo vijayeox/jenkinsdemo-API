@@ -349,19 +349,6 @@
                         },
                         "hideOnChildrenHidden": false,
                         "hideLabel": true
-                    }, {
-                        "label": "orgId",
-                        "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
-                        "key": "orgId",
-                        "type": "hidden",
-                        "input": true,
-                        "tableView": true,
-                        "lockKey": true,
-                        "hideOnChildrenHidden": false,
-                        "validate": {
-                            "unique": false,
-                            "multiple": false
-                        }
                     }],
                     "width": 4,
                     "offset": 0,
@@ -429,6 +416,19 @@
                             "multiple": false
                         },
                         "hideOnChildrenHidden": false
+                    }, {
+                        "label": "orgId",
+                        "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
+                        "key": "orgId",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": true,
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false,
+                        "validate": {
+                            "unique": false,
+                            "multiple": false
+                        }
                     }],
                     "width": 4,
                     "offset": 0,
@@ -451,6 +451,7 @@
             "title": "Personal Information",
             "theme": "primary",
             "breadcrumb": "none",
+            "breadcrumbClickable": true,
             "buttonSettings": {
                 "previous": true,
                 "cancel": true,
@@ -460,12 +461,7 @@
             "dataGridLabel": false,
             "tableView": false,
             "key": "panelPanel4",
-            "customConditional": "show = ((data['padiVerified'] == true || data['businessPadiVerified'] == true) && (data['user_exists']==0||data['user_exists']=='0'))",
-            "conditional": {
-                "show": true,
-                "when": "padiVerified",
-                "eq": "true"
-            },
+            "customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==false||data['policy_exists']=='false') && (data['padiVerified']==true||data['padiVerified']=='true') ) && (data['padiNotFound'] == false || data['padiNotFound'] == 'false')",
             "type": "panel",
             "label": "Personal Information",
             "input": false,
@@ -691,7 +687,7 @@
                                     "label": "",
                                     "value": ""
                                 }],
-                                "custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}\n}"
+                                "custom": "let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}"
                             },
                             "template": "<span>{{ item }}</span>",
                             "selectThreshold": 0.3,
@@ -968,6 +964,7 @@
                                 "spellcheck": true,
                                 "tableView": true,
                                 "validate": {
+                                    "customMessage": "Please enter a valid phone number",
                                     "unique": false,
                                     "multiple": false
                                 },
@@ -1041,7 +1038,7 @@
                                 "clearOnHide": false,
                                 "validate": {
                                     "required": true,
-                                    "customMessage": "Please enter mobile phone number.",
+                                    "customMessage": "Please enter a valid phone number",
                                     "unique": false,
                                     "multiple": false
                                 },
@@ -1173,7 +1170,7 @@
                     "autofocus": true,
                     "tableView": true,
                     "datePicker": {
-                        "minDate": "2020-03-11T18:30:00.000Z",
+                        "minDate": "2020-03-15T18:30:00.000Z",
                         "datepickerMode": "day"
                     },
                     "enableTime": false,
@@ -1203,7 +1200,7 @@
                         "hourIncrement": 1,
                         "minuteIncrement": 1,
                         "time_24hr": true,
-                        "minDate": "2020-03-11T18:30:00.000Z",
+                        "minDate": "2020-03-15T18:30:00.000Z",
                         "maxDate": null
                     },
                     "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
@@ -1295,6 +1292,23 @@
                             "multiple": false
                         },
                         "key": "business_padi",
+                        "logic": [{
+                            "name": "Disable Field",
+                            "trigger": {
+                                "type": "javascript",
+                                "javascript": "result = false;\nif(data['businessPadiVerified'] == true || data['businessPadiVerified'] == 'true'){\n result = true; \n}"
+                            },
+                            "actions": [{
+                                "name": "Disable Action",
+                                "type": "property",
+                                "property": {
+                                    "label": "Disabled",
+                                    "value": "disabled",
+                                    "type": "boolean"
+                                },
+                                "state": true
+                            }]
+                        }],
                         "type": "number",
                         "input": true,
                         "hideOnChildrenHidden": false,
@@ -1402,6 +1416,7 @@
                 },
                 "path": "panelPanelColumns4"
             }, {
+                "title": "    ",
                 "theme": "primary",
                 "breadcrumb": "none",
                 "breadcrumbClickable": false,
@@ -1414,12 +1429,12 @@
                 "tableView": false,
                 "key": "pan",
                 "conditional": {
-                    "show": "true",
+                    "show": true,
                     "when": "businessPadiVerified",
                     "eq": "true"
                 },
                 "type": "panel",
-                "label": "Panel",
+                "label": "Business Detail",
                 "input": false,
                 "validate": {
                     "unique": false,
@@ -1670,6 +1685,7 @@
                                     "tableView": true,
                                     "validate": {
                                         "required": true,
+                                        "customMessage": "Please enter a valid phone number",
                                         "unique": false,
                                         "multiple": false
                                     },
@@ -1992,7 +2008,8 @@
                 "unique": false,
                 "multiple": false
             },
-            "path": "panelPanel"
+            "path": "panelPanel",
+            "isNew": false
         }, {
             "title": "Policy Information",
             "theme": "primary",
@@ -2088,6 +2105,7 @@
                     "hideLabel": true,
                     "tableView": true,
                     "validate": {
+                        "minLength": 1,
                         "unique": false,
                         "multiple": false
                     },
@@ -2121,7 +2139,8 @@
                         "dataGridLabel": false,
                         "tableView": true,
                         "datePicker": {
-                            "datepickerMode": "day"
+                            "datepickerMode": "day",
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "enableTime": false,
                         "timePicker": {
@@ -2151,7 +2170,7 @@
                             "minuteIncrement": 1,
                             "time_24hr": true,
                             "minDate": null,
-                            "maxDate": null
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
                     }, {
@@ -2161,7 +2180,7 @@
                         "spellcheck": true,
                         "tableView": false,
                         "delimiter": true,
-                        "requireDecimal": false,
+                        "requireDecimal": true,
                         "inputFormat": "plain",
                         "validate": {
                             "required": true,
@@ -2172,7 +2191,9 @@
                         "type": "number",
                         "input": true,
                         "inDataGrid": true,
-                        "inputType": "number"
+                        "inputType": "number",
+                        "dataGridLabel": false,
+                        "decimalLimit": 2
                     }],
                     "lockKey": true,
                     "path": "DataGrid"
@@ -2699,6 +2720,7 @@
                 "hideLabel": true,
                 "tableView": true,
                 "validate": {
+                    "minLength": 1,
                     "unique": false,
                     "multiple": false
                 },
@@ -3360,7 +3382,7 @@
                         "format": "MM-dd-yyyy",
                         "tableView": true,
                         "datePicker": {
-                            "maxDate": "moment(). format('YYYY MM DD')",
+                            "maxDate": "2020-03-15T18:30:00.000Z",
                             "datepickerMode": "day"
                         },
                         "enableTime": false,
@@ -3396,7 +3418,7 @@
                             "minuteIncrement": 1,
                             "time_24hr": true,
                             "minDate": null,
-                            "maxDate": "moment(). format('YYYY MM DD')"
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
                         "hideOnChildrenHidden": false
@@ -3411,7 +3433,7 @@
                         "format": "MM-dd-yyyy",
                         "tableView": true,
                         "datePicker": {
-                            "maxDate": "moment(). format('YYYY MM DD')",
+                            "maxDate": "2020-03-15T18:30:00.000Z",
                             "datepickerMode": "day"
                         },
                         "enableTime": false,
@@ -3445,7 +3467,7 @@
                             "minuteIncrement": 1,
                             "time_24hr": true,
                             "minDate": null,
-                            "maxDate": "moment(). format('YYYY MM DD')"
+                            "maxDate": "2020-03-15T18:30:00.000Z"
                         },
                         "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
                         "hideOnChildrenHidden": false
@@ -3877,9 +3899,9 @@
                 "hideLabel": true,
                 "tableView": false,
                 "validate": {
+                    "minLength": 1,
                     "unique": false,
-                    "multiple": false,
-                    "minLength": 1
+                    "multiple": false
                 },
                 "key": "lossPayees",
                 "type": "datagrid",
@@ -4102,7 +4124,7 @@
                     "value": "",
                     "attr": ""
                 }],
-                "content": "<table bgcolor = \"lightgrey\" width = \"100%\">\n<tr>\n<td><span style=\"color:black;\"><font face=\"Century Gothic\">Employees are automatically covered under your store or resort operator's policy (does not include Professional Liability).</font></span></td></tr>\n<tr>\n<td><font face=\"Century Gothic\"> Divemasters and Instructors may not be added as additional insureds.</font></td></tr>\n<tr>\n<td><font face=\"Century Gothic\"> Owners, officers and directors of your business are automatically covered under your policy and need not be added as additional insureds (does not include Professional Liability)</font></td></tr>\n</table>",
+                "content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
                 "refreshOnChange": false,
                 "tableView": false,
                 "key": "page_content",
@@ -4186,9 +4208,9 @@
                     "hideLabel": true,
                     "tableView": false,
                     "validate": {
+                        "minLength": 1,
                         "unique": false,
-                        "multiple": false,
-                        "minLength": 1
+                        "multiple": false
                     },
                     "key": "additionalInsured",
                     "type": "datagrid",
@@ -4650,9 +4672,9 @@
                 "hideLabel": true,
                 "tableView": false,
                 "validate": {
+                    "minLength": 1,
                     "unique": false,
-                    "multiple": false,
-                    "minLength": 1
+                    "multiple": false
                 },
                 "key": "additionalNamedInsured",
                 "type": "datagrid",
@@ -4904,49 +4926,22 @@
                 "key": "page7Columns",
                 "columns": [{
                     "components": [{
-                        "label": "Select Group Coverage",
-                        "tableView": true,
-                        "data": {
-                            "values": [{
-                                "value": "groupCoverageMoreThan0",
-                                "label": "0 to $25,000"
-                            }, {
-                                "value": "groupCoverageMoreThan25000",
-                                "label": "$25,001 to $50,000"
-                            }, {
-                                "value": "groupCoverageMoreThan50000",
-                                "label": "$50,001 to $100,000"
-                            }, {
-                                "value": "groupCoverageMoreThan100000",
-                                "label": "$100,001 to $150,000"
-                            }, {
-                                "value": "groupCoverageMoreThan150000",
-                                "label": "$150,001 to $200,000"
-                            }, {
-                                "value": "groupCoverageMoreThan200000",
-                                "label": "$200,001 to $250,000"
-                            }, {
-                                "value": "groupCoverageMoreThan250000",
-                                "label": "$250,001 to $350,000"
-                            }, {
-                                "value": "groupCoverageMoreThan350000",
-                                "label": "$350,001 to $500,000"
-                            }, {
-                                "value": "groupCoverageMoreThan500000",
-                                "label": "$500,001 and up"
-                            }]
-                        },
-                        "selectThreshold": 0.3,
-                        "clearOnHide": false,
+                        "label": "What was your annual receipt for  supervision?",
+                        "mask": false,
+                        "spellcheck": true,
+                        "tableView": false,
+                        "delimiter": true,
+                        "requireDecimal": true,
+                        "inputFormat": "plain",
                         "validate": {
                             "required": true,
                             "unique": false,
                             "multiple": false
                         },
-                        "key": "groupCoverageSelect",
-                        "type": "select",
+                        "key": "annualReceipt",
+                        "type": "number",
+                        "decimalLimit": 2,
                         "input": true,
-                        "lockKey": true,
                         "hideOnChildrenHidden": false
                     }],
                     "width": 6,
@@ -5110,7 +5105,8 @@
                 "modal": false,
                 "validate": {
                     "unique": false,
-                    "multiple": false
+                    "multiple": false,
+                    "minLength": 1
                 },
                 "key": "groupPL",
                 "type": "editgrid",
@@ -5419,9 +5415,9 @@
                     "hideLabel": true,
                     "tableView": true,
                     "validate": {
+                        "minLength": 1,
                         "unique": false,
-                        "multiple": false,
-                        "minLength": 1
+                        "multiple": false
                     },
                     "key": "groupAdditionalInsured",
                     "type": "datagrid",
@@ -5692,7 +5688,8 @@
                     "modal": false,
                     "validate": {
                         "unique": false,
-                        "multiple": false
+                        "multiple": false,
+                        "minLength": 1
                     },
                     "key": "namedInsureds",
                     "type": "editgrid",
@@ -6150,6 +6147,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T06:13:54.262Z",
+    "modified": "2020-03-16T15:11:03.529Z",
     "machineName": "testdivehub:diveBoat02New"
 }

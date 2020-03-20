@@ -13,7 +13,7 @@
           <camunda:formField id="automatic_renewal" label="Auto Renewal?" type="boolean" />
         </camunda:formData>
         <camunda:properties>
-          <camunda:property name="template" value="bharatIpl" />
+          <camunda:property name="template" value="csrInitiatesIpl" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_161msdp</bpmn:outgoing>
@@ -99,7 +99,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
           <camunda:formField id="approved" type="boolean" defaultValue="false" />
         </camunda:formData>
         <camunda:properties>
-          <camunda:property name="template" value="iplCsrReview" />
+          <camunda:property name="template" value="csrInitiatesIpl" />
         </camunda:properties>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">execution.setVariable('CSRReviewRequired', false)</camunda:script>
@@ -118,11 +118,16 @@ def country = execution.getVariable('country')
 def tecRecEndorsment = execution.getVariable('tecRecEndorsment')
 def section2Agreement = execution.getVariable('section2Agreement')
 def internationalCoverages = execution.getVariable('careerCoverage')
+def initiatedByCsr = execution.getVariable('initiatedByCsr')
+def approved = execution.getVariable('approved')
+def scubaFit = execution.getVariable('scubaFit')
+def cylinder = execution.getVariable('cylinder')
 
 boolean result1 = false
 boolean result2 = false
 boolean result3 = false
 boolean result4 = false
+boolean result5 = false
 
 if (additionalInsured) {
  additionalInsured.each {
@@ -136,30 +141,43 @@ if (section2Agreement) {
      result2 = true
     }
 }
+if(cylinder){
+  if(cylinder == "cylinderInspector" || cylinder == "cylinderInstructor"){
+    result5 = true
+  }
+  
+}
 if(internationalCoverages){
 	if(internationalCoverages == "internationalInstructor" || internationalCoverages == "internationalAssistantInstructor" || internationalCoverages == "internationalDivemaster" || internationalCoverages =="internationalNonteachingSupervisoryInstructor" || internationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){
 		result4 = true
 	}
 }
 
-if (country != "United States of America" ||
+if ((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (country != "United States of America" ||
  tecRecEndorsment == "accepted" ||
- result1 || result2 || result4) {
+ result1 || result2 || result4 || scubaFit == "scubaFitInstructor" || result5)) {
   result3=true
 }
 
-execution.setVariable('CSRReviewRequired', result3)</camunda:script>
+execution.setVariable('CSRReviewRequired', result3)
+
+if(initiatedByCsr == true &amp;&amp; approved == "rejected"){
+  execution.setVariable('RejectedPolicy', true)
+}else{  
+  execution.setVariable('RejectedPolicy', false)
+}</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_161msdp</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0xu2tpx</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1maipgq</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_022khxp</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0xu2tpx" sourceRef="ExclusiveGateway_1a80v3g" targetRef="Task_0giy3fm">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1maipgq" name="Bypass CSR" sourceRef="ExclusiveGateway_1a80v3g" targetRef="ExclusiveGateway_12lkytx">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==false and RejectedPolicy != true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_199pho8" name="Rejected" sourceRef="Task_1s7qzh3" targetRef="Task_1g3m6bq">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
@@ -179,6 +197,7 @@ execution.setVariable('CSRReviewRequired', result3)</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_199pho8</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_022khxp</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0gvf8c9</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0gvf8c9" sourceRef="Task_1g3m6bq" targetRef="Task_1s7qzh3" />
@@ -195,6 +214,9 @@ execution.setVariable('CSRReviewRequired', result3)</camunda:script>
       <bpmn:incoming>SequenceFlow_0xu2tpx</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0m69sz4</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_022khxp" sourceRef="ExclusiveGateway_1a80v3g" targetRef="Task_1g3m6bq">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${RejectedPolicy == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1dx3jli">
@@ -299,6 +321,12 @@ execution.setVariable('CSRReviewRequired', result3)</camunda:script>
       <bpmndi:BPMNShape id="ServiceTask_0yg1fw4_di" bpmnElement="Task_0giy3fm">
         <dc:Bounds x="455" y="211" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_022khxp_di" bpmnElement="SequenceFlow_022khxp">
+        <di:waypoint x="354" y="276" />
+        <di:waypoint x="354" y="518" />
+        <di:waypoint x="843" y="518" />
+        <di:waypoint x="843" y="436" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
