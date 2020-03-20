@@ -1170,7 +1170,7 @@
                     "autofocus": true,
                     "tableView": true,
                     "datePicker": {
-                        "minDate": "2020-03-15T18:30:00.000Z",
+                        "minDate": "moment(). format('MM-dd-yyyy');",
                         "datepickerMode": "day"
                     },
                     "enableTime": false,
@@ -1200,7 +1200,7 @@
                         "hourIncrement": 1,
                         "minuteIncrement": 1,
                         "time_24hr": true,
-                        "minDate": "2020-03-15T18:30:00.000Z",
+                        "minDate": "moment(). format('MM-dd-yyyy');",
                         "maxDate": null
                     },
                     "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
@@ -4927,6 +4927,7 @@
                 "columns": [{
                     "components": [{
                         "label": "What was your annual receipt for  supervision?",
+                        "prefix": "$",
                         "mask": false,
                         "spellcheck": true,
                         "tableView": false,
@@ -4969,7 +4970,7 @@
                 "key": "page7Columns2",
                 "columns": [{
                     "components": [{
-                        "label": "Select Excess Liability",
+                        "label": "Select Liability Limit",
                         "widget": "choicesjs",
                         "tableView": true,
                         "data": {
@@ -6147,6 +6148,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-16T15:11:03.529Z",
+    "modified": "2020-03-20T12:16:03.400Z",
     "machineName": "testdivehub:diveBoat02New"
 }
