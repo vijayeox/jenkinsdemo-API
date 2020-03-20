@@ -29,7 +29,7 @@
       <bpmn:outgoing>SequenceFlow_1lnz46n</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0am14xf</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="UserTask_0ak903b" name="Send Quote to Customer and Accept" camunda:asyncAfter="true" camunda:assignee="{{padi}}">
+    <bpmn:userTask id="UserTask_0ak903b" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:assignee="{{padi}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveStoreUserApprovalForm" />
@@ -169,7 +169,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0ufepba" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">def approved = execution.getVariable('approved')
+          <camunda:script scriptFormat="groovy">def approved = execution.getVariable('csrApproved')
 
 if(approved == "rejected"){
   execution.setVariable('RejectedPolicy', true)
@@ -184,13 +184,13 @@ if(approved == "rejected"){
       <bpmn:outgoing>SequenceFlow_0dxn7cp</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_1lbuvj4" sourceRef="ExclusiveGateway_0ufepba" targetRef="UserTask_1vfu0fp">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false &amp;&amp; RejectedPolicy == false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false &amp;&amp; RejectedPolicy == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1qnlgmz" sourceRef="ExclusiveGateway_0ufepba" targetRef="ServiceTask_0xam12g">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0dxn7cp" sourceRef="ExclusiveGateway_0ufepba" targetRef="ServiceTask_0xwp59s">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
