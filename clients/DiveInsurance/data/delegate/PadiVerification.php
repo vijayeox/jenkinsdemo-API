@@ -17,7 +17,6 @@ class PadiVerification extends AbstractAppDelegate
     {
         $this->logger->info("Padi Verification new".json_encode($data));
         $privileges = $this->getPrivilege();
-        
         if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
             $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
             $data['initiatedByCsr'] = true;
@@ -83,22 +82,20 @@ class PadiVerification extends AbstractAppDelegate
             $returnArray['verified'] = true;
             $returnArray['padi_empty'] = false;
             $returnArray['businessPadiEmpty'] = false;
-            // $returnArray['businessPadiVerified1'] = true;
+            $returnArray['padiNotFoundCsrReview'] = false;
             unset($returnArray['member_number']);
             unset($privileges);
             return $returnArray;
         } else {
-            if(isset($response[0]['firstname']) && (!isset($response[0]['business_name']) || $response[0]['business_name'] == '')){
-                $returnArray['padiVerified'] = false;
-            }else if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
-                $returnArray['businessPadiVerified'] = false;
-            }
+            $returnArray = array();
+            $returnArray['businessPadiVerified'] = false;
+            $returnArray['padiVerified'] = false;
             $returnArray['verified'] = true;
             $returnArray['padi_empty'] = false;
             $returnArray['businessPadiEmpty'] = false;
             $returnArray['padiNotFound'] = true;
             $returnArray['businessPadiNotFound'] = true;
-            // $returnArray['businessPadiVerified1'] = false;
+            $returnArray['padiNotFoundCsrReview'] = true;
             $data = array_merge($data,$returnArray);
             unset($data['member_number']);
             unset($privileges);
