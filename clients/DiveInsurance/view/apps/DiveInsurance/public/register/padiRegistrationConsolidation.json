@@ -464,6 +464,17 @@
 						"multiple": false
 					},
 					"hideOnChildrenHidden": false
+				}, {
+					"label": "businessPadiVerified",
+					"key": "businessPadiVerified",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					},
+					"hideOnChildrenHidden": false
 				}],
 				"width": 4,
 				"offset": 0,
@@ -510,20 +521,22 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
+						"required": true,
 						"unique": false,
 						"multiple": false
 					},
 					"key": "firstname",
 					"customConditional": "show = (data.padiVerified === true && (data.user_exists===0||data.user_exists=='0')) || ((data.padiNotFound===true||data.padiNotFound=='true') && (data.verified === true || data.verified=='true'))",
 					"logic": [{
-						"name": "disable field",
+						"name": "Disable Field Logic",
 						"trigger": {
-							"type": "simple",
+							"type": "javascript",
 							"simple": {
 								"show": true,
-								"when": "padiNotFound",
-								"eq": "false"
-							}
+								"when": "",
+								"eq": ""
+							},
+							"javascript": "result = false;\nif(data.padiNotFound == false && data.businessPadiVerified == false){\n  result = true;\n}"
 						},
 						"actions": [{
 							"name": "disable field",
@@ -542,7 +555,7 @@
 								"value": "validate.required",
 								"type": "boolean"
 							},
-							"state": true
+							"state": false
 						}]
 					}],
 					"type": "textfield",
@@ -569,12 +582,13 @@
 					"logic": [{
 						"name": "disable name",
 						"trigger": {
-							"type": "simple",
+							"type": "javascript",
 							"simple": {
 								"show": true,
-								"when": "padiNotFound",
-								"eq": "false"
-							}
+								"when": "",
+								"eq": ""
+							},
+							"javascript": "result = false;\nif(data.padiNotFound == false && data.businessPadiVerified == false){\n  result = true;\n}"
 						},
 						"actions": [{
 							"name": "disable name",
@@ -582,15 +596,6 @@
 							"property": {
 								"label": "Disabled",
 								"value": "disabled",
-								"type": "boolean"
-							},
-							"state": true
-						}, {
-							"name": "mask",
-							"type": "property",
-							"property": {
-								"label": "Required",
-								"value": "validate.required",
 								"type": "boolean"
 							},
 							"state": true
@@ -612,6 +617,7 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
+						"required": true,
 						"unique": false,
 						"multiple": false
 					},
@@ -620,12 +626,13 @@
 					"logic": [{
 						"name": "disable name",
 						"trigger": {
-							"type": "simple",
+							"type": "javascript",
 							"simple": {
 								"show": true,
-								"when": "padiNotFound",
-								"eq": "false"
-							}
+								"when": "",
+								"eq": ""
+							},
+							"javascript": "result = false;\nif(data.padiNotFound == false && data.businessPadiVerified == false){\n  result = true;\n}"
 						},
 						"actions": [{
 							"name": "disable name",
@@ -644,7 +651,7 @@
 								"value": "validate.required",
 								"type": "boolean"
 							},
-							"state": true
+							"state": false
 						}]
 					}],
 					"type": "textfield",
@@ -1353,6 +1360,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-03-21T13:17:55.136Z",
+	"modified": "2020-03-22T05:40:45.420Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
