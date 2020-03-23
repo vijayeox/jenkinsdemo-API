@@ -79,7 +79,7 @@
 			}
 		}, {
 			"label": "ApproverName",
-			"calculateValue": "console.log(data);\nvalue = data['userprofile'].name;",
+			"calculateValue": "value = data['userprofile'].name;",
 			"key": "approverName",
 			"type": "hidden",
 			"input": true,
@@ -1875,6 +1875,7 @@
 							"value": "no",
 							"label": "No"
 						}],
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please answer all the questions.",
@@ -2418,6 +2419,7 @@
 					"value": "no",
 					"label": "No"
 				}],
+				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please select Yes or No",
@@ -2984,13 +2986,14 @@
 						"format": "MM-dd-yyyy",
 						"tableView": true,
 						"datePicker": {
-							"maxDate": "2020-03-11T18:30:00.000Z",
+							"maxDate": "moment()",
 							"datepickerMode": "day"
 						},
 						"enableTime": false,
 						"timePicker": {
 							"showMeridian": false
 						},
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter the date of purchase.",
@@ -3019,7 +3022,7 @@
 							"minuteIncrement": 1,
 							"time_24hr": true,
 							"minDate": null,
-							"maxDate": "2020-03-11T18:30:00.000Z"
+							"maxDate": "moment()"
 						},
 						"hideOnChildrenHidden": false
 					}],
@@ -5321,7 +5324,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"business_state\"] &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+							"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"business_state\"] &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }else{\n      return 0;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6581,7 +6584,7 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"redrawOn": "data",
-								"calculateValue": "value = (parseFloat(data['dingy_value']) * parseFloat(data['hullRate'])/100)",
+								"calculateValue": "value = ((parseFloat(data['dingy_value']) || 0) * parseFloat(data['hullRate'])/100)",
 								"validate": {
 									"multiple": false,
 									"unique": false
@@ -6605,7 +6608,7 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"redrawOn": "data",
-								"calculateValue": "value = (parseFloat(data['trailer_value']) * parseFloat(data['hullRate'])/100)",
+								"calculateValue": "value = ((parseFloat(data['trailer_value']) || 0) * parseFloat(data['hullRate'])/100)",
 								"validate": {
 									"multiple": false,
 									"unique": false
@@ -7334,7 +7337,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
-						"calculateValue": "console.log('ExcessLiabilityPremium ==== '+data['ExcessLiabilityPremium']);\nvalue = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
+						"calculateValue": "value = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
 						"validate": {
 							"multiple": false,
 							"unique": false
@@ -7558,7 +7561,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "console.log(\"log Data\");\nconsole.log(\"premiumTotal --\"+data['premiumTotalProRated']);\nconsole.log(\"groupProfessionalLiabilityPrice --\"+data['groupProfessionalLiabilityPrice']);\nvalue = ((parseFloat(data['premiumTotalProRated']) || 0)+(parseFloat(data['groupProfessionalLiabilityPrice']) || 0)+(parseFloat(data['padiFee']) || 0))",
+							"calculateValue": "value = ((parseFloat(data['premiumTotalProRated']) || 0)+(parseFloat(data['groupProfessionalLiabilityPrice']) || 0)+(parseFloat(data['padiFee']) || 0))",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8532,7 +8535,7 @@
 	"revisions": "",
 	"_vid": 0,
 	"title": "DiveBoatCSr2",
-	"display": "form",
+	"display": "wizard",
 	"access": [{
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
 		"type": "read_all"
@@ -8548,6 +8551,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-20T12:55:55.490Z",
+	"modified": "2020-03-23T10:47:27.566Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }

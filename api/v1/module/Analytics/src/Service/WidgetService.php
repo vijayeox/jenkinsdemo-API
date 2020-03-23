@@ -35,16 +35,18 @@ class WidgetService extends AbstractService
             throw $errors;
         }
 
-        $uuid = $data['uuid'];
-        $query = 'SELECT w.id from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
-        $queryParams = [
-            'created_by' => AuthContext::get(AuthConstants::USER_ID),
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-            'uuid' => $uuid
-        ];
-        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        if (0 == count($resultSet)) {
-            throw new Exception("Given wiget id ${uuid} either does not exist OR user has no permission to read the widget.");
+        if (isset($data['uuid'])) {
+            $uuid = $data['uuid'];
+            $query = 'SELECT w.id from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
+            $queryParams = [
+                'created_by' => AuthContext::get(AuthConstants::USER_ID),
+                'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+                'uuid' => $uuid
+            ];
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if (0 == count($resultSet)) {
+                throw new Exception("Given wiget id ${uuid} either does not exist OR user has no permission to read the widget.");
+            }
         }
 
         $form = new Widget();
