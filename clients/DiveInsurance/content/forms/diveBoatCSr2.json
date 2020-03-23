@@ -79,7 +79,7 @@
 			}
 		}, {
 			"label": "ApproverName",
-			"calculateValue": "console.log(data);\nvalue = data['userprofile'].name;",
+			"calculateValue": "value = data['userprofile'].name;",
 			"key": "approverName",
 			"type": "hidden",
 			"input": true,
@@ -1875,6 +1875,7 @@
 							"value": "no",
 							"label": "No"
 						}],
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please answer all the questions.",
@@ -2418,6 +2419,7 @@
 					"value": "no",
 					"label": "No"
 				}],
+				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please select Yes or No",
@@ -7334,7 +7336,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
-						"calculateValue": "console.log('ExcessLiabilityPremium ==== '+data['ExcessLiabilityPremium']);\nvalue = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
+						"calculateValue": "value = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
 						"validate": {
 							"multiple": false,
 							"unique": false
@@ -7558,7 +7560,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "console.log(\"log Data\");\nconsole.log(\"premiumTotal --\"+data['premiumTotalProRated']);\nconsole.log(\"groupProfessionalLiabilityPrice --\"+data['groupProfessionalLiabilityPrice']);\nvalue = ((parseFloat(data['premiumTotalProRated']) || 0)+(parseFloat(data['groupProfessionalLiabilityPrice']) || 0)+(parseFloat(data['padiFee']) || 0))",
+							"calculateValue": "value = ((parseFloat(data['premiumTotalProRated']) || 0)+(parseFloat(data['groupProfessionalLiabilityPrice']) || 0)+(parseFloat(data['padiFee']) || 0))",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -8532,7 +8534,7 @@
 	"revisions": "",
 	"_vid": 0,
 	"title": "DiveBoatCSr2",
-	"display": "form",
+	"display": "wizard",
 	"access": [{
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
 		"type": "read_all"
@@ -8548,6 +8550,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-23T06:17:03.612Z",
+	"modified": "2020-03-23T07:14:56.704Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
