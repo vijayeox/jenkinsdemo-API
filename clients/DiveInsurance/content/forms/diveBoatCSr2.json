@@ -5321,7 +5321,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"business_state\"] &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+							"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"business_state\"] &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }else{\n      return 0;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
 							"validate": {
 								"multiple": false,
 								"unique": false
@@ -6581,7 +6581,7 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"redrawOn": "data",
-								"calculateValue": "value = (parseFloat(data['dingy_value']) * parseFloat(data['hullRate'])/100)",
+								"calculateValue": "value = ((parseFloat(data['dingy_value']) || 0) * parseFloat(data['hullRate'])/100)",
 								"validate": {
 									"multiple": false,
 									"unique": false
@@ -6605,7 +6605,7 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"redrawOn": "data",
-								"calculateValue": "value = (parseFloat(data['trailer_value']) * parseFloat(data['hullRate'])/100)",
+								"calculateValue": "value = ((parseFloat(data['trailer_value']) || 0) * parseFloat(data['hullRate'])/100)",
 								"validate": {
 									"multiple": false,
 									"unique": false
@@ -8548,6 +8548,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-20T12:55:55.490Z",
+	"modified": "2020-03-23T06:17:03.612Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
