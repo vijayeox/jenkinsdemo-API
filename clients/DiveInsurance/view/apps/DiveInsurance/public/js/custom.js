@@ -223,63 +223,83 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
     });
-    form.on("callDelegate", changed => {
-      var component = form.getComponent(event.target.id);
-      if (component) {
-        var properties = component.component.properties;
-        if (properties) {
-          if (properties["delegate"]) {
-            if (properties["padiType"]) {
-              changed["padiType"] = properties["padiType"]
+
+    form.on("customEvent", function (event) {
+      console.log(event)
+      var changed = event.data;
+      if (event.type == "callDelegate") {
+        var component = form.getComponent(event.target.id);
+        if (component) {
+          var component = event.component;
+          if (properties) {
+            if (properties["delegate"]) {
+              if (properties["padiType"]) {
+                changed["padiType"] = properties["padiType"]
                 ? properties["padiType"]
                 : null;
-            }
-            $.ajax({
-              type: "POST",
-              async: false,
-              url:
+              }
+              $.ajax({
+                type: "POST",
+                async: false,
+                url:
                 baseUrl +
                 "app/" +
                 appId +
                 "/delegate/" +
                 properties["delegate"],
-              data: changed,
-              success: function(response) {
-                if (response.data) {
-                  form.submission = { data: response.data };
-                  form.triggerChange();
+                data: changed,
+                success: function(response) {
+                  if (response.data) {
+                    form.setSubmission({ data: response.data });
+                    form.triggerChange();
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
       }
-    });
-    form.on("callCommands", changed => {
-      var component = form.getComponent(event.target.id);
-      if (component) {
-        var properties = component.component.properties;
-        if (properties) {
-          if (properties["commands"]) {
-            $.ajax({
-              type: "POST",
-              async: false,
-              url:
+      if (event.type == "callCommands") {
+        var component = event.component;
+        if (component) {
+          var properties = component.properties;
+          if (properties) {
+            if (properties["commands"]) {
+              $.ajax({
+                type: "POST",
+                async: false,
+                url:
                 baseUrl +
                 "app/" +
                 appId +
                 "/commands?" +
                 $.param(JSON.parse(properties["commands"])),
-              data: changed,
-              success: function(response) {
-                if (response.data) {
-                  form.submission = { data: response.data };
-                  form.triggerChange();
+                data: changed,
+                success: function(response) {
+                  if (response.data) {
+                    console.log(response.data);
+                    form.setSubmission({ data: response.data }).then(response2 => {
+                      console.log(form.submission);
+                    });
+                    console.log(form.submission)
+                    // form.triggerChange();
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
+      }
+      if(event.type == 'resetPADI'){
+        setTimeout(function() {
+          var padiField = $("input[name='data[padi]']");
+          padiField.keyup(function(e) {
+            if (e.keyCode === 13) {
+              $("button[name='data[validatePADIButton]']").trigger("click");
+            }
+          });
+        }, 500);
+        form.triggerChange();
       }
     });
     form.on("change", changed => {
@@ -309,17 +329,6 @@ document.addEventListener("DOMContentLoaded", function() {
           }
         }
       }
-    });
-    form.on("resetPADI", changed => {
-      setTimeout(function() {
-        var padiField = $("input[name='data[padi]']");
-        padiField.keyup(function(e) {
-          if (e.keyCode === 13) {
-            $("button[name='data[validatePADIButton]']").trigger("click");
-          }
-        });
-      }, 500);
-      form.triggerChange();
     });
   });
 });

@@ -92,7 +92,7 @@ entity:
                 data_type: text
             -
                 name: documents
-                text: Policy Documents
+                text: 'Policy Documents'
                 data_type: document
     -
         name: 'Pocket Card Job'
@@ -138,7 +138,7 @@ menu:
                                     -
                                         type: Document
                                         content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''Do MMMM YYYY'')} </p>'
-                                        useFileData: true
+                                        useRowData: true
                                     -
                                         type: DocumentViewer
                                         url: 'file/{{uuid}}/document'
@@ -181,7 +181,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' != ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -190,7 +190,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' != ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -492,7 +492,7 @@ menu:
                                     -
                                         type: Document
                                         content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''Do MMMM YYYY'')} </p>'
-                                        useFileData: true
+                                        useRowData: true
                                     -
                                         type: DocumentViewer
                                         url: 'file/{{uuid}}/document'

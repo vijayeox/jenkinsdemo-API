@@ -366,7 +366,7 @@
 					}, {
 						"label": "product",
 						"customDefaultValue": "value = \"Emergency First Response\";",
-						"key": "product1",
+						"key": "product",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
@@ -1072,19 +1072,6 @@
 		"type": "panel",
 		"title": "Coverage",
 		"components": [{
-			"label": "product",
-			"defaultValue": "Emergency First Response",
-			"customDefaultValue": "value = \"Emergency First Response\";",
-			"key": "product",
-			"type": "hidden",
-			"input": true,
-			"tableView": true,
-			"lockKey": true,
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
-		}, {
 			"title": "Policy Period",
 			"theme": "primary",
 			"breadcrumbClickable": false,
@@ -2885,7 +2872,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 375,
+	"_vid": 376,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -2969,7 +2956,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-03-18T22:06:11.761Z",
+	"modified": "2020-03-20T05:16:34.352Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
