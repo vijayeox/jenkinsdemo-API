@@ -4478,6 +4478,7 @@
 				"columns": [{
 					"components": [{
 						"label": "What was your annual receipt for  supervision?",
+						"prefix": "$",
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
@@ -4521,7 +4522,7 @@
 				"key": "page7Columns2",
 				"columns": [{
 					"components": [{
-						"label": "Select Excess Liability",
+						"label": "Select Liability Limit",
 						"widget": "choicesjs",
 						"tableView": true,
 						"dataSrc": "custom",
@@ -5359,6 +5360,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-18T11:18:47.428Z",
+	"modified": "2020-03-20T12:16:59.352Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }

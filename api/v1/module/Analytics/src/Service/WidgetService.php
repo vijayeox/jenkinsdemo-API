@@ -29,6 +29,24 @@ class WidgetService extends AbstractService
 
     public function createWidget($data)
     {
+        if (!isset($data['queries']) || empty($data['queries'])) {
+            $errors = new ValidationException();
+            $errors->setErrors(array('queries' => 'required'));
+            throw $errors;
+        }
+
+        $uuid = $data['uuid'];
+        $query = 'SELECT w.id from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
+        $queryParams = [
+            'created_by' => AuthContext::get(AuthConstants::USER_ID),
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'uuid' => $uuid
+        ];
+        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        if (0 == count($resultSet)) {
+            throw new Exception("Given wiget id ${uuid} either does not exist OR user has no permission to read the widget.");
+        }
+
         $form = new Widget();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -39,10 +57,10 @@ class WidgetService extends AbstractService
             unset($data['visualization_uuid']);
         }
         if(isset($data['configuration'])) {
-            $data += array('configuration' => json_encode($data['configuration']));
+            $data['configuration'] = json_encode($data['configuration']);
         }
         if(isset($data['expression'])) {
-            $data += array('expression' => json_encode($data['expression']));
+            $data['expression'] = json_encode($data['expression']);
         }
         $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
@@ -62,25 +80,29 @@ class WidgetService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        if(isset($data['queries'])&& !empty($data['queries'])) {
+
             try {
                 $sequence = 0;
                 foreach($data['queries'] as $query) {
                     $queryUuid = $query['uuid'];
-                    if(isset($query['configuration']))
+                    if(isset($query['configuration'])) {
                         $queryConfiguration = json_encode($query['configuration']);
-                    else
-                        $queryConfiguration = $query['configuration'];
-                    $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT id FROM ox_widget WHERE uuid=:widgetUuid), (SELECT id FROM ox_query WHERE uuid=:queryUuid), :sequence, :configuration)';
+                    }
+                    else {
+                        $queryConfiguration = '';
+                    }
+                    $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT w.id FROM ox_widget w WHERE uuid=:widgetUuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)), (SELECT q.id FROM ox_query q WHERE q.uuid=:queryUuid and q.org_id=:org_id and (q.ispublic=true OR q.created_by=:created_by)), :sequence, :configuration)';
                     $queryParams = [
                         'widgetUuid' => $data['uuid'],
                         'queryUuid' => $queryUuid,
                         'sequence' => $sequence,
-                        'configuration' => $queryConfiguration
+                        'configuration' => $queryConfiguration,
+                        'created_by' => AuthContext::get(AuthConstants::USER_ID),
+                        'org_id' => AuthContext::get(AuthConstants::ORG_ID),
                     ];
-                    $this->logger->error('Executing query:');
-                    $this->logger->error($query);
-                    $this->logger->error($queryParams);
+                    $this->logger->info('Executing query:');
+                    $this->logger->info($query);
+                    $this->logger->info($queryParams);
                     $result = $this->executeQueryWithBindParameters($query, $queryParams);
                     if (1 != $result->count()) {
                         $this->logger->error('Unexpected result from ox_widget_query insert statement. Transaction rolled back.', $result);
@@ -110,12 +132,6 @@ class WidgetService extends AbstractService
                 }
                 return 0;
             }
-        }
-        else {
-            $errors = new ValidationException();
-            $errors->setErrors(array('queries' => 'required'));
-            throw $errors;
-        }
     }
 
     //DO NOT ADD THIS AT IS NOT NEEDED. LEAVING THIS HERE IN CASE THE REQUIREMENT CHANGES
@@ -353,60 +369,48 @@ class WidgetService extends AbstractService
 
     public function copyWidget($params)
     {
-        $uuid = $params['widgetUuid'];
-        $query = 'SELECT w.uuid, w.ispublic, w.name, w.configuration, w.expression, w.visualization_id, q.uuid as query_uuid, wq.configuration as query_configuration, wq.sequence as query_sequence from ox_widget as w INNER JOIN ox_widget_query as wq on w.id=wq.ox_widget_id INNER JOIN ox_query as q ON wq.ox_query_id = q.id where w.uuid=:uuid and w.created_by=:created_by and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
+        if (!isset($params['queries']) || empty($params['queries'])) {
+            throw new Exception('Widget must have at least one query.');
+        }
+
+        $widgetUuid = $params['widgetUuid'];
+        $query = 'SELECT w.id, w.name, w.visualization_id, w.ispublic, w.configuration, w.expression from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-            'uuid' => $uuid
+            'uuid' => $widgetUuid
         ];
         try {
             $resultGet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultGet) == 0) {
-                return 0;
+                throw new Exception("Given wiget id ${widgetUuid} either does not exist OR user has no permission to read the widget.");
             }
-            try {
-                $queries = [];
-                foreach($resultGet as $row) {
-                    array_push($queries, [
-                        'uuid' => $row['query_uuid'],
-                        'sequence' => $row['query_sequence'],
-                        'configuration' => $row['query_configuration']
-                    ]);
-                }
-                $firstRow = $resultGet[0];
-                if(isset($params['name'])) {
-                    //Use incoming name if sent by the client.
-                    $name = $params['name'];
-                }
-                else {
-                    //Create unique name based on existing widget name if name is not given by the client.
-                    $name = $firstRow['name'] . '_copy_' . date('Y-m-d H:i:s');
-                }
-                $widget = [
-                    'ispublic' => $firstRow['ispublic'],
-                    'visualization_id' => $firstRow['visualization_id'],
-                    'name' => $name,
-                    'configuration' => $firstRow['configuration'],
-                    'expression' => $firstRow['expression'],
-                    'queries' => $queries
-                ];
-                $resultCreate = $this->createWidget($widget);
-                return $resultCreate;
-            }
-            catch(Exception $e){
-                $this->logger->error('Error has occured-');
-                $this->logger->error($e->getMessage());
-                return 0;
-            }
+            $firstRow = $resultGet[0];
         }
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
-            $this->logger->error($e);
             $this->logger->error('Query and params:');
             $this->logger->error($query);
             $this->logger->error($queryParams);
-            return 0;
+            throw $e;
+        }
+
+        $widget = [
+            'uuid'             => $widgetUuid,
+            'ispublic'         => $firstRow['ispublic'],
+            'visualization_id' => $firstRow['visualization_id'],
+            'name'             => isset($params['name']) ? $params['name'] : $firstRow['name'] . '_copy_' . date('Y-m-d H:i:s'),
+            'configuration'    => isset($params['configuration']) ? $params['configuration'] : $firstRow['configuration'],
+            'expression'       => isset($params['expression']) ? $params['expression'] : $firstRow['expression'],
+            'queries'          => $params['queries']
+        ];
+
+        try {
+            $resultCreate = $this->createWidget($widget);
+            return $resultCreate;
+        }
+        catch(Exception $e){
+            throw $e;
         }
     }
 }

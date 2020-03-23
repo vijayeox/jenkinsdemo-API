@@ -23,7 +23,9 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 $fieldNamesArray = is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
                 if (sizeof($fieldNamesArray) == 1) {
                     $fieldName = $fieldNamesArray[0];
-                    $data[$fieldName] = $this->getFileData($data[$fieldName]);
+                    if(isset($data[$fieldName]) && is_array($data[$fieldName])){
+                        $data[$fieldName] = $this->getFileData($data[$fieldName]);
+                    }
                 } else if (sizeof($fieldNamesArray) == 2) {
                     $gridFieldName = $fieldNamesArray[0];
                     $fieldName = $fieldNamesArray[1];
@@ -35,7 +37,7 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 }
             }
         }
-        return $data;
+         return $data;
     }
 
     public function getFileData(array $documentsArray) {

@@ -597,3 +597,59 @@ body{
   margin-top: 1px;
   margin-bottom: 1px;
 }
+
+
+/*Roaster*/
+.r_title{
+  font-size: 20px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.r_title1,.r_title2{
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.r_label{
+  width: 100%;
+}
+
+.r_label1{
+  width: 50%;
+  float:left;
+  display: inline-block;
+}
+
+.r_label2{
+  width: 50%;
+  float:left;
+  display: inline-block;
+}
+
+.r_content{
+   font-size: 15px;
+   margin:0px;
+   padding: 2px;
+}
+.r_content1{
+   font-size: 15px;
+}
+
+.r_headerRow{
+  border-bottom: 1px solid black;
+}
+
+.r_footerTitle{
+  margin-top:0px;
+  padding-top: 0px;
+  font-size: 15px;
+}
+
+
+.footer-v1{
+  width:100%;
+  margin-top:2%;
+  margin-bottom: 2%;
+}

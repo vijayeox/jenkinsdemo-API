@@ -1061,7 +1061,7 @@
 							"unique": false,
 							"multiple": false
 						},
-						"errorLabel": "Please enter a valid phone number",
+						"errorLabel": "Please enter a valid Fax number",
 						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
