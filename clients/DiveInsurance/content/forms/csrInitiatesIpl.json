@@ -926,54 +926,19 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"spellcheck": true,
-								"tableView": true,
+								"placeholder": " ",
+								"spellcheck": false,
+								"tableView": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid home or work phone number",
+									"customMessage": "Please enter a valid phone number",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "phoneNumber",
 								"input": true,
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "home_phone",
@@ -1021,7 +986,7 @@
 								"valueProperty": "dial_code",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
-								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateValue": "if(data.country){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"validate": {
 									"unique": false,
 									"multiple": false
@@ -1038,54 +1003,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
+								"placeholder": " ",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number",
+									"customMessage": "Please enter a valid phone number",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "phoneNumber",
 								"input": true,
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "mobile_phone",
@@ -2485,143 +2416,6 @@
 					"multiple": false
 				}
 			}, {
-				"title": "  ",
-				"breadcrumbClickable": false,
-				"buttonSettings": {
-					"previous": true,
-					"cancel": true,
-					"next": true
-				},
-				"collapsible": false,
-				"tableView": true,
-				"key": "techrecPanel",
-				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
-				"type": "panel",
-				"label": "  ",
-				"input": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				},
-				"components": [{
-					"label": "documentFields",
-					"calculateValue": "value = [\"attachments1\" ,\"scubaFit_attachments1\" , \"cylinderInstructor_attachments1\" , \"cylinderInspector_attachments1\" , \"techRec_attachments1\"];",
-					"key": "documentFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
-				}, {
-					"type": "documentviewer",
-					"key": "techRec_attachments1",
-					"calculateValue": "value = (data['techRec_attachments'])",
-					"dtype": "documentviewer",
-					"datype": "documentviewer",
-					"dattype": "documentviewer",
-					"customConditional": "show = (data.techRec_attachments !='');",
-					"datatype": "documentviewer",
-					"data_type": "documentviewer",
-					"label": "TechRec Attachments",
-					"hideLabel": true,
-					"inputType": "documentviewer",
-					"input": 1,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"protected": true,
-					"persistent": false
-				}, {
-					"type": "documentviewer",
-					"key": "cylinderInspector_attachments1",
-					"calculateValue": "value = (data['cylinderInspector_attachments'])",
-					"dtype": "documentviewer",
-					"customConditional": "show = (data.cylinderInspector_attachments !='');",
-					"datype": "documentviewer",
-					"dattype": "documentviewer",
-					"datatype": "documentviewer",
-					"data_type": "documentviewer",
-					"label": "Cylinder Inspector Attachments",
-					"hideLabel": true,
-					"inputType": "documentviewer",
-					"input": 1,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"protected": true,
-					"persistent": false
-				}, {
-					"type": "documentviewer",
-					"key": "cylinderInstructor_attachments1",
-					"calculateValue": "value = (data['cylinderInstructor_attachments'])",
-					"dtype": "documentviewer",
-					"datype": "documentviewer",
-					"dattype": "documentviewer",
-					"datatype": "documentviewer",
-					"data_type": "documentviewer",
-					"label": "Cylinder Instructor Attachments",
-					"hideLabel": true,
-					"inputType": "documentviewer",
-					"input": 1,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"customConditional": "show = (data.cylinderInstructor_attachments !='');",
-					"protected": true,
-					"persistent": false
-				}, {
-					"type": "documentviewer",
-					"key": "scubaFit_attachments1",
-					"calculateValue": "value = (data['scubaFit_attachments'])",
-					"dtype": "documentviewer",
-					"datype": "documentviewer",
-					"customConditional": "show = (data.scubaFit_attachments !='');",
-					"dattype": "documentviewer",
-					"datatype": "documentviewer",
-					"data_type": "documentviewer",
-					"label": "Scuba Fit Attachments",
-					"hideLabel": true,
-					"inputType": "documentviewer",
-					"input": 1,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"protected": true,
-					"persistent": false
-				}, {
-					"type": "documentviewer",
-					"key": "attachments1",
-					"calculateValue": "value = (data['attachments'])",
-					"dtype": "documentviewer",
-					"customConditional": "show = (data.attachments !='');",
-					"datype": "documentviewer",
-					"dattype": "documentviewer",
-					"datatype": "documentviewer",
-					"data_type": "documentviewer",
-					"label": "Attachments",
-					"hideLabel": true,
-					"inputType": "documentviewer",
-					"input": 1,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					},
-					"protected": true,
-					"persistent": false
-				}],
-				"path": "techrecPanel"
-			}, {
 				"title": "TechRec Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": false,
@@ -2633,7 +2427,6 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "techRecAttachment",
-				"customConditional": "if (data.privileges){\n  show = (data.tecRecEndorsment === 'accepted' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr == true))) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "tecRecEndorsment",
@@ -2678,7 +2471,6 @@
 					"calculateValue": "if((data.techRec_attachments || data.techRec_attachments !== undefined) && data.techRec_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
 					"validate": {
 						"required": true,
-						"customMessage": "Please attach the proof of your TechRec Attachements",
 						"unique": false,
 						"multiple": true
 					},
@@ -2699,7 +2491,6 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "cylinderInspectorAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.cylinder === 'cylinderInspector' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true))) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "cylinder",
@@ -2764,14 +2555,13 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "cylinderInstructorAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.cylinder === 'cylinderInstructor' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true)))? true: false;\n}\nelse{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "cylinder",
 					"eq": "cylinderInstructor"
 				},
 				"type": "panel",
-				"label": "Cylinder Instructor Attachments",
+				"label": "Panel",
 				"input": false,
 				"validate": {
 					"unique": false,
@@ -2829,7 +2619,6 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "scubaFitAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true))) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "scubaFit",
@@ -2883,21 +2672,11 @@
 				}],
 				"path": "scubaFitAttachments"
 			}, {
+				"key": "page3PanelPanel",
+				"input": false,
 				"title": "Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": true,
-				"buttonSettings": {
-					"previous": true,
-					"cancel": true,
-					"next": true
-				},
-				"collapsible": false,
 				"tableView": false,
-				"key": "page3PanelPanel",
-				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-				"type": "panel",
-				"label": "Attachments",
-				"input": false,
 				"components": [{
 					"label": "Attachments",
 					"hideLabel": true,
@@ -2931,65 +2710,13 @@
 						"multiple": false
 					}
 				}],
+				"type": "panel",
+				"label": "Panel",
 				"validate": {
 					"unique": false,
 					"multiple": false
 				},
 				"path": "page3PanelPanel"
-			}, {
-				"title": "Attachments",
-				"theme": "primary",
-				"breadcrumbClickable": false,
-				"buttonSettings": {
-					"previous": true,
-					"cancel": true,
-					"next": true
-				},
-				"collapsible": false,
-				"tableView": false,
-				"key": "CsrAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-				"type": "panel",
-				"label": "Attachments",
-				"input": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				},
-				"components": [{
-					"label": "Attachments",
-					"hideLabel": true,
-					"tableView": true,
-					"storage": "base64",
-					"webcam": true,
-					"fileTypes": [{
-						"label": "",
-						"value": ""
-					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
-					"fileMaxSize": "10MB",
-					"multiple": true,
-					"calculateValue": "if((data.csr_attachments || data.csr_attachments !== undefined) && data.csr_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
-					"validate": {
-						"unique": false,
-						"multiple": true
-					},
-					"key": "csr_attachments",
-					"type": "file",
-					"input": true
-				}, {
-					"label": "csrAttachmentsFieldnames",
-					"calculateValue": "value = [\"csr_attachments\"];",
-					"key": "csrAttachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
-				}],
-				"path": "CsrAttachments"
 			}],
 			"validate": {
 				"unique": false,
@@ -4436,8 +4163,7 @@
 			"type": "textarea",
 			"input": true
 		}, {
-			"title": "Approve/Reject the Application",
-			"theme": "primary",
+			"title": "    ",
 			"breadcrumbClickable": false,
 			"buttonSettings": {
 				"previous": true,
@@ -4448,7 +4174,7 @@
 			"tableView": false,
 			"key": "page77Panel",
 			"type": "panel",
-			"label": "Approve/Reject the Application",
+			"label": "    ",
 			"input": false,
 			"validate": {
 				"unique": false,
@@ -4458,7 +4184,6 @@
 				"label": "Approve/Reject the Application",
 				"optionsLabelPosition": "top",
 				"inline": true,
-				"hideLabel": true,
 				"autofocus": true,
 				"tableView": true,
 				"values": [{
@@ -4514,7 +4239,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 106,
+	"_vid": 61,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4535,6 +4260,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-03-21T19:35:32.039Z",
+	"modified": "2020-03-17T04:49:54.467Z",
 	"machineName": "testdivehub:csrInitiates"
 }
