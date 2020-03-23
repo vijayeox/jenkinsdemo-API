@@ -2571,6 +2571,7 @@
                         "label": "Waters to be navigated",
                         "widget": "choicesjs",
                         "tableView": true,
+                        "multiple": true,
                         "data": {
                             "values": [{
                                 "value": "caribbean",
@@ -2599,7 +2600,7 @@
                         "validate": {
                             "required": true,
                             "unique": false,
-                            "multiple": false
+                            "multiple": true
                         },
                         "key": "waters_to_be_navigated",
                         "type": "select",
@@ -6361,6 +6362,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-23T11:57:18.187Z",
+    "modified": "2020-03-23T12:02:31.447Z",
     "machineName": "testdivehub:diveBoat02New"
 }
