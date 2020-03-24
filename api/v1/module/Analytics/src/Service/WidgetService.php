@@ -55,6 +55,7 @@ class WidgetService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['uuid'] = Uuid::uuid4()->toString();
         if(isset($data['visualization_uuid'])){
+            //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
             $data['visualization_id'] = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $data['org_id']));
             unset($data['visualization_uuid']);
         }

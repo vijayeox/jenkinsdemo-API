@@ -16,7 +16,7 @@ class SetupEndorsement extends AbstractAppDelegate
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
         $privileges = $this->getPrivilege();
         if(isset($privileges['MANAGE_MY_POLICY_WRITE']) && 
-            $privileges['MANAGE_MY_POLICY_WRITE'] == true){
+            $privileges['MANAGE_MY_POLICY_WRITE'] == true && ($data['CSRReviewRequired'] == "" || $data['CSRReviewRequired'] == false || $data['CSRReviewRequired'] == 'false')){
              $rates = $this->getRates($data,$persistenceService);
                 $data = array_merge($data,$rates);
                 $data['policyStatus'] = "Pending Approval";
@@ -35,6 +35,8 @@ class SetupEndorsement extends AbstractAppDelegate
                    $data['endorsementCoverage'] = array();
                    $data['endorsementCylinder'] = array();
                    $data['endorsementExcessLiability'] = array();
+                }else{
+                    $data['endorsement_options'] = array();
                 }
                 if(isset($data['careerCoverage'])){
                     $data['careerCoveragePrice'] = 0;

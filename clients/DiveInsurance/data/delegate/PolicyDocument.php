@@ -423,6 +423,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
             }
+            $this->processAttachments($data);
             $data['CSRReviewRequired'] = "";
             $data['rejectionReason'] = "";
             if($this->type == 'quote' || $this->type == 'endorsementQuote'){
@@ -648,6 +649,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->documentBuilder->copyTemplateToDestination($file,$dest);
                     return $dest.$file;
                 }
+            }
+        }
+
+        private function processAttachments(&$data){
+            if(isset($data['csr_attachments'])){
+                if(is_string($data['csr_attachments'])){
+                    $data['csr_attachments'] = json_decode($data['csr_attachments'], true);
+                }
+                if(!isset($data['attachments'])){
+                    $data['attachments'] = array();
+                }else if(is_string($data['attachments'])){
+                    $data['attachments'] = json_decode($data['attachments'], true);
+                }
+                foreach ($data['csr_attachments'] as $key => $value) {
+                    $data['attachments'][] = $value;
+                }
+                $data['csr_attachments'] = "";
             }
         }
 }
