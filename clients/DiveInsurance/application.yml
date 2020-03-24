@@ -634,7 +634,7 @@ menu:
                             -
                                 name: 'View Pocket Card'
                                 icon: 'fa fa-envelope-open'
-                                rule: '''{{jobStatus}}'' == ''Completed'''
+                                rule: '''{{jobStatus}}'' == ''Completed'' && ''{{pocketCardProductType}}'' != ''No Records Found'''
                                 details:
                                     -
                                         type: DocumentViewer
