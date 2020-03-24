@@ -16,27 +16,29 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
             }
             $attachmentsFieldnames = $data['attachmentsFieldnames'];
             $this->logger->info("attachmentsFieldnames: ".print_r($data['attachmentsFieldnames'],true));
-            for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
-                $fieldNamesArray =is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
-                $this->logger->info("Document Save Entry fieldNamesArray: ".print_r($fieldNamesArray,true));
-                if (sizeof($fieldNamesArray) == 1) {
-                    $this->logger->info("Document Save Entry fieldNamesArray size 1");
-                    $fieldName = $fieldNamesArray[0];
-                    if(isset($data[$fieldName]) && is_array($data[$fieldName]) ){
-                        $data[$fieldName] = $this->saveFile($data, $data[$fieldName]);
-                    }
-                } else if (sizeof($fieldNamesArray) == 2) {
-                    $this->logger->info("Document Save Entry fieldNamesArray size 2");
-                    $gridFieldName = $fieldNamesArray[0];
-                    $fieldName = $fieldNamesArray[1];
-                    if(isset($data[$gridFieldName])){
-                        for ($j = 0;$j < sizeof($data[$gridFieldName]);$j++) {
-                            if (isset($data[$gridFieldName][$j][$fieldName])  && is_array($data[$gridFieldName][$j][$fieldName]) ) {
-                                $data[$gridFieldName][$j][$fieldName] = $this->saveFile($data, $data[$gridFieldName][$j][$fieldName]);
-                            }
+            if(is_array($attachmentsFieldnames)){
+                for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
+                    $fieldNamesArray =is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
+                    $this->logger->info("Document Save Entry fieldNamesArray: ".print_r($fieldNamesArray,true));
+                    if (is_array($fieldNamesArray) && sizeof($fieldNamesArray) == 1) {
+                        $this->logger->info("Document Save Entry fieldNamesArray size 1");
+                        $fieldName = $fieldNamesArray[0];
+                        if(isset($data[$fieldName]) && is_array($data[$fieldName]) ){
+                            $data[$fieldName] = $this->saveFile($data, $data[$fieldName]);
                         }
-                    } 
-                }
+                    } else if (is_array($fieldNamesArray) && sizeof($fieldNamesArray) == 2) {
+                        $this->logger->info("Document Save Entry fieldNamesArray size 2");
+                        $gridFieldName = $fieldNamesArray[0];
+                        $fieldName = $fieldNamesArray[1];
+                        if(isset($data[$gridFieldName])){
+                            for ($j = 0;$j < sizeof($data[$gridFieldName]);$j++) {
+                                if (isset($data[$gridFieldName][$j][$fieldName])  && is_array($data[$gridFieldName][$j][$fieldName]) ) {
+                                    $data[$gridFieldName][$j][$fieldName] = $this->saveFile($data, $data[$gridFieldName][$j][$fieldName]);
+                                }
+                            }
+                        } 
+                    }
+                } 
             }
         }
         $this->logger->info("Document Save return data ".print_r($data,true));
