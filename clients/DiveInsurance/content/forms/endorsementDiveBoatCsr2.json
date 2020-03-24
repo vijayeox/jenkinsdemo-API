@@ -3971,7 +3971,6 @@
 						"hideLabel": true,
 						"tableView": false,
 						"storage": "base64",
-						"image": true,
 						"webcam": false,
 						"fileTypes": [{
 							"label": "",
@@ -5053,17 +5052,17 @@
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "base64",
-					"image": true,
 					"webcam": false,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
 					}],
+					"multiple": true,
 					"persistent": false,
 					"protected": true,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": true
 					},
 					"key": "document",
 					"type": "file",
@@ -10108,6 +10107,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-24T06:28:03.189Z",
+	"modified": "2020-03-24T07:17:27.910Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }

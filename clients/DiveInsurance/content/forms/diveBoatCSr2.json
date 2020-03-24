@@ -4089,7 +4089,6 @@
 						"hideLabel": true,
 						"tableView": true,
 						"storage": "base64",
-						"image": true,
 						"webcam": false,
 						"fileTypes": [{
 							"label": "",
@@ -4878,17 +4877,17 @@
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "base64",
-					"image": true,
 					"webcam": false,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
 					}],
+					"multiple": true,
 					"persistent": false,
 					"protected": true,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": true
 					},
 					"key": "document",
 					"type": "file",
@@ -8575,6 +8574,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-24T06:27:04.612Z",
+	"modified": "2020-03-24T07:17:48.303Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }

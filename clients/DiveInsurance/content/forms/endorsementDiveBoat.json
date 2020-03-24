@@ -3894,7 +3894,6 @@
 						"hideLabel": true,
 						"tableView": false,
 						"storage": "base64",
-						"image": true,
 						"webcam": false,
 						"fileTypes": [{
 							"label": "",
@@ -4915,16 +4914,16 @@
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "base64",
-					"image": true,
 					"webcam": false,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
 					}],
+					"multiple": true,
 					"clearOnHide": false,
 					"validate": {
 						"unique": false,
-						"multiple": false
+						"multiple": true
 					},
 					"key": "document",
 					"type": "file",
@@ -5393,6 +5392,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-24T06:27:32.678Z",
+	"modified": "2020-03-24T07:17:13.089Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }

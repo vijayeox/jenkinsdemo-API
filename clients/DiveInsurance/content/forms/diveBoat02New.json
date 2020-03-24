@@ -5577,15 +5577,15 @@
                     "hideLabel": true,
                     "tableView": true,
                     "storage": "base64",
-                    "image": true,
                     "webcam": false,
                     "fileTypes": [{
                         "label": "",
                         "value": ""
                     }],
+                    "multiple": true,
                     "validate": {
                         "unique": false,
-                        "multiple": false
+                        "multiple": true
                     },
                     "key": "document",
                     "type": "file",
@@ -6386,6 +6386,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-24T06:26:54.194Z",
+    "modified": "2020-03-24T07:17:40.427Z",
     "machineName": "testdivehub:diveBoat02New"
 }
