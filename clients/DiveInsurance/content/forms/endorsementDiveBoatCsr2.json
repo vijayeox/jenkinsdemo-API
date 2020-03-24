@@ -9745,6 +9745,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
+						"custom": "if(data['quote_due_date'] && data['quote_due_date'] != ''){\n  valid = (moment(data['quote_due_date']) > moment()) ? true : 'Please choose the date after '+moment().format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 						"unique": false,
 						"multiple": false
 					},
@@ -10107,6 +10108,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-24T07:17:27.910Z",
+	"modified": "2020-03-24T07:31:27.428Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }
