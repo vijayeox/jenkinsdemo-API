@@ -413,21 +413,22 @@
 									"value": "",
 									"label": ""
 								}],
-								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}\n}"
+								"custom": "let obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"selectThreshold": 0.3,
 							"validate": {
 								"required": true,
+								"customMessage": "State is required",
 								"unique": false,
 								"multiple": false
 							},
 							"key": "state",
 							"type": "select",
+							"refreshOn": "country",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"refreshOn": "country"
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -582,21 +583,22 @@
 									"value": "",
 									"label": ""
 								}],
-								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}\n}"
+								"custom": "let obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"selectThreshold": 0.3,
 							"validate": {
 								"required": true,
+								"customMessage": "State is required",
 								"unique": false,
 								"multiple": false
 							},
 							"key": "physical_state",
 							"type": "select",
+							"refreshOn": "physical_country",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"refreshOn": "physical_country"
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1173,20 +1175,22 @@
 								"dataSrc": "custom",
 								"data": {
 									"values": [{}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n}\n}"
+									"custom": "let obj = data['countryList'].find(o => o.country === data.business_country);\nif (obj) {\n  values = obj.states;\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"validate": {
 									"required": true,
+									"customMessage": "State is required",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "business_state",
 								"type": "select",
+								"refreshOn": "business_country",
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"refreshOn": "business_country"
+								"clearOnRefresh": true
 							}],
 							"offset": 0,
 							"push": 0,
@@ -1415,6 +1419,8 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"pattern": "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
+								"customMessage": "Please enter a valid URL.",
 								"unique": false,
 								"multiple": false
 							},
@@ -1716,13 +1722,18 @@
 				}, {
 					"label": "Date ",
 					"format": "MM-dd-yyyy",
+					"dataGridLabel": false,
 					"tableView": false,
+					"datePicker": {
+						"datepickerMode": "day"
+					},
 					"enableTime": false,
 					"timePicker": {
 						"showMeridian": false
 					},
 					"validate": {
 						"required": true,
+						"custom": "if(row['data_grid_date'] && row['data_grid_date'] != ''){\n  valid = (moment(row['data_grid_date']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 						"unique": false,
 						"multiple": false
 					},
@@ -1746,10 +1757,7 @@
 						"minDate": null,
 						"maxDate": null
 					},
-					"inDataGrid": true,
-					"datePicker": {
-						"datepickerMode": "day"
-					}
+					"inDataGrid": true
 				}, {
 					"label": "Amount",
 					"prefix": "$",
@@ -2945,6 +2953,7 @@
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter the date of last survey.",
+							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 							"unique": false,
 							"multiple": false
 						},
@@ -2997,6 +3006,7 @@
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter the date of purchase.",
+							"custom": "if(data['date_of_purchase'] && data['date_of_purchase'] != ''){\n  valid = (moment(data['date_of_purchase']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 							"unique": false,
 							"multiple": false
 						},
@@ -3523,6 +3533,9 @@
 									"multiple": false
 								},
 								"key": "country",
+								"properties": {
+									"clear_field": "state"
+								},
 								"type": "select",
 								"input": true,
 								"lockKey": true,
@@ -3543,23 +3556,24 @@
 										"value": "",
 										"label": ""
 									}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row['country']);\nconsole.log(obj);\n  if(obj){\n  values = obj.states\n  } else {\n  values = \"\"\n  }\n}"
+									"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"validate": {
 									"required": true,
+									"customMessage": "State is required",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "state",
 								"customConditional": "show = (row.country)",
 								"type": "select",
+								"refreshOn": "country",
 								"input": true,
 								"lockKey": true,
 								"clearOnRefresh": true,
-								"hideOnChildrenHidden": false,
-								"refreshOn": "country"
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -3829,6 +3843,9 @@
 										"multiple": false
 									},
 									"key": "country",
+									"properties": {
+										"clear_field": "state"
+									},
 									"type": "select",
 									"input": true,
 									"lockKey": true,
@@ -3849,23 +3866,24 @@
 											"value": "",
 											"label": ""
 										}],
-										"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row['country']);\nconsole.log(obj);\n  if(obj){\n  values = obj.states\n  } else {\n  values = \"\"\n  }\n}"
+										"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 									},
 									"template": "<span>{{ item }}</span>",
 									"selectThreshold": 0.3,
 									"validate": {
 										"required": true,
+										"customMessage": "State is required",
 										"unique": false,
 										"multiple": false
 									},
 									"key": "state",
 									"customConditional": "show = (row.country)",
 									"type": "select",
+									"refreshOn": "country",
 									"input": true,
 									"lockKey": true,
 									"clearOnRefresh": true,
-									"hideOnChildrenHidden": false,
-									"refreshOn": "country"
+									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
 								"offset": 0,
@@ -4264,6 +4282,9 @@
 									"multiple": false
 								},
 								"key": "country",
+								"properties": {
+									"clear_field": "state"
+								},
 								"type": "select",
 								"input": true,
 								"lockKey": true,
@@ -4284,23 +4305,24 @@
 										"value": "",
 										"label": ""
 									}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row['country']);\nconsole.log(obj);\n  if(obj){\n  values = obj.states\n  } else {\n  values = \"\"\n  }\n}"
+									"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"validate": {
 									"required": true,
+									"customMessage": "State is required",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "state",
 								"customConditional": "show = (row.country)",
 								"type": "select",
+								"refreshOn": "country",
 								"input": true,
 								"lockKey": true,
 								"clearOnRefresh": true,
-								"hideOnChildrenHidden": false,
-								"refreshOn": "country"
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -5023,6 +5045,9 @@
 										"multiple": false
 									},
 									"key": "country",
+									"properties": {
+										"clear_field": "state"
+									},
 									"type": "select",
 									"input": true,
 									"lockKey": true,
@@ -5043,23 +5068,24 @@
 											"value": "",
 											"label": ""
 										}],
-										"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row['country']);\nconsole.log(obj);\n  if(obj){\n  values = obj.states\n  } else {\n  values = \"\"\n  }\n}"
+										"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 									},
 									"template": "<span>{{ item }}</span>",
 									"selectThreshold": 0.3,
 									"validate": {
 										"required": true,
+										"customMessage": "State is required",
 										"unique": false,
 										"multiple": false
 									},
 									"key": "state",
 									"customConditional": "show = (row.country)",
 									"type": "select",
+									"refreshOn": "country",
 									"input": true,
 									"lockKey": true,
 									"clearOnRefresh": true,
-									"hideOnChildrenHidden": false,
-									"refreshOn": "country"
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -8551,6 +8577,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-23T10:47:27.566Z",
+	"modified": "2020-03-24T03:47:45.500Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
