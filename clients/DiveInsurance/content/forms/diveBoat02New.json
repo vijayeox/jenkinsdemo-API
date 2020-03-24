@@ -1443,7 +1443,7 @@
                     }
                 }, {
                     "label": "end_date",
-                    "calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-7-22\";\n}else{\nvalue = (year)+ \"-7-22\";\n}",
+                    "calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-07-22\";\n}else{\nvalue = (year)+ \"-07-22\";\n}",
                     "key": "end_date",
                     "properties": {
                         "data_type": "Date"
@@ -6386,6 +6386,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-24T07:17:40.427Z",
+    "modified": "2020-03-24T10:02:27.510Z",
     "machineName": "testdivehub:diveBoat02New"
 }

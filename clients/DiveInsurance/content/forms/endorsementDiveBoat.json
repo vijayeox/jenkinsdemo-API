@@ -924,16 +924,16 @@
 						"multiple": false
 					}
 				}, {
-					"input": true,
-					"tableView": true,
-					"key": "end_date",
 					"label": "end_date",
-					"type": "hidden",
+					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-07-22\";\n}else{\nvalue = (year)+ \"-07-22\";\n}",
+					"key": "end_date",
 					"properties": {
 						"data_type": "Date"
 					},
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
 					"lockKey": true,
-					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-7-22\";\n}else{\nvalue = (year)+ \"-7-22\";\n}",
 					"hideOnChildrenHidden": false,
 					"validate": {
 						"unique": false,
@@ -5392,6 +5392,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-03-24T07:17:13.089Z",
+	"modified": "2020-03-24T10:02:21.817Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }
