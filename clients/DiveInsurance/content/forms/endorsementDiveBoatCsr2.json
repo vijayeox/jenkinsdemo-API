@@ -179,11 +179,14 @@
 				"multiple": false
 			}
 		}, {
-			"key": "panelPanel2",
-			"input": false,
-			"title": "Padi Validation",
+			"title": "PADI Validation",
 			"theme": "primary",
+			"collapsible": false,
 			"tableView": false,
+			"key": "panelPanel2",
+			"type": "panel",
+			"label": "Pa Validation",
+			"input": false,
 			"components": [{
 				"label": "Columns",
 				"input": false,
@@ -250,8 +253,6 @@
 					"multiple": false
 				}
 			}],
-			"type": "panel",
-			"label": "Panel",
 			"validate": {
 				"unique": false,
 				"multiple": false
@@ -10108,6 +10109,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-24T07:42:20.342Z",
+	"modified": "2020-03-24T11:36:36.424Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }
