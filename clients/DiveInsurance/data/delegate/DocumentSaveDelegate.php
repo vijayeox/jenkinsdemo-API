@@ -2,46 +2,70 @@
 use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\AppDelegate\UserContextTrait;
+
 class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
+    use UserContextTrait;
     public function __construct() {
         parent::__construct();
     }
     public function execute(array $data, Persistence $persistenceService) {
         $this->logger->info("Document Save Entry");
-        if (isset($data['attachmentsFieldnames'])) {
-            if (!isset($data['fileId'])) {
-                $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
-            } else {
-                $data['uuid'] = $data['fileId'];
-            }
-            $attachmentsFieldnames = $data['attachmentsFieldnames'];
-            $this->logger->info("attachmentsFieldnames: ".print_r($data['attachmentsFieldnames'],true));
-            if(is_array($attachmentsFieldnames)){
-                for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
-                    $fieldNamesArray =is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
-                    $this->logger->info("Document Save Entry fieldNamesArray: ".print_r($fieldNamesArray,true));
-                    if (is_array($fieldNamesArray) && sizeof($fieldNamesArray) == 1) {
-                        $this->logger->info("Document Save Entry fieldNamesArray size 1");
-                        $fieldName = $fieldNamesArray[0];
-                        if(isset($data[$fieldName]) && is_array($data[$fieldName]) ){
-                            $data[$fieldName] = $this->saveFile($data, $data[$fieldName]);
-                        }
-                    } else if (is_array($fieldNamesArray) && sizeof($fieldNamesArray) == 2) {
-                        $this->logger->info("Document Save Entry fieldNamesArray size 2");
-                        $gridFieldName = $fieldNamesArray[0];
-                        $fieldName = $fieldNamesArray[1];
-                        if(isset($data[$gridFieldName])){
-                            for ($j = 0;$j < sizeof($data[$gridFieldName]);$j++) {
-                                if (isset($data[$gridFieldName][$j][$fieldName])  && is_array($data[$gridFieldName][$j][$fieldName]) ) {
-                                    $data[$gridFieldName][$j][$fieldName] = $this->saveFile($data, $data[$gridFieldName][$j][$fieldName]);
-                                }
-                            }
-                        } 
+
+        $privileges = $this->getPrivilege();
+        if(!isset($data['endorsement_options'])){
+            if ((isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
+                $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true) && (isset($data['initiatedByCsr']) && ($data['initiatedByCsr'] == false))) {
+                $this->logger->info("AM here");
+                if((isset($data['csrAttachmentsFieldnames']))){
+                    if(!isset($data['fileId'])) {
+                        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+                    } else {
+                        $data['uuid'] = $data['fileId'];
                     }
-                } 
+                    $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
+                    $this->logger->info("csrAttachmentsFieldnames Data: ".print_r($data['csrAttachmentsFieldnames'],true));
+                    $this->getAttchments($data,$attachmentsFieldnames);
+                }
+            }else{
+                if (isset($data['attachmentsFieldnames'])) {
+                    if (!isset($data['fileId'])) {
+                        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+                    } else {
+                        $data['uuid'] = $data['fileId'];
+                    }
+                    $attachmentsFieldnames = $data['attachmentsFieldnames'];
+                    $this->logger->info("attachmentsFieldnames: ".print_r($data['attachmentsFieldnames'],true));
+                    $this->getAttchments($data,$attachmentsFieldnames);
+                }
             }
+        }else{
+                  if (isset($data['endorAttachmentsFieldnames'])) {
+                    if (!isset($data['fileId'])) {
+                        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+                    } else {
+                        $data['uuid'] = $data['fileId'];
+                    }
+                    $attachmentsFieldnames = $data['endorAttachmentsFieldnames'];
+                    $this->logger->info("endorAttachmentsFieldnames Data: ".print_r($data['endorAttachmentsFieldnames'],true));
+                    $this->getAttchments($data,$attachmentsFieldnames);
+                }
+
+                   if((isset($data['csrAttachmentsFieldnames']))){
+                    if(!isset($data['fileId'])) {
+                        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+                    } else {
+                        $data['uuid'] = $data['fileId'];
+                    }
+                    $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
+                    $this->logger->info("csrAttachmentsFieldnames Data: ".print_r($data['csrAttachmentsFieldnames'],true));
+                    $this->getAttchments($data,$attachmentsFieldnames);
+                }
+
         }
-        $this->logger->info("Document Save return data ".print_r($data,true));
+        if(isset($data['documentFieldnames'])){
+            $this->cleanDocumentFields($data, $data['documentFieldnames']);
+        }
         return $data;
     }
 
@@ -67,5 +91,39 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
         }
         $this->logger->info("saveFile return: ".print_r($documentsArray,true));
         return $documentsArray;
+    }
+    
+    private function cleanDocumentFields(array &$data,array $documentFieldnames) {
+        $this->logger->info("Document Field NAmes: ".print_r($documentFieldnames,true));
+        for ($i = 0;$i < sizeof($documentFieldnames);$i++) {
+            $this->logger->info("Data for field: ".$documentFieldnames[$i]." - ".print_r($data[$documentFieldnames[$i]],true));
+            unset($data[$documentFieldnames[$i]]);
+        }
+    }
+    private function getAttchments(array &$data,array $attachmentsFieldnames){
+        if(is_array($attachmentsFieldnames)){
+            for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
+            $fieldNamesArray =is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
+            $this->logger->info("Document Save Entry fieldNamesArray: ".print_r($fieldNamesArray,true));
+            if (sizeof($fieldNamesArray) == 1) {
+                $this->logger->info("Document Save Entry fieldNamesArray size 1");
+                $fieldName = $fieldNamesArray[0];
+                if(isset($data[$fieldName]) && is_array($data[$fieldName]) ){
+                    $data[$fieldName] = $this->saveFile($data, $data[$fieldName]);
+                }
+            } else if (sizeof($fieldNamesArray) == 2) {
+                $this->logger->info("Document Save Entry fieldNamesArray size 2");
+                $gridFieldName = $fieldNamesArray[0];
+                $fieldName = $fieldNamesArray[1];
+                if(isset($data[$gridFieldName])){
+                    for ($j = 0;$j < sizeof($data[$gridFieldName]);$j++) {
+                        if (isset($data[$gridFieldName][$j][$fieldName])  && is_array($data[$gridFieldName][$j][$fieldName]) ) {
+                            $data[$gridFieldName][$j][$fieldName] = $this->saveFile($data, $data[$gridFieldName][$j][$fieldName]);
+                        }
+                    }
+                } 
+                }
+            }
+        }
     }
 }
