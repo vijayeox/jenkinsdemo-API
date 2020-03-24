@@ -1,5 +1,11 @@
 FROM php:7.2-apache-stretch
 
+RUN apt-get update
+RUN apt-get install -y libpq-dev
+
+RUN apt-get update
+RUN apt-get install -y pdftk
+
 RUN apt-get update \
  && apt-get install -y graphviz \
  && apt-get install -y unzip \
@@ -14,6 +20,7 @@ RUN apt-get update \
  && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-install zip \
  && docker-php-ext-install pdo_mysql \
+ && docker-php-ext-install pdo pdo_pgsql pgsql \
  && docker-php-ext-install xsl \
  && a2enmod rewrite \
  && apt-get install -y mysql-client \
