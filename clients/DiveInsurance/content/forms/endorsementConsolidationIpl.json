@@ -1130,21 +1130,54 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"placeholder": " ",
-								"spellcheck": false,
-								"tableView": false,
-								"clearOnHide": false,
-								"validateOn": "blur",
+								"spellcheck": true,
+								"tableView": true,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter your phone number.",
+									"customMessage": "Please enter a valid home or work phone number",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "home_phone_number",
-								"type": "phoneNumber",
+								"logic": [{
+									"name": "fieldMask",
+									"trigger": {
+										"type": "simple",
+										"simple": {
+											"show": true,
+											"when": "home_country_code",
+											"eq": "52"
+										}
+									},
+									"actions": [{
+										"name": "mask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(99) 9999-9999"
+									}]
+								}, {
+									"name": "defaultMask",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "result = (data.home_country_code != 52)"
+									},
+									"actions": [{
+										"name": "defaultMask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(999) 999-9999"
+									}]
+								}],
+								"type": "textfield",
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "home_phone",
@@ -1207,21 +1240,54 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"placeholder": " ",
-								"spellcheck": false,
-								"tableView": false,
-								"clearOnHide": false,
-								"validateOn": "blur",
+								"spellcheck": true,
+								"tableView": true,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter your phone number.",
+									"customMessage": "Please enter a valid mobile phone number",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "phone_number",
-								"type": "phoneNumber",
+								"logic": [{
+									"name": "mask",
+									"trigger": {
+										"type": "simple",
+										"simple": {
+											"show": true,
+											"when": "home_country_code",
+											"eq": "52"
+										}
+									},
+									"actions": [{
+										"name": "mask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(99) 9999-9999"
+									}]
+								}, {
+									"name": "defaultMask",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "result = (data.phone_country_code != 52)"
+									},
+									"actions": [{
+										"name": "defaultMask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(999) 999-9999"
+									}]
+								}],
+								"type": "textfield",
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "phone",
@@ -1264,7 +1330,7 @@
 							"unique": false,
 							"multiple": false
 						},
-						"errorLabel": "Please enter a valid fax number",
+						"errorLabel": "Please enter a valid Fax number",
 						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
@@ -2090,11 +2156,12 @@
 										"spellcheck": true,
 										"disabled": true,
 										"tableView": true,
+										"defaultValue": 0,
 										"delimiter": false,
 										"requireDecimal": true,
 										"inputFormat": "plain",
 										"clearOnHide": false,
-										"calculateValue": "value = (parseFloat(data['endorsementTotal1']) - parseFloat(data['amount'])) ;",
+										"calculateValue": "value = (parseFloat(data['endorsementTotal']) - parseFloat(data['amount'])) ;",
 										"validate": {
 											"unique": false,
 											"multiple": false
@@ -2104,7 +2171,6 @@
 										"decimalLimit": 2,
 										"input": true,
 										"hideOnChildrenHidden": false,
-										"defaultValue": 0,
 										"inputType": "number"
 									}],
 									"width": 8,
@@ -2162,11 +2228,133 @@
 				"path": "page3Panel",
 				"hideOnChildrenHidden": false
 			}, {
+				"title": " ",
+				"breadcrumbClickable": false,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": true,
+				"key": "documentPanel",
+				"type": "panel",
+				"label": " ",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"components": [{
+					"type": "documentviewer",
+					"key": "techRec_attachments1",
+					"calculateValue": "value = (data['techRec_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.techRec_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "TechRec Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}, {
+					"type": "documentviewer",
+					"key": "cylinderInspector_attachments1",
+					"calculateValue": "value = (data['cylinderInspector_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.cylinderInspector_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Cylinder Inspector Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}, {
+					"type": "documentviewer",
+					"key": "cylinderInstructor_attachments1",
+					"calculateValue": "value = (data['cylinderInstructor_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.cylinderInstructor_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Cylinder Instructor Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}, {
+					"type": "documentviewer",
+					"key": "scubaFit_attachments1",
+					"calculateValue": "value = (data['scubaFit_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.scubaFit_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Scuba Fit Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}, {
+					"type": "documentviewer",
+					"key": "attachments1",
+					"calculateValue": "value = (data['attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}],
+				"path": "documentPanel"
+			}, {
 				"title": "TechRec Attachments",
 				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel1",
+				"customConditional": "if((data.techRec_attachments.length === 0 && data.tecRecEndorsment === 'accepted') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "tecRecEndorsment",
@@ -2216,7 +2404,7 @@
 						"unique": false,
 						"multiple": true
 					},
-					"key": "techRec_attachments",
+					"key": "endor_techRec_attachments",
 					"type": "file",
 					"input": true
 				}],
@@ -2224,10 +2412,16 @@
 			}, {
 				"title": "Cylinder Inspector Attachments",
 				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel3",
-				"customConditional": "if(data.cylinder == \"cylinderInspector\" || data.upgradecylinder.value == \"cylinderInspector\"){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "var selected = false;\nif(data.previous_cylinder === 'cylinderInspector'){\n\tselected = true;\t\n}\n\n\nif((data.cylinderInspector_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInspector\") && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2272,7 +2466,7 @@
 						"unique": false,
 						"multiple": true
 					},
-					"key": "cylinderInspector_attachments",
+					"key": "endor_cylinderInspector_attachments",
 					"type": "file",
 					"input": true
 				}],
@@ -2280,10 +2474,16 @@
 			}, {
 				"title": "Cylinder Instructor Attachments",
 				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "if(data.cylinder == \"cylinderInstructor\" || data.upgradecylinder.value == \"cylinderInstructor\"){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "var selected = false;\nif(data.previous_cylinder === 'cylinderInstructor'){\n\tselected = true;\t\n}\n\nif((data.cylinderInstructor_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInstructor\" ) && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Instructor Attachments",
 				"input": false,
@@ -2328,7 +2528,7 @@
 						"unique": false,
 						"multiple": true
 					},
-					"key": "cylinderInstructor_attachments",
+					"key": "endor_cylinderInstructor_attachments",
 					"type": "file",
 					"input": true
 				}],
@@ -2336,9 +2536,16 @@
 			}, {
 				"title": "Scuba Fit Attachments",
 				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel5",
+				"customConditional": "if((data.scubaFit_attachments.length === 0 && data.scubaFit === 'scubaFitInstructor') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "scubaFit",
@@ -2388,7 +2595,7 @@
 						"unique": false,
 						"multiple": true
 					},
-					"key": "scubaFit_attachments",
+					"key": "endor_scubaFit_attachments",
 					"type": "file",
 					"input": true
 				}],
@@ -2396,9 +2603,16 @@
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel2",
+				"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = true;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Attachments",
 				"input": false,
@@ -2409,7 +2623,8 @@
 				"components": [{
 					"label": "attachmentFields",
 					"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
-					"key": "attachmentsFieldnames",
+					"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\"];",
+					"key": "endorAttachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
@@ -2435,11 +2650,66 @@
 						"unique": false,
 						"multiple": true
 					},
-					"key": "attachments",
+					"key": "endor_attachments",
 					"type": "file",
 					"input": true
 				}],
 				"path": "panel2"
+			}, {
+				"title": "Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": false,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": false,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "attachmentsCsrEndor",
+				"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = false;\n}\nelse{\n  show = true;\n}",
+				"type": "panel",
+				"label": "Attachments",
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"components": [{
+					"label": "csrEndorAttachmentsFieldnames",
+					"calculateValue": "value = [\"csr_attachments\"];",
+					"key": "csrEndorAttachmentsFieldnames",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}, {
+					"label": "Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"multiple": true,
+					"clearOnHide": false,
+					"calculateValue": "if((data.csrEndor_attachments || data.csrEndor_attachments !== undefined) && data.csrEndor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"validate": {
+						"unique": false,
+						"multiple": true
+					},
+					"key": "csr_attachments",
+					"type": "file",
+					"input": true
+				}],
+				"path": "attachmentsCsrEndor"
 			}],
 			"type": "panel",
 			"tooltip": "Select a valid policy period from the list",
@@ -3037,7 +3307,7 @@
 			"label": "amount",
 			"defaultValue": "0",
 			"calculateValue": "value = parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00",
-			"key": "endorAmountPayable",
+			"key": "amount",
 			"properties": {
 				"target": "convergepay-amount",
 				"render": "page6"
@@ -3251,6 +3521,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-03-17T07:31:45.516Z",
+	"modified": "2020-03-24T07:53:53.777Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
