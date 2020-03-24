@@ -11,7 +11,7 @@
 		"tableView": false,
 		"components": [{
 			"label": "initiatedByCsr",
-			"calculateValue": "if (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null){\n  value = data.privileges['MANAGE_POLICY_APPROVAL_WRITE']?false : true;\n}",
+			"calculateValue": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null){\n  value = data.privileges['MANAGE_POLICY_APPROVAL_WRITE']?false : true;\n}",
 			"key": "initiatedByCsr",
 			"type": "hidden",
 			"input": true,
@@ -668,7 +668,7 @@
 							"dataSrc": "custom",
 							"data": {
 								"values": [{}],
-								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
+								"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === data['country']);\n  if(obj){\n    values = obj.states\n  }\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"selectThreshold": 0.3,
@@ -836,7 +836,7 @@
 							"dataSrc": "custom",
 							"data": {
 								"values": [{}],
-								"custom": "let obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}"
+								"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === data['physical_country']);\n  if(obj){\n    values = obj.states\n  }\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"selectThreshold": 0.3,
@@ -4054,17 +4054,24 @@
 									}],
 									"custom": "values = data['countryList'];"
 								},
+								"valueProperty": "country",
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
+									"customMessage": "Please enter your country.",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "country",
+								"properties": {
+									"clear_field": "state"
+								},
 								"type": "select",
 								"input": true,
 								"lockKey": true,
+								"source": "5d347da33e9be31e15d3b115",
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "State",
@@ -4072,17 +4079,9 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{
-										"value": "",
-										"label": ""
-									}],
-									"headers": [{
-										"value": "",
-										"key": ""
-									}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+									"values": [{}],
+									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 								},
-								"valueProperty": "name",
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
@@ -4093,11 +4092,12 @@
 								},
 								"key": "state",
 								"type": "select",
-								"refreshOn": "country",
+								"refreshOn": "row.country",
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false,
-								"clearOnRefresh": true
+								"clearOnRefresh": true,
+								"isNew": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -4326,17 +4326,24 @@
 									}],
 									"custom": "values = data['countryList'];"
 								},
+								"valueProperty": "country",
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"validate": {
 									"required": true,
+									"customMessage": "Please enter your country.",
 									"unique": false,
 									"multiple": false
 								},
 								"key": "country",
+								"properties": {
+									"clear_field": "state"
+								},
 								"type": "select",
 								"input": true,
 								"lockKey": true,
+								"source": "5d347da33e9be31e15d3b115",
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "State",
@@ -4344,17 +4351,9 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{
-										"value": "",
-										"label": ""
-									}],
-									"headers": [{
-										"value": "",
-										"key": ""
-									}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+									"values": [{}],
+									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 								},
-								"valueProperty": "name",
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
@@ -4365,11 +4364,12 @@
 								},
 								"key": "state",
 								"type": "select",
-								"refreshOn": "country",
+								"refreshOn": "row.country",
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false,
-								"clearOnRefresh": true
+								"clearOnRefresh": true,
+								"isNew": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -4528,17 +4528,24 @@
 										}],
 										"custom": "values = data['countryList'];"
 									},
+									"valueProperty": "country",
 									"template": "<span>{{ item.country }}</span>",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
+										"customMessage": "Please enter your country.",
 										"unique": false,
 										"multiple": false
 									},
 									"key": "country",
+									"properties": {
+										"clear_field": "state"
+									},
 									"type": "select",
 									"input": true,
 									"lockKey": true,
+									"source": "5d347da33e9be31e15d3b115",
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "State",
@@ -4546,17 +4553,9 @@
 									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
-										"values": [{
-											"value": "",
-											"label": ""
-										}],
-										"headers": [{
-											"value": "",
-											"key": ""
-										}],
-										"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+										"values": [{}],
+										"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 									},
-									"valueProperty": "name",
 									"template": "<span>{{ item }}</span>",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
@@ -4565,13 +4564,14 @@
 										"unique": false,
 										"multiple": false
 									},
-									"key": "additionalLocationState",
+									"key": "state",
 									"type": "select",
-									"refreshOn": "country",
+									"refreshOn": "row.country",
 									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false,
-									"clearOnRefresh": true
+									"clearOnRefresh": true,
+									"isNew": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -6845,25 +6845,29 @@
 										}]
 									}, {
 										"components": [{
-											"input": true,
-											"tableView": true,
-											"inputType": "number",
 											"label": "Liability Tax Percentage",
-											"key": "ALliabilityTaxPercentage",
 											"prefix": "%",
-											"defaultValue": "0",
-											"clearOnHide": false,
-											"type": "number",
 											"hideLabel": true,
-											"lockKey": true,
-											"requireDecimal": true,
-											"decimalLimit": 3,
+											"mask": false,
+											"spellcheck": true,
 											"disabled": true,
-											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.additionalLocationState &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+											"tableView": true,
+											"defaultValue": "0",
+											"delimiter": false,
+											"requireDecimal": true,
+											"inputFormat": "plain",
+											"clearOnHide": false,
+											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.additionalLocationState &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 											"validate": {
 												"multiple": false,
 												"unique": false
-											}
+											},
+											"key": "ALliabilityTaxPercentage",
+											"type": "number",
+											"decimalLimit": 3,
+											"input": true,
+											"inputType": "number",
+											"lockKey": true
 										}]
 									}, {
 										"components": [{
@@ -6908,25 +6912,29 @@
 										}]
 									}, {
 										"components": [{
-											"input": true,
-											"tableView": true,
-											"inputType": "number",
 											"label": "Property Tax Percentage",
-											"key": "ALPropertyTaxPercentage",
 											"prefix": "%",
-											"defaultValue": "0",
-											"clearOnHide": false,
-											"type": "number",
 											"hideLabel": true,
-											"lockKey": true,
-											"decimalLimit": 3,
-											"requireDecimal": true,
+											"mask": false,
+											"spellcheck": true,
 											"disabled": true,
-											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.additionalLocationState &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+											"tableView": true,
+											"defaultValue": "0",
+											"delimiter": false,
+											"requireDecimal": true,
+											"inputFormat": "plain",
+											"clearOnHide": false,
+											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.additionalLocationState &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 											"validate": {
 												"multiple": false,
 												"unique": false
-											}
+											},
+											"key": "ALPropertyTaxPercentage",
+											"type": "number",
+											"decimalLimit": 3,
+											"input": true,
+											"inputType": "number",
+											"lockKey": true
 										}]
 									}, {
 										"components": [{
@@ -7923,7 +7931,7 @@
 					"multiple": false
 				},
 				"key": "groupPL",
-				"customConditional": "show = (row.count() > 0)",
+				"customConditional": "if(row && row.length){\n  show = true\n}",
 				"type": "editgrid",
 				"input": true,
 				"components": [{
@@ -8257,10 +8265,10 @@
 							"pull": 0
 						}, {
 							"components": [{
-								"input": true,
-								"tableView": true,
 								"label": "Country",
-								"key": "country",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
 								"data": {
 									"values": [{
 										"value": "",
@@ -8268,17 +8276,25 @@
 									}],
 									"custom": "values = data['countryList'];"
 								},
-								"dataSrc": "custom",
+								"valueProperty": "country",
+								"template": "<span>{{ item.country }}</span>",
+								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
+									"customMessage": "Please enter your country.",
 									"unique": false,
 									"multiple": false
 								},
+								"key": "country",
+								"properties": {
+									"clear_field": "state"
+								},
 								"type": "select",
+								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"template": "<span>{{ item.country }}</span>",
-								"isNew": false
+								"source": "5d347da33e9be31e15d3b115",
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -8286,28 +8302,30 @@
 							"pull": 0
 						}, {
 							"components": [{
-								"input": true,
-								"tableView": true,
 								"label": "State",
-								"key": "state",
-								"data": {
-									"values": [{
-										"value": "",
-										"label": ""
-									}],
-									"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row['country']);\nconsole.log(obj);\n  if(obj){\n  values = obj.states\n  } else {\n  values = \"\"\n  }\n}"
-								},
+								"widget": "choicesjs",
+								"tableView": true,
 								"dataSrc": "custom",
+								"data": {
+									"values": [{}],
+									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
+								},
 								"template": "<span>{{ item }}</span>",
+								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
+								"key": "state",
 								"type": "select",
+								"refreshOn": "row.country",
+								"input": true,
 								"lockKey": true,
-								"customConditional": "show = (row.country)",
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"clearOnRefresh": true,
+								"isNew": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -8556,24 +8574,28 @@
 						}]
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
-							"inputType": "number",
 							"label": "Tax Percentage",
-							"key": "groupTaxPercentage",
 							"prefix": "%",
-							"clearOnHide": false,
-							"type": "number",
-							"lockKey": true,
 							"hideLabel": true,
-							"decimalLimit": 2,
-							"requireDecimal": true,
+							"mask": false,
+							"spellcheck": true,
 							"disabled": true,
-							"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+							"tableView": true,
+							"delimiter": false,
+							"requireDecimal": true,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"validate": {
 								"multiple": false,
 								"unique": false
-							}
+							},
+							"key": "groupTaxPercentage",
+							"type": "number",
+							"decimalLimit": 2,
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
 						}]
 					}, {
 						"components": [{
@@ -11502,6 +11524,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-03-20T12:00:58.308Z",
+	"modified": "2020-03-24T09:23:15.394Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
