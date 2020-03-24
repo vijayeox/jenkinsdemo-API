@@ -65,13 +65,13 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
         $policy['previous_groupCoverageSelect'] = $data['groupCoverageSelect'];
         $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
         $policy['previous_groupExcessLiabilitySelect'] = $data['groupExcessLiabilitySelect'];
-        $policy['previous_groupTaxPercentage'] = $data['groupTaxPercentage'];
-        $policy['previous_groupTaxAmount'] = $data['groupTaxAmount'];
-        $policy['previous_groupPadiFeeAmount'] = $data['groupPadiFeeAmount'];
+        $policy['previous_groupTaxPercentage'] = isset($data['groupTaxPercentage']) ? $data['groupTaxPercentage'] : 0;
+        $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
+        $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
         $policy['previous_groupPAORfee'] = isset($data['groupPAORfee']) ? $data['groupPAORfee'] : 0;
         $policy['groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
-        $policy['previous_groupProfessionalLiabilityPrice'] = $data['groupProfessionalLiabilityPrice'];
-        $policy['previous_groupTotalAmount'] = $data['groupTotalAmount'];
+        $policy['previous_groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
+        $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
 
     
         $policy['previous_hullRate'] = $data['hullRate'];
