@@ -82,18 +82,39 @@
 		"key": "panelColumns3",
 		"columns": [{
 			"components": [{
-				"key": "panelColumns3Content",
 				"label": "Content",
-				"input": false,
 				"attrs": [{
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2019.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2021.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "panelColumns3Content",
+				"customConditional": "show = false;\nconsole.log(productName);\nif(productName == 'IPLRegister' || productName == 'EFR' || productName == 'DiveStore'){\n   show =true;\n}",
 				"type": "htmlelement",
+				"input": false,
 				"hideLabel": true,
 				"hideOnChildrenHidden": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
+			}, {
+				"label": "Content",
+				"attrs": [{
+					"value": "",
+					"attr": ""
+				}],
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2020 through 12:01 AM July 22, 2021  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"refreshOnChange": false,
 				"tableView": false,
+				"key": "panelColumns3Content1",
+				"customConditional": "show = false;\nif(productName == 'DiveBoat'){\n   show =true;\n}",
+				"type": "htmlelement",
+				"input": false,
+				"hideLabel": true,
+				"hideOnChildrenHidden": false,
 				"validate": {
 					"unique": false,
 					"multiple": false
@@ -139,7 +160,8 @@
 		"validate": {
 			"unique": false,
 			"multiple": false
-		}
+		},
+		"path": "panelColumns3"
 	}, {
 		"key": "panelPanel2",
 		"input": false,
@@ -1341,7 +1363,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 4,
+	"_vid": 8,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1355,6 +1377,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-03-23T11:51:57.868Z",
+	"modified": "2020-03-24T04:59:03.926Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
