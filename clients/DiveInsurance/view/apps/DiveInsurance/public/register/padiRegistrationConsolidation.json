@@ -91,7 +91,7 @@
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "panelColumns3Content",
-				"customConditional": "show = false;\nconsole.log(productName);\nif(productName == 'IPLRegister' || productName == 'EFR' || productName == 'DiveStore'){\n   show =true;\n}",
+				"customConditional": "show = false;\nif(productName == 'IPLRegister' || productName == 'EFR' || productName == 'DiveStore'){\n   show =true;\n}",
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
@@ -819,8 +819,7 @@
 							"pattern": "[0-9\\s-]*",
 							"customMessage": "Please enter a valid Zip Code for your region.",
 							"unique": false,
-							"multiple": false,
-							"maxLength": 6
+							"multiple": false
 						},
 						"key": "zip",
 						"type": "textfield",
@@ -1013,8 +1012,7 @@
 									"pattern": "[0-9\\s-]*",
 									"customMessage": "Please enter a valid Zip Code for your region.",
 									"unique": false,
-									"multiple": false,
-									"maxLength": 6
+									"multiple": false
 								},
 								"key": "physical_zip",
 								"type": "textfield",
@@ -1363,7 +1361,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 9,
+	"_vid": 15,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1377,6 +1375,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-03-24T05:11:30.378Z",
+	"modified": "2020-03-24T05:44:50.991Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

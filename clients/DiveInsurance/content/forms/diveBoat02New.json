@@ -329,7 +329,8 @@
                             "unique": false,
                             "multiple": false
                         },
-                        "hideOnChildrenHidden": false
+                        "hideOnChildrenHidden": false,
+                        "hideLabel": true
                     }, {
                         "label": "PADI Verified",
                         "tableView": false,
@@ -3609,7 +3610,6 @@
                         },
                         "validate": {
                             "required": true,
-                            "customMessage": "Please enter the date of last survey.",
                             "custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
                             "unique": false,
                             "multiple": false
@@ -3660,7 +3660,6 @@
                         },
                         "validate": {
                             "required": true,
-                            "customMessage": "Please enter the date of purchase.",
                             "custom": "if(data['date_of_purchase'] && data['date_of_purchase'] != ''){\n  valid = (moment(data['date_of_purchase']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
                             "unique": false,
                             "multiple": false
@@ -4799,27 +4798,26 @@
                     },
                     "path": "page8",
                     "components": [{
-                        "input": true,
-                        "tableView": true,
                         "label": "Attachments",
-                        "key": "attachments",
-                        "image": true,
-                        "multiple": true,
-                        "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
-                        "fileMaxSize": "10MB",
-                        "type": "file",
-                        "lockKey": true,
-                        "storage": "base64",
                         "hideLabel": true,
-                        "validate": {
-                            "unique": false,
-                            "multiple": true
-                        },
+                        "tableView": true,
+                        "storage": "base64",
                         "webcam": false,
                         "fileTypes": [{
                             "label": "",
                             "value": ""
-                        }]
+                        }],
+                        "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                        "fileMaxSize": "10MB",
+                        "multiple": true,
+                        "validate": {
+                            "unique": false,
+                            "multiple": true
+                        },
+                        "key": "attachments",
+                        "type": "file",
+                        "input": true,
+                        "lockKey": true
                     }, {
                         "label": "attachmentFields",
                         "customDefaultValue": "value = [[\"groupPL\",\"document\"],['attachments']];",
@@ -6388,6 +6386,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-24T03:47:38.504Z",
+    "modified": "2020-03-24T06:26:54.194Z",
     "machineName": "testdivehub:diveBoat02New"
 }

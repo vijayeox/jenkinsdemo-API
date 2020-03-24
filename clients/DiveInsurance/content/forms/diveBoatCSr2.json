@@ -495,17 +495,17 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"input": true,
-					"tableView": true,
 					"label": "Same as mailing address",
-					"dataGridLabel": false,
-					"key": "sameasmailingaddress",
+					"tableView": true,
 					"defaultValue": "true",
 					"validate": {
 						"unique": false,
 						"multiple": false
 					},
+					"key": "sameasmailingaddress",
 					"type": "checkbox",
+					"input": true,
+					"dataGridLabel": false,
 					"lockKey": true
 				}, {
 					"label": "Columns",
@@ -2952,7 +2952,6 @@
 						},
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the date of last survey.",
 							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 							"unique": false,
 							"multiple": false
@@ -3005,7 +3004,6 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the date of purchase.",
 							"custom": "if(data['date_of_purchase'] && data['date_of_purchase'] != ''){\n  valid = (moment(data['date_of_purchase']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 							"unique": false,
 							"multiple": false
@@ -8577,6 +8575,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-24T03:47:45.500Z",
+	"modified": "2020-03-24T06:27:04.612Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }
