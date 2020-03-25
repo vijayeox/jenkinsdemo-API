@@ -1557,7 +1557,7 @@
                         "refreshOnChange": false,
                         "tableView": false,
                         "key": "html6",
-                        "customConditional": "show = ((data['businessPadiNotFound']==true||data['businessPadiNotFound']=='true') && (data['verified'] == true || data['verified']=='true'))",
+                        "customConditional": "show = false;\nif((data['businessPadiNotFound']==true||data['businessPadiNotFound']=='true') && (data['verified'] == true || data['verified']=='true')){\n  console.log(\"NEHA\");\n  show = true;\n}else if(data['businessPadiEmpty'] == '' && data['businessPadiNotFound'] == '' && data['businessPadiVerified']){\n  console.log('NEHA3');\n  show = false;\n}else if(data['businessPadiNotFound'] == false && data['businessPadiVerified'] == false && data['verified'] == true && data['businessPadiVerified'] == false && data['business_name'] == '' && data['businessPadiEmpty'] == false){\n  console.log(\"NEHA2\");\n  show = true;\n}",
                         "type": "htmlelement",
                         "input": false,
                         "validate": {
@@ -2046,8 +2046,7 @@
                             "tableView": true,
                             "clearOnHide": false,
                             "validate": {
-                                "pattern": "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-                                "customMessage": "Please enter a valid URL.",
+                                "custom": "if(data['business_website'] && data['business_website'] != ''){\n valid = (data['business_website'].match(/^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$/)) ?  true : 'Please enter a valid URL';\n}",
                                 "unique": false,
                                 "multiple": false
                             },
@@ -3652,15 +3651,17 @@
                         "format": "MM-dd-yyyy",
                         "tableView": false,
                         "datePicker": {
+                            "maxDate": "moment()",
                             "datepickerMode": "day"
                         },
                         "enableTime": false,
                         "timePicker": {
                             "showMeridian": false
                         },
+                        "clearOnHide": false,
                         "validate": {
                             "required": true,
-                            "custom": "if(data['date_of_purchase'] && data['date_of_purchase'] != ''){\n  valid = (moment(data['date_of_purchase']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
+                            "custom": "if(data['date_of_purchase'] && data['date_of_purchase'] != ''){\n  valid = (moment(data['date_of_purchase']) < moment(data['start_date'])) ? true : 'Please choose a date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
                             "unique": false,
                             "multiple": false
                         },
@@ -3685,7 +3686,7 @@
                             "minuteIncrement": 1,
                             "time_24hr": true,
                             "minDate": null,
-                            "maxDate": null
+                            "maxDate": "moment()"
                         },
                         "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
                         "hideOnChildrenHidden": false
@@ -6386,6 +6387,6 @@
     "path": "diveboat02new",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-12T05:52:31.834Z",
-    "modified": "2020-03-24T10:02:27.510Z",
+    "modified": "2020-03-25T07:30:33.924Z",
     "machineName": "testdivehub:diveBoat02New"
 }

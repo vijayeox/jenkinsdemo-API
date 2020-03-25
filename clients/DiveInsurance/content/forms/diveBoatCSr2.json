@@ -1426,10 +1426,9 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
-								"pattern": "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-								"customMessage": "Please enter a valid URL.",
 								"unique": false,
-								"multiple": false
+								"multiple": false,
+								"custom": "if(data['business_website'] && data['business_website'] != ''){\n valid = (data['business_website'].match(/^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$/)) ?  true : 'Please enter a valid URL';\n}"
 							},
 							"key": "business_website",
 							"type": "textfield",
@@ -8579,6 +8578,6 @@
 	"path": "diveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-12T06:00:31.228Z",
-	"modified": "2020-03-24T14:13:54.616Z",
+	"modified": "2020-03-25T07:33:17.937Z",
 	"machineName": "testdivehub:diveBoatCSr2"
 }

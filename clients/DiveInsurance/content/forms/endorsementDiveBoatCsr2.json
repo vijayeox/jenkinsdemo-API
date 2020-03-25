@@ -1448,8 +1448,7 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
-								"pattern": "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-								"customMessage": "Please enter a valid URL.",
+								"custom": "if(data['business_website'] && data['business_website'] != ''){\n valid = (data['business_website'].match(/^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$/)) ?  true : 'Please enter a valid URL';\n}",
 								"unique": false,
 								"multiple": false
 							},
@@ -10109,6 +10108,6 @@
 	"path": "endorsementdiveboatcsr2",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-20T04:29:58.773Z",
-	"modified": "2020-03-24T11:36:36.424Z",
+	"modified": "2020-03-25T07:33:47.171Z",
 	"machineName": "testdivehub:endorsementDiveBoatCsr2"
 }
