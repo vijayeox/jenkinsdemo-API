@@ -21,16 +21,22 @@
     "input": false,
     "components": [{
       "type": "documentviewer",
-      "key": "documents",
-      "dtype": "documentviewer",
-      "datype": "documentviewer",
-      "dattype": "documentviewer",
-      "datatype": "documentviewer",
-      "data_type": "documentviewer",
+      "key": "documents1",
       "label": "Quote Information",
+      "calculateValue": "value = (data['documents'])",
       "hideLabel": true,
       "inputType": "documentviewer",
       "input": 1,
+      "tableView": false,
+      "validate": {
+        "unique": false,
+        "multiple": false
+      }
+    }, {
+      "label": "documents",
+      "key": "documents",
+      "type": "hidden",
+      "input": true,
       "tableView": false,
       "validate": {
         "unique": false,
@@ -48,18 +54,11 @@
       },
       "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
     }, {
+      "key": "page5Panel2",
+      "input": false,
       "title": "Approval",
       "theme": "primary",
-      "collapsible": false,
       "tableView": false,
-      "key": "page5Panel2",
-      "attributes": {
-        "margin-bottom": "15px",
-        "margin-top": "15px"
-      },
-      "type": "panel",
-      "label": "Approval",
-      "input": false,
       "components": [{
         "label": "well",
         "tableView": false,
@@ -73,14 +72,14 @@
         "components": [{
           "label": "<b>I hereby declare that I accept the proposal</b>",
           "optionsLabelPosition": "right",
-          "inline": true,
-          "tableView": false,
+          "inline": false,
+          "tableView": true,
           "values": [{
-            "value": "accepted",
+            "value": "true",
             "label": "Accept",
             "shortcut": ""
           }, {
-            "value": "rejected",
+            "value": "false",
             "label": "Decline",
             "shortcut": ""
           }],
@@ -110,7 +109,7 @@
           "conditional": {
             "show": true,
             "when": "userApproved",
-            "eq": "rejected"
+            "eq": "false"
           },
           "type": "textarea",
           "input": true
@@ -119,15 +118,28 @@
         "clearOnHide": false,
         "hideLabel": true
       }],
+      "type": "panel",
       "lockKey": true,
+      "label": "Panel",
       "validate": {
         "unique": false,
         "multiple": false
       },
       "path": "page5Panel2"
     }, {
+      "label": "automatic_renewal",
+      "customDefaultValue": "value = false;",
+      "key": "automatic_renewal",
+      "type": "hidden",
+      "input": true,
+      "tableView": false,
+      "validate": {
+        "unique": false,
+        "multiple": false
+      }
+    }, {
       "label": "amount",
-      "calculateValue": "value = parseFloat(data['totalAmount']).toFixed(2);",
+      "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
       "key": "amount",
       "type": "hidden",
       "input": true,
@@ -176,12 +188,12 @@
             "multiple": false
           }
         }, {
-          "label": "amountPayable",
-          "calculateValue": "value = data['amount']",
-          "key": "page7Panel2AmountPayable",
-          "type": "hidden",
           "input": true,
           "tableView": true,
+          "key": "page7Panel2AmountPayable",
+          "label": "amountPayable",
+          "type": "hidden",
+          "calculateValue": "value = data['amount']",
           "validate": {
             "unique": false,
             "multiple": false
@@ -287,6 +299,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-17T10:20:42.875Z",
+  "modified": "2020-03-24T13:48:49.567Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

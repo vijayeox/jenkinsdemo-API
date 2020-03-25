@@ -32,7 +32,7 @@
     <bpmn:userTask id="UserTask_1ffuff9" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:assignee="{{padi}}">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="diveStoreUserApprovalForm" />
+          <camunda:property name="template" value="diveBoatUserApproval" />
         </camunda:properties>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">def assignee = execution.getVariable('email');</camunda:script>
