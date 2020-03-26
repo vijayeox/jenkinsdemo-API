@@ -14,7 +14,8 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate":"PolicyDocument"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"DiveBoatEndorsementPremiumCalculation"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"EndorsementDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
             </camunda:list>
@@ -76,7 +77,8 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate":"QuoteDocument"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"DiveBoatEndorsementPremiumCalculation"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate":"EndorsementQuote"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
