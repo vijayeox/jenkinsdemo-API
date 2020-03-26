@@ -651,7 +651,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
 
         private function processAttachments(&$data){
-            if(isset($data['csr_attachments'])){
+            if(isset($data['csr_attachments']) && (!empty($data['csr_attachments']))){
                 if(is_string($data['csr_attachments'])){
                     $data['csr_attachments'] = json_decode($data['csr_attachments'], true);
                 }

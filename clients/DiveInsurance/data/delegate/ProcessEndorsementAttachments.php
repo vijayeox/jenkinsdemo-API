@@ -24,9 +24,8 @@ class ProcessEndorsementAttachments extends AbstractAppDelegate
     private function processAttachments(array &$data, $srcAttach, $destAttach){
         $this->logger->info("processing attachment for ----".print_r($srcAttach,true));
         $this->logger->info("processing attachment destination ----".print_r($destAttach,true));
-        $attachment = $data[$srcAttach];
-
-        $this->logger->info("processing attachment attachment ----".print_r($attachment,true));
+        if(isset($data[$srcAttach]))
+            $attachment = $data[$srcAttach];
 
         if(!isset($attachment)){
             return;
