@@ -725,12 +725,14 @@ class FileService extends AbstractService
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             foreach ($selectResultSet as $result) {
-                $documentsArray[$result['text']] =  json_decode($result['field_value'], true);
+                if(!empty($result['field_value'])){
+                    $documentsArray[$result['text']] =  json_decode($result['field_value'], true);
+                }
             }
             foreach ($documentsArray as $key=>$docItem) {
-                   if(isset($docItem) && !isset($docItem[0]['file']) ){
+                if(isset($docItem) && !isset($docItem[0]['file']) ){
                      $parseDocData = array();
-                    foreach ($docItem as $document) {
+                     foreach ($docItem as $document) {
                         $fileType = explode(".", $document);
                         $fileName = explode("/", $document);
                         array_push($parseDocData, 
@@ -738,11 +740,11 @@ class FileService extends AbstractService
                                   'type'=> 'file/' . $fileType[1],
                                   'originalName'=> end($fileName)
                                 ));
-                    }
-                   $documentsArray[$key] =$parseDocData;
-                   } else {
+                }
+                    $documentsArray[$key] =$parseDocData;
+                } else {
                     $documentsArray[$key] =$docItem;
-                   }
+                }
             }
             return $documentsArray;
         } catch (Exception $e) {
