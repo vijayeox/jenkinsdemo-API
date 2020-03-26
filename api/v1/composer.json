@@ -60,6 +60,7 @@
     "apache/log4php": "2.3.0",
     "webit/eval-math":"1.0.1",
     "nicolab/php-ftp-client": "dev-master",
+    "mikehaertl/php-pdftk": "dev-master",
     "twilio/sdk": "dev-master",
     "zendframework/zend-hydrator": "^3.0@dev"
   },

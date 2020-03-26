@@ -68,7 +68,7 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 $fieldNamesArray = is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
                 if (sizeof($fieldNamesArray) == 1) {
                     $fieldName = $fieldNamesArray[0];
-                   if(isset($data[$fieldName])){
+                   if(isset($data[$fieldName]) && (!empty($data[$fieldName]))){
                         $data[$fieldName] = is_string($data[$fieldName]) ? json_decode($data[$fieldName],true) :$data[$fieldName];
                             $data[$fieldName] = $this->getFileData($data[$fieldName]);
                     }

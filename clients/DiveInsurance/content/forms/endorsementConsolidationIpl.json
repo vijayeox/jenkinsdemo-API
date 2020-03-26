@@ -807,7 +807,6 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter your city.",
 							"unique": false,
 							"multiple": false
 						},
@@ -829,7 +828,6 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter address 1.",
 							"unique": false,
 							"multiple": false
 						},
@@ -890,7 +888,8 @@
 						"validate": {
 							"required": true,
 							"pattern": "[0-9\\s-]*",
-							"customMessage": "Please enter your zip code.",
+							"customMessage": "Please enter a valid Zip Code for your region.",
+							"maxLength": 12,
 							"unique": false,
 							"multiple": false
 						},
@@ -969,7 +968,6 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter your city.",
 								"unique": false,
 								"multiple": false
 							},
@@ -991,7 +989,6 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter your address.",
 								"unique": false,
 								"multiple": false
 							},
@@ -1054,7 +1051,8 @@
 							"validate": {
 								"required": true,
 								"pattern": "[0-9\\s-]*",
-								"customMessage": "Please enter your zip code.",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"maxLength": 12,
 								"unique": false,
 								"multiple": false
 							},
@@ -1133,7 +1131,6 @@
 								"spellcheck": true,
 								"tableView": true,
 								"validate": {
-									"required": true,
 									"customMessage": "Please enter a valid home or work phone number",
 									"unique": false,
 									"multiple": false
@@ -1535,7 +1532,7 @@
 						"key": "page3PanelColumns",
 						"columns": [{
 							"components": [{
-								"label": "TechRec Coverage",
+								"label": "TecRec Coverage",
 								"optionsLabelPosition": "right",
 								"inline": false,
 								"tableView": true,
@@ -2255,7 +2252,7 @@
 					"customConditional": "show = (data.techRec_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "TechRec Attachments",
+					"label": "TecRec Attachments",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -2343,7 +2340,7 @@
 				}],
 				"path": "documentPanel"
 			}, {
-				"title": "TechRec Attachments",
+				"title": "TecRec Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": true,
 				"buttonSettings": {
@@ -2361,7 +2358,7 @@
 					"eq": "accepted"
 				},
 				"type": "panel",
-				"label": "TechRec Attachments",
+				"label": "TecRec Attachments",
 				"input": false,
 				"validate": {
 					"unique": false,
@@ -2385,7 +2382,7 @@
 					},
 					"hideLabel": true
 				}, {
-					"label": "techRec Attachments",
+					"label": "tecRec Attachments",
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "base64",
@@ -3521,6 +3518,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-03-24T07:53:53.777Z",
+	"modified": "2020-03-26T05:58:09.618Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

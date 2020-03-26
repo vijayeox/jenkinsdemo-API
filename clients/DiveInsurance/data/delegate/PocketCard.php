@@ -68,6 +68,10 @@ class PocketCard extends PolicyDocument
             $files = $this->getFileList($params, $filterParams);
         }
         $this->logger->info("he total number of files fetched is : ".print_r($files['total'], true));
+        $totalfiles = json_decode($files['total']);
+        if($totalfiles == 0){
+            $data['product'] = 'No Records Found';
+        } 
         $this->logger->info("the file details of get file is : ".print_r($files['data'], true));
         $options = array();
         $newData = array();
@@ -115,7 +119,7 @@ class PocketCard extends PolicyDocument
         if(isset($data['jobStatus']) && ($data['jobStatus']=='In Force')){
             $data['jobStatus'] = 'Completed';
         }        
-        $this->logger->info("The data returned from pocket card is : ", print_r($data, true));        
+        $this->logger->info("The data returned from pocket card is : ". print_r($data, true));
         return $data;
     }
 }

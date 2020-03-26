@@ -181,7 +181,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' != ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -190,7 +190,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' != ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -485,6 +485,24 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
+                                name: Endorsement
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2bc1caaa-9628-486d-8b42-104534625993/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
                                 name: 'View Policy'
                                 icon: 'fa fa-envelope-open'
                                 rule: '''{{policyStatus}}'' != ''Rejected'''
@@ -548,6 +566,7 @@ menu:
                             - lastname
                             - product
                             - phone
+                        placeholder: "Search using Name or PADI or Product or Phone"
                         operations:
                             title: 'Create Policy'
                             actions:
@@ -634,7 +653,7 @@ menu:
                             -
                                 name: 'View Pocket Card'
                                 icon: 'fa fa-envelope-open'
-                                rule: '''{{jobStatus}}'' == ''Completed'''
+                                rule: '''{{jobStatus}}'' == ''Completed'' && ''{{pocketCardProductType}}'' != ''No Records Found'''
                                 details:
                                     -
                                         type: DocumentViewer

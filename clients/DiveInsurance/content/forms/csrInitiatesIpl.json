@@ -581,7 +581,6 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter your country.",
 								"unique": false,
 								"multiple": false
 							},
@@ -597,7 +596,6 @@
 							"tableView": true,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter your city.",
 								"unique": false,
 								"multiple": false
 							},
@@ -618,7 +616,6 @@
 							"tableView": true,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter your mailing address.",
 								"unique": false,
 								"multiple": false
 							},
@@ -680,6 +677,7 @@
 								"required": true,
 								"pattern": "[0-9\\s-]*",
 								"customMessage": "Please enter a valid Zip Code for your region.",
+								"maxLength": 12,
 								"unique": false,
 								"multiple": false
 							},
@@ -846,6 +844,8 @@
 							"validate": {
 								"required": true,
 								"pattern": "[0-9\\s-]*",
+								"customMessage": "Please enter a valid Zip Code for your region.",
+								"maxLength": 12,
 								"unique": false,
 								"multiple": false
 							},
@@ -929,7 +929,6 @@
 								"spellcheck": true,
 								"tableView": true,
 								"validate": {
-									"required": true,
 									"customMessage": "Please enter a valid home or work phone number",
 									"unique": false,
 									"multiple": false
@@ -1633,7 +1632,7 @@
 					"key": "page3PanelColumns",
 					"columns": [{
 						"components": [{
-							"label": "TechRec Coverage",
+							"label": "TecRec Coverage",
 							"optionsLabelPosition": "right",
 							"inline": false,
 							"tableView": true,
@@ -2524,7 +2523,7 @@
 					"customConditional": "show = (data.techRec_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "TechRec Attachments",
+					"label": "TecRec Attachments",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -2622,7 +2621,7 @@
 				}],
 				"path": "techrecPanel"
 			}, {
-				"title": "TechRec Attachments",
+				"title": "TecRec Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": false,
 				"buttonSettings": {
@@ -2640,7 +2639,7 @@
 					"eq": "accepted"
 				},
 				"type": "panel",
-				"label": "TechRec Attachments",
+				"label": "TecRec Attachments",
 				"input": false,
 				"validate": {
 					"unique": false,
@@ -2663,7 +2662,7 @@
 						"multiple": false
 					}
 				}, {
-					"label": "TechRec Attachments",
+					"label": "TecRec Attachments",
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "base64",
@@ -3358,6 +3357,7 @@
 									},
 									"validate": {
 										"required": true,
+										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
 										"unique": false,
 										"multiple": false
 									},
@@ -4514,7 +4514,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 108,
+	"_vid": 119,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4535,6 +4535,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-03-23T07:19:56.206Z",
+	"modified": "2020-03-26T05:53:02.466Z",
 	"machineName": "testdivehub:csrInitiates"
 }

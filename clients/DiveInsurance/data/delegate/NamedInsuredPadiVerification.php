@@ -29,12 +29,12 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
             }
             $response[0]['name'] = $response[0]['initial']." ".$response[0]['firstname'] ." ".$response[0]['lastname'];
             $returnArray = array_merge($data,$response[0]);
-            $returnArray['padiVerified'] = true;
-            $returnArray['verified'] = true;
+            $returnArray['padi_Verified'] = true;
+            $returnArray['verified_flag'] = true;
             return $returnArray;
         } else {
-            $returnArray['padiVerified'] = false;
-            $returnArray['verified'] = true;
+            $returnArray['padi_Verified'] = false;
+            $returnArray['verified_flag'] = true;
             $data = array_merge($data,$returnArray);
             return $data;
         }

@@ -44,9 +44,8 @@ a policy will be sent to you.)</p>
 		<p class = "line_end">Thank you for your support of the PADI Endorsed Dive Boat program. Please call or email me if you have any questions.</p>
 </div>
 		<p>Sincerely,</p>
-		<p>Vicencia & Buckley A Division of HUB International</p>
-		<p class="acc_name">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
+		<p class ="footer_line">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line"><span id="phone1Val"></span> or <span id="phone2Val"></span></p>
 		<p class ="footer_line">{$approverEmailId}</p>
 

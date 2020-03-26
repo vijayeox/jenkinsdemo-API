@@ -41,25 +41,30 @@ class PocketCardMenu extends AbstractAppDelegate
                 unset($value['pocketCardEndDate']);
                 $value['pocketCardEndDate'] = date('Y-m-d', $time);
                 $value['generationType'] = $value['pocketCardStartDate'].' to '.$value['pocketCardEndDate'];
-
-                if(isset($value['pocketCardProductType'])){
-                    $productName = json_decode($value['pocketCardProductType'], true);
-                    unset($value['pocketCardProductType']);
-                    $value['pocketCardProductType'] = '';
-                    if(isset($productName['individualProfessionalLiability']) && ($productName['individualProfessionalLiability'] == 1)){
-                        $value['pocketCardProductType'] .= 'Individual Professional Liability , ';
+                if(isset($value['product']) && $value['product'] == 'No Records Found'){
+                    $this->logger->info('hello123456');
+                    $value['pocketCardProductType'] = $value['product'];
+                }
+                else{
+                    if(isset($value['pocketCardProductType'])){
+                        $productName = json_decode($value['pocketCardProductType'], true);
+                        unset($value['pocketCardProductType']);
+                        $value['pocketCardProductType'] = '';
+                        if(isset($productName['individualProfessionalLiability']) && ($productName['individualProfessionalLiability'] == 1)){
+                            $value['pocketCardProductType'] .= 'Individual Professional Liability , ';
+                        }
+                        if(isset($productName['emergencyFirstResponse']) && ($productName['emergencyFirstResponse'] == 1)){
+                            $value['pocketCardProductType'] .= 'Emergency First Response , ';
+                        }
+                        if(isset($productName['diveBoat']) && ($productName['diveBoat'] == 1)){
+                            $value['pocketCardProductType'] .= 'Dive Boat , ';
+                        }
+                        if(isset($productName['diveStore']) && ($productName['diveStore'] == 1)){
+                            $value['pocketCardProductType'] .= ' Dive Store , ';
+                        }
+                        $value['pocketCardProductType'] = rtrim($value['pocketCardProductType'], ", ");
+                        $this->logger->info($value['pocketCardProductType']);
                     }
-                    if(isset($productName['emergencyFirstResponse']) && ($productName['emergencyFirstResponse'] == 1)){
-                        $value['pocketCardProductType'] .= 'Emergency First Response , ';
-                    }
-                    if(isset($productName['diveBoat']) && ($productName['diveBoat'] == 1)){
-                        $value['pocketCardProductType'] .= 'Dive Boat , ';
-                    }
-                    if(isset($productName['diveStore']) && ($productName['diveStore'] == 1)){
-                        $value['pocketCardProductType'] .= ' Dive Store , ';
-                    }
-                    $value['pocketCardProductType'] = rtrim($value['pocketCardProductType'], ", ");
-                    $this->logger->info($value['pocketCardProductType']);
                 }
             }
             

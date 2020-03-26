@@ -3,7 +3,6 @@
 <head>
   <link href= "{$smarty.current_dir}/css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
-
 </head>
 <body onload = "agentInfo()">
  <div class = "m_div">
