@@ -544,8 +544,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             if($resultQuery->count()!=0){
                 return $stateLicenseDetails[0]['license_number'];
+            }else{
+                $selectQuery = "Select * FROM state_license WHERE state = 'California'";
+                $resultQuery = $persistenceService->selectQuery($selectQuery);
+                while ($resultQuery->next()) {
+                    $stateLicenseDetails[] = $resultQuery->current();
+                }
+                return $stateLicenseDetails[0]['license_number'];
             }
-            return "";
         }
         
         private function getPolicyDetails($data,$persistenceService,$product = null)
