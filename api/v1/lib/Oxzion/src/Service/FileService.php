@@ -732,17 +732,18 @@ class FileService extends AbstractService
             foreach ($documentsArray as $key=>$docItem) {
                 if(isset($docItem) && !isset($docItem[0]['file']) ){
                      $parseDocData = array();
-                     foreach ($docItem as $document) {
-                        $fileType = explode(".", $document);
-                        $fileName = explode("/", $document);
-                        array_push($parseDocData, 
-                            array('file' => $document, 
-                                  'type'=> 'file/' . $fileType[1],
-                                  'originalName'=> end($fileName)
-                                ));
-                }
-                    $documentsArray[$key] =$parseDocData;
-                } else {
+                    foreach ($docItem as $document) {
+                        if(is_array($document)){
+                            foreach ($document as $doc) {
+                                $this->parseDocumentData($parseDocData,$doc);
+                            }
+                        }
+                        else{
+                            $this->parseDocumentData($parseDocData,$document);
+                        }
+                    }
+                   $documentsArray[$key] =$parseDocData;
+                   } else {
                     $documentsArray[$key] =$docItem;
                 }
             }
@@ -751,6 +752,17 @@ class FileService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             return 0;
         }
+    }
+
+    private function parseDocumentData(&$parseArray,$DocumentItem)
+    {
+        $fileType = explode(".", $DocumentItem);
+        $fileName = explode("/", $DocumentItem);
+        array_push($parseArray, 
+            array('file' => $DocumentItem, 
+              'type'=> 'file/' . $fileType[1],
+              'originalName'=> end($fileName)
+            ));
     }
 
     public function getFieldType($value, $prefix)

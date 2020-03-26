@@ -4,6 +4,7 @@ use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ArtifactUtils;
+use Oxzion\PDF\PDF_Watermarker;
 
 class PolicyDocument extends AbstractDocumentAppDelegate
 {
@@ -128,8 +129,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             } 
 
             if(isset($data['business_state'])){
-                 $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['business_state']."'";
-                 $state = $data['business_state'];
+                $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['business_state']."'";
+                $state = $data['business_state'];
             }
             $resultSet = $persistenceService->selectQuery($selectQuery);
             $stateDetails = array();
@@ -212,7 +213,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($temp['AdditionalInsuredOption']) && $temp['AdditionalInsuredOption'] == 'newListOfAdditionalInsureds'){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
-                    $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
+                    $documents['additionalInsured_document'] = array($this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter'));
                 }
 
                 if(isset($this->template[$temp['product']]['blanketForm'])){
@@ -362,7 +363,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents[$key] = $value;
                         }
                     } else {
-                        $documents['coi_document']  = $policyDocuments;
+                        $documents['coi_document']  = array($policyDocuments);
                     }
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
@@ -396,10 +397,31 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
             $this->logger->info("temp".print_r($data,true));
+            $this->logger->info("Documents :".print_r($documents,true));
             if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
                 $data['documents'] = json_decode($data['documents'],true);
+                if(isset($data['documents']['coi_document']) && isset($documents['coi_document'])){
+                    $destinationForWatermark = $dest['absolutePath'].$data['documents']['coi_document'];
+                    $this->addWaterMark($destinationForWatermark,"INVALID");
+                    array_push($data['documents']['coi_document'], $documents['coi_document'][0]);
+                }
+                if(isset($data['documents']['additionalInsured_document']) && isset($documents['additionalInsured_document'])){
+                    $destinationForWatermark = $dest['absolutePath'].$data['documents']['additionalInsured_document'];
+                    $this->addWaterMark($destinationForWatermark,"INVALID");
+                    array_push($data['documents']['additionalInsured_document'], $documents['additionalInsured_document'][0]);
+                }
                 $data['documents'] = array_merge($data['documents'],$documents);
             }else{
+                if(isset($data['documents']['coi_document'][0]) && isset($documents['coi_document'][0])){
+                    $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['coi_document'][0];
+                    $this->addWaterMark($destinationForWatermark,"INVALID");
+                    array_push($documents['coi_document'],$data['documents']['coi_document'][0]);
+                }
+                if(isset($data['documents']['additionalInsured_document'][0]) && isset($documents['additionalInsured_document'][0])){
+                    $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['additionalInsured_document'][0];
+                    $this->addWaterMark($destinationForWatermark,"INVALID");
+                    array_push($documents['additionalInsured_document'],$data['documents']['additionalInsured_document'][0]);
+                }
                 $data['documents'] = $documents;
             }
             if(isset($data['endorsement_options'])){
@@ -672,4 +694,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['csr_attachments'] = "";
             }
         }
+
+    private function addWaterMark($source,$text){
+        $this->logger->info("Watermark source :",$source);
+        $pdfwater = new PDF_Watermarker();
+        $pdfwater->watermarkPDF($source,$text);
+    }
 }
