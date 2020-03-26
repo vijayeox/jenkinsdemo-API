@@ -2,9 +2,9 @@
 <html>
 <head>
 <link href= "{$smarty.current_dir}/css/card_css.css" rel="stylesheet" type="text/css" />
-
+<script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
 </head>
-<body>
+<body onload = "agentInfo()">
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
@@ -33,9 +33,8 @@ application.</li>
 		<p class = "line_end">Thank you for your support of the PADI Endorsed Insurance Program, if you have any questions, please call or email me if you have any questions.</p>
 </div>
 		<p>Sincerely,</p>
-		<p>Vicencia & Buckley A Division of HUB International</p>
-		<p class="acc_name">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
+		<p class ="footer_line">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line"><span id="phone1Val"></span> or <span id="phone2Val"></span></p>
 		<p class ="footer_line">{$approverEmailId}</p>
 

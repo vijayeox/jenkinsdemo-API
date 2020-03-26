@@ -20,6 +20,7 @@ abstract class DispatchDocument extends MailDelegate
         $mailOptions['subject'] = $data['subject'];
         if (isset($data['document'])) {
             $mailOptions['attachments'] = $data['document'];
+            unset($data['document']);
         }
         $this->logger->info("ATTACHMENTS LIST ".print_r($mailOptions,true));
         $template = $data['template'];
