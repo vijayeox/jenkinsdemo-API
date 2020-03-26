@@ -80,7 +80,7 @@ class ArtifactUtils
                 $mimeType = 'application/zip';
                 break;
             default:
-                $mimeType = 'text/html';
+                $mimeType = 'application/octet-stream';
                 break;
         }
         return $mimeType;
