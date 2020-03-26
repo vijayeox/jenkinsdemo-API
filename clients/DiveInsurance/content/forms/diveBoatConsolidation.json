@@ -838,10 +838,12 @@
 							"label": "Zip Code",
 							"spellcheck": false,
 							"tableView": true,
+							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"pattern": "[0-9\\s-]*",
 								"customMessage": "Please enter a valid Zip Code for your region.",
+								"maxLength": 12,
 								"unique": false,
 								"multiple": false
 							},
@@ -1036,10 +1038,12 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = data['zip'];\n}else{\n  value = data['physical_zip'];\n}",
+									"calculateServer": false,
 									"validate": {
 										"required": true,
 										"pattern": "[0-9\\s-]*",
 										"customMessage": "Please enter a valid Zip Code for your region.",
+										"maxLength": 12,
 										"unique": false,
 										"multiple": false
 									},
@@ -1537,6 +1541,7 @@
 						"clearOnHide": false,
 						"customDefaultValue": "if(data['business_name'] && data['business_name'] != ''){\n  value = data['padi'];\n}",
 						"calculateValue": "if(data['business_name'] && data['business_padi'] == ''){\n  value = data['padi'];\n}",
+						"validateOn": "blur",
 						"validate": {
 							"required": true,
 							"unique": false,
@@ -1569,16 +1574,21 @@
 						"action": "event",
 						"showValidations": false,
 						"theme": "success",
+						"customClass": "alignCenter",
 						"tableView": false,
 						"key": "panelPanelColumns4ValidateBusinessPadi",
 						"properties": {
-							"delegate": "PadiVerification"
+							"delegate": "BusinessPadiVerification"
 						},
 						"customConditional": "show = (data['businessPadiVerified'] == false)",
 						"type": "button",
 						"event": "callDelegate",
 						"input": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -1589,11 +1599,15 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html6",
-						"customConditional": "show = ((data['businessPadiNotFound']==true||data['businessPadiNotFound']=='true') && (data['verified'] == true || data['verified']=='true'))",
+						"customConditional": "show = ((data['businessPadiValidated'] == 'false' || data['businessPadiValidated'] == false) && (data['businessPadiEmpty'] == 'false' || data['businessPadiEmpty'] == false))",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -1620,18 +1634,7 @@
 					"pull": 0,
 					"size": "md"
 				}, {
-					"components": [{
-						"label": "businessPadiNotFound",
-						"key": "businessPadiNotFound",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
-					}],
+					"components": [],
 					"width": 4,
 					"offset": 0,
 					"push": 0,
@@ -1802,10 +1805,12 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"pattern": "[0-9\\s-]*",
 									"customMessage": "Please enter a valid Zip Code for your region.",
+									"maxLength": 12,
 									"unique": false,
 									"multiple": false
 								},
@@ -4262,8 +4267,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
+									"pattern": "[0-9\\s-]*",
+									"maxLength": 12,
 									"unique": false,
 									"multiple": false
 								},
@@ -4543,8 +4551,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
+									"pattern": "[0-9\\s-]*",
+									"maxLength": 12,
 									"unique": false,
 									"multiple": false
 								},
@@ -9066,7 +9077,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 16,
+	"_vid": 23,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9084,6 +9095,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-03-26T10:18:04.194Z",
+	"modified": "2020-03-26T14:17:01.421Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
