@@ -233,11 +233,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-                         $document['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+                         $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
                     }
                     else{
                         $this->logger->info("DOCUMENT groupPL");
-                        $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
+                        $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
 
 
                         if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
@@ -303,16 +303,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
 
-                   if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-                         $document['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
-                    }
-                    else{
-                        $this->logger->info("DOCUMENT groupPL");
-                        $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
-
-                        if(isset($temp['additionalNamedInsured']) && $temp['group_additional_insureds_select'] == 'yes'){
-                        $this->logger->info("DOCUMENT additionalNamedInsured");
-                        $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                    if($this->type == 'quote' || $this->type == 'endorsementQuote'){
+                            $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+                     } else {
+                            $this->logger->info("DOCUMENT groupPL");
+                            $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
+                            if(isset($temp['additionalNamedInsured']) && $temp['group_additional_insureds_select'] == 'yes'){
+                                $this->logger->info("DOCUMENT additionalNamedInsured");
+                                $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                         }
 
                         if(isset($temp['namedInsureds']) && $temp['group_named_insureds_select'] == 'yes'){
