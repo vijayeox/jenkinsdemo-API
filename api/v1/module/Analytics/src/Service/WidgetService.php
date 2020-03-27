@@ -229,7 +229,6 @@ class WidgetService extends AbstractService
 
     public function getWidget($uuid,$params)
     {
-        $overRides = [];
         $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, IF(w.created_by=:created_by, true, false) AS is_owner, w.version,v.renderer, v.type, q.uuid AS query_uuid, wq.sequence AS query_sequence, wq.configuration AS query_configuration FROM ox_widget w JOIN ox_visualization v on w.visualization_id=v.id JOIN ox_widget_query wq ON w.id=wq.ox_widget_id JOIN ox_query q ON wq.ox_query_id=q.id WHERE w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid AND (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
@@ -243,15 +242,11 @@ class WidgetService extends AbstractService
             }
             $queries = [];
             foreach($resultSet as $row) {
-                $configuration = json_decode($row['query_configuration'],1);
                 array_push($queries, [
                     'uuid' => $row['query_uuid'],
                     'sequence' => $row['query_sequence'],
-                    'configuration' => $configuration
+                    'configuration' => json_decode($row['query_configuration'])
                 ]);
-                if (!empty($configuration)) {
-                    $overRides[$row['query_uuid']]=$configuration;
-                }
             }
             $firstRow = $resultSet[0];
             $widget = [
@@ -284,15 +279,11 @@ class WidgetService extends AbstractService
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');
         $filter = null;
-        $overRidesAllowed = ['group','sort','field','date-period','date-range','filter','expression','round'];
-        
         if(isset($params['data'])) {
-            foreach($overRidesAllowed as $overRidesKey) {
-                if (isset($params[$overRidesKey])) {
-                    $overRides[$overRidesKey] = $params[$overRidesKey];
-                }
+            if (isset($params['filter'])) {
+                $filter = $params['filter'];
             }
-            $data = $this->queryService->runMultipleQueries($uuidList,$overRides);
+            $data = $this->queryService->runMultipleQueries($uuidList,$filter);
 
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];
