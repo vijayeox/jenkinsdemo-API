@@ -362,8 +362,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         foreach ($policyDocuments as $key => $value) {
                             $documents[$key] = $value;
                         }
-                    } else {
+                    }else if($temp['product'] == 'Individual Professional Liability'){
                         $documents['coi_document']  = array($policyDocuments);
+                    }else{
+                        $documents['coi_document']  = $policyDocuments;
                     }
                 }
                 if($this->type != 'quote' && $this->type != 'endorsementQuote')
@@ -396,22 +398,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
             }
+
+
+
+
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
-            if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
-                $data['documents'] = json_decode($data['documents'],true);
-                if(isset($data['documents']['coi_document']) && isset($documents['coi_document'])){
-                    $destinationForWatermark = $dest['absolutePath'].$data['documents']['coi_document'];
-                    $this->addWaterMark($destinationForWatermark,"INVALID");
-                    array_push($data['documents']['coi_document'], $documents['coi_document'][0]);
-                }
-                if(isset($data['documents']['additionalInsured_document']) && isset($documents['additionalInsured_document'])){
-                    $destinationForWatermark = $dest['absolutePath'].$data['documents']['additionalInsured_document'];
-                    $this->addWaterMark($destinationForWatermark,"INVALID");
-                    array_push($data['documents']['additionalInsured_document'], $documents['additionalInsured_document'][0]);
-                }
-                $data['documents'] = array_merge($data['documents'],$documents);
-            }else{
+            if($temp['product'] == 'Individual Professional Liability'){
                 if(isset($data['documents']['coi_document'][0]) && isset($documents['coi_document'][0])){
                     $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['coi_document'][0];
                     $this->addWaterMark($destinationForWatermark,"INVALID");
@@ -423,7 +416,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     array_push($documents['additionalInsured_document'],$data['documents']['additionalInsured_document'][0]);
                 }
                 $data['documents'] = $documents;
+            }else if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
+                $data['documents'] = json_decode($data['documents'],true);
+                $data['documents'] = array_merge($data['documents'],$documents);
+            }else{
+                $data['documents'] = $documents;
             }
+             
             if(isset($data['endorsement_options'])){
                 if(isset($data['endorsementCoverage'])){
                     $data['endorsementCoverage'] = array();

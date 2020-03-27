@@ -49,7 +49,11 @@ class DispatchNewPolicy extends DispatchDocument {
             foreach($this->document[$data['product']]['docs'] as $file){
                 if(array_key_exists($file,$data['documents'])){
                     if($file == 'coi_document'){
-                        $doc = end($data['documents'][$file]);
+                        if(is_array($data['documents'][$file])){
+                            $doc = end($data['documents'][$file]);
+                        }else{
+                            $doc = $data['documents'][$file];
+                        }
                     }else{
                         $doc = $data['documents'][$file];
                     }
