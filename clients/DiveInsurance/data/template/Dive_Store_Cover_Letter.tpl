@@ -33,8 +33,8 @@ This can only be covered by an individual or group professional liability policy
 questions.</p>
 </div>
 		<p>Sincerely,</p>
-		<p class="acc_name">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
+		<p class="footer_line">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line">(800) 223-9998 or (714) 739-3176</p>
 		<p class ="footer_line">{$approverEmailId}</p>
 

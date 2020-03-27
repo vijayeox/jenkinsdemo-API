@@ -96,8 +96,9 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
     private function cleanDocumentFields(array &$data,array $documentFieldnames) {
         $this->logger->info("Document Field NAmes: ".print_r($documentFieldnames,true));
         for ($i = 0;$i < sizeof($documentFieldnames);$i++) {
-            $this->logger->info("Data for field: ".$documentFieldnames[$i]." - ".print_r($data[$documentFieldnames[$i]],true));
-            unset($data[$documentFieldnames[$i]]);
+            // $this->logger->info("Data for field: ".$documentFieldnames[$i]." - ".print_r($data[$documentFieldnames[$i]],true));
+            // if(isset($data[$documentFieldnames[$i]]))
+                unset($data[$documentFieldnames[$i]]);
         }
     }
     private function getAttchments(array &$data,array $attachmentsFieldnames){

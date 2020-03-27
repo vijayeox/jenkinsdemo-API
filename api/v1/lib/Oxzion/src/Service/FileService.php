@@ -725,30 +725,44 @@ class FileService extends AbstractService
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             foreach ($selectResultSet as $result) {
-                $documentsArray[$result['text']] =  json_decode($result['field_value'], true);
+                if(!empty($result['field_value'])){
+                    $documentsArray[$result['text']] =  json_decode($result['field_value'], true);
+                }
             }
             foreach ($documentsArray as $key=>$docItem) {
-                   if(isset($docItem) && !isset($docItem[0]['file']) ){
+                if(isset($docItem) && !isset($docItem[0]['file']) ){
                      $parseDocData = array();
                     foreach ($docItem as $document) {
-                        $fileType = explode(".", $document);
-                        $fileName = explode("/", $document);
-                        array_push($parseDocData, 
-                            array('file' => $document, 
-                                  'type'=> 'file/' . $fileType[1],
-                                  'originalName'=> end($fileName)
-                                ));
+                        if(is_array($document)){
+                            foreach ($document as $doc) {
+                                $this->parseDocumentData($parseDocData,$doc);
+                            }
+                        }
+                        else{
+                            $this->parseDocumentData($parseDocData,$document);
+                        }
                     }
                    $documentsArray[$key] =$parseDocData;
                    } else {
                     $documentsArray[$key] =$docItem;
-                   }
+                }
             }
             return $documentsArray;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             return 0;
         }
+    }
+
+    private function parseDocumentData(&$parseArray,$DocumentItem)
+    {
+        $fileType = explode(".", $DocumentItem);
+        $fileName = explode("/", $DocumentItem);
+        array_push($parseArray, 
+            array('file' => $DocumentItem, 
+              'type'=> 'file/' . $fileType[1],
+              'originalName'=> end($fileName)
+            ));
     }
 
     public function getFieldType($value, $prefix)

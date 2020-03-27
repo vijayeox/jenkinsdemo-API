@@ -142,7 +142,9 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			$filter[] = $parameters['filter'];
 		}
 		if (isset($parameters['inline_filter'])) {
-			array_unshift($filter, $parameters['inline_filter']);
+			foreach($parameters['inline_filter'] as $inlineArry) {
+				array_unshift($filter, $inlineArry);
+			}
 		}
 		$this->hasGroup = (empty($group)) ? 0 : 1;
 		if (!empty($group)) $group = array_map('strtolower', $group);

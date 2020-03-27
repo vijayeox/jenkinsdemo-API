@@ -7,17 +7,145 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
 {
     public function __construct(){
         parent::__construct();
-    
+        $this->unsetOptions = array('excessLiabilityLimit',
+            'totalLiabilityLimit',
+            'LiabilityPremiumCost',
+            'ExcessLiabilityPremium',
+            'HullPremium',
+            'DingyTenderPremium',
+            'TrailerPremium',
+            'CrewOnBoatPremium',
+            'CrewMembersinWaterPremium',
+            'PropertySubTotal',
+            'PropertySubTotalProRated',
+            'LiabilitySubTotal',
+            'LiabilitySubTotalProRated',
+            'premiumTotalProRated',
+            'groupCoverage',
+            'csrApproved',
+            'quoteRequirement',
+            'quote_due_date',
+            'groupPadiFee',
+            'groupExcessLiability9M',
+            'groupExcessLiability4M',
+            'groupExcessLiability3M',
+            'groupExcessLiability2M',
+            'groupExcessLiability1M',
+            'groupCoverageMoreThan500000',
+            'groupCoverageMoreThan350000',
+            'groupCoverageMoreThan250000',
+            'groupCoverageMoreThan200000',
+            'groupCoverageMoreThan150000',
+            'groupCoverageMoreThan100000',
+            'groupCoverageMoreThan50000',
+            'groupCoverageMoreThan25000',
+            'groupCoverageMoreThan0',
+            'stateTaxData',
+            'SuperiorRisk',
+            'DingyLiabilityPremium',
+            'ProRataDays',
+            'DateEffective',
+            'excessLiabilityCoverage9000000',
+            'excessLiabilityCoverage4000000',
+            'excessLiabilityCoverage3000000',
+            'excessLiabilityCoverage2000000',
+            'excessLiabilityCoverage1000000',
+            'excessLiabilityCoverageDeclined',
+            'CrewInBoat',
+            'CrewInWater',
+            'PassengerPremium',
+            'DeductibleGreaterthan24',
+            'DeductibleLessthan25',
+            'Layup2',
+            'Layup1',
+            'LayupA',
+            'PortRisk',
+            'Navigation',
+            'NavWaterSurcharge',
+            'FL-HISurcharge',
+            'boat_age',
+            'total',
+            'padiFee',
+            'groupProfessionalLiabilityPrice',
+            'premiumTotalProRated',
+            'PropertySubTotalProRated',
+            'PropertySubTotal',
+            'SuperiorRiskCredit',
+            'NavigationCredit',
+            'PortRiskCredit',
+            'NavWaterSurchargePremium',
+            'Age25Surcharge',
+            'PropertyBasePremium',
+            'hullRate',
+            'ProRataFactor',
+            'LiabilityPremium1M',
+            'primaryLimit',
+            'DingyLiability',
+            'PassengerPremiumCost',
+            'totalLiability',
+            'FlHiSurchargePremium',
+            'hull_age',
+            'layupDeductible',
+            'layup_period',
+            'hull25000LessThan5',
+            'hull25000LessThan11',
+            'hull25000LessThan25',
+            'hull25000GreaterThan25',
+            'hull50000LessThan5',
+            'hull50000LessThan11',
+            'hull50000LessThan25',
+            'hull50000GreaterThan25',
+            'hull100000LessThan5',
+            'hull100000LessThan11',
+            'hull100000LessThan25',
+            'hull100000GreaterThan25',
+            'hull150000LessThan5',
+            'hull150000LessThan11',
+            'hull150000LessThan25',
+            'hull150000GreaterThan25',
+            'hull200000LessThan5',
+            'hull200000LessThan11',
+            'hull200000LessThan25',
+            'hull200000GreaterThan25',
+            'hull250000LessThan5',
+            'hull250000LessThan11',
+            'hull250000LessThan25',
+            'hull250000GreaterThan25',
+            'hull300000LessThan5',
+            'hull300000LessThan11',
+            'hull300000LessThan25',
+            'hull300000GreaterThan25',
+            'hull350000LessThan5',
+            'hull350000LessThan11',
+            'hull350000LessThan25',
+            'hull350000GreaterThan25',
+            'hull400000LessThan5',
+            'hull400000LessThan11',
+            'hull400000LessThan25',
+            'hull400000GreaterThan25',
+            'hull500000LessThan5',
+            'hull500000LessThan11',
+            'hull500000LessThan25',
+            'hull500000GreaterThan25',
+            'hull600000LessThan5',
+            'hull600000LessThan11',
+            'hull600000LessThan25',
+            'hull600000GreaterThan25',
+            'groupTotalAmount',
+            'groupPAORfee',
+            'groupPadiFeeAmount',
+            'groupTaxAmount',
+            'groupTaxPercentage');
     }
 
     public function execute(array $data,Persistence $persistenceService)
     {
-
         $this->logger->info("Executing Endorsement Setup - Dive Boat".print_r($data,true));
         $endorsementCoverage = array();
         $endorsementGroupCoverage = array();
         $endorsementGroupLiability = array();
         $policy =  array();
+        $data['initiatedByCsr'] = false;
         $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
         $policy['update_date'] =  date("Y-m-d");
         $policy['previous_hull_market_value'] = isset($data['hull_market_value']) ? $data['hull_market_value'] : 0;
@@ -29,8 +157,8 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
         $policy['previous_CrewInWaterCount'] = isset($data['CrewInWaterCount']) ? $data['CrewInWaterCount'] : 0;
         $policy['previous_certified_for_max_number_of_passengers'] = isset($data['certified_for_max_number_of_passengers']) ? $data['certified_for_max_number_of_passengers'] : 0;
         $policy['previous_excess_liability_coverage'] = $data['excess_liability_coverage'];
-        $policy['previous_excessLiabilityLimit'] = $data['excessLiabilityLimit'];
-        $policy['previous_totalLiabilityLimit'] = $data['totalLiabilityLimit'];
+        $policy['previous_excessLiabilityLimit'] = $data['excess_liability_coverage'];
+        $policy['previous_totalLiabilityLimit'] = isset($data['totalLiabilityLimit'])?$data['totalLiabilityLimit']:0;
         $policy['previous_HullPremium'] = isset($data['HullPremium']) ? $data['HullPremium'] : 0;
         $policy['previous_DingyTenderPremium'] = isset($data['DingyTenderPremium']) ? $data['DingyTenderPremium'] : 0;
         $policy['previous_TrailerPremium'] = isset($data['TrailerPremium']) ? $data['TrailerPremium'] : 0;
@@ -150,6 +278,16 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
          // }
         array_push($data['previous_policy_data'],$policy);
 
+        $this->logger->info("Endorsement CleanUp Setup - Dive Boat");
+        $unsetOptions = $this->unsetOptions;
+        for($i=0;$i< sizeof($unsetOptions);$i++){
+            if(isset($data[$unsetOptions[$i]])){
+                unset($data[$unsetOptions[$i]]);
+            }
+        }
+        if(!isset($data['initiatedByCsr']) || !$data['initiatedByCsr']){
+            unset($data['endorsement_options']);
+        }
         $data['endorsementCoverage'] = $endorsementCoverage;
         $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
         $data['endorsementGroupLiability'] = $endorsementGroupLiability;

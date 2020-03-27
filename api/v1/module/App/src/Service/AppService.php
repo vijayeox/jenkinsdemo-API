@@ -925,7 +925,7 @@ class AppService extends AbstractService
                         $field['entity_id'] = $entity['id'];
                         $this->fieldService->saveField($appId, $field);
                     } else {
-                        $this->fieldService->updateField($result['id'], $field);
+                        $this->fieldService->updateField($result['uuid'], $field);
                     }
                 }
                 if (isset($entity['child']) && $entity['child']) {

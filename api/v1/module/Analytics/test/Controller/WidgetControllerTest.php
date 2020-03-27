@@ -76,7 +76,7 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['name'], 'required');
+        $this->assertEquals($content['data']['errors']['queries'], 'required');
     }
 
     public function testCopy()

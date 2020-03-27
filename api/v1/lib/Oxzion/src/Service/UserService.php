@@ -455,7 +455,8 @@ class UserService extends AbstractService
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         if (isset($userdata['address_id'])) {
             $this->addressService->updateAddress($userdata['address_id'], $data);
-        } else {
+        } else if(!empty($userdata['address1']) || !empty($userdata['city']) || 
+                    !empty($userdata['state']) || !empty($userdata['country']) || !empty($userdata['zip'])) {
             $addressid = $this->addressService->addAddress($data);
             $userdata['address_id'] = $addressid;
         }

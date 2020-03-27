@@ -181,7 +181,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -190,7 +190,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -557,7 +557,34 @@ menu:
                                         type: Form
                                         url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' == ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{end_date}}'' <= ''{{current_date}}'''
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                icon: 'fa fa-repeat'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                icon: 'fa fa-repeat'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2d94a2f0-c64c-48e0-a4f0-f85f626f0626/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                icon: 'fa fa-repeat'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/5a2ed122-3f12-4240-b197-a24469721e87/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 icon: 'fa fa-repeat'
                         filterColumns:
                             - name
@@ -770,10 +797,25 @@ workflow:
         bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
         entity: 'Emergency First Response'
     -
-        name: 'Reinstate Policy'
+        name: 'Individual Liability Reinstate Policy'
         uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
-        bpmn_file: 'Cancel Policy/ReinstatePolicy.bpmn'
+        bpmn_file: 'Cancel Policy/ReinstatePolicyIPL.bpmn'
         entity: 'Individual Professional Liability'
+    -
+        name: 'Emergency First Response Reinstate Policy'
+        entity: 'Emergency First Response'
+        uuid: a484ac20-0bc6-4c3f-9426-199e6fadc4a2
+        bpmn_file: 'Cancel Policy/ReinstatePolicyEFR.bpmn'
+    -
+        name: 'Dive Boat Reinstate Policy'
+        entity: 'Dive Boat'
+        uuid: 2d94a2f0-c64c-48e0-a4f0-f85f626f0626
+        bpmn_file: 'Cancel Policy/ReinstatePolicyDB.bpmn'
+    -
+        name: 'Dive Store Reinstate Policy'
+        entity: 'Dive Store'
+        uuid: 5a2ed122-3f12-4240-b197-a24469721e87
+        bpmn_file: 'Cancel Policy/ReinstatePolicyDS.bpmn'
     -
         bpmn_file: 'Cancel Policy/CancelPolicyIPL.bpmn'
         entity: 'Individual Professional Liability'
