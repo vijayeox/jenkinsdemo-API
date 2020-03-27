@@ -54,3 +54,18 @@ ox_widget_query:
     ox_widget_id: 116
     sequence: 1
     configuration: "Sample"        
+  -
+    ox_query_id: 117
+    ox_widget_id: 117
+    sequence: 1
+    configuration: '{"field":"budget_amount"}'
+  -
+    ox_query_id: 116
+    ox_widget_id: 118
+    sequence: 1
+    configuration: "Sample"    
+  -
+    ox_query_id: 117
+    ox_widget_id: 118
+    sequence: 1
+    configuration: '{"filter":["industry","==","Software"]}'
