@@ -22,8 +22,62 @@
 			"tableView": false,
 			"validate": {
 				"multiple": false,
-				"unique": false
-			}
+				"unique": false,
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false
+			},
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "ejzm15l"
 		}, {
 			"label": "Please select areas you want to modify",
 			"optionsLabelPosition": "right",
@@ -75,8 +129,59 @@
 			"inputType": "checkbox",
 			"validate": {
 				"multiple": false,
-				"unique": false
-			}
+				"unique": false,
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false
+			},
+			"autofocus": false,
+			"inline": false,
+			"protected": false,
+			"persistent": true,
+			"hidden": false,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"unique": false,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"widget": null,
+			"attributes": {},
+			"validateOn": "change",
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"fieldSet": false,
+			"id": "eofjhu9"
 		}, {
 			"label": "automatic_renewal",
 			"customDefaultValue": "value = false",
@@ -86,14 +191,120 @@
 			"tableView": false,
 			"validate": {
 				"multiple": false,
-				"unique": false
-			}
+				"unique": false,
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false
+			},
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"calculateValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "ekcieyp"
 		}],
 		"path": "endorsementChange",
 		"validate": {
 			"multiple": false,
-			"unique": false
-		}
+			"unique": false,
+			"required": false,
+			"custom": "",
+			"customPrivate": false,
+			"strictDateValidation": false
+		},
+		"clearOnHide": false,
+		"hideLabel": false,
+		"placeholder": "",
+		"prefix": "",
+		"customClass": "",
+		"suffix": "",
+		"multiple": false,
+		"defaultValue": null,
+		"protected": false,
+		"unique": false,
+		"persistent": false,
+		"hidden": false,
+		"refreshOn": "",
+		"redrawOn": "",
+		"modalEdit": false,
+		"labelPosition": "top",
+		"description": "",
+		"errorLabel": "",
+		"tooltip": "",
+		"tabindex": "",
+		"disabled": false,
+		"autofocus": false,
+		"dbIndex": false,
+		"customDefaultValue": "",
+		"calculateValue": "",
+		"widget": null,
+		"attributes": {},
+		"validateOn": "change",
+		"conditional": {
+			"show": null,
+			"when": null,
+			"eq": ""
+		},
+		"overlay": {
+			"style": "",
+			"left": "",
+			"top": "",
+			"width": "",
+			"height": ""
+		},
+		"allowCalculateOverride": false,
+		"encrypted": false,
+		"showCharCount": false,
+		"showWordCount": false,
+		"properties": {},
+		"allowMultipleMasks": false,
+		"tree": false,
+		"breadcrumb": "default",
+		"id": "eoh7ph"
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -2604,7 +2815,24 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"inputType": "text",
+						"inputMask": "",
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": "",
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false,
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						}
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2627,7 +2855,24 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"inputType": "text",
+						"inputMask": "",
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": "",
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false,
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						}
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2655,7 +2900,19 @@
 						"key": "built_year",
 						"type": "select",
 						"input": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"placeholder": "",
+						"valueProperty": "",
+						"defaultValue": "",
+						"refreshOn": "",
+						"filter": "",
+						"authenticate": false,
+						"multiple": false,
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2672,7 +2929,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"clearOnHide": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -2691,7 +2949,24 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"inputType": "text",
+						"inputMask": "",
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": "",
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false,
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						}
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2714,7 +2989,24 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"inputType": "text",
+						"inputMask": "",
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": "",
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false,
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						}
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2740,7 +3032,15 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputType": "number"
+						"inputType": "number",
+						"autofocus": false,
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"defaultValue": "",
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2757,7 +3057,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"clearOnHide": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -2776,7 +3077,24 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"inputType": "text",
+						"inputMask": "",
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": "",
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false,
+						"conditional": {
+							"show": null,
+							"when": null,
+							"eq": ""
+						}
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2802,7 +3120,15 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputType": "number"
+						"inputType": "number",
+						"autofocus": false,
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"defaultValue": "",
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2829,7 +3155,14 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputType": "number"
+						"inputType": "number",
+						"autofocus": false,
+						"placeholder": "",
+						"prefix": "",
+						"defaultValue": "",
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2846,7 +3179,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"clearOnHide": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -2870,7 +3204,14 @@
 						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputType": "number"
+						"inputType": "number",
+						"autofocus": false,
+						"placeholder": "",
+						"suffix": "",
+						"defaultValue": "",
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2898,7 +3239,14 @@
 						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputType": "number"
+						"inputType": "number",
+						"autofocus": false,
+						"placeholder": "",
+						"suffix": "",
+						"defaultValue": "",
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2942,7 +3290,21 @@
 							"margin-top": "20px"
 						},
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"placeholder": "",
+						"dataSrc": "values",
+						"valueProperty": "",
+						"defaultValue": "",
+						"refreshOn": "",
+						"filter": "",
+						"authenticate": false,
+						"template": "<span>{{ item.label }}</span>",
+						"multiple": false,
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false
 					}, {
 						"label": "If other, please specify",
 						"spellcheck": true,
@@ -2964,7 +3326,19 @@
 							"margin-top": "20px"
 						},
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"inputType": "text",
+						"inputMask": "",
+						"placeholder": "",
+						"prefix": "",
+						"suffix": "",
+						"multiple": false,
+						"defaultValue": "",
+						"protected": false,
+						"unique": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -2981,7 +3355,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"clearOnHide": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -2990,7 +3365,9 @@
 						"format": "MM-dd-yyyy",
 						"tableView": true,
 						"datePicker": {
-							"datepickerMode": "day"
+							"datepickerMode": "day",
+							"minDate": null,
+							"maxDate": null
 						},
 						"enableTime": false,
 						"timePicker": {
@@ -3029,7 +3406,15 @@
 							"minDate": null,
 							"maxDate": null
 						},
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"placeholder": "",
+						"enableDate": true,
+						"defaultDate": "",
+						"datepickerMode": "day",
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -3042,7 +3427,9 @@
 						"format": "MM-dd-yyyy",
 						"tableView": true,
 						"datePicker": {
-							"datepickerMode": "day"
+							"datepickerMode": "day",
+							"minDate": null,
+							"maxDate": null
 						},
 						"enableTime": false,
 						"timePicker": {
@@ -3079,7 +3466,15 @@
 							"minDate": null,
 							"maxDate": null
 						},
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"autofocus": false,
+						"placeholder": "",
+						"enableDate": true,
+						"defaultDate": "",
+						"datepickerMode": "day",
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"offset": 0,
 					"push": 0,
@@ -3096,7 +3491,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"clearOnHide": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -3131,13 +3527,35 @@
 							"type": "textfield",
 							"input": true,
 							"inDataGrid": true,
-							"lockKey": true
+							"lockKey": true,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							}
 						}],
 						"hideOnChildrenHidden": false,
 						"validate": {
 							"unique": false,
 							"multiple": false
-						}
+						},
+						"autofocus": false,
+						"tree": true,
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3182,9 +3600,31 @@
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false,
-							"inDataGrid": true
+							"inDataGrid": true,
+							"autofocus": false,
+							"inputType": "text",
+							"inputMask": "",
+							"placeholder": "",
+							"prefix": "",
+							"suffix": "",
+							"multiple": false,
+							"defaultValue": "",
+							"protected": false,
+							"unique": false,
+							"persistent": true,
+							"hidden": false,
+							"conditional": {
+								"show": null,
+								"when": null,
+								"eq": ""
+							}
 						}],
-						"path": "engine_make"
+						"path": "engine_make",
+						"autofocus": false,
+						"tree": true,
+						"protected": false,
+						"persistent": true,
+						"hidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3201,7 +3641,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"clearOnHide": false
 			}, {
 				"input": true,
 				"tableView": true,
@@ -3233,7 +3674,11 @@
 				},
 				"type": "survey",
 				"hideLabel": true,
-				"lockKey": true
+				"lockKey": true,
+				"defaultValue": "",
+				"protected": false,
+				"persistent": true,
+				"hidden": false
 			}],
 			"type": "panel",
 			"lockKey": true,
@@ -3242,7 +3687,9 @@
 			"validate": {
 				"unique": false,
 				"multiple": false
-			}
+			},
+			"clearOnHide": false,
+			"hideLabel": false
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -3272,7 +3719,21 @@
 					"validate": {
 						"unique": false,
 						"multiple": false
-					}
+					},
+					"autofocus": false,
+					"placeholder": "",
+					"dataSrc": "values",
+					"valueProperty": "",
+					"defaultValue": "",
+					"refreshOn": "",
+					"filter": "",
+					"authenticate": false,
+					"template": "<span>{{ item.label }}</span>",
+					"multiple": false,
+					"protected": false,
+					"unique": false,
+					"persistent": true,
+					"hidden": false
 				}, {
 					"key": "pageNaNPanel4",
 					"input": false,
@@ -3298,6 +3759,23 @@
 								"validate": {
 									"unique": false,
 									"multiple": false
+								},
+								"autofocus": false,
+								"inputType": "text",
+								"inputMask": "",
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": "",
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
 								}
 							}, {
 								"label": "Dinghy Length (Feet)",
@@ -3317,7 +3795,15 @@
 								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"inputType": "number"
+								"inputType": "number",
+								"autofocus": false,
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"defaultValue": "",
+								"protected": false,
+								"persistent": true,
+								"hidden": false
 							}],
 							"width": 6,
 							"offset": 0,
@@ -3344,14 +3830,26 @@
 								"validate": {
 									"unique": false,
 									"multiple": false
-								}
+								},
+								"autofocus": false,
+								"placeholder": "",
+								"valueProperty": "",
+								"defaultValue": "",
+								"refreshOn": "",
+								"filter": "",
+								"authenticate": false,
+								"multiple": false,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false
 							}, {
 								"label": "Value",
 								"prefix": "$",
 								"mask": false,
 								"spellcheck": true,
 								"tableView": true,
-								"defaultValue": "0",
+								"defaultValue": "",
 								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
@@ -3366,7 +3864,21 @@
 								"validate": {
 									"unique": false,
 									"multiple": false
-								}
+								},
+								"autofocus": false,
+								"placeholder": "",
+								"suffix": "",
+								"protected": false,
+								"persistent": true,
+								"hidden": false,
+								"labelPosition": "top",
+								"tags": [],
+								"conditional": {
+									"show": "",
+									"when": null,
+									"eq": ""
+								},
+								"properties": {}
 							}],
 							"width": 6,
 							"offset": 0,
@@ -3380,7 +3892,8 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						}
+						},
+						"clearOnHide": false
 					}],
 					"type": "panel",
 					"conditional": {
@@ -3389,7 +3902,9 @@
 						"eq": "yes"
 					},
 					"hideOnChildrenHidden": false,
-					"label": "Panel"
+					"label": "Panel",
+					"clearOnHide": false,
+					"hideLabel": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -3420,7 +3935,21 @@
 					"validate": {
 						"unique": false,
 						"multiple": false
-					}
+					},
+					"autofocus": false,
+					"placeholder": "",
+					"dataSrc": "values",
+					"valueProperty": "",
+					"defaultValue": "",
+					"refreshOn": "",
+					"filter": "",
+					"authenticate": false,
+					"template": "<span>{{ item.label }}</span>",
+					"multiple": false,
+					"protected": false,
+					"unique": false,
+					"persistent": true,
+					"hidden": false
 				}, {
 					"key": "pageNaNPanel5",
 					"input": false,
@@ -3446,6 +3975,23 @@
 								"validate": {
 									"unique": false,
 									"multiple": false
+								},
+								"autofocus": false,
+								"inputType": "text",
+								"inputMask": "",
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": "",
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
 								}
 							}, {
 								"label": "Built Year",
@@ -3466,7 +4012,19 @@
 								"validate": {
 									"unique": false,
 									"multiple": false
-								}
+								},
+								"autofocus": false,
+								"placeholder": "",
+								"valueProperty": "",
+								"defaultValue": "",
+								"refreshOn": "",
+								"filter": "",
+								"authenticate": false,
+								"multiple": false,
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false
 							}],
 							"width": 6,
 							"offset": 0,
@@ -3487,6 +4045,23 @@
 								"validate": {
 									"unique": false,
 									"multiple": false
+								},
+								"autofocus": false,
+								"inputType": "text",
+								"inputMask": "",
+								"placeholder": "",
+								"prefix": "",
+								"suffix": "",
+								"multiple": false,
+								"defaultValue": "",
+								"protected": false,
+								"unique": false,
+								"persistent": true,
+								"hidden": false,
+								"conditional": {
+									"show": null,
+									"when": null,
+									"eq": ""
 								}
 							}, {
 								"label": "Value",
@@ -3494,7 +4069,7 @@
 								"mask": false,
 								"spellcheck": true,
 								"tableView": true,
-								"defaultValue": "0",
+								"defaultValue": "",
 								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
@@ -3509,7 +4084,21 @@
 								"validate": {
 									"unique": false,
 									"multiple": false
-								}
+								},
+								"autofocus": false,
+								"placeholder": "",
+								"suffix": "",
+								"protected": false,
+								"persistent": true,
+								"hidden": false,
+								"labelPosition": "top",
+								"tags": [],
+								"conditional": {
+									"show": "",
+									"when": null,
+									"eq": ""
+								},
+								"properties": {}
 							}],
 							"width": 6,
 							"offset": 0,
@@ -3523,7 +4112,8 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						}
+						},
+						"clearOnHide": false
 					}],
 					"type": "panel",
 					"conditional": {
@@ -3532,7 +4122,9 @@
 						"eq": "yes"
 					},
 					"hideOnChildrenHidden": false,
-					"label": "Panel"
+					"label": "Panel",
+					"clearOnHide": false,
+					"hideLabel": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -3545,7 +4137,8 @@
 			"validate": {
 				"unique": false,
 				"multiple": false
-			}
+			},
+			"clearOnHide": false
 		}],
 		"input": false,
 		"key": "pageNaN",
@@ -3564,7 +4157,9 @@
 			"cancel": true,
 			"next": true
 		},
-		"collapsible": false
+		"collapsible": false,
+		"clearOnHide": false,
+		"hideLabel": false
 	}, {
 		"type": "panel",
 		"title": "Additional",
@@ -9890,6 +10485,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-03-27T09:35:59.287Z",
+	"modified": "2020-03-27T12:22:57.947Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
