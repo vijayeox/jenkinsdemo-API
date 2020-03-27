@@ -15,14 +15,22 @@
 			"key": "product",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "initiatedByCsr",
 			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
 			"key": "initiatedByCsr",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "automatic_renewal",
 			"customDefaultValue": "value = false;",
@@ -30,7 +38,11 @@
 			"key": "automatic_renewal",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -49,7 +61,11 @@
 					"type": "htmlelement",
 					"hideLabel": true,
 					"hideOnChildrenHidden": false,
-					"tableView": false
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 6,
 				"offset": 0,
@@ -78,7 +94,11 @@
 					"source": "5d52a58c7d69825a5e8dfe7d",
 					"hideLabel": true,
 					"hideOnChildrenHidden": false,
-					"tableView": false
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 4,
 				"offset": 0,
@@ -89,7 +109,11 @@
 			"type": "columns",
 			"lockKey": true,
 			"source": "5d52a3bed4d969439f23bb00",
-			"hideLabel": true
+			"hideLabel": true,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"title": "PADI Validation",
 			"theme": "primary",
@@ -119,7 +143,11 @@
 						"type": "hidden",
 						"lockKey": true,
 						"calculateValue": "value = data['padi'];",
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -127,7 +155,11 @@
 						"label": "verified",
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -136,7 +168,11 @@
 						"type": "hidden",
 						"defaultValue": "padi",
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -145,7 +181,11 @@
 						"type": "hidden",
 						"lockKey": true,
 						"defaultValue": "false",
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "ApproverName",
 						"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].name;\n  }\n}",
@@ -153,7 +193,11 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "ApproverEmailId",
 						"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].email;\n  }\n}",
@@ -161,7 +205,11 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 4,
 					"offset": 0,
@@ -182,7 +230,9 @@
 						"validate": {
 							"required": true,
 							"customMessage": "Padi Number is not Valid!",
-							"min": 0
+							"min": 0,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "padi",
 						"logic": [{
@@ -227,7 +277,11 @@
 						"event": "callPipeline",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "Change PADI Number",
 						"action": "event",
@@ -354,7 +408,11 @@
 						"label": "workflow_uuid",
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -362,7 +420,11 @@
 						"label": "padiNotFound",
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -372,7 +434,11 @@
 						"persistent": false,
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -381,7 +447,11 @@
 						"type": "hidden",
 						"lockKey": true,
 						"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "disableUserInfoEditing",
 						"customDefaultValue": "value = false;",
@@ -389,7 +459,11 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 4,
 					"offset": 0,
@@ -399,7 +473,11 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelColumns"
+				"path": "panelColumns",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -426,7 +504,11 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 4,
 					"offset": 0,
@@ -443,8 +525,16 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelPanel2Columns"
-			}]
+				"path": "panelPanel2Columns",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
+			}],
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"title": "Personal Information",
 			"theme": "primary",
@@ -471,7 +561,9 @@
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
-							"customMessage": "Please enter your first name."
+							"customMessage": "Please enter your first name.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "firstname",
 						"logic": [{
@@ -528,7 +620,9 @@
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
-							"customMessage": "Please enter your initial."
+							"customMessage": "Please enter your initial.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "initial",
 						"type": "textfield",
@@ -548,7 +642,9 @@
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
-							"customMessage": "Please enter your last name."
+							"customMessage": "Please enter your last name.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "lastname",
 						"logic": [{
@@ -624,7 +720,11 @@
 					}]
 				}],
 				"type": "columns",
-				"input": false
+				"input": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
@@ -658,7 +758,9 @@
 							"template": "<span>{{ item.country }}</span>",
 							"selectThreshold": 0.3,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "country",
 							"type": "select",
@@ -670,7 +772,9 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "city",
 							"type": "textfield",
@@ -689,7 +793,9 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "address1",
 							"type": "textfield",
@@ -709,7 +815,9 @@
 							"selectThreshold": 0.3,
 							"validate": {
 								"required": true,
-								"customMessage": "State is required"
+								"customMessage": "State is required",
+								"unique": false,
+								"multiple": false
 							},
 							"key": "state",
 							"type": "select",
@@ -733,7 +841,11 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "Zip Code",
 							"spellcheck": false,
@@ -743,7 +855,9 @@
 								"required": true,
 								"pattern": "[0-9\\s-]*",
 								"customMessage": "Please enter a valid Zip Code for your region.",
-								"maxLength": 12
+								"maxLength": 12,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "zip",
 							"type": "textfield",
@@ -759,8 +873,16 @@
 					}],
 					"type": "columns",
 					"hideLabel": true,
-					"path": "panelPanelColumns"
-				}]
+					"path": "panelPanelColumns",
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}],
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"title": "Physical Address",
 				"theme": "primary",
@@ -783,6 +905,10 @@
 					"style": {
 						"margin-top": "5px",
 						"margin-bottom": "5px"
+					},
+					"validate": {
+						"unique": false,
+						"multiple": false
 					}
 				}, {
 					"label": "Columns",
@@ -814,7 +940,9 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"unique": false,
+										"multiple": false
 									},
 									"key": "physical_country",
 									"type": "select",
@@ -826,9 +954,10 @@
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = data['city'];\n}else{\n  value = data['physical_city'];\n}",
 									"validate": {
-										"required": true
+										"required": true,
+										"unique": false,
+										"multiple": false
 									},
 									"key": "physical_city",
 									"type": "textfield",
@@ -847,10 +976,11 @@
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = data['address1'];\n}else{\n  value = data['mailaddress1'];\n}",
 									"validateOn": "blur",
 									"validate": {
-										"required": true
+										"required": true,
+										"unique": false,
+										"multiple": false
 									},
 									"key": "mailaddress1",
 									"type": "textfield",
@@ -879,7 +1009,9 @@
 									"clearOnHide": false,
 									"validate": {
 										"required": true,
-										"customMessage": "State is required"
+										"customMessage": "State is required",
+										"unique": false,
+										"multiple": false
 									},
 									"key": "physical_state",
 									"type": "select",
@@ -900,7 +1032,10 @@
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = data['address2'];\n}else{\n  value = data['mailaddress2'];\n}",
+									"validate": {
+										"unique": false,
+										"multiple": false
+									},
 									"key": "mailaddress2",
 									"type": "textfield",
 									"input": true,
@@ -911,16 +1046,17 @@
 									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = data['zip'];\n}else{\n  value = data['physical_zip'];\n}",
-									"calculateServer": false,
 									"validate": {
 										"required": true,
 										"pattern": "[0-9\\s-]*",
 										"customMessage": "Please enter a valid Zip Code for your region.",
-										"maxLength": 12
+										"maxLength": 12,
+										"unique": false,
+										"multiple": false
 									},
 									"key": "physical_zip",
 									"type": "textfield",
+									"calculateServer": false,
 									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
@@ -933,7 +1069,11 @@
 							}],
 							"type": "columns",
 							"hideLabel": true,
-							"path": "panelPanel3Columns2Columns"
+							"path": "panelPanel3Columns2Columns",
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 12,
 						"offset": 0,
@@ -959,7 +1099,11 @@
 					"customConditional": "if(data['sameasmailingaddress'] === false || data['sameasmailingaddress'] == 'false'){\nshow = true\n} else {\n  show = false\n}",
 					"type": "columns",
 					"input": false
-				}]
+				}],
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -987,7 +1131,11 @@
 								"key": "home_country_code",
 								"type": "select",
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
 							}],
 							"width": 4,
 							"offset": 0,
@@ -1000,7 +1148,9 @@
 								"spellcheck": true,
 								"tableView": true,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"customMessage": "Please enter a valid home or work phone number",
+									"unique": false,
+									"multiple": false
 								},
 								"key": "home_phone_number",
 								"logic": [{
@@ -1050,7 +1200,11 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
 							}],
 							"width": 8,
 							"offset": 0,
@@ -1063,7 +1217,11 @@
 						"key": "columns3",
 						"type": "columns",
 						"input": false,
-						"path": "columns3"
+						"path": "columns3",
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "Columns",
 						"columns": [{
@@ -1087,7 +1245,11 @@
 								"key": "phone_country_code",
 								"type": "select",
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
 							}],
 							"width": 4,
 							"offset": 0,
@@ -1102,7 +1264,9 @@
 								"clearOnHide": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid mobile phone number",
+									"unique": false,
+									"multiple": false
 								},
 								"key": "phone_number",
 								"logic": [{
@@ -1152,7 +1316,11 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
 							}],
 							"width": 8,
 							"offset": 0,
@@ -1165,7 +1333,11 @@
 						"key": "columns4",
 						"type": "columns",
 						"input": false,
-						"path": "columns4"
+						"path": "columns4",
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1183,7 +1355,11 @@
 						"type": "phoneNumber",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
@@ -1191,7 +1367,9 @@
 						"tableView": true,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter your email address in format: yourname@example.com"
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "email",
 						"type": "email",
@@ -1207,7 +1385,11 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelPanel3Columns"
+				"path": "panelPanel3Columns",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}]
 		}],
 		"type": "panel",
@@ -1221,7 +1403,11 @@
 			"next": true
 		},
 		"collapsible": false,
-		"path": "panel"
+		"path": "panel",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}, {
 		"key": "panel2",
 		"input": false,
@@ -1249,7 +1435,9 @@
 					},
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "policyPeriod",
 					"properties": {
@@ -1291,16 +1479,25 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
+					"label": "end_date",
+					"defaultValue": "2020-07-31",
+					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-07-22\";\n}else{\nvalue = (year)+ \"-07-22\";\n}",
+					"key": "end_date",
+					"type": "hidden",
 					"input": true,
 					"tableView": true,
-					"key": "end_date",
-					"label": "end_date",
-					"type": "hidden",
 					"lockKey": true,
-					"defaultValue": "2020-07-31",
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 5,
 				"offset": 0,
@@ -1310,7 +1507,11 @@
 			}],
 			"type": "columns",
 			"hideLabel": true,
-			"path": "panelColumns"
+			"path": "panelColumns",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "panelPanel",
 			"input": false,
@@ -1321,15 +1522,6 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
-						"label": "businessPadiValidated",
-						"customDefaultValue": "value = false",
-						"calculateServer": false,
-						"key": "businessPadiValidated",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
 						"label": "businessPadiEmpty",
 						"customDefaultValue": "value = true;",
 						"calculateServer": false,
@@ -1337,7 +1529,11 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 4,
 					"offset": 0,
@@ -1356,16 +1552,52 @@
 						"clearOnHide": false,
 						"customDefaultValue": "if(data['business_name'] && data['business_name'] != ''){\n  value = data['padi'];\n}",
 						"calculateValue": "if(data['business_name'] && data['business_padi'] == ''){\n  value = data['padi'];\n}",
-						"calculateServer": false,
 						"validateOn": "blur",
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "business_padi",
+						"logic": [{
+							"name": "Disable",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "result = false;\nif (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    result = true;\n  }else if(data['businessPadiVerified'] == true || data['businessPadiVerified'] == 'true'){\n      result = true;\n  }\n}else if(data['businessPadiVerified'] == true || data['businessPadiVerified'] == 'true'){\n      result = true;\n}"
+							},
+							"actions": [{
+								"name": "DisableField",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
 						"type": "number",
+						"calculateServer": false,
 						"input": true,
 						"hideOnChildrenHidden": false,
 						"inputType": "number"
+					}, {
+						"label": "HTML",
+						"attrs": [{
+							"attr": "",
+							"value": ""
+						}],
+						"content": "<style>\n  .alignCenter{\n    text-align:center\n  }\n</style>",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "html1",
+						"type": "htmlelement",
+						"input": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Validate Business PADI",
 						"action": "event",
@@ -1377,10 +1609,31 @@
 						"properties": {
 							"delegate": "BusinessPadiVerification"
 						},
+						"logic": [{
+							"name": "Hide",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "result = false;\nif (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    result = true;\n  }else if(data['businessPadiVerified'] == true || data['businessPadiVerified'] == 'true'){\n      result = true;\n  }\n}else if(data['businessPadiVerified'] == true || data['businessPadiVerified'] == 'true'){\n  result = true;\n}"
+							},
+							"actions": [{
+								"name": "Hide Button",
+								"type": "property",
+								"property": {
+									"label": "Hidden",
+									"value": "hidden",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
 						"type": "button",
 						"event": "callDelegate",
 						"input": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -1391,11 +1644,15 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html6",
-						"customConditional": "if((data['businessPadiValidated'] === false || data['businessPadiValidated']=='false') && (data['businessPadiEmpty']===false || data['businessPadiEmpty']==='false')){\n  if(data['businessPadiEmpty'] === true){\n    show =false;\n  } else {\n    show = true;\n  }\n} else {\n  show = false;\n}",
+						"customConditional": "show = false;\nif((data['businessPadiValidated'] === false || data['businessPadiValidated']=='false') && (data['businessPadiEmpty']===false || data['businessPadiEmpty']==='false')){  \n  if(data['businessPadiEmpty'] === true){   \n     show =false; \n  } else {  \n      show = true;  \n    \n  }\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -1414,7 +1671,11 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 4,
 					"offset": 0,
@@ -1422,7 +1683,18 @@
 					"pull": 0,
 					"size": "md"
 				}, {
-					"components": [],
+					"components": [{
+						"label": "businessPadiValidated",
+						"key": "businessPadiValidated",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"hideOnChildrenHidden": false
+					}],
 					"width": 4,
 					"offset": 0,
 					"push": 0,
@@ -1434,7 +1706,11 @@
 				"key": "panelPanelColumns4",
 				"type": "columns",
 				"input": false,
-				"path": "panelPanelColumns4"
+				"path": "panelPanelColumns4",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"title": "             ",
 				"theme": "primary",
@@ -1447,7 +1723,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel1",
-				"customConditional": "show = false;\nif(data['businessPadiValidated'] === true || data['businessPadiValidated'] == 'true'){\n  show = true;\n}",
+				"customConditional": "show = false;\nif((data['businessPadiValidated'] === true || data['businessPadiValidated'] == 'true') || (data['businessPadiVerifie'] == 'true' || data['businessPadiVerified'] == true)){\n  show = true;\n}",
 				"type": "panel",
 				"label": "             ",
 				"input": false,
@@ -1459,7 +1735,9 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please enter legal business name."
+						"customMessage": "Please enter legal business name.",
+						"unique": false,
+						"multiple": false
 					},
 					"key": "business_name",
 					"type": "textfield",
@@ -1492,7 +1770,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "business_country",
 								"type": "select",
@@ -1504,7 +1784,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "business_city",
 								"type": "textfield",
@@ -1524,7 +1806,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "business_address1",
 								"type": "textfield",
@@ -1545,7 +1829,9 @@
 								"clearOnHide": false,
 								"validate": {
 									"required": true,
-									"customMessage": "State is required"
+									"customMessage": "State is required",
+									"unique": false,
+									"multiple": false
 								},
 								"key": "business_state",
 								"type": "select",
@@ -1569,7 +1855,11 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
 							}, {
 								"label": "Zip Code",
 								"spellcheck": true,
@@ -1580,7 +1870,9 @@
 									"required": true,
 									"pattern": "[0-9\\s-]*",
 									"customMessage": "Please enter a valid Zip Code for your region.",
-									"maxLength": 12
+									"maxLength": 12,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "business_zip",
 								"type": "textfield",
@@ -1599,9 +1891,17 @@
 						"type": "columns",
 						"input": false,
 						"path": "columns",
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
-					"path": "businessAddress"
+					"path": "businessAddress",
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Columns",
 					"columns": [{
@@ -1624,7 +1924,11 @@
 									"key": "work_country_code",
 									"type": "select",
 									"input": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"offset": 0,
 								"push": 0,
@@ -1641,7 +1945,9 @@
 									"calculateValue": "value = data['mobilephone']",
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter a valid phone number"
+										"customMessage": "Please enter a valid phone number",
+										"unique": false,
+										"multiple": false
 									},
 									"key": "buisness_work_number",
 									"type": "phoneNumber",
@@ -1655,7 +1961,11 @@
 									"type": "hidden",
 									"input": true,
 									"tableView": false,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"offset": 0,
 								"push": 0,
@@ -1668,7 +1978,11 @@
 							"key": "columns3",
 							"type": "columns",
 							"input": false,
-							"path": "columns3"
+							"path": "columns3",
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 6,
 						"offset": 0,
@@ -1686,7 +2000,9 @@
 							},
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter the email address."
+								"customMessage": "Please enter the email address.",
+								"unique": false,
+								"multiple": false
 							},
 							"key": "business_email",
 							"type": "email",
@@ -1705,7 +2021,11 @@
 					"type": "columns",
 					"input": false,
 					"path": "columns4",
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Columns",
 					"columns": [{
@@ -1720,7 +2040,11 @@
 							"type": "phoneNumber",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 6,
 						"offset": 0,
@@ -1740,7 +2064,11 @@
 							"type": "email",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 6,
 						"offset": 0,
@@ -1753,7 +2081,11 @@
 					"type": "columns",
 					"input": false,
 					"path": "columns5",
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Columns",
 					"columns": [{
@@ -1763,7 +2095,9 @@
 							"tableView": false,
 							"clearOnHide": false,
 							"validate": {
-								"custom": "if(data['business_website'] && data['business_website'] != ''){\n valid = (data['business_website'].match(/^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$/)) ?  true : 'Please enter a valid URL';\n}"
+								"custom": "if(data['business_website'] && data['business_website'] != ''){\n valid = (data['business_website'].match(/^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$/)) ?  true : 'Please enter a valid URL';\n}",
+								"unique": false,
+								"multiple": false
 							},
 							"key": "business_website",
 							"type": "textfield",
@@ -1789,10 +2123,18 @@
 					"type": "columns",
 					"input": false,
 					"path": "columns6",
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"path": "panel1",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"clearOnHide": false,
 				"key": "panelPanelWell",
@@ -1806,7 +2148,7 @@
 						"components": [{
 							"label": "DBA",
 							"widget": "choicesjs",
-							"placeholder": "DBA",
+							"placeholder": " ",
 							"tableView": true,
 							"data": {
 								"values": [{
@@ -1826,7 +2168,9 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "dba",
 							"type": "select",
@@ -1905,13 +2249,21 @@
 						"size": "md"
 					}],
 					"type": "columns",
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"tableView": false,
 				"type": "well",
 				"hideLabel": true,
 				"label": "",
-				"path": "panelPanelWell"
+				"path": "panelPanelWell",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Current Insurance Company",
 				"spellcheck": true,
@@ -1920,11 +2272,19 @@
 				"key": "current_insurance_company",
 				"type": "textfield",
 				"input": true,
-				"lockKey": true
+				"lockKey": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
 			"label": "Panel",
-			"path": "panelPanel"
+			"path": "panelPanel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "panelColumnsPanel",
 			"input": false,
@@ -1960,7 +2320,9 @@
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
-					"required": true
+					"required": true,
+					"unique": false,
+					"multiple": false
 				},
 				"errorLabel": "Primary limit $1,000,000",
 				"key": "excess_liability_coverage",
@@ -1991,7 +2353,11 @@
 				"input": true,
 				"labelWidth": 26,
 				"labelMargin": 4,
-				"lockKey": true
+				"lockKey": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Data Grid",
 				"disableAddingRemovingRows": false,
@@ -2021,7 +2387,9 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "data_grid_claims",
 					"type": "textfield",
@@ -2043,7 +2411,9 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"custom": "if(row['data_grid_date'] && row['data_grid_date'] != ''){\n  valid = (moment(row['data_grid_date']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+						"custom": "if(row['data_grid_date'] && row['data_grid_date'] != ''){\n  valid = (moment(row['data_grid_date']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
+						"unique": false,
+						"multiple": false
 					},
 					"key": "data_grid_date",
 					"type": "datetime",
@@ -2078,7 +2448,9 @@
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "data_grid_amount",
 					"type": "number",
@@ -2108,10 +2480,18 @@
 				"key": "marine_insurance_policy_ever_cancelled_or_nonrenewed",
 				"type": "radio",
 				"input": true,
-				"lockKey": true
+				"lockKey": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
-			"label": "Panel"
+			"label": "Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
@@ -2123,7 +2503,11 @@
 			"next": true
 		},
 		"collapsible": false,
-		"nextPage": "if(data['businessPadiValidated'] === true || data['businessPadiValidated'] == 'true'){\n  next = 'pageNaN'  \n} else {\n  next = 'panel2'\n}"
+		"nextPage": "if((data['businessPadiValidated'] === true || data['businessPadiValidated'] == 'true') || (data['businessPadiVerified'] === true || data['businessPadiVerified'] == 'true')) {\n  next = 'pageNaN'; \n} else {\n  next = 'panel2';\n}",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}, {
 		"type": "panel",
 		"title": "Boat Usage &  Captain & Crew Schedule",
@@ -2147,7 +2531,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the name of captain."
+							"customMessage": "Please enter the name of captain.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "captain_name",
 						"type": "textfield",
@@ -2167,7 +2553,11 @@
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputType": "number"
+						"inputType": "number",
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "Percentage of trips for diving charters",
 						"suffix": "%",
@@ -2180,7 +2570,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter percentage of trips for diving charters."
+							"customMessage": "Please enter percentage of trips for diving charters.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "percentage_of_trips_for_diving_charters",
 						"type": "number",
@@ -2207,7 +2599,11 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2248,7 +2644,8 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"multiple": true
+							"multiple": true,
+							"unique": false
 						},
 						"key": "waters_to_be_navigated",
 						"type": "select",
@@ -2303,7 +2700,9 @@
 								},
 								"clearOnHide": false,
 								"validate": {
-									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_from_date_time']) >= moment(data['start_date'])) ? true : 'Please choose the date after '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_from_date_time']) >= moment(data['start_date'])) ? true : 'Please choose the date after '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
+									"unique": false,
+									"multiple": false
 								},
 								"key": "layup_period_from_date_time",
 								"type": "datetime",
@@ -2347,7 +2746,9 @@
 								},
 								"clearOnHide": false,
 								"validate": {
-									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_to_date_time']) > moment(data['layup_period_from_date_time'])) ? true : 'Please choose a date after '+moment(data.layup_period_from_date_time).format('MM-DD-YYYY');\n}"
+									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_to_date_time']) > moment(data['layup_period_from_date_time'])) ? true : 'Please choose a date after '+moment(data.layup_period_from_date_time).format('MM-DD-YYYY');\n}",
+									"unique": false,
+									"multiple": false
 								},
 								"key": "layup_period_to_date_time",
 								"logic": [{
@@ -2396,7 +2797,11 @@
 							"size": "md"
 						}],
 						"type": "columns",
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2406,10 +2811,18 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "pageNaNColumns"
+				"path": "pageNaNColumns",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
-			"label": "Panel"
+			"label": "Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "pageNaNPanel",
 			"input": false,
@@ -2429,7 +2842,9 @@
 				"tableView": true,
 				"clearOnHide": false,
 				"validate": {
-					"minLength": 1
+					"minLength": 1,
+					"unique": false,
+					"multiple": false
 				},
 				"key": "CrewGrid",
 				"type": "datagrid",
@@ -2444,7 +2859,11 @@
 					"type": "textfield",
 					"input": true,
 					"inDataGrid": true,
-					"lockKey": true
+					"lockKey": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Name",
 					"spellcheck": true,
@@ -2455,7 +2874,11 @@
 					"type": "textfield",
 					"input": true,
 					"inDataGrid": true,
-					"lockKey": true
+					"lockKey": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Full Time/Part Time                                            ",
 					"widget": "choicesjs",
@@ -2475,7 +2898,11 @@
 					"key": "ft_pt",
 					"type": "select",
 					"input": true,
-					"inDataGrid": true
+					"inDataGrid": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Do they have Professional Liability Insurance?",
 					"widget": "choicesjs",
@@ -2496,7 +2923,11 @@
 					"type": "select",
 					"input": true,
 					"inDataGrid": true,
-					"lockKey": true
+					"lockKey": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "PADI Number",
 					"mask": false,
@@ -2511,14 +2942,22 @@
 					"type": "number",
 					"input": true,
 					"inDataGrid": true,
-					"inputType": "number"
+					"inputType": "number",
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"lockKey": true,
 				"path": "CrewGrid"
 			}],
 			"type": "panel",
 			"label": "Panel",
-			"path": "pageNaNPanel"
+			"path": "pageNaNPanel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "Survey",
 			"hideLabel": true,
@@ -2570,7 +3009,9 @@
 			"clearOnHide": false,
 			"validate": {
 				"required": true,
-				"customMessage": "Please answer all the questions."
+				"customMessage": "Please answer all the questions.",
+				"unique": false,
+				"multiple": false
 			},
 			"key": "boat_usage_survey",
 			"type": "survey",
@@ -2591,7 +3032,9 @@
 						"defaultValue": false,
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "CrewInBoatYN",
 						"type": "checkbox",
@@ -2631,7 +3074,9 @@
 						"defaultValue": false,
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "CrewInWaterYN",
 						"type": "checkbox",
@@ -2680,7 +3125,11 @@
 		"tableView": false,
 		"breadcrumb": "none",
 		"label": "Panel",
-		"path": "pageNaN"
+		"path": "pageNaN",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}, {
 		"type": "panel",
 		"title": "Boat Details",
@@ -2701,7 +3150,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter name of the vessel."
+							"customMessage": "Please enter name of the vessel.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "vessel_name",
 						"type": "textfield",
@@ -2722,7 +3173,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the manufacturer."
+							"customMessage": "Please enter the manufacturer.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "hull_mfg",
 						"type": "textfield",
@@ -2749,7 +3202,9 @@
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "built_year",
 						"type": "select",
@@ -2767,7 +3222,11 @@
 				"type": "columns",
 				"input": false,
 				"path": "columns9",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -2778,7 +3237,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the serial number."
+							"customMessage": "Please enter the serial number.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "vessel_sno",
 						"type": "textfield",
@@ -2799,7 +3260,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the model."
+							"customMessage": "Please enter the model.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "model",
 						"type": "textfield",
@@ -2822,7 +3285,9 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "vessel_length",
 						"type": "number",
@@ -2840,7 +3305,11 @@
 				"type": "columns",
 				"input": false,
 				"path": "columns10",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -2851,7 +3320,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the material of hull."
+							"customMessage": "Please enter the material of hull.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "hull_type",
 						"type": "textfield",
@@ -2875,7 +3346,9 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "maximum_range",
 						"type": "number",
@@ -2900,7 +3373,9 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "vessel_hp",
 						"type": "number",
@@ -2919,7 +3394,11 @@
 				"type": "columns",
 				"input": false,
 				"path": "columns11",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -2934,7 +3413,9 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "hull_market_value",
 						"type": "number",
@@ -2960,7 +3441,9 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "purchase_price_currency",
 						"type": "number",
@@ -3000,7 +3483,9 @@
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "type_of_propulsion",
 						"type": "select",
@@ -3044,7 +3529,11 @@
 				"type": "columns",
 				"input": false,
 				"path": "columns12",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -3070,7 +3559,9 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter the Protective devices."
+								"customMessage": "Please enter the Protective devices.",
+								"unique": false,
+								"multiple": false
 							},
 							"key": "protective_devices",
 							"type": "textfield",
@@ -3078,7 +3569,11 @@
 							"inDataGrid": true,
 							"lockKey": true
 						}],
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3097,7 +3592,9 @@
 						"enableRowGroups": false,
 						"tableView": false,
 						"validate": {
-							"minLength": 1
+							"minLength": 1,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "engine_make",
 						"type": "datagrid",
@@ -3111,7 +3608,9 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter the engine make."
+								"customMessage": "Please enter the engine make.",
+								"unique": false,
+								"multiple": false
 							},
 							"key": "engineMakeVal",
 							"type": "textfield",
@@ -3134,7 +3633,11 @@
 				"type": "columns",
 				"input": false,
 				"path": "columns14",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -3152,7 +3655,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "date_of_last_survey",
 						"type": "datetime",
@@ -3202,7 +3707,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data['date_of_purchase'] && data['date_of_purchase'] != ''){\n  valid = (moment(data['date_of_purchase']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+							"custom": "if(data['date_of_purchase'] && data['date_of_purchase'] != ''){\n  valid = (moment(data['date_of_purchase']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "date_of_purchase",
 						"type": "datetime",
@@ -3241,7 +3748,11 @@
 				"key": "columns13",
 				"type": "columns",
 				"input": false,
-				"path": "columns13"
+				"path": "columns13",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "DESCRIPTION OF BOAT",
 				"hideLabel": true,
@@ -3266,7 +3777,9 @@
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Please select Yes or No."
+					"customMessage": "Please select Yes or No.",
+					"unique": false,
+					"multiple": false
 				},
 				"key": "description_of_boat",
 				"type": "survey",
@@ -3276,7 +3789,11 @@
 			"type": "panel",
 			"lockKey": true,
 			"label": "Panel",
-			"path": "pageNaNPanel3"
+			"path": "pageNaNPanel3",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -3299,7 +3816,9 @@
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "dingy_or_tender",
 					"type": "select",
@@ -3324,7 +3843,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "dingy_manufacturer",
 								"type": "textfield",
@@ -3341,7 +3862,9 @@
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "dingy_length",
 								"type": "number",
@@ -3368,7 +3891,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "dingy_age",
 								"type": "select",
@@ -3385,7 +3910,9 @@
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "dingy_value",
 								"type": "number",
@@ -3402,7 +3929,11 @@
 						}],
 						"type": "columns",
 						"hideLabel": true,
-						"path": "pageNaNPanel4Columns"
+						"path": "pageNaNPanel4Columns",
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"type": "panel",
 					"conditional": {
@@ -3434,7 +3965,9 @@
 					},
 					"selectThreshold": 0.3,
 					"validate": {
-						"required": true
+						"required": true,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "trailer",
 					"type": "select",
@@ -3459,7 +3992,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "trailer_manufacturer",
 								"type": "textfield",
@@ -3479,7 +4014,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "trailer_year_built",
 								"type": "select",
@@ -3498,7 +4035,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "trailer_serial_number",
 								"type": "textfield",
@@ -3517,7 +4056,9 @@
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "trailer_value",
 								"type": "number",
@@ -3534,7 +4075,11 @@
 						}],
 						"type": "columns",
 						"hideLabel": true,
-						"path": "pageNaNPanel5Columns"
+						"path": "pageNaNPanel5Columns",
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"type": "panel",
 					"conditional": {
@@ -3552,14 +4097,22 @@
 				"size": "md"
 			}],
 			"type": "columns",
-			"hideLabel": true
+			"hideLabel": true,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}],
 		"input": false,
 		"key": "pageNaN",
 		"theme": "primary",
 		"tableView": false,
 		"breadcrumb": "none",
-		"label": "Panel"
+		"label": "Panel",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}, {
 		"type": "panel",
 		"title": "Additional",
@@ -3582,7 +4135,11 @@
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
-				"lockKey": true
+				"lockKey": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "well",
 				"tableView": false,
@@ -3607,7 +4164,9 @@
 					"customDefaultValue": "value = 'noAdditionalInsureds';",
 					"validate": {
 						"required": true,
-						"customMessage": "Please choose whether you would like to add Additional Insured"
+						"customMessage": "Please choose whether you would like to add Additional Insured",
+						"unique": false,
+						"multiple": false
 					},
 					"errorLabel": "Please choose whether you would like to add Additional Insured",
 					"key": "additional_insured_select",
@@ -3616,7 +4175,11 @@
 				}],
 				"path": "well4",
 				"clearOnHide": false,
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"title": "Information for each Additional Insured is required as follows",
 				"theme": "primary",
@@ -3643,7 +4206,9 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
-						"minLength": 1
+						"minLength": 1,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "additionalInsured",
 					"conditional": {
@@ -3661,7 +4226,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "name",
 								"type": "textfield",
@@ -3674,7 +4241,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "city",
 								"type": "textfield",
@@ -3706,7 +4275,9 @@
 								"clearOnHide": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter your country."
+									"customMessage": "Please enter your country.",
+									"unique": false,
+									"multiple": false
 								},
 								"key": "country",
 								"properties": {
@@ -3730,7 +4301,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "state",
 								"type": "select",
@@ -3752,7 +4325,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "address",
 								"type": "textfield",
@@ -3768,7 +4343,9 @@
 								"validate": {
 									"required": true,
 									"pattern": "[0-9\\s-]*",
-									"maxLength": 12
+									"maxLength": 12,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "zip",
 								"type": "textfield",
@@ -3809,12 +4386,32 @@
 								},
 								"selectThreshold": 0.3,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "businessRelation",
 								"type": "select",
 								"input": true,
 								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Please Mention",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "businessRelationOther",
+								"conditional": {
+									"show": true,
+									"when": "businessRelation",
+									"eq": "other"
+								},
+								"type": "textfield",
+								"input": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
@@ -3834,7 +4431,11 @@
 								"type": "textarea",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
 							}],
 							"width": 8,
 							"offset": 0,
@@ -3848,7 +4449,11 @@
 						"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
 						"type": "columns",
 						"input": false,
-						"inDataGrid": true
+						"inDataGrid": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"lockKey": true
 				}],
@@ -3856,7 +4461,11 @@
 			}],
 			"type": "panel",
 			"label": "Panel",
-			"path": "page4Panel"
+			"path": "page4Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "Additional Named Insureds",
 			"tableView": true,
@@ -3871,7 +4480,9 @@
 			},
 			"selectThreshold": 0.3,
 			"validate": {
-				"required": true
+				"required": true,
+				"unique": false,
+				"multiple": false
 			},
 			"key": "additional_named_insureds_option",
 			"type": "select",
@@ -3895,215 +4506,11 @@
 				"hideLabel": true,
 				"tableView": false,
 				"validate": {
-					"minLength": 1
+					"minLength": 1,
+					"unique": false,
+					"multiple": false
 				},
 				"key": "additionalNamedInsured",
-				"type": "datagrid",
-				"input": true,
-				"components": [{
-					"label": "Well",
-					"tableView": false,
-					"key": "well1",
-					"type": "well",
-					"input": false,
-					"components": [{
-						"label": "Columns",
-						"columns": [{
-							"components": [{
-								"label": "Name",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "name",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "City",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "city",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "Country",
-								"widget": "choicesjs",
-								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{
-										"value": "",
-										"label": ""
-									}],
-									"custom": "values = data['countryList'];"
-								},
-								"valueProperty": "country",
-								"template": "<span>{{ item.country }}</span>",
-								"selectThreshold": 0.3,
-								"clearOnHide": false,
-								"validate": {
-									"required": true,
-									"customMessage": "Please enter your country."
-								},
-								"key": "country",
-								"properties": {
-									"clear_field": "state"
-								},
-								"type": "select",
-								"input": true,
-								"lockKey": true,
-								"source": "5d347da33e9be31e15d3b115",
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "State",
-								"widget": "choicesjs",
-								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{}],
-									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
-								},
-								"template": "<span>{{ item }}</span>",
-								"selectThreshold": 0.3,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "state",
-								"type": "select",
-								"refreshOn": "row.country",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"clearOnRefresh": true
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "Address",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "address",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "Zip",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"calculateServer": false,
-								"validate": {
-									"required": true,
-									"pattern": "[0-9\\s-]*",
-									"maxLength": 12
-								},
-								"key": "zip",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"hideLabel": true,
-						"dataGridLabel": false,
-						"tableView": false,
-						"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
-						"type": "columns",
-						"input": false,
-						"inDataGrid": true
-					}],
-					"inDataGrid": true,
-					"clearOnHide": false,
-					"hideLabel": true
-				}],
-				"path": "additionalNamedInsured"
-			}],
-			"type": "panel",
-			"conditional": {
-				"show": "true",
-				"when": "additional_named_insureds_option",
-				"eq": "yes"
-			},
-			"lockKey": true,
-			"label": "Panel",
-			"path": "additional_named_insureds"
-		}, {
-			"label": "Loss Payees",
-			"widget": "choicesjs",
-			"tableView": true,
-			"data": {
-				"values": [{
-					"value": "yes",
-					"label": "Yes"
-				}, {
-					"value": "none",
-					"label": "None"
-				}]
-			},
-			"selectThreshold": 0.3,
-			"clearOnHide": false,
-			"validate": {
-				"required": true
-			},
-			"key": "loss_payees",
-			"type": "select",
-			"input": true,
-			"labelWidth": 27,
-			"labelMargin": 1,
-			"lockKey": true
-		}, {
-			"key": "pageNaNPanel6",
-			"input": false,
-			"title": "Loss Payees",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"label": "Loss Payees",
-				"disableAddingRemovingRows": false,
-				"reorder": false,
-				"addAnotherPosition": "bottom",
-				"defaultOpen": false,
-				"layoutFixed": false,
-				"enableRowGroups": false,
-				"hideLabel": true,
-				"tableView": true,
-				"clearOnHide": false,
-				"validate": {
-					"minLength": 1
-				},
-				"key": "lossPayees",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
@@ -4115,7 +4522,9 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "name",
 							"type": "textfield",
@@ -4128,7 +4537,9 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "city",
 							"type": "textfield",
@@ -4160,7 +4571,9 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter your country."
+								"customMessage": "Please enter your country.",
+								"unique": false,
+								"multiple": false
 							},
 							"key": "country",
 							"properties": {
@@ -4184,7 +4597,9 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "state",
 							"type": "select",
@@ -4206,7 +4621,225 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "address",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"required": true,
+								"pattern": "[0-9\\s-]*",
+								"maxLength": 12,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "zip",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"hideLabel": true,
+					"dataGridLabel": false,
+					"tableView": false,
+					"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
+					"type": "columns",
+					"input": false,
+					"inDataGrid": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}],
+				"path": "additionalNamedInsured"
+			}],
+			"type": "panel",
+			"conditional": {
+				"show": "true",
+				"when": "additional_named_insureds_option",
+				"eq": "yes"
+			},
+			"lockKey": true,
+			"label": "Panel",
+			"path": "additional_named_insureds"
+		}, {
+			"label": "Loss Payees",
+			"widget": "choicesjs",
+			"tableView": true,
+			"data": {
+				"values": [{
+					"value": "yes",
+					"label": "Yes"
+				}, {
+					"value": "none",
+					"label": "None"
+				}]
+			},
+			"selectThreshold": 0.3,
+			"clearOnHide": false,
+			"validate": {
+				"required": true,
+				"unique": false,
+				"multiple": false
+			},
+			"key": "loss_payees",
+			"type": "select",
+			"input": true,
+			"labelWidth": 27,
+			"labelMargin": 1,
+			"lockKey": true
+		}, {
+			"key": "pageNaNPanel6",
+			"input": false,
+			"title": "Loss Payees",
+			"theme": "primary",
+			"tableView": false,
+			"components": [{
+				"label": "Loss Payees",
+				"disableAddingRemovingRows": false,
+				"reorder": false,
+				"addAnotherPosition": "bottom",
+				"defaultOpen": false,
+				"layoutFixed": false,
+				"enableRowGroups": false,
+				"hideLabel": true,
+				"tableView": true,
+				"clearOnHide": false,
+				"validate": {
+					"minLength": 1,
+					"unique": false,
+					"multiple": false
+				},
+				"key": "lossPayees",
+				"type": "datagrid",
+				"input": true,
+				"components": [{
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "Name",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "name",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "City",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "city",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"label": "Country",
+							"widget": "choicesjs",
+							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"values": [{
+									"value": "",
+									"label": ""
+								}],
+								"custom": "values = data['countryList'];"
+							},
+							"valueProperty": "country",
+							"template": "<span>{{ item.country }}</span>",
+							"selectThreshold": 0.3,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Please enter your country.",
+								"unique": false,
+								"multiple": false
+							},
+							"key": "country",
+							"properties": {
+								"clear_field": "state"
+							},
+							"type": "select",
+							"input": true,
+							"lockKey": true,
+							"source": "5d347da33e9be31e15d3b115",
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "State",
+							"widget": "choicesjs",
+							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"values": [{}],
+								"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
+							},
+							"template": "<span>{{ item }}</span>",
+							"selectThreshold": 0.3,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
+							},
+							"key": "state",
+							"type": "select",
+							"refreshOn": "row.country",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"clearOnRefresh": true
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"label": "Address",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "address",
 							"type": "textfield",
@@ -4223,7 +4856,9 @@
 							"inputFormat": "plain",
 							"clearOnHide": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
 							"key": "zip",
 							"type": "number",
@@ -4244,7 +4879,11 @@
 					"key": "lossPayeesColumns",
 					"type": "columns",
 					"input": false,
-					"inDataGrid": true
+					"inDataGrid": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"lockKey": true
 			}],
@@ -4275,7 +4914,11 @@
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
-				"lockKey": true
+				"lockKey": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"input": true,
 				"tableView": true,
@@ -4293,7 +4936,11 @@
 				},
 				"type": "select",
 				"hideLabel": true,
-				"lockKey": true
+				"lockKey": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -4317,7 +4964,8 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"validate": {
-						"multiple": true
+						"multiple": true,
+						"unique": false
 					},
 					"key": "attachments",
 					"type": "file",
@@ -4328,14 +4976,26 @@
 					"key": "attachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
-					"tableView": false
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
-				"path": "attachments"
+				"path": "attachments",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
 			"lockKey": true,
 			"label": "Panel",
-			"path": "additional_required_information"
+			"path": "additional_required_information",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}],
 		"input": false,
 		"key": "page4",
@@ -4343,7 +5003,11 @@
 		"tableView": false,
 		"breadcrumb": "none",
 		"label": "Panel",
-		"path": "page4"
+		"path": "page4",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}, {
 		"type": "panel",
 		"title": "Group Professional Liability",
@@ -4364,7 +5028,9 @@
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
 			"validate": {
-				"required": true
+				"required": true,
+				"unique": false,
+				"multiple": false
 			},
 			"key": "groupProfessionalLiability",
 			"type": "select",
@@ -4375,7 +5041,11 @@
 			"key": "groupCoverageSelect",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "well",
 			"tableView": false,
@@ -4404,7 +5074,9 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "annualReceipt",
 						"type": "number",
@@ -4451,7 +5123,11 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "page7Columns"
+				"path": "page7Columns",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -4483,7 +5159,9 @@
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"unique": false,
+							"multiple": false
 						},
 						"key": "groupExcessLiabilitySelect",
 						"type": "select",
@@ -4528,7 +5206,11 @@
 					"size": "md"
 				}],
 				"type": "columns",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"title": "Add Members",
 				"theme": "primary",
@@ -4545,7 +5227,11 @@
 					"clearOnHide": false,
 					"key": "groupPadi",
 					"type": "textfield",
-					"input": true
+					"input": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Validate and Add PADI Members",
 					"action": "event",
@@ -4558,223 +5244,280 @@
 						"sourceDataKey": "groupPadi",
 						"destinationDataKey": "groupPL",
 						"valueKey": "padi",
-						"validationKey": "policy_exists",
+						"validationKey": "padi_Verified",
 						"clearSource": "true"
 					},
 					"type": "button",
 					"event": "callDelegate",
-					"input": true
-				}],
-				"path": "addMembers"
-			}, {
-				"label": "Members applicable for Group Liability",
-				"disableAddingRemovingRows": true,
-				"tableView": false,
-				"templates": {
-					"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-3\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-					"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-3\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
-				},
-				"modal": false,
-				"clearOnHide": false,
-				"key": "groupPL",
-				"type": "editgrid",
-				"input": true,
-				"components": [{
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "PADI",
-							"spellcheck": true,
-							"disabled": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"calculateServer": false,
-							"key": "padi",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "address1",
-							"key": "address1",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "address2",
-							"key": "address2",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "address_international",
-							"key": "address_international",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 3,
-						"size": "md"
-					}, {
-						"components": [{
-							"label": "Initial",
-							"spellcheck": true,
-							"disabled": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"calculateServer": false,
-							"key": "initial",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "state",
-							"key": "state",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "city",
-							"key": "city",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "zip",
-							"key": "zip",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 3,
-						"size": "md"
-					}, {
-						"components": [{
-							"label": "First Name",
-							"spellcheck": true,
-							"disabled": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"calculateServer": false,
-							"key": "firstname",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "country",
-							"key": "country",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "work_phone",
-							"key": "work_phone",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "home_phone",
-							"key": "home_phone",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 3,
-						"size": "md"
-					}, {
-						"components": [{
-							"label": "Last Name",
-							"spellcheck": true,
-							"disabled": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"calculateServer": false,
-							"key": "lastname",
-							"type": "textfield",
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "email",
-							"key": "email",
-							"type": "hidden",
-							"input": true,
-							"tableView": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "verified",
-							"key": "verified",
-							"type": "hidden",
-							"input": true,
-							"tableView": false,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 3,
-						"size": "md"
-					}],
-					"hideLabel": true,
-					"dataGridLabel": false,
-					"tableView": false,
-					"key": "page7GroupColumns",
-					"type": "columns",
-					"input": false,
-					"inDataGrid": true
-				}, {
-					"label": "Document",
-					"hideLabel": true,
-					"tableView": true,
-					"storage": "base64",
-					"webcam": false,
-					"fileTypes": [{
-						"label": "",
-						"value": ""
-					}],
-					"multiple": true,
-					"persistent": false,
-					"protected": true,
-					"validate": {
-						"multiple": true
-					},
-					"key": "document",
-					"type": "file",
 					"input": true,
-					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}, {
+					"label": "Members applicable for Group Liability",
+					"disableAddingRemovingRows": true,
+					"tableView": false,
+					"templates": {
+						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-3\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-3\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+					},
+					"modal": false,
+					"clearOnHide": false,
+					"key": "groupPL",
+					"type": "editgrid",
+					"input": true,
+					"components": [{
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "PADI",
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								},
+								"key": "padi",
+								"type": "textfield",
+								"calculateServer": false,
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "address1",
+								"key": "address",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "address2",
+								"key": "address2",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "address_international",
+								"key": "address_international",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "email",
+								"key": "email1",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 3,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Name",
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								},
+								"key": "name",
+								"type": "textfield",
+								"calculateServer": false,
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "state",
+								"key": "state",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "city",
+								"key": "city",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "zip",
+								"key": "zip",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "verified",
+								"key": "verified2",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 3,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Status",
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								},
+								"key": "status",
+								"type": "textfield",
+								"calculateServer": false,
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "country",
+								"key": "country",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "work_phone",
+								"key": "work_phone",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}, {
+								"label": "home_phone",
+								"key": "home_phone",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false,
+								"validate": {
+									"unique": false,
+									"multiple": false
+								}
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 3,
+							"size": "md"
+						}, {
+							"components": [],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 3,
+							"size": "md"
+						}],
+						"hideLabel": true,
+						"dataGridLabel": false,
+						"tableView": false,
+						"key": "page7GroupColumns",
+						"type": "columns",
+						"input": false,
+						"inDataGrid": true
+					}, {
+						"label": "Document",
+						"hideLabel": true,
+						"tableView": true,
+						"storage": "base64",
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"multiple": true,
+						"persistent": false,
+						"protected": true,
+						"validate": {
+							"multiple": true,
+							"unique": false
+						},
+						"key": "document",
+						"type": "file",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"path": "groupPL",
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
-				"path": "groupPL"
+				"path": "addMembers",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Additional Insureds",
 				"widget": "choicesjs",
@@ -4791,7 +5534,9 @@
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
-					"required": true
+					"required": true,
+					"unique": false,
+					"multiple": false
 				},
 				"key": "additional_insured",
 				"type": "select",
@@ -4815,174 +5560,181 @@
 					"hideLabel": true,
 					"tableView": false,
 					"validate": {
-						"minLength": 1
+						"minLength": 1,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "groupAdditionalInsured",
 					"type": "datagrid",
 					"input": true,
 					"components": [{
-						"label": "Well",
-						"tableView": false,
-						"key": "well3",
-						"type": "well",
+						"label": "Columns",
 						"input": false,
-						"components": [{
-							"label": "Columns",
-							"input": false,
-							"tableView": false,
-							"key": "groupAdditionalInsuredsColumns",
-							"columns": [{
-								"components": [{
-									"label": "Name",
-									"spellcheck": true,
-									"tableView": true,
-									"validate": {
-										"required": true
-									},
-									"key": "name",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Address",
-									"spellcheck": true,
-									"tableView": true,
-									"validate": {
-										"required": true
-									},
-									"key": "address",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "City",
-									"spellcheck": true,
-									"tableView": true,
-									"validate": {
-										"required": true
-									},
-									"key": "city",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Country",
-									"widget": "choicesjs",
-									"tableView": true,
-									"dataSrc": "custom",
-									"data": {
-										"values": [{
-											"value": "",
-											"label": ""
-										}],
-										"custom": "values = data['countryList'];"
-									},
-									"valueProperty": "country",
-									"dataType": "string",
-									"template": "<span>{{ item.country }}</span>",
-									"selectThreshold": 0.3,
-									"validate": {
-										"required": true
-									},
-									"key": "country",
-									"properties": {
-										"clear_field": "state"
-									},
-									"type": "select",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "State",
-									"widget": "choicesjs",
-									"tableView": true,
-									"dataSrc": "custom",
-									"data": {
-										"values": [{
-											"value": "",
-											"label": ""
-										}],
-										"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
-									},
-									"template": "<span>{{ item }}</span>",
-									"selectThreshold": 0.3,
-									"validate": {
-										"required": true,
-										"customMessage": "State is required"
-									},
-									"key": "state",
-									"customConditional": "show = (row.country)",
-									"type": "select",
-									"refreshOn": "country",
-									"input": true,
-									"lockKey": true,
-									"clearOnRefresh": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Zip Code",
-									"spellcheck": true,
-									"tableView": true,
-									"validate": {
-										"required": true,
-										"pattern": "[0-9\\s-]*",
-										"customMessage": "Please enter a valid Zip Code for your region."
-									},
-									"key": "zip",
-									"type": "textfield",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
+						"tableView": false,
+						"key": "groupAdditionalInsuredsColumns",
+						"columns": [{
+							"components": [{
+								"label": "Name",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "name",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
 							}],
-							"type": "columns",
-							"inDataGrid": true,
-							"hideLabel": true
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Country",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"value": "",
+										"label": ""
+									}],
+									"custom": "values = data['countryList'];"
+								},
+								"valueProperty": "country",
+								"dataType": "string",
+								"template": "<span>{{ item.country }}</span>",
+								"selectThreshold": 0.3,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "country",
+								"properties": {
+									"clear_field": "state"
+								},
+								"type": "select",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Address",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "address",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "City",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "city",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "State",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"value": "",
+										"label": ""
+									}],
+									"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
+								},
+								"template": "<span>{{ item }}</span>",
+								"selectThreshold": 0.3,
+								"validate": {
+									"required": true,
+									"customMessage": "State is required",
+									"unique": false,
+									"multiple": false
+								},
+								"key": "state",
+								"type": "select",
+								"refreshOn": "country",
+								"input": true,
+								"lockKey": true,
+								"clearOnRefresh": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Zip Code",
+								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"pattern": "[0-9\\s-]*",
+									"customMessage": "Please enter a valid Zip Code for your region.",
+									"unique": false,
+									"multiple": false
+								},
+								"key": "zip",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
 						}],
+						"type": "columns",
 						"inDataGrid": true,
-						"clearOnHide": false,
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"path": "groupAdditionalInsured"
 				}],
@@ -5010,7 +5762,9 @@
 				},
 				"selectThreshold": 0.3,
 				"validate": {
-					"required": true
+					"required": true,
+					"unique": false,
+					"multiple": false
 				},
 				"key": "named_insureds",
 				"type": "select",
@@ -5028,7 +5782,11 @@
 					"tableView": true,
 					"key": "namedPadi",
 					"type": "textfield",
-					"input": true
+					"input": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Validate and Add Named Insureds",
 					"action": "event",
@@ -5046,7 +5804,11 @@
 					},
 					"type": "button",
 					"event": "callDelegate",
-					"input": true
+					"input": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Edit Grid",
 					"disableAddingRemovingRows": true,
@@ -5135,7 +5897,11 @@
 						"input": true,
 						"tableView": false
 					}],
-					"path": "namedInsureds"
+					"path": "namedInsureds",
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"type": "panel",
 				"conditional": {
@@ -5168,7 +5934,11 @@
 							"content": "Taxes",
 							"type": "htmlelement",
 							"hideLabel": true,
-							"tableView": false
+							"tableView": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}]
 					}, {
 						"components": [{
@@ -5189,7 +5959,11 @@
 							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}]
 					}, {
 						"components": [{
@@ -5210,7 +5984,11 @@
 							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}]
 					}],
 					[{
@@ -5226,7 +6004,11 @@
 							"content": "PADI Fee",
 							"type": "htmlelement",
 							"hideLabel": true,
-							"tableView": false
+							"tableView": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}]
 					}, {
 						"components": []
@@ -5249,7 +6031,11 @@
 							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}]
 					}],
 					[{
@@ -5265,7 +6051,11 @@
 							"content": "Total",
 							"type": "htmlelement",
 							"hideLabel": true,
-							"tableView": false
+							"tableView": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}]
 					}, {
 						"components": []
@@ -5289,7 +6079,11 @@
 							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}]
 					}]
 				],
@@ -5305,7 +6099,11 @@
 		"theme": "primary",
 		"tableView": false,
 		"label": "Panel",
-		"path": "page7"
+		"path": "page7",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}, {
 		"type": "panel",
 		"title": "Terms & Conditions",
@@ -5330,14 +6128,20 @@
 						"key": "page5ColumnsPanelContent",
 						"type": "htmlelement",
 						"input": false,
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}, {
 						"label": "Acknowledged",
 						"tableView": true,
 						"defaultValue": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please acknowledge."
+							"customMessage": "Please acknowledge.",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "page5ColumnsPanelAcknowledged",
 						"type": "checkbox",
@@ -5364,7 +6168,11 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 6,
 								"offset": 0,
@@ -5380,7 +6188,11 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 6,
 								"offset": 0,
@@ -5389,15 +6201,27 @@
 								"size": "md"
 							}],
 							"type": "columns",
-							"hideLabel": true
+							"hideLabel": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"type": "fieldset",
 						"hideLabel": true,
-						"label": "Field Set"
+						"label": "Field Set",
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"type": "panel",
 					"hideOnChildrenHidden": false,
-					"label": "Panel"
+					"label": "Panel",
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"offset": 0,
 				"push": 0,
@@ -5416,7 +6240,11 @@
 			"tableView": false,
 			"key": "page5Columns",
 			"type": "columns",
-			"input": false
+			"input": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "page5ColumnsPanel2",
 			"input": false,
@@ -5435,11 +6263,19 @@
 				"key": "page5ColumnsPanel2Content",
 				"type": "htmlelement",
 				"input": false,
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
 			"hideOnChildrenHidden": false,
-			"label": "Panel"
+			"label": "Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "page5ColumnsPanel3",
 			"input": false,
@@ -5455,11 +6291,19 @@
 				"key": "comments",
 				"type": "textarea",
 				"input": true,
-				"lockKey": true
+				"lockKey": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
 			"hideOnChildrenHidden": false,
-			"label": "Panel"
+			"label": "Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "page5ColumnsPanel4",
 			"input": false,
@@ -5478,7 +6322,11 @@
 				"key": "page5ColumnsPanel4Content",
 				"type": "htmlelement",
 				"input": false,
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"input": true,
 				"tableView": true,
@@ -5488,14 +6336,20 @@
 				"defaultValue": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Please agree."
+					"customMessage": "Please agree.",
+					"unique": false,
+					"multiple": false
 				},
 				"type": "checkbox",
 				"lockKey": true
 			}],
 			"type": "panel",
 			"hideOnChildrenHidden": false,
-			"label": "Panel"
+			"label": "Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}],
 		"input": false,
 		"key": "page5",
@@ -5503,7 +6357,11 @@
 		"tableView": false,
 		"breadcrumb": "none",
 		"label": "Panel",
-		"path": "page5"
+		"path": "page5",
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}, {
 		"key": "page5Panel",
 		"input": false,
@@ -5519,7 +6377,11 @@
 			"persistent": false,
 			"type": "hidden",
 			"lockKey": true,
-			"defaultValue": "Dive Boat"
+			"defaultValue": "Dive Boat",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -5535,7 +6397,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5545,7 +6411,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5555,7 +6425,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5565,7 +6439,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5575,7 +6453,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5585,7 +6467,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5595,7 +6481,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5605,7 +6495,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5615,7 +6509,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5625,7 +6523,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5634,7 +6536,11 @@
 					"protected": true,
 					"persistent": false,
 					"type": "hidden",
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 3,
 				"offset": 0,
@@ -5651,7 +6557,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5661,7 +6571,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5671,7 +6585,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5681,7 +6599,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5691,7 +6613,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5701,7 +6627,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5711,7 +6641,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5721,7 +6655,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5731,7 +6669,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5741,7 +6683,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5751,7 +6697,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 3,
 				"offset": 0,
@@ -5768,7 +6718,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5778,7 +6732,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5788,7 +6746,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5798,7 +6760,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5808,7 +6774,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5818,7 +6788,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5828,7 +6802,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5838,7 +6816,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5848,7 +6830,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5858,7 +6844,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5868,7 +6858,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 3,
 				"offset": 0,
@@ -5885,7 +6879,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5895,7 +6893,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5905,7 +6907,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5915,7 +6921,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5925,7 +6935,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5935,7 +6949,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5945,7 +6963,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5955,7 +6977,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5965,7 +6991,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5975,7 +7005,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -5985,7 +7019,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 3,
 				"offset": 0,
@@ -5994,7 +7032,11 @@
 				"size": "md"
 			}],
 			"type": "columns",
-			"hideLabel": true
+			"hideLabel": true,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "layup_period",
 			"persistent": false,
@@ -6005,7 +7047,11 @@
 			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"lockKey": true
+			"lockKey": true,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "layupDeductible",
 			"persistent": false,
@@ -6016,7 +7062,11 @@
 			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"lockKey": true
+			"lockKey": true,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"input": true,
 			"tableView": true,
@@ -6025,7 +7075,11 @@
 			"protected": true,
 			"persistent": false,
 			"type": "hidden",
-			"lockKey": true
+			"lockKey": true,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -6045,7 +7099,11 @@
 					"type": "htmlelement",
 					"hideLabel": true,
 					"hideOnChildrenHidden": false,
-					"tableView": false
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Columns",
 					"input": false,
@@ -6071,7 +7129,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 4,
 						"offset": 0,
@@ -6098,7 +7160,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "hull_deductible",
 							"calculateValue": "value = '1000.00';",
@@ -6106,7 +7172,11 @@
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "Dinghy / Tender Premium",
 							"prefix": "$",
@@ -6126,7 +7196,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "Trailer Premium",
 							"prefix": "$",
@@ -6146,7 +7220,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 8,
 						"offset": 0,
@@ -6156,7 +7234,11 @@
 					}],
 					"type": "columns",
 					"hideLabel": true,
-					"path": "page5PanelColumnsColumns2"
+					"path": "page5PanelColumnsColumns2",
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Property Base Premium",
 					"prefix": "$",
@@ -6176,7 +7258,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Age > 25 Surcharge",
 					"prefix": "$",
@@ -6196,7 +7282,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Columns",
 					"input": false,
@@ -6212,7 +7302,11 @@
 							"defaultValue": false,
 							"type": "checkbox",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 3,
 						"offset": 0,
@@ -6238,7 +7332,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 9,
 						"offset": 0,
@@ -6247,7 +7345,11 @@
 						"size": "md"
 					}],
 					"type": "columns",
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Columns",
 					"input": false,
@@ -6269,7 +7371,11 @@
 									"defaultValue": false,
 									"type": "checkbox",
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 3,
 								"offset": 0,
@@ -6295,7 +7401,11 @@
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 9,
 								"offset": 0,
@@ -6304,7 +7414,11 @@
 								"size": "md"
 							}],
 							"type": "columns",
-							"hideLabel": true
+							"hideLabel": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "Columns",
 							"input": false,
@@ -6320,7 +7434,11 @@
 									"defaultValue": false,
 									"type": "checkbox",
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 3,
 								"offset": 0,
@@ -6347,7 +7465,11 @@
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 9,
 								"offset": 0,
@@ -6356,7 +7478,11 @@
 								"size": "md"
 							}],
 							"type": "columns",
-							"hideLabel": true
+							"hideLabel": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "Columns",
 							"input": false,
@@ -6372,7 +7498,11 @@
 									"defaultValue": false,
 									"type": "checkbox",
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 3,
 								"offset": 0,
@@ -6398,7 +7528,11 @@
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"validate": {
+										"unique": false,
+										"multiple": false
+									}
 								}],
 								"width": 9,
 								"offset": 0,
@@ -6407,7 +7541,11 @@
 								"size": "md"
 							}],
 							"type": "columns",
-							"hideLabel": true
+							"hideLabel": true,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "Property Sub Total",
 							"prefix": "$",
@@ -6427,7 +7565,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}, {
 							"label": "Property SubTotal ProRated",
 							"prefix": "$",
@@ -6447,7 +7589,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 12,
 						"offset": 0,
@@ -6463,7 +7609,11 @@
 						"size": "md"
 					}],
 					"type": "columns",
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 6,
 				"offset": 0,
@@ -6489,7 +7639,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"key": "page5PanelColumnsContent2",
 					"label": "Content",
@@ -6503,7 +7657,11 @@
 					"type": "htmlelement",
 					"hideLabel": true,
 					"hideOnChildrenHidden": false,
-					"tableView": false
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "LiabilityPremium1M",
 					"redrawOn": "data",
@@ -6512,7 +7670,11 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "liability_deductible",
 					"calculateValue": "value = '1000.00';",
@@ -6520,7 +7682,11 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Liability",
 					"prefix": "$",
@@ -6540,7 +7706,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Excess Liability Premium",
 					"prefix": "$",
@@ -6559,7 +7729,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "primaryLimit",
 					"calculateValue": "value = '1000000.00';",
@@ -6567,7 +7741,11 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "excessLiabilityLimit",
 					"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9000000.00';\n}",
@@ -6575,7 +7753,11 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "totalLiabilityLimit",
 					"calculateValue": "value = (parseFloat(data['primaryLimit']) + parseFloat(data['excessLiabilityLimit']));",
@@ -6583,7 +7765,11 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Dingy Liability Coverage",
 					"prefix": "$",
@@ -6603,7 +7789,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Passenger Premium",
 					"prefix": "$",
@@ -6623,7 +7813,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Crew On Boat Premium",
 					"prefix": "$",
@@ -6643,7 +7837,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Crew Members in Water Premium",
 					"prefix": "$",
@@ -6662,7 +7860,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "totalLiability",
 					"persistent": false,
@@ -6674,7 +7876,11 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Columns",
 					"input": false,
@@ -6690,7 +7896,11 @@
 							"defaultValue": false,
 							"type": "checkbox",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 3,
 						"offset": 0,
@@ -6716,7 +7926,11 @@
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"validate": {
+								"unique": false,
+								"multiple": false
+							}
 						}],
 						"width": 9,
 						"offset": 0,
@@ -6725,7 +7939,11 @@
 						"size": "md"
 					}],
 					"type": "columns",
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Liability Sub Total",
 					"prefix": "$",
@@ -6745,7 +7963,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "Liability SubTotal ProRated",
 					"prefix": "$",
@@ -6764,7 +7986,11 @@
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 6,
 				"offset": 0,
@@ -6774,7 +8000,11 @@
 			}],
 			"type": "columns",
 			"hideLabel": true,
-			"path": "page5PanelColumns"
+			"path": "page5PanelColumns",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"clearOnHide": false,
 			"input": false,
@@ -6795,7 +8025,11 @@
 						"content": "Premium Total ProRated",
 						"type": "htmlelement",
 						"hideLabel": true,
-						"tableView": false
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}, {
 					"components": [{
@@ -6817,7 +8051,11 @@
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}],
 				[{
@@ -6833,7 +8071,11 @@
 						"content": "Group Professional Liability",
 						"type": "htmlelement",
 						"hideLabel": true,
-						"tableView": false
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}, {
 					"components": [{
@@ -6855,7 +8097,11 @@
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}],
 				[{
@@ -6872,7 +8118,11 @@
 						"type": "htmlelement",
 						"lockKey": true,
 						"hideLabel": true,
-						"tableView": false
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}, {
 					"components": [{
@@ -6894,7 +8144,11 @@
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}],
 				[{
@@ -6911,7 +8165,11 @@
 						"type": "htmlelement",
 						"lockKey": true,
 						"hideLabel": true,
-						"tableView": false
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}, {
 					"components": [{
@@ -6934,14 +8192,22 @@
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}]
 				}]
 			],
 			"tableView": false,
 			"type": "table",
 			"hideLabel": true,
-			"label": "Table"
+			"label": "Table",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -6959,14 +8225,22 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "AgeSurcharge",
 					"key": "ageSurcharge",
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -6976,7 +8250,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -6986,7 +8264,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -6996,7 +8278,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7006,7 +8292,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7016,7 +8306,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7026,7 +8320,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7036,7 +8334,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7046,7 +8348,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7056,7 +8362,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7066,7 +8376,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7076,7 +8390,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "CrewInBoat",
 					"persistent": false,
@@ -7086,7 +8404,11 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7096,7 +8418,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7106,7 +8432,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "excessLiabilityCoverage2000000",
 					"persistent": false,
@@ -7117,7 +8447,11 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7127,7 +8461,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7137,7 +8475,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7147,7 +8489,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 6,
 				"offset": 0,
@@ -7165,7 +8511,11 @@
 					"type": "hidden",
 					"lockKey": true,
 					"calculateValue": "value = moment(). format('YYYY MM DD')",
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7176,7 +8526,11 @@
 					"type": "hidden",
 					"lockKey": true,
 					"calculateValue": "value = Math.round((new Date(data['end_date']) - new Date(data['DateEffective'])) / (1000 * 3600 * 24))",
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7186,7 +8540,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7196,7 +8554,11 @@
 					"persistent": false,
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7204,7 +8566,11 @@
 					"label": "stateTaxData",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7212,7 +8578,11 @@
 					"label": "groupCoverageMoreThan0",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7220,7 +8590,11 @@
 					"label": "groupCoverageMoreThan25000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7228,7 +8602,11 @@
 					"label": "groupCoverageMoreThan50000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7236,7 +8614,11 @@
 					"label": "groupCoverageMoreThan100000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7244,7 +8626,11 @@
 					"label": "groupCoverageMoreThan150000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7252,7 +8638,11 @@
 					"label": "groupCoverageMoreThan200000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7260,7 +8650,11 @@
 					"label": "groupCoverageMoreThan250000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7268,7 +8662,11 @@
 					"label": "groupCoverageMoreThan350000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7276,7 +8674,11 @@
 					"label": "groupCoverageMoreThan500000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7284,7 +8686,11 @@
 					"label": "groupExcessLiability1M",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7292,7 +8698,11 @@
 					"label": "groupExcessLiability2M",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7300,7 +8710,11 @@
 					"label": "groupExcessLiability3M",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7308,7 +8722,11 @@
 					"label": "groupExcessLiability4M",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -7316,7 +8734,11 @@
 					"label": "groupExcessLiability9M",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "groupExcessLiabilityLimit",
 					"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '100000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '200000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '300000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '400000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '900000';\n}",
@@ -7324,7 +8746,11 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "combinedSingalLimit",
 					"calculateValue": "var limit = '100000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
@@ -7332,7 +8758,11 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}, {
 					"label": "annualAggregate",
 					"calculateValue": "var limit = '1,00,000';\nvalue = parseFloat(data['primaryCombinedSingalLimit']) + parseFloat(limit);",
@@ -7340,7 +8770,11 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
 				"width": 6,
 				"offset": 0,
@@ -7351,21 +8785,33 @@
 			"type": "columns",
 			"hideLabel": true,
 			"lockKey": true,
-			"path": "total_col"
+			"path": "total_col",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"input": true,
 			"tableView": true,
 			"key": "groupPadiFee",
 			"label": "groupPadiFee",
 			"type": "hidden",
-			"lockKey": true
+			"lockKey": true,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"label": "amount",
 			"calculateValue": "value = parseFloat(data['total']).toFixed(2);",
 			"key": "amount",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "page5Panel4",
 			"input": false,
@@ -7390,7 +8836,11 @@
 						"type": "htmlelement",
 						"hideLabel": true,
 						"hideOnChildrenHidden": false,
-						"tableView": false
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"width": 5,
 					"offset": 0,
@@ -7413,7 +8863,9 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data['quote_due_date'] && data['quote_due_date'] != ''){\n  valid = (moment(data['quote_due_date']) > moment()) ? true : \"Date must not be less than today's date \"+moment().format('MM-DD-YYYY');\n}"
+							"custom": "if(data['quote_due_date'] && data['quote_due_date'] != ''){\n  valid = (moment(data['quote_due_date']) > moment()) ? true : \"Date must not be less than today's date \"+moment().format('MM-DD-YYYY');\n}",
+							"unique": false,
+							"multiple": false
 						},
 						"key": "quote_due_date",
 						"type": "datetime",
@@ -7452,7 +8904,11 @@
 					"size": "md"
 				}],
 				"type": "columns",
-				"hideLabel": true
+				"hideLabel": true,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"key": "page5Panel4Content2",
 				"label": "Content",
@@ -7464,7 +8920,11 @@
 				"content": "<p>Select or enter the requirements to bind coverage</p>",
 				"type": "htmlelement",
 				"hideLabel": true,
-				"tableView": false
+				"tableView": false,
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}, {
 				"label": "Data Grid",
 				"disableAddingRemovingRows": false,
@@ -7531,7 +8991,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"unique": false,
+									"multiple": false
 								},
 								"key": "quoteInfo",
 								"type": "select",
@@ -7572,17 +9034,33 @@
 						}],
 						"type": "columns",
 						"inDataGrid": true,
-						"hideLabel": true
+						"hideLabel": true,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						}
 					}],
 					"inDataGrid": true,
 					"clearOnHide": false,
-					"hideLabel": true
+					"hideLabel": true,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
 				}],
-				"path": "quoteRequirement"
+				"path": "quoteRequirement",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
 			"label": "Panel",
-			"path": "page5Panel4"
+			"path": "page5Panel4",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"key": "page5Panel2",
 			"input": false,
@@ -7610,7 +9088,9 @@
 					}],
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"unique": false,
+						"multiple": false
 					},
 					"key": "csrApproved",
 					"type": "radio",
@@ -7640,11 +9120,19 @@
 				"type": "well",
 				"hideLabel": true,
 				"label": "",
-				"path": "page5Panel2Well"
+				"path": "page5Panel2Well",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				}
 			}],
 			"type": "panel",
 			"lockKey": true,
-			"label": "Panel"
+			"label": "Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
@@ -7661,7 +9149,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 40,
+	"_vid": 60,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -7679,6 +9167,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-03-27T05:49:20.924Z",
+	"modified": "2020-03-27T11:20:57.099Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
