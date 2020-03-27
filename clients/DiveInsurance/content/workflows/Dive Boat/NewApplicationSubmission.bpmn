@@ -153,7 +153,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_122vx8d" sourceRef="ServiceTask_0ujmkhk" targetRef="UserTask_0h45jpd" />
     <bpmn:sequenceFlow id="SequenceFlow_17buw5i" sourceRef="ExclusiveGateway_0nwu4cb" targetRef="UserTask_0h45jpd">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false &amp;&amp; csrApproved == "accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0a6b2gy" sourceRef="UserTask_0h45jpd" targetRef="ServiceTask_1oi73v1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
