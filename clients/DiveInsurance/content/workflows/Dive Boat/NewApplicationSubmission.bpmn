@@ -143,17 +143,6 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_0us75hh</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0nwu4cb" camunda:asyncAfter="true">
-      <bpmn:extensionElements>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">def approved = execution.getVariable('csrApproved')
-
-if(approved == "rejected"){
-  execution.setVariable('RejectedPolicy', true)
-}else{  
-  execution.setVariable('RejectedPolicy', false)
-}</camunda:script>
-        </camunda:executionListener>
-      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1xzj7sg</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_17buw5i</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0lj6gpd</bpmn:outgoing>
@@ -164,7 +153,7 @@ if(approved == "rejected"){
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_122vx8d" sourceRef="ServiceTask_0ujmkhk" targetRef="UserTask_0h45jpd" />
     <bpmn:sequenceFlow id="SequenceFlow_17buw5i" sourceRef="ExclusiveGateway_0nwu4cb" targetRef="UserTask_0h45jpd">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false &amp;&amp; RejectedPolicy == "accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0a6b2gy" sourceRef="UserTask_0h45jpd" targetRef="ServiceTask_1oi73v1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
@@ -180,14 +169,14 @@ if(approved == "rejected"){
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1w9m9jn" sourceRef="ServiceTask_1oi73v1" targetRef="UserTask_1ffuff9" />
     <bpmn:sequenceFlow id="SequenceFlow_0lj6gpd" sourceRef="ExclusiveGateway_0nwu4cb" targetRef="ServiceTask_1oi73v1">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == "rejected"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; csrApproved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0rdrzqs" name="Yes" sourceRef="ExclusiveGateway_072c80l" targetRef="ServiceTask_1e7jxo6">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false || automatic_renewal=="false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0us75hh" sourceRef="ServiceTask_1b1as1f" targetRef="ServiceTask_1e7jxo6" />
     <bpmn:sequenceFlow id="SequenceFlow_1nijcya" sourceRef="ExclusiveGateway_0nwu4cb" targetRef="ServiceTask_0ujmkhk">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == "accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; csrApproved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0zl6fqx" name="No" sourceRef="ExclusiveGateway_072c80l" targetRef="ServiceTask_1b1as1f">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true || automatic_renewal=="true"}</bpmn:conditionExpression>

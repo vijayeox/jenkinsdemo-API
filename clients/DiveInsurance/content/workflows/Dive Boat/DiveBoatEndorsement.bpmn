@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0i0wmro" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0i0wmro" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="Process_1beehty" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0aopkcj" name="Start Endorsement" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -136,17 +136,6 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_1i7wk8i</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0m05kft" camunda:asyncAfter="true">
-      <bpmn:extensionElements>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">def approved = execution.getVariable('csrApproved')
-
-if(approved == "rejected"){
-  execution.setVariable('RejectedPolicy', true)
-}else{  
-  execution.setVariable('RejectedPolicy', false)
-}</camunda:script>
-        </camunda:executionListener>
-      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1dip504</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ei397z</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0hj9ar9</bpmn:outgoing>
@@ -166,7 +155,7 @@ if(approved == "rejected"){
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1i7wk8i" sourceRef="ServiceTask_1f9f9mg" targetRef="UserTask_17tssw0" />
     <bpmn:sequenceFlow id="SequenceFlow_0ei397z" sourceRef="ExclusiveGateway_0m05kft" targetRef="Task_0v80utj">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false &amp;&amp; RejectedPolicy == "accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1yj15ec" sourceRef="UserTask_17tssw0" targetRef="ServiceTask_0yopds7">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
@@ -175,7 +164,7 @@ if(approved == "rejected"){
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0hj9ar9" sourceRef="ExclusiveGateway_0m05kft" targetRef="ServiceTask_0yopds7">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == "rejected"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; csrApproved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0k4gf9r" sourceRef="ServiceTask_0yopds7" targetRef="UserTask_06fi2tn" />
     <bpmn:sequenceFlow id="SequenceFlow_00uri8d" sourceRef="UserTask_06fi2tn" targetRef="ExclusiveGateway_1ym0u01" />
@@ -183,7 +172,7 @@ if(approved == "rejected"){
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="true"|| userApproved == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0a9e30e" sourceRef="ExclusiveGateway_0m05kft" targetRef="ServiceTask_1f9f9mg">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; RejectedPolicy == "accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; csrApproved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0b025ou" sourceRef="Task_0v80utj" targetRef="UserTask_17tssw0" />
     <bpmn:serviceTask id="Task_0v80utj" name="Policy Status Change During Review" camunda:expression="0">
@@ -202,9 +191,9 @@ if(approved == "rejected"){
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1beehty">
       <bpmndi:BPMNShape id="StartEvent_0aopkcj_di" bpmnElement="StartEvent_0aopkcj">
-        <dc:Bounds x="170" y="279" width="36" height="36" />
+        <dc:Bounds x="155" y="299" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="156" y="322" width="66" height="27" />
+          <dc:Bounds x="136" y="345" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1t2fgpu_di" bpmnElement="ServiceTask_1t2fgpu">
@@ -247,9 +236,7 @@ if(approved == "rejected"){
         <dc:Bounds x="255" y="292" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1dip504_di" bpmnElement="SequenceFlow_1dip504">
-        <di:waypoint x="206" y="297" />
-        <di:waypoint x="231" y="297" />
-        <di:waypoint x="231" y="317" />
+        <di:waypoint x="191" y="317" />
         <di:waypoint x="255" y="317" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1rxjqv7_di" bpmnElement="SequenceFlow_1rxjqv7">

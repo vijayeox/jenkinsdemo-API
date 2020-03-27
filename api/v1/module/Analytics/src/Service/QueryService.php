@@ -16,6 +16,7 @@ use Oxzion\InvalidInputException;
 use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
+
 class QueryService extends AbstractService
 {
 
@@ -135,7 +136,9 @@ class QueryService extends AbstractService
                 'query' => $resultSet[0]
             ];
             //Query configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
-            $response['query']['configuration'] = json_decode($resultSet[0]["configuration"]);
+            if ($resultSet[0]["configuration"]) {
+                $response['query']['configuration'] = json_decode($resultSet[0]["configuration"]);
+            }
         }
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
@@ -194,7 +197,7 @@ class QueryService extends AbstractService
             return 0;
     }
 
-    public function executeAnalyticsQuery($uuid,$filter=null) {
+    public function executeAnalyticsQuery($uuid,$overRides=null) {
         $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid';
         $queryParams = [
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -205,7 +208,21 @@ class QueryService extends AbstractService
         if (count($resultSet) == 0) {
             return 0;
         }
-        $result = $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid'],$filter);
+        $configuration = $resultSet[0]['configuration'];
+        $configArray = json_decode($configuration,1);
+        if (isset($overRides[$uuid])) {
+            if (isset($overRides[$uuid]['filter'])) {
+                $configArray['inline_filter'][] = $overRides[$uuid]['filter'];
+                unset($overRides[$uuid]['filter']);
+            }
+            if (!empty($overRides[$uuid])) {
+                foreach($overRides[$uuid] as $key=>$config) {
+                    $configArray[$key]=$config;
+                }
+            }
+        }
+        $configuration = json_encode($configArray);
+        $result = $this->runQuery($configuration,$resultSet[0]['datasource_uuid'],$overRides);
 
   //      } catch(Exception $e) {
    //         return 0;
@@ -243,14 +260,23 @@ class QueryService extends AbstractService
         return $result['data'];
     }
 
-    private function runQuery($configuration,$datasource_uuid,$filter=null)
+    private function runQuery($configuration,$datasource_uuid,$overRides=null)
     {
         $analyticsEngine = $this->datasourceService->getAnalyticsEngine($datasource_uuid);
         $parameters = json_decode($configuration,1);
-        if (!empty($filter)) {
-            $filter = '{"filter":'.$filter.'}';
-            $filter = json_decode($filter,1); 
-            $parameters['inline_filter']=$filter['filter'];
+        if (!isset($parameters['inline_filter'])) {
+            $parameters['inline_filter'] = [];
+        }
+        if (!empty($overRides)) {
+            if (isset($overRides['filter'])) {
+                $filter = '{"filter":'.$overRides['filter'].'}';
+                $filter = json_decode($filter,1); 
+                $parameters['inline_filter'][] = $filter['filter']; //inline filter takes the highest precedence
+                unset($overRides['filter']);
+            }
+            foreach($overRides as $key=>$value) {
+                $parameters[$key]=$value;
+            }
         }
         $app_name = $parameters['app_name'];
         if (isset($parameters['entity_name'])) {
@@ -277,14 +303,14 @@ class QueryService extends AbstractService
         return $data;
     }
 
-    public function runMultipleQueries($uuidList,$filter=null)
+    public function runMultipleQueries($uuidList,$overRides=null)
     {
         $aggCheck = 0;
         $data = array();
         $resultCount = count($uuidList);
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -".$value);
-            $queryData = $this->executeAnalyticsQuery($value,$filter);
+            $queryData = $this->executeAnalyticsQuery($value,$overRides);
             $this->logger->info("Executing AnalyticsQuery returned -".print_r($queryData,true));
             if($queryData == null || $queryData == 0)
                 throw new InvalidInputException("uuid entered is incorrect - $value", 1);
