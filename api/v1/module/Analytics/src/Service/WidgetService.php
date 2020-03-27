@@ -426,4 +426,3 @@ class WidgetService extends AbstractService
         }
     }
 }
-

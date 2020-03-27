@@ -16,7 +16,6 @@ use Oxzion\InvalidInputException;
 use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
-use function GuzzleHttp\json_encode;
 
 class QueryService extends AbstractService
 {
@@ -216,8 +215,10 @@ class QueryService extends AbstractService
                 $configArray['inline_filter'][] = $overRides[$uuid]['filter'];
                 unset($overRides[$uuid]['filter']);
             }
-            foreach($overRides[$uuid] as $key=>$config) {
-                $configArray[$key]=$config;
+            if (!empty($overRides[$uuid])) {
+                foreach($overRides[$uuid] as $key=>$config) {
+                    $configArray[$key]=$config;
+                }
             }
         }
         $configuration = json_encode($configArray);

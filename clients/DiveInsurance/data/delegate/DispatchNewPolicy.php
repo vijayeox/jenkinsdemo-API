@@ -48,8 +48,12 @@ class DispatchNewPolicy extends DispatchDocument {
         if(count($this->required[$data['product']]['docs']) == count($document)){
             foreach($this->document[$data['product']]['docs'] as $file){
                 if(array_key_exists($file,$data['documents'])){
-
-                    $file = $this->destination.$data['documents'][$file];
+                    if(is_array($data['documents'][$file])){
+                            $doc = end($data['documents'][$file]);
+                    }else{
+                            $doc = $data['documents'][$file];
+                    }
+                    $file = $this->destination.$doc;
                     if(file_exists($file)){
                          array_push($fileData, $file);         
                     }else{
@@ -58,7 +62,6 @@ class DispatchNewPolicy extends DispatchDocument {
                     }
                 }
             }
-
 
             if(count($errorFile) > 0){
                 $error = json_encode($errorFile);

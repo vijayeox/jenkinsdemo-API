@@ -285,9 +285,6 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
                 unset($data[$unsetOptions[$i]]);
             }
         }
-        if(!isset($data['initiatedByCsr']) || !$data['initiatedByCsr']){
-            unset($data['endorsement_options']);
-        }
         $data['endorsementCoverage'] = $endorsementCoverage;
         $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
         $data['endorsementGroupLiability'] = $endorsementGroupLiability;
