@@ -452,6 +452,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['policyStatus'] = "Lapsed";
             } else {
                 $data['policyStatus'] = "In Force";
+                if(isset($data['endorsement_options'])){
+                    unset($data['endorsement_options']);
+                }
             }
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
