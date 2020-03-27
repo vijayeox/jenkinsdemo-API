@@ -44,14 +44,10 @@ class DispatchProposalDocument extends DispatchDocument {
         if(count($this->required[$data['product']]['docs']) == count($document)){
             foreach($this->document[$data['product']]['docs'] as $file){
                 if(array_key_exists($file,$data['documents'])){
-                    if($file == 'coi_document'){
-                        if(is_array($data['documents'][$file])){
+                    if(is_array($data['documents'][$file])){
                             $doc = end($data['documents'][$file]);
-                        }else{
-                            $doc = $data['documents'][$file];
-                        }
                     }else{
-                        $doc = $data['documents'][$file];
+                            $doc = $data['documents'][$file];
                     }
                     $file = $this->destination.$doc;
                     if(file_exists($file)){
