@@ -28,11 +28,17 @@ class DispatchReinstatePolicyMail extends DispatchDocument
             $temp = json_decode($data['reinstateDocuments'], true);
         }
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $data['orgUuid']));
-        
+        $data['documents_history'] = array();
+        array_push($data['documents_history'], $data['reinstateDocuments']);
+        array_push($data['documents_history'], $data['documents']);
+        unset($data['documents']);
         unset($data['documents']);
         $this->logger->info("Dispatch reinstate policy mail notification - data consists of:".json_encode($temp));
         foreach($temp as $key => $value){
-            $this->logger->info("The documents consist of : $value");
+            $this->logger->info("The documents consist of : ". print_r($value, true));
+            if (is_array($value)) {
+                $value = $value[0];
+            }
             $fileName = basename($value);
             $this->logger->info("the fileName is: ".print_r($fileName, true));
             $this->logger->info("the new path is : ".json_encode($dest));
