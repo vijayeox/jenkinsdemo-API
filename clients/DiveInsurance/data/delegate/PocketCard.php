@@ -70,7 +70,7 @@ class PocketCard extends PolicyDocument
         $this->logger->info("he total number of files fetched is : ".print_r($files['total'], true));
         $totalfiles = json_decode($files['total']);
         if($totalfiles == 0){
-            $data['product'] = 'No Records Found';
+            $data['jobStatus'] = 'No Records Found';
         } 
         $this->logger->info("the file details of get file is : ".print_r($files['data'], true));
         $options = array();
@@ -94,7 +94,7 @@ class PocketCard extends PolicyDocument
             $newData[$key]['state'] = $value['state'];
             $newData[$key]['zip'] = $value['zip'];
             $newData[$key]['entity_name'] = 'Pocket Card Job';
-            if($value['business_name'] && isset($value['business_name'])){
+            if(isset($value['business_name']) && $value['business_name']){
                 $newData[$key]['business_name'] = $value['business_name'];
             }
         }
