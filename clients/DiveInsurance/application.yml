@@ -517,7 +517,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -526,7 +526,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -535,7 +535,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -544,7 +544,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -703,7 +703,7 @@ menu:
                                 title: Product
                                 field: pocketCardProductType
                             -
-                                title: 'Job Status'
+                                title: Status
                                 field: jobStatus
     -
         name: MyAssignments
@@ -819,22 +819,22 @@ workflow:
     -
         bpmn_file: 'Cancel Policy/CancelPolicyIPL.bpmn'
         entity: 'Individual Professional Liability'
-        name: 'Cancel Policy'
+        name: 'IPL Cancel Policy'
         uuid: 71cb9e10-5845-4379-97c9-f9486b702bda
     -
         bpmn_file: 'Cancel Policy/CancelPolicyEFR.bpmn'
         entity: 'Emergency First Response'
-        name: 'Cancel Policy'
+        name: 'EFR Cancel Policy'
         uuid: 81cb9e10-5845-4379-97c9-f9486b702bda
     -
         bpmn_file: 'Cancel Policy/CancelPolicyDB.bpmn'
         entity: 'Dive Boat'
-        name: 'Cancel Policy'
+        name: 'DB Cancel Policy'
         uuid: 91cb9e10-5845-4379-97c9-f9486b702bda
     -
         bpmn_file: 'Cancel Policy/CancelPolicyDS.bpmn'
         entity: 'Dive Store'
-        name: 'Cancel Policy'
+        name: 'DS Cancel Policy'
         uuid: 61cb9e10-5845-4379-97c9-f9486b702bda
     -
         name: 'Dive Boat'
