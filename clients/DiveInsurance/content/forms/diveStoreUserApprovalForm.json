@@ -327,6 +327,15 @@
         "key": "paymentVerified",
         "type": "radio",
         "input": true
+      }, {
+        "label": "Notes",
+        "autoExpand": false,
+        "spellcheck": true,
+        "tableView": true,
+        "calculateServer": false,
+        "key": "notes",
+        "type": "textarea",
+        "input": true
       }]
     }],
     "path": "page5Panel"
@@ -357,6 +366,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-27T19:59:17.184Z",
+  "modified": "2020-03-28T12:14:14.238Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

@@ -222,6 +222,17 @@
 		"lockKey": true,
 		"label": "Panel"
 	}, {
+		"label": "Policy Status",
+		"calculateValue": "if(data.privileges && data.privileges['MANAGE_MY_POLICY_READ']){\n  value = 'Cancellation Approval Pending';\n}",
+		"key": "policyStatus",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
+	}, {
 		"input": true,
 		"label": "Submit",
 		"tableView": false,
@@ -233,7 +244,7 @@
 		}
 	}],
 	"revisions": "original",
-	"_vid": 78,
+	"_vid": 81,
 	"title": "Cancel Policy Generic",
 	"display": "form",
 	"access": [{
@@ -247,7 +258,7 @@
 	"path": "cancelpolicygeneric",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-08T05:30:33.387Z",
-	"modified": "2020-03-11T10:37:33.101Z",
+	"modified": "2020-03-26T12:54:56.433Z",
 	"machineName": "testdivehub:cancelPolicyGeneric",
 	"controller": ""
 }
