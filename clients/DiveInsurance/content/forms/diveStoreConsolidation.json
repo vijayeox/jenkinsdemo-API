@@ -11,7 +11,8 @@
 		"tableView": false,
 		"components": [{
 			"label": "product",
-			"customDefaultValue": "value = 'Dive Boat'",
+			"customDefaultValue": "value = 'Dive Store'",
+			"calculateServer": false,
 			"key": "product",
 			"type": "hidden",
 			"input": true,
@@ -7503,7 +7504,23 @@
 			"type": "columns",
 			"input": false,
 			"path": "page5Columns"
-		}, {
+		}],
+		"input": false,
+		"key": "page5",
+		"theme": "primary",
+		"tableView": false,
+		"label": "Panel"
+	}, {
+		"title": "Quote Approval",
+		"theme": "primary",
+		"collapsible": false,
+		"tableView": false,
+		"key": "page5PanelPanel",
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"type": "panel",
+		"label": "Quote Approval",
+		"input": false,
+		"components": [{
 			"label": "well",
 			"hidden": true,
 			"tableView": false,
@@ -8410,24 +8427,9 @@
 				"hideLabel": true
 			}],
 			"hideLabel": true,
-			"lockKey": true
-		}],
-		"input": false,
-		"key": "page5",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel"
-	}, {
-		"title": "Quote Approval",
-		"theme": "primary",
-		"collapsible": false,
-		"tableView": false,
-		"key": "page5PanelPanel",
-		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-		"type": "panel",
-		"label": "Quote Approval",
-		"input": false,
-		"components": [{
+			"lockKey": true,
+			"hideOnChildrenHidden": false
+		}, {
 			"label": "Columns",
 			"input": false,
 			"tableView": false,
@@ -8455,6 +8457,7 @@
 					"columns": [{
 						"components": [{
 							"label": "Coverage",
+							"widget": "choicesjs",
 							"tableView": true,
 							"data": {
 								"values": [{
@@ -8508,11 +8511,15 @@
 								}]
 							},
 							"selectThreshold": 0.3,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
 							"key": "liabilityCoverageOption",
 							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
@@ -8589,26 +8596,31 @@
 						"size": "md"
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
-							"inputType": "number",
 							"label": "Medical Expense",
-							"key": "MedicalExpenseFP",
 							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": false,
+							"disabled": true,
+							"tableView": false,
 							"defaultValue": "0.00",
+							"delimiter": false,
+							"requireDecimal": true,
+							"inputFormat": "plain",
 							"clearOnHide": false,
-							"type": "number",
+							"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
+							"calculateServer": false,
+							"key": "MedicalExpenseFP",
 							"conditional": {
-								"show": "true",
+								"show": true,
 								"when": "medicalExpensePLCheckBox",
 								"eq": "true"
 							},
-							"hideLabel": true,
-							"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
-							"disabled": true,
-							"requireDecimal": true,
-							"lockKey": true,
+							"type": "number",
 							"decimalLimit": 2,
+							"input": true,
+							"inputType": "number",
+							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 6,
@@ -8899,37 +8911,47 @@
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "ProRata Prem %",
-						"key": "proRataPercentage",
 						"prefix": "%",
-						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
-						"calculateValue": "var selectedDate = new Date(data[\"dsbireqpolicyperiod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
-						"decimalLimit": 2,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": false,
 						"requireDecimal": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "var selectedDate = new Date(data[\"policyPeriod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
+						"calculateServer": false,
+						"key": "proRataPercentage",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
 						"lockKey": true
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Liability Amount with ProRata",
-						"key": "liabilityProRataPremium",
 						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
 						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
-						"lockKey": true,
+						"delimiter": false,
 						"requireDecimal": true,
-						"decimalLimit": 2,
+						"inputFormat": "plain",
+						"clearOnHide": false,
 						"calculateValue": "value=(parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)",
-						"disabled": true
+						"calculateServer": false,
+						"key": "liabilityProRataPremium",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true
 					}]
 				}],
 				[{
@@ -9019,20 +9041,25 @@
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Prop Tax %",
-						"key": "propertyTaxPL",
 						"prefix": "%",
-						"defaultValue": "0",
-						"clearOnHide": false,
-						"type": "number",
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
-						"decimalLimit": 3,
+						"tableView": true,
+						"defaultValue": "0",
+						"delimiter": false,
 						"requireDecimal": true,
-						"lockKey": true,
-						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);"
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
+						"calculateServer": false,
+						"key": "propertyTaxPL",
+						"type": "number",
+						"decimalLimit": 3,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -9069,20 +9096,25 @@
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Lia Tax %",
-						"key": "liabilityTaxPL",
 						"prefix": "%",
-						"defaultValue": "0",
-						"clearOnHide": false,
-						"type": "number",
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
-						"decimalLimit": 3,
+						"tableView": true,
+						"defaultValue": "0",
+						"delimiter": false,
 						"requireDecimal": true,
-						"lockKey": true,
-						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);"
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
+						"calculateServer": false,
+						"key": "liabilityTaxPL",
+						"type": "number",
+						"decimalLimit": 3,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -9266,20 +9298,25 @@
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Property Deductibles Percentage",
-						"key": "propertyDeductiblesPercentage",
 						"prefix": "%",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
 						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
-						"lockKey": true,
+						"delimiter": false,
 						"requireDecimal": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "if(data['propertyDeductibles'] && data[data['propertyDeductibles']]) {\n  value = (data[data[\"propertyDeductibles\"]]||0)\n}",
+						"calculateServer": false,
+						"key": "propertyDeductiblesPercentage",
+						"type": "number",
 						"decimalLimit": 2,
-						"calculateValue": "value = (data[data[\"propertyDeductibles\"]]||0)",
-						"disabled": true
+						"input": true,
+						"inputType": "number",
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -9351,19 +9388,24 @@
 					"components": []
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Total Amount",
-						"key": "totalAmount",
 						"prefix": "$",
-						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
-						"requireDecimal": true,
-						"decimalLimit": 2,
-						"calculateValue": "value = (parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0);",
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": false,
+						"requireDecimal": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) -(parseFloat(data[\"PropDeductibleCredit\"])||0) ;",
+						"calculateServer": false,
+						"key": "totalAmount",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
 						"lockKey": true
 					}]
 				}]
@@ -9456,6 +9498,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-03-27T15:14:21.801Z",
+	"modified": "2020-03-28T07:10:03.134Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

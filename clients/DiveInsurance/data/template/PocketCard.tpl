@@ -27,8 +27,8 @@
 				</div>
 				<div class = "main_section">
 					<p class = "card_holder_name">{if isset($individual.business_name)}Business Name:&nbsp;
-						{$individual.business_name}<br>
-					{/if}Cardholder Name: &nbsp;{$individual.firstname}&nbsp{$individual.lastname}</p>
+						{$individual.business_name}<br> Insured: &nbsp;{$individual.firstname}&nbsp{$individual.lastname}
+					{else}Cardholder Name: &nbsp;{$individual.firstname}&nbsp{$individual.lastname}</p>{/if}
 					<div class = "section">
 						<div class = "sec1">
 							<p class = "info">Certificate #: &nbsp{$individual.certificate_no}</p>

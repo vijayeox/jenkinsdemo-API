@@ -46,9 +46,10 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
                 throw new DelegateException('Cancellation Document Not Found','file.not.found');
             }
             $data['subject'] = 'Request for cancellation of policy';
-            $data['document'] =$fileData;
+            // $data['document'] =$fileData;
             $response = $this->dispatch($data);
             $data['autoRenewalJob'] = '';
+            unset($data['confirmReinstatePolicy']);
             return $data;
         }
         else{
@@ -56,6 +57,8 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
             $data['template'] = $this->template['NotApproved'];
             $data['subject'] = 'Request for cancellation of policy';
             $response = $this->dispatch($data);
+            $data['policyStatus'] = "In Force";
+            unset($data['confirmReinstatePolicy']);
             return $data;
         }
     }

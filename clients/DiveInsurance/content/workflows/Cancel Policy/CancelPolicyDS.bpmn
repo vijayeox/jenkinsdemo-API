@@ -50,6 +50,7 @@
           <camunda:inputParameter name="commands">
             <camunda:list>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchCancelPolicyNotification"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>

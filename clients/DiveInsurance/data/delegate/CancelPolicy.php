@@ -48,6 +48,7 @@ class CancelPolicy extends PolicyDocument
         $Canceldate = isset($Canceldate) ? $Canceldate : date_create();
         $data['CancelDate'] = isset($data['CancelDate']) ? $data['CancelDate']: $Canceldate->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";
+        $data['confirmReinstatePolicy'] = '';
         if(isset($data['reinstateAmount'])){
             $data['reinstateAmount'] = '';
         }
