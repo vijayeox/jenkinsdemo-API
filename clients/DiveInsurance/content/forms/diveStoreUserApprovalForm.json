@@ -59,11 +59,11 @@
           "inline": false,
           "tableView": true,
           "values": [{
-            "value": "true",
+            "value": "accepted",
             "label": "Accept",
             "shortcut": ""
           }, {
-            "value": "false",
+            "value": "rejected",
             "label": "Decline",
             "shortcut": ""
           }],
@@ -298,6 +298,36 @@
       "input": false,
       "lockKey": true,
       "breadcrumbClickable": true
+    }, {
+      "title": "Payment Approval",
+      "theme": "primary",
+      "collapsible": false,
+      "tableView": false,
+      "key": "paymentApprovalPanel",
+      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+      "type": "panel",
+      "label": "Payment Approval",
+      "input": false,
+      "components": [{
+        "label": "Payment Verified",
+        "optionsLabelPosition": "right",
+        "inline": true,
+        "tableView": false,
+        "values": [{
+          "label": "Approved",
+          "value": "approved",
+          "shortcut": ""
+        }, {
+          "label": "Declined",
+          "value": "declined",
+          "shortcut": ""
+        }],
+        "clearOnHide": false,
+        "calculateServer": false,
+        "key": "paymentVerified",
+        "type": "radio",
+        "input": true
+      }]
     }],
     "path": "page5Panel"
   }, {
@@ -327,6 +357,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-27T13:03:25.040Z",
+  "modified": "2020-03-27T19:59:17.184Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

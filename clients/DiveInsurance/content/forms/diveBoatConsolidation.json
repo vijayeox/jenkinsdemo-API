@@ -246,7 +246,7 @@
 							"actions": [{
 								"name": "Reset Form",
 								"type": "value",
-								"value": "data.padiVerified = false;\ndata.verified = false;\ndata.policy_exists = false;\ndata.padiNotFound = false;\ndata.firstname = \"\";\ndata.lastname = \"\";\ndata.initial = \"\";"
+								"value": "data.padiVerified = false;\ndata.verified = false;\ndata.policy_exists = false;\ndata.padiNotFound = false;\ndata.firstname = \"\";\ndata.lastname = \"\";\ndata.initial = \"\";\ndata.business_padi = \"\";\ndata.business_name = \"\";\ndata.padi = \"\";\ndata.businessPadiVerified = \"\";\ndata.businessPadiNotFound = \"\";\ndata.businessPadiEmpty = \"\";\ndata.padi_empty = \"\";"
 							}]
 						}],
 						"type": "button",
@@ -470,47 +470,12 @@
 						"spellcheck": true,
 						"tableView": false,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
+							"required": true,
 							"customMessage": "Please enter your first name."
 						},
 						"key": "firstname",
-						"logic": [{
-							"name": "required is enabled",
-							"trigger": {
-								"type": "simple",
-								"simple": {
-									"show": true,
-									"when": "padiNotFound",
-									"eq": "true"
-								}
-							},
-							"actions": [{
-								"name": "required is enabled",
-								"type": "property",
-								"property": {
-									"label": "Required",
-									"value": "validate.required",
-									"type": "boolean"
-								},
-								"state": true
-							}]
-						}, {
-							"name": "Enable Fields for CSR",
-							"trigger": {
-								"type": "javascript",
-								"javascript": "result =  ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));"
-							},
-							"actions": [{
-								"name": "Enable Fields",
-								"type": "property",
-								"property": {
-									"label": "Disabled",
-									"value": "disabled",
-									"type": "boolean"
-								},
-								"state": false
-							}]
-						}],
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
@@ -527,6 +492,7 @@
 						"spellcheck": true,
 						"tableView": false,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"customMessage": "Please enter your initial."
 						},
@@ -547,47 +513,12 @@
 						"spellcheck": true,
 						"tableView": false,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
+							"required": true,
 							"customMessage": "Please enter your last name."
 						},
 						"key": "lastname",
-						"logic": [{
-							"name": "required is enabled",
-							"trigger": {
-								"type": "simple",
-								"simple": {
-									"show": true,
-									"when": "padiNotFound",
-									"eq": "true"
-								}
-							},
-							"actions": [{
-								"name": "required is enabled",
-								"type": "property",
-								"property": {
-									"label": "Required",
-									"value": "validate.required",
-									"type": "boolean"
-								},
-								"state": true
-							}, {
-								"name": "Enable Fields for CSR",
-								"trigger": {
-									"type": "javascript",
-									"javascript": "result =  ((data['padiNotFound']==true||data['padiNotFound']=='true') && \n\t(data['verified'] == true || data['verified']=='true') && \n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']);"
-								},
-								"actions": [{
-									"name": "Enable Fields",
-									"type": "property",
-									"property": {
-										"label": "Disabled",
-										"value": "disabled",
-										"type": "boolean"
-									},
-									"state": false
-								}]
-							}]
-						}],
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
@@ -603,17 +534,13 @@
 				"tableView": false,
 				"key": "panelColumns2",
 				"logic": [{
-					"name": "disable fields",
+					"name": "Disable ",
 					"trigger": {
-						"type": "simple",
-						"simple": {
-							"show": true,
-							"when": "padiNotFound",
-							"eq": "false"
-						}
+						"type": "javascript",
+						"javascript": "if(data.padiNotFound === false && data.businessPadiVerified === false){\n  result = true;\n}else{\n  result = false;\n}"
 					},
 					"actions": [{
-						"name": "disable fields",
+						"name": "disable",
 						"type": "property",
 						"property": {
 							"label": "Disabled",
@@ -621,6 +548,22 @@
 							"type": "boolean"
 						},
 						"state": true
+					}]
+				}, {
+					"name": "Enable",
+					"trigger": {
+						"type": "javascript",
+						"javascript": "if(data.padiNotFound === true){\n  result = true;\n}else if(data.businessPadiVerified === true){\n  result = true;  \n}else{\n  result = false;\n}"
+					},
+					"actions": [{
+						"name": "enable",
+						"type": "property",
+						"property": {
+							"label": "Disabled",
+							"value": "disabled",
+							"type": "boolean"
+						},
+						"state": false
 					}]
 				}],
 				"type": "columns",
@@ -1754,7 +1697,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
-							"calculateValue": "value = data['fax'];",
+							"calculateServer": false,
 							"key": "business_fax",
 							"type": "phoneNumber",
 							"input": true,
@@ -4527,11 +4470,18 @@
 						},
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "groupExcessLiabilitySelect",
+						"properties": {
+							"delegate": "RateCard"
+						},
 						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
@@ -7683,7 +7633,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 69,
+	"_vid": 97,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -7701,6 +7651,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-03-27T14:12:17.689Z",
+	"modified": "2020-03-28T07:42:24.615Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
