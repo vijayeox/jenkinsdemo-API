@@ -64,21 +64,19 @@
 					"inline": false,
 					"tableView": true,
 					"values": [{
-						"value": "true",
+						"value": "accepted",
 						"label": "Accept",
 						"shortcut": ""
 					}, {
-						"value": "false",
+						"value": "rejected",
 						"label": "Decline",
 						"shortcut": ""
 					}],
+					"calculateServer": false,
 					"validate": {
 						"required": true
 					},
 					"key": "userApproved",
-					"properties": {
-						"render": "page7"
-					},
 					"type": "radio",
 					"input": true,
 					"lockKey": true
@@ -174,6 +172,10 @@
 						}, {
 							"label": "Credit Card",
 							"value": "creditCard",
+							"shortcut": ""
+						}, {
+							"label": "Financial Fund",
+							"value": "financialFunding",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -302,6 +304,36 @@
 			"input": false,
 			"lockKey": true,
 			"breadcrumbClickable": true
+		}, {
+			"title": "Payment Approval",
+			"theme": "primary",
+			"collapsible": false,
+			"tableView": false,
+			"key": "paymentApprovalPanel",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Payment Approval",
+			"input": false,
+			"components": [{
+				"label": "Payment Verified",
+				"optionsLabelPosition": "right",
+				"inline": true,
+				"tableView": false,
+				"values": [{
+					"label": "Approved",
+					"value": "approved",
+					"shortcut": ""
+				}, {
+					"label": "Declined",
+					"value": "declined",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"calculateServer": false,
+				"key": "paymentVerified",
+				"type": "radio",
+				"input": true
+			}]
 		}],
 		"path": "page5Panel"
 	}, {
@@ -328,6 +360,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-03-27T14:33:14.527Z",
+	"modified": "2020-03-27T19:54:44.095Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }
