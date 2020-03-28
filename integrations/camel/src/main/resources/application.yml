@@ -30,7 +30,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     platform: org.hibernate.dialect.MySQL5Dialect
-    url: jdbc:mysql://192.168.0.2:3306/quartz_db?useSSL=false
+    url: jdbc:mysql://localhost:3306/quartz_db?useSSL=false
     username: root
     password: password
   jpa:
@@ -49,8 +49,8 @@ smtp:
   from:
     email: support@eoxvantage.com
 db:
-  host: jdbc:mysql://192.168.0.2/new_appBuilderDb
-  user: bharat
+  host: jdbc:mysql://localhost/appBuilder_oxzionapi
+  user: root
   password: password
 contentType: text/html
 camel:
@@ -61,9 +61,9 @@ camel:
       host: localhost
       port: 8081
 apikey: 0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98
-authorization-url: http://192.168.0.2:8080/auth
+authorization-url: http://localhost:8080/auth
 elastic:
-  host: 192.168.0.2
+  host: localhost
   port: 9200
   core: test
 twillio:
