@@ -234,7 +234,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-                         $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+                         $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter',null,$length);
                     }
                     else{
                         $this->logger->info("DOCUMENT groupPL");
@@ -631,11 +631,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $options['footer'] =  $this->template[$data['product']][$footerKey];
             }
             if(!is_array($docDest) && !file_exists($docDest)){
-                $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
+                $generatedDocument = $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
             } else {
                 if(is_array($docDest)){
+                    $generatedDocuments = array();
                     foreach($docDest as $key => $doc){
-                        $this->documentBuilder->generateDocument($key,$data,$doc,$options);
+                        $generatedDocuments[] = $this->documentBuilder->generateDocument($key,$data,$doc,$options);
                     }
                 }
             }
@@ -644,7 +645,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return $data;
             }
             if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
-                return $dest['relativePath'].$template.'-'.$length.'.pdf';
+                if(isset($indexKey) && $indexKey != null){
+                    return $dest['relativePath'].$template.'-'.$length.'.pdf';
+                }
+                return $dest['relativePath'].$template.'.pdf';
             }else{
                 if(is_array($docDest)){
                     $filesCreated = array();

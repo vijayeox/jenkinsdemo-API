@@ -277,7 +277,7 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
                 }
          // }
         array_push($data['previous_policy_data'],$policy);
-
+        // $data['previous_policy_data'] = $policy;
         $this->logger->info("Endorsement CleanUp Setup - Dive Boat");
         $unsetOptions = $this->unsetOptions;
         for($i=0;$i< sizeof($unsetOptions);$i++){
