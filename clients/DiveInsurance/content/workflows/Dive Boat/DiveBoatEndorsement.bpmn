@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0i0wmro" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0i0wmro" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="Process_1beehty" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0aopkcj" name="Start Endorsement" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -17,7 +17,7 @@
               <camunda:value>{"command" : "delegate", "delegate":"DiveBoatEndorsementPremiumCalculation"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"EndorsementDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
-              <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate" : "NewPolicyDocumentDispatch"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
@@ -179,7 +179,8 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:serviceTask id="Task_0v80utj" name="Policy Status Change During Review" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')</camunda:script>
+          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')
+execution.setVariable('initiatedByUser',true)</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">fileSave</camunda:inputParameter>
