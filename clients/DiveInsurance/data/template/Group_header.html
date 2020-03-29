@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link href= "./css/template_css.css" rel="stylesheet" type="text/css" />
+<link href= "./css/template_css.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="./AgentInfo.js"></script> 
 <script>
   function subst() {
@@ -16,21 +16,39 @@
               vars[temp_var[0]] = decodeURI(temp_var[1]);
           }
       }
+      document.getElementsById("test").textContent = query_strings_from_url;
        var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','combinedSingalLimit','annualAggregate'];
-      for (var css_class in css_selector_classes) {
+       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
-              var element = document.getElementsByClassName(css_selector_classes[css_class]);
-              for (var j = 0; j < element.length; ++j) {
-                  element[j].textContent = vars[css_selector_classes[css_class]];
-              }
+            var element = document.getElementsByClassName(
+              css_selector_classes[css_class]
+            );
+            for (var j = 0; j < element.length; ++j) {
+              element[j].textContent = vars[css_selector_classes[css_class]];
+            }
+            if (css_selector_classes[css_class] == "start_date") {
+              document.getElementsByClassName(
+                "start_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+            }
+            if (css_selector_classes[css_class] == "end_date") {
+              document.getElementsByClassName("end_date")[0].textContent =
+                moment(vars[css_selector_classes[css_class]]).format(
+                  "D MMMM YYYY"
+                ) + " - 12:01:00 AM";
+            }
           }
-      }
+        }
       agentInfo();
   }
   </script>
 </head>
 <body onload="subst()">  
  <div class = "main_group">
+
+    <div id = "test"></div>
             <hr class="line1"></hr>
           <div class="spacer"></div>
           <hr class="line2"></hr>
