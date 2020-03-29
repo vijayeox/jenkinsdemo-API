@@ -17,9 +17,6 @@ class EndorsementQuote extends PolicyDocument
              'template' => 'DiveBoat_Endorsement',
              'header' => 'DB_EndorsementQuote_header.html',
              'footer' => 'DB_Endorsement_footer.html',
-             'aiTemplate' => 'DiveBoat_AI',
-             'aiheader' => 'DiveBoat_AI_header.html',
-             'aifooter' => 'DiveBoat_AI_footer.html',
              'aniTemplate' => 'DiveBoat_ANI',
              'aniheader' => 'DB_Quote_ANI_header.html',
              'anifooter' => null,
@@ -55,9 +52,9 @@ class EndorsementQuote extends PolicyDocument
              'alheader' => 'DiveStore_AL_header.html',
              'alfooter' => 'DiveStore_AL_footer.html',
              'alTemplate' => 'DiveStore_AdditionalLocations',
-             'gtemplate' => 'Group_PL_COI',
-             'gheader' => 'Group_header.html',
-             'gfooter' => 'Group_footer.html',
+             'roster' => 'Roster',
+             'rosterHeader' => 'Roster_header.html',
+             'rosterFooter' => 'Roster_footer.html',
              'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf'
          ));   
     }

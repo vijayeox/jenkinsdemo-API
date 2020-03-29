@@ -110,6 +110,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $length = 0;
             $startDate = $data['start_date'];
             $endDate = $data['end_date'];
+
+            if(isset($data['update_date'])){
+                $updateDate = $data['update_date'];
+            }
+            
             if(isset($data['previous_policy_data'])){
                 $previous_data = array();
                 $previous_data = json_decode($data['previous_policy_data'],true);
@@ -122,28 +127,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
-            $state = "";
+
+
             if(isset($data['state'])){
-              $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['state']."'";
-              $state = $data['state'];
-            } 
+                $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+            }
 
             if(isset($data['business_state'])){
-                $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['business_state']."'";
-                $state = $data['business_state'];
-            }
-            $resultSet = $persistenceService->selectQuery($selectQuery);
-            $stateDetails = array();
-            if($resultSet->count() == 0){
-                $data['state_in_short'] = $data['state']; 
-            }
-            while ($resultSet->next()) {
-                $stateDetails[] = $resultSet->current();
-            }       
-            if(isset($stateDetails) && count($stateDetails)>0){                
-                    $data['state_in_short'] = $stateDetails[0]['state_in_short'];                
-            }else{
-                $data['state_in_short'] = isset($state) ? $state : "";
+                $data['state_in_short'] = $this->getStateInShort($data['business_state'],$persistenceService);
             }
             $this->logger->info("Data------------------ ".print_r($data,true));
             unset($data['dest']);
@@ -227,10 +218,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
                 }
 
-                if(isset($temp['additionalInsured']) && $temp['additional_insured_select'] == 'newListOfAdditionalInsureds'){
+                if($this->type != 'endorsementQuote'){
+                    if(isset($temp['additionalInsured']) && $temp['additional_insured_select'] == 'newListOfAdditionalInsureds'){
                     $this->logger->info("DOCUMENT additionalInsured");
+                    $temp['additionalInsured'] = json_decode($temp['additionalInsured'],true);
+                    for($i = 0;$i< sizeof($temp['additionalInsured']);$i++){
+                        $temp['additionalInsured'][$i]['state_in_short'] = $this->getStateInShort($temp['additionalInsured'][$i]['state'],$persistenceService);
+                    }
+                    $temp['additionalInsured'] = json_encode($temp['additionalInsured']);
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
+                    }    
                 }
+                
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
@@ -457,6 +456,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
+            if(isset($data['update_date'])){
+                $data['update_date'] = $updateDate;
+            }
+            
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }
@@ -480,7 +483,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['start_date'] = date_format($date,"m/d/Y");
                 $date=date_create($data['end_date']);
                 $data['end_date'] = date_format($date,"m/d/Y");
-                
+                if(isset($data['update_date'])){
+                    $date=date_create($data['update_date']);
+                    $data['update_date'] = date_format($date,"m/d/Y");
+                }
                 if(isset($data['fileId'])){
                     $data['uuid'] = $data['fileId'];
                 }
@@ -705,5 +711,22 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->logger->info("Watermark source :",$source);
         $pdfwater = new PDF_Watermarker();
         $pdfwater->watermarkPDF($source,$text);
+    }
+
+
+    private function getStateInShort($state,$persistenceService){
+        $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$state."'";
+        $resultSet = $persistenceService->selectQuery($selectQuery);
+        if($resultSet->count() == 0){
+            return $state;
+        }else{
+            while ($resultSet->next()) {
+                $stateDetails[] = $resultSet->current();
+            }       
+            if(isset($stateDetails) && count($stateDetails)>0){                
+                 $state = $stateDetails[0]['state_in_short'];                
+            } 
+        }
+        return $state;
     }
 }

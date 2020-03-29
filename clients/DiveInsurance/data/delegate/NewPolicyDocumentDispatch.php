@@ -7,25 +7,24 @@ use Oxzion\DelegateException;
 require_once __DIR__."/DispatchDocument.php";
 
 
-class DispatchProposalDocument extends DispatchDocument {
+class NewPolicyDocumentDispatch extends DispatchDocument {
 
     public function __construct(){
         $this->template = array(
-            'Dive Boat' => 'diveBoatProposalMailTemplate',
-            'Dive Store' => 'diveStoreProposalMailTemplate');
+            'Dive Boat' => 'diveBoatPolicyMailTemplate',
+            'Dive Store' => 'diveStorePolicyMailTemplate');
         parent::__construct();
     }
 
     
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("Proposal DOCUMENT --- ".json_encode($data));
+        $this->logger->info("New Policy Document".json_encode($data));
         if(isset($data['documents']) && is_string($data['documents'])){
             $data['documents'] = json_decode($data['documents'],true);
         }
         $fileData =array();
         $errorFile = array();
-        $document = array_keys($data['documents']);
         foreach($data['documents'] as $doc){
                     $file = $this->destination.$doc;
                     if(file_exists($file)){
@@ -42,7 +41,7 @@ class DispatchProposalDocument extends DispatchDocument {
                 throw new DelegateException('Documents Not Found','file.not.found',0,$errorFile);
             }
         $data['document'] =$fileData;
-        $data['subject'] = 'Proposal Document';
+        $data['subject'] = 'Certificate Of Insurance';
         $response = $this->dispatch($data);
         return $response;
     }
