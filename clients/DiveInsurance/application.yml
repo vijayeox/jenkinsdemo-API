@@ -143,6 +143,16 @@ menu:
                                         type: DocumentViewer
                                         url: 'file/{{uuid}}/document'
                             -
+                                name: Upgrade To IPL
+                                rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                                        fileId: '{{uuid}}'
+                                        page: 1
+                                icon: 'fa fa-arrow-circle-up' 
+                            -
                                 name: Endorsement
                                 rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
@@ -484,6 +494,16 @@ menu:
                                         url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
+                            -
+                                name: Upgrade To IPL
+                                rule: '''{{policyStatus}}'' == ''In Force'' && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                                        fileId: '{{uuid}}'
+                                        page: 1
+                                icon: 'fa fa-arrow-circle-up'
                             -
                                 name: Endorsement
                                 rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'

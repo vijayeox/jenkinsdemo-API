@@ -13,10 +13,10 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
         $this->logger->info("Document Save Entry");
 
         $privileges = $this->getPrivilege();
-        if(!isset($data['endorsement_options'])){
+        if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
+           if(!isset($data['endorsement_options'])){
             if ((isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
                 $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true) && (isset($data['initiatedByCsr']) && ($data['initiatedByCsr'] == false))) {
-                $this->logger->info("AM here");
                 if((isset($data['csrAttachmentsFieldnames']))){
                     if(!isset($data['fileId'])) {
                         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
@@ -39,8 +39,8 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                     $this->getAttchments($data,$attachmentsFieldnames);
                 }
             }
-        }else{
-                  if (isset($data['endorAttachmentsFieldnames'])) {
+          }else{
+                if (isset($data['endorAttachmentsFieldnames'])) {
                     if (!isset($data['fileId'])) {
                         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
                     } else {
@@ -62,6 +62,18 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                     $this->getAttchments($data,$attachmentsFieldnames);
                 }
 
+         } 
+        }else{
+            if (isset($data['attachmentsFieldnames'])) {
+                if (!isset($data['fileId'])) {
+                    $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+                } else {
+                    $data['uuid'] = $data['fileId'];
+                }
+                $attachmentsFieldnames = $data['attachmentsFieldnames'];
+                $this->logger->info("attachmentsFieldnames: ".print_r($data['attachmentsFieldnames'],true));
+                $this->getAttchments($data,$attachmentsFieldnames);
+            }
         }
         if(isset($data['documentFieldnames'])){
             $this->cleanDocumentFields($data, $data['documentFieldnames']);

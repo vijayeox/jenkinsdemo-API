@@ -2082,7 +2082,7 @@
 						}]
 					}, {
 						"components": [{
-							"label": "How man Crew Members would you like to Cover ?",
+							"label": "How many Crew Members would you like to Cover ?",
 							"mask": false,
 							"spellcheck": true,
 							"tableView": true,
@@ -2090,12 +2090,13 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
 							"key": "CrewInWaterCount",
 							"conditional": {
-								"show": "true",
+								"show": true,
 								"when": "CrewInWaterYN",
 								"eq": "true"
 							},
@@ -4209,6 +4210,10 @@
 					},
 					"modal": false,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"customMessage": "Please enter all the required fields before proceeding."
+					},
 					"key": "groupPL",
 					"type": "editgrid",
 					"input": true,
@@ -4605,6 +4610,10 @@
 					},
 					"modal": false,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"customMessage": "Please enter all the required fields before proceeding."
+					},
 					"key": "namedInsureds",
 					"type": "editgrid",
 					"input": true,
@@ -7680,6 +7689,7 @@
 					}, {
 						"components": [{
 							"label": "Amount Payable",
+							"prefix": "$",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
@@ -7704,6 +7714,7 @@
 							"inputType": "number"
 						}, {
 							"label": "Number",
+							"prefix": "$",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
@@ -8465,7 +8476,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 17,
+	"_vid": 20,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8483,6 +8494,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-03-30T09:05:54.761Z",
+	"modified": "2020-03-30T14:28:37.489Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

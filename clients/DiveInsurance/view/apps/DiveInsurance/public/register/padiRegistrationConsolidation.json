@@ -609,11 +609,18 @@
 						"dataType": "auto",
 						"template": "<span>{{ item.country }}</span>",
 						"selectThreshold": 0.3,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "country",
+						"properties": {
+							"clear_field": "state"
+						},
 						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
@@ -654,17 +661,25 @@
 						"tableView": true,
 						"dataSrc": "custom",
 						"data": {
-							"values": [{}],
-							"custom": "let obj = countryList.find(o => o.country === data['country']);\nif(obj){\n  values = obj.states\n}"
+							"values": [{
+								"label": "",
+								"value": ""
+							}],
+							"custom": "if(countryList){\nlet obj = countryList.find(o => o.country === data['country']);\nif(obj){\n  values = obj.states\n}\n}"
 						},
 						"template": "<span>{{ item }}</span>",
 						"selectThreshold": 0.3,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "state",
 						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
 						"refreshOn": "country",
+						"redrawOn": "country",
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false,
@@ -761,11 +776,18 @@
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
 								"key": "physical_country",
+								"properties": {
+									"clear_field": "physical_state"
+								},
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -818,21 +840,26 @@
 										"value": "",
 										"key": ""
 									}],
-									"custom": "let obj = countryList.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states\n}"
+									"custom": "if(countryList){\nlet obj = countryList.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states\n}\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
 								"key": "physical_state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "physical_country",
 								"input": true,
 								"lockKey": true,
 								"clearOnRefresh": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"redrawOn": "physical_country"
 							}],
 							"width": 4,
 							"offset": 0,
@@ -1160,7 +1187,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 30,
+	"_vid": 32,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1174,6 +1201,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-03-30T07:00:57.085Z",
+	"modified": "2020-03-30T13:45:46.059Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
