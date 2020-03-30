@@ -316,7 +316,7 @@ class FileService extends AbstractService
             $this->logger->info("FILE ID  ------" . json_encode($id));
             $params = array('id' => $id,
                 'orgId' => AuthContext::get(AuthConstants::ORG_ID));
-            $select = "SELECT id, uuid, data, latest  from ox_file where uuid = :id AND org_id = :orgId";
+            $select = "SELECT id, uuid, data, latest, entity_id  from ox_file where uuid = :id AND org_id = :orgId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
             $this->logger->info("FILE DATA ------" . json_encode($result));
@@ -326,8 +326,8 @@ class FileService extends AbstractService
                     if ($result[0]['data']) {
                         $result[0]['data'] = json_decode($result[0]['data'], true);
                     }
-                    unset($result[0]['latest']);
-                    unset($result[0]['id']);
+                    // unset($result[0]['latest']);
+                    // unset($result[0]['id']);
                     $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
                     return $result[0];
                 } else {
