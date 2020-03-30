@@ -35,7 +35,6 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         unset($data['documents']);
         $this->logger->info("Dispatch reinstate policy mail notification - data consists of:".json_encode($temp));
         foreach($temp as $key => $value){
-            $this->logger->info("The documents consist of : ". print_r($value, true));
             if (is_array($value)) {
                 $value = $value[0];
             }
