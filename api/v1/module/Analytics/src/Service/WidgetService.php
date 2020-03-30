@@ -14,6 +14,7 @@ use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 use Zend\Mvc\Application;
 use Webit\Util\EvalMath\EvalMath;
+use Oxzion\VersionMismatchException;
 
 class WidgetService extends AbstractService
 {
@@ -36,24 +37,15 @@ class WidgetService extends AbstractService
         }
 
         if (isset($data['uuid'])) {
-            $uuid = $data['uuid'];
-            $query = 'SELECT w.id from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
-            $queryParams = [
-                'created_by' => AuthContext::get(AuthConstants::USER_ID),
-                'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-                'uuid' => $uuid
-            ];
-            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (0 == count($resultSet)) {
-                throw new Exception("Given wiget id ${uuid} either does not exist OR user has no permission to read the widget.");
-            }
+            throw new Exception("Wiget id ${data['uuid']} should not be set when creating a new widget or copying a widget.");
         }
 
-        $form = new Widget();
+        $data['uuid'] = Uuid::uuid4()->toString();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['uuid'] = Uuid::uuid4()->toString();
+
+        $form = new Widget();
         if(isset($data['visualization_uuid'])){
             //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
             $data['visualization_id'] = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $data['org_id']));
@@ -67,8 +59,8 @@ class WidgetService extends AbstractService
         }
         $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
+
         $this->beginTransaction();
-        $count = 0;
         try {
             $count = $this->table->save2($form);
             if ($count == 0) {
@@ -77,107 +69,214 @@ class WidgetService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            $this->commit();
         } 
         catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
 
-            try {
-                $sequence = 0;
-                foreach($data['queries'] as $query) {
-                    $queryUuid = $query['uuid'];
-                    if(isset($query['configuration'])) {
-                        $queryConfiguration = json_encode($query['configuration']);
-                    }
-                    else {
-                        $queryConfiguration = '';
-                    }
-                    $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT w.id FROM ox_widget w WHERE uuid=:widgetUuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)), (SELECT q.id FROM ox_query q WHERE q.uuid=:queryUuid and q.org_id=:org_id and (q.ispublic=true OR q.created_by=:created_by)), :sequence, :configuration)';
-                    $queryParams = [
-                        'widgetUuid' => $data['uuid'],
-                        'queryUuid' => $queryUuid,
-                        'sequence' => $sequence,
-                        'configuration' => $queryConfiguration,
-                        'created_by' => AuthContext::get(AuthConstants::USER_ID),
-                        'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-                    ];
-                    $this->logger->info('Executing query:');
-                    $this->logger->info($query);
-                    $this->logger->info($queryParams);
-                    $result = $this->executeQueryWithBindParameters($query, $queryParams);
-                    if (1 != $result->count()) {
-                        $this->logger->error('Unexpected result from ox_widget_query insert statement. Transaction rolled back.', $result);
-                        $this->logger->error('Query and parameters are:');
-                        $this->logger->error($query);
-                        $this->logger->error($queryParams);
-                        $this->rollback();
-                        return 0;
-                    }
-                    $sequence++;
+        try {
+            $sequence = 0;
+            foreach($data['queries'] as $query) {
+                $queryUuid = $query['uuid'];
+                if(isset($query['configuration'])) {
+                    $queryConfiguration = json_encode($query['configuration']);
                 }
-                $this->commit();
-                return $data['uuid'];
-            }
-            catch (ZendDbException $e) {
-                $this->logger->error('Database exception occurred.');
-                $this->logger->error($e);
-                $this->logger->error("Query and params:");
-                $this->logger->error($query);
-                $this->logger->error($queryParams);
-                try {
+                else {
+                    $queryConfiguration = '';
+                }
+                $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT w.id FROM ox_widget w WHERE uuid=:widgetUuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)), (SELECT q.id FROM ox_query q WHERE q.uuid=:queryUuid and q.org_id=:org_id and (q.ispublic=true OR q.created_by=:created_by)), :sequence, :configuration)';
+                $queryParams = [
+                    'widgetUuid' => $data['uuid'],
+                    'queryUuid' => $queryUuid,
+                    'sequence' => $sequence,
+                    'configuration' => $queryConfiguration,
+                    'created_by' => AuthContext::get(AuthConstants::USER_ID),
+                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+                ];
+                $this->logger->info('Executing query:');
+                $this->logger->info($query);
+                $this->logger->info($queryParams);
+                $result = $this->executeQueryWithBindParameters($query, $queryParams);
+                if (1 != $result->count()) {
+                    $this->logger->error('Unexpected result from ox_widget_query insert statement. Transaction rolled back.', $result);
+                    $this->logger->error('Query and parameters are:');
+                    $this->logger->error($query);
+                    $this->logger->error($queryParams);
                     $this->rollback();
+                    return 0;
                 }
-                catch (ZendDbException $ee) {
-                    $this->logger->error('Database exception occurred when rolling back transaction.');
-                    $this->logger->error($ee);
-                }
-                return 0;
+                $sequence++;
             }
-    }
-
-    //DO NOT ADD THIS AT IS NOT NEEDED. LEAVING THIS HERE IN CASE THE REQUIREMENT CHANGES
-    //-----------------------------------------------------------------------------------
-    // - BRIAN
-
-    /*public function updateWidget($uuid, $data)
-    {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
+            $this->commit();
+            return $data['uuid'];
+        }
+        catch (ZendDbException $e) {
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
+            $this->logger->error("Query and params:");
+            $this->logger->error($query);
+            $this->logger->error($queryParams);
+            try {
+                $this->rollback();
+            }
+            catch (ZendDbException $ee) {
+                $this->logger->error('Database exception occurred when rolling back transaction.');
+                $this->logger->error($ee);
+            }
             return 0;
         }
-        if(!isset($data['version']))
-        {
-            throw new Exception("Version is not specified, please specify the version");
+    }
+
+    public function updateWidget($uuid, &$data)
+    {
+        if (!isset($data['queries']) || empty($data['queries'])) {
+            $errors = new ValidationException();
+            $errors->setErrors(array('queries' => 'required'));
+            throw $errors;
         }
+
+        if($uuid != $data['uuid']) {
+            throw new Exception("UUID mismatch in URL and the request parameter.");
+        }
+
+        $query = 'SELECT w.id from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
+        $queryParams = [
+            'created_by' => AuthContext::get(AuthConstants::USER_ID),
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'uuid' => $uuid
+        ];
+        try {
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        }
+        catch (Exception $e) {
+            throw $e;
+        }
+
+        if (0 == count($resultSet)) {
+            throw new Exception("Given wiget id ${uuid} either does not exist OR user has no permission to read the widget.");
+        }
+
+        $obj = $this->table->getByUuid($uuid, array());
         $form = new Widget();
         $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+
+        if(isset($data['visualization_uuid'])){
+            //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
+            $data['visualization_id'] = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $data['org_id']));
+            unset($data['visualization_uuid']);
+        }
+        if(isset($data['configuration'])) {
+            $data['configuration'] = json_encode($data['configuration']);
+        }
+        if(isset($data['expression'])) {
+            $data['expression'] = json_encode($data['expression']);
+        }
         $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate();
-        $count = 0;
+        $form->validate();
+
+        $this->beginTransaction();
         try {
             $count = $this->table->save2($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
-    }*/
+
+        try {
+            $query = 'DELETE FROM ox_widget_query WHERE ox_widget_id=(SELECT id FROM ox_widget WHERE uuid=:uuid)';
+            $queryParams = [
+                'uuid' => $uuid
+            ];
+            $result = $this->executeQueryWithBindParameters($query, $queryParams);
+            if (1 != $result->count()) {
+                $this->logger->error('Unexpected result from ox_widget_query cleaning statement. Transaction rolled back.', $result);
+                $this->logger->error('Query and parameters are:');
+                $this->logger->error($query);
+                $this->logger->error($queryParams);
+                $this->rollback();
+                return 0;
+            }
+            $sequence = 0;
+            foreach($data['queries'] as $query) {
+                $queryUuid = $query['uuid'];
+                if(isset($query['configuration'])) {
+                    $queryConfiguration = json_encode($query['configuration']);
+                }
+                else {
+                    $queryConfiguration = '';
+                }
+                $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT w.id FROM ox_widget w WHERE uuid=:widgetUuid), (SELECT q.id FROM ox_query q WHERE q.uuid=:queryUuid and q.org_id=:org_id and (q.ispublic=true OR q.created_by=:created_by)), :sequence, :configuration)';
+                $queryParams = [
+                    'widgetUuid' => $data['uuid'],
+                    'queryUuid' => $queryUuid,
+                    'sequence' => $sequence,
+                    'configuration' => $queryConfiguration,
+                    'created_by' => AuthContext::get(AuthConstants::USER_ID),
+                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+                ];
+                $this->logger->info('Executing query:');
+                $this->logger->info($query);
+                $this->logger->info($queryParams);
+                $result = $this->executeQueryWithBindParameters($query, $queryParams);
+                if (1 != $result->count()) {
+                    $this->logger->error('Unexpected result from ox_widget_query insert statement. Transaction rolled back.', $result);
+                    $this->logger->error('Query and parameters are:');
+                    $this->logger->error($query);
+                    $this->logger->error($queryParams);
+                    $this->rollback();
+                    return 0;
+                }
+                $sequence++;
+            }
+            $this->commit();
+        }
+        catch (ZendDbException $e) {
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
+            $this->logger->error("Query and params:");
+            $this->logger->error($query);
+            $this->logger->error($queryParams);
+            try {
+                $this->rollback();
+            }
+            catch (ZendDbException $ee) {
+                $this->logger->error('Database exception occurred when rolling back transaction.');
+                $this->logger->error($ee);
+            }
+            return 0;
+        }
+
+        //Query updated version back and set it in data for returning to the client.
+        $query = 'SELECT w.version from ox_widget as w where w.uuid=:uuid';
+        $queryParams = [
+            'uuid' => $uuid
+        ];
+        try {
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        }
+        catch (Exception $e) {
+            throw $e;
+        }
+        $data['version'] = $resultSet[0]['version'];
+        return 1; //Return a number > 0 to keep the controller happy!
+    }
 
     public function deleteWidget($uuid,$version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
         if(!isset($version))
         {
             throw new Exception("Version is not specified, please specify the version");
+        }
+
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
+            return 0;
         }
         $data = array('version' => $version,'isdeleted' => 1);
         $form = new Widget();
@@ -408,7 +507,6 @@ class WidgetService extends AbstractService
         }
 
         $widget = [
-            'uuid'             => $widgetUuid,
             'ispublic'         => $firstRow['ispublic'],
             'visualization_id' => $firstRow['visualization_id'],
             'name'             => isset($params['name']) ? $params['name'] : $firstRow['name'] . '_copy_' . date('Y-m-d H:i:s'),
