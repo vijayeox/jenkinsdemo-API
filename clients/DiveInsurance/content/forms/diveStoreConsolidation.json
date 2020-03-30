@@ -180,6 +180,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Padi Number is not Valid!",
@@ -190,7 +191,7 @@
 							"name": "Check PADI Verified",
 							"trigger": {
 								"type": "javascript",
-								"javascript": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    result = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    result = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    result = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    result = false;\n} else {\n    result = false;\n}"
+								"javascript": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    result = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    result = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    result = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    result = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    result = false;\n} else {\n    result = false;\n}"
 							},
 							"actions": [{
 								"name": "Disable",
@@ -220,7 +221,7 @@
 						"properties": {
 							"commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
 						},
-						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = false;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = false;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = false;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = true;\n} else {\n    show = true;\n}",
+						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = false;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = false;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = false;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = false;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = true;\n} else {\n    show = true;\n}",
 						"overlay": {
 							"style": "text-align:center"
 						},
@@ -237,7 +238,7 @@
 						"customClass": "alignCenter",
 						"tableView": false,
 						"key": "changePadi",
-						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n} else {\n    show = false;\n}",
+						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n} else {\n    show = false;\n}",
 						"logic": [{
 							"name": "Event Handler",
 							"trigger": {
@@ -269,20 +270,6 @@
 						"input": false,
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
-					}, {
-						"key": "panelColumnsContent3",
-						"label": "Content",
-						"input": false,
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "PADI Membership not Applicable for this Program",
-						"type": "htmlelement",
-						"hideLabel": true,
-						"customConditional": "show = ((data['padiVerified']==false||data['padiVerified']=='false') && (data['verified'] == true || data['verified']=='true') && (data['padiNotFound']==false||data['padiNotFound']=='false') )",
-						"hideOnChildrenHidden": false,
-						"tableView": false
 					}, {
 						"label": "Content",
 						"attrs": [{
@@ -317,6 +304,11 @@
 						"label": "PADI Verified",
 						"tableView": false,
 						"defaultValue": false,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
 						"key": "padiVerifiedCSRCheck",
 						"properties": {
 							"negate": "padiVerified"
@@ -458,7 +450,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "panel",
-			"customConditional": "if (!(data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true')){\n\tshow = true;\n} else {\n    show = false;\n}",
+			"customConditional": "if (!(data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true')){\n\tshow = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true')){\n\tshow = true;\n} else {\n    show = false;\n}",
 			"type": "panel",
 			"label": "Personal Information",
 			"input": false,
@@ -1130,7 +1122,7 @@
 		"source": "5d4ee6df800c612c49e802d3",
 		"label": "Personal Information",
 		"path": "panel",
-		"nextPage": "next = (data['padiVerified'] ==true ||data['padiVerifiedCSRCheck']==true) ? 'panel2' : 'panel'",
+		"nextPage": "if(data['padiVerified'] ===true ||data['businessPadiVerified']===true){\n\tnext = 'panel2'\n} else {\n\tif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) && data['padiVerifiedCSRCheck'] ===true){\n\t\tnext = 'panel2';\n\t} else {\n\t\tif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && !(data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t\tnext = 'panel2';\n\t} else {\n\tnext = 'panel';\n\t}\n\t}\n}",
 		"breadcrumbClickable": true,
 		"buttonSettings": {
 			"previous": true,
@@ -1264,7 +1256,7 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"customDefaultValue": "if(data['business_name'] && data['business_name'] != ''){\n  value = data['padi'];\n}",
-						"calculateValue": "if(data['business_name'] && data['business_padi'] == ''){\n  value = data['padi'];\n}",
+						"calculateValue": "if(data['business_name'] && data['businessPadiVerified'] === true){\n  value = data['padi'];\n}",
 						"calculateServer": false,
 						"validateOn": "blur",
 						"validate": {
@@ -1306,7 +1298,7 @@
 						"input": false,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "Validate Business PADI",
+						"label": "Validate Membership",
 						"action": "event",
 						"showValidations": false,
 						"theme": "success",
@@ -1416,10 +1408,12 @@
 				"input": false,
 				"components": [{
 					"label": "Legal Business Name",
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
+					"spellcheck": false,
+					"tableView": false,
 					"clearOnHide": false,
+					"calculateValue": "if(data['business_name'] && data['businessPadiVerified']===true){\n  value = data['business_name']\n}",
+					"calculateServer": false,
+					"allowCalculateOverride": true,
 					"validate": {
 						"required": true,
 						"customMessage": "Please enter legal business name."
@@ -1774,6 +1768,16 @@
 					"columns": [{
 						"components": [{
 							"label": "DBA",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"calculateServer": false,
+							"key": "dba1",
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Entity Type",
 							"widget": "choicesjs",
 							"placeholder": " ",
 							"tableView": true,
@@ -1794,11 +1798,15 @@
 							},
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
 							"key": "dba",
 							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
@@ -9496,6 +9504,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-03-30T07:40:04.585Z",
+	"modified": "2020-03-30T21:51:55.893Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
