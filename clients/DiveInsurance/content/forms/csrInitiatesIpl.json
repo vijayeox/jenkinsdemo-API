@@ -3927,7 +3927,7 @@
 				"label": "amountPayable",
 				"calculateValue": "if(!data.CSRReviewRequired){\n  value = data['finalAmount'];\n}",
 				"calculateServer": false,
-				"key": "page6Panel2AmountPayable",
+				"key": "amountPayable",
 				"type": "hidden",
 				"input": true,
 				"tableView": true
@@ -4016,7 +4016,7 @@
 						"key": "custom",
 						"label": "custom",
 						"input": true,
-						"amount_field": "finalAmount",
+						"amount_field": "amountPayable",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
@@ -4074,7 +4074,8 @@
 					"payment_confirmation_page": "true"
 				},
 				"type": "columns",
-				"input": false
+				"input": false,
+				"keyModified": true
 			}],
 			"type": "panel",
 			"breadcrumb": "none",
@@ -4213,7 +4214,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 177,
+	"_vid": 179,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4234,6 +4235,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-03-30T14:47:55.518Z",
+	"modified": "2020-03-30T19:17:56.118Z",
 	"machineName": "testdivehub:csrInitiates"
 }
