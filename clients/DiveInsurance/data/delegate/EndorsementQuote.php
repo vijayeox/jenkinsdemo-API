@@ -21,13 +21,18 @@ class EndorsementQuote extends PolicyDocument
              'aniheader' => 'DB_Quote_ANI_header.html',
              'anifooter' => null,
              'policy' => 'Dive_Boat_Policy.pdf',
-             'roster' => 'Roster',
+             'roster' => 'Roster_Certificate',
              'rosterHeader' => 'Roster_header.html',
              'rosterFooter' => 'Roster_footer.html',
+             'rosterPdf' => 'Roster.pdf',
              'lpTemplate' => 'DiveBoat_LP',
              'lpheader' => 'DiveBoat_LP_header.html',
              'lpfooter' => 'DiveBoat_LP_footer.html',
-             'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf'),
+             'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
+             'boatAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT.pdf',
+             'waterAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT_InWater.pdf',
+             'hurricaneQuestionnaire' => 'PADI_Hurricane_Questionnaire',
+             'groupExclusions' => 'Group_Exclusions.pdf'),
             'Dive Store' 
             => array(
              'template' => 'DiveStoreEndorsement', 
@@ -52,10 +57,12 @@ class EndorsementQuote extends PolicyDocument
              'alheader' => 'DiveStore_AL_header.html',
              'alfooter' => 'DiveStore_AL_footer.html',
              'alTemplate' => 'DiveStore_AdditionalLocations',
-             'roster' => 'Roster',
+             'roster' => 'Roster_Certificate',
              'rosterHeader' => 'Roster_header.html',
              'rosterFooter' => 'Roster_footer.html',
-             'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf'
+             'rosterPdf' => 'Roster.pdf',
+             'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
+             'groupExclusions' => 'Group_Exclusions.pdf'
          ));   
     }
 }

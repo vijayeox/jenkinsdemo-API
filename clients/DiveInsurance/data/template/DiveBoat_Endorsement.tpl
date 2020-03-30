@@ -38,7 +38,7 @@
           <p>{if isset($increased_dinghyValue)}
                 *** The amount of DinghyTender Insurance has increased by ${$increased_dinghyValue},the premium has increased by ${$increased_dinghyPremium}
              {else if isset($decreased_dinghyValue)}
-                *** The amount of DinghyTender Insurance has been decreased by ${$decreased_dinghyValue},the premium has been decreased by ${$increased_dinghyPremium}
+                *** The amount of DinghyTender Insurance has been decreased by ${$decreased_dinghyValue},the premium has been decreased by ${$decreased_dinghyValue}
               {/if}
           </p>
 

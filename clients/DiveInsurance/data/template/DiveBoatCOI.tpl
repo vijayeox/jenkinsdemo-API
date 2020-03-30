@@ -198,7 +198,7 @@
 {/if}
 {if isset($layup_period_from_date_time) && $layup_period_from_date_time != ""}
 <hr></hr>
-<p class = "layup">Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}</p>
+<p class = "layup"><b>Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}</b></p>
 <hr></hr>
 {/if}
 <p class = "layup"  ><b>Deductibles:</b></p>

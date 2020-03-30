@@ -172,13 +172,13 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
             $policy['previous_TrailerPremium'] = isset($data['TrailerPremium']) ? $data['TrailerPremium'] : 0;
             $policy['previous_PropertyBasePremium'] = isset($data['PropertyBasePremium']) ? $data['PropertyBasePremium'] : 0;
             $policy['previous_Age25Surcharge'] = $data['Age25Surcharge'];
-            $policy['previous_NavWaterSurchargeYN'] = $data['NavWaterSurchargeYN'];
+            $policy['previous_NavWaterSurchargeYN'] = isset($data['NavWaterSurchargeYN']) ? $data['NavWaterSurchargeYN'] : false;
             $policy['previous_NavWaterSurchargePremium'] = $data['NavWaterSurchargePremium'];
-            $policy['previous_PortRiskYN'] = $data['PortRiskYN'];
+            $policy['previous_PortRiskYN'] = isset($data['PortRiskYN']) ? $data['PortRiskYN'] : false;
             $policy['previous_PortRiskCredit'] = $data['PortRiskCredit'];
-            $policy['previous_NavigationCreditYN'] = $data['NavigationCreditYN'];
+            $policy['previous_NavigationCreditYN'] = isset($data['NavigationCreditYN']) ? $data['NavigationCreditYN'] : false;
             $policy['previous_NavigationCredit'] = $data['NavigationCredit'];
-            $policy['previous_SuperiorRiskCreditYN'] = $data['SuperiorRiskCreditYN'];
+            $policy['previous_SuperiorRiskCreditYN'] = isset($data['SuperiorRiskCreditYN']) ? $data['SuperiorRiskCreditYN'] : false;
             $policy['previous_SuperiorRiskCredit'] = $data['SuperiorRiskCredit'];
             $policy['previous_PropertySubTotal'] = $data['PropertySubTotal'];
             $policy['previous_PropertySubTotalProRated'] = $data['PropertySubTotalProRated'];
@@ -190,7 +190,7 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
             $policy['previous_PassengerPremiumCost'] = $data['PassengerPremiumCost'];
             $policy['previous_CrewOnBoatPremium'] = isset($data['CrewOnBoatPremium']) ? $data['CrewOnBoatPremium'] : 0;
             $policy['previous_CrewMembersinWaterPremium'] = isset($data['CrewMembersinWaterPremium']) ? $data['CrewMembersinWaterPremium'] : 0;
-            $policy['prevoius_FL-HISurchargeYN'] = $data['FL-HISurchargeYN'];
+            $policy['prevoius_FL-HISurchargeYN'] = isset($data['FL-HISurchargeYN']) ? isset($data['FL-HISurchargeYN']) : false;
             $policy['previous_LiabilitySubTotal'] = $data['LiabilitySubTotal'];
             $policy['previous_LiabilitySubTotalProRated'] = $data['LiabilitySubTotalProRated'];
 

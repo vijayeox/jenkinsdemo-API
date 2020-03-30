@@ -217,18 +217,18 @@
   <hr class="total_hr"></hr>
   <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format:2:".":","}</span></p>
 </div>
-<hr class = "sec_title"></hr>
 {if isset($navigation_limit_note) && $navigation_limit_note != ""}
+<hr class = "sec_title"></hr>
 <p class="nav"><b>Navigation Limits:</b></p>
 <p class="nav_title">While the Vessel is afloat, this policy covers only losses which occur within the navigation limits specified below:</p>
 <p class="nav_title2">{$navigation_limit_note}</p>
 {/if}
 {if isset($layup_period_from_date_time) && $layup_period_from_date_time != ''} 
 <hr></hr>
-Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}
+<p class = "layup"><b>Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}</b></p>
 <hr></hr>
 {/if}
-<p><b>Deductibles:</b></p>
+<p class = "layup"><b>Deductibles:</b></p>
 <div>
   <p><span class = "sec_title">SECTION A - HULL INSURANCE:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>Hull Deductibles - 1.5% of value up to 25 years. 2.5% of value over 25 years.</span></p>
   <div class = "main_sec">

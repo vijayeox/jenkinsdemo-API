@@ -269,20 +269,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"key": "panelColumnsContent3",
-						"label": "Content",
-						"input": false,
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "PADI Membership not Applicable for this Program",
-						"type": "htmlelement",
-						"hideLabel": true,
-						"customConditional": "show = ((data['padiVerified']==false||data['padiVerified']=='false') && (data['verified'] == true || data['verified']=='true') && (data['padiNotFound']==false||data['padiNotFound']=='false') )",
-						"hideOnChildrenHidden": false,
-						"tableView": false
-					}, {
 						"label": "Content",
 						"attrs": [{
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
@@ -457,7 +443,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "panel",
-			"customConditional": "if (!(data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true')){\n\tshow = true;\n} else {\n    show = false;\n}",
+			"customConditional": "if (!(data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if(((data.padiVerified === true || data.padiVerified == 'true') || (data.businessPadiVerified === true || data.businessPadiVerified == 'true')) &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true')){\n\tshow = true;\n} else {\n    show = false;\n}",
 			"type": "panel",
 			"label": "Personal Information",
 			"input": false,
@@ -1126,7 +1112,7 @@
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
-		"nextPage": "next = (data['padiVerified'] ==true ||data['padiVerifiedCSRCheck']==true) ? 'panel2' : 'panel'",
+		"nextPage": "next = (data['padiVerified'] ==true || data['businessPadiVerified'] ==true || data['padiVerifiedCSRCheck']==true) ? 'panel2' : 'panel'",
 		"label": "Personal Information",
 		"breadcrumbClickable": true,
 		"buttonSettings": {
@@ -2479,7 +2465,7 @@
 						}]
 					}, {
 						"components": [{
-							"label": "How man Crew Members would you like to Cover ?",
+							"label": "How many Crew Members would you like to Cover ?",
 							"mask": false,
 							"spellcheck": true,
 							"tableView": true,
@@ -2487,6 +2473,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
@@ -4599,6 +4586,10 @@
 					},
 					"modal": false,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"customMessage": "Please enter all the required fields before proceeding."
+					},
 					"key": "groupPL",
 					"type": "editgrid",
 					"input": true,
@@ -4977,6 +4968,10 @@
 					},
 					"modal": false,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"customMessage": "Please enter all the required fields before proceeding."
+					},
 					"key": "namedInsureds",
 					"type": "editgrid",
 					"input": true,
@@ -7598,7 +7593,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 165,
+	"_vid": 170,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -7616,6 +7611,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-03-30T09:06:02.191Z",
+	"modified": "2020-03-30T14:04:52.791Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

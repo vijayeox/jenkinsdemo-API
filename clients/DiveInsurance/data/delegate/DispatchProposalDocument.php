@@ -24,6 +24,7 @@ class DispatchProposalDocument extends DispatchDocument {
         if(isset($data['documents']) && is_string($data['documents'])){
             $data['documents'] = json_decode($data['documents'],true);
         }
+
         $fileData =array();
         $errorFile = array();
         foreach($data['documents'] as $doc){
