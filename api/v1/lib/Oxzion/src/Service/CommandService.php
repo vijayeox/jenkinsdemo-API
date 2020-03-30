@@ -14,6 +14,7 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
+use Oxzion\Service\JobService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Service\UserService;
 use Oxzion\Service\WorkflowInstanceService;
@@ -29,6 +30,7 @@ class CommandService extends AbstractService
     protected $fileService;
     private $workflowInstanceService;
     private $userService;
+    private $jobService;
     /**
      * @ignore __construct
      */
@@ -39,7 +41,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -51,6 +53,7 @@ class CommandService extends AbstractService
         $this->workflowService = $workflowService;
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
         $this->userService = $userService;
+        $this->jobService = $jobService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -172,6 +175,10 @@ class CommandService extends AbstractService
                 $this->logger->info("Get User Identifiers By UserId");
                 return $this->getUserIdentifier($data);
                 break;
+            case 'getuserdata':
+                $this->logger->info("GET User Data");
+                return $this->getUserData($data);
+                break;
             case 'getuserlist':
                 $this->logger->info("GET User LIST");
                 return $this->getUserList($data);
@@ -191,6 +198,10 @@ class CommandService extends AbstractService
             case 'deactivateFile':
                 $this->logger->info("DEACTIVATE File ID");
                 return $this->deactivateFile($data);
+                break;
+            case 'submitWorkflow':
+                $this->logger->info("SUBMIT WORKFLOW");
+                return $this->submitWorkflow($data);
                 break;
             default:
                 break;
@@ -244,42 +255,46 @@ class CommandService extends AbstractService
 
     protected function scheduleJob(&$data)
     {
-        $this->logger->info("DATA  ------" . json_encode($data));
-        if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
-            $this->logger->info("jobUrl/Cron/Url/JobName Not Specified");
-            throw new EntityNotFoundException("JobUrl or Cron Expression or URL or JobName Not Specified");
+        try
+        {
+            $this->logger->info("DATA  ------" . json_encode($data));
+            if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
+                $this->logger->info("jobUrl/Cron/JobName Not Specified");
+                throw new EntityNotFoundException("JobUrl or Cron Expression or JobName Not Specified");
+            }
+            $jobUrl = $data['jobUrl'];
+            $cron = $data['cron'];
+            $jobGroup = $data['jobName'];
+            if(isset($data['fileId'])){
+                $jobName = $data['fileId'];
+            }else{
+                $jobName = $data['uuid'];
+            }            
+            $appId = $data['app_id'];
+            $orgId = isset($data['org_id']) ? $data['org_id'] : AuthContext::get(AuthConstants::ORG_ID);
+            unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
+            $this->logger->info("JOB DATA ------" . json_encode($data));
+            $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
+            $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
+            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $orgId);
+        } catch (Exception $e) {
+            $this->logger->error("Job Schedule ---- Exception - ".$e->getMessage() , $e);
         }
-        $jobUrl = $data['jobUrl'];
-        $cron = $data['cron'];
-        $url = 'setupjob';
-
-        $this->logger->info("jobUrl - $jobUrl, url -$url");
-        unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
-        $this->logger->info("JOB DATA ------" . json_encode($data));
-        $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
-        $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
-        $response = $this->restClient->postWithHeader($url, $jobPayload);
-        $this->logger->info("Response - " . print_r($response, true));
-        if (isset($response['body'])) {
+        if (isset($response) && isset($response['body'])) {
             $response = json_decode($response['body'], true);
-            $jobName = $data['jobName'];
-            unset($data['jobName']);
             $jobData = array("jobId" => $response['JobId'], "jobGroup" => $response['JobGroup']);
-            $data[$jobName] = json_encode($jobData);
+            $data[$jobGroup] = json_encode($jobData);
         }
         $this->logger->info("Schedule JOB DATA - " . print_r($data, true));
-        $fileData = json_encode($data);
-        $params = array("filedata" => $fileData, "fileUuid" => $data['fileId']);
-        $query = "UPDATE ox_file SET data = :filedata where uuid = :fileUuid";
-        $this->executeUpdateWithBindParameters($query, $params);
-        // return $response;
+        $this->fileService->updateFile($data, $data['fileId']);
+        return $data;
     }
 
     protected function canceljob(&$data)
     {
-        try {
+        try 
+        {
             $this->logger->info("DATA  ------" . json_encode($data));
-            $url = 'canceljob';
             if (!isset($data['jobName'])) {
                 $this->logger->warn("Job Name not specified, so job not cancelled");
                 return $data;
@@ -294,10 +309,14 @@ class CommandService extends AbstractService
                 $this->logger->warn("Job Id or Job Group Not Specified, so job not cancelled");
                 return $data;
             }
+            $appId = $data['app_id'];
+            $groupName = $JobData['jobGroup'];
             $jobPayload = array('jobid' => $JobData['jobId'], 'jobgroup' => $JobData['jobGroup']);
-            unset($data[$jobName]);
-            $response = $this->restClient->postWithHeader($url, $jobPayload);
-        } catch (Exception $e) {
+            $data[$jobName] = array();
+            $response = $this->jobService->cancelJobId($JobData['jobId'], $appId, $groupName);
+            $this->logger->info("Response - " . print_r($response, true));
+        } 
+        catch (Exception $e) {
             $this->logger->info("CLEAR JOB RESPONSE ---- " . print_r($e->getMessage(), true));
             if (strpos($e->getMessage(), 'response') !== false) {
                 $res = explode('response:', $e->getMessage())[1];
@@ -310,8 +329,8 @@ class CommandService extends AbstractService
             }
             throw $e;
         }
-        $this->logger->info("Response - " . print_r($response, true));
-        // return $response;
+        $this->logger->info("Cancel Job Data - " . print_r($data, true));
+        return $data;
     }
 
     protected function fileSave(&$data)
@@ -470,7 +489,7 @@ class CommandService extends AbstractService
             throw new EntityNotFoundException("File Id not provided");
         }
 
-        $result = $this->fileService->getFile($fileId);
+        $result = $this->fileService->getFile($fileId, true);
         $this->logger->info("EXTRACT FILE DATA result" . print_r($result, true));
         if ($result == 0) {
             throw new EntityNotFoundException("File " . $fileId . " not found");
@@ -566,6 +585,28 @@ class CommandService extends AbstractService
         }
     }
 
+    public function getUserData(&$data)
+    {
+        $userId = isset($data['user_id']) ? $this->getIdFromUuid('ox_user', $data['user_id']) : AuthContext::get(AuthConstants::USER_ID);
+        if (isset($data['appId']) && isset($userId)) {
+            $select = "SELECT * from ox_wf_user_identifier where app_id = :appId AND user_id = :user_id";
+            $selectQuery = array("appId" => $data['app_id'], "user_id" => $userId);
+            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+            if (count($result) > 0) {
+                $result = $this->userService->getUserWithMinimumDetails($userId);
+                unset($result['uuid']);
+                unset($result['username']);
+                $data = array_merge($data, $result);
+                return $data;
+            } else {
+                $data['user_exists'] = '0';
+                return $data;
+            }
+        } else {
+            return $data;
+        }
+    }
+
     protected function getUserList(&$data)
     {
         if (isset($data['appId'])) {
@@ -585,11 +626,22 @@ class CommandService extends AbstractService
         return $submitActivity;
     }
 
+    protected function submitWorkflow(&$data)
+    {
+        if(isset($data['activityInstanceId'])){
+           return $this->submitActivity($data);
+        }
+        return $this->startWorkflow($data);
+    }
+
     protected function processFileData(&$data){
         $this->logger->info("Process File Data--");
         if(isset($data['data'])){
             $this->logger->info("Process File Data --");
             $fileData = $data['data'];
+            if(isset($fileData['uuid'])){
+                unset($fileData['uuid']);
+            }
             unset($data['data']);
             $processedData = array_merge($data,$fileData);
             $this->logger->info("Processed Data".print_r($processedData,true));

@@ -19,3 +19,7 @@ api/v1/.vscode/launch.json
 .vscode/launch.json
 integrations/smtp/smtp-server/outbox/
 integrations/smtp/smtp-server/smtp.log
+integrations/camel/.project
+integrations/camel/.settings/org.eclipse.buildship.core.prefs
+clients/BridgeMed/view/themes/BridgeMedTheme/dist/
+clients/BridgeMed/view/themes/BridgeMedTheme/node_modules/

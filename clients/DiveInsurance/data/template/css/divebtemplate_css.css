@@ -132,6 +132,7 @@ body{
 	margin-top:0px;
 	padding: 0px;
 	letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .certificate_data{
 	width :35%;
@@ -190,6 +191,7 @@ body{
 	margin-bottom: 0px;
 	margin-top:0px;
   font-weight:bold;
+  font-size: 15px;
 }
 
 .section1{
@@ -596,4 +598,114 @@ body{
 .title_value{
   margin-top: 1px;
   margin-bottom: 1px;
+}
+
+
+/*Roaster*/
+.r_title{
+  font-size: 20px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.r_title1,.r_title2{
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.r_label{
+  width: 100%;
+}
+
+.r_label1{
+  width: 50%;
+  float:left;
+  display: inline-block;
+}
+
+.r_label2{
+  width: 50%;
+  float:left;
+  display: inline-block;
+}
+
+.r_content{
+   font-size: 15px;
+   margin:0px;
+   padding: 2px;
+}
+.r_content1{
+   font-size: 15px;
+}
+
+.r_headerRow{
+  border-bottom: 1px solid black;
+}
+
+.r_footerTitle{
+  margin-top:0px;
+  padding-top: 0px;
+  font-size: 15px;
+}
+
+
+.footer-v1{
+  width:100%;
+  margin-top:2%;
+  margin-bottom: 2%;
+}
+
+
+
+.left_content1{
+  float:left;
+  width : 50%;
+  display: inline-block;
+}
+.right_content2{
+  float:left;
+  width : 50%;
+  display: inline-block;
+}
+
+.com_info{
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-bottom:1px;
+  margin-top:0px;
+  padding: 0px;
+  width: 70%;
+  letter-spacing: 1px;
+}
+
+.com_info1{
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-bottom:1px;
+  margin-top:0px;
+  padding: 0px;
+  width: 60%;
+  letter-spacing: 1px;
+}
+
+.layup{
+  margin:0px;
+  padding: 0px;
+}
+
+.sec_title_med{
+  margin-top:1px;
+  margin-bottom: 1px;
+  margin-left:0px;
+}
+
+.value_align1{
+  margin-top:2px;
+  margin-bottom:2px;
+  font-size:15px;
 }

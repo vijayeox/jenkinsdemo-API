@@ -9,7 +9,8 @@ import org.camunda.bpm.engine.runtime.Incident
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class CustomServiceTaskListener implements ExecutionListener {
+class CustomServiceTaskListener implements ExecutionListener, Serializable {
+  static final long serialVersionUID = -677991492884005036L
   private static final Logger logger = LoggerFactory.getLogger(CustomServiceTaskListener.class)
 
   private static CustomServiceTaskListener instance = null
@@ -70,9 +71,10 @@ class CustomServiceTaskListener implements ExecutionListener {
           if(taskDetails.variables.return == "true" || taskDetails.variables.return == true){
             logger.info("Inside Return");
             def responseData = responseValue.data
-            responseData.putAll(responseData)
             execution.setVariables(responseData)
+            println("responseData - ${responseData}")
             logger.info("Final Response received - ${execution.getVariables()}")
+            println("Final Response received - ${execution.getVariables()}")
           }
           }else{
             ErrorHandler.handleError(execution)

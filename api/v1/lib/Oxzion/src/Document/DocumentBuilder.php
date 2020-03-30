@@ -62,6 +62,10 @@ class DocumentBuilder {
        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend,$generateOptions);
     }
 
+    public function fillPDFForm($template,$data,$destination) {
+        return $this->documentGenerator->fillPDFForm($template,$data,$destination);
+    }
+
     public function copyTemplateToDestination($template,$destination){
         $sourcePath = $this->config['TEMPLATE_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID).'/'.$template;
         $this->logger->info("copyTemplateToDestination".$sourcePath);

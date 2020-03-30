@@ -1,6 +1,8 @@
-import React, { Component } from "react";
-import WidgetRenderer from "./WidgetRenderer";
-
+import React, { Component } from 'react';
+import WidgetRenderer from './WidgetRenderer';
+import WidgetDrillDownHelper from './WidgetDrillDownHelper';
+import Swal from 'sweetalert2';
+import './WidgetStyles.css'
 
 class Dashboard extends Component {
   constructor(props) {
@@ -10,26 +12,26 @@ class Dashboard extends Component {
       htmlData: this.props.htmlData ? this.props.htmlData : null
     };
     this.content = this.props.content;
+    this.renderedWidgets = {};
     var uuid = '';
-    if(this.props.uuid){
+    if (this.props.uuid) {
       uuid = this.props.uuid;
     }
-    if(this.props.content){
+    if (this.props.content) {
       var content = JSON.parse(this.props.content)
-      if(content && content.uuid){
+      if (content && content.uuid) {
         uuid = content.uuid;
       }
     }
     this.uuid = uuid;
-    console.log(this.uuid);
     this.loader = this.core.make("oxzion/splash");
-    this.helper=this.core.make("oxzion/restClient");
+    this.helper = this.core.make("oxzion/restClient");
     this.props.proc.on("destroy", () => {
       this.removeScriptsFromDom();
     });
   }
 
-  async GetDashboardHtmlDataByUUID(uuid) {
+  async getDashboardHtmlDataByUuid(uuid) {
     let response = await this.helper.request(
       "v1",
       "analytics/dashboard/" + uuid,
@@ -38,10 +40,10 @@ class Dashboard extends Component {
     );
     return response;
   }
-  async GetWidgetByUUID(uuid) {
+  async getWidgetByUuid(uuid) {
     let response = await this.helper.request(
       "v1",
-      "analytics/widget/" + uuid+'?data=true',
+      "analytics/widget/" + uuid + '?data=true',
       {},
       "get"
     );
@@ -50,60 +52,151 @@ class Dashboard extends Component {
 
   componentDidMount() {
     if (this.uuid) {
-      this.loader.show();
-      this.GetDashboardHtmlDataByUUID(this.uuid).then(response => {
-        this.loader.destroy();
+      let thiz = this;
+      this.loader.show()
+      this.getDashboardHtmlDataByUuid(this.uuid).then(response => {
         if (response.status == "success") {
           this.setState({
             htmlData: response.data.dashboard.content ? response.data.dashboard.content : null
           });
-            this.callUpdateGraph();
+          thiz.loader.destroy();
+          this.updateGraph();
         } else {
           this.setState({
             htmlData: `<p>No Data</p>`
           });
+          this.loader.destroy()
         }
+      }).
+      catch(function (response) {
+          console.error('Could not load widget.');
+          console.error(response);
+          Swal.fire({
+              type: 'error',
+              title: 'Oops ...',
+              text: 'Could not load widget. Please try after some time.'
+          });
+          thiz.loader.destroy();
       });
     } else if (this.state.htmlData != null) {
-      this.callUpdateGraph();
+      this.updateGraph();
     }
+    window.addEventListener('message', this.widgetDrillDownMessageHandler, false);
   }
 
   componentWillUnmount() {
-    if (this.chart) {
-      this.chart.dispose();
+    for (let elementId in this.renderedWidgets) {
+      let widget = this.renderedWidgets[elementId];
+      if (widget) {
+        if (widget.dispose) {
+          widget.dispose();
+        }
+        delete this.renderedWidgets[elementId];
+      }
     }
+    window.removeEventListener('message', this.widgetDrillDownMessageHandler, false);
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.htmlData) {
-      if (this.props.htmlData !== prevProps.htmlData) {
-        this.setState({
-          htmlData: this.props.htmlData
-        });
-      }
-    }
+    // if (this.props.htmlData) {
+    //   if (this.props.htmlData !== prevProps.htmlData) {
+    //     this.setState({
+    //       htmlData: this.props.htmlData
+    //     });
+    //   }
+    // }
   }
 
-  callUpdateGraph = () => {
-      var self = this;
-      if (this.state.htmlData != null) {
-        var root = document;
-        self.updateGraph(root);
+  updateGraph = async () => {
+    if (null === this.state.htmlData) {
+        return;
+    }
+    let root = document;
+    var widgets = root.getElementsByClassName('oxzion-widget');
+    let thiz = this;
+    this.loader.show();
+    let errorFound = false;
+    for (let widget of widgets) {        
+      var attributes = widget.attributes;
+      var widgetUUId = attributes[WidgetDrillDownHelper.OXZION_WIDGET_ID_ATTRIBUTE].value;
+      let response = await this.getWidgetByUuid(widgetUUId);
+      if ('error' === response.status) {
+        console.error('Could not load widget.');
+        console.error(response);
+        errorFound = true;
       }
-  };
-
-  updateGraph = root => {
-    var widgets = root.getElementsByClassName("oxzion-widget");
-    for(let widget of widgets)
-    {
-        var attributes = widget.attributes;
-        var widgetUUId = attributes['data-oxzion-widget-id'].value;
-        this.GetWidgetByUUID(widgetUUId).then(response => {
-          WidgetRenderer.render(widget, response.data.widget);
-        })
+      else {
+        let widgetObject = WidgetRenderer.render(widget, response.data.widget);
+        if (widgetObject) {
+          this.renderedWidgets[widgetUUId] = widgetObject;
+        }
+      }
+    }
+    this.loader.destroy();
+    if (errorFound) {
+      Swal.fire({
+        type: 'error',
+        title: 'Oops ...',
+        text: 'Could not load one or more widget(s). Please try after some time.'
+      });
+      return;
     }
   };
+
+  widgetDrillDownMessageHandler = (event) => {
+    let eventData = event.data;
+    let action = eventData[WidgetDrillDownHelper.MSG_PROP_ACTION];
+    if ((action !== WidgetDrillDownHelper.ACTION_DRILL_DOWN) && (action !== WidgetDrillDownHelper.ACTION_ROLL_UP)) {
+      return;
+    }
+    let target = eventData[WidgetDrillDownHelper.MSG_PROP_TARGET];
+    if (target && (target !== 'widget')) {
+      return;
+    }
+
+    var thiz = this;
+    function cleanup(elementId) {
+      let widget = thiz.renderedWidgets[elementId];
+      if (widget) {
+        if (widget.dispose) {
+          widget.dispose();
+        }
+        delete thiz.renderedWidgets[elementId];
+      }
+    }
+
+    let elementId = eventData[WidgetDrillDownHelper.MSG_PROP_ELEMENT_ID];
+    let widgetId = eventData[WidgetDrillDownHelper.MSG_PROP_WIDGET_ID];
+    cleanup(elementId);
+
+    let nextWidgetId = eventData[WidgetDrillDownHelper.MSG_PROP_NEXT_WIDGET_ID];
+    if (nextWidgetId) {
+      widgetId = nextWidgetId;
+    }
+
+    let url = `analytics/widget/${widgetId}?data=true`;
+    let filter = eventData[WidgetDrillDownHelper.MSG_PROP_FILTER];
+    if (filter && ('' !== filter)) {
+      url = url + '&filter=' + encodeURIComponent(filter);
+    }
+
+    var self = this;
+    this.helper.request('v1', url, null, 'get').
+      then(response => {
+        let element = document.getElementById(elementId);
+        let widgetObject = WidgetRenderer.render(element, response.data.widget, eventData);
+        if (widgetObject) {
+          self.renderedWidgets[elementId] = widgetObject;
+        }
+      }).
+      catch(response => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Could not fetch the widget data. Please try after some time.'
+        });
+      });
+  }
 
   render() {
     return <div dangerouslySetInnerHTML={{ __html: this.state.htmlData }} />;

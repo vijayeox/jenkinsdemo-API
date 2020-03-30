@@ -10,8 +10,8 @@ class RenewalRateCard extends RateCard
     public function __construct()
     {
         parent::__construct();
-        $this->unsetVariables = array('Individual Professional Liability' => array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents'));
-        $this->coverages = array('Individual Professional Liability' => array('careerCoveragePrice'=>'careerCoverage','scubaFitPrice'=>'scubaFit','equipmentPrice'=>'equipment','cylinderPrice'=>'cylinder','excessLiabilityPrice'=>'excessLiability'));
+        $this->unsetVariables = array('Individual Professional Liability' => array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents','autoRenewalJob'),'Emergency First Response' => array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents','autoRenewalJob'),'Dive Boat' => array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents','autoRenewalJob'),'Dive Store' => array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents','autoRenewalJob'));
+        $this->coverages = array('Individual Professional Liability' => array('careerCoveragePrice'=>'careerCoverage','scubaFitPrice'=>'scubaFit','equipmentPrice'=>'equipment','cylinderPrice'=>'cylinder','excessLiabilityPrice'=>'excessLiability'),'Emergency First Response' => array('coverageAmount'=>'liabilityCoverageName'));
     }
 
     public function execute(array $data, Persistence $persistenceService)
@@ -39,6 +39,7 @@ class RenewalRateCard extends RateCard
         $data['form_data'] = $this->rateCalculation($data['form_data']);
         //CLEAN FILE DATA FOR CURRENT YEAR
         $data['form_data'] = $this->cleanExistingData($data['form_data']);
+        $data['form_data']['policyStatus'] = "Renewal Approval Pending"; 
         //END CLEAN FILE DATA FOR CURRENT YEAR
         $this->logger->info("CLEAN DATA END" . print_r($data, true));
 

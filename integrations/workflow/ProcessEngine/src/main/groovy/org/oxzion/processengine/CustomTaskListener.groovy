@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory
 import java.util.regex.Matcher
 
 
-class CustomTaskListener implements TaskListener {
+class CustomTaskListener implements TaskListener, Serializable {
+  static final long serialVersionUID = -687991492884005033L
   private static final Logger logger = LoggerFactory.getLogger(CustomTaskListener.class);
 
   private static CustomTaskListener instance = null

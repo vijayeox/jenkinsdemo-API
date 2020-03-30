@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Overlay, Tooltip, Button } from 'react-bootstrap';
+import { Overlay, Tooltip, Button, Form } from 'react-bootstrap';
 import { dashboardEditor as section } from './metadata.json';
 import JavascriptLoader from './components/javascriptLoader';
 
 import { WidgetRenderer, DashboardEditorFilter } from './GUIComponents';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 import '../../gui/src/public/css/sweetalert.css';
 import './components/widget/editor/widgetEditorApp.scss';
 import '../../gui/src/public/css/dashboardEditor.scss'
@@ -45,10 +45,45 @@ class DashboardEditor extends React.Component {
                         }
                     );
                     break;
+                case 'permissions':
+                    thisInstance.userProfile = thisInstance.core.make("oxzion/profile").get();
+                    let permissions=thisInstance.userProfile.key.privileges;
+                    let preparedData={
+                        "permissions":permissions,
+                        "corrid":eventData.params["OX_CORR_ID"]
+                    }
+                    editorDialog.postMessage({"data":preparedData},'*')
                 default:
                     console.warn(`Unhandled editor dialog message action:${eventData.action}`);
             }
         };
+    }
+
+    widgetDrillDownMessageHandler = (event) => {
+        let data = event['data'];
+        if (data['action'] !== 'oxzion-widget-drillDown') {
+            return;
+        }
+
+        let elementId = data['elementId'];
+        let widgetId = data['widgetId'];
+        let chart = this.renderedCharts[elementId];
+        if (chart) {
+            if (chart.dispose) {
+                chart.dispose();
+            }
+            this.renderedCharts[elementId] = null;
+        }
+        let replaceWidgetId = data['replaceWith'];
+        if (replaceWidgetId) {
+            widgetId = replaceWidgetId;
+            let iframeElement = document.querySelector('iframe.cke_wysiwyg_frame');
+            let iframeWindow = iframeElement.contentWindow;
+            let iframeDocument = iframeWindow.document;
+            let widgetElement = iframeDocument.querySelector('#' + elementId);
+            widgetElement.setAttribute('data-oxzion-widget-id', replaceWidgetId);
+        }
+        this.updateWidget(elementId, widgetId);
     }
 
     inputChanged = (e) => {
@@ -369,7 +404,14 @@ class DashboardEditor extends React.Component {
     }
 
     componentDidMount() {
+        if(this.state.dashboardId==null) 
+        {
+            let loader=this.core.make('oxzion/splash');
+            loader.destroy()
+        }
+
         window.addEventListener('message', this.editorDialogMessageHandler, false);
+        window.addEventListener('message', this.widgetDrillDownMessageHandler, false);
         JavascriptLoader.loadScript(this.getJsLibraryList());
     }
 
@@ -384,6 +426,7 @@ class DashboardEditor extends React.Component {
             }
         }
         window.removeEventListener('message', this.editorDialogMessageHandler, false);
+        window.removeEventListener('message', this.widgetDrillDownMessageHandler, false);
         if (this.editor) {
             this.editor.destroy();
         }
@@ -401,9 +444,9 @@ class DashboardEditor extends React.Component {
         return (
             <form className="dashboard-editor-form">
                 <div className="row col-12" style={{ marginBottom: "3em" }}>
-                    <Button className="dashboard-back-btn" onClick={() => this.props.flipCard("")}><i class="fa fa-arrow-left" aria-hidden="true" title="Go back"></i></Button>
+                    <Button className="dashboard-back-btn" onClick={() => this.props.flipCard("")}><i className="fa fa-arrow-left" aria-hidden="true" title="Go back"></i></Button>
                     <Button className="dashboard-save-btn" onClick={this.saveDashboard} disabled={!this.state.contentChanged}>Save</Button>
-                    <Button className="dashboard-filter-btn" id="dashboard-filter-btn" onClick={() => this.displayFilterDiv()}><i class="fa fa-filter" aria-hidden="true"></i>Filter</Button>
+                    <Button className="dashboard-filter-btn" id="dashboard-filter-btn" onClick={() => this.displayFilterDiv()}><i className="fa fa-filter" aria-hidden="true"></i>Filter</Button>
                 </div>
                 <div>
                     <DashboardEditorFilter 

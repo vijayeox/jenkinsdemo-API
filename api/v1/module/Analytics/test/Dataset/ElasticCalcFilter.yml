@@ -1,0 +1,211 @@
+ox_elastic:
+  -
+    app_name: 'crmnew'
+    entity_name: 'Lead'
+    id: 83
+    username: 'john'
+    org_id: 1
+    action: 'insert'
+    ac_last_contact_date: null
+    ac_last_contact_date_in: null
+    ac_last_contact_date_out: null
+    ac_contact_count: null
+    ac_contact_count_in: null
+    ac_contact_count_out: null
+    serialized_data: null
+    name: 'John Doe'
+    namePrefix: null,
+    firstName: 'John'
+    middleName: null
+    lastName: 'Doe'
+    nameSuffix: null
+    jobTitle: 'CEO'
+    companyName: 'EOX Vantage'
+    website: 'eoxvantage.com'
+    numberOfEmployees: 8
+    industry: 'Insurance'
+    closeDate: 2019/08/30
+    createdAt: 2019/08/30
+    updatedAt: 2019/08/30
+    notes: null
+    twitter: null
+    linkedIn: null
+    contact: null
+    owner_username: 'john'
+    organization: 1
+    organization_name: 'Vantage Agora'
+    customerAssociation: null
+    source: 'demand_generation'
+    source_name: 'Demand Generation'
+    status: 'new'
+    status_name: 'New'
+    budget_amount: 1000
+    actual_amount: 500
+  -
+    app_name: 'crmnew'
+    entity_name: 'Lead'
+    id: 84
+    username: 'john'
+    org_id: 1
+    action: 'insert'
+    ac_last_contact_date: null
+    ac_last_contact_date_in: null
+    ac_last_contact_date_out: null
+    ac_contact_count: null
+    ac_contact_count_in: null
+    ac_contact_count_out: null
+    serialized_data: null
+    name: 'Jim Smith'
+    namePrefix: null,
+    firstName: 'Jim'
+    middleName: null
+    lastName: 'Smith'
+    nameSuffix: null
+    jobTitle: 'Manager'
+    companyName: 'ABC Solutions'
+    website: 'eoxvantage.com'
+    numberOfEmployees: 8
+    industry: 'Software'
+    closeDate: 2019/10/15
+    createdAt: 2019/08/30
+    updatedAt: 2019/08/30
+    notes: null
+    twitter: null
+    linkedIn: null
+    contact: null
+    owner_username: 'john'
+    organization: 1
+    organization_name: 'Vantage Agora'
+    customerAssociation: null
+    source: 'demand_generation'
+    source_name: 'Demand Generation'
+    status: 'new'
+    status_name: 'New'
+    budget_amount: 2000
+    actual_amount: 2300
+  -
+    app_name: 'crmnew'
+    entity_name: 'Lead'
+    id: 85
+    username: mark
+    org_id: 1
+    action: 'insert'
+    ac_last_contact_date: null
+    ac_last_contact_date_in: null
+    ac_last_contact_date_out: null
+    ac_contact_count: null
+    ac_contact_count_in: null
+    ac_contact_count_out: null
+    serialized_data: null
+    name: 'Jim Smith'
+    namePrefix: null,
+    firstName: 'Jim'
+    middleName: null
+    lastName: 'Smith'
+    nameSuffix: null
+    jobTitle: 'Manager'
+    companyName: 'ABC Solutions'
+    website: 'eoxvantage.com'
+    numberOfEmployees: 8
+    industry: 'Insurance'
+    closeDate: 2019/11/01
+    createdAt: 2019/08/30
+    updatedAt: 2019/08/30
+    notes: null
+    twitter: null
+    linkedIn: null
+    contact: null
+    owner_username: mark
+    organization: 1
+    organization_name: 'Vantage Agora'
+    customerAssociation: null
+    source: 'demand_generation'
+    source_name: 'Demand Generation'
+    status: 'new'
+    status_name: 'New'
+    budget_amount: 3000
+    actual_amount: 2800
+  -
+    app_name: 'crmnew'
+    entity_name: 'Lead'
+    id: 86
+    username: mark
+    org_id: 1
+    action: 'insert'
+    ac_last_contact_date: null
+    ac_last_contact_date_in: null
+    ac_last_contact_date_out: null
+    ac_contact_count: null
+    ac_contact_count_in: null
+    ac_contact_count_out: null
+    serialized_data: null
+    name: 'Jim Smith'
+    namePrefix: null,
+    firstName: 'Jim'
+    middleName: null
+    lastName: 'Smith'
+    nameSuffix: null
+    jobTitle: 'Manager'
+    companyName: 'ABC Solutions'
+    website: 'eoxvantage.com'
+    numberOfEmployees: 8
+    closeDate: 2020/02/01
+    industry: 'Insurance'
+    createdAt: 2020/01/30
+    updatedAt: 2020/01/30
+    notes: null
+    twitter: null
+    linkedIn: null
+    contact: null
+    owner_username: mark
+    organization: 1
+    organization_name: 'Vantage Agora'
+    customerAssociation: null
+    source: 'demand_generation'
+    source_name: 'Demand Generation'
+    status: 'new'
+    status_name: 'New'
+    budget_amount: 3000
+    actual_amount: 2800
+  -
+    app_name: 'crmnew'
+    entity_name: 'Lead'
+    id: 87
+    username: jane
+    org_id: 1
+    action: 'insert'
+    ac_last_contact_date: null
+    ac_last_contact_date_in: null
+    ac_last_contact_date_out: null
+    ac_contact_count: null
+    ac_contact_count_in: null
+    ac_contact_count_out: null
+    serialized_data: null
+    name: 'Jim Smith'
+    namePrefix: null,
+    firstName: 'Jim'
+    middleName: null
+    lastName: 'Smith'
+    nameSuffix: null
+    jobTitle: 'Manager'
+    companyName: 'ABC Solutions'
+    website: 'eoxvantage.com'
+    numberOfEmployees: 8
+    closeDate: 2020/02/01
+    industry: 'Insurance'
+    createdAt: 2020/01/30
+    updatedAt: 2020/01/30
+    notes: null
+    twitter: null
+    linkedIn: null
+    contact: null
+    owner_username: jane
+    organization: 1
+    organization_name: 'Vantage Agora'
+    customerAssociation: null
+    source: 'demand_generation'
+    source_name: 'Demand Generation'
+    status: 'new'
+    status_name: 'New'
+    budget_amount: 5000
+    actual_amount: 5000

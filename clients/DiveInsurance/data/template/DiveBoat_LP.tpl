@@ -9,7 +9,7 @@
 	<div class ="body_div_lp">
 			{foreach from=$list item=$additional}
 	    		<p class = "ai_list">
-	    			&nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state},{$additional.zip}
+	    			&nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state} &nbsp&nbsp{$additional.zip}
 	    		</p>
     		{/foreach}
 	</div>

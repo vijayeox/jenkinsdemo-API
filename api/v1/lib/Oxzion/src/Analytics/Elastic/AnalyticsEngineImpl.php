@@ -67,6 +67,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		$field = null;
 		$dateperiod = null;
 		$filter =array();
+		$inline_filter = array();
 		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
 		if (!empty($parameters['date-period'])) $dateperiod = $parameters['date-period'];
 		if (!empty($parameters['date_period'])) $dateperiod =  $parameters['date_period'];
@@ -140,10 +141,15 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		if (isset($parameters['filter'])) {
 			$filter[] = $parameters['filter'];
 		}
+		if (isset($parameters['inline_filter'])) {
+			foreach($parameters['inline_filter'] as $inlineArry) {
+				array_unshift($filter, $inlineArry);
+			}
+		}
 		$this->hasGroup = (empty($group)) ? 0 : 1;
 		if (!empty($group)) $group = array_map('strtolower', $group);
 
-		$returnarray = array('filter' => $filter, 'group' => $group, 'range' => $range, 'aggregates' => $aggregates);
+		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'range' => $range, 'aggregates' => $aggregates);
 		if (isset($parameters['pagesize'])) {
 			$returnarray['pagesize'] = $parameters['pagesize'];
 		}

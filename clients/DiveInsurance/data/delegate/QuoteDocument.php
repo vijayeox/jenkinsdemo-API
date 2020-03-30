@@ -24,15 +24,15 @@ class QuoteDocument extends PolicyDocument
                      'aniheader' => 'DB_Quote_ANI_header.html',
                      'anifooter' => null,
                      'policy' => 'Dive_Boat_Policy.pdf',
-                     'gtemplate' => 'Group_PL_COI',
-                     'gheader' => 'Group_header.html',
-                     'gfooter' => 'Group_footer.html',
-                     'nTemplate' => 'Group_PL_NI',
-                     'nheader' => 'Group_NI_header.html',
-                     'nfooter' => 'Group_NI_footer.html',
+                     'roster' => 'Roster',
+                     'rosterHeader' => 'Roster_header.html',
+                     'rosterFooter' => 'Roster_footer.html',
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
-                     'lpfooter' => 'DiveBoat_LP_footer.html'),
+                     'lpfooter' => 'DiveBoat_LP_footer.html',
+                     'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
+                     'boatAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT.pdf',
+                     'waterAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT_InWater.pdf'),
         'Dive Store' 
             => array(
                      'template' => 'DiveCenterProposal_Template', 
@@ -47,6 +47,9 @@ class QuoteDocument extends PolicyDocument
                      'aniTemplate' => 'DiveStore_ANI',
                      'aniheader' => 'DS_Quote_ANI_header.html',
                      'anifooter' => null,
+                     'nTemplate' => 'Group_PL_NI',
+                     'nheader' => 'Group_NI_header.html',
+                     'nfooter' => 'Group_NI_footer.html',
                      'lpTemplate' => 'DS_Quote_LP',
                      'lpheader' => 'DS_LP_header.html',
                      'lpfooter' => null,
@@ -54,6 +57,9 @@ class QuoteDocument extends PolicyDocument
                      'gtemplate' => 'Group_PL_COI',
                      'gheader' => 'Group_header.html',
                      'gfooter' => 'Group_footer.html',
+                     'alheader' => 'DiveStore_AL_header.html',
+                     'alfooter' => 'DiveStore_AL_footer.html',
+                     'alTemplate' => 'DiveStore_AdditionalLocations'
                     ));
         
     }

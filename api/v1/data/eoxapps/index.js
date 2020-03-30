@@ -10,7 +10,7 @@ const register = (core, args, options, metadata) => {
   const proc = core.make("osjs/application", { args, options, metadata });
   proc
     .createWindow({
-      id: "HubWindow",
+      id: metadata.name + "_Window",
       title: metadata.title.en_EN,
       icon: proc.resource(icon_white),
       dimension: {

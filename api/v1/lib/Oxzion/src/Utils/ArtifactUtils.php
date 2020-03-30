@@ -40,6 +40,52 @@ class ArtifactUtils
         }
         return array('absolutePath' => $templateDir.$path, 'relativePath' => $path);
     }
+
+    public static function getMimeType($fileName){
+        $pathInfo = pathinfo($fileName);
+        $fileExtension = $pathInfo['extension'];
+        switch ($fileExtension) {
+            case 'png':
+                $mimeType = 'image/png';
+                break;
+            case 'pdf':
+                $mimeType = 'application/pdf';
+                break;
+            case 'jpeg':
+            case 'jpg':
+                $mimeType = 'image/jpeg';
+                break;
+            case 'mp4':
+                $mimeType = 'video/mp4';
+                break;
+            case 'gif':
+                $mimeType = 'image/gif';
+                break;
+            case 'xls':
+                $mimeType = 'application/vnd.ms-excel';
+                break;
+            case 'xlsx':
+                $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                break;
+            case 'docx':
+                $mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                break;
+            case 'doc':
+                $mimeType = 'application/msword';
+                break;
+            case 'odt':
+                $mimeType = 'application/vnd.oasis.opendocument.text';
+                break;
+            case 'zip':
+                $mimeType = 'application/zip';
+                break;
+            default:
+                $mimeType = 'application/octet-stream';
+                break;
+        }
+        return $mimeType;
+
+    }
 }
 
 ArtifactUtils::$logger  = Logger::getLogger(__CLASS__);

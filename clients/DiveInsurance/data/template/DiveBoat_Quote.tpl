@@ -3,7 +3,6 @@
 <head>
   <link href= "{$smarty.current_dir}/css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
-
 </head>
 <body onload = "agentInfo()">
  <div class = "m_div">
@@ -79,12 +78,12 @@
       </div>
       <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p></div>
       <div class="sec3">
-       <p class="value_align">{if isset($HullPremium)}
+       <p class="value_align">{if isset($HullPremium) && $HullPremium != '0.00'}
         ${$HullPremium|number_format:2:".":","}
         {else}
         N/A
       {/if}</p>
-      <p class="value_align">{if isset($DingyTenderPremium)}
+      <p class="value_align">{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
         ${$DingyTenderPremium|number_format:2:".":","}
         {else}
         N/A
@@ -95,11 +94,11 @@
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($HullPremium)}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($HullPremium) && $HullPremium != '0.00'}
         Included
         {else}
         N/A
-      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($DingyTenderPremium)}
+      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
         Included
         {else}
         N/A
@@ -115,7 +114,7 @@
         <p class="hull_title">Limit of Insurance:</p>
       </div>
       <div class="sec2"><p class="hull_title">US</p></div>
-      <div class="sec3"><p class="value_align">{if isset($TrailerPremium)}
+      <div class="sec3"><p class="value_align">{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
         ${$TrailerPremium|number_format:2:".":","}
         {else}
         N/A
@@ -125,7 +124,7 @@
       <div class="sec4">
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium)}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
         Included
         {else}
         N/A
@@ -164,13 +163,13 @@
       </div>
       <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
       <div class="sec3"><p class="value_align">{$totalLiabilityLimit}</p>
-      <p class="value_align">{if isset($CrewOnBoatPremium)}
+      <p class="value_align">{if isset($CrewOnBoatPremium) && $CrewOnBoatPremium != '0.00'}
                                 {$totalLiabilityLimit}
                              {else}
                                 NotCovered
                             {/if}
                              </p>
-      <p class="value_align">{if isset($CrewMembersinWaterPremium)}
+      <p class="value_align">{if isset($CrewMembersinWaterPremium) && $CrewMembersinWaterPremium != '0.00'}
                                 {$totalLiabilityLimit}
                              {else}
                                 NotCovered
@@ -182,11 +181,11 @@
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewOnBoatPremium)}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewOnBoatPremium) && $CrewOnBoatPremium != '0.00'}
         Included
         {else}
         N/A
-      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewMembersinWaterPremium)}
+      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewMembersinWaterPremium) && $CrewMembersinWaterPremium != '0.00'}
         Included
         {else}
         N/A
@@ -214,15 +213,17 @@
 <div>&nbsp</div>
 <hr></hr>
 <div class = "total">
-  <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount}</span></p>
+  <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount|number_format:2:".":","}</span></p>
   <hr class="total_hr"></hr>
-  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee}</span></p>
+  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format:2:".":","}</span></p>
 </div>
 <hr class = "sec_title"></hr>
+{if isset($navigation_limit_note) && $navigation_limit_note != ""}
 <p class="nav"><b>Navigation Limits:</b></p>
 <p class="nav_title">While the Vessel is afloat, this policy covers only losses which occur within the navigation limits specified below:</p>
 <p class="nav_title2">{$navigation_limit_note}</p>
-{if isset($layup_period_from_date_time)}
+{/if}
+{if isset($layup_period_from_date_time) && $layup_period_from_date_time != ''} 
 <hr></hr>
 Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}
 <hr></hr>
@@ -238,12 +239,12 @@ Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$
         <p class =" deduct">Personal Effects:</p>
       </div>
       <div class ="sector2">
-        <p  class="value_align">{if isset($DingyTenderPremium)}
+        <p  class="value_align">{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
         $1000.00
         {else}
         N/A
       {/if}</p>
-        <p class="value_align">{if isset($TrailerPremium)}
+        <p class="value_align">{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
         $1000.00
         {else}
         N/A

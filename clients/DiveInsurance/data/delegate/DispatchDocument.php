@@ -20,11 +20,14 @@ abstract class DispatchDocument extends MailDelegate
         $mailOptions['subject'] = $data['subject'];
         if (isset($data['document'])) {
             $mailOptions['attachments'] = $data['document'];
+            unset($data['document']);
         }
         $this->logger->info("ATTACHMENTS LIST ".print_r($mailOptions,true));
-        $template = $data['template'];
-        $response = $this->sendMail($data, $template, $mailOptions);
-        $this->logger->info("Mail Response" . $response);
-        return $response;
+        if(isset($data['template'])){
+            $template = $data['template'];
+            $response = $this->sendMail($data, $template, $mailOptions);
+            $this->logger->info("Mail Response" . $response);
+            return $response;
+        }
     }
 }

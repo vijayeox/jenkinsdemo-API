@@ -109,12 +109,12 @@ body {
   text-transform: uppercase;
 }
 .certificate_data {
-  width: 45%;
+  width: 40%;
   float: left;
   display: inline-block;
 }
 .certificate_data1 {
-  width: 55%;
+  width: 60%;
   float: left;
   margin-bottom: 10px;
   display: inline-block;

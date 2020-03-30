@@ -42,11 +42,16 @@ class CancelPolicy extends PolicyDocument
                 $data[$key] = json_encode($row);
             }
         }
+        $value = json_decode($data['reasonforCsrCancellation'], true);
+        $data['reasonforCsrCancellation'] = $value['value'];
         $data['reinstateDocuments'] = $data['documents'];
         $Canceldate = isset($Canceldate) ? $Canceldate : date_create();
         $data['CancelDate'] = isset($data['CancelDate']) ? $data['CancelDate']: $Canceldate->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";
-
+        $data['confirmReinstatePolicy'] = '';
+        if(isset($data['reinstateAmount'])){
+            $data['reinstateAmount'] = '';
+        }
         if($data['reasonforCsrCancellation'] == 'nonPaymentOfPremium'){
             $this->logger->info("Processing nonPaymentOfPremium");
             $temp = $Canceldate;

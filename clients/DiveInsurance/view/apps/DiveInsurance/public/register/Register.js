@@ -19,12 +19,16 @@ export default class Register extends React.Component {
           type="text/css"
           dangerouslySetInnerHTML={{
             __html:
-              "\n   .logo{\n    text-align: center;\n    margin:50px;\n  }\n  .logo img{\n    width:auto;\n    height: 150px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
+              "\n   .logo{\n    text-align: center;\n    margin:25px;\n    height:100px;\n  }\n  .logo > img{\n    width:auto;\n    height: 100px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
           }}
         />
         <div className="container">
           <div className="logo">
-            <img src="../img/logo.png" />
+            <img src="../img/logo.png" style={{ float: "left" }} />
+            <div className="padi" style={{ float: "right" }}>
+              <img src="../img/padi.png" />
+              <h4>PADI ENDORSED INSURANCE</h4>
+            </div>
           </div>
           <section>
             <div className="form">

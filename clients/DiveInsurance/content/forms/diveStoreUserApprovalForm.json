@@ -3,331 +3,378 @@
   "type": "form",
   "tags": [],
   "owner": "5cd2e0d62363f67ddc9489c6",
-  "components": [
-    {
-      "type": "panel",
-      "title": "Quote Information",
-      "components": [
-        {
-          "type": "documentviewer",
-          "key": "documents",
-          "conditional": { "show": "", "when": null, "eq": "" },
-          "protected": false,
-          "persistent": true,
-          "dtype": "documentviewer",
-          "datype": "documentviewer",
-          "dattype": "documentviewer",
-          "datatype": "documentviewer",
-          "data_type": "documentviewer",
-          "label": "Quote Information",
-          "hideLabel": true,
-          "inputType": "documentviewer",
-          "input": 1,
-          "tableView": false,
-          "validate": { "unique": false, "multiple": false }
-        },
-        {
-          "autofocus": false,
-          "input": true,
+  "components": [{
+    "title": "Quote Information",
+    "theme": "primary",
+    "breadcrumb": "none",
+    "breadcrumbClickable": true,
+    "buttonSettings": {
+      "previous": true,
+      "cancel": true,
+      "next": true
+    },
+    "collapsible": false,
+    "tableView": false,
+    "key": "page5Panel",
+    "type": "panel",
+    "label": "Rate Car",
+    "input": false,
+    "components": [{
+      "type": "documentviewer",
+      "key": "documents1",
+      "label": "Quote Information",
+      "calculateValue": "value = (data['documents'])",
+      "hideLabel": true,
+      "inputType": "documentviewer",
+      "input": 1,
+      "tableView": false
+    }, {
+      "label": "documents",
+      "key": "documents",
+      "type": "hidden",
+      "input": true,
+      "tableView": false
+    }, {
+      "label": "orgId",
+      "key": "orgId",
+      "type": "hidden",
+      "input": true,
+      "tableView": false,
+      "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
+    }, {
+      "key": "page5Panel2",
+      "input": false,
+      "title": "Approval",
+      "theme": "primary",
+      "tableView": false,
+      "components": [{
+        "label": "well",
+        "tableView": false,
+        "key": "well4",
+        "type": "well",
+        "input": false,
+        "components": [{
+          "label": "<b>I hereby declare that I accept the proposal</b>",
+          "optionsLabelPosition": "right",
+          "inline": false,
           "tableView": true,
-          "inputType": "radio",
-          "label": "Would you like to Proceed with the Quote?",
-          "key": "userApproved",
-          "values": [
-            { "value": "true", "label": "Accept", "shortcut": "" },
-            { "value": "false", "label": "Decline", "shortcut": "" }
-          ],
-          "defaultValue": "",
-          "protected": false,
-          "fieldSet": false,
-          "persistent": true,
-          "hidden": false,
-          "clearOnHide": false,
+          "values": [{
+            "value": "accepted",
+            "label": "Accept",
+            "shortcut": ""
+          }, {
+            "value": "rejected",
+            "label": "Decline",
+            "shortcut": ""
+          }],
+          "calculateServer": false,
           "validate": {
-            "required": true,
-            "custom": "",
-            "customPrivate": false
+            "required": true
+          },
+          "key": "userApproved",
+          "properties": {
+            "": "page7"
           },
           "type": "radio",
-          "labelPosition": "top",
-          "optionsLabelPosition": "right",
-          "tags": [],
-          "conditional": { "show": "", "when": null, "eq": "" },
-          "properties": {},
-          "lockKey": true
-        },
-        {
-          "autofocus": false,
           "input": true,
-          "tableView": true,
+          "lockKey": true
+        }, {
           "label": "Could you let us know the Reason for Rejecting the Quote?",
-          "key": "page2CouldyouletusknowtheReasonforRejectingtheQuote",
-          "placeholder": "",
-          "prefix": "",
-          "suffix": "",
-          "rows": 3,
-          "multiple": false,
-          "defaultValue": "",
-          "protected": false,
-          "persistent": true,
-          "hidden": false,
-          "wysiwyg": false,
-          "clearOnHide": true,
+          "autoExpand": false,
           "spellcheck": true,
+          "tableView": true,
           "validate": {
-            "required": false,
-            "minLength": "",
-            "maxLength": "",
-            "pattern": "",
-            "custom": ""
+            "required": true
+          },
+          "key": "userRejectionReason",
+          "conditional": {
+            "show": true,
+            "when": "userApproved",
+            "eq": "false"
           },
           "type": "textarea",
-          "labelPosition": "top",
-          "inputFormat": "plain",
-          "tags": [],
-          "conditional": {
-            "show": "true",
-            "when": "userApproved",
-            "eq": "decline"
-          },
-          "properties": {}
-        }
-      ],
-      "input": false,
-      "key": "page2",
-      "clearOnHide": false,
-      "theme": "primary",
-      "tableView": false,
-      "hideLabel": false,
-      "breadcrumb": "default",
-      "tags": [],
-      "conditional": { "show": "", "when": null, "eq": "" },
-      "properties": {},
-      "nextPage": ""
-    },
-    {
+          "input": true
+        }],
+        "path": "well4",
+        "clearOnHide": false,
+        "hideLabel": true
+      }],
       "type": "panel",
-      "title": "Payment Information",
-      "components": [
-        {
-          "key": "page7Panel",
-          "input": false,
-          "title": "Automatic Renewal",
-          "theme": "primary",
-          "tableView": false,
-          "components": [
-            {
-              "key": "page7PanelContent",
-              "label": "Content",
-              "input": false,
-              "attrs": [{ "value": "", "attr": "" }],
-              "content": "<h4><b>PADI  has made membership renewal simple.\nVicencia & Buckley is making AUTOMATIC RENEWAL for Professional Liability Insurance a reality!</b></h4>\n</br>",
-              "type": "htmlelement",
-              "hideLabel": true,
-              "tableView": false,
-              "validate": { "unique": false, "multiple": false },
-              "tag": "p",
-              "className": ""
-            },
-            {
-              "input": true,
-              "tableView": true,
-              "label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
-              "dataGridLabel": false,
-              "key": "automatic_renewal",
-              "defaultValue": false,
-              "type": "checkbox",
-              "lockKey": true,
-              "validate": { "unique": false, "multiple": false },
-              "autofocus": false,
-              "inputType": "checkbox",
-              "hideLabel": false,
-              "protected": false,
-              "persistent": true,
-              "hidden": false,
-              "name": "",
-              "value": "",
-              "clearOnHide": true
-            },
-            {
-              "label": "Click here for more information",
-              "tag": "a",
-              "attrs": [{ "value": "", "attr": "" }],
-              "content": "<a href=\"https://www.diveinsurance.com/pop_automatic_renewal.htm\">Click here for more information</a>",
-              "refreshOnChange": false,
-              "tableView": false,
-              "key": "page7PanelClickhereformoreinformation",
-              "type": "htmlelement",
-              "input": false,
-              "hideLabel": true,
-              "validate": { "unique": false, "multiple": false },
-              "className": ""
-            }
-          ],
-          "type": "panel",
-          "label": "Panel",
-          "validate": { "unique": false, "multiple": false },
-          "clearOnHide": false,
-          "hideLabel": false
-        },
-        {
-          "input": true,
-          "tableView": true,
-          "key": "single_limit",
-          "label": "single_limit",
-          "type": "hidden",
-          "lockKey": true,
-          "defaultValue": "$1,000,000",
-          "validate": { "unique": false, "multiple": false },
-          "protected": false,
-          "unique": false,
-          "persistent": true
-        },
-        {
-          "input": true,
-          "tableView": true,
-          "key": "annual_aggregate",
-          "label": "annual_aggregate",
-          "type": "hidden",
-          "lockKey": true,
-          "defaultValue": "$2,000,000",
-          "validate": { "unique": false, "multiple": false },
-          "protected": false,
-          "unique": false,
-          "persistent": true,
-          "tags": [],
-          "conditional": { "show": "", "when": null, "eq": "" },
-          "properties": {}
-        },
-        {
-          "key": "page7Panel2",
-          "input": false,
-          "title": "Payment Details",
-          "theme": "primary",
-          "tableView": false,
-          "components": [
-            {
-              "input": true,
-              "tableView": true,
-              "key": "amountPayable",
-              "label": "amountPayable",
-              "type": "hidden",
-              "lockKey": true,
-              "calculateValue": "value = data['totalAmount']",
-              "validate": { "unique": false, "multiple": false },
-              "protected": false,
-              "unique": false,
-              "persistent": true
-            },
-            {
-              "input": true,
-              "tableView": true,
-              "key": "transaction_id",
-              "label": "transaction_id",
-              "type": "hidden",
-              "lockKey": true,
-              "validate": { "unique": false, "multiple": false },
-              "protected": false,
-              "unique": false,
-              "persistent": true
-            },
-            {
-              "input": true,
-              "tableView": true,
-              "key": "transaction_status",
-              "label": "transaction_status",
-              "type": "hidden",
-              "lockKey": true,
-              "validate": { "unique": false, "multiple": false },
-              "protected": false,
-              "unique": false,
-              "persistent": true
-            },
-            {
-              "type": "convergepay",
-              "key": "custom",
-              "conditional": { "show": "", "when": null, "eq": "" },
-              "protected": false,
-              "persistent": true,
-              "label": "custom",
-              "input": true,
-              "tableView": false,
-              "validate": { "unique": false, "multiple": false }
-            }
-          ],
-          "type": "panel",
-          "label": "Panel",
-          "validate": { "unique": false, "multiple": false },
-          "clearOnHide": false,
-          "hideLabel": false
-        },
-        {
-          "key": "page7Content",
-          "label": "Content",
-          "input": false,
-          "attrs": [{ "value": "", "attr": "" }],
-          "content": "</br><b><font color=\"red\">If you click \"Submit Form\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Form\" only once.</b></font>",
-          "type": "htmlelement",
-          "hideLabel": true,
-          "tableView": false,
-          "validate": { "unique": false, "multiple": false },
-          "tag": "p",
-          "className": ""
-        }
-      ],
-      "input": false,
-      "key": "page7",
-      "theme": "primary",
-      "tableView": false,
+      "lockKey": true,
       "label": "Panel",
-      "validate": { "unique": false, "multiple": false },
-      "clearOnHide": false,
-      "hideLabel": false,
-      "breadcrumb": "default",
-      "tags": [],
-      "conditional": { "show": "", "when": null, "eq": "" },
-      "properties": { "payment_confirmation_page": "true" }
-    },
-    {
+      "path": "page5Panel2"
+    }, {
+      "label": "automatic_renewal",
+      "customDefaultValue": "value = false;",
+      "key": "automatic_renewal",
+      "type": "hidden",
       "input": true,
-      "label": "Submit",
+      "tableView": false
+    }, {
+      "label": "amount",
+      "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
+      "calculateServer": false,
+      "key": "amount",
+      "type": "hidden",
+      "input": true,
+      "tableView": false
+    }, {
+      "title": "Payment Information",
+      "theme": "primary",
+      "collapsible": false,
       "tableView": false,
-      "key": "submit",
-      "type": "button",
-      "event": "submitForm",
-      "validate": { "unique": false, "multiple": false },
-      "autofocus": false,
-      "size": "md",
-      "leftIcon": "",
-      "rightIcon": "",
-      "block": false,
-      "action": "submit",
-      "disableOnInvalid": false,
-      "theme": "primary"
-    }
-  ],
+      "key": "page7",
+      "properties": {
+        "payment_confirmation_page": "true"
+      },
+      "conditional": {
+        "show": true,
+        "when": "userApproved",
+        "eq": "accepted"
+      },
+      "type": "panel",
+      "label": "Payment Information",
+      "breadcrumb": "none",
+      "buttonSettings": {
+        "previous": true,
+        "cancel": true,
+        "next": true
+      },
+      "components": [{
+        "label": "payment",
+        "calculateValue": "value = 'true';",
+        "calculateServer": false,
+        "key": "payment",
+        "type": "hidden",
+        "input": true,
+        "tableView": false
+      }, {
+        "label": "Columns",
+        "columns": [{
+          "components": [{
+            "label": "Payment Options",
+            "optionsLabelPosition": "right",
+            "inline": false,
+            "tableView": false,
+            "values": [{
+              "label": "Cash",
+              "value": "cash",
+              "shortcut": ""
+            }, {
+              "label": "Money Order",
+              "value": "moneyOrder",
+              "shortcut": ""
+            }, {
+              "label": "Cheque",
+              "value": "cheque",
+              "shortcut": ""
+            }, {
+              "label": "Credit Card",
+              "value": "creditCard",
+              "shortcut": ""
+            }, {
+              "label": "Financial Fund",
+              "value": "financialFunding",
+              "shortcut": ""
+            }],
+            "clearOnHide": false,
+            "calculateServer": false,
+            "validate": {
+              "required": true
+            },
+            "key": "paymentOptions",
+            "properties": {
+              "render": "columns"
+            },
+            "type": "radio",
+            "input": true,
+            "hideOnChildrenHidden": false
+          }],
+          "width": 6,
+          "offset": 0,
+          "push": 0,
+          "pull": 0,
+          "size": "md"
+        }, {
+          "components": [{
+            "label": "Cheque Number",
+            "mask": false,
+            "spellcheck": true,
+            "tableView": false,
+            "delimiter": false,
+            "requireDecimal": false,
+            "inputFormat": "plain",
+            "clearOnHide": false,
+            "calculateServer": false,
+            "validate": {
+              "required": true
+            },
+            "key": "chequeNumber",
+            "conditional": {
+              "show": true,
+              "when": "paymentOptions",
+              "eq": "cheque"
+            },
+            "type": "number",
+            "input": true,
+            "hideOnChildrenHidden": false
+          }, {
+            "type": "convergepay",
+            "key": "custom",
+            "label": "custom",
+            "input": true,
+            "conditional": {
+              "show": true,
+              "when": "paymentOptions",
+              "eq": "creditCard"
+            },
+            "tableView": false,
+            "hideOnChildrenHidden": false
+          }, {
+            "label": "Order ID",
+            "spellcheck": true,
+            "tableView": true,
+            "clearOnHide": false,
+            "calculateServer": false,
+            "validate": {
+              "required": true
+            },
+            "key": "orderId",
+            "conditional": {
+              "show": true,
+              "when": "paymentOptions",
+              "eq": "moneyOrder"
+            },
+            "type": "textfield",
+            "input": true,
+            "hideOnChildrenHidden": false
+          }, {
+            "label": "Content",
+            "attrs": [{
+              "value": "",
+              "attr": ""
+            }],
+            "content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+            "refreshOnChange": false,
+            "tableView": false,
+            "key": "page7Content",
+            "conditional": {
+              "show": true,
+              "when": "paymentOptions",
+              "eq": "creditCard"
+            },
+            "type": "htmlelement",
+            "input": false,
+            "hideLabel": true,
+            "hideOnChildrenHidden": false
+          }],
+          "width": 6,
+          "offset": 0,
+          "push": 0,
+          "pull": 0,
+          "size": "md"
+        }],
+        "tableView": false,
+        "key": "columns",
+        "properties": {
+          "payment_confirmation_page": "true"
+        },
+        "type": "columns",
+        "input": false
+      }, {
+        "input": true,
+        "tableView": true,
+        "key": "transaction_id",
+        "label": "transaction_id",
+        "type": "hidden",
+        "lockKey": true
+      }, {
+        "input": true,
+        "tableView": true,
+        "key": "transaction_status",
+        "label": "transaction_status",
+        "type": "hidden",
+        "lockKey": true
+      }, {
+        "label": "amountPayable",
+        "calculateValue": "value = data['amount']",
+        "calculateServer": false,
+        "key": "page7Panel2AmountPayable",
+        "type": "hidden",
+        "input": true,
+        "tableView": true
+      }],
+      "input": false,
+      "lockKey": true,
+      "breadcrumbClickable": true
+    }, {
+      "title": "Payment Approval",
+      "theme": "primary",
+      "collapsible": false,
+      "tableView": false,
+      "key": "paymentApprovalPanel",
+      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+      "type": "panel",
+      "label": "Payment Approval",
+      "input": false,
+      "components": [{
+        "label": "Payment Verified",
+        "optionsLabelPosition": "right",
+        "inline": true,
+        "tableView": false,
+        "values": [{
+          "label": "Approved",
+          "value": "approved",
+          "shortcut": ""
+        }, {
+          "label": "Declined",
+          "value": "declined",
+          "shortcut": ""
+        }],
+        "clearOnHide": false,
+        "calculateServer": false,
+        "key": "paymentVerified",
+        "type": "radio",
+        "input": true
+      }, {
+        "label": "Notes",
+        "autoExpand": false,
+        "spellcheck": true,
+        "tableView": true,
+        "calculateServer": false,
+        "key": "notes",
+        "type": "textarea",
+        "input": true
+      }]
+    }],
+    "path": "page5Panel"
+  }, {
+    "label": "Submit",
+    "showValidations": false,
+    "tableView": false,
+    "key": "submit",
+    "type": "button",
+    "event": "submitForm",
+    "input": true
+  }],
   "controller": "",
   "revisions": "",
   "_vid": 0,
   "title": "Dive Store User Approval Form",
-  "display": "wizard",
-  "access": [
-    {
-      "roles": [
-        "5ce43aa430776b950569301d",
-        "5ce43aa430776b4a5969301e",
-        "5ce43aa430776bdfb569301f"
-      ],
-      "type": "read_all"
-    }
-  ],
+  "display": "form",
+  "access": [{
+    "roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
+    "type": "read_all"
+  }],
   "submissionAccess": [],
   "settings": {},
-  "properties": { "delegate": "RateCard" },
+  "properties": {
+    "delegate": "RateCard"
+  },
   "name": "diveStoreUserApprovalForm",
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-02-06T10:51:29.937Z",
+  "modified": "2020-03-28T15:15:53.846Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

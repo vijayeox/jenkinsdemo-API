@@ -15,6 +15,8 @@
 .dashboard .flippy-front{
   height: auto;
   min-height: 70vh;
+  padding: 0px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0);
 }
 .dashboard-filter-btn{
     position: absolute;
@@ -116,13 +118,14 @@ padding-right: 1em;
     padding: 1em;
     padding-top: 12px;
     padding-bottom: 0px;
-    border-radius: 10px;
     position: absolute;
-    width: 98%;
+    width: 100%;
     background-image: linear-gradient(to right top, #3d6776, #4b6f7c, #587682, #657e88, #72868e);
   }
   .dashboard-viewer-div{
+    position: absolute;
     margin-top: 5em;
+    width:100%;
   }
   .dash-manager-buttons{
     position: absolute;
@@ -152,7 +155,8 @@ padding-right: 1em;
   top: 0.1em;
 }
  .create-dash-btn{
-   margin-bottom: 5px;
+  margin-left: 1em;
+  margin-bottom: 10px;
  }
   .Window_Analytics .dashboard .GridCustomStyle{
     height: calc(100% - 91px) !important
@@ -161,3 +165,5 @@ padding-right: 1em;
   .Window_Analytics .dashboard label{
     color: #265160 !important;
   }
+  
+  

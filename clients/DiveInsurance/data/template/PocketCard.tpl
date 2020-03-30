@@ -14,11 +14,11 @@
 		<div class="main_div">
 			<div class = "details">
 				<p class = "email"><b>Your certificate and insurance policy <br>were emailed to :<br><u>{$individual.email}</u></b></p><br>
-				<p class = "email" align="left"><b>Address:{$individual.address1}<br>
+				<p class = "email" align="left"><b>{$individual.lastname},&nbsp;{$individual.firstname}<br>{$individual.address1}<br>
 					{if isset($individual.address2)}
 						{$individual.address2}<br>
 					{/if}
-					{$individual.city}, {$individual.state},{$individual.zip} </b></p>
+					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip} </b></p>
 			</div>
 			<div class = "insure">
 				<div class = "header">
@@ -26,7 +26,9 @@
 					<p class = "heading2"><b>Insured's Pocket Card</b></p>
 				</div>
 				<div class = "main_section">
-					<p class = "card_holder_name">Cardholder Name: &nbsp{$individual.firstname}&nbsp{$individual.lastname}</p>
+					<p class = "card_holder_name">{if isset($individual.business_name)}Business Name:&nbsp;
+						{$individual.business_name}<br> Insured: &nbsp;{$individual.firstname}&nbsp{$individual.lastname}
+					{else}Cardholder Name: &nbsp;{$individual.firstname}&nbsp{$individual.lastname}</p>{/if}
 					<div class = "section">
 						<div class = "sec1">
 							<p class = "info">Certificate #: &nbsp{$individual.certificate_no}</p>

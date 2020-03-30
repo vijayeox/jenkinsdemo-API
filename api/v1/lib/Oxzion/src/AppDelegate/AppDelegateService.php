@@ -78,7 +78,8 @@ class AppDelegateService extends AbstractService
                 if (method_exists($obj, "setUserContext")) {
                     $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
                         AuthContext::get(AuthConstants::NAME),
-                        AuthContext::get(AuthConstants::ORG_UUID));
+                        AuthContext::get(AuthConstants::ORG_UUID),
+                        AuthContext::get(AuthConstants::PRIVILEGES));
                 }
                 $persistenceService = $this->getPersistence($appId);
 

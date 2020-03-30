@@ -88,7 +88,7 @@ class DashboardService extends AbstractService
         $form->updateValidate($data);
         $count = 0;
         try {
-            if(isset($data['isdefault']) && $data['isdefault'] === 1) {
+            if(isset($data['isdefault']) && $data['isdefault'] == 1) {
                 $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
                 $queryParams = [
                     'org_id' => AuthContext::get(AuthConstants::ORG_ID)

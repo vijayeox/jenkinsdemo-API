@@ -9,7 +9,10 @@ import java.text.SimpleDateFormat
 import java.util.logging.Logger
 
 
-class CustomTaskCompleteListener implements TaskListener {
+class CustomTaskCompleteListener implements TaskListener, Serializable {
+
+    static final long serialVersionUID = -787991492884005035L
+
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 
     private static CustomTaskCompleteListener instance = null

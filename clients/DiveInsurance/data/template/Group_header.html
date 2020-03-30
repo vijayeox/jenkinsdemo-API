@@ -1,8 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link href= "./css/template_css.css" rel="stylesheet" type="text/css" />
+<link href= "./css/template_css.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="./AgentInfo.js"></script> 
+<script type="text/javascript" src="./js/moment.js"></script>
+
 <script>
   function subst() {
       var vars = {};
@@ -16,21 +18,39 @@
               vars[temp_var[0]] = decodeURI(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','single_limit','annual_aggregate'];
+      // document.getElementById("test").textContent = query_strings_from_url;
+     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','combinedSingalLimit','annualAggregate'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
-              var element = document.getElementsByClassName(css_selector_classes[css_class]);
-              for (var j = 0; j < element.length; ++j) {
-                  element[j].textContent = vars[css_selector_classes[css_class]];
-              }
+            var element = document.getElementsByClassName(
+              css_selector_classes[css_class]
+            );
+            for (var j = 0; j < element.length; ++j) {
+              element[j].textContent = vars[css_selector_classes[css_class]];
+            }
+            if (css_selector_classes[css_class] == "start_date") {
+              document.getElementsByClassName(
+                "start_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+            }
+            if (css_selector_classes[css_class] == "end_date") {
+              document.getElementsByClassName("end_date")[0].textContent =
+                moment(vars[css_selector_classes[css_class]]).format(
+                  "D MMMM YYYY"
+                ) + " - 12:01:00 AM";
+            }
           }
-      }
+        }
       agentInfo();
   }
   </script>
 </head>
 <body onload="subst()">  
  <div class = "main_group">
+
+    <div id = "test"></div>
             <hr class="line1"></hr>
           <div class="spacer"></div>
           <hr class="line2"></hr>
@@ -73,7 +93,7 @@
           <p class = "p_margin"><b>Expiration Date:</b></p>
         </div>
         <div class = "certificate_data1">
-          <p class = "p_margin">S<span class ="certificate_no"></span></p>
+          <p class = "p_margin"><span class ="group_certificate_no"></span></p>
           <p class = "p_margin"><span class ="business_padi"></span></p>
           <p class = "p_margin"><span class ="start_date"></span></p>
           <p class = "p_margin"><span class ="end_date"></span></p>
@@ -82,7 +102,7 @@
           <hr></hr>
           <p class = "p_margin">Policy issued by Tokio Marine Specialty Insurance
 Company</p>
-          <p class = "p_margin">Policy #: <span class ="policy_id"></span></p>
+          <p class = "p_margin">Policy #: <span class ="group_policy_id"></span></p>
         </div>
       </div>
       </div>
@@ -100,8 +120,8 @@ Company</p>
             </div>
             <div class = "gin-type1"> 
                 <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
-                  <p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p>
-                  <p class = "ins_font">$2,000,000</p>
+                  <p class = "ins_font">$<span class ="combinedSingalLimit"></span>&nbsp&nbsp&nbsp(per occurrence)</p>
+                  <p class = "ins_font">$<span class ="annualAggregate"></span></p>
             </div>
           </div>
           <div class="gi_type2">

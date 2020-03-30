@@ -1176,7 +1176,6 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'Bharat Gogineni');
-        $this->assertEquals($content['data']['orgid'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data']['role'][0]['name'],'ADMIN');
         $this->assertEquals($content['data']['role'][1]['name'],'MANAGER');
     }

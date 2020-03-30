@@ -56,6 +56,10 @@ class Ratecard extends AbstractAppDelegate
         if(isset($stateTaxData)){
             $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
         }
+        if(isset($data["quote_due_date"]) || isset($data['quoteRequirement'])){
+            $data['quote_due_date'] = '';
+            $data['quoteRequirement'] = array();
+        }
         if(isset($premiumRateCardDetails)){
             $this->logger->info("Rate Card ENd");
             $returnArray = array_merge($data,$premiumRateCardDetails);

@@ -11,10 +11,13 @@ class AbstractEditor extends React.Component {
             readOnly: true,
             queries: [],
             configuration: '',
+            drillDownFilter:'',
+            drillDownWidget:'',
             expression: '',
             errors:{
                 configuration:null,
                 expression: null,
+                drillDown:{},
                 queries: []
             }
         };
@@ -327,11 +330,19 @@ class AbstractEditor extends React.Component {
     }
 
     loadData = (postLoadCallback) => {
-        let thiz = this;
-        let params = {
-            'queries':this.state.queries
+        let params = {};
+        let postUrl = '';
+        //when only single query is passed pass the uuid in url
+        if(this.state.queries && (this.state.queries.length === 1)) {
+            postUrl = 'analytics/query/' + this.state.queries[0].uuid + '?data=true';
+        }
+        else {
+            postUrl = 'analytics/query/data';
+            params['queries'] = this.state.queries;
         };
-        window.postDataRequest('analytics/query/data', params).
+
+        let thiz = this;
+        window.postDataRequest(postUrl, params).
             then(function(responseData) {
                 thiz.data = responseData.query.data;
                 if (postLoadCallback) {
@@ -351,7 +362,8 @@ class AbstractEditor extends React.Component {
 
     loadQueries = (postLoadCallback) => {
         let thiz = this;
-        window.postDataRequest('analytics/query').
+        window.postDataRequest('analytics/query?filter=' + 
+            encodeURIComponent('[{"take":500,"skip":0,"sort":[{"field":"name","dir":"asc"}]}]')).
             then(function(response) {
                 thiz.queryList = response.data;
                 thiz.forceUpdate();

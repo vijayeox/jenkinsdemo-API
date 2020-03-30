@@ -2,15 +2,13 @@
 namespace App\Controller;
 
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Encryption\Crypto;
+use Oxzion\EntityNotFoundException;
 use Oxzion\Model\Job;
 use Oxzion\Model\JobTable;
 use Oxzion\ServiceException;
 use Oxzion\Service\JobService;
 use Oxzion\ValidationException;
-use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
-
 
 class JobController extends AbstractApiController
 {
@@ -39,7 +37,7 @@ class JobController extends AbstractApiController
         $jobGroup = $params['jobGroup'];
         $jobPayload = $params['jobPayload'];
         $cron = $params['cron'];
-        $orgId = isset($params['orgId']) ? $params['orgId']: AuthContext::get(AuthConstants::ORG_ID) ;
+        $orgId = isset($params['orgId']) ? $params['orgId'] : AuthContext::get(AuthConstants::ORG_ID);
         $appId = $this->params()->fromRoute()['appId'];
         try {
             $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $orgId);
@@ -51,10 +49,10 @@ class JobController extends AbstractApiController
             }
         } catch (EntityNotFoundException $e) {
             return $this->getErrorResponse($e->getMessage());
-        } catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),406);
-        } catch(Exception $e){
-            return $this->getErrorResponse($e->getMessage(),500);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 406);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
     }
 
@@ -70,7 +68,7 @@ class JobController extends AbstractApiController
         $params = $this->extractPostData();
         $data['app_id'] = $this->params()->fromRoute()['appId'];
         $appId = isset($data['app_id']) ? $data['app_id'] : null;
-        try{
+        try {
             $response = $this->jobService->getJobsList($appId);
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
@@ -80,10 +78,10 @@ class JobController extends AbstractApiController
             }
         } catch (ValidationException $e) {
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),406);
-        } catch(Exception $e){
-            return $this->getErrorResponse($e->getMessage(),500);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 406);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
     }
 
@@ -99,7 +97,7 @@ class JobController extends AbstractApiController
     {
         $appId = $this->params()->fromRoute()['appId'];
         $jobId = $this->params()->fromRoute()['jobId'];
-        try{
+        try {
             $response = $this->jobService->getJobDetails($jobId, $appId);
             if ($response && is_array($response)) {
                 $this->log->info("Job Service successfully executed - " . print_r($response, true));
@@ -109,10 +107,10 @@ class JobController extends AbstractApiController
             }
         } catch (ValidationException $e) {
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),406);
-        } catch(Exception $e){
-            return $this->getErrorResponse($e->getMessage(),500);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 406);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
     }
 
@@ -131,7 +129,7 @@ class JobController extends AbstractApiController
         $jobGroup = $params['jobGroup'];
         $data['app_id'] = $this->params()->fromRoute()['appId'];
         $appId = isset($data['app_id']) ? $data['app_id'] : null;
-        try{
+        try {
             $response = $this->jobService->cancelJob($jobName, $jobGroup, $appId);
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
@@ -141,10 +139,10 @@ class JobController extends AbstractApiController
             }
         } catch (ValidationException $e) {
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),406);
-        } catch(Exception $e){
-            return $this->getErrorResponse($e->getMessage(),500);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 406);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
     }
 
@@ -162,7 +160,7 @@ class JobController extends AbstractApiController
         $jobId = $params['jobId'];
         $data['app_id'] = $this->params()->fromRoute()['appId'];
         $appId = isset($data['app_id']) ? $data['app_id'] : null;
-        try{
+        try {
             $response = $this->jobService->cancelJobId($jobId, $appId);
             if ($response && is_array($response)) {
                 $this->log->info("Job Cancellation Successfully Executed - " . print_r($response, true));
@@ -172,10 +170,10 @@ class JobController extends AbstractApiController
             }
         } catch (ValidationException $e) {
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),406);
-        } catch(Exception $e){
-            return $this->getErrorResponse($e->getMessage(),500);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 406);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
     }
 }

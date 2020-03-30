@@ -216,7 +216,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflowinstance/1/activityinstance/99999/form', 'GET');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');

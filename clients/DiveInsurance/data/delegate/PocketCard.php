@@ -36,7 +36,7 @@ class PocketCard extends PolicyDocument
             $this->logger->info("filter params is : ". json_encode($filterParams));
             $params['workflowStatus'] = 'Completed';
             $files = $this->getFileList($params, $filterParams);
-            $data['product'] = implode(", ", array_column($files, 'product'));
+            $data['product'] = implode(", ", array_column($files['data'], 'product'));
             // print_r($data);exit;
             $this->logger->info("the product is: ", print_r($data['product'], true));
         }
@@ -58,10 +58,20 @@ class PocketCard extends PolicyDocument
             if($data['pocketCardProductType']['emergencyFirstResponse']){
                 $filter[] = array("field" => "product", "operator" => "eq", "value" => "Emergency First Response");
             }
+            if($data['pocketCardProductType']['diveBoat']){
+                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Boat");
+            }
+            if($data['pocketCardProductType']['diveStore']){
+                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Store");
+            }
             $filterParams = array(array("filter" => array("logic" => "OR", "filters" => $filter)));
             $files = $this->getFileList($params, $filterParams);
         }
         $this->logger->info("he total number of files fetched is : ".print_r($files['total'], true));
+        $totalfiles = json_decode($files['total']);
+        if($totalfiles == 0){
+            $data['jobStatus'] = 'No Records Found';
+        } 
         $this->logger->info("the file details of get file is : ".print_r($files['data'], true));
         $options = array();
         $newData = array();
@@ -84,6 +94,9 @@ class PocketCard extends PolicyDocument
             $newData[$key]['state'] = $value['state'];
             $newData[$key]['zip'] = $value['zip'];
             $newData[$key]['entity_name'] = 'Pocket Card Job';
+            if(isset($value['business_name']) && $value['business_name']){
+                $newData[$key]['business_name'] = $value['business_name'];
+            }
         }
         $this->logger->info("New array data is : ".print_r($newData,true));
 
@@ -106,7 +119,7 @@ class PocketCard extends PolicyDocument
         if(isset($data['jobStatus']) && ($data['jobStatus']=='In Force')){
             $data['jobStatus'] = 'Completed';
         }        
-        $this->logger->info("The data returned from pocket card is : ", print_r($data, true));        
+        $this->logger->info("The data returned from pocket card is : ". print_r($data, true));
         return $data;
     }
 }

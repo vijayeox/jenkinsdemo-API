@@ -4,6 +4,29 @@
 	"tags": [],
 	"owner": "5ddfaa682859774314661851",
 	"components": [{
+		"label": "Generate Pocket Card for : ",
+		"optionsLabelPosition": "right",
+		"inline": false,
+		"tableView": false,
+		"values": [{
+			"label": "Member Padi Number",
+			"value": "padiNumber",
+			"shortcut": ""
+		}, {
+			"label": "Batch",
+			"value": "batch",
+			"shortcut": ""
+		}],
+		"validate": {
+			"required": true,
+			"customMessage": "Please select one of the options",
+			"unique": false,
+			"multiple": false
+		},
+		"key": "generatePocketCardBy",
+		"type": "radio",
+		"input": true
+	}, {
 		"label": "Columns",
 		"columns": [{
 			"components": [],
@@ -22,6 +45,7 @@
 				"requireDecimal": false,
 				"inputFormat": "plain",
 				"validate": {
+					"required": true,
 					"unique": false,
 					"multiple": false
 				},
@@ -43,6 +67,11 @@
 		}],
 		"tableView": false,
 		"key": "columns1",
+		"conditional": {
+			"show": true,
+			"when": "generatePocketCardBy",
+			"eq": "padiNumber"
+		},
 		"type": "columns",
 		"input": false,
 		"validate": {
@@ -50,23 +79,6 @@
 			"multiple": false
 		},
 		"path": "columns1"
-	}, {
-		"label": "HTML",
-		"className": "text-center",
-		"attrs": [{
-			"attr": "",
-			"value": ""
-		}],
-		"content": "OR",
-		"refreshOnChange": false,
-		"tableView": false,
-		"key": "html",
-		"type": "htmlelement",
-		"input": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
 	}, {
 		"label": "Columns",
 		"columns": [{
@@ -82,6 +94,7 @@
 					"showMeridian": false
 				},
 				"validate": {
+					"required": true,
 					"unique": false,
 					"multiple": false
 				},
@@ -91,6 +104,7 @@
 				"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 				"widget": {
 					"type": "calendar",
+					"displayInTimezone": "viewer",
 					"language": "en",
 					"useLocaleSettings": false,
 					"allowInput": true,
@@ -123,6 +137,7 @@
 					"showMeridian": false
 				},
 				"validate": {
+					"required": true,
 					"unique": false,
 					"multiple": false
 				},
@@ -132,6 +147,7 @@
 				"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 				"widget": {
 					"type": "calendar",
+					"displayInTimezone": "viewer",
 					"language": "en",
 					"useLocaleSettings": false,
 					"allowInput": true,
@@ -154,6 +170,11 @@
 		}],
 		"tableView": false,
 		"key": "columns",
+		"conditional": {
+			"show": true,
+			"when": "generatePocketCardBy",
+			"eq": "batch"
+		},
 		"type": "columns",
 		"input": false,
 		"validate": {
@@ -165,11 +186,6 @@
 		"label": "Product Type:",
 		"optionsLabelPosition": "right",
 		"tableView": false,
-		"defaultValue": {
-			"": false,
-			"individualProfessionalLiability": false,
-			"emergencyFirstResponse": false
-		},
 		"values": [{
 			"label": "Individual Professional Liability",
 			"value": "individualProfessionalLiability",
@@ -178,12 +194,26 @@
 			"label": "Emergency First Response",
 			"value": "emergencyFirstResponse",
 			"shortcut": ""
+		}, {
+			"label": "Dive Boat",
+			"value": "diveBoat",
+			"shortcut": ""
+		}, {
+			"label": "Dive Store",
+			"value": "diveStore",
+			"shortcut": ""
 		}],
 		"validate": {
+			"required": true,
 			"unique": false,
 			"multiple": false
 		},
 		"key": "pocketCardProductType",
+		"conditional": {
+			"show": true,
+			"when": "generatePocketCardBy",
+			"eq": "batch"
+		},
 		"type": "selectboxes",
 		"input": true,
 		"inputType": "checkbox"
@@ -199,20 +229,20 @@
 			"multiple": false
 		}
 	}, {
-		"type": "button",
 		"label": "Submit",
-		"key": "submit",
-		"disableOnInvalid": true,
-		"input": true,
+		"showValidations": false,
 		"tableView": false,
+		"key": "submit",
+		"type": "button",
+		"input": true,
 		"validate": {
 			"unique": false,
 			"multiple": false
 		}
 	}],
 	"controller": "",
-	"revisions": "",
-	"_vid": 0,
+	"revisions": "original",
+	"_vid": 19,
 	"title": "Pocket Card",
 	"display": "form",
 	"access": [{
@@ -228,6 +258,6 @@
 	"path": "pocketcard",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-22T13:47:45.298Z",
-	"modified": "2020-02-11T06:35:52.792Z",
+	"modified": "2020-03-26T06:32:29.881Z",
 	"machineName": "testdivehub:pocketCard"
 }

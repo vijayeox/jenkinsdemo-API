@@ -6,6 +6,7 @@
 namespace App\Controller;
 
 use Oxzion\Controller\AbstractApiControllerHelper;
+use Oxzion\Utils\ArtifactUtils;
 
 /**
  * Document Controller
@@ -67,7 +68,9 @@ class DocumentController extends AbstractApiControllerHelper
         }
         if (file_exists($attachment_location)) {
             header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-            header("Cache-Control: public"); // needed for internet explorer
+            header("Cache-Control: public"); // needed for internet explorer            
+            $mimeType = ArtifactUtils::getMimeType($params['document']);
+            header("Content-Type:".$mimeType );  
             header("Content-Transfer-Encoding: Binary");
             header("Content-Length:" . filesize($attachment_location));
             header("Content-Disposition: attachment; filename=" . $params['document']);

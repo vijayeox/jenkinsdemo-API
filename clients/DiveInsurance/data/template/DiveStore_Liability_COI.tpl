@@ -34,77 +34,77 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "no"}
+						{if $excessLiabilityCoverage == ""}
                             $1,000,000
-                        {elseif $excessLiabilityCoverage == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $10,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "no"}
+						{if $excessLiabilityCoverage == ""}
                             $1,000,000
-                        {elseif $excessLiabilityCoverage == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                         	$4,000,000
-                        {elseif $excessLiabilityCoverage == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $10,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "no"}
+						{if $excessLiabilityCoverage == ""}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             $6,000,000
-                        {elseif $excessLiabilityCoverage == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $11,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "no"}
+						{if $excessLiabilityCoverage == ""}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             $6,000,000
-                        {elseif $excessLiabilityCoverage == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $11,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "no"}
+						{if $excessLiabilityCoverage == ""}
                             $1,000,000
-                        {elseif $excessLiabilityCoverage == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $10,000,000
                         {/if}
 					</p>
@@ -124,7 +124,7 @@
                         {/if}
 					</p>
 					<p class = "sec_title2">
-					    {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+					    {if $TravelAgentEOFP && (int)$TravelAgentEOFP > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>

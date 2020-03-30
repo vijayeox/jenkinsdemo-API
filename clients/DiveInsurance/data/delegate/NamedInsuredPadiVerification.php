@@ -8,6 +8,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
 {
     public function __construct(){
         parent::__construct();
+        $this->status = array('OWSI' => 'Instructor','MI' => 'Instructor','MSDT' => 'Instructor','UI' => 'Instructor','DM' => 'Dive Master','AI' => 'Assistant Instructor','PM' => 'Instructor','AIN' => 'Assistant Instructor');
     }
 
     // Padi Verification is performed here
@@ -27,14 +28,23 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
             while ($result->next()) {
                 $response[] = $result->current();
             }
-            $response[0]['name'] = $response[0]['initial']." ".$response[0]['firstname'] ." ".$response[0]['lastname'];
+            $response[0]['name'] = $response[0]['firstname']." ".$response[0]['initial']." ".$response[0]['lastname'];
+            if(isset($response[0]['status']) && $response[0]['status'] != ''){
+                if(array_key_exists($response[0]['status'], $this->status)){
+                    $response[0]['status'] = $this->status[$response[0]['status']];    
+                }else{
+                    $response[0]['status'] = " ";
+                }
+            }else{
+                $response[0]['status'] = " ";
+            }
             $returnArray = array_merge($data,$response[0]);
-            $returnArray['padiVerified'] = true;
-            $returnArray['verified'] = true;
+            $returnArray['padi_Verified'] = true;
+            // $returnArray['verified_flag'] = true;
             return $returnArray;
         } else {
-            $returnArray['padiVerified'] = false;
-            $returnArray['verified'] = true;
+            $returnArray['padi_Verified'] = false;
+            // $returnArray['verified_flag'] = true;
             $data = array_merge($data,$returnArray);
             return $data;
         }

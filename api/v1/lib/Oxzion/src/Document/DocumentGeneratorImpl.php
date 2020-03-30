@@ -6,6 +6,7 @@ use TCPDF;
 use Knp\Snappy\Pdf;
 use setasign\Fpdi\Tcpdf\Fpdi;
 use Oxzion\Utils\FileUtils;
+use mikehaertl\pdftk\Pdf as PDFTK;
 
 class DocumentGeneratorImpl implements DocumentGenerator
 {
@@ -166,6 +167,22 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $path = $pdf->output($destination, 'F');
 
         return $destination;
+    }
+
+
+    public function fillPDFForm($form, $data, $destination)
+    {
+       
+        // create new PDF document
+        $pdf = new  PDFTK($form);
+        $result = $pdf->fillForm($data)
+            ->needAppearances()
+            ->saveAs($destination);
+        return $result;
+        // if (!$result) {
+        //     throw new Exception($pdf->getError());
+        // }
+                
     }
 
    

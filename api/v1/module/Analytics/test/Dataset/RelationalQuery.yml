@@ -1,0 +1,26 @@
+ox_query:
+  -
+    id: 30
+    uuid: '111d2819-c5ff-4426-bc40-f7a20704a738'
+    name: 'query1'
+    datasource_id: 3
+    configuration: '{"app_name":"mysqltable","view":"testview"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 31
+    uuid: '2220cc5b-2567-4e5f-a741-f34e9f6f1af1'
+    name: 'query2'
+    datasource_id: 3
+    configuration: '{"app_name":"postgrestable","view":"testview"}'
+    ispublic: 1
+    created_by: 2
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
