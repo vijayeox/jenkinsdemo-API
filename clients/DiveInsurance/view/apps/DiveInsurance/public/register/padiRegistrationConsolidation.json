@@ -10,11 +10,7 @@
 		"label": "orgId",
 		"type": "hidden",
 		"lockKey": true,
-		"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
 	}, {
 		"input": true,
 		"tableView": true,
@@ -22,22 +18,14 @@
 		"label": "commands",
 		"type": "hidden",
 		"lockKey": true,
-		"defaultValue": "[\"create_user\",\"store_cache_data\",\"sign_in\"]",
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"defaultValue": "[\"create_user\",\"store_cache_data\",\"sign_in\"]"
 	}, {
 		"label": "workflow_uuid",
 		"calculateValue": "if(productName=='IPLRegister'){\n  value = 'f0efea9e-7863-4368-a9b2-baa1a1603067';\n} else if(productName == 'DiveStore'){\n  value = 'cb99e634-de00-468d-9230-d6f77d241c5b';\n} else if(productName == 'DiveBoat'){\n  value = 'bb15e393-11b9-48ea-bc5a-5b7616047cb1';\n} else if(productName == 'EFR'){\n  value = 'cb74d176-225a-11ea-978f-2e728ce88125';\n} else {\n  value = 'f0efea9e-7863-4368-a9b2-baa1a1603067';\n}",
 		"key": "workflow_uuid",
 		"type": "hidden",
 		"input": true,
-		"tableView": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"tableView": false
 	}, {
 		"label": "product",
 		"defaultValue": "Individual Professional Liability",
@@ -47,22 +35,14 @@
 		"input": true,
 		"tableView": true,
 		"lockKey": true,
-		"hideOnChildrenHidden": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"hideOnChildrenHidden": false
 	}, {
 		"label": "product_email_id",
 		"calculateValue": "if(productName=='IPLRegister'){\n  value = 'instructors@diveinsurance.com';\n} else if(productName == 'DiveStore'){\n  value = 'divestore@diveinsurance.com';\n} else if(productName == 'DiveBoat'){\n  value = 'diveboat@diveinsurance.com';\n} else if(productName == 'EFR'){\n  value = 'efr@diveinsurance.com';\n} else {\n  value = 'instructors@diveinsurance.com';\n}",
 		"key": "product_email_id",
 		"type": "hidden",
 		"input": true,
-		"tableView": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"tableView": false
 	}, {
 		"input": true,
 		"tableView": true,
@@ -70,11 +50,7 @@
 		"label": "page",
 		"type": "hidden",
 		"defaultValue": "1",
-		"lockKey": true,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"lockKey": true
 	}, {
 		"label": "Columns",
 		"input": false,
@@ -95,11 +71,7 @@
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
-				"hideOnChildrenHidden": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"hideOnChildrenHidden": false
 			}, {
 				"label": "Content",
 				"attrs": [{
@@ -114,11 +86,7 @@
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
-				"hideOnChildrenHidden": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"hideOnChildrenHidden": false
 			}],
 			"width": 6,
 			"offset": 0,
@@ -146,11 +114,7 @@
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
-				"hideOnChildrenHidden": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"hideOnChildrenHidden": false
 			}],
 			"width": 4,
 			"offset": 0,
@@ -160,11 +124,7 @@
 		}],
 		"type": "columns",
 		"hideLabel": true,
-		"path": "panelColumns3",
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"path": "panelColumns3"
 	}, {
 		"key": "panelPanel2",
 		"input": false,
@@ -193,21 +153,20 @@
 					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
+					"calculateServer": false,
 					"validateOn": "blur",
 					"validate": {
 						"required": true,
 						"customMessage": "Please provide a valid PADI Number",
 						"min": 0,
-						"max": null,
-						"unique": false,
-						"multiple": false
+						"max": null
 					},
 					"key": "padi",
 					"logic": [{
 						"name": "Check PADI Verified",
 						"trigger": {
 							"type": "javascript",
-							"javascript": "if (\n  (data[\"padiVerified\"] == true || (data[\"padiNotFound\"] == true || data[\"padiNotFound\"] == 'true')) &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  result = true;\n} else {\n  result = false;\n}"
+							"javascript": "if (\n  (data[\"padiVerified\"] == true || (data[\"padiNotFound\"] == true || data[\"padiNotFound\"] == 'true')) &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  result = true;\n} else if((data['businessPadiVerified']===true || data['businessPadiVerified']=='true') && \n(data['product'] != 'Individual Professional Liability' && data['product']!='Emergency First Response')){\n  result = true;\n} else {\n  result = false;\n}"
 						},
 						"actions": [{
 							"name": "Disable editing",
@@ -240,11 +199,7 @@
 					"type": "htmlelement",
 					"input": false,
 					"hideLabel": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "Validate PADI Membership",
 					"action": "event",
@@ -265,11 +220,7 @@
 					"event": "callCommands",
 					"custom": "data['padidata'] = data['padi']",
 					"input": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "Change PADI Number",
 					"action": "event",
@@ -288,17 +239,13 @@
 						"actions": [{
 							"name": "Reset data values",
 							"type": "value",
-							"value": "data.padiVerified = false;\ndata.user_exists = 0;\ndata.padiNotFound = false;\ndata.verified = false;\ndata.firstname = \"\";\ndata.initial = \"\";\ndata.lastname = \"\";"
+							"value": "data.padiVerified = false;\ndata.businessPadiVerified = false;\ndata.user_exists = 0;\ndata.padiNotFound = false;\ndata.verified = false;\ndata.firstname = \"\";\ndata.initial = \"\";\ndata.lastname = \"\";"
 						}]
 					}],
 					"type": "button",
 					"event": "resetPADI",
 					"input": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "Content",
 					"attrs": [{
@@ -313,25 +260,22 @@
 					"type": "htmlelement",
 					"input": false,
 					"hideLabel": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
-					"key": "panelColumnsContent2",
 					"label": "Content",
-					"input": false,
 					"attrs": [{
 						"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 						"attr": "style"
 					}],
 					"content": "PADI Membership not Applicable for this Program",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "panelColumnsContent2",
+					"customConditional": "show = (data['businessPadiVerified']===true || data['businessPadiVerified']=='true') && \n(data['product'] == 'Individual Professional Liability' || data['product']=='Emergency First Response');",
 					"type": "htmlelement",
+					"input": false,
 					"hideLabel": true,
-					"customConditional": "show = ((data['padiVerified']==false||data['padiVerified']=='false') && (data['verified'] == true || data['verified']=='true') && (data['padiNotFound']==false||data['padiNotFound']=='false') )",
-					"hideOnChildrenHidden": false,
-					"tableView": false
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "Content",
 					"attrs": [{
@@ -342,7 +286,7 @@
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "panelColumnsContent4",
-					"customConditional": "show = ((data['padiNotFound']==true||data['padiNotFound']=='true') && (data['verified'] == true || data['verified']=='true'))",
+					"customConditional": "show = ((data['padiNotFound']==true||data['padiNotFound']=='true') && (data['verified'] == true || data['verified']=='true') && (data['user_exists']!==1 && data['user_exists']!=='1'))",
 					"type": "htmlelement",
 					"input": false,
 					"hideLabel": true,
@@ -372,11 +316,7 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"input": true,
 					"tableView": true,
@@ -385,11 +325,7 @@
 					"type": "hidden",
 					"lockKey": true,
 					"defaultValue": "false",
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"input": true,
 					"tableView": true,
@@ -400,11 +336,7 @@
 					"type": "hidden",
 					"lockKey": true,
 					"defaultValue": "false",
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"input": true,
 					"tableView": true,
@@ -413,11 +345,7 @@
 					"type": "hidden",
 					"lockKey": true,
 					"defaultValue": "padi",
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"input": true,
 					"tableView": true,
@@ -427,11 +355,7 @@
 					"lockKey": true,
 					"defaultValue": "false",
 					"calculateServer": false,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"input": true,
 					"tableView": true,
@@ -440,11 +364,7 @@
 					"type": "hidden",
 					"lockKey": true,
 					"defaultValue": "0",
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "Username",
 					"calculateValue": "if(data.padiVerified == 'true' || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\nvalue = data.padi;\n}",
@@ -453,11 +373,7 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"input": true,
 					"tableView": true,
@@ -466,33 +382,21 @@
 					"type": "hidden",
 					"lockKey": true,
 					"calculateValue": "value = true",
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "PadiNotFoundCsrReview",
 					"key": "padiNotFoundCsrReview",
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "businessPadiVerified",
 					"key": "businessPadiVerified",
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}],
 				"width": 4,
 				"offset": 0,
@@ -509,19 +413,11 @@
 			}],
 			"type": "columns",
 			"hideLabel": true,
-			"path": "panelColumns",
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
+			"path": "panelColumns"
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
-		"label": "Panel",
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"label": "Panel"
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -541,9 +437,7 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
-						"required": true,
-						"unique": false,
-						"multiple": false
+						"required": true
 					},
 					"key": "firstname",
 					"logic": [{
@@ -619,11 +513,7 @@
 					"type": "textfield",
 					"input": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}],
 				"width": 4,
 				"offset": 0,
@@ -637,9 +527,7 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
-						"required": true,
-						"unique": false,
-						"multiple": false
+						"required": true
 					},
 					"key": "lastname",
 					"logic": [{
@@ -688,11 +576,7 @@
 			"tableView": false,
 			"key": "panelColumns2",
 			"type": "columns",
-			"input": false,
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
+			"input": false
 		}, {
 			"title": "Mailing Address",
 			"theme": "primary",
@@ -726,9 +610,7 @@
 						"template": "<span>{{ item.country }}</span>",
 						"selectThreshold": 0.3,
 						"validate": {
-							"required": true,
-							"unique": false,
-							"multiple": false
+							"required": true
 						},
 						"key": "country",
 						"type": "select",
@@ -740,9 +622,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"validate": {
-							"required": true,
-							"unique": false,
-							"multiple": false
+							"required": true
 						},
 						"key": "city",
 						"type": "textfield",
@@ -761,9 +641,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"validate": {
-							"required": true,
-							"unique": false,
-							"multiple": false
+							"required": true
 						},
 						"key": "address1",
 						"type": "textfield",
@@ -782,9 +660,7 @@
 						"template": "<span>{{ item }}</span>",
 						"selectThreshold": 0.3,
 						"validate": {
-							"required": true,
-							"unique": false,
-							"multiple": false
+							"required": true
 						},
 						"key": "state",
 						"type": "select",
@@ -808,11 +684,7 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Zip Code",
 						"spellcheck": false,
@@ -820,9 +692,7 @@
 						"validate": {
 							"required": true,
 							"pattern": "[0-9\\s-]*",
-							"customMessage": "Please enter a valid Zip Code for your region.",
-							"unique": false,
-							"multiple": false
+							"customMessage": "Please enter a valid Zip Code for your region."
 						},
 						"key": "zip",
 						"type": "textfield",
@@ -838,16 +708,8 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelPanelColumns",
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
-			}],
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
+				"path": "panelPanelColumns"
+			}]
 		}, {
 			"title": "Physical Address",
 			"theme": "primary",
@@ -869,10 +731,6 @@
 				"style": {
 					"margin-top": "5px",
 					"margin-bottom": "5px"
-				},
-				"validate": {
-					"unique": false,
-					"multiple": false
 				}
 			}, {
 				"label": "Columns",
@@ -904,9 +762,7 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
+									"required": true
 								},
 								"key": "physical_country",
 								"type": "select",
@@ -919,9 +775,7 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
+									"required": true
 								},
 								"key": "physical_city",
 								"type": "textfield",
@@ -942,9 +796,7 @@
 								"clearOnHide": false,
 								"validateOn": "blur",
 								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
+									"required": true
 								},
 								"key": "mailaddress1",
 								"type": "textfield",
@@ -972,9 +824,7 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
-									"unique": false,
-									"multiple": false
+									"required": true
 								},
 								"key": "physical_state",
 								"type": "select",
@@ -999,11 +849,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "Zip Code",
 								"spellcheck": true,
@@ -1012,9 +858,7 @@
 								"validate": {
 									"required": true,
 									"pattern": "[0-9\\s-]*",
-									"customMessage": "Please enter a valid Zip Code for your region.",
-									"unique": false,
-									"multiple": false
+									"customMessage": "Please enter a valid Zip Code for your region."
 								},
 								"key": "physical_zip",
 								"type": "textfield",
@@ -1030,11 +874,7 @@
 						}],
 						"type": "columns",
 						"hideLabel": true,
-						"path": "panelPanel3Columns2Columns",
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"path": "panelPanel3Columns2Columns"
 					}],
 					"width": 12,
 					"offset": 0,
@@ -1059,16 +899,8 @@
 				},
 				"customConditional": "if(data['sameasmailingaddress'] === false || data['sameasmailingaddress'] == 'false'){\nshow = true\n} else {\n  show = false\n}",
 				"type": "columns",
-				"input": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
-			}],
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
+				"input": false
+			}]
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -1095,11 +927,7 @@
 							"key": "home_country_code",
 							"type": "select",
 							"input": true,
-							"hideOnChildrenHidden": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1113,9 +941,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
-								"customMessage": "Please enter a valid home or work phone number",
-								"unique": false,
-								"multiple": false
+								"customMessage": "Please enter a valid home or work phone number"
 							},
 							"key": "home_phone_number",
 							"logic": [{
@@ -1165,11 +991,7 @@
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
-							"hideOnChildrenHidden": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 8,
 						"offset": 0,
@@ -1182,11 +1004,7 @@
 					"key": "columns3",
 					"type": "columns",
 					"input": false,
-					"path": "columns3",
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"path": "columns3"
 				}, {
 					"label": "Columns",
 					"columns": [{
@@ -1209,11 +1027,7 @@
 							"key": "phone_country_code",
 							"type": "select",
 							"input": true,
-							"hideOnChildrenHidden": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1228,9 +1042,7 @@
 							"tableView": true,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter a valid mobile phone number",
-								"unique": false,
-								"multiple": false
+								"customMessage": "Please enter a valid mobile phone number"
 							},
 							"key": "phone_number",
 							"logic": [{
@@ -1280,11 +1092,7 @@
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
-							"hideOnChildrenHidden": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 8,
 						"offset": 0,
@@ -1297,11 +1105,7 @@
 					"key": "columns4",
 					"type": "columns",
 					"input": false,
-					"path": "columns4",
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"path": "columns4"
 				}],
 				"width": 6,
 				"offset": 0,
@@ -1319,11 +1123,7 @@
 					"type": "phoneNumber",
 					"input": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}, {
 					"label": "Email",
 					"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
@@ -1331,9 +1131,7 @@
 					"tableView": true,
 					"validate": {
 						"required": true,
-						"customMessage": "Please enter your email address in format: yourname@example.com",
-						"unique": false,
-						"multiple": false
+						"customMessage": "Please enter your email address in format: yourname@example.com"
 					},
 					"key": "email",
 					"type": "email",
@@ -1349,16 +1147,8 @@
 			}],
 			"type": "columns",
 			"hideLabel": true,
-			"path": "panelPanel3Columns",
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
-		}],
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+			"path": "panelPanel3Columns"
+		}]
 	}, {
 		"label": "Register",
 		"showValidations": false,
@@ -1370,7 +1160,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 24,
+	"_vid": 29,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1384,6 +1174,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-03-27T09:37:37.341Z",
+	"modified": "2020-03-30T05:04:10.309Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

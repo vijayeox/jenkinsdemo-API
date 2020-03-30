@@ -51,7 +51,7 @@
             <camunda:list>
               <camunda:value>{"command" : "delegate", "delegate" : "PolicyDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
-              <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate" : "NewPolicyDocumentDispatch"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
