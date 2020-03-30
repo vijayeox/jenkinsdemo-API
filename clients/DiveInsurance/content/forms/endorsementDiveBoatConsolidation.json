@@ -7236,7 +7236,8 @@
 			"hideOnChildrenHidden": false
 		}, {
 			"label": "primaryLimit",
-			"calculateValue": "value = '1,000,000.00';",
+			"calculateValue": "value = '1000000';",
+			"calculateServer": false,
 			"key": "primaryLimit",
 			"type": "hidden",
 			"input": true,
@@ -7244,7 +7245,8 @@
 			"hideOnChildrenHidden": false
 		}, {
 			"label": "excessLiabilityLimit",
-			"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9,000,000.00';\n}",
+			"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9000000.00';\n}",
+			"calculateServer": false,
 			"key": "excessLiabilityLimit",
 			"type": "hidden",
 			"input": true,
@@ -7256,6 +7258,7 @@
 			"protected": true,
 			"redrawOn": "data",
 			"calculateValue": "value = (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) || 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0)",
+			"calculateServer": false,
 			"key": "totalLiability",
 			"type": "hidden",
 			"input": true,
@@ -8476,7 +8479,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 20,
+	"_vid": 21,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8494,6 +8497,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-03-30T14:28:37.489Z",
+	"modified": "2020-03-30T15:53:57.440Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
