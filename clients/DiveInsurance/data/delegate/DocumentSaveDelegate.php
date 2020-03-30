@@ -13,9 +13,9 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
         $this->logger->info("Document Save Entry");
 
         $privileges = $this->getPrivilege();
-        if(!isset($data['endorsement_options'])){
+        if(!isset($data['endorsement_options']) || ($data['product']=='Dive Store'||$data['product']=='Dive Boat')){
             if ((isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
-                $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true) && (isset($data['initiatedByCsr']) && ($data['initiatedByCsr'] == false))) {
+                 $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true) && (isset($data['initiatedByCsr']) && ($data['initiatedByCsr'] == false)) && ($data['product']!='Dive Store'&&$data['product']!='Dive Boat')) {
                 $this->logger->info("AM here");
                 if((isset($data['csrAttachmentsFieldnames']))){
                     if(!isset($data['fileId'])) {
