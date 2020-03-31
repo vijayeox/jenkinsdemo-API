@@ -764,23 +764,23 @@
 								"valueProperty": "country",
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
-								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
 								"key": "physical_country",
+								"properties": {
+									"clear_field": "physical_state"
+								},
 								"type": "select",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"properties": {
-									"clear_field": "physical_state"
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "City",
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -800,7 +800,7 @@
 								"label": "Address 1",
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
+								"calculateServer": false,
 								"validateOn": "blur",
 								"validate": {
 									"required": true
@@ -829,7 +829,7 @@
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
-								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -852,7 +852,7 @@
 								"label": "Address 2",
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "mailaddress2",
 								"type": "textfield",
 								"input": true,
@@ -862,7 +862,6 @@
 								"label": "Zip Code",
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true,
@@ -1168,7 +1167,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 47,
+	"_vid": 48,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1182,6 +1181,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-03-31T06:26:54.762Z",
+	"modified": "2020-03-31T14:33:23.030Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

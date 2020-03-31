@@ -134,7 +134,7 @@
 							"name": "Check PADI Verified",
 							"trigger": {
 								"type": "javascript",
-								"javascript": "if(\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\")){\n    result = true;\n  } else {\n    result = false;\n  }"
+								"javascript": "if (((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) ||\n    (data.verified !== true && data.verified != \"true\") || \n    (data['businessPadiVerified'] === true || data['businessPadiVerified'] == 'true')) {\n    result = false;\n} else {\n    result = true;\n}"
 							},
 							"actions": [{
 								"name": "Disable",
@@ -827,7 +827,7 @@
 							"label": "City",
 							"spellcheck": true,
 							"tableView": true,
-							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
@@ -1211,12 +1211,13 @@
 		"type": "panel",
 		"title": "Coverage",
 		"components": [{
+			"label": "product",
+			"customDefaultValue": "value =\"Individual Professional Liability\";",
+			"calculateServer": false,
+			"key": "product",
+			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"key": "product",
-			"label": "product",
-			"type": "hidden",
-			"defaultValue": "Individual Professional Liability",
 			"lockKey": true
 		}, {
 			"key": "page3Panel3",
@@ -2476,9 +2477,9 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"calculateValue": "if((data.techRec_attachments || data.techRec_attachments !== undefined) && data.techRec_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
-						"required": true,
-						"customMessage": "Please attach the proof of your TechRec Attachements",
+						"custom": "valid = data.techRec_attachments.length>0? true : \"help me\";\nconsole.log(valid);",
 						"multiple": true
 					},
 					"key": "techRec_attachments",
@@ -4213,7 +4214,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 182,
+	"_vid": 191,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4234,6 +4235,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-03-31T03:08:07.726Z",
+	"modified": "2020-03-31T14:04:31.242Z",
 	"machineName": "testdivehub:csrInitiates"
 }
