@@ -2,7 +2,11 @@ FROM openjdk:8u181-jre-alpine3.8
 
 ARG VERSION=7.9.0
 ARG DISTRO=tomcat
-
+ARG DB_HOST
+ARG DB_USERNAME
+ARG DB_PASSWORD
+ARG API_DB
+ARG CAMUNDA_DB
 ARG TOMCAT_PORT=8090
 RUN apk add --no-cache \
         bash \
@@ -49,15 +53,12 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
-ENV DB_HOST=localhost
-ENV DB_USER=root
-ENV DB_PASS=password
-ENV DB_URL=jdbc:mysql://${DB_HOST}/process-engine
-ENV BASE_DB_URL=jdbc:mysql://${DB_HOST}/appBuilder_oxzionapi
-ENV BASE_DB_USERNAME=${DB_USER}
-ENV BASE_DB_PASSWORD=${DB_PASS}
-ENV DB_USERNAME=${DB_USER}
-ENV DB_PASSWORD=${DB_PASS}
+ENV DB_URL=jdbc:mysql://${DB_HOST}/${CAMUNDA_DB}
+ENV API_DB_URL=jdbc:mysql://${DB_HOST}/${API_DB}
+ENV API_DB_USERNAME=${DB_USERNAME}
+ENV API_DB_PASSWORD=${DB_PASSWORD}
+ENV DB_USERNAME=${DB_USERNAME}
+ENV DB_PASSWORD=${DB_PASSWORD}
 ENV DB_CONN_MAXACTIVE=20
 ENV DB_CONN_MINIDLE=5
 ENV DB_CONN_MAXIDLE=20
@@ -78,6 +79,5 @@ RUN addgroup -g 1000 -S camunda && \
 WORKDIR /camunda
 
 # USER camunda
-
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["./camunda.sh"]

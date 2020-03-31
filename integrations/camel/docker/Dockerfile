@@ -27,6 +27,9 @@ RUN tar xzf $ACTIVEMQ-bin.tar.gz -C  /opt && \
     chown -h activemq:activemq $ACTIVEMQ_HOME && \
     mkdir -p /app 
 
+ARG HOST
+ENV HOST=${HOST}
+
 EXPOSE $ACTIVEMQ_TCP $ACTIVEMQ_AMQP $ACTIVEMQ_STOMP $ACTIVEMQ_MQTT $ACTIVEMQ_WS $ACTIVEMQ_UI $SERVER_PORT
 
 WORKDIR /workspace/app
