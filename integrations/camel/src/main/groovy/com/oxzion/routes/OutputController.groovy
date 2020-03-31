@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RestController
-@RequestMapping("reloading")
+//@RestController
+//@RequestMapping("reloading")
 class OutputController {
     private static final Logger logger = LoggerFactory.getLogger(OutputController.class)
 
-    @Autowired
+    //@Autowired
     RouteConfigurationDirectoryListener listener
 
-    @GetMapping("/activateListenerForRoutesUpdate")
+    //@GetMapping("/activateListenerForRoutesUpdate")
     public  String reload() throws Exception {
         listener.listenFile()
         logger.info("Routes can be updated")
