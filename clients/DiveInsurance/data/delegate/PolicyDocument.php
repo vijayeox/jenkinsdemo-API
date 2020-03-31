@@ -175,16 +175,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];    
                             array_push($coverageList,$temp['upgradeCareerCoverageVal']);
                         }
-                        if(isset($data['upgradecylinder']) && !is_array($data['upgradecylinder'])){    
-                            $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
-                            $data['upgradecylinder'] = $cylinderOnCsrReview;
+                        if(isset($data['upgradecylinder'])){
+                            if(!is_array($data['upgradecylinder'])){    
+                                $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
+                                $data['upgradecylinder'] = $cylinderOnCsrReview;
+                            }
                             $data['cylinder'] = $data['upgradecylinder']['value'];
                             $temp['cylinderPriceVal'] = $data['upgradecylinder']['label'];
+                        $this->logger->info("DOCUMENT cylinder3".print_r($temp['cylinderPriceVal'],true));
                         }
-                        if(isset($data['upgradeExcessLiability']) && !is_array($data['upgradeExcessLiability'])){ 
+                        if(isset($data['upgradeExcessLiability'])){                         
+                         if(!is_array($data['upgradeExcessLiability'])){ 
                             $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
                             $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;
+                        }
                             $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
+                            $temp['upgradeExcessLiabilityVal'] = $data['upgradeExcessLiability']['label'];
+                            $this->logger->info("UPGRADE EXCESS -".print_r($temp['upgradeExcessLiabilityVal'],true));
                         }
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
@@ -193,11 +200,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['scubaFit']])){
                             $temp['scubaFitVal'] = $result[$data['scubaFit']];
                         }
+                        if(isset($result[$data['tecRecEndorsment']])){
+                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
+                        }
                         if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
                             $temp['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
+                        if(isset($result[$data['excessLiability']]) && !isset($temp['upgradeExcessLiabilityVal'])){
+                            $temp['upgradeExcessLiabilityVal'] = $result[$data['excessLiability']];
+                        }
                     }
-                    
+                    $this->logger->info("DOCUMENT blanketForm11111111");
                     if( isset($temp['upgradeCareerCoverageVal']) && isset($result[$temp['upgradeCareerCoverageVal']])){
                         $data['upgradeCareerCoverageVal'] = $result[$temp['upgradeCareerCoverageVal']];
                     }

@@ -40,6 +40,21 @@ RUN rm -rf /var/lib/apt/lists/* && curl -sL https://deb.nodesource.com/setup_8.x
 RUN apt-get clean
 ADD http://www.phpdoc.org/phpDocumentor.phar /usr/local/bin/phpdoc
 RUN chmod 755 /usr/local/bin/phpdoc
+#
+
+ARG DB_HOST
+ARG DB_USERNAME
+ARG DB_PASSWORD
+ARG API_DB
+ARG TEST_API_DB
+ARG HOST
+ENV HOST=${HOST}
+ENV DB_USERNAME=${DB_USERNAME}
+ENV DB_PASSWORD=${DB_PASSWORD}
+ENV API_DB=${API_DB}
+ENV TEST_API_DB=${TEST_API_DB}
+ENV DB_HOST=${DB_HOST}
+#
 RUN mkdir -p /app/api/v1 && \
     mv /var/www /var/www2 && \
     ln -s /app/api/v1 /var/www

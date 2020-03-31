@@ -901,7 +901,7 @@
 							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 							},
 							"key": "physical_zip",
 							"type": "textfield",
@@ -2273,7 +2273,7 @@
 									"delimiter": false,
 									"requireDecimal": true,
 									"inputFormat": "plain",
-									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    value =\n      data[\"amount\"] - data[\"page6Panel2AmountPayable\"] - data.efrAmountPaid;\n  } else {\n    value = data[\"amount\"] - data.efrAmountPaid;\n  }\n} else {\n  value = data[\"amount\"] - data[\"page6Panel2AmountPayable\"];\n}",
+									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    value =\n      data[\"amount\"] - data[\"amountPayable\"] - data.efrAmountPaid;\n  } else {\n    value = data[\"amount\"] - data.efrAmountPaid;\n  }\n} else {\n  value = data[\"amount\"] - data[\"amountPayable\"];\n}",
 									"calculateServer": false,
 									"key": "balance",
 									"type": "number",
@@ -3688,9 +3688,7 @@
 											"calculateServer": false,
 											"validate": {
 												"required": true,
-												"pattern": "[0-9\\s-]*",
-												"customMessage": "Please enter a valid Zip Code for your region.",
-												"maxLength": 12
+												"custom": "if(data['zip'] && data['zip'] != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 											},
 											"key": "zip",
 											"type": "textfield",
@@ -4016,7 +4014,7 @@
 						"key": "custom",
 						"label": "custom",
 						"input": true,
-						"amount_field": "amountPayable",
+						"amount_field": "finalAmount",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
@@ -4132,6 +4130,7 @@
 			"refreshOnChange": false,
 			"tableView": false,
 			"key": "page6Pleaseprocessthepaymentandapprove",
+			"customConditional": "show = (parseFloat(data.balance) > 0);",
 			"type": "htmlelement",
 			"input": false
 		}, {
@@ -4214,7 +4213,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 179,
+	"_vid": 182,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4235,6 +4234,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-03-30T19:17:56.118Z",
+	"modified": "2020-03-31T03:08:07.726Z",
 	"machineName": "testdivehub:csrInitiates"
 }
