@@ -148,6 +148,67 @@ mysql -u 'user_name' -p 'password'
 
 	- create database quartz_db;
 
+### 4. <u>Run application using [docker-compose](https://docs.docker.com/compose/)</u>
+
+- For globale crdential update, compy .env.example to .env and change the credential according to your ip and other credentislas  
+```bash
+ $ cp  .env.example  .env
+``` 
+- To start api, camunda workflow, camel with activemq, view run below command 
+
+```bash
+$ docker-compose up -d --build
+```
+- once the above service is up, you get into bash using below command for eache services
+ - Example for api (check docker-compose.yml for services name)
+```bash
+$ docker-compose run zf /bin/bash
+```
+- For API 
+  - Copy local.php.dist to local.php inside api/v1
+
+	```bash
+	$ cp api/v1/config/autoload/local.php.dist api/v1/config/autoload/local.php
+	```
+  - At this point, you can visit http://localhost:8080 to see the site running.
+
+  - You can also run composer from the image. The container environment is named "zf", so you will pass that value to `docker-compose run`:
+
+    ```bash
+    $ docker-compose run zf composer install
+    ```	
+- For View
+	`cp .env.example to .env in all the iframe apps under `view/apps` to your host.`
+	```bash
+	 $ cp view/bos/src/server/local.js.example view/bos/src/server/local.js
+	- update view/bos/src/server/local.js to your host environment
+	- $ cp view/bos/src/osjs-server.env.example view/bos/src/osjs-server.env and update the SERVER parameter to your host ip. 
+	- $ cp view/bos/src/client/local.js.example view/bos/src/client/local.js
+	- update the wrapper url parameter to host ip in view/bos/src/client/local.js
+	- To enter in view bash mode run below command
+		```bash
+		$ docker-compose run vw /bin/bash
+		```
+    - once you are into the view bash follow below instrucnctions - 
+	  -  Follow instructions given in the readme files under the specific apps.
+
+	  -	To build the complete view run the following command
+	    ```bash
+		$ npm run build
+        ```
+	  -	To clean all view project
+	  ```bash
+		$ npm run clean
+      ```
+	  -	To start the node server
+	   ```bash
+		$ npm run serve		
+	   ```
+
+### Note 1: If you followed docker-ompose approach mentioned above, then you need to follow the scripts mentioned below
+### Note 2: if you start application using docker-compose at root level, then you have to update crdential only in .env file at root level, but if you run each application separately by entering into services, then update .env at respective places.
+
+#### If you followed docker-ompose approach mentioned above, then you need to follow the scripts mentioned below
 <h5>Above are the database required for basic app development and if you want to work for each integrations follow the readme inside each integrations to setup dev environment accordingly</h5>
 
 <h4> 3. <u>Build Docker Images for Development Environement</u>: </h4>
