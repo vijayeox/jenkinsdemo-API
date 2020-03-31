@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
-  <bpmn:process id="Process_1x7ok44" isExecutable="true">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
+  <bpmn:process id="IPLEndorsement" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
@@ -255,12 +255,12 @@ if(initiatedByCsr == true &amp;&amp; approved == "rejected"){
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1m44nyk" sourceRef="StartEvent_0qetve8" targetRef="Task_1jrn5e5" />
     <bpmn:sequenceFlow id="SequenceFlow_1ckr5am" sourceRef="Task_1jrn5e5" targetRef="ExclusiveGateway_0spajg7" />
-	<bpmn:sequenceFlow id="SequenceFlow_1v1dk1z" sourceRef="ExclusiveGateway_0spajg7" targetRef="Task_037h9gn">	
-    <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${RejectedPolicy == true}</bpmn:conditionExpression>	
+    <bpmn:sequenceFlow id="SequenceFlow_1v1dk1z" sourceRef="ExclusiveGateway_0spajg7" targetRef="Task_037h9gn">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${RejectedPolicy == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1x7ok44">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="IPLEndorsement">
       <bpmndi:BPMNShape id="StartEvent_0qetve8_di" bpmnElement="StartEvent_0qetve8">
         <dc:Bounds x="177" y="322" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -398,12 +398,12 @@ if(initiatedByCsr == true &amp;&amp; approved == "rejected"){
         <di:waypoint x="468" y="340" />
         <di:waypoint x="579" y="340" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1v1dk1z_di" bpmnElement="SequenceFlow_1v1dk1z">	
-        <di:waypoint x="590" y="351" />	
-        <di:waypoint x="305" y="575" />	
-        <di:waypoint x="305" y="844" />	
-        <di:waypoint x="604" y="844" />	
-        <di:waypoint x="604" y="785" />	
+      <bpmndi:BPMNEdge id="SequenceFlow_1v1dk1z_di" bpmnElement="SequenceFlow_1v1dk1z">
+        <di:waypoint x="590" y="351" />
+        <di:waypoint x="305" y="575" />
+        <di:waypoint x="305" y="844" />
+        <di:waypoint x="604" y="844" />
+        <di:waypoint x="604" y="785" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
-  <bpmn:process id="Process_1dx3jli" isExecutable="true">
+  <bpmn:process id="IPLNewPolicy" isExecutable="true">
     <bpmn:extensionElements>
       <camunda:executionListener expression="0" event="start" />
     </bpmn:extensionElements>
@@ -258,7 +258,7 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
     <bpmn:sequenceFlow id="SequenceFlow_1rq996b" sourceRef="ServiceTask_1ssocdc" targetRef="ExclusiveGateway_12lkytx" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1dx3jli">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="IPLNewPolicy">
       <bpmndi:BPMNShape id="EndEvent_19debzw_di" bpmnElement="EndEvent_19debzw">
         <dc:Bounds x="1685" y="333" width="36" height="36" />
         <bpmndi:BPMNLabel>
