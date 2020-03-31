@@ -2835,7 +2835,7 @@
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) > moment(data['date_of_purchase'])) ? true : 'Please choose the date after '+moment(data.start_date).format('MM-DD-YYYY')+ '(Date of Purchase)';\n}"
+							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) > moment(data['date_of_purchase'])) ? true : 'Please choose the date after '+moment(data.date_of_purchase).format('MM-DD-YYYY')+ '(Date of Purchase)';\n}"
 						},
 						"key": "date_of_last_survey",
 						"type": "datetime",
@@ -3865,7 +3865,8 @@
 					"input": true
 				}, {
 					"label": "attachmentFields",
-					"customDefaultValue": "value = [[\"groupPL\",\"document\"],\"attachments\"];",
+					"customDefaultValue": "value = [[\"groupPL\",\"document\"],'attachments','csrApprovalAttachments'];",
+					"calculateServer": false,
 					"key": "attachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
@@ -8513,6 +8514,40 @@
 				}],
 				"path": "quoteRequirement"
 			}, {
+				"title": "Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "csrAttachmentsPanel",
+				"type": "panel",
+				"label": "Panel",
+				"input": false,
+				"components": [{
+					"label": "Upload",
+					"hideLabel": true,
+					"tableView": false,
+					"storage": "base64",
+					"webcam": false,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"multiple": true,
+					"calculateServer": false,
+					"validate": {
+						"multiple": true
+					},
+					"key": "csrApprovalAttachments",
+					"type": "file",
+					"input": true
+				}]
+			}, {
 				"key": "page5Panel2",
 				"input": false,
 				"title": "Approval",
@@ -8595,7 +8630,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 26,
+	"_vid": 28,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8613,6 +8648,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-03-31T10:24:32.011Z",
+	"modified": "2020-03-31T13:18:08.872Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

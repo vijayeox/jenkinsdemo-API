@@ -25,6 +25,10 @@ class DispatchProposalDocument extends DispatchDocument {
             $data['documents'] = json_decode($data['documents'],true);
         }
 
+        if(isset($data['csrApprovalAttachments']) && is_string($data['csrApprovalAttachments'])){
+            $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
+        }
+
         $fileData =array();
         $errorFile = array();
         foreach($data['documents'] as $doc){
@@ -36,11 +40,25 @@ class DispatchProposalDocument extends DispatchDocument {
                 array_push($errorFile,$file);
             }
         }
+
+        if(isset($data['csrApprovalAttachments'])){
+            foreach($data['csrApprovalAttachments'] as $doc){
+                $file = $this->destination.$doc['file'];
+                if(file_exists($file)){
+                    array_push($fileData, $file);         
+                } else {
+                    $this->logger->error("File Not Found".$file);
+                    array_push($errorFile,$file);
+                }
+            }
+        }
+
         if(count($errorFile) > 0){
             $error = json_encode($errorFile);
             $this->logger->error("Documents Not Found".$error);
             throw new DelegateException('Documents Not Found','file.not.found',0,$errorFile);
         }
+        
         $data['document'] =$fileData;
         $data['subject'] = 'Proposal Document';
         $data['url'] = $this->baseUrl. '?app=DiveInsurance&params={"type":"Form","activityInstanceId":"'.$data['activityInstanceId'].'","workflowInstanceId":"'.$data['workflowInstanceId'].'"}';

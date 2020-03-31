@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_16vqq5z" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
-  <bpmn:process id="Process_1mgkvtn" isExecutable="true">
+  <bpmn:process id="EFRNewPolicy" isExecutable="true">
     <bpmn:endEvent id="EndEvent_0rxtnh7" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_0yz4jp1</bpmn:incoming>
     </bpmn:endEvent>
@@ -159,7 +159,7 @@ if(initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "")
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1mgkvtn">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="EFRNewPolicy">
       <bpmndi:BPMNShape id="EndEvent_0rxtnh7_di" bpmnElement="EndEvent_0rxtnh7">
         <dc:Bounds x="1422" y="199" width="36" height="36" />
         <bpmndi:BPMNLabel>

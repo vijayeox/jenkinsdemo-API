@@ -38,10 +38,12 @@
 				"label": "Additional Insured",
 				"shortcut": ""
 			}],
+			"calculateServer": false,
 			"validate": {
 				"required": true,
-				"customMessage": "Select atleast one option to go next."
+				"minSelectedCount": 1
 			},
+			"minSelectedCountMessage": "Select atleast one option to go next.",
 			"key": "endorsement_options",
 			"properties": {
 				"render": "page6"
@@ -3086,7 +3088,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 2,
+	"_vid": 9,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3104,6 +3106,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-03-31T03:09:56.299Z",
+	"modified": "2020-03-31T14:05:11.648Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
