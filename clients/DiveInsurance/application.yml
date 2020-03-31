@@ -143,7 +143,7 @@ menu:
                                         type: DocumentViewer
                                         url: 'file/{{uuid}}/document'
                             -
-                                name: Upgrade To IPL
+                                name: 'Upgrade To IPL'
                                 rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
                                 details:
                                     -
@@ -151,7 +151,7 @@ menu:
                                         url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
                                         fileId: '{{uuid}}'
                                         page: 1
-                                icon: 'fa fa-arrow-circle-up' 
+                                icon: 'fa fa-arrow-circle-up'
                             -
                                 name: Endorsement
                                 rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
@@ -495,7 +495,7 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
-                                name: Upgrade To IPL
+                                name: 'Upgrade To IPL'
                                 rule: '''{{policyStatus}}'' == ''In Force'' && (''{{entity_name}}'' == ''Emergency First Response'')'
                                 details:
                                     -
@@ -613,7 +613,7 @@ menu:
                             - lastname
                             - product
                             - phone
-                        placeholder: "Search using Name or PADI or Product or Phone"
+                        placeholder: 'Search using Name or PADI or Product or Phone'
                         operations:
                             title: 'Create Policy'
                             actions:
