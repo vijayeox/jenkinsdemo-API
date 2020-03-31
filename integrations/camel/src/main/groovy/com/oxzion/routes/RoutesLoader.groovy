@@ -70,18 +70,9 @@ class RoutesLoader extends RouteBuilder{
             }
         }else{
             //load the routes from Externalise route file
-            if(flag==null){
-                url =  new URL(new URL("file:"), "/app/integrations/camel/testReload/CamelRoutes.groovy")
-            }else{
-                //test file
-                url = new URL(new URL("file:"), "/app/integrations/camel/testReload/camelRoutesTest.groovy")
-            }
-        }
-            println "url - ${url}"
-        if(!url){
             url = RoutesLoader.class.classLoader.getResource("Routes.groovy")
         }
-        println url
+        println "url - ${url}"
         return new ConfigSlurper().parse(url)
 
     }
