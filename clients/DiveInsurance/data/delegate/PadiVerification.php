@@ -16,6 +16,21 @@ class PadiVerification extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Padi Verification new".json_encode($data));
+        unset($data['businessPadiVerified']);
+        unset($data['padiVerified']);
+        unset($data['verified']);
+        unset($data['padi_empty']);
+        unset($data['businessPadiEmpty']);
+        unset($data['padiNotFound']);
+        unset($data['businessPadiNotFound']);
+        unset($data['padiNotFoundCsrReview']);
+        unset($data['padiNotFound']);
+        unset($data['user_exists']);
+        unset($data['policy_exists']);
+        unset($data['firstname']);
+        unset($data['lastname']);
+        unset($data['business_name']);
+        unset($data['initial']);
         $privileges = $this->getPrivilege();
         if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
             $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
@@ -39,7 +54,6 @@ class PadiVerification extends AbstractAppDelegate
             return $data;
         }
         $select = "Select firstname, MI as initial, lastname, business_name FROM padi_data WHERE member_number ='".$data['member_number']."'";
-        
         $result = $persistenceService->selectQuery($select);
         if($result->count() > 0){
             $response = array();
@@ -47,27 +61,24 @@ class PadiVerification extends AbstractAppDelegate
                 $response[] = $result->current();
             }
             $returnArray = array_merge($data,$response[0]);
-            if(isset($response[0]['firstname']) && (!isset($response[0]['business_name']) || ($response[0]['business_name'] == '') || ($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ))){
-                $returnArray['business_name'] = isset($data['business_name']) ? $data['business_name'] : "";
+            if(isset($data['product']) && (($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (isset($response[0]['firstname']) && $response[0]['firstname'] != '' && $response[0]['firstname'] != null))){
                 $returnArray['padiVerified'] = true;
-            }else if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
-                $returnArray['firstname'] = isset($data['firstname']) ? $data['firstname'] : "";
-                $returnArray['lastname'] = isset($data['lastname']) ? $data['lastname'] : "";
-                $returnArray['initial'] = isset($data['initial']) ? $data['initial'] : "";
-                $returnArray['businessPadiVerified'] = true;
-                $returnArray['padiVerified'] = true;
-            }else{
                 $returnArray['businessPadiVerified'] = false;
-            }
-            if(isset($data['product'])){
-                if(($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (!isset($response[0]['firstname']) || $response[0]['firstname'] == '')){
-                    $returnArray['padiVerified'] = false;
-                }else if($data['product'] == 'Dive Store' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
+
+            }else if(isset($data['product']) && (($data['product'] == 'Dive Store'|| $data['product'] == 'Dive Boat') && (isset($response[0]['business_name']) && !empty($response[0]['business_name'])))) {
+                $returnArray['businessPadiVerified'] = true;
+                $returnArray['padiVerified'] = false;
+            } else {
+                if(isset($response[0]['firstname']) && $response[0]['firstname'] != '' && $response[0]['firstname'] != null ){
+                    $returnArray['padiVerified'] = true;
                     $returnArray['businessPadiVerified'] = false;
-                }else if($data['product'] == 'Dive Boat' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
+                } else if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
+                    $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = true;
+                } else {
+                    $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = false;
                 }
-            } else {
                 $returnArray['address1'] = isset($data['address1']) ? $data['address1'] : "";
                 $returnArray['address2'] = isset($data['address2']) ? $data['address2'] : "";
                 $returnArray['city'] = isset($data['city']) ? $data['city'] : "";

@@ -18,7 +18,7 @@
 
 				{foreach from=$list item=$additional}
 	    		<tr>
-	    			<td>{$additional.initial} {$additional.firstname} {$additional.lastname}</td>
+	    			<td>{$additional.name}</td>
 	    			<td>{$additional.padi}</td>
 	    			<td>{$additional.status}</td>
 	    		</tr>

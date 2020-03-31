@@ -178,11 +178,13 @@ def upgradeInternationalCoverages = execution.getVariable('upgradeCareerCoverage
 def autoRenewalJob = execution.getVariable('autoRenewalJob')
 def scubaFit = execution.getVariable('scubaFit')
 def cylinder = execution.getVariable('upgradecylinder')
+def paymentOptions = execution.getVariable('paymentOptions')
 
 boolean result1 = false
 boolean result3 = false
 boolean result4 = false
 boolean result5 = false
+boolean result6 = true
 
 if(personalInfo){
     if(country != "United States of America"){
@@ -211,6 +213,14 @@ if (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFi
   result3=true
 }
 
+if(paymentOptions){
+  if(paymentOptions == "creditCard"){
+    result6 = false
+  }
+}
+if(result6==true){
+result3=true
+}
 execution.setVariable('CSRReviewRequired', result3)
 }
 
@@ -221,9 +231,7 @@ if(result3){
 
 if(!autoRenewalJob){
 	execution.setVariable('autoRenewalJob', null)
-}
-
-</camunda:script>
+}</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">

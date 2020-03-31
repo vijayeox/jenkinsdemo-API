@@ -30,10 +30,10 @@ public class TwillioSms extends RouteBuilder {
 	@Autowired
 	private Environment env
 
-    @PostConstruct
-	public void init() {
-		Twilio.init(env.getProperty("twillio.accountSid"), env.getProperty("twillio.authToken"))
-	}
+    //@PostConstruct
+	//public void init() {
+		//Twilio.init(env.getProperty("twillio.accountSid"), env.getProperty("twillio.authToken"))
+	//}
 	
 	@Override
 	public void configure() {
@@ -46,9 +46,9 @@ public class TwillioSms extends RouteBuilder {
 						def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
 						// def messageIn  = exchange.getMessage().getBody() as String
 						logger.info("Processing Email with payload ${object}")
-						Message message = Message.creator(new PhoneNumber(object.to as String),
-								new PhoneNumber(env.getProperty("twillio.fromNumber")),
-								object.body as String).create();
+						//Message message = Message.creator(new PhoneNumber(object.to as String),
+								// new PhoneNumber(env.getProperty("twillio.fromNumber")),
+								// object.body as String).create();
 
 						logger.info("Message sent is "+message.getBody());
 					}

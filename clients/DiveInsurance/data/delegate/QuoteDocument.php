@@ -24,15 +24,18 @@ class QuoteDocument extends PolicyDocument
                      'aniheader' => 'DB_Quote_ANI_header.html',
                      'anifooter' => null,
                      'policy' => 'Dive_Boat_Policy.pdf',
-                     'roster' => 'Roster',
+                     'roster' => 'Roster_Certificate',
                      'rosterHeader' => 'Roster_header.html',
                      'rosterFooter' => 'Roster_footer.html',
+                     'rosterPdf' => 'Roster.pdf',
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
                      'lpfooter' => 'DiveBoat_LP_footer.html',
                      'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
                      'boatAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT.pdf',
-                     'waterAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT_InWater.pdf'),
+                     'waterAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT_InWater.pdf',
+                     'hurricaneQuestionnaire' => 'PADI_Hurricane_Questionnaire.pdf',
+                     'groupExclusions' => 'Group_Exclusions.pdf'),
         'Dive Store' 
             => array(
                      'template' => 'DiveCenterProposal_Template', 
@@ -59,7 +62,12 @@ class QuoteDocument extends PolicyDocument
                      'gfooter' => 'Group_footer.html',
                      'alheader' => 'DiveStore_AL_header.html',
                      'alfooter' => 'DiveStore_AL_footer.html',
-                     'alTemplate' => 'DiveStore_AdditionalLocations'
+                     'alTemplate' => 'DiveStore_AdditionalLocations',
+                     'groupExclusions' => 'Group_Exclusions.pdf',
+                     'roster' => 'Roster_Certificate',
+                     'rosterHeader' => 'Roster_header.html',
+                     'rosterFooter' => 'Roster_footer.html',
+                     'rosterPdf' => 'Roster.pdf',
                     ));
         
     }

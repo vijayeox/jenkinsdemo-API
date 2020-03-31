@@ -113,6 +113,7 @@
     }, {
       "label": "amount",
       "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
+      "calculateServer": false,
       "key": "amount",
       "type": "hidden",
       "input": true,
@@ -129,7 +130,7 @@
       "conditional": {
         "show": true,
         "when": "userApproved",
-        "eq": "true"
+        "eq": "accepted"
       },
       "type": "panel",
       "label": "Payment Information",
@@ -170,6 +171,10 @@
             }, {
               "label": "Credit Card",
               "value": "creditCard",
+              "shortcut": ""
+            }, {
+              "label": "Financial Fund",
+              "value": "financialFunding",
               "shortcut": ""
             }],
             "clearOnHide": false,
@@ -226,11 +231,14 @@
             "tableView": false,
             "hideOnChildrenHidden": false
           }, {
-            "label": "Order Id",
+            "label": "Order ID",
             "spellcheck": true,
             "tableView": true,
             "clearOnHide": false,
             "calculateServer": false,
+            "validate": {
+              "required": true
+            },
             "key": "orderId",
             "conditional": {
               "show": true,
@@ -288,12 +296,13 @@
         "type": "hidden",
         "lockKey": true
       }, {
-        "input": true,
-        "tableView": true,
-        "key": "page7Panel2AmountPayable",
         "label": "amountPayable",
+        "calculateValue": "value = data['amount']",
+        "calculateServer": false,
+        "key": "page7Panel2AmountPayable",
         "type": "hidden",
-        "calculateValue": "value = data['amount']"
+        "input": true,
+        "tableView": true
       }],
       "input": false,
       "lockKey": true,
@@ -327,6 +336,15 @@
         "key": "paymentVerified",
         "type": "radio",
         "input": true
+      }, {
+        "label": "Notes",
+        "autoExpand": false,
+        "spellcheck": true,
+        "tableView": true,
+        "calculateServer": false,
+        "key": "notes",
+        "type": "textarea",
+        "input": true
       }]
     }],
     "path": "page5Panel"
@@ -357,6 +375,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-27T19:59:17.184Z",
+  "modified": "2020-03-28T15:15:53.846Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

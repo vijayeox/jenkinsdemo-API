@@ -56,7 +56,7 @@ class DiveBoatEndorsementPremiumCalculation extends AbstractAppDelegate
         }
 
         if(isset($data['totalLiabilityLimit'])){
-        	$totalLiabilityLimit = (float)$data['totalLiabilityLimit'] - (float)$policy['previous_totalLiabilityLimit'];
+            $totalLiabilityLimit = (float)$data['totalLiabilityLimit'] - (float)$policy['previous_totalLiabilityLimit'];
         	if($totalLiabilityLimit > 0){
 	        	$data['increased_totalLiabilityLimitValue'] =  $totalLiabilityLimit;
 	        }else if($totalLiabilityLimit < 0){
