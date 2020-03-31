@@ -83,7 +83,7 @@ class ErrorHandler {
     }
     static log(String error_type, String  error_trace, String payload, String params,String app_id){
         try {
-            def BASE_DB_URL = System.getenv('BASE_DB_URL')
+            def API_DB_URL = System.getenv('API_DB_URL')
             def DB_DRIVER = System.getenv('DB_DRIVER')
             def DB_USERNAME = System.getenv('DB_USERNAME')
             def DB_PASSWORD = System.getenv('DB_PASSWORD')
@@ -91,7 +91,7 @@ class ErrorHandler {
             String pattern = "yyyy-MM-dd HH:mm:ss"
             SimpleDateFormat formatter = new SimpleDateFormat(pattern)
             String mysqlDateString = formatter.format(now)
-            def sql = Sql.newInstance(BASE_DB_URL, DB_USERNAME, DB_PASSWORD, DB_DRIVER)
+            def sql = Sql.newInstance(API_DB_URL, DB_USERNAME, DB_PASSWORD, DB_DRIVER)
             def appId = sql.firstRow("SELECT id FROM ox_app where uuid='${app_id}'")
             print(appId?.getProperty("id"))
             sql.execute("INSERT INTO ox_error_log (error_type, error_trace,payload,date_created,params,app_id) values (${error_type}, ${error_trace},${payload},${mysqlDateString}, ${params}, ${appId.getProperty("id")})")
