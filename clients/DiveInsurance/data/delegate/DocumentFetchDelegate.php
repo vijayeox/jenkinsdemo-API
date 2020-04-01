@@ -35,7 +35,7 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                     $this->getAttachmentsData($data,$attachmentsFieldnames);
                 }
             }
-        }else{
+        } else{
                 if (isset($data['csrAttachmentsFieldnames'])) {
                     $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
                     $this->getAttachmentsData($data,$attachmentsFieldnames);
@@ -43,11 +43,12 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
         }
         return $data;
 
-     }
-     }else{
-     if (isset($data['attachmentsFieldnames'])) {
-        $attachmentsFieldnames = $data['attachmentsFieldnames'];
-        $this->getAttachmentsData($data,$attachmentsFieldnames);
+     } else{
+        if (isset($data['attachmentsFieldnames'])) {
+           $attachmentsFieldnames = $data['attachmentsFieldnames'];
+           $this->getAttachmentsData($data,$attachmentsFieldnames);
+        }
+        return $data;
      }
     }
 
@@ -58,6 +59,7 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 $fileData = file_get_contents($file);
                 if($fileData){
                     $documentsArray[$i]['url']='data:'.$documentsArray[$i]['type'].';base64,'.base64_encode($fileData);
+                    $documentsArray[$i]['file_url'] = $documentsArray[$i]['file'];
                     unset($documentsArray[$i]['file']);
                 }
             }

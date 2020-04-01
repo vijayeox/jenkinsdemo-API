@@ -26,11 +26,6 @@ html {
   }
 }
 
-.GridCustomStyle .k-pager-wrap .k-link, .GridCustomStyle .k-pager-wrap .k-pager-nav
-{
-  color : #053b6d !important;
-}
-
 ::-webkit-scrollbar {
   width: 15px;
 }
@@ -345,8 +340,9 @@ label {
 .profile-dropdown-div:hover {
   color: #053b6d;
 }
-.GridCustomStyle .k-pager-wrap .k-link, .GridCustomStyle .k-pager-wrap .k-pager-nav{
-  color: #053b6d;
+.GridCustomStyle .k-pager-wrap .k-state-selected{
+  background-color: #053b6d!important;
+  color: white!important;
 }
 .form-render .bg-primary {
     background-color: #053b6d !important;

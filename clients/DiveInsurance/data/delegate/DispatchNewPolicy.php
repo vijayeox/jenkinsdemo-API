@@ -62,7 +62,6 @@ class DispatchNewPolicy extends DispatchDocument {
                     }
                 }
             }
-
             if(count($errorFile) > 0){
                 $error = json_encode($errorFile);
                 $this->logger->error("Documents Not Found".$error);
@@ -77,8 +76,5 @@ class DispatchNewPolicy extends DispatchDocument {
         $response = $this->dispatch($data);
         return $response;
     }
-
-
-
 }
 ?>

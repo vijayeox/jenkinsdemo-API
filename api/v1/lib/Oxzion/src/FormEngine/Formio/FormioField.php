@@ -28,7 +28,10 @@ class FormioField
         if (isset($field['validate'])) {
             $this->data['required'] = isset($field['validate']['required'])?$field['validate']['required']:0;
         }
-        if(isset($field['protected']) && $field['protected']==1){
+        if(isset($field['protected']) && ($field['protected']==1 || $field['protected']==false)){
+            $this->data = null;
+        }
+        if(isset($field['persistent']) && ($field['persistent']==false || $field['persistent']==0  || $field['persistent']=='')){
             $this->data = null;
         }
     }
