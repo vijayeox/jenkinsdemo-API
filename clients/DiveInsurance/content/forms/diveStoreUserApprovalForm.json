@@ -104,21 +104,6 @@
       "label": "Panel",
       "path": "page5Panel2"
     }, {
-      "label": "automatic_renewal",
-      "customDefaultValue": "value = false;",
-      "key": "automatic_renewal",
-      "type": "hidden",
-      "input": true,
-      "tableView": false
-    }, {
-      "label": "amount",
-      "calculateValue": "value = parseFloat(data['total']).toFixed(2);",
-      "calculateServer": false,
-      "key": "amount",
-      "type": "hidden",
-      "input": true,
-      "tableView": false
-    }, {
       "title": "Payment Information",
       "theme": "primary",
       "collapsible": false,
@@ -149,6 +134,55 @@
         "input": true,
         "tableView": false
       }, {
+        "label": "automatic_renewal",
+        "customDefaultValue": "value = false;",
+        "key": "automatic_renewal",
+        "type": "hidden",
+        "input": true,
+        "tableView": false
+      }, {
+        "label": "amountPayable",
+        "calculateValue": "if(data.premiumFinanceSelct == 'yes'){\nvalue = (parseFloat(data['totalAmount']).toFixed(2))*30/100;\n} else {\nvalue = parseFloat(data['totalAmount']).toFixed(2);\n}",
+        "calculateServer": false,
+        "key": "amountPayable",
+        "type": "hidden",
+        "input": true,
+        "tableView": false
+      }, {
+        "label": "Final Amount Payable",
+        "prefix": "$",
+        "spellcheck": false,
+        "disabled": true,
+        "tableView": false,
+        "clearOnHide": false,
+        "calculateValue": "value = data.amountPayable",
+        "calculateServer": false,
+        "key": "finalAmountPayable",
+        "type": "textfield",
+        "input": true
+      }, {
+        "label": "Would you like to apply for Premium Finance?",
+        "optionsLabelPosition": "right",
+        "inline": false,
+        "tableView": false,
+        "values": [{
+          "label": "Yes",
+          "value": "yes",
+          "shortcut": ""
+        }, {
+          "label": "No",
+          "value": "no",
+          "shortcut": ""
+        }],
+        "clearOnHide": false,
+        "calculateServer": false,
+        "validate": {
+          "required": true
+        },
+        "key": "premiumFinanceSelect",
+        "type": "radio",
+        "input": true
+      }, {
         "label": "Columns",
         "columns": [{
           "components": [{
@@ -171,10 +205,6 @@
             }, {
               "label": "Credit Card",
               "value": "creditCard",
-              "shortcut": ""
-            }, {
-              "label": "Financial Fund",
-              "value": "financialFunding",
               "shortcut": ""
             }],
             "clearOnHide": false,
@@ -221,6 +251,7 @@
           }, {
             "type": "convergepay",
             "key": "custom",
+            "amount_field": "amountPayable",
             "label": "custom",
             "input": true,
             "conditional": {
@@ -279,6 +310,7 @@
         "properties": {
           "payment_confirmation_page": "true"
         },
+        "customConditional": "if(data.premiumFinanceSelect=='yes'||data.premiumFinanceSelect=='no'){\n  show = true\n} else {\n  show = false\n}",
         "type": "columns",
         "input": false
       }, {
@@ -296,13 +328,12 @@
         "type": "hidden",
         "lockKey": true
       }, {
-        "label": "amountPayable",
-        "calculateValue": "value = data['amount']",
-        "calculateServer": false,
-        "key": "page7Panel2AmountPayable",
-        "type": "hidden",
         "input": true,
-        "tableView": true
+        "tableView": true,
+        "key": "page7Panel2AmountPayable",
+        "label": "amountPayable",
+        "type": "hidden",
+        "calculateValue": "value = data['amount']"
       }],
       "input": false,
       "lockKey": true,
@@ -375,6 +406,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-03-28T15:15:53.846Z",
+  "modified": "2020-04-01T09:47:25.897Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
