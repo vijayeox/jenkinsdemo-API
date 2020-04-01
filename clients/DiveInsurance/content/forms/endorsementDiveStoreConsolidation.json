@@ -3259,7 +3259,7 @@
 				"validate": {
 					"minLength": 1
 				},
-				"key": "lossPayees1",
+				"key": "lossPayees",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
@@ -3270,10 +3270,11 @@
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
-							"key": "name1",
+							"key": "name",
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
@@ -3283,10 +3284,11 @@
 							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
-							"key": "city1",
+							"key": "city",
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
@@ -3314,15 +3316,19 @@
 							"template": "<span>{{ item.country }}</span>",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please enter your country."
 							},
-							"key": "country1",
+							"key": "country",
 							"properties": {
 								"clear_field": "state"
 							},
 							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
 							"input": true,
 							"lockKey": true,
 							"source": "5d347da33e9be31e15d3b115",
@@ -3333,17 +3339,24 @@
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
-								"values": [{}],
+								"values": [{
+									"label": "",
+									"value": ""
+								}],
 								"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
-							"key": "state1",
+							"key": "state",
 							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
 							"refreshOn": "row.country",
 							"input": true,
 							"lockKey": true,
@@ -3366,7 +3379,7 @@
 							"validate": {
 								"required": true
 							},
-							"key": "address3",
+							"key": "address",
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
@@ -3381,7 +3394,7 @@
 								"required": true,
 								"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 							},
-							"key": "zip1",
+							"key": "zip",
 							"type": "textfield",
 							"input": true,
 							"hideOnChildrenHidden": false
@@ -6100,7 +6113,7 @@
 			"validate": {
 				"required": true
 			},
-			"key": "groupProfessionalLiability",
+			"key": "groupProfessionalLiabilitySelect",
 			"type": "select",
 			"indexeddb": {
 				"filter": {}
@@ -6119,7 +6132,7 @@
 			"key": "well2",
 			"conditional": {
 				"show": true,
-				"when": "groupProfessionalLiability",
+				"when": "groupProfessionalLiabilitySelect",
 				"eq": "yes"
 			},
 			"type": "well",
@@ -6618,6 +6631,7 @@
 								"label": "Zip Code",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true,
@@ -9571,7 +9585,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 14,
+	"_vid": 18,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9588,6 +9602,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-01T12:18:59.781Z",
+	"modified": "2020-04-01T16:11:08.739Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

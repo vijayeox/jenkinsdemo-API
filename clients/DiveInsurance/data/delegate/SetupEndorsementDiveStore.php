@@ -151,8 +151,12 @@ public function execute(array $data,Persistence $persistenceService)
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
         if($data['initiatedByUser'] == false){
             $data['update_date'] =  date("Y-m-d H:i:s");
+            $data['previous_groupTaxPercentage'] = $data['groupTaxPercentage'];
+            $data['previous_groupTaxAmount'] = ($data['groupTaxAmount']==0)?$data['groupTaxAmount']:0.00;
+            $data['previous_groupPadiFeeAmount'] = $data['groupPadiFeeAmount'];
             $data['previous_groupCoverageSelect'] = $data['groupCoverageSelect'];
             $data['previous_groupExcessLiabilitySelect'] = $data['groupExcessLiabilitySelect'];
+            $data['previous_groupTotalAmount'] = $data['groupTotalAmount'];
             $data['previous_propertyDeductibles'] = $data['propertyDeductibles'];
             $data['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
             $data['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
@@ -282,6 +286,7 @@ public function execute(array $data,Persistence $persistenceService)
             $data['endorsementExcessLiabilityCoverage'] = $endorsementExcessLiabilityCoverage;
             $data['endorsementNonOwnedAutoLiabilityPL'] = $endorsementNonOwnedAutoLiabilityPL;
             $data['endorsementLiabilityCoverageOption'] = $endorsementLiabilityCoverageOption;
+            $unsetOptions = $this->unsetOptions;
             for($i=0;$i< sizeof($unsetOptions);$i++){
                 if(isset($data[$unsetOptions[$i]])){
                     unset($data[$unsetOptions[$i]]);
