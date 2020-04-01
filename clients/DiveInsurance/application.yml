@@ -391,6 +391,9 @@ menu:
                                 multiFieldFilter:
                                     - lastname
                             -
+                                title: Policy Status
+                                field: policyStatus
+                            -
                                 title: Product
                                 field: entity_name
                                 filterCell:

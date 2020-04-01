@@ -68,6 +68,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'cover_letter' => 'Dive_Store_Cover_Letter',
                         'lheader' => 'letter_header.html',
                         'lfooter' => 'letter_footer.html',
+                        'instruct' => 'Instructions_To_Insured.pdf',
                         'aiTemplate' => 'DiveStore_AI',
                         'aiheader' => 'DiveStore_AI_header.html',
                         'aifooter' => 'DiveStore_AI_footer.html',
@@ -86,6 +87,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
                         'alTemplate' => 'DiveStore_AdditionalLocations',
+                        'blanketForm' => 'DB_AI_Blanket_Endorsement.pdf',
                         'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf'),
             'Emergency First Response'

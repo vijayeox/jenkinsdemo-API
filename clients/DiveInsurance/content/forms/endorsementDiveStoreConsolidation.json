@@ -2019,19 +2019,25 @@
 				"decimalLimit": 2,
 				"requireDecimal": true
 			}, {
-				"input": true,
-				"tableView": true,
 				"label": "Upload Receipts",
-				"key": "receipts",
-				"image": true,
-				"multiple": true,
-				"type": "file",
-				"lockKey": true,
+				"tableView": true,
 				"storage": "base64",
+				"image": true,
+				"webcam": false,
+				"fileTypes": [{
+					"label": "",
+					"value": ""
+				}],
+				"multiple": true,
+				"clearOnHide": false,
+				"calculateServer": false,
 				"validate": {
 					"multiple": true
 				},
-				"clearOnHide": false
+				"key": "receipts",
+				"type": "file",
+				"input": true,
+				"lockKey": true
 			}, {
 				"key": "pageNaNPanel3YesNo",
 				"label": "Yes/No",
@@ -4087,12 +4093,13 @@
 								"description": "Except Instructional/Supervisory & Travel Receipts.This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
 								"prefix": "$",
 								"mask": false,
-								"spellcheck": true,
+								"spellcheck": false,
 								"tableView": true,
 								"delimiter": false,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -4833,13 +4840,13 @@
 									"label": "Receipts",
 									"prefix": "$",
 									"mask": false,
-									"spellcheck": true,
-									"tableView": true,
-									"defaultValue": "0",
+									"spellcheck": false,
+									"tableView": false,
 									"delimiter": false,
 									"requireDecimal": true,
 									"inputFormat": "plain",
 									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9564,7 +9571,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 12,
+	"_vid": 14,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9581,6 +9588,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-01T06:27:31.330Z",
+	"modified": "2020-04-01T12:18:59.781Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

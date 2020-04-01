@@ -2032,19 +2032,24 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"input": true,
-								"tableView": true,
-								"inputType": "number",
 								"label": "Furniture, fixtures and equipment:",
-								"key": "dspropFurniturefixturesandequip",
 								"prefix": "$",
+								"mask": false,
+								"spellcheck": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": true,
+								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "dspropFurniturefixturesandequip",
 								"type": "number",
-								"lockKey": true,
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"requireDecimal": true,
 								"decimalLimit": 2,
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -3307,6 +3312,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -3338,6 +3344,7 @@
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter your country."
@@ -3347,6 +3354,9 @@
 									"clear_field": "state"
 								},
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"source": "5d347da33e9be31e15d3b115",
@@ -3357,17 +3367,24 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
 								"key": "state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "row.country",
 								"input": true,
 								"lockKey": true,
@@ -3385,6 +3402,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -3572,14 +3590,7 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": false,
-					"defaultValue": [{
-						"name3": "",
-						"city3": "",
-						"country3": "",
-						"state3": {},
-						"address5": "",
-						"zip3": ""
-					}],
+					"defaultValue": [{}],
 					"calculateServer": false,
 					"validate": {
 						"minLength": 1
@@ -3595,10 +3606,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "name3",
+								"key": "name",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -3608,10 +3620,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "city3",
+								"key": "city",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -3639,15 +3652,19 @@
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter your country."
 								},
-								"key": "country3",
+								"key": "country",
 								"properties": {
 									"clear_field": "state"
 								},
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"source": "5d347da33e9be31e15d3b115",
@@ -3658,17 +3675,24 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "state3",
+								"key": "state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "row.country",
 								"input": true,
 								"lockKey": true,
@@ -3686,10 +3710,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "address5",
+								"key": "address",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -3704,7 +3729,7 @@
 									"required": true,
 									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
-								"key": "zip3",
+								"key": "zip",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -3807,10 +3832,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "name2",
+								"key": "name",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -3820,10 +3846,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "city2",
+								"key": "city",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -3851,15 +3878,19 @@
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter your country."
 								},
-								"key": "country2",
+								"key": "country",
 								"properties": {
 									"clear_field": "state"
 								},
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"source": "5d347da33e9be31e15d3b115",
@@ -3870,17 +3901,24 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "state2",
+								"key": "state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "row.country",
 								"input": true,
 								"lockKey": true,
@@ -3903,7 +3941,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "address4",
+								"key": "address",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -3918,7 +3956,7 @@
 									"required": true,
 									"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
-								"key": "zip2",
+								"key": "zip",
 								"type": "textfield",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -4006,10 +4044,11 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "name1",
+								"key": "name",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4022,7 +4061,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "city1",
+								"key": "city",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4054,7 +4093,7 @@
 									"required": true,
 									"customMessage": "Please enter your country."
 								},
-								"key": "country1",
+								"key": "country",
 								"properties": {
 									"clear_field": "state"
 								},
@@ -4069,17 +4108,24 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "state1",
+								"key": "state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "row.country",
 								"input": true,
 								"lockKey": true,
@@ -4097,10 +4143,12 @@
 								"label": "Address",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "address3",
+								"key": "address",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4115,7 +4163,7 @@
 									"required": true,
 									"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
-								"key": "zip1",
+								"key": "zip",
 								"type": "textfield",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -7009,6 +7057,8 @@
 								"label": "Name",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -7040,6 +7090,8 @@
 								"dataType": "string",
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -7048,6 +7100,9 @@
 									"clear_field": "state"
 								},
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -7062,6 +7117,8 @@
 								"label": "Address",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -7081,6 +7138,8 @@
 								"label": "City",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -7110,12 +7169,17 @@
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "State is required"
 								},
 								"key": "state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "country",
 								"input": true,
 								"lockKey": true,
@@ -7132,6 +7196,7 @@
 								"label": "Zip Code",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true,
@@ -9693,6 +9758,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-01T07:26:33.542Z",
+	"modified": "2020-04-01T12:17:39.778Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
