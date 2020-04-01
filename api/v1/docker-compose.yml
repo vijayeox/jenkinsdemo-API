@@ -10,6 +10,7 @@ services:
                 DB_PASSWORD: ${DB_PASSWORD}
                 DB_HOST: ${DB_HOST}
                 API_DB : ${API_DB}
+                TEST_API_DB : ${TEST_API_DB}
         ports:
             - "8080:80"
         volumes:
