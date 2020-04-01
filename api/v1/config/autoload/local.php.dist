@@ -19,10 +19,7 @@ $username = getenv('DB_USERNAME');
 $password = getenv('DB_PASSWORD');
 
 if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
-    // $host = getenv('DB_HOST');
-    // $db = getenv('TEST_API_DB');
-    // $username = getenv('DB_USERNAME');
-    // $password = getenv('DB_PASSWORD');
+    $db = getenv('TEST_API_DB');
 }
 
 return [
