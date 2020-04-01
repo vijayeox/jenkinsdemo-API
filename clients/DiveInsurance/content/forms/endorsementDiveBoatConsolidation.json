@@ -2217,7 +2217,14 @@
 				"enableRowGroups": false,
 				"hideLabel": true,
 				"tableView": true,
+				"defaultValue": [{
+					"duty": "",
+					"name": "",
+					"ft_pt": "",
+					"do_they_have_professional_liability_insurance": ""
+				}],
 				"clearOnHide": false,
+				"calculateServer": false,
 				"validate": {
 					"minLength": 1
 				},
@@ -2230,6 +2237,10 @@
 					"dataGridLabel": false,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "duty",
 					"type": "textfield",
 					"input": true,
@@ -2241,6 +2252,10 @@
 					"dataGridLabel": false,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "name",
 					"type": "textfield",
 					"input": true,
@@ -2262,8 +2277,15 @@
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "ft_pt",
 					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
 					"input": true,
 					"inDataGrid": true
 				}, {
@@ -2282,8 +2304,15 @@
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "do_they_have_professional_liability_insurance",
 					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
 					"input": true,
 					"inDataGrid": true,
 					"lockKey": true
@@ -2297,6 +2326,10 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "padi",
 					"type": "number",
 					"input": true,
@@ -2802,7 +2835,7 @@
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) > moment(data['date_of_purchase'])) ? true : 'Please choose the date after '+moment(data.start_date).format('MM-DD-YYYY')+ '(Date of Purchase)';\n}"
+							"custom": "if(data['date_of_last_survey'] && data['date_of_last_survey'] != ''){\n  valid = (moment(data['date_of_last_survey']) > moment(data['date_of_purchase'])) ? true : 'Please choose the date after '+moment(data.date_of_purchase).format('MM-DD-YYYY')+ '(Date of Purchase)';\n}"
 						},
 						"key": "date_of_last_survey",
 						"type": "datetime",
@@ -3832,7 +3865,8 @@
 					"input": true
 				}, {
 					"label": "attachmentFields",
-					"customDefaultValue": "value = [[\"groupPL\",\"document\"],\"attachments\"];",
+					"customDefaultValue": "value = [[\"groupPL\",\"document\"],'attachments','csrApprovalAttachments'];",
+					"calculateServer": false,
 					"key": "attachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
@@ -4111,7 +4145,7 @@
 				"key": "page7Columns",
 				"columns": [{
 					"components": [{
-						"label": "What was your annual receipt for  supervision?",
+						"label": "What was your annual receipt instructional supervision?",
 						"prefix": "$",
 						"mask": false,
 						"spellcheck": true,
@@ -4120,6 +4154,7 @@
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -8479,6 +8514,40 @@
 				}],
 				"path": "quoteRequirement"
 			}, {
+				"title": "Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "csrAttachmentsPanel",
+				"type": "panel",
+				"label": "Panel",
+				"input": false,
+				"components": [{
+					"label": "Upload",
+					"hideLabel": true,
+					"tableView": false,
+					"storage": "base64",
+					"webcam": false,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"multiple": true,
+					"calculateServer": false,
+					"validate": {
+						"multiple": true
+					},
+					"key": "csrApprovalAttachments",
+					"type": "file",
+					"input": true
+				}]
+			}, {
 				"key": "page5Panel2",
 				"input": false,
 				"title": "Approval",
@@ -8561,7 +8630,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 24,
+	"_vid": 28,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8579,6 +8648,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-03-31T08:30:36.474Z",
+	"modified": "2020-03-31T13:18:08.872Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

@@ -1,15 +1,14 @@
 <?php
 namespace Oxzion\AppDelegate;
 
-use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Service\FileService;
 use Logger;
 
 trait FileTrait
 {
     protected $logger;
-    protected $fileService;
-    protected $appId;
+    private $fileService;
+    private $appId;
     
     public function __construct(){
         $this->logger = Logger::getLogger(__CLASS__);
