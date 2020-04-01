@@ -996,7 +996,9 @@
 						"disabled": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "business_padi",
+						"customConditional": "if((data.business_padi && data.business_padi != '') && ((data.businessPadiVerified === true || data.businessPadiVerified == 'true') || (data.businessPadiValidated == true || data.businessPadiValidated == 'true'))){\n  show = true;\n}else{\n  show = false;\n}",
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
@@ -1036,9 +1038,9 @@
 				"components": [{
 					"label": "Legal Business Name",
 					"spellcheck": true,
-					"disabled": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true,
 						"customMessage": "Please enter legal business name."
@@ -1912,7 +1914,7 @@
 						"key": "pageNaNColumnsColumns",
 						"columns": [{
 							"components": [{
-								"label": "Layup Period From",
+								"label": "From",
 								"format": "MM-dd-yyyy",
 								"tableView": true,
 								"datePicker": {
@@ -1968,7 +1970,7 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"label": "Layup Period To",
+								"label": "To",
 								"format": "MM-dd-yyyy",
 								"tableView": true,
 								"datePicker": {
@@ -8630,7 +8632,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 28,
+	"_vid": 31,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8648,6 +8650,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-03-31T13:18:08.872Z",
+	"modified": "2020-04-01T09:50:53.726Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
