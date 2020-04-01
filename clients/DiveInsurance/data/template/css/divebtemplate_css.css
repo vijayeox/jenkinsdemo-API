@@ -421,7 +421,7 @@ body{
 }
 .qfooter_line1{
   height: 1px;
-  margin-bottom:3px;
+  margin-bottom:2%;
   background-color: black;
   margin-top: 3%;
 }
@@ -537,13 +537,13 @@ body{
   margin-right:60%;
 }
 .info_margin{
-  width:70%;
+  width:55%;
   word-wrap: break-word;
   margin-top:2px;
   margin-bottom:2px;
 }
 .add_margin{
-  width:45%;
+  width:40%;
   word-wrap: break-word;
   margin-top:2px;
   margin-bottom:2px;
@@ -708,4 +708,8 @@ body{
   margin-top:2px;
   margin-bottom:2px;
   font-size:15px;
+}
+
+.ai_spacing{
+  margin-top: 10%;
 }

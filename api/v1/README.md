@@ -49,6 +49,12 @@ You can also run composer from the image. The container environment is named
 ```bash
 $ docker-compose run zf composer install
 ```
+To create tables in oxzionapi database, run migration script
+```bash
+For Linux
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./migrations migrate
+For Windows
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./migrations migrate
 
 To run tests using the mysql database running on your machine run the following command
 ```bash

@@ -62,7 +62,7 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        $data['uuid'] = $uuid = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+        $data['uuid'] = $uuid = !empty($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
         if (!$entityId && isset($data['entity_name'])) {
@@ -316,7 +316,7 @@ class FileService extends AbstractService
             $this->logger->info("FILE ID  ------" . json_encode($id));
             $params = array('id' => $id,
                 'orgId' => AuthContext::get(AuthConstants::ORG_ID));
-            $select = "SELECT id, uuid, data, latest  from ox_file where uuid = :id AND org_id = :orgId";
+            $select = "SELECT id, uuid, data, latest, entity_id  from ox_file where uuid = :id AND org_id = :orgId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
             $this->logger->info("FILE DATA ------" . json_encode($result));
@@ -720,15 +720,22 @@ class FileService extends AbstractService
             'fileUuid' => $params['fileId'],
             'dataType1' => 'document',
             'dataType2' => 'file');
-        $this->logger->info("Executing query $selectQuery with params - " . json_encode($selectQueryParams));
+        $this->logger->info("Executing query $selectQuery File with params - " . json_encode($selectQueryParams));
         $documentsArray = array();
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             foreach ($selectResultSet as $result) {
                 if(!empty($result['field_value'])){
-                    $documentsArray[$result['text']] =  json_decode($result['field_value'], true);
+                    $jsonValue =  json_decode($result['field_value'], true);
+                    if(!isset($documentsArray[$result['text']])){
+                        $documentsArray[$result['text']] =  $jsonValue;
+                    }
+                    else{
+                        $documentsArray[$result['text']] = array_merge($documentsArray[$result['text']],$jsonValue);
+                    }
                 }
             }
+
             foreach ($documentsArray as $key=>$docItem) {
                 if(isset($docItem) && !isset($docItem[0]['file']) ){
                      $parseDocData = array();

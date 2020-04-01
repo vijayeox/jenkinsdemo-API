@@ -89,11 +89,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\WidgetController::class,
                         'access'=>[
-                            // SET ACCESS CONTROL
-                            //DO NOT ADD THIS AT IS NOT NEEDED. LEAVING THIS HERE IN CASE THE REQUIREMENT CHANGES
-                            //--------------------------------------------------------------------
-                            // - BRIAN
-                            // 'put'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
+                            'put'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'post'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'delete'=> 'MANAGE_ANALYTICS_WIDGET_WRITE'
                         ],
@@ -103,7 +99,7 @@ return [
             'copyWidget' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/widget/:widgetUuid/copy',
+                    'route'    => '/analytics/widget[/:widgetUuid]/copy',
                     'defaults' => [
                         'controller' => Controller\WidgetController::class,
                         'method' => 'POST',

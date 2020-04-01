@@ -23,3 +23,7 @@ integrations/camel/.project
 integrations/camel/.settings/org.eclipse.buildship.core.prefs
 clients/BridgeMed/view/themes/BridgeMedTheme/dist/
 clients/BridgeMed/view/themes/BridgeMedTheme/node_modules/
+integrations/workflow/ProcessEngine/.project
+integrations/workflow/ProcessEngine/.project
+integrations/workflow/IdentityService/.classpath
+integrations/workflow/IdentityService/.settings/org.eclipse.buildship.core.prefs

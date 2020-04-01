@@ -20,6 +20,7 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("New Policy Document".json_encode($data));
+        $data['template'] = $this->template[$data['product']];
         if(isset($data['documents']) && is_string($data['documents'])){
             $data['documents'] = json_decode($data['documents'],true);
         }

@@ -1,0 +1,17 @@
+DELETE from `premium_rate_card` WHERE `product`='Individual Professional Liability' and is_upgrade = 0 and `key` = 'excessLiabilityCoverageDeclined';
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined','2019-06-30', '2019-07-31',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2019-09-01', '2019-09-30',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2019-10-01', '2019-10-31',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2019-11-01', '2019-11-30',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2019-12-01', '2019-12-31',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-01-01', '2020-01-31',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-02-01', '2020-02-29',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-03-01', '2020-03-31',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined','2019-08-01', '2019-08-31',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-04-01', '2020-04-30',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-05-01', '2020-05-31',0,'EXCESS_LIABILITY');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`coverage_category`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-06-01', '2020-06-30',0,'EXCESS_LIABILITY');
+
+
+UPDATE `premium_rate_card` SET `previous_key` = 0 where `product` = 'Individual Professional Liability' and `key` = 'excessLiabilityCoverageDeclined' and `is_upgrade` = 0;

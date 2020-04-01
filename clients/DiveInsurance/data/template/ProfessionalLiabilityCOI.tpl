@@ -112,23 +112,51 @@
 		</div>
 		<div class = "second_content">
 			{if isset($update_date)}
-			{assign var=endrosement value=$endorsement_options|json_decode:true}
 			{assign var=previousCoverages value=$previous_careerCoverage|json_decode:true}
-			{assign var=encode value=previousCoverages|json_encode:true}
-				<p {$encode} class ="policy_update"><b>Endorsements & Upgrades:</b></p>
+				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if isset($previous_careerCoverage) && !empty($previous_careerCoverage)}
-					{foreach name=outer from=$previousCoverages item=previousCoverage}
-						{foreach key=key item=item from=$previousCoverage}
-							{if $item@first}
-     							{continue}
-    						{/if}
-							<p class = "policy_status">Status of Insured : {$key} as of {$item|date_format:"%m/%d/%Y"}</p>
-						{/foreach}
+					{foreach from=$previousCoverages item=previousCoverage}
+						{if $upgradeCareerCoverageVal != $previousCoverage.label}
+							<p class = "policy_status">Status of Insured : {$previousCoverage.label} as of {$previousCoverage.update_date|date_format:"%m/%d/%Y"}</p>
+						{/if}
 					{/foreach}
 				{/if}
 				<p class = "policy_status" >Status of Insured : {$upgradeCareerCoverageVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
-			{/if}
 
+				{if isset($scubaFit) && !empty($scubaFit)}
+					{if $scubaFit != "scubaFitInstructorDeclined" && $scubaFit != $previous_scuba}
+						<p class = "policy_status">ScubaFit Coverage: {$scubaFitVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>tecRecVal
+					{/if}
+				{/if}
+
+				{if isset($tecRecVal) && !empty($tecRecVal)}
+					{if $tecRecVal != "declined"}
+						<p class = "policy_status">TecRec Coverage: {$tecRecVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+					{/if}
+				{/if}
+
+				{if isset($previous_cylinder) && !empty($previous_cylinder)}				
+				{assign var=previousCylinder value=$previous_cylinder|json_decode:true}
+					{foreach from=$previousCylinder item=previousCylinderNew}
+					{if $previousCylinderNew.label != $cylinderPriceVal}
+							<p class = "policy_status">Cylinder Coverage : {$previousCylinderNew.label} as of {$previousCylinderNew.update_date|date_format:"%m/%d/%Y"}</p>
+					{/if}
+					{/foreach}
+				{/if}
+					<p class = "policy_status" >Cylinder Coverage : {$cylinderPriceVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+
+				{if isset($previous_excessLiability) && !empty($previous_excessLiability)}
+				{assign var=previousExcessLiability value=$previous_excessLiability|json_decode:true}
+					{foreach from=$previousExcessLiability item=previousExcessLiabilityEndor}
+					{if $previousExcessLiabilityEndor.label != $upgradeExcessLiabilityVal}
+							<p class = "policy_status">Excess Liability Coverage : {$previousExcessLiabilityEndor.label} as of {$previousExcessLiabilityEndor.update_date|date_format:"%m/%d/%Y"}</p>
+					{/if}
+					{/foreach}
+				{/if}
+					<p class = "policy_status" >Excess Liability Coverage : {$upgradeExcessLiabilityVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+
+			{/if}
+				
 			<hr></hr>
 			<p class = "policy_notice">
 				The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688. The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description of the terms, conditions and exclusions of the policy. This certificate does not amend, alter or extend the coverage afforded by the policy referenced on this certificate.

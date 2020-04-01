@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-@Component
+//@Component
 public class RouteConfigurationDirectoryListener {
 
 
@@ -18,7 +18,7 @@ public class RouteConfigurationDirectoryListener {
     private static final String DIRECTORY_NAME = "./../../../../../../../camel/"
     private static final long POLL_INTERVAL = 3000
 
-    @Autowired
+   // @Autowired
     RoutesLoader loader
 
     public  void listenFile() throws  Exception{

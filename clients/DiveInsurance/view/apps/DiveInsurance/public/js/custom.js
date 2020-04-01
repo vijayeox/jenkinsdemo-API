@@ -327,6 +327,12 @@ document.addEventListener("DOMContentLoaded", function() {
               }
             });
           }
+          if(properties["clear_field"]){
+            var targetComponent = form.getComponent(properties["clear_field"]);
+            if (targetComponent) {
+              targetComponent.setValue("");
+            } 
+          }
         }
       }
     });

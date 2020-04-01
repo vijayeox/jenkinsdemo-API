@@ -30,7 +30,9 @@ class EndorsementDocument extends PolicyDocument
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
                      'lpfooter' => 'DiveBoat_LP_footer.html',
-                     'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf'),
+                     'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
+                     'blanketForm' => 'DB_AI_Blanket_Endorsement.pdf',
+                     'groupExclusions' => 'Group_Exclusions.pdf'),
         'Dive Store' 
             => array(
                      'template' => 'DiveStoreEndorsement', 
@@ -42,7 +44,8 @@ class EndorsementDocument extends PolicyDocument
                      'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
                      'gtemplate' => 'Group_PL_COI',
                      'gheader' => 'Group_header.html',
-                     'gfooter' => 'Group_footer.html'
+                     'gfooter' => 'Group_footer.html',
+                     'groupExclusions' => 'Group_Exclusions.pdf'
                     ));        
     }
 }
