@@ -62,7 +62,7 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        $data['uuid'] = $uuid = !empty($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+        $data['uuid'] = $uuid = isset($data['uuid']) && UuidUtil::isValidUuid($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
         if (!$entityId && isset($data['entity_name'])) {
