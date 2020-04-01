@@ -331,7 +331,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
 
-                if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
+                if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
                          $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter',null,$length);
                          $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');                         
@@ -341,7 +341,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
 
 
-                        if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                        if(isset($temp['additional_insured']) && $temp['additional_named_insureds_option'] == 'yes'){
                         $this->logger->info("DOCUMENT additionalNamedInsured");
                         $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                         }

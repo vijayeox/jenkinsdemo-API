@@ -106,20 +106,6 @@
 			"label": "Panel",
 			"path": "page5Panel2"
 		}, {
-			"label": "automatic_renewal",
-			"customDefaultValue": "value = false;",
-			"key": "automatic_renewal",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
-		}, {
-			"label": "amount",
-			"calculateValue": "value = parseFloat(data['total']).toFixed(2);",
-			"key": "amount",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
-		}, {
 			"title": "Payment Information",
 			"theme": "primary",
 			"collapsible": false,
@@ -150,6 +136,55 @@
 				"input": true,
 				"tableView": false
 			}, {
+				"label": "automatic_renewal",
+				"customDefaultValue": "value = false;",
+				"key": "automatic_renewal",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
+				"label": "amountPayable",
+				"calculateValue": "if(data.premiumFinanceSelct == 'yes'){\nvalue = (parseFloat(data['amount']).toFixed(2))*30/100;\n} else {\nvalue = parseFloat(data['amount']).toFixed(2);\n}",
+				"calculateServer": false,
+				"key": "amountPayable",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
+				"label": "Final Amount Payable",
+				"prefix": "$",
+				"spellcheck": false,
+				"disabled": true,
+				"tableView": false,
+				"clearOnHide": false,
+				"calculateValue": "value = data.amountPayable",
+				"calculateServer": false,
+				"key": "finalAmountPayable",
+				"type": "textfield",
+				"input": true
+			}, {
+				"label": "Would you like to apply for Premium Finance?",
+				"optionsLabelPosition": "right",
+				"inline": false,
+				"tableView": false,
+				"values": [{
+					"label": "Yes",
+					"value": "yes",
+					"shortcut": ""
+				}, {
+					"label": "No",
+					"value": "no",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
+				"key": "premiumFinanceSelect",
+				"type": "radio",
+				"input": true
+			}, {
 				"label": "Columns",
 				"columns": [{
 					"components": [{
@@ -172,10 +207,6 @@
 						}, {
 							"label": "Credit Card",
 							"value": "creditCard",
-							"shortcut": ""
-						}, {
-							"label": "Financial Fund",
-							"value": "financialFunding",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -222,6 +253,7 @@
 					}, {
 						"type": "convergepay",
 						"key": "custom",
+						"amount_field": "amountPayable",
 						"label": "custom",
 						"input": true,
 						"conditional": {
@@ -280,6 +312,7 @@
 				"properties": {
 					"payment_confirmation_page": "true"
 				},
+				"customConditional": "if(data.premiumFinanceSelect=='yes'||data.premiumFinanceSelect=='no'){\n  show = true\n} else {\n  show = false\n}",
 				"type": "columns",
 				"input": false
 			}, {
@@ -357,8 +390,8 @@
 		"input": true
 	}],
 	"controller": "",
-	"revisions": "",
-	"_vid": 0,
+	"revisions": "current",
+	"_vid": 7,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -372,6 +405,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-03-28T15:13:47.227Z",
+	"modified": "2020-04-01T09:49:20.977Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

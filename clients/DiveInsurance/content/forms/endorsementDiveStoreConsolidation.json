@@ -19,6 +19,15 @@
 					"label": "Please select areas you want to modify",
 					"optionsLabelPosition": "right",
 					"tableView": true,
+					"defaultValue": {
+						"modify_personinformation": false,
+						"modify_businessAndPolicyInformation": false,
+						"modify_propertyInformation": false,
+						"modify_generalLiabilityInformation": false,
+						"modify_additional": false,
+						"modify_groupProfessionalLiability": false,
+						"modify_personalInformation": false
+					},
 					"values": [{
 						"value": "modify_personalInformation",
 						"label": "Personal Information",
@@ -50,15 +59,7 @@
 					"input": true,
 					"inputType": "checkbox",
 					"lockKey": true,
-					"hideOnChildrenHidden": false,
-					"defaultValue": {
-						"modify_personinformation": false,
-						"modify_businessAndPolicyInformation": false,
-						"modify_propertyInformation": false,
-						"modify_generalLiabilityInformation": false,
-						"modify_additional": false,
-						"modify_groupProfessionalLiability": false
-					}
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -6065,7 +6066,11 @@
 			"next": true
 		},
 		"collapsible": false,
-		"customConditional": "if(data['endorsement_options'].includes('modify_additional')){\n  if(data.additional_options.includes('modify_additionalInsured') || data.additional_options.includes('modify_lossPayees') || data.additional_options.includes('modify_additionalLocations') || data.additional_options.includes('modify_optionalCoverages')){\n  show =true;\n  } else {\n    show = false;\n  }\n} else {\n  show = false;\n}"
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_additional"
+		}
 	}, {
 		"type": "panel",
 		"title": "Group Professional Liability",
@@ -9559,7 +9564,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 10,
+	"_vid": 12,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9576,6 +9581,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-03-31T20:55:32.418Z",
+	"modified": "2020-04-01T06:27:31.330Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
