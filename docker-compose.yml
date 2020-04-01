@@ -27,8 +27,6 @@ services:
         network_mode: "host"    
         ports:
             - "8090:8090"
-        volumes:
-            - ./:/app 
     camel:
         build:
             context: ./integrations/camel/docker
