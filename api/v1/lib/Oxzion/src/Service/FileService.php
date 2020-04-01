@@ -720,15 +720,22 @@ class FileService extends AbstractService
             'fileUuid' => $params['fileId'],
             'dataType1' => 'document',
             'dataType2' => 'file');
-        $this->logger->info("Executing query $selectQuery with params - " . json_encode($selectQueryParams));
+        $this->logger->info("Executing query $selectQuery File with params - " . json_encode($selectQueryParams));
         $documentsArray = array();
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             foreach ($selectResultSet as $result) {
                 if(!empty($result['field_value'])){
-                    $documentsArray[$result['text']] =  json_decode($result['field_value'], true);
+                    $jsonValue =  json_decode($result['field_value'], true);
+                    if(!isset($documentsArray[$result['text']])){
+                        $documentsArray[$result['text']] =  $jsonValue;
+                    }
+                    else{
+                        $documentsArray[$result['text']] = array_merge($documentsArray[$result['text']],$jsonValue);
+                    }
                 }
             }
+
             foreach ($documentsArray as $key=>$docItem) {
                 if(isset($docItem) && !isset($docItem[0]['file']) ){
                      $parseDocData = array();
