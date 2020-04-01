@@ -59,6 +59,7 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 $fileData = file_get_contents($file);
                 if($fileData){
                     $documentsArray[$i]['url']='data:'.$documentsArray[$i]['type'].';base64,'.base64_encode($fileData);
+                    $documentsArray[$i]['file_url'] = $documentsArray[$i]['file'];
                     unset($documentsArray[$i]['file']);
                 }
             }
