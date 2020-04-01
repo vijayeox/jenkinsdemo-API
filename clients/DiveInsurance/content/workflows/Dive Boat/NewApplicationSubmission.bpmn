@@ -68,6 +68,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate" : "DocumentSaveDelegate"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "PolicyDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "NewPolicyDocumentDispatch"}</camunda:value>
@@ -189,7 +190,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:userTask id="UserTask_0v6b5bh" name="CSR Payment Verification" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="diveStoreUserApprovalForm" />
+          <camunda:property name="template" value="diveBoatUserApproval" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0ynpmw4</bpmn:incoming>

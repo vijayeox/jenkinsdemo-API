@@ -106,6 +106,35 @@
 			"label": "Panel",
 			"path": "page5Panel2"
 		}, {
+			"title": "Attachments",
+			"theme": "primary",
+			"collapsible": false,
+			"tableView": false,
+			"key": "csrAttachmentsPanel",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Attachments",
+			"input": false,
+			"components": [{
+				"label": "Upload",
+				"hideLabel": true,
+				"tableView": false,
+				"storage": "base64",
+				"webcam": false,
+				"fileTypes": [{
+					"label": "",
+					"value": ""
+				}],
+				"multiple": true,
+				"calculateServer": false,
+				"validate": {
+					"multiple": true
+				},
+				"key": "csrApprovalAttachments",
+				"type": "file",
+				"input": true
+			}]
+		}, {
 			"title": "Payment Information",
 			"theme": "primary",
 			"collapsible": false,
@@ -114,11 +143,7 @@
 			"properties": {
 				"payment_confirmation_page": "true"
 			},
-			"conditional": {
-				"show": true,
-				"when": "userApproved",
-				"eq": "accepted"
-			},
+			"customConditional": "if((data.userApproved == 'accepted') && (parseFloat(data.amount) > 0)){\n   show = true;\n}else{\n  show =false;\n}",
 			"type": "panel",
 			"label": "Payment Information",
 			"breadcrumb": "none",
@@ -157,7 +182,7 @@
 				"disabled": true,
 				"tableView": false,
 				"clearOnHide": false,
-				"calculateValue": "value = data.amountPayable",
+				"calculateValue": "value = parseFloat(data.amountPayable);",
 				"calculateServer": false,
 				"key": "finalAmountPayable",
 				"type": "textfield",
@@ -391,7 +416,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 7,
+	"_vid": 16,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -400,11 +425,13 @@
 	}],
 	"submissionAccess": [],
 	"settings": {},
-	"properties": {},
+	"properties": {
+		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]"
+	},
 	"name": "diveBoatUserApproval",
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-01T09:49:20.977Z",
+	"modified": "2020-04-01T14:23:46.726Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

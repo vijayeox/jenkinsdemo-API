@@ -14,8 +14,9 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
 
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("DocumentFetchDelegate".print_r($data,true));
-        $privileges = $this->getPrivilege();
+    $this->logger->info("DocumentFetchDelegate".print_r($data,true));
+    $privileges = $this->getPrivilege();
+    if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
         if(!isset($data['endorsement_options'])){
             if(isset($data['initiatedByCsr']) && ($data['initiatedByCsr'] == false && (isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
                 $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true))){
@@ -42,6 +43,12 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
         }
         return $data;
 
+     }
+     }else{
+     if (isset($data['attachmentsFieldnames'])) {
+        $attachmentsFieldnames = $data['attachmentsFieldnames'];
+        $this->getAttachmentsData($data,$attachmentsFieldnames);
+     }
     }
 
     public function getFileData(array $documentsArray) {
