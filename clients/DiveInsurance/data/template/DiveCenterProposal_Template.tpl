@@ -44,7 +44,7 @@
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
-                        {if (int)$dspropFurniturefixturesandequip != 0}
+                        {if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>
@@ -185,7 +185,7 @@
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        {if $poolLiability && (int)$poolLiability > 0}
+                        {if isset($poolLiability) && (int)$poolLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -195,7 +195,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+                        {if isset($travelAgentEOReceiptsPL) && (int)$travelAgentEOReceiptsPL > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -622,7 +622,7 @@
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
-                <p>(Based on estimated annual group receipts of ${$groupReceipts})</p>
+                <p>(Based on estimated annual group receipts of {if isset($groupReceipts)}${(float)$groupReceipts|number_format:2:".":","}}.{else}$0.00{/if})</p>
                 <p>Dive Center Group Instructional Program Surplus Lines Tax:</p>
                 <p>Dive Center Group Instructional Program PADI Administration Fee:</p>
             </div>
