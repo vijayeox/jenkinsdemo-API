@@ -490,7 +490,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if($temp['product'] == 'Individual Professional Liability'){
                 if(isset($data['documents']['coi_document'][0]) && isset($documents['coi_document'][0])){
                     $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['coi_document'][0];
-                    $this->logger->info('destination for water mark  is: '.print_r($destinationForWatermark, true));
                     $this->addWaterMark($destinationForWatermark,"INVALID");
                     array_push($documents['coi_document'],$data['documents']['coi_document'][0]);
                 }
