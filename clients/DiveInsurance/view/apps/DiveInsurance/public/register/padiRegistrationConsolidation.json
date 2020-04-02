@@ -726,7 +726,8 @@
 			"components": [{
 				"label": "Same as mailing address",
 				"tableView": false,
-				"defaultValue": false,
+				"defaultValue": true,
+				"calculateServer": false,
 				"key": "sameasmailingaddress",
 				"type": "checkbox",
 				"input": true,
@@ -773,6 +774,9 @@
 									"clear_field": "physical_state"
 								},
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -835,6 +839,9 @@
 								},
 								"key": "physical_state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "physical_country",
 								"input": true,
 								"lockKey": true,
@@ -1167,7 +1174,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 48,
+	"_vid": 57,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1181,6 +1188,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-03-31T14:33:23.030Z",
+	"modified": "2020-04-02T14:08:25.780Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
