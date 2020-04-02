@@ -1951,6 +1951,9 @@
 							}, {
 								"value": "concrete",
 								"label": "Concrete"
+							}, {
+								"label": "Other",
+								"value": "other"
 							}]
 						},
 						"selectThreshold": 0.3,
@@ -1969,6 +1972,24 @@
 						"labelMargin": 3,
 						"input": true,
 						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Please Specify",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "pleaseSpecify",
+						"conditional": {
+							"show": true,
+							"when": "dspropbuildingconstr",
+							"eq": "other"
+						},
+						"type": "textfield",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 8,
@@ -2019,20 +2040,19 @@
 				"key": "pageNaNColumns",
 				"columns": [{
 					"components": [{
-						"label": "Distance from Ocean/Gulf",
+						"label": "Distance from Ocean/Golf",
+						"suffix": "Miles",
+						"mask": false,
 						"spellcheck": false,
 						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
-						"validate": {
-							"maxLength": 10
-						},
 						"key": "dspropdistfrmoceangulf",
-						"type": "textfield",
-						"labelWidth": 30,
-						"labelMargin": 3,
+						"type": "number",
 						"input": true,
-						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Content",
@@ -2257,7 +2277,18 @@
 							"pull": 0,
 							"size": "md"
 						}, {
-							"components": [],
+							"components": [{
+								"label": "Please explain location",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "dspropPleaseexplainlocation",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
 							"width": 6,
 							"offset": 0,
 							"push": 0,
@@ -2507,17 +2538,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false,
 						"label": "Field Set"
-					}, {
-						"label": "Please explain location",
-						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
-						"calculateServer": false,
-						"key": "dspropPleaseexplainlocation",
-						"type": "textfield",
-						"input": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2627,32 +2647,49 @@
 				"key": "pageNaNPanel3Columns2",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you have a pool on premises?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "true",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "false",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "doyouhaveapoolonpremisesPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"conditional": {
-							"show": "true"
-						},
-						"lockKey": true,
+						"type": "radio",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
 						"label": "If you have a pool, is it used for activities other than diving and/or swimming? If yes, contact Vicencia & Buckley for supplemental form",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "true",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "false",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-						"defaultValue": false,
-						"type": "checkbox",
 						"conditional": {
-							"show": "true",
+							"show": true,
 							"when": "doyouhaveapoolonpremisesPL",
 							"eq": "true"
 						},
-						"lockKey": true,
+						"type": "radio",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Pool Liability",
@@ -2671,7 +2708,7 @@
 						"key": "poolLiability",
 						"conditional": {
 							"show": true,
-							"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+							"when": "radio1",
 							"eq": "true"
 						},
 						"type": "number",
@@ -2709,14 +2746,24 @@
 				"key": "pageNaNPanel3Columns4",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you have any incidental locations, i.e. office, kiosk, etc?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "true",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "false",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "doyouhaveanyincidentallocationsiEOfficekiosketcPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"lockKey": true,
+						"type": "radio",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Please describe the locations",
@@ -2724,6 +2771,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -2734,10 +2782,10 @@
 							"eq": "true"
 						},
 						"type": "textfield",
-						"input": true,
-						"lockKey": true,
 						"labelWidth": 30,
 						"labelMargin": 3,
+						"input": true,
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -2763,14 +2811,24 @@
 				"key": "pageNaNPanel3Columns5",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you have property at that location to be insured?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "true",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "false",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "doyouhavepropertyatthatlocationtobeinsuredPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"lockKey": true,
+						"type": "radio",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Please enter the value to insure",
@@ -2780,7 +2838,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -2799,8 +2857,7 @@
 						"labelWidth": null,
 						"labelMargin": null,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"decimalLimit": 2
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2825,14 +2882,24 @@
 				"key": "pageNaNPanel3Columns",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you conduct recreational or business activities, other than diving, at your facility?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "true",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "false",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "recreationalorbusinessactivitiesfacilityPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"lockKey": true,
+						"type": "radio",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -6436,28 +6503,36 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": true,
-						"defaultValue": "40000.00",
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
-							"required": true,
-							"min": 40000
+							"required": true
 						},
-						"key": "lossOfBusIncome",
+						"key": "additionalLossOfBusIncome",
 						"conditional": {
 							"show": true,
 							"when": "additionalLossofBusinessIncomePL",
 							"eq": "true"
 						},
 						"type": "number",
+						"labelMargin": 3,
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"labelWidth": null,
-						"labelMargin": 3,
 						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "lossOfBusIncome",
+						"calculateValue": "value = parseFloat(40000)+(parseFloat(additionalLossOfBusIncome)||0.00)",
+						"calculateServer": false,
+						"key": "lossOfBusIncome",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -9935,6 +10010,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-02T15:16:34.110Z",
+	"modified": "2020-04-02T20:41:53.460Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
