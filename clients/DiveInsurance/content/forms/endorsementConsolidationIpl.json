@@ -2059,7 +2059,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel3",
-				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nfor(var i=0;i<=len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInspector'){\n\tselected = true;\t\n}}\n\nif((data.cylinderInspector_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInspector\") && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<=len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInspector'){\n\tselected = true;\t\n}}\n}\nif((data.cylinderInspector_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInspector\") && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2112,7 +2112,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nfor(var i=0;i<=len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInstructor'){\n\tselected = true;\t\n}}\n\nif((data.cylinderInstructor_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInstructor\" ) && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<=len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInstructor'){\n\tselected = true;\t\n}}}\n\nif((data.cylinderInstructor_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInstructor\" ) && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Instructor Attachments",
 				"input": false,
@@ -2898,11 +2898,7 @@
 					"label": "custom",
 					"input": true,
 					"amount_field": "amount",
-					"conditional": {
-						"show": true,
-						"when": "paymentOptions",
-						"eq": "creditCard"
-					},
+					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
 					"tableView": false,
 					"hideOnChildrenHidden": false
 				}, {
@@ -2933,11 +2929,7 @@
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "page7Content",
-					"conditional": {
-						"show": true,
-						"when": "paymentOptions",
-						"eq": "creditCard"
-					},
+					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
 					"type": "htmlelement",
 					"input": false,
 					"hideLabel": true,
@@ -2992,7 +2984,7 @@
 			"cancel": true,
 			"next": true
 		},
-		"customConditional": "console.log(data['endorsement_options'].modify_coverage);\nconsole.log(data['endorsementTotal']);\nconsole.log(data.privileges['MANAGE_MY_POLICY_WRITE']);\nconsole.log((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ));\nconsole.log(data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0);\n\nshow = false;\nif((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ) && (data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0) && (data.privileges['MANAGE_MY_POLICY_WRITE'])){\nconsole.log(1111112222);\n\tshow =true;\n}"
+		"customConditional": "show = false;\nif((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ) && (data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0)){\n\tshow =true;\n}"
 	}, {
 		"title": "Approval",
 		"theme": "primary",
@@ -3088,7 +3080,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 13,
+	"_vid": 18,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3106,6 +3098,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-01T10:35:16.465Z",
+	"modified": "2020-04-02T06:52:34.058Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
