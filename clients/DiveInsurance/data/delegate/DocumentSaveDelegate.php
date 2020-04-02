@@ -116,8 +116,8 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
             if(is_array($documentFieldnames[$i])){
                 $gridFieldName = $documentFieldnames[$i][0];
                 for ($j=1; $j < sizeof($documentFieldnames[$i]); $j++) {
-                    if(isset($data[$documentFieldnames[$i][$j]])){
-                        unset($data[$documentFieldnames[$i][$j]]);
+                    if(isset($documentFieldnames[$i][$j]) && isset($gridFieldName[$documentFieldnames[$i][$j]]) && isset($data[$gridFieldName[$documentFieldnames[$i][$j]]])){
+                        unset($data[$gridFieldName[$documentFieldnames[$i][$j]]]);
                     }
                 }
             }

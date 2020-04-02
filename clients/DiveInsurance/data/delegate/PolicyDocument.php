@@ -19,6 +19,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => 'ProfessionalLiabilityCOI',
                 'header' => 'COIheader.html',
                 'footer' => 'COIfooter.html',
+                'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Individual_Professional_Liability_Policy.pdf',
                 'aiTemplate' => 'Individual_PL_AI',
@@ -90,12 +91,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'blanketForm' => 'DS_AI_Blanket_Endorsement.pdf',
                         'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf',
-                        'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf',
-                        'businessIncomeWorksheet'=>'DS_Business_Income_Worksheet.pdf'),
+                        'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'),
             'Emergency First Response'
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
                 'footer' => 'EFR_footer.html',
+                'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
@@ -230,6 +231,39 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT blanketForm");
                     $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
                 }
+                $this->logger->info('hello 123');
+                
+                if(isset($this->template[$temp['product']]['card'])){
+                    $this->logger->info("generate pocket card");
+                    $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
+                    $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                    $template = $this->template[$temp['product']]['card'];
+                    $options = array();        
+                    $docDest = $dest['absolutePath'].$template.'.pdf';
+                    $NewData = array();
+                    $NewData[0]['email'] = $data['email'];
+                    $NewData[0]['padi'] = $data['padi'];
+                    $NewData[0]['certificate_no'] = $data['certificate_no'];
+                    $NewData[0]['start_date'] = $data['start_date'];
+                    $NewData[0]['end_date'] = $data['end_date'];
+                    $NewData[0]['firstname'] = $data['firstname'];
+                    $NewData[0]['lastname'] = $data['lastname'];
+                    $NewData[0]['address1'] = $data['address1'];
+                    $NewData[0]['address2'] = isset($data['address2']) ? $data['address2'] : '';
+                    $NewData[0]['city'] = $data['city'];
+                    $NewData[0]['state'] = $data['state'];
+                    $NewData[0]['zip'] = $data['zip'];
+                    $NewData[0]['entity_name'] = 'Pocket Card Job';
+                    if($data['business_name'] && isset($data['business_name'])){
+                        $NewData[0]['business_name'] = $data['business_name'];
+                    }
+                    $newData = json_encode($NewData);
+                    $docdata = array('data' => $newData);
+                    unset($NewData);
+                    unset($newData);
+                    $this->logger->info("Data is: ".print_r($docdata, true));
+                    $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
+                }
             }
             else if($data['product'] == "Dive Boat"){
                 if(isset($this->template[$data['product']]['instruct'])){
@@ -316,6 +350,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
             else if($data['product'] == "Dive Store"){
+                if(isset($this->template[$data['product']]['instruct'])){
+                    $this->logger->info("DOCUMENT instruct");
+                    $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
+                }
                 if(isset($temp['additionalInsured']) && (isset($temp['additionalInsuredSelect']) && $temp['additionalInsuredSelect']=="yes")){
                     $this->logger->info("DOCUMENT additionalInsured");
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
@@ -338,7 +376,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
                          $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter',null,$length);
-                         $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');                         
+                         $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
+                         if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
+                            $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+                        }
                     }
                     else{
                         $this->logger->info("DOCUMENT groupPL");
@@ -370,9 +411,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['NonOwnedAutoLiability'] = $this->copyDocuments($temp,$dest['relativePath'],'AutoLiability');
                     }
                 }
-                if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
-                    $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
-                }
                 if(isset($this->template[$temp['product']]['travelAgentEO']))   {
                     if(isset($temp['TravelAgentEOFP']) && $temp['TravelAgentEOFP']){
                         $this->logger->info("DOCUMENT TravelAgentEOFP");
@@ -403,7 +441,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(!isset($documents['property_coi_document']) && !isset($documents['liability_coi_document'])){
                 $this->logger->info("DOCUMENT coi_document");
-                $this->logger->info("Policy Documnet Generation");
+                $this->logger->info("Policy Document Generation");
                 if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
                     $endorsementFileName = 'Endorsement - '.$length;
                     $documents[$endorsementFileName] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null,$length);
@@ -449,9 +487,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
             }
-
-
-
 
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
