@@ -18,6 +18,14 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "documentFields",
+			"calculateValue": "value = [\"receipts1\",[\"additionalLocations\",\"receiptsAL1\"],[\"groupPL\",\"document1\"]]",
+			"calculateServer": false,
+			"key": "documentFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "initiatedByCsr",
 			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
 			"key": "initiatedByCsr",
@@ -9820,6 +9828,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-01T21:46:19.120Z",
+	"modified": "2020-04-02T04:49:22.390Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
