@@ -27,3 +27,5 @@ integrations/workflow/ProcessEngine/.project
 integrations/workflow/ProcessEngine/.project
 integrations/workflow/IdentityService/.classpath
 integrations/workflow/IdentityService/.settings/org.eclipse.buildship.core.prefs
+integrations/workflow/ProcessEngine/bin/
+integrations/workflow/ProcessEngine/bin/

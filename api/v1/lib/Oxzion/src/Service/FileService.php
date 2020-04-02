@@ -62,7 +62,7 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        $data['uuid'] = $uuid = !empty($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+        $data['uuid'] = $uuid = isset($data['uuid']) && UuidUtil::isValidUuid($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
         if (!$entityId && isset($data['entity_name'])) {
@@ -116,6 +116,8 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
+            $data['data'] = $fields;
+            $file->exchangeArray($data);
             $this->updateFileData($id, $fields);
             if (!$validFields || empty($validFields)) {
                 $this->logger->info("FILE Validation ----- ");
@@ -129,7 +131,7 @@ class FileService extends AbstractService
             if (isset($data['id'])) {
                 $this->messageProducer->sendTopic(json_encode(array('id' => $data['id'])), 'FILE_ADDED');
             }
-
+            $data = array_merge($file->toArray(),$fields);
         } catch (Exception $e) {
             $this->logger->info("erorororor  - file record");
             $this->rollback();
@@ -231,7 +233,6 @@ class FileService extends AbstractService
         $id = $this->getIdFromUuid('ox_file', $id);
         $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
         $dataArray = array_merge($fileObject, $fields);
-
         $fileObject = $obj;
         $dataArray = $this->cleanData($dataArray);
         $fileObject['data'] = json_encode($dataArray);
@@ -402,6 +403,14 @@ class FileService extends AbstractService
         $keyValueFields = array();
         $i = 0;
         if (!empty($fields)) {
+            //Remove All Protected fields
+            foreach ($fieldData as $k => $v) {
+                if (($key = array_search($k, array_column($fields, 'name')) > -1)) {
+                    continue;
+                } else {
+                    unset($fieldData[$k]);
+                }
+            }
             foreach ($fields as $field) {
                 if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
                     // Update the existing record

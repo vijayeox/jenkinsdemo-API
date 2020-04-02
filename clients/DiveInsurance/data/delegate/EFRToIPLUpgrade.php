@@ -19,7 +19,7 @@ class EFRToIPLUpgrade extends PolicyCheck
             $data['EFRFileId'] = $fileData['fileId'];
             $data['EFRWorkflowInstanceId'] = $fileData['parentWorkflowInstanceId'];
             $data['efrToIPLUpgrade'] = true;
-            $data['efrAmountPaid'] = $fileData['amountPayable'];
+            $data['efrAmountPaid'] = $fileData['amount'];
             $data['product'] = "Individual Professional Liability";
             $data['parentWorkflowInstanceId'] = "";
             $data['fileId'] = "";

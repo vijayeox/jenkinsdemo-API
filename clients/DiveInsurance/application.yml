@@ -287,11 +287,11 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
-                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
+                                cell: '<td>{moment(item.start_date).format("DD MM YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
-                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
+                                cell: '<td>{moment(item.end_date).format("DD MM YYYY")}</td>'
     -
         name: Home
         icon: 'fa fa-home'
@@ -391,6 +391,9 @@ menu:
                                 multiFieldFilter:
                                     - lastname
                             -
+                                title: Policy Status
+                                field: policyStatus
+                            -
                                 title: Product
                                 field: entity_name
                                 filterCell:
@@ -404,13 +407,13 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
-                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
+                                cell: '<td>{moment(item.start_date).format("DD MM YYYY")}</td>'
                                 filter: date
                                 filterFormat: YYYY-MM-DD
                             -
                                 title: 'Policy End Date'
                                 field: end_date
-                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
+                                cell: '<td>{moment(item.end_date).format("DD MM YYYY")}</td>'
                                 filter: date
                                 filterFormat: YYYY-MM-DD
         uuid: 50fd8782-3e08-4a4c-9ff2-10d404904e5e
@@ -660,11 +663,11 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
-                                cell: '<td>{moment(item.start_date).format("Do MMM YYYY")}</td>'
+                                cell: '<td>{moment(item.start_date).format("DD MM YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
-                                cell: '<td>{moment(item.end_date).format("Do MMM YYYY")}</td>'
+                                cell: '<td>{moment(item.end_date).format("DD MM YYYY")}</td>'
         uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'

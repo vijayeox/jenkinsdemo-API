@@ -196,7 +196,7 @@ execution.setVariable('initiatedByUser',true)</camunda:script>
     <bpmn:userTask id="UserTask_0139gd0" name="CSR Payment Verification" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="diveStoreUserApprovalForm" />
+          <camunda:property name="template" value="diveBoatUserApproval" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1imdpib</bpmn:incoming>

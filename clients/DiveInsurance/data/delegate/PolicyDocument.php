@@ -68,6 +68,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'cover_letter' => 'Dive_Store_Cover_Letter',
                         'lheader' => 'letter_header.html',
                         'lfooter' => 'letter_footer.html',
+                        'instruct' => 'Instructions_To_Insured.pdf',
                         'aiTemplate' => 'DiveStore_AI',
                         'aiheader' => 'DiveStore_AI_header.html',
                         'aifooter' => 'DiveStore_AI_footer.html',
@@ -86,8 +87,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
                         'alTemplate' => 'DiveStore_AdditionalLocations',
+                        'blanketForm' => 'DS_AI_Blanket_Endorsement.pdf',
                         'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
-                        'groupExclusions' => 'Group_Exclusions.pdf'),
+                        'groupExclusions' => 'Group_Exclusions.pdf',
+                        'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf',
+                        'businessIncomeWorksheet'=>'DS_Business_Income_Worksheet.pdf'),
             'Emergency First Response'
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
@@ -331,7 +335,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
 
-                if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
+                if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
                          $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter',null,$length);
                          $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');                         
@@ -341,7 +345,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
 
 
-                        if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                        if(isset($temp['additional_insured']) && $temp['additional_named_insureds_option'] == 'yes'){
                         $this->logger->info("DOCUMENT additionalNamedInsured");
                         $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                         }
@@ -360,13 +364,25 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
                 }
 
+                if(isset($this->template[$temp['product']]['AutoLiability']))   {
+                    if(isset($temp['nonOwnedAutoLiabilityPL']) && $temp['nonOwnedAutoLiabilityPL'] != 'no'){
+                        $this->logger->info("DOCUMENT TravelAgentEOFP");
+                        $documents['NonOwnedAutoLiability'] = $this->copyDocuments($temp,$dest['relativePath'],'AutoLiability');
+                    }
+                }
+                if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
+                    $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+                }
                 if(isset($this->template[$temp['product']]['travelAgentEO']))   {
                     if(isset($temp['TravelAgentEOFP']) && $temp['TravelAgentEOFP']){
                         $this->logger->info("DOCUMENT TravelAgentEOFP");
                         $documents['Travel_Agents_PL_Endorsement'] = $this->copyDocuments($temp,$dest['relativePath'],'travelAgentEO');
                     }
                 }
-
+                if(isset($this->template[$temp['product']]['blanketForm'])){
+                    $this->logger->info("DOCUMENT blanketForm");
+                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                }
             }
 
             if($this->type != 'quote'){

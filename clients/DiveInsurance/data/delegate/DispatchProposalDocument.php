@@ -51,6 +51,7 @@ class DispatchProposalDocument extends DispatchDocument {
                     array_push($errorFile,$file);
                 }
             }
+            $data['csrApprovalAttachments'] = array();
         }
 
         if(count($errorFile) > 0){

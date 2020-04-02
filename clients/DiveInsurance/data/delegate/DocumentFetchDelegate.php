@@ -14,8 +14,9 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
 
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("DocumentFetchDelegate".print_r($data,true));
-        $privileges = $this->getPrivilege();
+    $this->logger->info("DocumentFetchDelegate".print_r($data,true));
+    $privileges = $this->getPrivilege();
+    if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
         if(!isset($data['endorsement_options'])){
             if(isset($data['initiatedByCsr']) && ($data['initiatedByCsr'] == false && (isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
                 $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true))){
@@ -34,7 +35,7 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                     $this->getAttachmentsData($data,$attachmentsFieldnames);
                 }
             }
-        }else{
+        } else{
                 if (isset($data['csrAttachmentsFieldnames'])) {
                     $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
                     $this->getAttachmentsData($data,$attachmentsFieldnames);
@@ -42,6 +43,13 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
         }
         return $data;
 
+     } else{
+        if (isset($data['attachmentsFieldnames'])) {
+           $attachmentsFieldnames = $data['attachmentsFieldnames'];
+           $this->getAttachmentsData($data,$attachmentsFieldnames);
+        }
+        return $data;
+     }
     }
 
     public function getFileData(array $documentsArray) {
@@ -51,6 +59,7 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 $fileData = file_get_contents($file);
                 if($fileData){
                     $documentsArray[$i]['url']='data:'.$documentsArray[$i]['type'].';base64,'.base64_encode($fileData);
+                    $documentsArray[$i]['file_url'] = $documentsArray[$i]['file'];
                     unset($documentsArray[$i]['file']);
                 }
             }
