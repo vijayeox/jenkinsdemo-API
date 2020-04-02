@@ -479,7 +479,9 @@ menu:
                         defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
                         filterable: true
                         resizable: true
-                        sortable: true
+                        sortable: 
+                            allowUnsort: false
+                            mode: multiple
                         pageable:
                             buttonCount: 3
                             pageSizes:
