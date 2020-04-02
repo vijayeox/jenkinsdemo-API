@@ -9806,10 +9806,11 @@
 				"spellcheck": true,
 				"tableView": true,
 				"inputFormat": "plain",
+				"calculateServer": false,
 				"validate": {
 					"required": true
 				},
-				"key": "rejectComment",
+				"key": "rejectionReason",
 				"conditional": {
 					"show": true,
 					"when": "csrApproved",
@@ -9856,6 +9857,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-02T10:17:20.009Z",
+	"modified": "2020-04-02T10:57:58.450Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
