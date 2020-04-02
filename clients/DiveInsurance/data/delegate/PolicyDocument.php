@@ -19,6 +19,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => 'ProfessionalLiabilityCOI',
                 'header' => 'COIheader.html',
                 'footer' => 'COIfooter.html',
+                'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Individual_Professional_Liability_Policy.pdf',
                 'aiTemplate' => 'Individual_PL_AI',
@@ -96,6 +97,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
                 'footer' => 'EFR_footer.html',
+                'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
@@ -229,6 +231,39 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($this->template[$temp['product']]['blanketForm'])){
                     $this->logger->info("DOCUMENT blanketForm");
                     $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                }
+                $this->logger->info('hello 123');
+                
+                if(isset($this->template[$temp['product']]['card'])){
+                    $this->logger->info("generate pocket card");
+                    $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
+                    $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                    $template = $this->template[$temp['product']]['card'];
+                    $options = array();        
+                    $docDest = $dest['absolutePath'].$template.'.pdf';
+                    $NewData = array();
+                    $NewData[0]['email'] = $data['email'];
+                    $NewData[0]['padi'] = $data['padi'];
+                    $NewData[0]['certificate_no'] = $data['certificate_no'];
+                    $NewData[0]['start_date'] = $data['start_date'];
+                    $NewData[0]['end_date'] = $data['end_date'];
+                    $NewData[0]['firstname'] = $data['firstname'];
+                    $NewData[0]['lastname'] = $data['lastname'];
+                    $NewData[0]['address1'] = $data['address1'];
+                    $NewData[0]['address2'] = isset($data['address2']) ? $data['address2'] : '';
+                    $NewData[0]['city'] = $data['city'];
+                    $NewData[0]['state'] = $data['state'];
+                    $NewData[0]['zip'] = $data['zip'];
+                    $NewData[0]['entity_name'] = 'Pocket Card Job';
+                    if($data['business_name'] && isset($data['business_name'])){
+                        $NewData[0]['business_name'] = $data['business_name'];
+                    }
+                    $newData = json_encode($NewData);
+                    $docdata = array('data' => $newData);
+                    unset($NewData);
+                    unset($newData);
+                    $this->logger->info("Data is: ".print_r($docdata, true));
+                    $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
                 }
             }
             else if($data['product'] == "Dive Boat"){
@@ -450,14 +485,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
 
-
-
-
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability'){
                 if(isset($data['documents']['coi_document'][0]) && isset($documents['coi_document'][0])){
                     $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['coi_document'][0];
+                    $this->logger->info('destination for water mark  is: '.print_r($destinationForWatermark, true));
                     $this->addWaterMark($destinationForWatermark,"INVALID");
                     array_push($documents['coi_document'],$data['documents']['coi_document'][0]);
                 }
