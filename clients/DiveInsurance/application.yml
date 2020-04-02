@@ -287,11 +287,11 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
-                                cell: '<td>{moment(item.start_date).format("DD MM YYYY")}</td>'
+                                cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
-                                cell: '<td>{moment(item.end_date).format("DD MM YYYY")}</td>'
+                                cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
     -
         name: Home
         icon: 'fa fa-home'
@@ -407,15 +407,15 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
-                                cell: '<td>{moment(item.start_date).format("DD MM YYYY")}</td>'
+                                cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}</td>'
                                 filter: date
-                                filterFormat: YYYY-MM-DD
+                                filterFormat: MM-DD-YYYY
                             -
                                 title: 'Policy End Date'
                                 field: end_date
-                                cell: '<td>{moment(item.end_date).format("DD MM YYYY")}</td>'
+                                cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
                                 filter: date
-                                filterFormat: YYYY-MM-DD
+                                filterFormat: MM-DD-YYYY
         uuid: 50fd8782-3e08-4a4c-9ff2-10d404904e5e
     -
         name: Errors
@@ -663,11 +663,11 @@ menu:
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
-                                cell: '<td>{moment(item.start_date).format("DD MM YYYY")}</td>'
+                                cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}</td>'
                             -
                                 title: 'Policy End Date'
                                 field: end_date
-                                cell: '<td>{moment(item.end_date).format("DD MM YYYY")}</td>'
+                                cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
         uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'
