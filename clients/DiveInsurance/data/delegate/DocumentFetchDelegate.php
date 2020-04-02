@@ -28,28 +28,25 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
               }  
             }
             else{ 
-
                 $this->logger->info("NOT INITIATED BY CSR");
                 if (isset($data['attachmentsFieldnames'])) {
                     $attachmentsFieldnames = $data['attachmentsFieldnames'];
                     $this->getAttachmentsData($data,$attachmentsFieldnames);
                 }
             }
-        } else{
-                if (isset($data['csrAttachmentsFieldnames'])) {
-                    $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
-                    $this->getAttachmentsData($data,$attachmentsFieldnames);
-                }
+        }else{
+            if (isset($data['csrAttachmentsFieldnames'])) {
+                $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
+                $this->getAttachmentsData($data,$attachmentsFieldnames);
+            }
         }
-        return $data;
-
      } else{
         if (isset($data['attachmentsFieldnames'])) {
            $attachmentsFieldnames = $data['attachmentsFieldnames'];
            $this->getAttachmentsData($data,$attachmentsFieldnames);
         }
-        return $data;
      }
+     return $data;
     }
 
     public function getFileData(array $documentsArray) {
