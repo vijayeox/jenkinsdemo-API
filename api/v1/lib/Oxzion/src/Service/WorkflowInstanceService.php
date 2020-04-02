@@ -218,7 +218,7 @@ class WorkflowInstanceService extends AbstractService
             }
             $this->beginTransaction();
             $file = $this->fileService->createFile($fileData, $workflowInstance['id']);
-            $this->logger->info("File created -" . $fileData);
+            $this->logger->info("File created -" . $file);
             $params['fileId'] = $fileData['uuid'];
             $params['workflow_instance_id'] = $workflowInstance['id'];
             $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
