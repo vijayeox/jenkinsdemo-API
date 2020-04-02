@@ -53,9 +53,9 @@ class QuoteDocument extends PolicyDocument
                      'nTemplate' => 'Group_PL_NI',
                      'nheader' => 'Group_NI_header.html',
                      'nfooter' => 'Group_NI_footer.html',
-                     'lpTemplate' => 'DS_Quote_LP',
-                     'lpheader' => 'DS_LP_header.html',
-                     'lpfooter' => null,
+                     'lpTemplate' => 'DiveStore_LP',
+                     'lpheader' => 'DiveStore_LP_header.html',
+                     'lpfooter' => 'DiveStore_LP_footer.html',
                      'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
                      'gtemplate' => 'Group_PL_COI',
                      'gheader' => 'Group_header.html',
@@ -68,6 +68,7 @@ class QuoteDocument extends PolicyDocument
                      'rosterHeader' => 'Roster_header.html',
                      'rosterFooter' => 'Roster_footer.html',
                      'rosterPdf' => 'Roster.pdf',
+                     'businessIncomeWorksheet'=>'DS_Business_Income_Worksheet.pdf'
                     ));
         
     }

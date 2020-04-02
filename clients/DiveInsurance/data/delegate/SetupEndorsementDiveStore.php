@@ -135,7 +135,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
             'groupPAORfee',
             'groupPadiFeeAmount',
             'groupTaxAmount',
-            'groupTaxPercentage','paymentVerified');
+            'groupTaxPercentage','paymentVerified','premiumFinanceSelect','finalAmountPayable','paymentOptions','chequeNumber','orderId');
 }
 
 public function execute(array $data,Persistence $persistenceService)
