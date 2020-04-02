@@ -6,7 +6,7 @@ use Oxzion\Db\Persistence\Persistence;
 trait UserContextTrait
 {
 	private $userId;
-	private $uysername;
+	private $username;
 	private $orgId;
     private $privilege;
 

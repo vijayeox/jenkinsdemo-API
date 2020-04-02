@@ -404,13 +404,13 @@ class FileService extends AbstractService
         $i = 0;
         if (!empty($fields)) {
             //Remove All Protected fields
-            foreach ($fieldData as $k => $v) {
-                if (($key = array_search($k, array_column($fields, 'name')) > -1)) {
-                    continue;
-                } else {
-                    unset($fieldData[$k]);
-                }
-            }
+            // foreach ($fieldData as $k => $v) {
+            //     if (($key = array_search($k, array_column($fields, 'name')) > -1)) {
+            //         continue;
+            //     } else {
+            //         unset($fieldData[$k]);
+            //     }
+            // }
             foreach ($fields as $field) {
                 if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
                     // Update the existing record
