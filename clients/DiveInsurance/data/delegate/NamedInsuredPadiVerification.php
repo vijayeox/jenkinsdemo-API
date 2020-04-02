@@ -40,6 +40,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
             }
             $returnArray = array_merge($data,$response[0]);
             $returnArray['padi_Verified'] = true;
+            $returnArray['nameOfInstitution'] = 'PADI';
             // $returnArray['verified_flag'] = true;
             return $returnArray;
         } else {

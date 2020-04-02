@@ -490,13 +490,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
-            if($temp['product'] == 'Individual Professional Liability'){
+            if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
                 if(isset($data['documents']['coi_document'][0]) && isset($documents['coi_document'][0])){
                     $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['coi_document'][0];
                     $this->addWaterMark($destinationForWatermark,"INVALID");
                     array_push($documents['coi_document'],$data['documents']['coi_document'][0]);
                 }
-                if(isset($data['documents']['additionalInsured_document'][0]) && isset($documents['additionalInsured_document'][0])){
+                if(isset($data['documents']['additionalInsured_document'][0]) && isset($documents['additionalInsured_document'][0]) && ($data['endorsement_options']['modify_additionalInsured'] == 1)){
                     $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['additionalInsured_document'][0];
                     $this->addWaterMark($destinationForWatermark,"INVALID");
                     array_push($documents['additionalInsured_document'],$data['documents']['additionalInsured_document'][0]);

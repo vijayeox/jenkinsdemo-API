@@ -116,15 +116,17 @@
 			"label": "Attachments",
 			"input": false,
 			"components": [{
-				"label": "Upload",
+				"label": "Attachments",
 				"hideLabel": true,
-				"tableView": false,
+				"tableView": true,
 				"storage": "base64",
 				"webcam": false,
 				"fileTypes": [{
 					"label": "",
 					"value": ""
 				}],
+				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+				"fileMaxSize": "10MB",
 				"multiple": true,
 				"calculateServer": false,
 				"validate": {
@@ -409,7 +411,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 17,
+	"_vid": 24,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -419,12 +421,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"}]"
 	},
 	"name": "diveBoatUserApproval",
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-02T08:31:10.534Z",
+	"modified": "2020-04-02T12:28:59.371Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

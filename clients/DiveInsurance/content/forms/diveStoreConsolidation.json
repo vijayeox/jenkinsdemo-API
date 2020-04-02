@@ -1214,7 +1214,7 @@
 				}, {
 					"label": "end_date",
 					"defaultValue": "2020-07-31",
-					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-07-30\";\n}else{\nvalue = (year)+ \"-07-30\";\n}",
+					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 					"calculateServer": false,
 					"key": "end_date",
 					"type": "hidden",
@@ -1825,6 +1825,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter the partners."
@@ -1832,7 +1833,7 @@
 						"key": "who_are_the_partners",
 						"conditional": {
 							"show": true,
-							"when": "dba",
+							"when": "entity_type",
 							"eq": "partnership"
 						},
 						"type": "textfield",
@@ -1844,6 +1845,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter the shareholders."
@@ -1851,7 +1853,7 @@
 						"key": "who_are_the_shareholders",
 						"conditional": {
 							"show": true,
-							"when": "dba",
+							"when": "entity_type",
 							"eq": "corporation"
 						},
 						"type": "textfield",
@@ -1863,6 +1865,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "If other, please explain."
@@ -1870,7 +1873,7 @@
 						"key": "others_please_explain",
 						"conditional": {
 							"show": true,
-							"when": "dba",
+							"when": "entity_type",
 							"eq": "other"
 						},
 						"type": "textfield",
@@ -2072,19 +2075,24 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"input": true,
-								"tableView": true,
-								"inputType": "number",
 								"label": "Inventory/Stock:",
-								"key": "dspropinventory",
 								"prefix": "$",
+								"mask": false,
+								"spellcheck": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": true,
+								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "dspropinventory",
 								"type": "number",
-								"lockKey": true,
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"requireDecimal": true,
 								"decimalLimit": 2,
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -2101,19 +2109,24 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"input": true,
-								"tableView": true,
-								"inputType": "number",
 								"label": "Property of others:",
-								"key": "dspropofothers",
 								"prefix": "$",
+								"mask": false,
+								"spellcheck": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": true,
+								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "dspropofothers",
 								"type": "number",
-								"lockKey": true,
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"requireDecimal": true,
 								"decimalLimit": 2,
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -2123,19 +2136,24 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"input": true,
-								"tableView": true,
-								"inputType": "number",
 								"label": "Signs (Attached or Detached):",
-								"key": "dspropsignsattachedordetached",
 								"prefix": "$",
+								"mask": false,
+								"spellcheck": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": true,
+								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "dspropsignsattachedordetached",
 								"type": "number",
-								"lockKey": true,
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"requireDecimal": true,
 								"decimalLimit": 2,
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -2152,19 +2170,24 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"input": true,
-								"tableView": true,
-								"inputType": "number",
 								"label": "Tenant Improvements:",
-								"key": "dspropTennantImprv",
 								"prefix": "$",
+								"mask": false,
+								"spellcheck": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": true,
+								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "dspropTennantImprv",
 								"type": "number",
-								"lockKey": true,
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"requireDecimal": true,
 								"decimalLimit": 2,
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -2174,19 +2197,24 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"input": true,
-								"tableView": true,
-								"inputType": "number",
-								"label": "Other:",
-								"key": "dspropother",
+								"label": "Other",
 								"prefix": "$",
+								"mask": false,
+								"spellcheck": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": true,
+								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "dspropother",
 								"type": "number",
-								"lockKey": true,
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"requireDecimal": true,
 								"decimalLimit": 2,
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -2212,14 +2240,15 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "dspropownpropincludingcompr",
 								"type": "number",
+								"labelWidth": 0,
+								"labelMargin": 3,
 								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
-								"labelWidth": 0,
-								"labelMargin": 3,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -2290,28 +2319,32 @@
 					"size": "md"
 				}, {
 					"components": [{
-						"label": "Property Deductible",
+						"label": "Do you own the building?",
 						"widget": "choicesjs",
-						"tableView": true,
+						"tableView": false,
 						"data": {
 							"values": [{
-								"value": "propertyDeductibles1000",
-								"label": "$1,000"
+								"value": "yes",
+								"label": "Yes"
 							}, {
-								"value": "propertyDeductibles2500",
-								"label": "$2,500"
-							}, {
-								"value": "propertyDeductibles5000",
-								"label": "$5,000"
+								"value": "no",
+								"label": "No"
 							}]
 						},
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
-						"key": "propertyDeductibles",
+						"calculateServer": false,
+						"validate": {
+							"required": true,
+							"customMessage": "Please let us know if you are the owner of the building?"
+						},
+						"errorLabel": "Building Ownership",
+						"key": "dspropownbuilding",
 						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
 						"input": true,
-						"labelWidth": 30,
-						"labelMargin": 3,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -2327,6 +2360,7 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
@@ -2336,11 +2370,11 @@
 									"when": "pageNaNColumnsDoyouownthebuilding"
 								},
 								"type": "number",
+								"labelWidth": 2,
+								"labelMargin": 3,
 								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
-								"labelWidth": 2,
-								"labelMargin": 3,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -2372,16 +2406,24 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
-									"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "var currentYear = moment().year()\nfor(var i = 1990; i<currentYear; i++){\n  values.push(i);\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "built_year1",
+								"key": "built_year",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -2423,32 +2465,28 @@
 						"tableView": false,
 						"legend": "Property Deductibles",
 						"components": [{
-							"label": "Do you own the building?",
+							"label": "Property Deductible",
 							"widget": "choicesjs",
-							"tableView": false,
+							"tableView": true,
 							"data": {
 								"values": [{
-									"value": "yes",
-									"label": "Yes"
+									"value": "propertyDeductibles1000",
+									"label": "$1,000"
 								}, {
-									"value": "no",
-									"label": "No"
+									"value": "propertyDeductibles2500",
+									"label": "$2,500"
+								}, {
+									"value": "propertyDeductibles5000",
+									"label": "$5,000"
 								}]
 							},
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateServer": false,
-							"validate": {
-								"required": true,
-								"customMessage": "Please let us know if you are the owner of the building?"
-							},
-							"errorLabel": "Building Ownership",
-							"key": "dspropownbuilding",
+							"key": "propertyDeductibles",
 							"type": "select",
-							"indexeddb": {
-								"filter": {}
-							},
 							"input": true,
+							"labelWidth": 30,
+							"labelMargin": 3,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -2474,6 +2512,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "dspropPleaseexplainlocation",
 						"type": "textfield",
 						"input": true,
@@ -2519,6 +2558,7 @@
 				"requireDecimal": true,
 				"inputFormat": "plain",
 				"clearOnHide": false,
+				"calculateServer": false,
 				"validate": {
 					"min": null,
 					"max": null
@@ -2624,6 +2664,7 @@
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -2634,12 +2675,12 @@
 							"eq": "true"
 						},
 						"type": "number",
+						"labelWidth": 30,
+						"labelMargin": 3,
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"labelWidth": 30,
-						"labelMargin": 3,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -2739,9 +2780,10 @@
 						"spellcheck": true,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -2757,7 +2799,8 @@
 						"labelWidth": null,
 						"labelMargin": null,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"decimalLimit": 2
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3120,11 +3163,14 @@
 					"input": true,
 					"components": [{
 						"label": "Date of the claim",
+						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"dataGridLabel": false,
 						"tableView": false,
 						"datePicker": {
-							"maxDate": "moment(). format('MM-dd-yyyy');",
+							"maxDate": "moment(). format('MM-dd-yyyy')",
+							"disableWeekends": false,
+							"disableWeekdays": false,
 							"datepickerMode": "day"
 						},
 						"enableTime": false,
@@ -3132,6 +3178,7 @@
 							"showMeridian": false
 						},
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -3145,7 +3192,7 @@
 							"displayInTimezone": "viewer",
 							"language": "en",
 							"useLocaleSettings": false,
-							"allowInput": true,
+							"allowInput": false,
 							"mode": "single",
 							"enableTime": false,
 							"noCalendar": false,
@@ -3154,7 +3201,9 @@
 							"minuteIncrement": 1,
 							"time_24hr": true,
 							"minDate": null,
-							"maxDate": "moment(). format('MM-dd-yyyy');"
+							"disableWeekends": false,
+							"disableWeekdays": false,
+							"maxDate": "moment(). format('MM-dd-yyyy')"
 						},
 						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 					}, {
@@ -3165,19 +3214,21 @@
 						"dataGridLabel": false,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
-						"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
+						"key": "Pleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
 						"type": "number",
+						"labelWidth": 0,
+						"labelMargin": 3,
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"inDataGrid": true,
-						"labelWidth": 0,
-						"labelMargin": 3
+						"inDataGrid": true
 					}, {
 						"label": "Amounts outstanding",
 						"prefix": "$",
@@ -3186,19 +3237,21 @@
 						"dataGridLabel": false,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding3",
 						"type": "number",
+						"labelWidth": 0,
+						"labelMargin": 3,
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"inDataGrid": true,
-						"labelWidth": 0,
-						"labelMargin": 3
+						"inDataGrid": true
 					}],
 					"lockKey": true
 				}, {
@@ -3206,6 +3259,7 @@
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"key": "pageNaNPanel3ColumnsPanelText",
 					"conditional": {
 						"show": true,
@@ -4890,23 +4944,19 @@
 										"label": "Please enter the value to insure",
 										"description": "You will need to complete another application for these locations.",
 										"prefix": "$",
+										"mask": false,
 										"spellcheck": true,
-										"tableView": true,
+										"tableView": false,
+										"delimiter": false,
+										"requireDecimal": true,
+										"inputFormat": "plain",
 										"clearOnHide": false,
 										"calculateServer": false,
-										"validate": {
-											"required": true
-										},
 										"key": "propertyValueToBeInsured",
-										"conditional": {
-											"show": true,
-											"when": "doyouhavepropertyatthatlocationtobeinsuredAL",
-											"eq": "true"
-										},
-										"type": "textfield",
+										"type": "number",
+										"decimalLimit": 2,
 										"input": true,
-										"hideOnChildrenHidden": false,
-										"lockKey": true
+										"hideOnChildrenHidden": false
 									}],
 									"width": 6,
 									"offset": 0,
@@ -5295,12 +5345,16 @@
 										"tableView": true,
 										"datePicker": {
 											"maxDate": "moment(). format('MM-dd-yyyy');",
+											"disableWeekends": false,
+											"disableWeekdays": false,
 											"datepickerMode": "day"
 										},
 										"enableTime": false,
 										"timePicker": {
 											"showMeridian": false
 										},
+										"clearOnHide": false,
+										"calculateServer": false,
 										"validate": {
 											"required": true
 										},
@@ -5322,6 +5376,8 @@
 											"minuteIncrement": 1,
 											"time_24hr": true,
 											"minDate": null,
+											"disableWeekends": false,
+											"disableWeekdays": false,
 											"maxDate": "moment(). format('MM-dd-yyyy');"
 										},
 										"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
@@ -5342,6 +5398,7 @@
 										"requireDecimal": true,
 										"inputFormat": "plain",
 										"clearOnHide": false,
+										"calculateServer": false,
 										"validate": {
 											"required": true
 										},
@@ -6919,10 +6976,12 @@
 				"label": "Pane",
 				"input": false,
 				"components": [{
-					"label": "Enter PADI Number",
+					"label": "PADI Number in System?",
+					"description": "Enter the PADI Membership to Validate",
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"key": "groupPadi",
 					"type": "textfield",
 					"input": true
@@ -6946,12 +7005,13 @@
 					"input": true
 				}, {
 					"label": "Members applicable for Group Liability",
-					"disableAddingRemovingRows": true,
+					"disableAddingRemovingRows": false,
 					"tableView": false,
 					"templates": {
-						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-3\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-3\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
+					"addAnother": "Not registered in system?Click here to add external members",
 					"modal": false,
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -6965,14 +7025,13 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "PADI",
-								"spellcheck": true,
-								"disabled": true,
-								"tableView": true,
+								"label": "Membership ID",
+								"spellcheck": false,
+								"tableView": false,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "padi",
 								"type": "textfield",
-								"calculateServer": false,
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -7025,7 +7084,20 @@
 							"width": 3,
 							"size": "md"
 						}, {
-							"components": [],
+							"components": [{
+								"label": "Name of Institution",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "nameOfInstitution",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
@@ -7335,9 +7407,11 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"label": "PADI Number",
+					"label": "PADI Number in System?",
+					"description": "Enter the PADI Membership to Validate",
 					"spellcheck": true,
 					"tableView": true,
+					"calculateServer": false,
 					"key": "namedPadi",
 					"type": "textfield",
 					"input": true
@@ -7365,10 +7439,10 @@
 					"hideLabel": true,
 					"tableView": false,
 					"templates": {
-						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-3\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-3\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
-					"addAnother": "Add Named Insured",
+					"addAnother": "Not registered in system?Click here to add external members",
 					"modal": false,
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -7445,7 +7519,11 @@
 								"label": "Name of Institution",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "nameOfInstitution",
 								"type": "textfield",
 								"input": true,
@@ -9806,10 +9884,11 @@
 				"spellcheck": true,
 				"tableView": true,
 				"inputFormat": "plain",
+				"calculateServer": false,
 				"validate": {
 					"required": true
 				},
-				"key": "rejectComment",
+				"key": "rejectionReason",
 				"conditional": {
 					"show": true,
 					"when": "csrApproved",
@@ -9856,6 +9935,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-02T10:17:20.009Z",
+	"modified": "2020-04-02T15:16:34.110Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
