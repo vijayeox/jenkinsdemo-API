@@ -2642,9 +2642,6 @@
 				"tableView": false
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns2",
 				"columns": [{
 					"components": [{
 						"label": "Do you have a pool on premises?",
@@ -2653,11 +2650,11 @@
 						"tableView": false,
 						"values": [{
 							"label": "Yes",
-							"value": "true",
+							"value": "yes",
 							"shortcut": ""
 						}, {
 							"label": "No",
-							"value": "false",
+							"value": "no",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -2673,11 +2670,11 @@
 						"tableView": false,
 						"values": [{
 							"label": "Yes",
-							"value": "true",
+							"value": "yes",
 							"shortcut": ""
 						}, {
 							"label": "No",
-							"value": "false",
+							"value": "no",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -2708,8 +2705,8 @@
 						"key": "poolLiability",
 						"conditional": {
 							"show": true,
-							"when": "radio1",
-							"eq": "true"
+							"when": "doyouhaveapoolonpremisesPL",
+							"eq": "yes"
 						},
 						"type": "number",
 						"labelWidth": 30,
@@ -2720,30 +2717,30 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
+					"width": 8,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns2",
 				"conditional": {
-					"show": "true"
+					"show": true
 				},
+				"type": "columns",
+				"input": false,
 				"path": "pageNaNPanel3Columns2"
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns4",
 				"columns": [{
 					"components": [{
 						"label": "Do you have any incidental locations, i.e. office, kiosk, etc?",
@@ -2752,11 +2749,11 @@
 						"tableView": false,
 						"values": [{
 							"label": "Yes",
-							"value": "true",
+							"value": "yes",
 							"shortcut": ""
 						}, {
 							"label": "No",
-							"value": "false",
+							"value": "no",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -2779,7 +2776,7 @@
 						"conditional": {
 							"show": true,
 							"when": "doyouhaveanyincidentallocationsiEOfficekiosketcPL",
-							"eq": "true"
+							"eq": "yes"
 						},
 						"type": "textfield",
 						"labelWidth": 30,
@@ -2788,27 +2785,27 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
+					"width": 8,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns4",
+				"type": "columns",
+				"input": false,
 				"path": "pageNaNPanel3Columns4"
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns5",
 				"columns": [{
 					"components": [{
 						"label": "Do you have property at that location to be insured?",
@@ -2817,11 +2814,11 @@
 						"tableView": false,
 						"values": [{
 							"label": "Yes",
-							"value": "true",
+							"value": "yes",
 							"shortcut": ""
 						}, {
 							"label": "No",
-							"value": "false",
+							"value": "no",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -2849,7 +2846,7 @@
 						"conditional": {
 							"show": true,
 							"when": "doyouhavepropertyatthatlocationtobeinsuredPL",
-							"eq": "true"
+							"eq": "yes"
 						},
 						"type": "number",
 						"input": true,
@@ -2859,27 +2856,27 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
-					"size": "md"
+					"size": "md",
+					"width": 8
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns5",
+				"type": "columns",
+				"input": false,
 				"path": "pageNaNPanel3Columns5"
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns",
 				"columns": [{
 					"components": [{
 						"label": "Do you conduct recreational or business activities, other than diving, at your facility?",
@@ -2888,11 +2885,11 @@
 						"tableView": false,
 						"values": [{
 							"label": "Yes",
-							"value": "true",
+							"value": "yes",
 							"shortcut": ""
 						}, {
 							"label": "No",
-							"value": "false",
+							"value": "no",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -2902,24 +2899,27 @@
 						"input": true,
 						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
+					"width": 8,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns",
 				"conditional": {
-					"show": "true"
-				}
+					"show": true
+				},
+				"type": "columns",
+				"input": false
 			}, {
 				"key": "pageNaNPanel3Pleasecheckallthatapplybelow",
 				"label": "Please check all that apply below",
@@ -3235,7 +3235,7 @@
 						"dataGridLabel": false,
 						"tableView": false,
 						"datePicker": {
-							"maxDate": "moment(). format('MM-dd-yyyy')",
+							"maxDate": "moment().format('MM-dd-yyyy')",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"datepickerMode": "day"
@@ -3270,7 +3270,7 @@
 							"minDate": null,
 							"disableWeekends": false,
 							"disableWeekdays": false,
-							"maxDate": "moment(). format('MM-dd-yyyy')"
+							"maxDate": "moment().format('MM-dd-yyyy')"
 						},
 						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 					}, {
@@ -4831,7 +4831,7 @@
 							}, {
 								"type": "documentviewer",
 								"key": "receiptsAL1",
-								"calculateValue": "value = (row.receiptsAL)",
+								"calculateValue": "value = row.receiptsAL",
 								"dtype": "documentviewer",
 								"datype": "documentviewer",
 								"dattype": "documentviewer",
@@ -5634,16 +5634,16 @@
 									"mask": false,
 									"spellcheck": true,
 									"tableView": true,
-									"defaultValue": "40000.00",
 									"delimiter": true,
 									"requireDecimal": true,
 									"inputFormat": "plain",
 									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true,
 										"min": 40000
 									},
-									"key": "ALLossofBusIncome",
+									"key": "ALLossofBusIncomeVal",
 									"conditional": {
 										"show": true,
 										"when": "ALLossofBusIncomeCheckBox",
@@ -5654,6 +5654,15 @@
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "ALLossofBusIncome",
+									"calculateValue": "value = parseFloat(40000)+(parseFloat(row.ALLossofBusIncomeVal)||0.00)",
+									"calculateServer": false,
+									"key": "ALLossofBusIncome",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 6,
@@ -6527,7 +6536,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "lossOfBusIncome",
-						"calculateValue": "value = parseFloat(40000)+(parseFloat(additionalLossOfBusIncome)||0.00)",
+						"calculateValue": "value = parseFloat(40000)+(parseFloat(data.additionalLossOfBusIncome)||0.00)",
 						"calculateServer": false,
 						"key": "lossOfBusIncome",
 						"type": "hidden",
@@ -7210,7 +7219,7 @@
 					}, {
 						"type": "documentviewer",
 						"key": "document1",
-						"calculateValue": "value = (row['document'])",
+						"calculateValue": "value = (row.document)",
 						"dtype": "documentviewer",
 						"datype": "documentviewer",
 						"dattype": "documentviewer",
@@ -10010,6 +10019,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-02T20:41:53.460Z",
+	"modified": "2020-04-03T09:28:08.218Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

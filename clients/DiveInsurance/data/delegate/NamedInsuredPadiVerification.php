@@ -29,6 +29,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
                 $response[] = $result->current();
             }
             $response[0]['name'] = $response[0]['firstname']." ".$response[0]['initial']." ".$response[0]['lastname'];
+            $response[0]['nameOfInstitution'] = 'PADI';
             if(isset($response[0]['status']) && $response[0]['status'] != ''){
                 if(array_key_exists($response[0]['status'], $this->status)){
                     $response[0]['status'] = $this->status[$response[0]['status']];    
