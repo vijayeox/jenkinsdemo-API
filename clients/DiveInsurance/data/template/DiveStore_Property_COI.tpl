@@ -42,7 +42,7 @@
 					<p></p>
 					<p class = "sec_title2">                        
 						{if $additionalLossofBusinessIncomePL != "false"}
-                            ${$lossOfBusIncome|number_format:2:".":","}
+                            ${((float)$lossOfBusIncome)|number_format:2:".":","}
                         {else}
                             $0
                         {/if}</p>

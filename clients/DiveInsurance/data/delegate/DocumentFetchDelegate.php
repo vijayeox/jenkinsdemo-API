@@ -42,8 +42,10 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
         }
      } else{
         if (isset($data['attachmentsFieldnames'])) {
-           $attachmentsFieldnames = $data['attachmentsFieldnames'];
-           $this->getAttachmentsData($data,$attachmentsFieldnames);
+            $attachmentsFieldnames = $data['attachmentsFieldnames'];
+            if(is_array($attachmentsFieldnames)){
+                $this->getAttachmentsData($data,$attachmentsFieldnames);
+            }
         }
      }
      return $data;
