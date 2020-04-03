@@ -1,3 +1,6 @@
+ALTER TABLE `premium_rate_card` MODIFY `coverage_category` Text NULL;
+
+
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`is_upgrade`,`previous_key`) VALUES ('Dive Store', '$1,000','propertyDeductibles1000','2019-06-30', '2019-07-31',0,1,'propertyDeductibles1000');
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`is_upgrade`,`previous_key`) VALUES ('Dive Store', '$1,000','propertyDeductibles1000','2019-08-01', '2019-08-31',0,1,'propertyDeductibles1000');
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`is_upgrade`,`previous_key`) VALUES ('Dive Store', '$1,000','propertyDeductibles1000','2019-09-01', '2019-09-30',0,1,'propertyDeductibles1000');
