@@ -5480,7 +5480,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = (parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00)+(parseFloat(data[\"groupExcessLiability\"])||0.00)",
+							"calculateValue": "var val = (parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00)+(parseFloat(data[\"groupExcessLiability\"])||0.00);\nif(parseFloat(val) > 175){\n  value = parseFloat(val);\n}else{\n  value = 0.00;\n}",
 							"calculateServer": false,
 							"key": "groupTotalAmount",
 							"type": "number",
@@ -7916,7 +7916,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 255,
+	"_vid": 256,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -7934,6 +7934,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-03T11:00:29.221Z",
+	"modified": "2020-04-03T14:36:59.347Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
