@@ -137,7 +137,7 @@ menu:
                                 details:
                                     -
                                         type: Document
-                                        content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''Do MMMM YYYY'')} </p>'
+                                        content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
                                         useRowData: true
                                     -
                                         type: DocumentViewer
@@ -727,7 +727,7 @@ menu:
                                 details:
                                     -
                                         type: Document
-                                        content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''Do MMMM YYYY'')} </p>'
+                                        content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
                                         useRowData: true
                                     -
                                         type: DocumentViewer
