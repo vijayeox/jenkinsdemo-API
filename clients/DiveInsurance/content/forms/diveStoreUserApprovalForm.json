@@ -112,6 +112,11 @@
       "properties": {
         "payment_confirmation_page": "true"
       },
+      "conditional": {
+        "show": true,
+        "when": "userApproved",
+        "eq": "accepted"
+      },
       "type": "panel",
       "label": "Payment Information",
       "breadcrumb": "none",
@@ -403,6 +408,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-04-02T08:31:35.426Z",
+  "modified": "2020-04-03T09:32:26.717Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
