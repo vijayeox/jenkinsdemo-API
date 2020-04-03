@@ -933,6 +933,7 @@
 								"label": "Home or Work Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"calculateServer": false,
 								"validate": {
 									"customMessage": "Please enter a valid home or work phone number"
 								},
@@ -1327,7 +1328,9 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"customDefaultValue": "value = 0.00",
 								"calculateValue": "console.log(data['techRecPrice']);",
+								"calculateServer": false,
 								"key": "techRecPrice",
 								"type": "number",
 								"decimalLimit": 2,
@@ -1432,7 +1435,9 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"customDefaultValue": "value = 0.00",
 								"calculateValue": "if(data['scubaFit'] && data[data['scubaFit']]){\nvalue = data[data['scubaFit']];\n}",
+								"calculateServer": false,
 								"key": "scubaFitPrice",
 								"type": "number",
 								"decimalLimit": 2,
@@ -1508,6 +1513,8 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"customDefaultValue": "value = 0.00",
+								"calculateServer": false,
 								"key": "cylinderPrice",
 								"type": "number",
 								"decimalLimit": 2,
@@ -1613,7 +1620,9 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"customDefaultValue": "value = 0.00",
 								"calculateValue": "if(data[data['equipment']] && data['equipment']){\nvalue = data[data['equipment']];\n}",
+								"calculateServer": false,
 								"key": "equipmentPrice",
 								"type": "number",
 								"decimalLimit": 2,
@@ -2038,10 +2047,13 @@
 					"multiple": true,
 					"clearOnHide": false,
 					"calculateValue": "if((data.techRec_attachments || data.techRec_attachments !== undefined) && data.techRec_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"required": true,
+						"custom": "console.log(54634);\nconsole.log(data);\nvalid = (!empty(data['endor_techRec_attachments'])) ? true :'Please attach the proof of your TechRec Attachements';",
 						"multiple": true
 					},
+					"errorLabel": "Please attach the proof of your TechRec Attachements",
 					"key": "endor_techRec_attachments",
 					"type": "file",
 					"input": true
@@ -2059,7 +2071,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel3",
-				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<=len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInspector'){\n\tselected = true;\t\n}}\n}\nif((data.cylinderInspector_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInspector\") && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInspector'){\n\tselected = true;\t\n}}\n}\nif((data.cylinderInspector_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInspector\") && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2112,7 +2124,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<=len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInstructor'){\n\tselected = true;\t\n}}}\n\nif((data.cylinderInstructor_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInstructor\" ) && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInstructor'){\n\tselected = true;\t\n}}}\n\nif((data.cylinderInstructor_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInstructor\" ) && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Instructor Attachments",
 				"input": false,
@@ -2629,7 +2641,7 @@
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"custom": "if(data['zip'] && data['zip'] != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
 								"key": "zip",
 								"type": "textfield",
@@ -2898,7 +2910,7 @@
 					"label": "custom",
 					"input": true,
 					"amount_field": "amount",
-					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
+					"customConditional": "if(data.paymentOptions =='creditCard'){show=true;}else{show=false;}",
 					"tableView": false,
 					"hideOnChildrenHidden": false
 				}, {
@@ -2929,7 +2941,7 @@
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "page7Content",
-					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
+					"customConditional": "if(data.paymentOptions =='creditCard'){show=true;}else{show=false;}",
 					"type": "htmlelement",
 					"input": false,
 					"hideLabel": true,
@@ -3001,10 +3013,11 @@
 				"attr": "",
 				"value": ""
 			}],
-			"content": "<h4>Please process the payment and approve</h4>",
+			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
 			"refreshOnChange": false,
 			"tableView": false,
 			"key": "pleaseProcessThePaymentAndApprove",
+			"customConditional": "show = (parseFloat(data.balanceEndor) > 0);",
 			"type": "htmlelement",
 			"input": false,
 			"hideLabel": true
@@ -3080,7 +3093,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 18,
+	"_vid": 24,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3098,6 +3111,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-02T06:52:34.058Z",
+	"modified": "2020-04-03T03:54:17.952Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

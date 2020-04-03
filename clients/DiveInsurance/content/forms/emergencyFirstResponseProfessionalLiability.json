@@ -26,11 +26,7 @@
 					"input": false,
 					"hideLabel": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -59,11 +55,7 @@
 					"input": false,
 					"hideLabel": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"hideOnChildrenHidden": false
 				}],
 				"width": 4,
 				"offset": 0,
@@ -77,11 +69,7 @@
 			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? false: true;\n}",
 			"type": "columns",
 			"input": false,
-			"lockKey": true,
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
+			"lockKey": true
 		}, {
 			"title": "PADI Validation",
 			"theme": "primary",
@@ -111,11 +99,7 @@
 						"type": "hidden",
 						"lockKey": true,
 						"calculateValue": "value = data['padi'];",
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "padiNotFound",
 						"key": "padiNotFound",
@@ -123,11 +107,7 @@
 						"input": true,
 						"tableView": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "verified",
 						"defaultValue": "false",
@@ -136,11 +116,7 @@
 						"input": true,
 						"tableView": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "padiVerified",
 						"defaultValue": "false",
@@ -149,11 +125,7 @@
 						"input": true,
 						"tableView": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "policy_exists",
 						"defaultValue": "false",
@@ -162,11 +134,7 @@
 						"input": true,
 						"tableView": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "disableUserInfoEdit",
 						"customDefaultValue": "value = false;",
@@ -174,11 +142,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Policy Status",
 						"customDefaultValue": "value = \"Pending Approval\";",
@@ -186,11 +150,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -211,9 +171,7 @@
 						"validate": {
 							"required": true,
 							"customMessage": "Padi Number is not Valid!",
-							"min": 0,
-							"unique": false,
-							"multiple": false
+							"min": 0
 						},
 						"key": "padi",
 						"logic": [{
@@ -268,11 +226,7 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideLabel": true
 					}, {
 						"label": "Validate PADI Membership",
 						"action": "event",
@@ -309,11 +263,7 @@
 						"event": "callPipeline",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Change PADI Number",
 						"action": "event",
@@ -443,11 +393,7 @@
 						"input": true,
 						"tableView": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "orgId",
 						"customDefaultValue": "value = \"f0033dc0-126b-40ba-89e0-d3061bdeda4c\";",
@@ -455,11 +401,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "workflow_uuid",
 						"customDefaultValue": "value=\"cb74d176-225a-11ea-978f-2e728ce88125\"",
@@ -467,11 +409,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "product",
 						"customDefaultValue": "value = \"Emergency First Response\";",
@@ -480,11 +418,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -494,17 +428,9 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelPanel2Columns",
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"path": "panelPanel2Columns"
 			}],
-			"path": "panelPanel2",
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
+			"path": "panelPanel2"
 		}, {
 			"title": "Personal Information",
 			"theme": "primary",
@@ -541,16 +467,13 @@
 						"key": "firstnameLabel",
 						"type": "htmlelement",
 						"input": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						},
 						"hideOnChildrenHidden": false
 					}],
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
-					"width": 4
+					"width": 4,
+					"size": "md"
 				}, {
 					"components": [{
 						"label": "Initial",
@@ -564,16 +487,13 @@
 						"key": "initialLabel",
 						"type": "htmlelement",
 						"input": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						},
 						"hideOnChildrenHidden": false
 					}],
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
-					"width": 4
+					"width": 4,
+					"size": "md"
 				}, {
 					"components": [{
 						"label": "Last Name",
@@ -587,26 +507,19 @@
 						"key": "lastnameLabel",
 						"type": "htmlelement",
 						"input": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						},
 						"hideOnChildrenHidden": false
 					}],
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
-					"width": 4
+					"width": 4,
+					"size": "md"
 				}],
 				"tableView": false,
 				"key": "columns5",
 				"customConditional": "show = !data.padiNotFound;",
 				"type": "columns",
 				"input": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				},
 				"path": "columns5"
 			}, {
 				"label": "Columns",
@@ -618,9 +531,7 @@
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
-							"customMessage": "Please enter your first name.",
-							"unique": false,
-							"multiple": false
+							"customMessage": "Please enter your first name."
 						},
 						"key": "firstname",
 						"logic": [{
@@ -661,9 +572,7 @@
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
-							"customMessage": "Please enter your initial.",
-							"unique": false,
-							"multiple": false
+							"customMessage": "Please enter your initial."
 						},
 						"key": "initial",
 						"type": "textfield",
@@ -683,9 +592,7 @@
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
-							"customMessage": "Please enter your last name.",
-							"unique": false,
-							"multiple": false
+							"customMessage": "Please enter your last name."
 						},
 						"key": "lastname",
 						"logic": [{
@@ -725,11 +632,7 @@
 				"key": "panelColumns2",
 				"customConditional": "show = data.padiNotFound;",
 				"type": "columns",
-				"input": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"input": false
 			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
@@ -768,9 +671,7 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "country",
 							"type": "select",
@@ -783,9 +684,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "city",
 							"type": "textfield",
@@ -804,9 +703,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "address1",
 							"type": "textfield",
@@ -826,9 +723,7 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "state",
 							"type": "select",
@@ -850,9 +745,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
-								"customMessage": "Please enter your mailing address.",
-								"unique": false,
-								"multiple": false
+								"customMessage": "Please enter your mailing address."
 							},
 							"key": "address2",
 							"type": "textfield",
@@ -866,9 +759,7 @@
 							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}",
-								"unique": false,
-								"multiple": false
+								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 							},
 							"key": "zip",
 							"type": "textfield",
@@ -884,17 +775,9 @@
 					}],
 					"type": "columns",
 					"hideLabel": true,
-					"path": "panelPanelColumns",
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"path": "panelPanelColumns"
 				}],
-				"lockKey": true,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"lockKey": true
 			}, {
 				"title": "Physical Address",
 				"theme": "primary",
@@ -919,11 +802,7 @@
 					"type": "checkbox",
 					"input": true,
 					"dataGridLabel": false,
-					"lockKey": true,
-					"validate": {
-						"unique": false,
-						"multiple": false
-					}
+					"lockKey": true
 				}, {
 					"label": "Columns",
 					"columns": [{
@@ -945,9 +824,7 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "physical_country",
 							"type": "select",
@@ -960,9 +837,7 @@
 							"tableView": true,
 							"calculateServer": false,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "physical_city",
 							"type": "textfield",
@@ -981,9 +856,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "mailaddress1",
 							"type": "textfield",
@@ -1003,9 +876,7 @@
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
-								"required": true,
-								"unique": false,
-								"multiple": false
+								"required": true
 							},
 							"key": "physical_state",
 							"type": "select",
@@ -1029,11 +900,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"validate": {
-								"unique": false,
-								"multiple": false
-							}
+							"hideOnChildrenHidden": false
 						}, {
 							"label": "Zip Code",
 							"spellcheck": false,
@@ -1042,9 +909,7 @@
 							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}",
-								"unique": false,
-								"multiple": false
+								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 							},
 							"key": "physical_zip",
 							"type": "textfield",
@@ -1072,11 +937,7 @@
 					"lockKey": true,
 					"path": "panelPanel3Columns2"
 				}],
-				"path": "panelPanel3",
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"path": "panelPanel3"
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -1103,11 +964,7 @@
 								"key": "home_country_code",
 								"type": "select",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 3,
 							"offset": 0,
@@ -1120,9 +977,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number",
-									"unique": false,
-									"multiple": false
+									"customMessage": "Please enter a valid home or work phone number"
 								},
 								"key": "home_phone_number",
 								"logic": [{
@@ -1172,11 +1027,7 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 9,
 							"offset": 0,
@@ -1189,11 +1040,7 @@
 						"type": "columns",
 						"input": false,
 						"path": "columns3",
-						"hideLabel": true,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideLabel": true
 					}, {
 						"label": "Columns",
 						"columns": [{
@@ -1216,11 +1063,7 @@
 								"key": "phone_country_code",
 								"type": "select",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 3,
 							"offset": 0,
@@ -1234,9 +1077,7 @@
 								"tableView": true,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number",
-									"unique": false,
-									"multiple": false
+									"customMessage": "Please enter a valid mobile phone number"
 								},
 								"key": "phone_number",
 								"logic": [{
@@ -1286,11 +1127,7 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false,
-								"validate": {
-									"unique": false,
-									"multiple": false
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 9,
 							"offset": 0,
@@ -1303,11 +1140,7 @@
 						"type": "columns",
 						"input": false,
 						"path": "columns4",
-						"hideLabel": true,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideLabel": true
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1325,11 +1158,7 @@
 						"type": "phoneNumber",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"validate": {
-							"unique": false,
-							"multiple": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
@@ -1337,9 +1166,7 @@
 						"tableView": true,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter your email address in format: yourname@example.com",
-							"unique": false,
-							"multiple": false
+							"customMessage": "Please enter your email address in format: yourname@example.com"
 						},
 						"key": "email",
 						"logic": [{
@@ -1372,26 +1199,14 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelPanel3Columns",
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
+				"path": "panelPanel3Columns"
 			}],
 			"lockKey": true,
-			"path": "panelPanel4",
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
+			"path": "panelPanel4"
 		}],
 		"type": "panel",
 		"label": "Panel",
-		"path": "panel",
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"path": "panel"
 	}, {
 		"type": "panel",
 		"title": "Coverage",
@@ -1834,6 +1649,14 @@
 				"calculateValue": "value = [\"attachments\"];",
 				"calculateServer": false,
 				"key": "attachmentsFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
+				"label": "documentFieldnames",
+				"calculateValue": "value = [\"attachments1\"];",
+				"calculateServer": false,
+				"key": "documentFieldnames",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -3153,7 +2976,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 424,
+	"_vid": 425,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3237,7 +3060,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-01T15:54:57.294Z",
+	"modified": "2020-04-02T19:34:06.419Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

@@ -118,9 +118,9 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"}, {"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
+                        route: 'file/user/me'
                         filterable: false
-                        reorderable: false
+                        defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"},{"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
                         resizable: true
                         pageable:
                             buttonCount: 3
@@ -261,9 +261,9 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
+                        route: 'file/user/me/status/Completed'
                         filterable: false
-                        reorderable: true
+                        defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
                         resizable: true
                         sortable: true
                         pageable:
@@ -318,7 +318,6 @@ menu:
                     content:
                         route: assignments
                         filterable: true
-                        reorderable: true
                         resizable: true
                         sortable: true
                         pageable:
@@ -430,7 +429,6 @@ menu:
                     content:
                         route: errorlog
                         filterable: true
-                        reorderable: true
                         resizable: true
                         sortable: true
                         pageable:
@@ -468,11 +466,210 @@ menu:
         uuid: 41551bff-e30e-4ba5-abc1-1a864f12e061
     -
         name: 'Manage Policies'
-        icon: 'fa fa-search'
+        icon: 'fa fa-folder-open'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
         page:
             name: 'Manage Policies'
             description: 'Page to manage policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: 'file/search/status/Completed'
+                        defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                        filterable: true
+                        resizable: true
+                        sortable: 
+                            allowUnsort: false
+                            mode: multiple
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                        actions:
+                            -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: 'Upgrade To IPL'
+                                rule: '''{{policyStatus}}'' == ''In Force'' && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-arrow-circle-up'
+                            -
+                                name: Endorsement
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2bc1caaa-9628-486d-8b42-104534625993/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: 'View Policy'
+                                icon: 'fa fa-envelope-open'
+                                rule: '''{{policyStatus}}'' != ''Rejected'''
+                                details:
+                                    -
+                                        type: Document
+                                        content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''Do MMMM YYYY'')} </p>'
+                                        useRowData: true
+                                    -
+                                        type: DocumentViewer
+                                        url: 'file/{{uuid}}/document'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/91cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                icon: 'fa fa-repeat'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{disableReinstate}}'' == ''true'') && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                icon: 'fa fa-repeat'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2d94a2f0-c64c-48e0-a4f0-f85f626f0626/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                icon: 'fa fa-repeat'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/5a2ed122-3f12-4240-b197-a24469721e87/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{end_date}}'' <= ''{{current_date}}'')'
+                                icon: 'fa fa-repeat'
+                        columnConfig:
+                            -
+                                title: PADI
+                                field: padi
+                            -
+                                title: Name
+                                field: firstname
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                multiFieldFilter:
+                                    - lastname
+                            -
+                                title: Product
+                                field: product
+                                filterCell:
+                                    type: dropdown
+                                    listItems:
+                                        - 'Individual Professional Liability'
+                                        - 'Dive Boat'
+                                        - 'Dive Store'
+                                        - 'Emergency First Response'
+                                    placeholder: 'Select Product'
+                            -
+                                title: 'Policy Status'
+                                field: policyStatus
+                                filterCell:
+                                    type: dropdown
+                                    listItems:
+                                        - 'In Force'
+                                        - 'Cancelled'
+                                        - 'Rejected'
+                                    placeholder: 'Select Status'
+                            -
+                                title: 'Policy Start Date'
+                                field: start_date
+                                cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}</td>'
+                                filter: date
+                                filterFormat: YYYY-MM-DD
+                            -
+                                title: 'Policy End Date'
+                                field: end_date
+                                cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
+                                filter: date
+                                filterFormat: YYYY-MM-DD
+        uuid: 576f6ce4-74e6-11ea-bc55-0242ac130003
+    -
+        name: 'Search Policies'
+        icon: 'fa fa-search'
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        page:
+            name: 'Search Policies'
+            description: 'Page to search for specific policy'
             content:
                 -
                     type: Search
@@ -695,7 +892,6 @@ menu:
                     content:
                         route: 'pipeline/commands/[{"command" : "delegate", "delegate":"PocketCardMenu"}]'
                         filterable: true
-                        reorderable: true
                         resizable: true
                         actions:
                             -
@@ -742,7 +938,6 @@ menu:
                     content:
                         route: assignments
                         filterable: true
-                        reorderable: true
                         resizable: true
                         sortable: true
                         pageable:
