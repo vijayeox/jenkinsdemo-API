@@ -5153,7 +5153,8 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = parseFloat(data[\"groupTaxAmount\"])+parseFloat(data[\"groupPadiFeeAmount\"])+parseFloat(data[\"groupCoverage\"])+parseFloat(data[\"groupExcessLiability\"])",
+							"calculateValue": "var val = (parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00)+(parseFloat(data[\"groupExcessLiability\"])||0.00);\nif(parseFloat(val) > 175){\n  value = parseFloat(val);\n}else{\n  value = 0.00;\n}",
+							"calculateServer": false,
 							"key": "groupTotalAmount",
 							"type": "number",
 							"decimalLimit": 2,
@@ -8680,7 +8681,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 42,
+	"_vid": 43,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8698,6 +8699,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-03T10:57:07.740Z",
+	"modified": "2020-04-03T14:36:53.118Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

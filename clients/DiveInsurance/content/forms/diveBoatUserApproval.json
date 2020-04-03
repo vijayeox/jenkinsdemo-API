@@ -133,6 +133,7 @@
 					"multiple": true
 				},
 				"key": "csrApprovalAttachments",
+				"customConditional": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
 				"type": "file",
 				"input": true
 			}]
@@ -411,7 +412,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 24,
+	"_vid": 32,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -422,12 +423,13 @@
 	"settings": {},
 	"properties": {
 		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"}]"
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"}]",
+		"post_delegate_referesh": "csrApprovalAttachments"
 	},
 	"name": "diveBoatUserApproval",
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-02T12:28:59.371Z",
+	"modified": "2020-04-03T14:37:02.659Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }
