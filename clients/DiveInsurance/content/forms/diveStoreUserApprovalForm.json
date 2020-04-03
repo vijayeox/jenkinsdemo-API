@@ -142,24 +142,20 @@
         "tableView": false
       }, {
         "label": "amountPayable",
-        "calculateValue": "if(data.premiumFinanceSelct == 'yes'){\nvalue = (parseFloat(data['totalAmount']).toFixed(2))*30/100;\n} else {\nvalue = parseFloat(data['totalAmount']).toFixed(2);\n}",
+        "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\nvalue = (parseFloat(data['totalAmount']).toFixed(2))*30/100;\n} else {\nvalue = parseFloat(data['totalAmount']).toFixed(2);\n}",
         "calculateServer": false,
         "key": "amountPayable",
         "type": "hidden",
         "input": true,
         "tableView": false
       }, {
-        "label": "Final Amount Payable",
-        "prefix": "$",
-        "spellcheck": false,
-        "disabled": true,
-        "tableView": false,
-        "clearOnHide": false,
-        "calculateValue": "value = data.amountPayable",
+        "label": "amount",
+        "calculateValue": "value = data.totalAmount",
         "calculateServer": false,
-        "key": "finalAmountPayable",
-        "type": "textfield",
-        "input": true
+        "key": "amount",
+        "type": "hidden",
+        "input": true,
+        "tableView": false
       }, {
         "label": "Would you like to apply for Premium Finance?",
         "optionsLabelPosition": "right",
@@ -181,6 +177,19 @@
         },
         "key": "premiumFinanceSelect",
         "type": "radio",
+        "input": true
+      }, {
+        "label": "Final Amount Payable",
+        "prefix": "$",
+        "spellcheck": false,
+        "disabled": true,
+        "tableView": false,
+        "redrawOn": "amountPayable",
+        "clearOnHide": false,
+        "calculateValue": "value = data.amountPayable",
+        "calculateServer": false,
+        "key": "finalAmountPayable",
+        "type": "textfield",
         "input": true
       }, {
         "label": "Columns",
@@ -250,7 +259,7 @@
             "hideOnChildrenHidden": false
           }, {
             "type": "convergepay",
-            "key": "custom",
+            "key": "creditcardPayment",
             "amount_field": "amountPayable",
             "label": "custom",
             "input": true,
@@ -327,13 +336,6 @@
         "label": "transaction_status",
         "type": "hidden",
         "lockKey": true
-      }, {
-        "input": true,
-        "tableView": true,
-        "key": "page7Panel2AmountPayable",
-        "label": "amountPayable",
-        "type": "hidden",
-        "calculateValue": "value = data['amount']"
       }],
       "input": false,
       "lockKey": true,
@@ -406,6 +408,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-04-01T09:47:25.897Z",
+  "modified": "2020-04-03T09:32:26.717Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

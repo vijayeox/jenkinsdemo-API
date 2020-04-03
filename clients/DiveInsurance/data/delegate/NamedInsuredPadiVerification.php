@@ -29,6 +29,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
                 $response[] = $result->current();
             }
             $response[0]['name'] = $response[0]['firstname']." ".$response[0]['initial']." ".$response[0]['lastname'];
+            $response[0]['nameOfInstitution'] = 'PADI';
             if(isset($response[0]['status']) && $response[0]['status'] != ''){
                 if(array_key_exists($response[0]['status'], $this->status)){
                     $response[0]['status'] = $this->status[$response[0]['status']];    
@@ -40,6 +41,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
             }
             $returnArray = array_merge($data,$response[0]);
             $returnArray['padi_Verified'] = true;
+            $returnArray['nameOfInstitution'] = 'PADI';
             // $returnArray['verified_flag'] = true;
             return $returnArray;
         } else {

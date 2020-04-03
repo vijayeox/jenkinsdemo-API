@@ -223,7 +223,7 @@ class WorkflowInstanceService extends AbstractService
             $params['workflow_instance_id'] = $workflowInstance['id'];
             $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
             $this->logger->info("Checking Params" . print_r($params, true));
-            $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $fileData);
+            $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
             $this->logger->info("WorkflowInstanceId created" . print_r($workflowInstanceId, true));
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
             $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id']);

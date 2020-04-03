@@ -116,15 +116,17 @@
 			"label": "Attachments",
 			"input": false,
 			"components": [{
-				"label": "Upload",
+				"label": "Attachments",
 				"hideLabel": true,
-				"tableView": false,
+				"tableView": true,
 				"storage": "base64",
 				"webcam": false,
 				"fileTypes": [{
 					"label": "",
 					"value": ""
 				}],
+				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+				"fileMaxSize": "10MB",
 				"multiple": true,
 				"calculateServer": false,
 				"validate": {
@@ -143,7 +145,6 @@
 			"properties": {
 				"payment_confirmation_page": "true"
 			},
-			"customConditional": "if((data.userApproved == 'accepted') && (parseFloat(data.amount) > 0)){\n   show = true;\n}else{\n  show =false;\n}",
 			"type": "panel",
 			"label": "Payment Information",
 			"breadcrumb": "none",
@@ -169,24 +170,12 @@
 				"tableView": false
 			}, {
 				"label": "amountPayable",
-				"calculateValue": "if(data.premiumFinanceSelct == 'yes'){\nvalue = (parseFloat(data['amount']).toFixed(2))*30/100;\n} else {\nvalue = parseFloat(data['amount']).toFixed(2);\n}",
+				"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\nvalue = (parseFloat(data['amount']).toFixed(2))*30/100;\n} else {\nvalue = parseFloat(data['amount']).toFixed(2);\n}",
 				"calculateServer": false,
 				"key": "amountPayable",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
-			}, {
-				"label": "Final Amount Payable",
-				"prefix": "$",
-				"spellcheck": false,
-				"disabled": true,
-				"tableView": false,
-				"clearOnHide": false,
-				"calculateValue": "value = parseFloat(data.amountPayable);",
-				"calculateServer": false,
-				"key": "finalAmountPayable",
-				"type": "textfield",
-				"input": true
 			}, {
 				"label": "Would you like to apply for Premium Finance?",
 				"optionsLabelPosition": "right",
@@ -208,6 +197,19 @@
 				},
 				"key": "premiumFinanceSelect",
 				"type": "radio",
+				"input": true
+			}, {
+				"label": "Final Amount Payable",
+				"prefix": "$",
+				"spellcheck": false,
+				"disabled": true,
+				"tableView": false,
+				"redrawOn": "amountPayable",
+				"clearOnHide": false,
+				"calculateValue": "value = data.amountPayable",
+				"calculateServer": false,
+				"key": "finalAmountPayable",
+				"type": "textfield",
 				"input": true
 			}, {
 				"label": "Columns",
@@ -277,7 +279,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"type": "convergepay",
-						"key": "custom",
+						"key": "creditcardPayment",
 						"amount_field": "amountPayable",
 						"label": "custom",
 						"input": true,
@@ -354,13 +356,6 @@
 				"label": "transaction_status",
 				"type": "hidden",
 				"lockKey": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "page7Panel2AmountPayable",
-				"label": "amountPayable",
-				"type": "hidden",
-				"calculateValue": "value = data['amount']"
 			}],
 			"input": false,
 			"lockKey": true,
@@ -416,7 +411,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 16,
+	"_vid": 24,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -426,12 +421,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"}]"
 	},
 	"name": "diveBoatUserApproval",
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-01T14:23:46.726Z",
+	"modified": "2020-04-02T12:28:59.371Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

@@ -84,6 +84,14 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "documentFields",
+			"calculateValue": "value = [\"receipts1\",[\"additionalLocations\",\"receiptsAL1\"],[\"groupPL\",\"document1\"]]",
+			"calculateServer": false,
+			"key": "documentFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "automatic_renewal",
 			"customDefaultValue": "value = false;",
 			"calculateServer": false,
@@ -968,7 +976,7 @@
 				}, {
 					"label": "end_date",
 					"defaultValue": "2020-07-31",
-					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-07-22\";\n}else{\nvalue = (year)+ \"-07-22\";\n}",
+					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 					"calculateServer": false,
 					"key": "end_date",
 					"type": "hidden",
@@ -1354,7 +1362,7 @@
 					"tableView": true,
 					"clearOnHide": false,
 					"calculateServer": false,
-					"key": "dba1",
+					"key": "dba",
 					"type": "textfield",
 					"input": true,
 					"hideOnChildrenHidden": false
@@ -1382,9 +1390,10 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please Select the Entity Type of your Business"
 					},
-					"key": "dba",
+					"key": "entity_type",
 					"type": "select",
 					"indexeddb": {
 						"filter": {}
@@ -1397,6 +1406,7 @@
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true,
 						"customMessage": "Please enter the partners."
@@ -1404,7 +1414,7 @@
 					"key": "who_are_the_partners",
 					"conditional": {
 						"show": true,
-						"when": "dba",
+						"when": "entity_type",
 						"eq": "partnership"
 					},
 					"type": "textfield",
@@ -1416,6 +1426,7 @@
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true,
 						"customMessage": "Please enter the shareholders."
@@ -1423,7 +1434,7 @@
 					"key": "who_are_the_shareholders",
 					"conditional": {
 						"show": true,
-						"when": "dba",
+						"when": "entity_type",
 						"eq": "corporation"
 					},
 					"type": "textfield",
@@ -1435,6 +1446,7 @@
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true,
 						"customMessage": "If other, please explain."
@@ -1442,7 +1454,7 @@
 					"key": "others_please_explain",
 					"conditional": {
 						"show": true,
-						"when": "dba",
+						"when": "entity_type",
 						"eq": "other"
 					},
 					"type": "textfield",
@@ -1513,19 +1525,45 @@
 							}, {
 								"value": "concrete",
 								"label": "Concrete"
+							}, {
+								"label": "Other",
+								"value": "other"
 							}]
 						},
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Please select the material used for the Building Construction"
 						},
 						"key": "dspropbuildingconstr",
 						"type": "select",
-						"input": true,
-						"lockKey": true,
+						"indexeddb": {
+							"filter": {}
+						},
 						"labelWidth": 30,
 						"labelMargin": 3,
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Please Specify",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "pleaseSpecify",
+						"conditional": {
+							"show": true,
+							"when": "dspropbuildingconstr",
+							"eq": "other"
+						},
+						"type": "textfield",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 8,
@@ -1576,17 +1614,19 @@
 				"key": "pageNaNColumns",
 				"columns": [{
 					"components": [{
-						"label": "Distance from Ocean/Gulf",
-						"labelPosition": "left-left",
-						"spellcheck": true,
-						"tableView": true,
+						"label": "Distance from Ocean/Golf",
+						"suffix": "Miles",
+						"mask": false,
+						"spellcheck": false,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "dspropdistfrmoceangulf",
-						"type": "textfield",
+						"type": "number",
 						"input": true,
-						"lockKey": true,
-						"labelWidth": 30,
-						"labelMargin": 3,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Content",
@@ -1607,19 +1647,24 @@
 						"rows": [
 							[{
 								"components": [{
-									"input": true,
-									"tableView": true,
-									"inputType": "number",
-									"label": "Furniture, fixtures and equipment:",
-									"key": "dspropFurniturefixturesandequip",
+									"label": "Furniture, fixtures and equipment",
 									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": true,
+									"delimiter": false,
+									"requireDecimal": true,
+									"inputFormat": "plain",
 									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "dspropFurniturefixturesandequip",
 									"type": "number",
-									"lockKey": true,
 									"labelWidth": 0,
 									"labelMargin": 3,
-									"requireDecimal": true,
-									"decimalLimit": 2
+									"decimalLimit": 2,
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
 								}]
 							}, {
 								"components": [{
@@ -1715,22 +1760,37 @@
 							}],
 							[{
 								"components": [{
-									"input": true,
-									"tableView": true,
-									"inputType": "number",
-									"label": "Do you own property, including compressors, off premises:",
-									"key": "dspropownpropincludingcompr",
+									"label": "Do you own property, including compressors, off premises",
 									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": true,
+									"delimiter": false,
+									"requireDecimal": true,
+									"inputFormat": "plain",
 									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "dspropownpropincludingcompr",
 									"type": "number",
-									"lockKey": true,
 									"labelWidth": 0,
 									"labelMargin": 3,
-									"requireDecimal": true,
-									"decimalLimit": 2
+									"decimalLimit": 2,
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
 								}]
 							}, {
-								"components": []
+								"components": [{
+									"label": "Please explain location",
+									"spellcheck": true,
+									"tableView": true,
+									"clearOnHide": false,
+									"key": "dspropPleaseexplainlocation",
+									"type": "textfield",
+									"input": true,
+									"lockKey": true,
+									"hideOnChildrenHidden": false
+								}]
 							}]
 						],
 						"tableView": false,
@@ -1869,16 +1929,23 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
-									"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "var currentYear = moment().year()\nfor(var i = 1990; i<currentYear; i++){\n  values.push(i);\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
 								"key": "built_year1",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1925,16 +1992,23 @@
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
-								"values": [{}],
+								"values": [{
+									"label": "",
+									"value": ""
+								}],
 								"custom": "if(data['endorsementPropertyDeductibles']){\n  for(var key in data['endorsementPropertyDeductibles']){\nvar item = {}\nitem.label = data['endorsementPropertyDeductibles'][key];\nitem.value = key;\nvalues.push(item);\n}\n}\n\nconsole.log(values)"
 							},
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "propertyDeductibles",
 							"type": "select",
-							"input": true,
+							"indexeddb": {
+								"filter": {}
+							},
 							"labelWidth": 30,
 							"labelMargin": 3,
+							"input": true,
 							"lockKey": true
 						}, {
 							"key": "dspropmechbreakdown",
@@ -1954,16 +2028,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false,
 						"label": "Field Set"
-					}, {
-						"label": "Please explain location",
-						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
-						"key": "dspropPleaseexplainlocation",
-						"type": "textfield",
-						"input": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2039,6 +2103,23 @@
 				"input": true,
 				"lockKey": true
 			}, {
+				"type": "documentviewer",
+				"key": "receipts1",
+				"calculateValue": "value = (data.receipts)",
+				"dtype": "documentviewer",
+				"datype": "documentviewer",
+				"dattype": "documentviewer",
+				"customConditional": "if (data.privileges){\n  if(data.receipts !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+				"datatype": "documentviewer",
+				"data_type": "documentviewer",
+				"label": "Receipts Attachments",
+				"hideLabel": true,
+				"inputType": "documentviewer",
+				"input": 1,
+				"tableView": false,
+				"protected": true,
+				"persistent": false
+			}, {
 				"key": "pageNaNPanel3YesNo",
 				"label": "Yes/No",
 				"input": false,
@@ -2054,106 +2135,133 @@
 				"clearOnHide": false
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns2",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you have a pool on premises?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "doyouhaveapoolonpremisesPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"conditional": {
-							"show": "true"
-						},
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"clearOnHide": false
-					}, {
+						"type": "radio",
 						"input": true,
-						"tableView": true,
+						"hideOnChildrenHidden": false
+					}, {
 						"label": "If you have a pool, is it used for activities other than diving and/or swimming? If yes, contact Vicencia & Buckley for supplemental form",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-						"defaultValue": false,
-						"type": "checkbox",
 						"conditional": {
-							"show": "true",
+							"show": true,
 							"when": "doyouhaveapoolonpremisesPL",
 							"eq": "true"
 						},
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"clearOnHide": false
-					}, {
+						"type": "radio",
 						"input": true,
-						"tableView": true,
-						"inputType": "number",
+						"hideOnChildrenHidden": false
+					}, {
 						"label": "Pool Liability",
-						"key": "poolLiability",
 						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": true,
+						"delimiter": false,
+						"requireDecimal": true,
+						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
-						"type": "number",
+						"key": "poolLiability",
 						"conditional": {
-							"show": "true",
-							"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-							"eq": "true"
+							"show": true,
+							"when": "doyouhaveapoolonpremisesPL",
+							"eq": "yes"
 						},
-						"lockKey": true,
-						"requireDecimal": true,
-						"decimalLimit": 2,
+						"type": "number",
 						"labelWidth": 30,
 						"labelMargin": 3,
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
+					"width": 8,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns2",
 				"conditional": {
-					"show": "true"
+					"show": true
 				},
+				"type": "columns",
+				"input": false,
 				"path": "pageNaNPanel3Columns2"
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns4",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you have any incidental locations, i.e. office, kiosk, etc?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "doyouhaveanyincidentallocationsiEOfficekiosketcPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"clearOnHide": false
+						"type": "radio",
+						"input": true,
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Please describe the locations",
 						"description": "You will need to complete another application for these locations.",
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -2161,48 +2269,57 @@
 						"conditional": {
 							"show": true,
 							"when": "doyouhaveanyincidentallocationsiEOfficekiosketcPL",
-							"eq": "true"
+							"eq": "yes"
 						},
 						"type": "textfield",
-						"input": true,
-						"lockKey": true,
 						"labelWidth": 30,
 						"labelMargin": 3,
+						"input": true,
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
+					"width": 8,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns4",
+				"type": "columns",
+				"input": false,
 				"path": "pageNaNPanel3Columns4"
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns5",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you have property at that location to be insured?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "doyouhavepropertyatthatlocationtobeinsuredPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"clearOnHide": false
+						"type": "radio",
+						"input": true,
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Please enter the value to insure",
 						"description": "You will need to complete another application for these locations.",
@@ -2214,6 +2331,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -2221,7 +2339,7 @@
 						"conditional": {
 							"show": true,
 							"when": "doyouhavepropertyatthatlocationtobeinsuredPL",
-							"eq": "true"
+							"eq": "yes"
 						},
 						"type": "number",
 						"input": true,
@@ -2231,58 +2349,70 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
-					"size": "md"
+					"size": "md",
+					"width": 8
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns5",
+				"type": "columns",
+				"input": false,
 				"path": "pageNaNPanel3Columns5"
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "pageNaNPanel3Columns",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Do you conduct recreational or business activities, other than diving, at your facility?",
-						"dataGridLabel": false,
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "recreationalorbusinessactivitiesfacilityPL",
-						"defaultValue": false,
-						"type": "checkbox",
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"clearOnHide": false
+						"type": "radio",
+						"input": true,
+						"hideOnChildrenHidden": false
 					}],
-					"width": 6,
+					"width": 8,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}, {
 					"components": [],
-					"width": 6,
+					"width": 4,
 					"offset": 0,
 					"push": 0,
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
 				"hideLabel": true,
+				"tableView": false,
+				"key": "pageNaNPanel3Columns",
 				"conditional": {
-					"show": "true"
-				}
+					"show": true
+				},
+				"type": "columns",
+				"input": false
 			}, {
 				"key": "pageNaNPanel3Pleasecheckallthatapplybelow",
 				"label": "Please check all that apply below",
@@ -4916,16 +5046,16 @@
 									"mask": false,
 									"spellcheck": true,
 									"tableView": true,
-									"defaultValue": "40000.00",
 									"delimiter": true,
 									"requireDecimal": true,
 									"inputFormat": "plain",
 									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true,
 										"min": 40000
 									},
-									"key": "ALLossofBusIncome",
+									"key": "ALLossofBusIncomeVal",
 									"conditional": {
 										"show": true,
 										"when": "ALLossofBusIncomeCheckBox",
@@ -4936,6 +5066,15 @@
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "ALLossofBusIncome",
+									"calculateValue": "value = parseFloat(40000)+(parseFloat(row.ALLossofBusIncomeVal)||0.00)",
+									"calculateServer": false,
+									"key": "ALLossofBusIncome",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 6,
@@ -5736,17 +5875,16 @@
 				"key": "page4PanelPanelPanelColumns3",
 				"columns": [{
 					"components": [{
-						"label": "Additional Loss of Business Income",
-						"tableView": true,
-						"defaultValue": false,
-						"clearOnHide": false,
-						"calculateServer": false,
-						"key": "additionalLossofBusinessIncomePL",
-						"type": "checkbox",
 						"input": true,
+						"tableView": true,
+						"label": "Additional Loss of Business Income",
 						"dataGridLabel": false,
+						"key": "additionalLossofBusinessIncomePL",
+						"defaultValue": "true",
+						"type": "checkbox",
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"clearOnHide": false
 					}, {
 						"label": "Additional Loss of Business Income",
 						"description": "$40,000 included in standard policy",
@@ -5754,28 +5892,36 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": true,
-						"defaultValue": "40000.00",
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
-							"required": true,
-							"min": 40000
+							"required": true
 						},
-						"key": "lossOfBusIncome",
+						"key": "additionalLossOfBusIncome",
 						"conditional": {
 							"show": true,
 							"when": "additionalLossofBusinessIncomePL",
 							"eq": "true"
 						},
 						"type": "number",
+						"labelMargin": 3,
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"labelWidth": null,
-						"labelMargin": 3,
 						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "lossOfBusIncome",
+						"calculateValue": "value = parseFloat(40000)+(parseFloat(additionalLossOfBusIncome)||0.00)",
+						"calculateServer": false,
+						"key": "lossOfBusIncome",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -6291,10 +6437,12 @@
 				"label": "Pane",
 				"input": false,
 				"components": [{
-					"label": "Enter PADI Number",
+					"label": "PADI Number in System?",
+					"description": "Enter the PADI Membership to Validate",
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"key": "groupPadi",
 					"type": "textfield",
 					"input": true
@@ -6318,12 +6466,13 @@
 					"input": true
 				}, {
 					"label": "Members applicable for Group Liability",
-					"disableAddingRemovingRows": true,
+					"disableAddingRemovingRows": false,
 					"tableView": false,
 					"templates": {
-						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-3\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-3\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
+					"addAnother": "Not registered in system?Click here to add external members",
 					"modal": false,
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -6337,14 +6486,13 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "PADI",
-								"spellcheck": true,
-								"disabled": true,
-								"tableView": true,
+								"label": "Membership ID",
+								"spellcheck": false,
+								"tableView": false,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "padi",
 								"type": "textfield",
-								"calculateServer": false,
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -6397,7 +6545,20 @@
 							"width": 3,
 							"size": "md"
 						}, {
-							"components": [],
+							"components": [{
+								"label": "Name of Institution",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "nameOfInstitution",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
@@ -6422,8 +6583,8 @@
 							"value": ""
 						}],
 						"multiple": true,
-						"persistent": false,
-						"protected": true,
+						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"multiple": true
 						},
@@ -6432,6 +6593,23 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"type": "documentviewer",
+						"key": "document1",
+						"calculateValue": "value = (row['document'])",
+						"dtype": "documentviewer",
+						"datype": "documentviewer",
+						"dattype": "documentviewer",
+						"customConditional": "if (data.privileges){\n  if(row.document !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+						"datatype": "documentviewer",
+						"data_type": "documentviewer",
+						"label": "Member Attachments",
+						"hideLabel": true,
+						"inputType": "documentviewer",
+						"input": 1,
+						"tableView": false,
+						"protected": true,
+						"persistent": false
 					}],
 					"path": "groupPL"
 				}],
@@ -6474,7 +6652,6 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": false,
-					"clearOnHide": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -6610,7 +6787,6 @@
 									"customMessage": "State is required"
 								},
 								"key": "state",
-								"customConditional": "show = (row.country)",
 								"type": "select",
 								"indexeddb": {
 									"filter": {}
@@ -6691,10 +6867,11 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"label": "PADI Number",
+					"label": "PADI Number in System?",
+					"description": "Enter the PADI Membership to Validate",
 					"spellcheck": true,
 					"tableView": true,
-					"clearOnHide": false,
+					"calculateServer": false,
 					"key": "namedPadi",
 					"type": "textfield",
 					"input": true
@@ -6711,20 +6888,21 @@
 						"destinationDataKey": "namedInsureds",
 						"valueKey": "padi",
 						"validationKey": "padi_Verified",
-						"cleanSource": "true"
+						"clearSource": "true"
 					},
 					"type": "button",
 					"event": "callDelegate",
 					"input": true
 				}, {
 					"label": "Edit Grid",
-					"disableAddingRemovingRows": true,
+					"disableAddingRemovingRows": false,
 					"hideLabel": true,
 					"tableView": false,
 					"templates": {
-						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-3\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-3\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
+					"addAnother": "Not registered in system?Click here to add external members",
 					"modal": false,
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -6738,11 +6916,14 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "PADI",
-								"spellcheck": true,
-								"disabled": true,
-								"tableView": true,
+								"label": "Membership ID",
+								"spellcheck": false,
+								"tableView": false,
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "padi",
 								"type": "textfield",
 								"input": true,
@@ -6782,9 +6963,6 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"calculateServer": false,
-								"validate": {
-									"required": true
-								},
 								"key": "status",
 								"type": "textfield",
 								"input": true,
@@ -6796,6 +6974,26 @@
 							"pull": 0,
 							"width": 3,
 							"size": "md"
+						}, {
+							"components": [{
+								"label": "Name of Institution",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "nameOfInstitution",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"size": "md",
+							"width": 3,
+							"offset": 0,
+							"push": 0,
+							"pull": 0
 						}],
 						"hideLabel": true,
 						"dataGridLabel": false,
@@ -7347,7 +7545,8 @@
 				"label": "attachmentsFieldnames",
 				"type": "hidden",
 				"lockKey": true,
-				"calculateValue": "value = [\"receipts\",[\"additionalLocations\",\"receiptsAL\"],[\"groupPL\",\"document\"]]"
+				"calculateValue": "value = [\"receipts\",[\"additionalLocations\",\"receiptsAL\"],[\"groupPL\",\"document\"]]",
+				"hideOnChildrenHidden": false
 			}, {
 				"input": true,
 				"tableView": true,
@@ -8665,20 +8864,25 @@
 					"components": []
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Liability Coverages Total",
-						"key": "liabilityCoveragesTotalPL",
 						"prefix": "$",
-						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
-						"lockKey": true,
-						"decimalLimit": 2,
-						"requireDecimal": true,
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
-						"calculateValue": "value=(parseFloat(data[\"CoverageFP\"])||0)+(parseFloat(data[\"nonDivingPoolAmount\"])||0)+(parseFloat(data[\"MedicalExpenseFP\"])||0)+(parseFloat(data[\"Non-OwnedAutoFP\"]||0))+(parseFloat(data[\"ExcessLiabilityFP\"])||0)+(parseFloat(data[\"TravelAgentEOFP\"])||0)"
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": false,
+						"requireDecimal": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value=(parseFloat(data[\"CoverageFP\"])||0)+(parseFloat(data[\"nonDivingPoolAmount\"])||0)+(parseFloat(data[\"MedicalExpenseFP\"])||0)+(parseFloat(data[\"Non-OwnedAutoFP\"]||0))+(parseFloat(data[\"ExcessLiabilityFP\"])||0)+(parseFloat(data[\"TravelAgentEOFP\"])||0)",
+						"calculateServer": false,
+						"key": "liabilityCoveragesTotalPL",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -8816,37 +9020,46 @@
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "ProRata Prem %",
-						"key": "proRataPercentage",
 						"prefix": "%",
-						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
-						"calculateValue": "var selectedDate = new Date(data[\"dsbireqpolicyperiod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
-						"decimalLimit": 2,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": false,
 						"requireDecimal": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "var selectedDate = new Date(data[\"policyPeriod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
+						"calculateServer": false,
+						"key": "proRataPercentage",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
 						"lockKey": true
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Liability Amount with ProRata",
-						"key": "liabilityProRataPremium",
 						"prefix": "$",
-						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
-						"lockKey": true,
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"delimiter": false,
 						"requireDecimal": true,
-						"decimalLimit": 2,
+						"inputFormat": "plain",
+						"clearOnHide": false,
 						"calculateValue": "value=(parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)",
-						"disabled": true
+						"calculateServer": false,
+						"key": "liabilityProRataPremium",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -8884,19 +9097,24 @@
 					"components": []
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Property with Pro Rata Premium",
-						"key": "propertyProRataPremium",
 						"prefix": "$",
-						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
-						"requireDecimal": true,
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
-						"decimalLimit": 2,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": false,
+						"requireDecimal": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
 						"calculateValue": "value=(parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)",
+						"calculateServer": false,
+						"key": "propertyProRataPremium",
+						"type": "number",
+						"decimalLimit": 2,
+						"input": true,
+						"inputType": "number",
 						"lockKey": true
 					}]
 				}, {
@@ -9585,7 +9803,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 18,
+	"_vid": 31,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9602,6 +9820,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-01T16:11:08.739Z",
+	"modified": "2020-04-03T09:27:34.205Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

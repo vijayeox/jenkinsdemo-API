@@ -135,7 +135,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
             'groupPAORfee',
             'groupPadiFeeAmount',
             'groupTaxAmount',
-            'groupTaxPercentage','paymentVerified');
+            'groupTaxPercentage','paymentVerified','premiumFinanceSelect','finalAmountPayable','paymentOptions','chequeNumber','orderId');
 }
 
 public function execute(array $data,Persistence $persistenceService)
@@ -149,7 +149,7 @@ public function execute(array $data,Persistence $persistenceService)
         $endorsementLiabilityCoverageOption = array();
         $data['initiatedByCsr'] = false;
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
-        if($data['initiatedByUser'] == false){
+       if($data['initiatedByUser'] == false){
             $data['update_date'] =  date("Y-m-d H:i:s");
             $data['previous_groupTaxPercentage'] = $data['groupTaxPercentage'];
             $data['previous_groupTaxAmount'] = ($data['groupTaxAmount']==0)?$data['groupTaxAmount']:0.00;

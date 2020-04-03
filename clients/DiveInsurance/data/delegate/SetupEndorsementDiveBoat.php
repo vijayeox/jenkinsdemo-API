@@ -135,7 +135,7 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
             'groupPAORfee',
             'groupPadiFeeAmount',
             'groupTaxAmount',
-            'groupTaxPercentage');
+            'groupTaxPercentage','paymentVerified','premiumFinanceSelect','finalAmountPayable','paymentOptions','chequeNumber','orderId');
     }
 
     public function execute(array $data,Persistence $persistenceService)
@@ -182,8 +182,6 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
             $policy['previous_SuperiorRiskCredit'] = $data['SuperiorRiskCredit'];
             $policy['previous_PropertySubTotal'] = $data['PropertySubTotal'];
             $policy['previous_PropertySubTotalProRated'] = $data['PropertySubTotalProRated'];
-        
-
             $policy['previous_LiabilityPremiumCost'] = $data['LiabilityPremiumCost'];
             $policy['previous_ExcessLiabilityPremium'] = $data['ExcessLiabilityPremium'];
             $policy['previous_DingyLiability'] = $data['DingyLiability'];

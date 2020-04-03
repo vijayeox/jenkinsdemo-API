@@ -134,7 +134,7 @@ class ActivityInstanceService extends AbstractService
         try {
             $test = $this->activityEngine->claimActivity($taskId, AuthContext::get(AuthConstants::USERNAME));
         } catch (Exception $e) {
-            print($e->getMessage());
+            // print($e->getMessage());
             throw $e;
         }
         $selectQuery = "SELECT aia.* FROM `ox_activity_instance_assignee` as aia

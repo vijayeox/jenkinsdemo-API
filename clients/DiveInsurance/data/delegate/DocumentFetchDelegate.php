@@ -28,28 +28,27 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
               }  
             }
             else{ 
-
                 $this->logger->info("NOT INITIATED BY CSR");
                 if (isset($data['attachmentsFieldnames'])) {
                     $attachmentsFieldnames = $data['attachmentsFieldnames'];
                     $this->getAttachmentsData($data,$attachmentsFieldnames);
                 }
             }
-        } else{
-                if (isset($data['csrAttachmentsFieldnames'])) {
-                    $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
-                    $this->getAttachmentsData($data,$attachmentsFieldnames);
-                }
+        }else{
+            if (isset($data['csrAttachmentsFieldnames'])) {
+                $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
+                $this->getAttachmentsData($data,$attachmentsFieldnames);
+            }
         }
-        return $data;
-
      } else{
         if (isset($data['attachmentsFieldnames'])) {
-           $attachmentsFieldnames = $data['attachmentsFieldnames'];
-           $this->getAttachmentsData($data,$attachmentsFieldnames);
+            $attachmentsFieldnames = $data['attachmentsFieldnames'];
+            if(is_array($attachmentsFieldnames)){
+                $this->getAttachmentsData($data,$attachmentsFieldnames);
+            }
         }
-        return $data;
      }
+     return $data;
     }
 
     public function getFileData(array $documentsArray) {
@@ -70,17 +69,21 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
     private function getAttachmentsData(array &$data, array $attachmentsFieldnames){
 
         if(!is_array($attachmentsFieldnames)){
-                        $attachmentsFieldnames = json_decode($attachmentsFieldnames,true);
+            $attachmentsFieldnames = json_decode($attachmentsFieldnames,true);
         }
 
         for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
                 $fieldNamesArray = is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
                 if (sizeof($fieldNamesArray) == 1) {
-                    $fieldName = $fieldNamesArray[0];
-                   if(isset($data[$fieldName]) && (!empty($data[$fieldName]))){
-                        $data[$fieldName] = is_string($data[$fieldName]) ? json_decode($data[$fieldName],true) :$data[$fieldName];
+                   $fieldName = $fieldNamesArray[0];
+                   if(isset($data[$fieldName])){
+                        if(empty($data[$fieldName])){                    
+                            $data[$fieldName] = array();
+                        }else{
+                            $data[$fieldName] = is_string($data[$fieldName]) ? json_decode($data[$fieldName],true) :$data[$fieldName];
                             $data[$fieldName] = $this->getFileData($data[$fieldName]);
-                    }
+                        }
+                   }
                 } else if (sizeof($fieldNamesArray) == 2) {
                     $gridFieldName = $fieldNamesArray[0];
                     $fieldName = $fieldNamesArray[1];

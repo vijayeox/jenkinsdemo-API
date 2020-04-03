@@ -91,15 +91,17 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
         if (!is_dir($this->destination . $filepath)) {
             mkdir($this->destination . $filepath, 0777, true);
         }
-        for ($i = 0;$i < sizeof($documentsArray);$i++) {
-            if(isset($documentsArray[$i]['url'])){
-                $base64Data = explode(',', $documentsArray[$i]['url']);
-                $content = base64_decode($base64Data[1]);
-                $file = fopen($this->destination . $filepath . $documentsArray[$i]['name'], 'wb');
-                fwrite($file, $content);
-                fclose($file);
-                unset($documentsArray[$i]['url']);
-                $documentsArray[$i]['file'] = $filepath . $documentsArray[$i]['name'];
+        if(is_array($documentsArray)){
+            for ($i = 0;$i < sizeof($documentsArray);$i++) {
+                if(isset($documentsArray[$i]['url'])){
+                    $base64Data = explode(',', $documentsArray[$i]['url']);
+                    $content = base64_decode($base64Data[1]);
+                    $file = fopen($this->destination . $filepath . $documentsArray[$i]['name'], 'wb');
+                    fwrite($file, $content);
+                    fclose($file);
+                    unset($documentsArray[$i]['url']);
+                    $documentsArray[$i]['file'] = $filepath . $documentsArray[$i]['name'];
+                }
             }
         }
         $this->logger->info("saveFile return: ".print_r($documentsArray,true));
@@ -109,9 +111,22 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
     private function cleanDocumentFields(array &$data,array $documentFieldnames) {
         $this->logger->info("Document Field NAmes: ".print_r($documentFieldnames,true));
         for ($i = 0;$i < sizeof($documentFieldnames);$i++) {
-            // $this->logger->info("Data for field: ".$documentFieldnames[$i]." - ".print_r($data[$documentFieldnames[$i]],true));
-            // if(isset($data[$documentFieldnames[$i]]))
+            $fieldNamesArray =is_string($documentFieldnames[$i]) ? array($documentFieldnames[$i]) : $documentFieldnames[$i];
+            if(is_string($documentFieldnames[$i])){
                 unset($data[$documentFieldnames[$i]]);
+            }
+            if(is_array($documentFieldnames[$i])){
+                $gridFieldName = $documentFieldnames[$i][0];
+                if(sizeof($documentFieldnames[$i]) > 1){
+                    for ($j=1; $j < sizeof($documentFieldnames[$i]); $j++) {
+                        if(isset($documentFieldnames[$i][$j]) && isset($gridFieldName[$documentFieldnames[$i][$j]]) && isset($data[$gridFieldName[$documentFieldnames[$i][$j]]])){
+                            unset($data[$gridFieldName[$documentFieldnames[$i][$j]]]);
+                        }
+                    }
+                } else {
+                    unset($data[$documentFieldnames[$i][0]]);
+                }
+            }
         }
     }
     private function getAttchments(array &$data,array $attachmentsFieldnames){

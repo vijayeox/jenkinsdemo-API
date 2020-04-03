@@ -29,7 +29,7 @@
                     <tr>
                         <td>Business Income:</td>
                         {if $additionalLossofBusinessIncomePL != "false"}
-                            <td>${$lossOfBusIncome|number_format:2:".":","}</td>
+                            <td>${((float)$lossOfBusIncome)|number_format:2:".":","}</td>
                         {else}
                             <td>$0</td>
                         {/if}
@@ -590,7 +590,7 @@
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${if $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format:2:".":","}{else}0{/if})</p>
+                <p>(Based on estimated annual receipts of ${if isset($estimatedAnnualReceipts) &&  $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format:2:".":","}{else}0{/if})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
                 <p>Dive Center Additional Location Premium:</p>
@@ -615,10 +615,10 @@
         <!-- second section -->
         <div class="main">
             <div class="value_main">
-                <p>${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}</p>
+                <p>{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>${(float)$groupTaxAmount|number_format:2:".":","}</p>
-                <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format:2:".":","}}.{else}$0.00{/if}</p>
+                <p>{if isset($groupPadiFeeAmount)}${(float)$groupTaxAmount|number_format:2:".":","}{else}$0.00{/if}</p>
+                <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format:2:".":","}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
@@ -632,7 +632,7 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-                <p>{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2:".":","}}.{else}$0.00{/if}</p>
+                <p>{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2:".":","}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>

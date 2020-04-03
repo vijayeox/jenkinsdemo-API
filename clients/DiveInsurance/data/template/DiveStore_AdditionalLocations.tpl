@@ -1,4 +1,4 @@
-{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
+{assign var=dspropcentralfire value=$dsPropCentralFireAL|json_decode:true}
 {assign var=additionalLocationData value=$additionalLocationData|json_decode:true}
 <!DOCTYPE html>
 <html>
@@ -16,14 +16,14 @@
     <b><p>Store/Location Description : {$store_name}</p></b>
     <b><p>Store/Location Number: {$store_number}</p></b>
     <p><b>Additional Named Insured:></b></p>
-    {assign var=list value=$additionalInsured|json_decode:true}
+    {assign var=list value=$additionalNamedInsured|json_decode:true}
     {foreach $list as $additional}
         <p class = "ai_list">
             &nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.country},{$additional.city},{$additional.state},{$additional.zip}
         </p>
     {/foreach}
     <p><b>Location Address: {$additionalLocationData.address},<br>
-    {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.additionalLocationState} - {$additionalLocationData.zip}</p>
+    {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.state} - {$additionalLocationData.zip}</p>
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>
@@ -35,7 +35,7 @@
                     <tr><td>Policy #: liability_policy_no</td></tr>
                     <tr>
                         <td>Contents Limit:</td>
-                        <td>${$dspropTotal|number_format:2:".":","}</td>
+                        <td>${$additionalLocationPropertyTotal|number_format:2:".":","}</td>
                     </tr>
                     <tr>
                         <td id="space_left">(Sign limited to : $25,000)</td>
@@ -43,23 +43,23 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        {if $additionalLossofBusinessIncomePL != "false"}
-                            <td>${$lossOfBusIncome|number_format:2:".":","}</td>
+                        {if $ALLossofBusIncomeCheckBox != "false"}
+                            <td>${$ALLossofBusIncome|number_format:2:".":","}</td>
                         {else}
                             <td>$0</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
-                        {if $dspropownbuilding != "no"}
-                            <td>${$dspropreplacementvalue|number_format:2:".":","}</td>
+                        {if isset($additionalLocationDoYouOwntheBuilding) && $additionalLocationDoYouOwntheBuilding != "no"}
+                            <td>${$ALBuildingReplacementValue|number_format:2:".":","}</td>
                         {else}
                             <td>Not Included</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
-                        {if (int)$dspropFurniturefixturesandequip != 0}
+                        {if isset($additionalLocationFurniturefixturesAndEquipment) && (int)$additionalLocationFurniturefixturesAndEquipment != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>
@@ -110,7 +110,7 @@
                     <tr><td>Policy #: liability_policy_no</td></tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        {if $poolLiability && (int)$poolLiability > 0}
+                        {if $ALPoolLiability && (int)$ALPoolLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -120,7 +120,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+                        {if $ReceiptsAmont && (int)$ReceiptsAmont > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -137,7 +137,7 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is ${$PropDeductibleCredit}}.</td>
+                            Mechanical breakdown is $2500. All other perils is $1000.</td>
                     </tr>
                 </tbody>
             </table>
@@ -150,7 +150,7 @@
 
             <!-- Alarm Calc -->
             <div style="margin: 2% 0;">
-                {if $dspropcentralfire.centralStationAlarmPL != "yes"}
+                {if $dspropcentralfire.centralStationAlarmAL != "yes"}
                 <center>
                     <b>
                         <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>
