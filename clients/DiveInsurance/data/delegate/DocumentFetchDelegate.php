@@ -77,10 +77,10 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 if (sizeof($fieldNamesArray) == 1) {
                    $fieldName = $fieldNamesArray[0];
                    if(isset($data[$fieldName])){
-                        if(empty($data[$fieldName])){                    
+                        $data[$fieldName] = is_string($data[$fieldName]) ? json_decode($data[$fieldName],true) :$data[$fieldName];
+                        if(empty($data[$fieldName])){ 
                             $data[$fieldName] = array();
-                        }else{
-                            $data[$fieldName] = is_string($data[$fieldName]) ? json_decode($data[$fieldName],true) :$data[$fieldName];
+                        }else {
                             $data[$fieldName] = $this->getFileData($data[$fieldName]);
                         }
                    }

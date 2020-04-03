@@ -46,8 +46,12 @@ class ErrorHandler
         }
         $response = $e->getResponse();
         $exception = $e->getParam('exception');
-        $exceptionJson = array();
+        $exceptionJson = array();        
+        $errorJson = array(
+            'message'   => 'An error occurred during execution; please try again later.',
+        );
         if ($exception) {
+            $errorJson['message'] = $exception->getMessage();
             $exceptionJson = array(
                 'class' => get_class($exception),
                 'file' => $exception->getFile(),
@@ -57,10 +61,6 @@ class ErrorHandler
             );
         }
         self::$logger->error(print_r($exceptionJson, true));
-        
-        $errorJson = array(
-            'message'   => 'An error occurred during execution; please try again later.',
-        );
         
         // if(isset($_ENV['ENV']) && strtolower($_ENV['ENV']) != 'production'){
         $errorJson['error'] = $error;
