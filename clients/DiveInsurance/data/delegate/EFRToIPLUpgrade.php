@@ -22,17 +22,15 @@ class EFRToIPLUpgrade extends PolicyCheck
             $data['efrAmountPaid'] = $fileData['amount'];
             $data['product'] = "Individual Professional Liability";
             $data['parentWorkflowInstanceId'] = "";
+            $data['disableUserInfoEdit'] = true;
             $data['fileId'] = "";
 
-            $data['padi']=$fileData['padi'];
-            $data['padiNotFound']=$fileData['padiNotFound'];
-            $data['padiNotFoundCsrReview']=$fileData['padiNotFoundCsrReview'];
-            $data['padiVerified']=$fileData['padiVerified'];
-            $data['padi_empty']=$fileData['padi_empty'];
-            $data['verified']=$fileData['verified'];
-            $data['changePadi']=$fileData['changePadi'];
-            $data['policy_exists']=$fileData['policy_exists'];
-            $data['initiatedByCsr']=$fileData['initiatedByCsr'];
+            $data['padi']= isset($fileData['padi']) ? $fileData['padi'] : NULL ;
+            $data['padiNotFound']= isset($fileData['padiNotFound']) ? $fileData['padiNotFound'] : NULL ;
+            $data['padiNotFoundCsrReview']= isset($fileData['padiNotFoundCsrReview']) ? $fileData['padiNotFoundCsrReview'] : NULL ;
+            $data['padiVerified']= isset($fileData['padiVerified']) ? $fileData['padiVerified'] : NULL ;
+            $data['padi_empty']= isset($fileData['padi_empty']) ? $fileData['padi_empty'] : NULL ;
+            $data['verified']= isset($fileData['verified']) ? $fileData['verified'] : NULL ;
 
             $privileges = $this->getPrivilege();
             if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
