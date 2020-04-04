@@ -1004,7 +1004,7 @@
 			"hideLabel": true,
 			"path": "panelColumns"
 		}, {
-			"title": "             ",
+			"title": "Business Information",
 			"theme": "primary",
 			"breadcrumbClickable": true,
 			"buttonSettings": {
@@ -2748,8 +2748,10 @@
 						"shortcut": ""
 					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please let us know if you have had any claims in the last 5 years"
 					},
 					"key": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
 					"type": "radio",
@@ -2765,6 +2767,9 @@
 					"enableRowGroups": false,
 					"tableView": true,
 					"clearOnHide": false,
+					"validate": {
+						"minLength": 1
+					},
 					"key": "dsglClaimAmountpaidanyamountsoutstanding",
 					"conditional": {
 						"show": true,
@@ -2775,13 +2780,22 @@
 					"input": true,
 					"components": [{
 						"label": "Date of the claim",
+						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"dataGridLabel": false,
-						"tableView": true,
+						"tableView": false,
 						"datePicker": {
+							"maxDate": "moment().format('MM-dd-yyyy')",
+							"disableWeekends": false,
+							"disableWeekdays": false,
 							"datepickerMode": "day"
 						},
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -2795,16 +2809,18 @@
 							"displayInTimezone": "viewer",
 							"language": "en",
 							"useLocaleSettings": false,
-							"allowInput": true,
+							"allowInput": false,
 							"mode": "single",
-							"enableTime": true,
+							"enableTime": false,
 							"noCalendar": false,
 							"format": "MM-dd-yyyy",
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
-							"time_24hr": false,
+							"time_24hr": true,
 							"minDate": null,
-							"maxDate": null
+							"disableWeekends": false,
+							"disableWeekdays": false,
+							"maxDate": "moment().format('MM-dd-yyyy')"
 						},
 						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 					}, {
@@ -2815,19 +2831,21 @@
 						"dataGridLabel": false,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
-						"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
+						"key": "Pleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
 						"type": "number",
+						"labelWidth": 0,
+						"labelMargin": 3,
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"inDataGrid": true,
-						"labelWidth": 0,
-						"labelMargin": 3
+						"inDataGrid": true
 					}, {
 						"label": "Amounts outstanding",
 						"prefix": "$",
@@ -2836,19 +2854,21 @@
 						"dataGridLabel": false,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding3",
 						"type": "number",
+						"labelWidth": 0,
+						"labelMargin": 3,
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"inDataGrid": true,
-						"labelWidth": 0,
-						"labelMargin": 3
+						"inDataGrid": true
 					}],
 					"lockKey": true
 				}, {
@@ -2856,6 +2876,7 @@
 					"spellcheck": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateServer": false,
 					"key": "pageNaNPanel3ColumnsPanelText",
 					"conditional": {
 						"show": true,
@@ -6415,8 +6436,8 @@
 					"label": "Yes",
 					"value": "yes"
 				}, {
-					"label": "None",
-					"value": "none"
+					"label": "No",
+					"value": "no"
 				}]
 			},
 			"selectThreshold": 0.3,
@@ -6692,8 +6713,8 @@
 						}, {
 							"components": [{
 								"label": "Status",
-								"spellcheck": true,
-								"tableView": true,
+								"spellcheck": false,
+								"tableView": false,
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
@@ -6762,7 +6783,7 @@
 					}, {
 						"type": "documentviewer",
 						"key": "document1",
-						"calculateValue": "value = (row['document'])",
+						"calculateValue": "value = (row.document)",
 						"dtype": "documentviewer",
 						"datype": "documentviewer",
 						"dattype": "documentviewer",
@@ -7125,8 +7146,8 @@
 						}, {
 							"components": [{
 								"label": "Status",
-								"spellcheck": true,
-								"tableView": true,
+								"spellcheck": false,
+								"tableView": false,
 								"clearOnHide": false,
 								"calculateServer": false,
 								"key": "status",
@@ -9969,7 +9990,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 34,
+	"_vid": 37,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9986,6 +10007,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-04T10:13:54.185Z",
+	"modified": "2020-04-04T13:29:22.794Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
