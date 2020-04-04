@@ -1205,7 +1205,7 @@
 		"type": "panel",
 		"lockKey": true,
 		"source": "5d4ee6df800c612c49e802d3",
-		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiVerifiedCSRCheck === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\")\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiVerifiedCSRCheck === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
 		"label": "Personal Information",
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -2719,7 +2719,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "CsrAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && !data.initiatedByCsr) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Attachments",
 				"input": false,
@@ -4023,7 +4023,7 @@
 						"label": "custom",
 						"input": true,
 						"amount_field": "finalAmount",
-						"customConditional": "if(data.paymentOptions =='creditCard'){show=true;}else{show=false;}",
+						"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
@@ -4054,7 +4054,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page7Content",
-						"customConditional": "if(data.paymentOptions =='creditCard'){show=true;}else{show=false;}",
+						"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
@@ -4196,11 +4196,11 @@
 		},
 		"collapsible": false,
 		"path": "csrapprovalscreen",
-		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}\nconsole.log(show);"
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 210,
+	"_vid": 214,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4221,6 +4221,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-03T03:05:43.929Z",
+	"modified": "2020-04-04T11:52:26.860Z",
 	"machineName": "testdivehub:csrInitiates"
 }
