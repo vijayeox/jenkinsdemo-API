@@ -193,8 +193,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Padi Number is not Valid!",
-							"min": 0
+							"customMessage": "Padi Number is not Valid!"
 						},
 						"key": "padi",
 						"logic": [{
@@ -2555,11 +2554,15 @@
 							},
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "propertyDeductibles",
 							"type": "select",
-							"input": true,
+							"indexeddb": {
+								"filter": {}
+							},
 							"labelWidth": 30,
 							"labelMargin": 3,
+							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -3940,7 +3943,18 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"name": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"address": "",
+						"zip": "",
+						"businessRelation": "",
+						"additionalInformation": ""
+					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -4269,7 +4283,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "name1",
+								"key": "name",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4282,7 +4296,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "city1",
+								"key": "city",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4310,15 +4324,19 @@
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter your country."
 								},
-								"key": "country1",
+								"key": "country",
 								"properties": {
 									"clear_field": "state"
 								},
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"source": "5d347da33e9be31e15d3b115",
@@ -4329,17 +4347,24 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true
 								},
-								"key": "state1",
+								"key": "state",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"refreshOn": "row.country",
 								"input": true,
 								"lockKey": true,
@@ -4361,7 +4386,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "address3",
+								"key": "address",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4376,7 +4401,7 @@
 									"required": true,
 									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
-								"key": "zip1",
+								"key": "zip",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4483,7 +4508,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "name2",
+								"key": "name",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4497,7 +4522,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "city2",
+								"key": "city",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4530,7 +4555,7 @@
 									"required": true,
 									"customMessage": "Please enter your country."
 								},
-								"key": "country2",
+								"key": "country",
 								"properties": {
 									"clear_field": "state"
 								},
@@ -4561,7 +4586,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "state2",
+								"key": "state",
 								"type": "select",
 								"indexeddb": {
 									"filter": {}
@@ -4588,7 +4613,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "address4",
+								"key": "address",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4603,7 +4628,7 @@
 									"required": true,
 									"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
-								"key": "zip2",
+								"key": "zip",
 								"type": "textfield",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -4710,7 +4735,7 @@
 									"validate": {
 										"required": true
 									},
-									"key": "name3",
+									"key": "name",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -4723,7 +4748,7 @@
 									"validate": {
 										"required": true
 									},
-									"key": "city3",
+									"key": "city",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -4751,15 +4776,19 @@
 									"template": "<span>{{ item.country }}</span>",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true,
 										"customMessage": "Please enter your country."
 									},
-									"key": "country3",
+									"key": "country",
 									"properties": {
 										"clear_field": "state"
 									},
 									"type": "select",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
 									"lockKey": true,
 									"source": "5d347da33e9be31e15d3b115",
@@ -4783,7 +4812,7 @@
 									"validate": {
 										"required": true
 									},
-									"key": "state3",
+									"key": "state",
 									"type": "select",
 									"indexeddb": {
 										"filter": {}
@@ -4825,7 +4854,7 @@
 										"required": true,
 										"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
-									"key": "zip3",
+									"key": "zip",
 									"type": "textfield",
 									"input": true,
 									"hideOnChildrenHidden": false
@@ -5247,16 +5276,24 @@
 												"tableView": true,
 												"dataSrc": "custom",
 												"data": {
-													"values": [{}],
-													"custom": "var currentYear = moment().year()\nfor(var i = 1800; i<currentYear; i++){\n  values.push(i);\n}"
+													"values": [{
+														"label": "",
+														"value": ""
+													}],
+													"custom": "var currentYear = moment().year()\nfor(var i = 1990; i<currentYear; i++){\n  values.push(i);\n}"
 												},
 												"template": "<span>{{ item }}</span>",
 												"selectThreshold": 0.3,
+												"clearOnHide": false,
+												"calculateServer": false,
 												"validate": {
 													"required": true
 												},
 												"key": "built_year1",
 												"type": "select",
+												"indexeddb": {
+													"filter": {}
+												},
 												"input": true,
 												"hideOnChildrenHidden": false
 											}, {
@@ -6962,6 +6999,7 @@
 			"widget": "choicesjs",
 			"autofocus": true,
 			"tableView": true,
+			"defaultValue": "no",
 			"data": {
 				"values": [{
 					"label": "Yes",
@@ -6982,8 +7020,7 @@
 			"indexeddb": {
 				"filter": {}
 			},
-			"input": true,
-			"defaultValue": "no"
+			"input": true
 		}, {
 			"label": "groupCoverageSelect",
 			"calculateValue": "if(parseFloat(data['annualReceipt']) >= 0 && parseFloat(data['annualReceipt']) <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']) >= 25001 && parseFloat(data['annualReceipt']) <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']) >= 50001 && parseFloat(data['annualReceipt']) <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']) >= 100001 && parseFloat(data['annualReceipt']) <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']) >= 150001 && parseFloat(data['annualReceipt']) <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']) >= 200001 && parseFloat(data['annualReceipt']) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']) >= 250001 && data['annualReceipt'] <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']) >= 350001 && data['annualReceipt'] <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
@@ -7252,8 +7289,8 @@
 						}, {
 							"components": [{
 								"label": "Status",
-								"spellcheck": true,
-								"tableView": true,
+								"spellcheck": false,
+								"tableView": false,
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
@@ -7701,6 +7738,9 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "status",
 								"type": "textfield",
 								"input": true,
@@ -10133,6 +10173,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-03T20:50:07.715Z",
+	"modified": "2020-04-04T13:30:06.886Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

@@ -10,7 +10,8 @@
 		"tableView": false,
 		"key": "pageNaN",
 		"properties": {
-			"render": "page6"
+			"render": "page6",
+			"set_property": "{\"property\" : \"disableOptions\",\"value\":true}"
 		},
 		"type": "panel",
 		"label": "Endorsement Change",
@@ -52,6 +53,26 @@
 			"input": true,
 			"lockKey": true,
 			"inputType": "checkbox"
+		}, {
+			"label": "HTML",
+			"attrs": [{
+				"attr": "style",
+				"value": "color: #a94442;font-size:1.1em;"
+			}],
+			"content": "Please Note: These options will be disabled once you click on the next button",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "html4",
+			"type": "htmlelement",
+			"input": false
+		}, {
+			"label": "disableOptions",
+			"customDefaultValue": "value = false;",
+			"calculateServer": false,
+			"key": "disableOptions",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"input": true,
 			"tableView": true,
@@ -453,7 +474,35 @@
 			"label": "Panel"
 		}],
 		"input": false,
-		"path": "pageNaN"
+		"path": "pageNaN",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": false,
+			"cancel": true,
+			"next": true
+		},
+		"customConditional": "show = !data.CSRReviewRequired;",
+		"logic": [{
+			"name": "disablePanel",
+			"trigger": {
+				"type": "simple",
+				"simple": {
+					"show": true,
+					"when": "disableOptions",
+					"eq": "true"
+				}
+			},
+			"actions": [{
+				"name": "disable",
+				"type": "property",
+				"property": {
+					"label": "Disabled",
+					"value": "disabled",
+					"type": "boolean"
+				},
+				"state": true
+			}]
+		}]
 	}, {
 		"key": "panel",
 		"input": false,
@@ -1155,7 +1204,14 @@
 		},
 		"lockKey": true,
 		"source": "5d4ee6df800c612c49e802d3",
-		"label": "Panel"
+		"label": "Personal Information",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": false,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false
 	}, {
 		"title": "Coverage",
 		"theme": "primary",
@@ -2404,7 +2460,13 @@
 			"label": "Panel"
 		}],
 		"input": false,
-		"path": "page3"
+		"path": "page3",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		}
 	}, {
 		"type": "panel",
 		"title": "Additional Insured",
@@ -2778,12 +2840,19 @@
 		"tableView": false,
 		"breadcrumb": "none",
 		"conditional": {
-			"show": "true",
+			"show": true,
 			"when": "endorsement_options",
 			"eq": "modify_additionalInsured"
 		},
-		"label": "Panel",
-		"path": "page5"
+		"label": "Additional Insured",
+		"path": "page5",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false
 	}, {
 		"title": "Payment",
 		"theme": "primary",
@@ -2910,7 +2979,7 @@
 					"label": "custom",
 					"input": true,
 					"amount_field": "amount",
-					"customConditional": "if(data.paymentOptions =='creditCard'){show=true;}else{show=false;}",
+					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
 					"tableView": false,
 					"hideOnChildrenHidden": false
 				}, {
@@ -2941,7 +3010,7 @@
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "page7Content",
-					"customConditional": "if(data.paymentOptions =='creditCard'){show=true;}else{show=false;}",
+					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
 					"type": "htmlelement",
 					"input": false,
 					"hideLabel": true,
@@ -3093,7 +3162,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 24,
+	"_vid": 47,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3105,12 +3174,13 @@
 	"properties": {
 		"showNext": "true",
 		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"},{\"command\" : \"delegate\",\"delegate\":\"EndorsementRateCard\"},{\"command\" : \"delegate\",\"delegate\":\"DocumentFetchDelegate\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"showPrevious": "false"
 	},
 	"name": "endorsementConsolidationIpl",
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-03T03:54:17.952Z",
+	"modified": "2020-04-04T11:36:13.509Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
