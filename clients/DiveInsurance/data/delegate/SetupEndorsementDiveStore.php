@@ -174,7 +174,9 @@ public function execute(array $data,Persistence $persistenceService)
             $data['previous_groupProfessionalLiability'] = $data['groupProfessionalLiability'];
             $data['previous_padiFeePL'] = $data['padiFeePL'];
             $data['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
-            $data['previous_PAORFee'] = $data['PAORFee'];
+            if(isset($data['PAORFee'])){
+                $data['previous_PAORFee'] = $data['PAORFee'];
+            }
             $data['previous_totalAmount'] = $data['totalAmount'];
 
 
