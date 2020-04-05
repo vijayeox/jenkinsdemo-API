@@ -152,12 +152,21 @@ class ElasticService
 				if($aggs){
 					$pagesize=0;
 					$boolfilterquery['aggs']=$aggs;
-				}
+				} 
 			}
-		}
+		} 
+        
 		$boolfilterquery['explain'] = true;
-		$params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
-		$result_obj = $this->search($params);
+        $params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
+        if(empty($searchconfig['aggregates'])) {
+            if (isset($searchconfig['sort'])) {
+                if (is_array($searchconfig['sort'])) {
+                    $params['body']['sort'] = $searchconfig['sort'];
+                }
+            }
+        }
+
+        $result_obj = $this->search($params);
 		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
 			$results['type']='group';
@@ -262,10 +271,22 @@ class ElasticService
                 $grouparray = array_merge($grouparraytmp, array('aggs' => array('groupdata' . $i => $grouparray)));
             } else {
                 if (isset($searchconfig['sort'])) {
-                    if ($aggs) {
-                        $grouparraytmp['terms']['order'] = array("value" => $searchconfig['sort']);
+                    if (!is_array($searchconfig['sort'])) {
+                        if ($aggs) {
+                            $grouparraytmp['terms']['order'] = array("value" => $searchconfig['sort']);
+                        } else {
+                            $grouparraytmp['terms']['order'] = array("_count" => $searchconfig['sort']);
+                        }    
                     } else {
-                        $grouparraytmp['terms']['order'] = array("_count" => $searchconfig['sort']);
+                        $searchkey = key($searchconfig['sort']);
+                        $searchdir = $searchconfig['sort'][key($searchconfig['sort'])];
+                        if ($searchkey == 'count' || $searchkey == 'term') {
+                            $searchkey = '_'.$searchkey;
+                        }
+                        if ($searchkey!='_count' && $searchkey!='_term' && $searchkey!='value') {
+                            $searchkey = '_term';
+                        }
+                        $grouparraytmp['terms']['order'] = [$searchkey=>$searchdir];
                     }
                 }
                 if ($aggs) {

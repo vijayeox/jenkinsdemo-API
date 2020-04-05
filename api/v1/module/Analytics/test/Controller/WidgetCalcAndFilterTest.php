@@ -294,4 +294,35 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
     }
 
 
+    public function testSortingWithLists() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123432c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000},{"owner_username":"mark","industry":"Insurance","budget_amount":3000},{"owner_username":"mark","industry":"Insurance","budget_amount":3000},{"owner_username":"jane","industry":"Insurance","budget_amount":5000},{"owner_username":"john","industry":"Software","budget_amount":2000}]');
+    }
+
+    public function testSortingWithGroup() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123432c3-040d-4444-9295-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":1500},{"owner_username":"mark","budget_amount":3000},{"owner_username":"jane","budget_amount":5000}]');
+    }
+
+
 }

@@ -343,6 +343,9 @@ class WidgetService extends AbstractService
             $queries = [];
             foreach($resultSet as $row) {
                 $configuration = json_decode($row['query_configuration'],1);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    $configuration = null;
+                }
                 array_push($queries, [
                     'uuid' => $row['query_uuid'],
                     'sequence' => $row['query_sequence'],
@@ -391,6 +394,7 @@ class WidgetService extends AbstractService
                     $overRides[$overRidesKey] = $params[$overRidesKey];
                 }
             }
+            
             $data = $this->queryService->runMultipleQueries($uuidList,$overRides);
 
             if (isset($response['widget']['expression']['expression'])) {
