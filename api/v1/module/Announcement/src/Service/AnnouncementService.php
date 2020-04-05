@@ -45,6 +45,7 @@ class AnnouncementService extends AbstractService
      * <code> name : string,
      *        status : string,
      *        description : string,
+     *        link : string,
      *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *        media_type : string,
@@ -112,6 +113,7 @@ class AnnouncementService extends AbstractService
      *  string name,
      *  string status,
      *  string description,
+     *  string link,
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
@@ -315,6 +317,7 @@ class AnnouncementService extends AbstractService
      * {
      *  string name,
      *  string status,
+     *  string link,
      *  string description,
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
@@ -336,7 +339,32 @@ class AnnouncementService extends AbstractService
         } else {
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
-        $select = "SELECT * from (SELECT a.id,a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id = oug.group_id where oug.avatar_id = " . AuthContext::get(AuthConstants::USER_ID) . " and a.org_id =" . $orgId . " and a.end_date >= curdate() union SELECT a.id,a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id where ogm.group_id is NULL and a.org_id =" . $orgId . " and a.end_date >= curdate())as a ORDER BY a.id DESC";
+        $select = "SELECT
+            *
+        FROM
+        (
+            SELECT
+                a.id,a.uuid,a.name,a.org_id,a.status,a.description,a.link,a.start_date,a.end_date,a.media_type,a.media
+            FROM
+                ox_announcement as a
+            LEFT JOIN ox_announcement_group_mapper as ogm
+            ON a.id = ogm.announcement_id
+            LEFT JOIN ox_user_group as oug
+            ON ogm.group_id = oug.group_id
+            WHERE oug.avatar_id = " . AuthContext::get(AuthConstants::USER_ID) . "
+            AND a.org_id = ".$orgId."
+            AND a.end_date >= curdate()
+                UNION
+            SELECT a.id,a.uuid,a.name,a.org_id,a.status,a.description,a.link,a.start_date,a.end_date,a.media_type,a.media
+            FROM
+                ox_announcement as a
+            LEFT JOIN ox_announcement_group_mapper as ogm
+            ON a.id = ogm.announcement_id
+            WHERE ogm.group_id is NULL
+            AND a.org_id = " . $orgId . "
+            AND a.end_date >= curdate( )
+        ) as a
+        ORDER BY a.id DESC";
         return $this->executeQuerywithParams($select)->toArray();
     }
 
@@ -349,6 +377,7 @@ class AnnouncementService extends AbstractService
      *  string name,
      *  string status,
      *  string description,
+     *  string link,
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
@@ -369,7 +398,7 @@ class AnnouncementService extends AbstractService
         } else {
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
-        $select = "SELECT DISTINCT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id=oug.group_id where a.org_id = " . $orgId . " AND a.uuid = '" . $id . "' AND a.end_date >= curdate()";
+        $select = "SELECT DISTINCT a.uuid,a.name,a.org_id,a.status,a.description,a.link,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id=oug.group_id where a.org_id = " . $orgId . " AND a.uuid = '" . $id . "' AND a.end_date >= curdate()";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (count($response) == 0) {
             return array();
@@ -413,7 +442,7 @@ class AnnouncementService extends AbstractService
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
         $count = $resultSet->toArray()[0]['count(id)'];
-        $query = "SELECT uuid, name, org_id, status, description, start_date, end_date, media_type, media FROM `ox_announcement`" . $where . " " . $sort . " " . $limit;
+        $query = "SELECT uuid, name, org_id, status, description, link, start_date, end_date, media_type, media FROM `ox_announcement`" . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         return array('data' => $resultSet, 'total' => $count);
     }
