@@ -43,6 +43,7 @@ class AnnouncementController extends AbstractApiController
      * <code> name : string,
      *        status : string,
      *        description : string,
+     *        link : string,
      *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *        media_type : string,
@@ -81,6 +82,7 @@ class AnnouncementController extends AbstractApiController
      *  string name,
      *  string status,
      *  string description,
+     *  link : string,
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
@@ -114,6 +116,7 @@ class AnnouncementController extends AbstractApiController
      *  string name,
      *  string status,
      *  string description,
+     *  string link
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
@@ -173,6 +176,7 @@ class AnnouncementController extends AbstractApiController
      *  integer org_id,
      *  string status,
      *  string description,
+     *  string link,
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,

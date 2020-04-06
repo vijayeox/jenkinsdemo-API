@@ -69,3 +69,13 @@ ox_widget_query:
     ox_widget_id: 118
     sequence: 1
     configuration: '{"filter":["industry","==","Software"]}'
+  -
+    ox_query_id: 118
+    ox_widget_id: 119
+    sequence: 1
+    configuration: ''
+  -
+    ox_query_id: 119
+    ox_widget_id: 120
+    sequence: 1
+    configuration: '{"filter":null,"sort":null,"group":null}'
