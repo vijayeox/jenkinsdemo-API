@@ -7322,8 +7322,8 @@
 						}, {
 							"components": [{
 								"label": "Status",
-								"spellcheck": false,
-								"tableView": false,
+								"spellcheck": true,
+								"tableView": true,
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
@@ -7332,7 +7332,6 @@
 								"key": "status",
 								"type": "textfield",
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
@@ -10260,6 +10259,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-06T07:32:28.035Z",
+	"modified": "2020-04-06T12:08:44.589Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
