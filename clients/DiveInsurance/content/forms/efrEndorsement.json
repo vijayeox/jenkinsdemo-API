@@ -49,6 +49,26 @@
 			"lockKey": true,
 			"inputType": "checkbox"
 		}, {
+			"label": "HTML",
+			"attrs": [{
+				"attr": "style",
+				"value": "color: #a94442;font-size:1.1em;"
+			}],
+			"content": "Please Note: These options will be disabled once you click on the next button",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "html",
+			"type": "htmlelement",
+			"input": false
+		}, {
+			"label": "disableOptions",
+			"customDefaultValue": "value = false;",
+			"calculateServer": false,
+			"key": "disableOptions",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "product",
 			"defaultValue": "Emergency First Response",
 			"key": "product",
@@ -91,7 +111,38 @@
 			"path": "page6Panel"
 		}],
 		"input": false,
-		"path": "page1"
+		"path": "page1",
+		"properties": {
+			"set_property": "{\"property\" : \"disableOptions\",\"value\":true}"
+		},
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"logic": [{
+			"name": "disablePanel",
+			"trigger": {
+				"type": "simple",
+				"simple": {
+					"show": true,
+					"when": "disableOptions",
+					"eq": "true"
+				}
+			},
+			"actions": [{
+				"name": "disable",
+				"type": "property",
+				"property": {
+					"label": "Disabled",
+					"value": "disabled",
+					"type": "boolean"
+				},
+				"state": true
+			}]
+		}],
+		"customConditional": "show = !data.CSRReviewRequired;"
 	}, {
 		"key": "panel",
 		"input": false,
@@ -1876,7 +1927,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 85,
+	"_vid": 89,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -1897,7 +1948,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-04T20:18:58.978Z",
+	"modified": "2020-04-06T12:17:49.568Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
