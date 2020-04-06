@@ -26,19 +26,30 @@ class PocketCard extends PolicyDocument
 
         if(isset($data['padiNumber'])){
             $this->logger->info("generating individual pocket card");
+            $result = $this->padiVerification($data['padiNumber'], $persistenceService);
+            $isBusiness = '';
+            if(!empty($result[0]['business_name']) && isset($result[0]['business_name'])){
+                $isBusiness = true;
+            }
+            else{
+                $isBusiness = false;
+            }
             $params = array();
             $currentDate = date_create()->format("Y-m-d");
             $filter[] = array("field" => "end_date", "operator" => "gte", "value" => $currentDate);
             $filter[] = array("field" => "policyStatus", "operator" => "eq", "value" => "In Force");
-            $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
+            if(!empty($isBusiness) && $isBusiness){
+                $filter[] = array("field" => "business_padi", "operator" => "eq", "value" => $data['padiNumber']);
+            }
+            else {
+                $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
+            }
             $filterParams = array(array("filter" => array("logic" => "AND", "filters" => $filter)));
-            // print(json_encode($filterParams));
             $this->logger->info("filter params is : ". json_encode($filterParams));
             $params['workflowStatus'] = 'Completed';
             $files = $this->getFileList($params, $filterParams);
-            $data['product'] = implode(", ", array_column($files['data'], 'product'));
-            // print_r($data);exit;
-            $this->logger->info("the product is: ", print_r($data['product'], true));
+            $data['product'] = implode(", ", array_unique(array_column($files['data'], 'product')));
+            $this->logger->info("the product is: ". print_r($data['product'], true));
         }
         else
         {
@@ -52,6 +63,7 @@ class PocketCard extends PolicyDocument
             }
             $params['workflowStatus'] = 'Completed';
             $filter = array();
+            $data['pocketCardProductType'] = json_decode($data['pocketCardProductType'], true);
             if($data['pocketCardProductType']['individualProfessionalLiability']){
                 $filter[] = array("field" => "product", "operator" => "eq", "value" => "Individual Professional Liability");
             }
@@ -121,6 +133,19 @@ class PocketCard extends PolicyDocument
         }        
         $this->logger->info("The data returned from pocket card is : ". print_r($data, true));
         return $data;
+    }
+
+    private function padiVerification($padi, Persistence $persistenceService){
+        $this->logger->info('pocket card padi verification: ');
+        $select = "Select firstname, MI as initial, lastname, business_name FROM padi_data WHERE member_number ='".$padi."'";
+        $result = $persistenceService->selectQuery($select);
+        $response = array();
+        if($result->count() > 0){
+            while ($result->next()) {
+                $response[] = $result->current();
+            }
+        }
+        return $response;
     }
 }
 ?>
