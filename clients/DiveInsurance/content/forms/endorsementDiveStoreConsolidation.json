@@ -6906,9 +6906,7 @@
 							"zip": ""
 						}],
 						"clearOnHide": false,
-						"calculateValue": "value = data.additionalInsured",
 						"calculateServer": false,
-						"allowCalculateOverride": true,
 						"validate": {
 							"minLength": 1
 						},
@@ -10085,7 +10083,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 41,
+	"_vid": 42,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10102,6 +10100,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-05T19:57:09.360Z",
+	"modified": "2020-04-06T07:44:33.682Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
