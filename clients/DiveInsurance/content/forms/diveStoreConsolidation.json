@@ -7491,9 +7491,7 @@
 							"zip": ""
 						}],
 						"clearOnHide": false,
-						"calculateValue": "value = data.additionalInsured",
 						"calculateServer": false,
-						"allowCalculateOverride": true,
 						"validate": {
 							"minLength": 1
 						},
@@ -10262,6 +10260,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-06T04:02:45.408Z",
+	"modified": "2020-04-06T07:32:28.035Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

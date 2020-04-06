@@ -491,15 +491,40 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
-                if(isset($data['documents']['coi_document'][0]) && isset($documents['coi_document'][0])){
-                    $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['coi_document'][0];
-                    $this->addWaterMark($destinationForWatermark,"INVALID");
-                    array_push($documents['coi_document'],$data['documents']['coi_document'][0]);
+                if(isset($data['documents']) && is_string($data['documents'])){
+                    $docs = json_decode($data['documents'],true);
                 }
-                if(isset($data['documents']['additionalInsured_document'][0]) && isset($documents['additionalInsured_document'][0]) && ($data['endorsement_options']['modify_additionalInsured'] == 1)){
-                    $destinationForWatermark = $dest['absolutePath'].'../../'.$data['documents']['additionalInsured_document'][0];
+                if(isset($docs['coi_document']) && isset($documents['coi_document'][0])){
+                    $destinationForWatermark = $dest['absolutePath'].'../../'.$docs['coi_document'][0];
                     $this->addWaterMark($destinationForWatermark,"INVALID");
-                    array_push($documents['additionalInsured_document'],$data['documents']['additionalInsured_document'][0]);
+                    foreach ($docs['coi_document'] as $key => $value) {
+                        array_push($documents['coi_document'],$docs['coi_document'][$key]);
+                    }
+                }
+                if(isset($docs['additionalInsured_document']) && isset($documents['additionalInsured_document'][0])){
+                    $optionSetCheck = 0;
+                    if(isset($data['endorsement_options'])){
+                        if(is_array($data['endorsement_options'])){
+                            if($data['endorsement_options']['modify_additionalInsured'] == true)
+                                $optionSetCheck = 1;
+                            $this->logger->info("array endorsement_options check value =".$data['endorsement_options']['modify_additionalInsured']);
+                        }
+                        if(is_string($data['endorsement_options']))
+                        {
+                            $endorsementOptions = json_decode($data['endorsement_options'],true);
+                            if($endorsementOptions['modify_additionalInsured'] == true){
+                                $optionSetCheck = 1;
+                            }
+                            $this->logger->info("string endorsement_options check value =".$data['endorsement_options']);
+                        }
+                        if($optionSetCheck == 1){
+                            $destinationForWatermark = $dest['absolutePath'].'../../'.$docs['additionalInsured_document'][0];
+                            $this->addWaterMark($destinationForWatermark,"INVALID");
+                            foreach ($docs['additionalInsured_document'] as $key => $value) {
+                                array_push($documents['additionalInsured_document'],$docs['additionalInsured_document'][$key]);
+                            }
+                        }
+                    }
                 }
                 $data['documents'] = $documents;
             }else if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
