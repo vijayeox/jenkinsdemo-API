@@ -55,7 +55,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'nheader' => 'Group_NI_header.html',
                 'nfooter' => 'Group_NI_footer.html',
                 'aniTemplate' => 'DiveBoat_ANI',
-                'aniheader' => 'DB_Quote_ANI_header.html',
+                'aniheader' => 'DiveBoat_ANI_header.html',
                 'anifooter' => null,
                 'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
                 'blanketForm' => 'DB_AI_Blanket_Endorsement.pdf',

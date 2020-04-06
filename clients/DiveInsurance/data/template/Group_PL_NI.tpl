@@ -19,10 +19,10 @@
 			      <div class = "named_div5"><p class ="t_title">No</p>
 			      </div>
 
-			      <div class = "named_div6"><p class ="t_title"></p>
+			      <div class = "named_div6"><p class ="t_title">&nbsp</p>
 			      </div>
 
-			      <div class = "named_div7"><p class ="t_title"></p>
+			      <div class = "named_div7"><p class ="t_title">&nbsp</p>
 				  </div>
 			</div>
 	    {/foreach}
