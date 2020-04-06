@@ -42,6 +42,39 @@
       "tableView": false,
       "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
     }, {
+      "title": "Attachments",
+      "theme": "primary",
+      "collapsible": false,
+      "tableView": false,
+      "key": "csrAttachmentsPanel",
+      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+      "type": "panel",
+      "label": "Attachments",
+      "input": false,
+      "components": [{
+        "label": "Attachments",
+        "hideLabel": true,
+        "tableView": true,
+        "storage": "base64",
+        "webcam": false,
+        "fileTypes": [{
+          "label": "",
+          "value": ""
+        }],
+        "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+        "fileMaxSize": "10MB",
+        "multiple": true,
+        "calculateServer": false,
+        "validate": {
+          "multiple": true
+        },
+        "key": "csrApprovalAttachments",
+        "customConditional": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
+        "type": "file",
+        "input": true
+      }],
+      "keyModified": true
+    }, {
       "key": "page5Panel2",
       "input": false,
       "title": "Approval",
@@ -408,6 +441,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-04-03T09:32:26.717Z",
+  "modified": "2020-04-05T10:32:18.083Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

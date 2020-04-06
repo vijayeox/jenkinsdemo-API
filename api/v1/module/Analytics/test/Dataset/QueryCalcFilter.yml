@@ -83,3 +83,27 @@ ox_query:
     org_id: 1
     isdeleted: 0
     version: 1     
+  -
+    id: 118
+    uuid: '12989e0d-f6cd-40e2-9154-87de247b9ce1'
+    name: 'queryListWithSort'
+    datasource_id: 3
+    configuration: '{"app_name":"crmnew","list":"owner_username,industry,budget_amount","sort":{"industry.keyword":"asc","budget_amount":"asc"}}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 119
+    uuid: '12989e0d-3344-40e2-9154-87de247b9ce1'
+    name: 'groupWithSort'
+    datasource_id: 3
+    configuration: '{"app_name":"crmnew","group":"owner_username","field":"budget_amount","operation":"avg","sort":{"value":"asc"}}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1

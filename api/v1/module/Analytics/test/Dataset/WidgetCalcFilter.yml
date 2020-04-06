@@ -103,3 +103,29 @@ ox_widget:
     configuration: ''
     version: 1
     expression: ''
+  -
+    id: 119
+    uuid: '123432c3-040d-44d8-9295-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'listSorts'
+    configuration: ''
+    version: 1
+    expression: ''
+  -
+    id: 120
+    uuid: '123432c3-040d-4444-9295-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'groupSorts'
+    configuration: ''
+    version: 1
+    expression: ''

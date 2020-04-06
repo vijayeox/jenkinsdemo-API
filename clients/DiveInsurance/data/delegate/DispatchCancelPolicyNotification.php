@@ -45,8 +45,11 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
                 $this->logger->error("Cancellation Document Not Found".$error);
                 throw new DelegateException('Cancellation Document Not Found','file.not.found');
             }
-            $data['subject'] = 'Request for cancellation of policy';
-            $data['document'] =$fileData;
+            $mailData = array();
+            $mailData['to'] = $data['email'];
+            $mailData['subject'] = 'Request for cancellation of policy';
+            $mailData['template'] = $data['template'];
+            $mailData['attachments'] = $fileData;
             $response = $this->dispatch($data);
             $data['autoRenewalJob'] = '';
             unset($data['confirmReinstatePolicy']);

@@ -211,13 +211,17 @@ class QueryService extends AbstractService
         $configuration = $resultSet[0]['configuration'];
         $configArray = json_decode($configuration,1);
         if (isset($overRides[$uuid])) {
-            if (isset($overRides[$uuid]['filter'])) {
-                $configArray['inline_filter'][] = $overRides[$uuid]['filter'];
+            if (array_key_exists('filter',$overRides[$uuid])) {
+                if (!empty($overRides[$uuid]['filter'])) {
+                    $configArray['inline_filter'][] = $overRides[$uuid]['filter'];
+                }
                 unset($overRides[$uuid]['filter']);
             }
             if (!empty($overRides[$uuid])) {
                 foreach($overRides[$uuid] as $key=>$config) {
-                    $configArray[$key]=$config;
+                    if ($config!==null) {
+                        $configArray[$key]=$config;
+                    }
                 }
             }
         }
@@ -268,14 +272,18 @@ class QueryService extends AbstractService
             $parameters['inline_filter'] = [];
         }
         if (!empty($overRides)) {
-            if (isset($overRides['filter'])) {
-                $filter = '{"filter":'.$overRides['filter'].'}';
-                $filter = json_decode($filter,1); 
-                $parameters['inline_filter'][] = $filter['filter']; //inline filter takes the highest precedence
+            if (array_key_exists('filter',$overRides)) {
+                if (!empty($overRides['filter'])) {
+                    $filter = '{"filter":'.$overRides['filter'].'}';
+                    $filter = json_decode($filter,1); 
+                    $parameters['inline_filter'][] = $filter['filter']; //inline filter takes the highest precedence    
+                }
                 unset($overRides['filter']);
             }
             foreach($overRides as $key=>$value) {
-                $parameters[$key]=$value;
+                if ($value!==null) {
+                    $parameters[$key]=$value;
+                }
             }
         }
         $app_name = $parameters['app_name'];
