@@ -7,10 +7,10 @@
 	<div>
 	<div class = "second_content">
 		<hr class = "spacing1"></hr>
-			<p class = "policy_notice">
+			<p class = "grppolicy_notice">
 				The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688. The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description of the terms, conditions and exclusions of the policy. This certificate does not amend, alter or extend the coverage afforded by the policy referenced on this certificate.
 			</p>
-			<p class = "policy_notice">
+			<p class = "grppolicy_notice">
 				Notice of cancelation: The premium and any taxes or fees are fully earned upon inception and no refund is granted unless cancelled by the company.If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.
 			</p>
 		<hr class = "spacing1"></hr>
@@ -233,7 +233,7 @@
 		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
 		{assign var=list value=$groupPL|json_decode:true}
 		{foreach from=$list item=$additional}
-	    		<p class = "ai_list">
+	    		<p class = "grpai_list">
 	    			&nbsp&nbsp&nbsp{$additional.name}
 	    		</p>
     		{/foreach}

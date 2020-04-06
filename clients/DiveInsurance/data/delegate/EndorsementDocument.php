@@ -22,10 +22,10 @@ class EndorsementDocument extends PolicyDocument
                      'anifooter' => null,
                      'policy' => 'Dive_Boat_Policy.pdf',
                      'gtemplate' => 'Group_PL_COI',
-                     'gheader' => 'Group_header.html',
+                     'gheader' => 'Group_EndoHeader.html',
                      'gfooter' => 'Group_footer.html',
                      'nTemplate' => 'Group_PL_NI',
-                     'nheader' => 'Group_NI_header.html',
+                     'nheader' => 'Group_Endo_NI_header.html',
                      'nfooter' => 'Group_NI_footer.html',
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
@@ -43,8 +43,11 @@ class EndorsementDocument extends PolicyDocument
                      'lfooter' => 'letter_footer.html',
                      'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
                      'gtemplate' => 'Group_PL_COI',
-                     'gheader' => 'Group_header.html',
+                     'gheader' => 'Group_EndoHeader.html',
                      'gfooter' => 'Group_footer.html',
+                     'nTemplate' => 'Group_PL_NI',
+                     'nheader' => 'Group_Endo_NI_header.html',
+                     'nfooter' => 'Group_NI_footer.html',
                      'groupExclusions' => 'Group_Exclusions.pdf'
                     ));        
     }
