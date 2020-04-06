@@ -123,13 +123,14 @@
 				"key": "panelColumns",
 				"columns": [{
 					"components": [{
+						"label": "Username",
+						"calculateValue": "value = data['padi'];",
+						"calculateServer": false,
+						"key": "username",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "username",
-						"label": "Username",
-						"type": "hidden",
 						"lockKey": true,
-						"calculateValue": "value = data['padi'];",
 						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
@@ -4996,15 +4997,18 @@
 								"columns": [{
 									"components": [{
 										"label": "Distance from Ocean/Gulf",
+										"suffix": "Miles",
+										"mask": false,
 										"spellcheck": true,
-										"tableView": true,
+										"tableView": false,
+										"delimiter": false,
+										"requireDecimal": false,
+										"inputFormat": "plain",
 										"clearOnHide": false,
+										"calculateServer": false,
 										"key": "distanceFromOceanOrGulf",
-										"type": "textfield",
+										"type": "number",
 										"input": true,
-										"labelWidth": 30,
-										"labelMargin": 3,
-										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
 										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsContent",
@@ -5292,7 +5296,7 @@
 												"validate": {
 													"required": true
 												},
-												"key": "built_year1",
+												"key": "built_year",
 												"type": "select",
 												"indexeddb": {
 													"filter": {}
@@ -5484,7 +5488,7 @@
 											"spellcheck": true,
 											"tableView": true,
 											"delimiter": false,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateServer": false,
@@ -5495,7 +5499,7 @@
 											"conditional": {
 												"show": true,
 												"when": "ifyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformAL",
-												"eq": "true"
+												"eq": "yes"
 											},
 											"type": "number",
 											"decimalLimit": 2,
@@ -5611,8 +5615,12 @@
 											"label": "Please enter the value to insure",
 											"description": "You will need to complete another application for these locations.",
 											"prefix": "$",
-											"spellcheck": true,
-											"tableView": true,
+											"mask": false,
+											"spellcheck": false,
+											"tableView": false,
+											"delimiter": false,
+											"requireDecimal": false,
+											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateServer": false,
 											"validate": {
@@ -5624,10 +5632,12 @@
 												"when": "doyouhavepropertyatthatlocationtobeinsuredAL",
 												"eq": "yes"
 											},
-											"type": "textfield",
+											"type": "number",
 											"input": true,
 											"hideOnChildrenHidden": false,
-											"lockKey": true
+											"lockKey": true,
+											"inputType": "text",
+											"decimalLimit": 2
 										}],
 										"width": 6,
 										"offset": 0,
@@ -10259,6 +10269,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-06T12:08:44.589Z",
+	"modified": "2020-04-06T16:16:32.018Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
