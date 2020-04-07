@@ -569,22 +569,15 @@ class FileService extends AbstractService
             if (isset($params['gtCreatedDate'])) {
                 $createdFilter .= " AND of.date_created >= :gtCreatedDate";
                 $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
-                // strtotime converts the date given in the UI to -1 day.
-                // UI Date: 2020-02-11 00:00:00 hours , strtotime function result is: 2020-02-10 12:59:59 hours
-                // +1 converts the date to 2020-02-11 00:00:00 hours so the date in Y-m-d format uses the
-                // right date selected in the UI.
-                $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate'] . "+1 days"));
+                $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
             }
             if (isset($params['ltCreatedDate'])) {
-                $createdFilter .= " AND of.date_created <= :ltCreatedDate";
+                $createdFilter .= " AND of.date_created < :ltCreatedDate";
                 $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
-                // strtotime converts the date given in the UI to -1 day.
-                // UI Date: 2020-02-11 00:00:00 hours , strtotime function result is: 2020-02-10 12:59:59 hours
-                // +1 results in modified date: 2020-02-11 00:00:00 hours
-                // Then, modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
-                // the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
-                // till EOD of 2020-02-11, we need to use 2020-02-12 hence [+2] added to the date.
-                $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+2 days"));
+                /* modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
+                 the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
+                 till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
+                $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
             }
             $where = " $appFilter $statusFilter $entityFilter $createdFilter and of.latest=1";
             $fromQuery = " from ox_file as of
@@ -692,7 +685,7 @@ class FileService extends AbstractService
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
-                $select = "SELECT of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if ($resultSet) {
