@@ -491,8 +491,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
-                if(isset($data['documents']) && is_string($data['documents'])){
+                if(isset($data['documents']) && is_string($data['documents'])) {
                     $docs = json_decode($data['documents'],true);
+                }
+                else {
+                    $docs = $data['documents'];
                 }
                 if(isset($docs['coi_document']) && isset($documents['coi_document'][0])){
                     $destinationForWatermark = $dest['absolutePath'].'../../'.$docs['coi_document'][0];
