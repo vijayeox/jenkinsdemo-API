@@ -29,6 +29,39 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "disableOptions",
+			"customDefaultValue": "value = false;",
+			"calculateServer": false,
+			"key": "disableOptions",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "documentFields",
+			"calculateValue": "value = [[\"groupPL\",\"document1\"],'attachments1','csrApprovalAttachments1'];",
+			"calculateServer": false,
+			"key": "documentFields",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "attachmentsFieldnames",
+			"calculateValue": "value = [[\"groupPL\",\"document\"],'attachments','csrApprovalAttachments'];",
+			"calculateServer": false,
+			"key": "attachmentsFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "start_date",
+			"calculateServer": false,
+			"key": "start_date",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
+		}, {
 			"label": "Please select areas you want to modify",
 			"optionsLabelPosition": "right",
 			"tableView": false,
@@ -83,6 +116,18 @@
 			"input": true,
 			"inputType": "checkbox"
 		}, {
+			"label": "HTML",
+			"attrs": [{
+				"attr": "style",
+				"value": "color: #a94442;font-size:1.1em;"
+			}],
+			"content": "Please Note: These options will be disabled once you click on the next button",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "html34",
+			"type": "htmlelement",
+			"input": false
+		}, {
 			"label": "automatic_renewal",
 			"customDefaultValue": "value = false",
 			"key": "automatic_renewal",
@@ -90,7 +135,37 @@
 			"input": true,
 			"tableView": false
 		}],
-		"path": "endorsementChange"
+		"path": "endorsementChange",
+		"properties": {
+			"set_property": "{\"property\" : \"disableOptions\",\"value\":true}"
+		},
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"logic": [{
+			"name": "disablePanel",
+			"trigger": {
+				"type": "simple",
+				"simple": {
+					"show": true,
+					"when": "disableOptions",
+					"eq": "true"
+				}
+			},
+			"actions": [{
+				"name": "disable",
+				"type": "property",
+				"property": {
+					"label": "Disabled",
+					"value": "disabled",
+					"type": "boolean"
+				},
+				"state": true
+			}]
+		}]
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -876,7 +951,12 @@
 			"label": "Panel",
 			"path": "panelPanel4"
 		}],
-		"nextPage": "next = (data['padiVerified'] ==true) ? 'panel2' : 'panel'"
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		}
 	}, {
 		"title": "Business & Policy Information",
 		"theme": "primary",
@@ -954,15 +1034,6 @@
 				"size": "md"
 			}, {
 				"components": [{
-					"label": "start_date",
-					"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
-					"key": "start_date",
-					"type": "hidden",
-					"input": true,
-					"tableView": true,
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
 					"label": "end_date",
 					"defaultValue": "2020-07-31",
 					"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-07-22\";\n}else{\nvalue = (year)+ \"-07-22\";\n}",
@@ -1036,7 +1107,6 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel1",
-				"customConditional": "show = false;\nif((data['businessPadiValidated'] === true || data['businessPadiValidated'] == 'true') || (data['businessPadiVerified'] == 'true' || data['businessPadiVerified'] == true)){\n  show = true;\n}",
 				"type": "panel",
 				"label": "             ",
 				"input": false,
@@ -1392,9 +1462,6 @@
 							"spellcheck": true,
 							"tableView": true,
 							"calculateServer": false,
-							"validate": {
-								"required": true
-							},
 							"key": "dba1",
 							"type": "textfield",
 							"input": true,
@@ -2087,12 +2154,6 @@
 					"value": "doYouWantCoverageForPassengersWhileInTheWaterGroupProfessionalLiability",
 					"label": "Do you want coverage for passengers while in the water? (Group Professional Liability)"
 				}, {
-					"value": "CrewInBoatYN",
-					"label": "Do you want coverage for Paid Crew while onboard the vessel?"
-				}, {
-					"label": "Do you want coverage for Paid Crew while they are in the water?",
-					"value": "CrewInWaterYN"
-				}, {
 					"label": "Coast Guard Approved? (Mandatory in U.S.):",
 					"value": "coastGuardApprovedMandatoryInUS"
 				}],
@@ -2114,90 +2175,6 @@
 				"lockKey": true,
 				"hideOnChildrenHidden": false,
 				"keyModified": true
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "How many Crew Members on Boat?",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": true,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true,
-							"customMessage": "Please enter the number of Crew Members on Boat."
-						},
-						"key": "CrewInBoatCount",
-						"customConditional": "show = (data['boat_usage_survey'].CrewInBoatYN == 'yes')",
-						"type": "number",
-						"input": true,
-						"inputType": "number",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"tableView": false,
-				"key": "columns2",
-				"type": "columns",
-				"input": false
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "How many Crew Members would you like to Cover ?",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": true,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true,
-							"customMessage": "Please enter the number of Crew Members you would like to Cover."
-						},
-						"key": "CrewInWaterCount",
-						"customConditional": "show = (data['boat_usage_survey'].CrewInWaterYN == 'yes')",
-						"type": "number",
-						"input": true,
-						"inputType": "number",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"tableView": false,
-				"key": "columns7",
-				"type": "columns",
-				"input": false
 			}],
 			"type": "panel",
 			"label": "Panel"
@@ -2348,10 +2325,10 @@
 					"value": "hasAnyCrewHadDecompressionSicknessOrReceivedHyperbaricTreatmentInTheLastThree3Years",
 					"label": "Has any crew had decompression sickness or received hyperbaric treatment in the last three (3) years?"
 				}, {
-					"value": "doYouWantCoverageForPaidCrewWhileOnboardTheVessel",
+					"value": "CrewInBoatYN",
 					"label": "Do you want coverage for Paid Crew while onboard the vessel?"
 				}, {
-					"value": "doYouWantCoverageForPaidCrewWhileTheyAreInTheWater",
+					"value": "CrewInWaterYN",
 					"label": "Do you want coverage for Paid Crew while they are in the water?"
 				}, {
 					"value": "doYouRequireAllInstructorsAndDivemastersOnBoardYourVesselToCarryProfessionalLiabilityInsurance",
@@ -2367,6 +2344,7 @@
 					"value": "no",
 					"label": "No"
 				}],
+				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please select Yes or No"
@@ -2375,6 +2353,90 @@
 				"type": "survey",
 				"input": true,
 				"lockKey": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "How many Crew Members on Boat?",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": true,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the number of Crew Members on Boat."
+						},
+						"key": "CrewInBoatCount",
+						"customConditional": "show = (data['captain_and_crew_schedule_survey'].CrewInBoatYN == 'yes')",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns7",
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "How many Crew Members would you like to Cover ?",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": true,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter the number of Crew Members you would like to Cover."
+						},
+						"key": "CrewInWaterCount",
+						"customConditional": "show = (data['captain_and_crew_schedule_survey'].CrewInWaterYN == 'yes')",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns8",
+				"type": "columns",
+				"input": false
 			}],
 			"type": "panel",
 			"label": "Panel"
@@ -2462,7 +2524,7 @@
 								"label": "",
 								"value": ""
 							}],
-							"custom": "var currentYear = moment().year()\nfor(var i = 1990; i<currentYear; i++){\n  values.push(i);\n}"
+							"custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
 						},
 						"template": "<span>{{ item }}</span>",
 						"selectThreshold": 0.3,
@@ -3089,7 +3151,7 @@
 										"label": "",
 										"value": ""
 									}],
-									"custom": "var currentYear = moment().year()\nfor(var i = 1990; i<currentYear; i++){\n  values.push(i);\n}"
+									"custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
@@ -3197,7 +3259,7 @@
 										"label": "",
 										"value": ""
 									}],
-									"custom": "var currentYear = moment().year()\nfor(var i = 1990; i<currentYear; i++){\n  values.push(i);\n}"
+									"custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
 								},
 								"template": "<span>{{ item }}</span>",
 								"selectThreshold": 0.3,
@@ -3866,13 +3928,23 @@
 					"type": "file",
 					"input": true
 				}, {
-					"label": "attachmentFields",
-					"customDefaultValue": "value = [[\"groupPL\",\"document\"],'attachments','csrApprovalAttachments'];",
-					"calculateServer": false,
-					"key": "attachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false
+					"type": "documentviewer",
+					"key": "attachments1",
+					"calculateValue": "value = (data.attachments)",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "if (data.privileges){\n  if(data.attachments !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"protected": true,
+					"persistent": false,
+					"keyModified": true
 				}],
 				"path": "panel9"
 			}],
@@ -4361,11 +4433,11 @@
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
-							"width": 3,
-							"size": "md"
+							"size": "md",
+							"width": 4
 						}, {
 							"components": [{
-								"label": "Name",
+								"label": "First Name",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
@@ -4373,7 +4445,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "name",
+								"key": "firstname",
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4382,9 +4454,38 @@
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
-							"width": 3,
-							"size": "md"
+							"size": "md",
+							"width": 4
 						}, {
+							"components": [{
+								"label": "Last Name",
+								"spellcheck": true,
+								"tableView": true,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "lastname",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md",
+							"width": 4
+						}],
+						"hideLabel": true,
+						"dataGridLabel": false,
+						"tableView": false,
+						"key": "page7GroupColumns",
+						"type": "columns",
+						"input": false,
+						"inDataGrid": true
+					}, {
+						"label": "Columns",
+						"columns": [{
 							"components": [{
 								"label": "Status",
 								"spellcheck": true,
@@ -4403,8 +4504,8 @@
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
-							"width": 3,
-							"size": "md"
+							"size": "md",
+							"width": 4
 						}, {
 							"components": [{
 								"label": "Institution Name",
@@ -4422,16 +4523,46 @@
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
-							"width": 3,
-							"size": "md"
+							"size": "md",
+							"width": 4
+						}, {
+							"components": [{
+								"label": "initial",
+								"calculateServer": false,
+								"key": "initial",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "start_date",
+								"calculateValue": "if(!row.start_date && row.start_date == \"\"){\n  value = data.update_date;\n}",
+								"calculateServer": false,
+								"key": "start_date",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "update_date",
+								"calculateValue": "value = data.update_date;",
+								"calculateServer": false,
+								"key": "update_date",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}],
+							"size": "md",
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
 						}],
-						"hideLabel": true,
-						"dataGridLabel": false,
 						"tableView": false,
-						"key": "page7GroupColumns",
+						"key": "columns1",
 						"type": "columns",
-						"input": false,
-						"inDataGrid": true
+						"input": false
 					}, {
 						"label": "Document",
 						"hideLabel": true,
@@ -4460,6 +4591,24 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false
+					}, {
+						"type": "documentviewer",
+						"key": "document1",
+						"calculateValue": "value = (data.document)",
+						"dtype": "documentviewer",
+						"datype": "documentviewer",
+						"dattype": "documentviewer",
+						"customConditional": "if (data.privileges){\n  if(data.document !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+						"datatype": "documentviewer",
+						"data_type": "documentviewer",
+						"label": "Attachments",
+						"hideLabel": true,
+						"inputType": "documentviewer",
+						"input": 1,
+						"tableView": false,
+						"protected": true,
+						"persistent": false,
+						"keyModified": true
 					}],
 					"path": "groupPL"
 				}],
@@ -4752,7 +4901,7 @@
 					"tableView": false,
 					"templates": {
 						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
+						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
 					"addAnother": "Not registered in system?Click here to add external members",
 					"modal": false,
@@ -4770,6 +4919,7 @@
 							"components": [{
 								"label": "Membership Number",
 								"spellcheck": true,
+								"disabled": true,
 								"tableView": true,
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -4785,12 +4935,13 @@
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
-							"width": 3,
-							"size": "md"
+							"size": "md",
+							"width": 4
 						}, {
 							"components": [{
 								"label": "Name",
 								"spellcheck": true,
+								"disabled": true,
 								"tableView": true,
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -4798,6 +4949,23 @@
 									"required": true
 								},
 								"key": "name",
+								"logic": [{
+									"name": "enable",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "if(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
+									},
+									"actions": [{
+										"name": "enable",
+										"type": "property",
+										"property": {
+											"label": "Disabled",
+											"value": "disabled",
+											"type": "boolean"
+										},
+										"state": false
+									}]
+								}],
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
@@ -4806,48 +4974,45 @@
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
-							"width": 3,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "Status",
-								"spellcheck": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"calculateServer": false,
-								"validate": {
-									"required": true
-								},
-								"key": "status",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"width": 3,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "Institution Name",
-								"spellcheck": true,
-								"tableView": true,
-								"calculateServer": false,
-								"validate": {
-									"required": true
-								},
-								"key": "nameOfInstitution",
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}],
 							"size": "md",
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Last Name",
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "lastname",
+								"logic": [{
+									"name": "enable",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "if(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
+									},
+									"actions": [{
+										"name": "enable",
+										"type": "property",
+										"property": {
+											"label": "Disabled",
+											"value": "disabled",
+											"type": "boolean"
+										},
+										"state": false
+									}]
+								}],
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
 							"offset": 0,
 							"push": 0,
 							"pull": 0,
-							"width": 3
+							"size": "md",
+							"width": 4
 						}],
 						"hideLabel": true,
 						"dataGridLabel": false,
@@ -4857,11 +5022,244 @@
 						"input": false,
 						"inDataGrid": true
 					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Status",
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "status",
+								"logic": [{
+									"name": "enable",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "console.log(row.upgradeStatus);\nconsole.log(\"START\");\nconsole.log(row.start_date);\nconsole.log(data.update_date);\nif(row.upgradeStatus && row.upgradeStatus == true){\n  console.log(\"Enable\");\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  console.log(\"Enable1\");\n  result = true;\n}else{\n  console.log(\"Disable\");\n  result = false;\n}"
+									},
+									"actions": [{
+										"name": "Enable",
+										"type": "property",
+										"property": {
+											"label": "Disabled",
+											"value": "disabled",
+											"type": "boolean"
+										},
+										"state": false
+									}]
+								}],
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md",
+							"width": 4
+						}, {
+							"components": [{
+								"label": "Institution Name",
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "nameOfInstitution",
+								"logic": [{
+									"name": "enable",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "if(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
+									},
+									"actions": [{
+										"name": "enable",
+										"type": "property",
+										"property": {
+											"label": "Disabled",
+											"value": "disabled",
+											"type": "boolean"
+										},
+										"state": false
+									}]
+								}],
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md",
+							"width": 4
+						}, {
+							"components": [{
+								"label": "start_date",
+								"calculateValue": "if(!row.start_date && row.start_date == \"\"){\n  value = data.update_date;\n}\nvalue = \"2020-04-01\";",
+								"calculateServer": false,
+								"key": "start_date",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}],
+							"size": "md",
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"width": 4
+						}],
+						"tableView": false,
+						"key": "columns",
+						"type": "columns",
+						"input": false
+					}, {
 						"label": "verified",
 						"key": "verified",
 						"type": "hidden",
 						"input": true,
 						"tableView": false
+					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Upgrade ",
+								"tableView": false,
+								"defaultValue": false,
+								"clearOnHide": false,
+								"customDefaultValue": "value = false;",
+								"calculateServer": false,
+								"key": "upgradeStatus",
+								"type": "checkbox",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Upgrade Date",
+								"format": "MM-dd-yyyy",
+								"tableView": false,
+								"datePicker": {
+									"minDate": "moment().format('YYYY MM DD')",
+									"disableWeekends": false,
+									"disableWeekdays": false
+								},
+								"enableTime": false,
+								"timePicker": {
+									"showMeridian": false
+								},
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "update_date",
+								"conditional": {
+									"show": true,
+									"when": "upgradeStatus",
+									"eq": "true"
+								},
+								"type": "datetime",
+								"input": true,
+								"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+								"widget": {
+									"type": "calendar",
+									"displayInTimezone": "viewer",
+									"language": "en",
+									"useLocaleSettings": false,
+									"allowInput": true,
+									"mode": "single",
+									"enableTime": false,
+									"noCalendar": false,
+									"format": "MM-dd-yyyy",
+									"hourIncrement": 1,
+									"minuteIncrement": 1,
+									"time_24hr": true,
+									"minDate": "moment().format('YYYY MM DD')",
+									"disableWeekends": false,
+									"disableWeekdays": false,
+									"maxDate": null
+								},
+								"hideOnChildrenHidden": false
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Cancel ",
+								"tableView": false,
+								"defaultValue": false,
+								"clearOnHide": false,
+								"customDefaultValue": "value = false;",
+								"calculateServer": false,
+								"key": "cancel",
+								"type": "checkbox",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Cancel Date",
+								"format": "MM-dd-yyyy",
+								"tableView": false,
+								"datePicker": {
+									"minDate": "moment().format('YYYY MM DD')",
+									"disableWeekends": false,
+									"disableWeekdays": false
+								},
+								"enableTime": false,
+								"timePicker": {
+									"showMeridian": false
+								},
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "cancel_date",
+								"conditional": {
+									"show": true,
+									"when": "cancel",
+									"eq": "true"
+								},
+								"type": "datetime",
+								"input": true,
+								"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+								"widget": {
+									"type": "calendar",
+									"displayInTimezone": "viewer",
+									"language": "en",
+									"useLocaleSettings": false,
+									"allowInput": true,
+									"mode": "single",
+									"enableTime": false,
+									"noCalendar": false,
+									"format": "MM-dd-yyyy",
+									"hourIncrement": 1,
+									"minuteIncrement": 1,
+									"time_24hr": true,
+									"minDate": "moment().format('YYYY MM DD')",
+									"disableWeekends": false,
+									"disableWeekdays": false,
+									"maxDate": null
+								},
+								"hideOnChildrenHidden": false
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"tableView": false,
+						"key": "columns9",
+						"customConditional": "if(moment(row.start_date) < moment(data.update_date)){\n  show = true;\n}else{\n  show = false;\n}",
+						"type": "columns",
+						"input": false
 					}],
 					"path": "namedInsureds"
 				}],
@@ -5194,8 +5592,7 @@
 			"cancel": true,
 			"next": true
 		},
-		"collapsible": false,
-		"nextPage": "if(data.groupProfessionalLiability == 'yes'){\n    if(data.groupPL.length > 0){\n        next = 'page5';\n        if(data.named_insureds == 'yes'){\n            if(data.namedInsureds.length > 0){\n                next = 'page5';\n            }else{\n                next = 'page7';\n            }\n        }\n    }else{\n        next = 'page7';\n    }\n}else{\n  next = 'page5';\n}"
+		"collapsible": false
 	}, {
 		"title": "Quote & Approval",
 		"theme": "primary",
@@ -8602,6 +8999,24 @@
 					"key": "csrApprovalAttachments",
 					"type": "file",
 					"input": true
+				}, {
+					"type": "documentviewer",
+					"key": "csrApprovalAttachments1",
+					"calculateValue": "value = (data.csrApprovalAttachments)",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "if (data.privileges){\n  if(data.csrApprovalAttachments !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"protected": true,
+					"persistent": false,
+					"keyModified": true
 				}]
 			}, {
 				"key": "page5Panel2",
@@ -8686,7 +9101,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 44,
+	"_vid": 112,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8704,6 +9119,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-06T12:02:23.550Z",
+	"modified": "2020-04-07T14:51:21.892Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

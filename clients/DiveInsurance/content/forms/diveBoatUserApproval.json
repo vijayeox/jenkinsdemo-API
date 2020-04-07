@@ -202,15 +202,18 @@
 			}, {
 				"label": "Final Amount Payable",
 				"prefix": "$",
-				"spellcheck": false,
+				"mask": false,
+				"spellcheck": true,
 				"disabled": true,
 				"tableView": false,
-				"redrawOn": "amountPayable",
-				"clearOnHide": false,
-				"calculateValue": "value = data.amountPayable",
+				"delimiter": true,
+				"requireDecimal": true,
+				"inputFormat": "plain",
+				"calculateValue": "value = data.amountPayable;",
 				"calculateServer": false,
 				"key": "finalAmountPayable",
-				"type": "textfield",
+				"type": "number",
+				"decimalLimit": 2,
 				"input": true
 			}, {
 				"label": "Columns",
@@ -412,7 +415,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 32,
+	"_vid": 34,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -430,6 +433,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-03T14:37:02.659Z",
+	"modified": "2020-04-07T12:37:34.577Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }
