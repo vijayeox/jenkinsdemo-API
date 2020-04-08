@@ -16,14 +16,20 @@
 			      <div class = "named_div3"><p class ="t_title">{$value.status}</p></div>
 
 			      <div class = "named_div4"><p class ="t_title">{$start_date|date_format:"%m/%d/%Y"}</p></div>
-			      <div class = "named_div5"><p class ="t_title">{if isset($update_date) && $update_date != ''}
+			      <div class = "named_div5"><p class ="t_title">{if isset($upgradeStatus) && ($upgradeStatus == true || $upgradeStatus == 'true')}
 			      Yes{else}No{/if}</p>
 			      </div>
 
-			      <div class = "named_div6"><p class ="t_title">{if isset($update_date) && $update_date != ''}{$update_date|date_format:"%m/%d/%Y"}{else}&nbsp{/if}</p>
+			      <div class = "named_div6"><p class ="t_title">{if isset($upgradeStatus) && ($upgradeStatus == true || $upgradeStatus == 'true')}
+			      {if isset($update_date) && $update_date != ''}{$update_date|date_format:"%m/%d/%Y"}{else}&nbsp{/if}
+			      {/if}
+			      </p>
 			      </div>
 
-			      <div class = "named_div7"><p class ="t_title">{if isset($cancel_date) && $cancel_date != ''}{$cancel_date|date_format:"%m/%d/%Y"}{else}&nbsp{/if}</p>
+			      <div class = "named_div7"><p class ="t_title">{if isset($cancel) && ($cancel == true || $cancel == 'true')}
+			      {if isset($cancel_date) && $cancel_date != ''}{$cancel_date|date_format:"%m/%d/%Y"}{else}&nbsp{/if}
+			      {/if}
+			      </p>
 				  </div>
 			</div>
 	    {/foreach}
