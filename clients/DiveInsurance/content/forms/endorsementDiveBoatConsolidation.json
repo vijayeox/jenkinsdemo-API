@@ -8518,7 +8518,7 @@
 				"tableView": false
 			}, {
 				"label": "Amount",
-				"calculateValue": "value = data['amount'];",
+				"calculateValue": "value = data['amount_payable'];",
 				"calculateServer": false,
 				"key": "amount",
 				"type": "hidden",
@@ -9296,7 +9296,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 135,
+	"_vid": 136,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9314,6 +9314,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-08T13:42:20.945Z",
+	"modified": "2020-04-08T14:02:16.777Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

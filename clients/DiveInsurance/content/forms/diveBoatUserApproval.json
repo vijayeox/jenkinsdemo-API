@@ -146,6 +146,11 @@
 			"properties": {
 				"payment_confirmation_page": "true"
 			},
+			"conditional": {
+				"show": true,
+				"when": "userApproved",
+				"eq": "accepted"
+			},
 			"type": "panel",
 			"label": "Payment Information",
 			"breadcrumb": "none",
@@ -203,18 +208,21 @@
 				"label": "Final Amount Payable",
 				"prefix": "$",
 				"mask": false,
-				"spellcheck": true,
+				"spellcheck": false,
 				"disabled": true,
 				"tableView": false,
 				"delimiter": true,
 				"requireDecimal": true,
 				"inputFormat": "plain",
-				"calculateValue": "value = data.amountPayable;",
+				"redrawOn": "amountPayable",
+				"clearOnHide": false,
+				"calculateValue": "value = data.amountPayable",
 				"calculateServer": false,
 				"key": "finalAmountPayable",
 				"type": "number",
-				"decimalLimit": 2,
-				"input": true
+				"input": true,
+				"inputType": "text",
+				"decimalLimit": 2
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -224,20 +232,20 @@
 						"inline": false,
 						"tableView": false,
 						"values": [{
-							"label": "Cash",
-							"value": "cash",
-							"shortcut": ""
-						}, {
 							"label": "Money Order",
 							"value": "moneyOrder",
 							"shortcut": ""
 						}, {
-							"label": "Cheque",
-							"value": "cheque",
+							"label": "Check",
+							"value": "check",
 							"shortcut": ""
 						}, {
 							"label": "Credit Card",
 							"value": "creditCard",
+							"shortcut": ""
+						}, {
+							"label": "Other",
+							"value": "other",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -260,40 +268,101 @@
 					"size": "md"
 				}, {
 					"components": [{
-						"label": "Cheque Number",
-						"mask": false,
-						"spellcheck": true,
+						"title": "Check Details",
+						"theme": "primary",
+						"collapsible": false,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "chequeNumber",
+						"key": "checkDetails",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
-							"eq": "cheque"
+							"eq": "check"
 						},
-						"type": "number",
-						"input": true,
+						"type": "panel",
+						"label": "Panel",
+						"input": false,
+						"components": [{
+							"label": "Check Number",
+							"mask": false,
+							"spellcheck": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"required": true
+							},
+							"key": "chequeNumber",
+							"type": "number",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Upload Consent Form",
+							"tableView": false,
+							"storage": "base64",
+							"webcam": false,
+							"fileTypes": [{
+								"label": "",
+								"value": ""
+							}],
+							"clearOnHide": false,
+							"calculateServer": false,
+							"key": "chequeConsentForm",
+							"type": "file",
+							"input": true
+						}],
 						"hideOnChildrenHidden": false
 					}, {
-						"type": "convergepay",
-						"key": "creditcardPayment",
-						"amount_field": "amountPayable",
-						"label": "custom",
-						"input": true,
-						"conditional": {
-							"show": true,
-							"when": "paymentOptions",
-							"eq": "creditCard"
-						},
+						"title": "Card Details",
+						"theme": "primary",
+						"collapsible": false,
 						"tableView": false,
+						"key": "cardDetails",
+						"type": "panel",
+						"label": "Panel",
+						"input": false,
+						"components": [{
+							"type": "convergepay",
+							"key": "creditcardPayment",
+							"amount_field": "amountPayable",
+							"label": "custom",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Content",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7Content",
+							"conditional": {
+								"show": true,
+								"when": "paymentOptions",
+								"eq": "creditCard"
+							},
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true,
+							"hideOnChildrenHidden": false
+						}],
 						"hideOnChildrenHidden": false
+					}, {
+						"title": "Money Order Details",
+						"theme": "primary",
+						"collapsible": false,
+						"tableView": false,
+						"key": "moneyOrderDetai",
+						"type": "panel",
+						"label": "Panel",
+						"input": false,
+						"hideOnChildrenHidden": false,
+						"components": []
 					}, {
 						"label": "Order ID",
 						"spellcheck": true,
@@ -311,25 +380,6 @@
 						},
 						"type": "textfield",
 						"input": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Content",
-						"attrs": [{
-							"value": "",
-							"attr": ""
-						}],
-						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "page7Content",
-						"conditional": {
-							"show": true,
-							"when": "paymentOptions",
-							"eq": "creditCard"
-						},
-						"type": "htmlelement",
-						"input": false,
-						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -415,7 +465,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 34,
+	"_vid": 37,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -433,6 +483,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-07T12:37:34.577Z",
+	"modified": "2020-04-08T13:58:31.154Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }
