@@ -117,14 +117,14 @@
                         {/if}
 					</p>
 					<p class = "sec_title2">
-					    {if $poolLiability && (int)$poolLiability > 0}
+					    {if isset($poolLiability) && (int)$poolLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
                         {/if}
 					</p>
 					<p class = "sec_title2">
-					    {if $TravelAgentEOFP && (int)$TravelAgentEOFP > 0}
+					    {if isset($TravelAgentEOFP) && (int)$TravelAgentEOFP > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>

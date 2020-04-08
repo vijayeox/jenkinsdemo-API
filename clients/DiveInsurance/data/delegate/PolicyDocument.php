@@ -82,8 +82,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'aniTemplate' => 'DiveStore_ANI',
                         'aniheader' => 'DS_Quote_ANI_header.html',
                         'anifooter' => null,
-                        'gtemplate' => 'Group_PL_COI',
-                        'gheader' => 'Group_header.html',
+                        'gtemplate' => 'Group_PL_COI_DS',
+                        'gheader' => 'Group_header_DS.html',
                         'gfooter' => 'Group_footer.html',
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
@@ -364,10 +364,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                 }
 
-                if(isset($temp['additionalLocations']) && is_array($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
-                    for($i=0; $i<sizeof($temp['additionalLocations']);$i++){
+                if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
+                    if(is_string($temp['additionalLocations'])){
+                        $additionalLocations = json_decode($temp['additionalLocations'],true);
+                    } else {
+                        $additionalLocations = $temp['additionalLocations'];
+                    }
+                    for($i=0; $i<sizeof($additionalLocations);$i++){
                         $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
-                        $temp["additionalLocationData"] = $temp['additionalLocations'][$i];
+                        $temp["additionalLocationData"] = json_encode($additionalLocations[$i]);
                         $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
                         unset($temp["additionalLocationData"]);
                     }
@@ -477,7 +482,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             
             if(isset($this->template[$temp['product']]['slWording'])){        
                 if($temp['product'] == 'Dive Store'){
-                    if($temp['business_state'] == 'California'){
+                    if($temp['state'] == 'California'){
                             $documents['slWording'] = $this->copyDocuments($temp,$dest['relativePath'],'slWording');
                         }
                     }

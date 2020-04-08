@@ -141,7 +141,7 @@
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        {if $poolLiability && (int)$poolLiability > 0}
+                        {if isset($poolLiability) && (int)$poolLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -151,7 +151,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+                        {if isset($travelAgentEOReceiptsPL) && (int)$travelAgentEOReceiptsPL > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>

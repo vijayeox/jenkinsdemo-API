@@ -44,12 +44,14 @@
 		"input": true,
 		"tableView": false
 	}, {
+		"label": "page",
+		"defaultValue": "1",
+		"calculateValue": "if(data.product == 'Dive Store'){\n  value = 0;\n} else {\n  value =1;\n}",
+		"calculateServer": false,
+		"key": "page",
+		"type": "hidden",
 		"input": true,
 		"tableView": true,
-		"key": "page",
-		"label": "page",
-		"type": "hidden",
-		"defaultValue": "1",
 		"lockKey": true
 	}, {
 		"label": "Columns",
@@ -178,6 +180,45 @@
 							},
 							"state": true
 						}]
+					}, {
+						"name": "Check for Dive Store",
+						"trigger": {
+							"type": "simple",
+							"simple": {
+								"show": true,
+								"when": "product",
+								"eq": "Dive Store"
+							}
+						},
+						"actions": [{
+							"name": "Change Label",
+							"type": "property",
+							"property": {
+								"label": "Label",
+								"value": "label",
+								"type": "string"
+							},
+							"text": "PADI Store Number"
+						}]
+					}, {
+						"name": "Check if not Dive Store",
+						"trigger": {
+							"type": "javascript",
+							"simple": {
+								"show": true
+							},
+							"javascript": "if(data['product'] == 'Individual Professional Liability' || data['product'] == 'Emergency First Response'|| data['product'] == 'Dive Boat' ){\n  result = true;\n} else {\n  result = false;\n}"
+						},
+						"actions": [{
+							"name": "Set Label",
+							"type": "property",
+							"property": {
+								"label": "Label",
+								"value": "label",
+								"type": "string"
+							},
+							"text": "PADI Number"
+						}]
 					}],
 					"type": "number",
 					"decimalLimit": 0,
@@ -211,7 +252,7 @@
 					"properties": {
 						"commands": "{\"commands\":[{\"command\":\"verify_user\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]}"
 					},
-					"customConditional": "if (\n  data[\"verified\"] === true &&\n  (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\")\n) {\n  show = false;\n} else {\n  show = true;\n}",
+					"customConditional": "if (\n  data[\"verified\"] === true &&\n  (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\") && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")\n) {\n  show = false;\n} else {\n  show = true;\n}",
 					"overlay": {
 						"style": "text-align:center"
 					},
@@ -228,7 +269,7 @@
 					"customClass": "alignCenter",
 					"tableView": false,
 					"key": "changePadi",
-					"customConditional": "if (\n  data[\"verified\"] === true &&\n  (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
+					"customConditional": "if (\n  data[\"verified\"] === true &&\n  (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\") && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
 					"logic": [{
 						"name": "Reset PADI",
 						"trigger": {
@@ -238,7 +279,7 @@
 						"actions": [{
 							"name": "Reset data values",
 							"type": "value",
-							"value": "data.padiVerified = false;\ndata.businessPadiVerified = false;\ndata.user_exists = 0;\ndata.padiNotFound = false;\ndata.verified = false;\ndata.firstname = \"\";\ndata.initial = \"\";\ndata.lastname = \"\";\ndata.sameasmailingaddress = true;",
+							"value": "data.padiVerified = false;\ndata.businessPadiVerified = false;\ndata.user_exists = 0;\ndata.padiNotFound = false;\ndata.verified = false;\ndata.firstname = \"\";\ndata.initial = \"\";\ndata.lastname = \"\";\ndata.sameasmailingaddress = true;\ndata.padiNotApplicable = false",
 							"property": {},
 							"state": ""
 						}]
@@ -272,7 +313,7 @@
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "panelColumnsContent2",
-					"customConditional": "show = (data['businessPadiVerified']===true || data['businessPadiVerified']=='true') && \n(data['product'] == 'Individual Professional Liability' || data['product']=='Emergency First Response');",
+					"customConditional": "show = (data['padiNotApplicable']===true || data['padiNotApplicable']=='true');",
 					"type": "htmlelement",
 					"input": false,
 					"hideLabel": true,
@@ -368,7 +409,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "Username",
-					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified == true || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\nvalue = data.padi;\n}",
+					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified === true  || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\nvalue = data.padi;\n}",
 					"calculateServer": false,
 					"key": "username",
 					"type": "hidden",
@@ -426,7 +467,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "panel",
-		"customConditional": "show = (data.verified === true && (data.user_exists===0||data.user_exists=='0'));",
+		"customConditional": "if (\n  data[\"verified\"] === true &&\n  (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\") && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
 		"type": "panel",
 		"label": "Personal Information",
 		"input": false,
@@ -579,6 +620,19 @@
 			"key": "panelColumns2",
 			"type": "columns",
 			"input": false
+		}, {
+			"label": "Legal Business Name",
+			"hidden": true,
+			"spellcheck": false,
+			"tableView": false,
+			"calculateServer": false,
+			"validate": {
+				"required": true
+			},
+			"key": "business_name",
+			"customConditional": "if(data['product'] == 'Dive Store'){\n  if(data.businessPadiVerified===true||data.businessPadiVerified==\"true\"){\n    show =true;\n  } else {\n    show = false;\n  }\n} else {\n  show = false;\n}",
+			"type": "textfield",
+			"input": true
 		}, {
 			"title": "Mailing Address",
 			"theme": "primary",
@@ -957,6 +1011,7 @@
 							"placeholder": " ",
 							"spellcheck": true,
 							"tableView": true,
+							"calculateServer": false,
 							"validate": {
 								"customMessage": "Please enter a valid home or work phone number"
 							},
@@ -996,6 +1051,46 @@
 										"type": "string"
 									},
 									"text": "(999) 999-9999"
+								}]
+							}, {
+								"name": "Change Field Name based on Store",
+								"trigger": {
+									"type": "simple",
+									"simple": {
+										"show": true,
+										"when": "product",
+										"eq": "Dive Store"
+									}
+								},
+								"actions": [{
+									"name": "Change Label",
+									"type": "property",
+									"property": {
+										"label": "Label",
+										"value": "label",
+										"type": "string"
+									},
+									"text": "Work Phone"
+								}]
+							}, {
+								"name": "Set Label Name based on Product",
+								"trigger": {
+									"type": "javascript",
+									"simple": {
+										"show": true,
+										"when": "product"
+									},
+									"javascript": "if(data['product'] == 'Individual Professional Liability' || data['product'] == 'Emergency First Response'|| data['product'] == 'Dive Boat' ){\n  result = true;\n} else {\n  result = false;\n}"
+								},
+								"actions": [{
+									"name": "Change Label to Work or Home Phone",
+									"type": "property",
+									"property": {
+										"label": "Label",
+										"value": "label",
+										"type": "string"
+									},
+									"text": "Home or Work Phone"
 								}]
 							}],
 							"type": "textfield",
@@ -1178,7 +1273,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 66,
+	"_vid": 74,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1192,6 +1287,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-04-06T11:35:13.017Z",
+	"modified": "2020-04-08T05:29:15.225Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
