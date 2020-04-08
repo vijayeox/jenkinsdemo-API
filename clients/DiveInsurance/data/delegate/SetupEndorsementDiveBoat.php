@@ -144,6 +144,23 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
        $data['initiatedByCsr'] = false;
        $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
        if($data['initiatedByUser'] == false){
+            if(isset($data['csrApproved'])){
+                unset($data['csrApproved']);
+            }
+            if(isset($data['disableOptions'])){
+                unset($data['disableOptions']);
+            }
+            if(isset($data['endorsement_options'])){
+             foreach($data['endorsement_options'] as $key=>$value) {
+                if(isset($data['endorsement_options'][$key])) {
+                    unset($data['endorsement_options'][$key]);
+                }
+            }
+            $data['endorsementCoverage'] = array();
+            $data['endorsementGroupLiability'] = array();
+            }else{
+                $data['endorsement_options'] = array();
+            }
             $endorsementCoverage = array();
             $endorsementGroupCoverage = array();
             $endorsementGroupLiability = array();

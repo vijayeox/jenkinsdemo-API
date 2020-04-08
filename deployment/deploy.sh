@@ -359,7 +359,7 @@ diveinsurance()
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
-        rsync -rl ./DiveInsurance /opt/oxzion/eoxapps
+        rsync -rl --delete ./DiveInsurance /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building DiveInsurance apps using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/DiveInsurance'
@@ -389,7 +389,7 @@ insurancemanagement()
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
-        rsync -rl ./InsuranceManagement /opt/oxzion/eoxapps
+        rsync -rl --delete ./InsuranceManagement /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building InsuranceManagement apps using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/InsuranceManagement'
@@ -419,7 +419,7 @@ task()
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
-        rsync -rl ./Task /opt/oxzion/eoxapps
+        rsync -rl --delete ./Task /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Task apps using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Task'
@@ -448,7 +448,7 @@ bridgemed()
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
-        rsync -rl ./BridgeMed /opt/oxzion/eoxapps
+        rsync -rl --delete ./BridgeMed /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building BridgeMed apps using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BridgeMed'

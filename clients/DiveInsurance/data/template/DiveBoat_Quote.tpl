@@ -39,7 +39,7 @@
     <p class = "c_details">{$business_country},{$business_zip}</p>
   </div>
   <div class = "agent_info1">
-    <p class ="padi_margin"><b>Member#:</b> {$business_padi}
+    <p class ="padi_margin"><b>Member#:</b> {$padi}
     </div>
   </div>
   <div class = "spacing_div">&nbsp</div>

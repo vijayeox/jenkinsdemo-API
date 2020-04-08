@@ -2674,7 +2674,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "page3PanelPanel",
-				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = false;\n}\nelse{\n  show = true;\n}",
 				"type": "panel",
 				"label": "Attachments",
 				"input": false,
@@ -4200,7 +4200,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 214,
+	"_vid": 215,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4221,6 +4221,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-04T11:52:26.860Z",
+	"modified": "2020-04-08T06:43:59.665Z",
 	"machineName": "testdivehub:csrInitiates"
 }
