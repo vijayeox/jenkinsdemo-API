@@ -173,7 +173,8 @@
 				},
 				"state": true
 			}]
-		}]
+		}],
+		"customConditional": "if(data.initiatedByUser && data.initiatedByUser == false){\n  show = true;\n}else{\n  show = false;\n}"
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -5246,7 +5247,7 @@
 										"name": "enable",
 										"trigger": {
 											"type": "javascript",
-											"javascript": "console.log(row.upgradeStatus);\nconsole.log(\"START\");\nconsole.log(row.start_date);\nconsole.log(data.update_date);\nif(row.upgradeStatus && row.upgradeStatus == true){\n  console.log(\"Enable\");\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  console.log(\"Enable1\");\n  result = true;\n}else{\n  console.log(\"Disable\");\n  result = false;\n}"
+											"javascript": "console.log(row.upgradeStatus);\nif(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
 										},
 										"actions": [{
 											"name": "Enable",
@@ -9295,7 +9296,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 133,
+	"_vid": 135,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9313,6 +9314,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-08T12:04:39.250Z",
+	"modified": "2020-04-08T13:42:20.945Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
