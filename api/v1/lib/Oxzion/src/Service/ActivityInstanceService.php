@@ -102,7 +102,6 @@ class ActivityInstanceService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }
