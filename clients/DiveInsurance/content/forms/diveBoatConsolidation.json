@@ -18,7 +18,8 @@
 			"tableView": false
 		}, {
 			"label": "initiatedByCsr",
-			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
+			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && (!data.CSRReviewRequired || data.CSRReviewRequired == false)){\n  value = true\n} else {\n  value = false\n}",
+			"calculateServer": false,
 			"key": "initiatedByCsr",
 			"type": "hidden",
 			"input": true,
@@ -1444,7 +1445,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html6",
-						"customConditional": "show = false;\nif((data['businessPadiValidated'] === false || data['businessPadiValidated']=='false') && (data['businessPadiEmpty']===false || data['businessPadiEmpty']==='false')){  \n  if(data['businessPadiEmpty'] === true){   \n     show =false; \n  } else {  \n      show = true;  \n    \n  }\n}",
+						"customConditional": "show = false;\nif(data.doYouHaveABoatMembershipPadiNumber==='no'){\n  show =false; \n   }else if((data['businessPadiValidated'] === false || data['businessPadiValidated']=='false') && (data['businessPadiEmpty']===false || data['businessPadiEmpty']==='false')){  \n  if(data['businessPadiEmpty'] === true){   \n     show =false; \n  } else {  \n      show = true;  \n    \n  }\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
@@ -1464,6 +1465,7 @@
 							"when": "businessPadiEmpty",
 							"eq": "true"
 						},
+						"customConditional": "show = false;\nif(data.doYouHaveABoatMembershipPadiNumber==='no'){\n  show =false; \n}else if(data['businessPadiEmpty'] === true){\n\tshow = true;\n}else{\n\tshow = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
@@ -4875,7 +4877,7 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"customMessage": "Please enter all the required fields before proceeding."
+						"custom": "valid = (data.groupPL.length > 0) ? true : \"Please add the members to group\";"
 					},
 					"key": "groupPL",
 					"type": "editgrid",
@@ -5503,7 +5505,7 @@
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"customMessage": "Please enter all the required fields before proceeding."
+							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";"
 						},
 						"key": "namedInsureds",
 						"type": "editgrid",
@@ -5828,8 +5830,7 @@
 			"cancel": true,
 			"next": true
 		},
-		"collapsible": false,
-		"nextPage": "if(data.groupProfessionalLiability == 'yes'){\n    if(data.groupPL.length > 0){\n        next = 'page5';\n        if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n            if(data.named_insureds == 'yes'){\n                if(data.namedInsureds.length > 0){\n                    next = 'page5';\n                }else{\n                    next = 'page7';\n                }\n            }\n        }\n    }else{\n        next = 'page7';\n    }\n}else{\n  next = 'page5';\n}"
+		"collapsible": false
 	}, {
 		"type": "panel",
 		"title": "Terms & Conditions",
@@ -8022,6 +8023,14 @@
 				"enableRowGroups": false,
 				"hideLabel": true,
 				"tableView": false,
+				"defaultValue": [{
+					"quoteInfo": "",
+					"quoteInfoOther": ""
+				}],
+				"calculateServer": false,
+				"validate": {
+					"minLength": 1
+				},
 				"key": "quoteRequirement",
 				"type": "datagrid",
 				"input": true,
@@ -8256,7 +8265,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 351,
+	"_vid": 360,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8274,6 +8283,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-09T01:51:59.405Z",
+	"modified": "2020-04-09T11:49:28.471Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

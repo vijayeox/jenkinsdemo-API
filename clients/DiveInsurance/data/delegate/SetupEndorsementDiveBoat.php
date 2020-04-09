@@ -141,9 +141,8 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
        $this->logger->info("Executing Endorsement Setup - Dive Boat".print_r($data,true));
-       $data['initiatedByCsr'] = false;
-       $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
-       if($data['initiatedByUser'] == false){
+       $data['CSRReviewRequired'] = isset($data['CSRReviewRequired']) ? $data['CSRReviewRequired'] : false;
+       if($data['CSRReviewRequired'] == false){
             if(isset($data['csrApproved'])){
                 unset($data['csrApproved']);
             }

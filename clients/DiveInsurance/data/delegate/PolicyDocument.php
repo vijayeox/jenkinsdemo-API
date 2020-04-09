@@ -600,6 +600,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $coi_number = $this->generateCOINumber($data,$persistenceService);
                     if($this->type == 'endorsement'){
                         $data['certificate_no'] = $data['certificate_no'].' - '.$length;
+                        if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
+                            $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;
+                        }
                     }else{
                         $data['certificate_no'] = $coi_number;
                         if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
@@ -781,7 +784,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return $data;
             }
             if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
-                if(isset($indexKey) && $indexKey != null){
+                if(isset($length) && $length > 0){
                     return $dest['relativePath'].$template.'-'.$length.'.pdf';
                 }
                 return $dest['relativePath'].$template.'.pdf';
