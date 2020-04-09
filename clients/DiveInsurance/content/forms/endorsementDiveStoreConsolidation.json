@@ -31,10 +31,6 @@
 					},
 					"values": [{
 						"value": "modify_personalInformation",
-						"label": "Personal Information",
-						"shortcut": ""
-					}, {
-						"value": "modify_businessAndPolicyInformation",
 						"label": "Business and Policy Information",
 						"shortcut": ""
 					}, {
@@ -86,6 +82,18 @@
 			"type": "columns",
 			"hideLabel": true
 		}, {
+			"label": "HTML",
+			"attrs": [{
+				"attr": "style",
+				"value": "color: #a94442;font-size:1.1em;"
+			}],
+			"content": "Please Note: These options will be disabled once you click on the next button",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "html34",
+			"type": "htmlelement",
+			"input": false
+		}, {
 			"label": "initiatedByCsr",
 			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
 			"key": "initiatedByCsr",
@@ -101,6 +109,13 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "previousPolicyLength",
+			"calculateValue": "value = data['previous_policy_data'].length - 1;",
+			"key": "previousPolicyLength",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "automatic_renewal",
 			"customDefaultValue": "value = false;",
 			"calculateServer": false,
@@ -110,8 +125,18 @@
 			"tableView": false
 		}],
 		"type": "panel",
-		"label": "Panel",
-		"path": "panel"
+		"label": "Endorsement Change",
+		"path": "panel",
+		"properties": {
+			"set_property": "{\"property\" : \"disableOptions\",\"value\":true}"
+		},
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false
 	}, {
 		"key": "panel",
 		"input": false,
@@ -1351,7 +1376,12 @@
 			"cancel": true,
 			"next": true
 		},
-		"path": "panel"
+		"path": "panel",
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_personalInformation"
+		}
 	}, {
 		"type": "panel",
 		"title": "Property Information",
@@ -10080,7 +10110,7 @@
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var amount=0.00;\nif(data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.data.propertyCoverageSelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.data.propertyCoverageSelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nvalue = amount",
+						"calculateValue": "var amount=0.00;\nif(data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nvalue = amount",
 						"calculateServer": false,
 						"key": "PAORFee",
 						"type": "number",
@@ -10188,18 +10218,25 @@
 					"components": []
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Amount",
-						"key": "amount",
 						"placeholder": "Amount Payable",
 						"prefix": "$",
-						"clearOnHide": false,
-						"type": "number",
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
+						"tableView": true,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value = data[\"totalAmount\"]-data[\"previous_totalAmount\"]",
+						"calculateServer": false,
+						"key": "amount",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
 						"lockKey": true,
-						"calculateValue": "value = data[\"totalAmount\"]-data[\"previous_totalAmount\"]"
+						"decimalLimit": 2
 					}]
 				}]
 			],
@@ -10266,7 +10303,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 63,
+	"_vid": 66,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10283,6 +10320,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-08T20:46:07.104Z",
+	"modified": "2020-04-09T08:26:14.179Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
