@@ -1,11 +1,11 @@
-{assign var=dspropcentralfire value=$dsPropCentralFireAL|json_decode:true}
 {assign var=additionalLocationData value=$additionalLocationData|json_decode:true}
+{assign var=dspropcentralfire value=$additionalLocationData.dsPropCentralFireAL}
 <!DOCTYPE html>
 <html>
 
 <head>
     <link href="{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
-    <link href="./css/divestemplate_css.css" rel="stylesheet" type="text/css" />
+    <link href="{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script> -->
 </head>
 
@@ -13,15 +13,17 @@
     <p></p>
     <div>
 
-    <b><p>Store/Location Description : {$store_name}</p></b>
-    <b><p>Store/Location Number: {$store_number}</p></b>
-    <p><b>Additional Named Insured:></b></p>
+    <b><p>Store/Location Description : {$business_name}</p></b>
+    <b><p>Store/Location Number: {$padi}</p></b>
+    <p><b>Additional Named Insured:</b></p>
     {assign var=list value=$additionalNamedInsured|json_decode:true}
-    {foreach $list as $additional}
+    {if isset($additional_named_insureds_option) && $additional_named_insureds_option=='yes'}
+    {foreach from=$list item=$additional}
         <p class = "ai_list">
             &nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.country},{$additional.city},{$additional.state},{$additional.zip}
         </p>
     {/foreach}
+    {/if}
     <p><b>Location Address: {$additionalLocationData.address},<br>
     {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.state} - {$additionalLocationData.zip}</p>
         <div class="table_sec">
@@ -32,10 +34,10 @@
                         <th>Limits</th>
                     </tr>
                     <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
-                    <tr><td>Policy #: liability_policy_no</td></tr>
+                    <tr><td>Policy #: PPK1992907</td></tr>
                     <tr>
                         <td>Contents Limit:</td>
-                        <td>${$additionalLocationPropertyTotal|number_format:2:".":","}</td>
+                        <td>${$additionalLocationData.additionalLocationPropertyTotal|number_format:2:".":","}</td>
                     </tr>
                     <tr>
                         <td id="space_left">(Sign limited to : $25,000)</td>
@@ -43,23 +45,23 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        {if $ALLossofBusIncomeCheckBox != "false"}
-                            <td>${$ALLossofBusIncome|number_format:2:".":","}</td>
+                        {if $additionalLocationData.ALLossofBusIncomeCheckBox != "false"}
+                            <td>${$additionalLocationData.ALLossofBusIncome|number_format:2:".":","}</td>
                         {else}
                             <td>$0</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
-                        {if isset($additionalLocationDoYouOwntheBuilding) && $additionalLocationDoYouOwntheBuilding != "no"}
-                            <td>${$ALBuildingReplacementValue|number_format:2:".":","}</td>
+                        {if isset($additionalLocationData.additionalLocationDoYouOwntheBuilding) && $additionalLocationData.additionalLocationDoYouOwntheBuilding != "no"}
+                            <td>${$additionalLocationData.ALBuildingReplacementValue|number_format:2:".":","}</td>
                         {else}
                             <td>Not Included</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
-                        {if isset($additionalLocationFurniturefixturesAndEquipment) && (int)$additionalLocationFurniturefixturesAndEquipment != 0}
+                        {if isset($additionalLocationData.additionalLocationFurniturefixturesAndEquipment) && (int)$additionalLocationData.additionalLocationFurniturefixturesAndEquipment != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>
@@ -107,10 +109,10 @@
                         <th>Limits</th>
                     </tr>
                     <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
-                    <tr><td>Policy #: liability_policy_no</td></tr>
+                    <tr><td>Policy #: PPK1992907</td></tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        {if $ALPoolLiability && (int)$ALPoolLiability > 0}
+                        {if isset($additionalLocationData.ALPoolLiability) && (int)$additionalLocationData.ALPoolLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -120,7 +122,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $ReceiptsAmont && (int)$ReceiptsAmont > 0}
+                        {if $additionalLocationData.estimatedMonthlyReceipts && (int)$additionalLocationData.estimatedMonthlyReceipts > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>

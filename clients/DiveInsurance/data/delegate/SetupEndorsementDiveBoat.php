@@ -141,9 +141,25 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
        $this->logger->info("Executing Endorsement Setup - Dive Boat".print_r($data,true));
-       $data['initiatedByCsr'] = false;
-       $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
-       if($data['initiatedByUser'] == false){
+       $data['CSRReviewRequired'] = isset($data['CSRReviewRequired']) ? $data['CSRReviewRequired'] : false;
+       if($data['CSRReviewRequired'] == false){
+            if(isset($data['csrApproved'])){
+                unset($data['csrApproved']);
+            }
+            if(isset($data['disableOptions'])){
+                unset($data['disableOptions']);
+            }
+            if(isset($data['endorsement_options'])){
+             foreach($data['endorsement_options'] as $key=>$value) {
+                if(isset($data['endorsement_options'][$key])) {
+                    unset($data['endorsement_options'][$key]);
+                }
+            }
+            $data['endorsementCoverage'] = array();
+            $data['endorsementGroupLiability'] = array();
+            }else{
+                $data['endorsement_options'] = array();
+            }
             $endorsementCoverage = array();
             $endorsementGroupCoverage = array();
             $endorsementGroupLiability = array();

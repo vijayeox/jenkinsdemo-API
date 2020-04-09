@@ -26,6 +26,7 @@ class ProcessEFRCancellation extends AbstractAppDelegate
         $fileData['workflowId'] = "81cb9e10-5845-4379-97c9-f9486b702bda";
         $fileData['fileId'] = $data['EFRFileId'];
         $fileData['parentWorkflowInstanceId'] = $data['EFRWorkflowInstanceId'];
+        $this->logger->info("EFR Cancellation Data sent to WF ---".json_encode($fileData));
 
         $result = $this->startWorkflow($fileData);
         $this->logger->info("EFR Cancellation Result ---".json_encode($result));

@@ -1,3 +1,4 @@
+{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -45,7 +46,7 @@
       {if isset($liabilityChanges)}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
-          {if isset(new_auto_liability)}
+          {if isset($new_auto_liability)}
             <p>+NON-Owned Auto Liability now applies as of the Effective date on this Endorsement ($1,000,000 Limit)</p>
           {/if}
 
@@ -53,34 +54,34 @@
             <p>+Liability Limits have been increased by {$increased_liability_limit} as of the Effective date of this Endorsement</p>
           {/if}
 
-          {if isset($travelagentPrice)}
+          {if isset($travelAgentEoPL)}
             <p>Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
           {/if}
       </div>
       {/if}
 
 
-      {if isset(additionalInsured)}
+      {if isset($additionalInsured)}
       <div class = "box">
         <center><b><u>***Additional Insured Schedule***</u></b></center>
         {assign var=list value=$additionalInsured|json_decode:true}
         {foreach from=$list item=$additional}
+          {if isset($additional.name) && ($additional.name != '')}
           <p class = "ai_list">
             {$additional.name}
           </p>
-        {/foreach}p
+      {/if}
+        {/foreach}
         <center><b>Additional Insured coverage applies only with respect to liability arising out of the operations of the named insureds</b></center>
       </div>
       {/if}
 
-
-      {if isset(additionalLocations)}
-
       <div class = "box">
 
-    <b><p>Store/Location Number: {$store_number}</p></b>
-    <p><b>Location Address: {$additionalLocationData.address},<br>
-    {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.additionalLocationState} - {$additionalLocationData.zip}</p>
+    <b><p>Store/Location Number: {$padi}</p></b>
+    <p><b>Location Address: {$address1},<br>
+      {$address2}<br>
+    {$country},{$city},{$state} - {$zip}</p>
 
     <center> <div>
       <p>See the Certificate for Primary Liability coverages.</p>
@@ -124,7 +125,7 @@
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
-                        {if (int)$dspropFurniturefixturesandequip != 0}
+                        {if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>
@@ -141,7 +142,7 @@
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        {if $poolLiability && (int)$poolLiability > 0}
+                        {if isset($poolLiability) && ((int)$poolLiability > 0)}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -151,7 +152,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+                        {if isset($travelAgentEOReceiptsPL) && ((int)$travelAgentEOReceiptsPL > 0)}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -183,8 +184,6 @@
             </div>
         </div>
     </div>
-    {/if}
 	</div>
 </body>
 </html>
-

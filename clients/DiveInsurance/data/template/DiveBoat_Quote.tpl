@@ -10,7 +10,7 @@
       <div class = "agent_info">
         <b class = "agent_info_title">Agent Information</b>
         <div class = "agent_1">
-         <p class ="info_margin" id ="nameVal"></p>
+         <p class ="info_margin1" id ="nameVal"></p>
          <p class ="add_margin" id = "addressVal"></p>
          <p></p>
          <p class = "p_info">License#: {$license_number}</p>
@@ -39,7 +39,7 @@
     <p class = "c_details">{$business_country},{$business_zip}</p>
   </div>
   <div class = "agent_info1">
-    <p class ="padi_margin"><b>Member#:</b> {$business_padi}
+    <p class ="padi_margin"><b>Member#:</b> {$padi}
     </div>
   </div>
   <div class = "spacing_div">&nbsp</div>

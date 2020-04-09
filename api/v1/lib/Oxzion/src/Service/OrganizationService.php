@@ -395,8 +395,8 @@ class OrganizationService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$orgField);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
         $where .= strlen($where) > 0 ? " AND og.status = 'Active'" : " WHERE og.status = 'Active'";
         $sort = " ORDER BY " . $sort;
@@ -514,8 +514,8 @@ class OrganizationService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$userField);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
 
         $where .= strlen($where) > 0 ? " AND ox_organization.uuid = '" . $id . "' AND ox_user.status = 'Active'" : " WHERE ox_organization.uuid = '" . $id . "' AND ox_user.status = 'Active'";
@@ -561,8 +561,8 @@ class OrganizationService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$userField);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
 
         $orgId = $this->getOrganizationIdByUuid($orgId);
@@ -603,8 +603,8 @@ class OrganizationService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$groupField);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
         $orgId = $this->getOrganizationIdByUuid($id);
         if (!$orgId) {
@@ -650,8 +650,8 @@ class OrganizationService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$projectField);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
         $orgId = $this->getOrganizationIdByUuid($id);
         if (!$orgId) {
@@ -697,8 +697,8 @@ class OrganizationService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$announcementField);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
         $orgId = $this->getOrganizationIdByUuid($id);
         if (!$orgId) {
@@ -743,8 +743,8 @@ class OrganizationService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$roleField);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
 
         $orgId = $this->getOrganizationIdByUuid($id);

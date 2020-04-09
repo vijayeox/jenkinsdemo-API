@@ -19,7 +19,7 @@ class EFRToIPLUpgrade extends PolicyCheck
             $data['EFRFileId'] = $fileData['fileId'];
             $data['EFRWorkflowInstanceId'] = $fileData['parentWorkflowInstanceId'];
             $data['efrToIPLUpgrade'] = true;
-            $data['efrAmountPaid'] = $fileData['amount'];
+            $data['efrAmountPaid'] = $fileData['amount'] + (isset($fileData['endorAmount']) ? $fileData['endorAmount'] : 0.00);
             $data['product'] = "Individual Professional Liability";
             $data['parentWorkflowInstanceId'] = "";
             $data['disableUserInfoEdit'] = true;
@@ -31,6 +31,7 @@ class EFRToIPLUpgrade extends PolicyCheck
             $data['padiVerified']= isset($fileData['padiVerified']) ? $fileData['padiVerified'] : NULL ;
             $data['padi_empty']= isset($fileData['padi_empty']) ? $fileData['padi_empty'] : NULL ;
             $data['verified']= isset($fileData['verified']) ? $fileData['verified'] : NULL ;
+            $data['businessPadiVerified']= isset($fileData['businessPadiVerified']) ? $fileData['businessPadiVerified'] : NULL ;
 
             $privileges = $this->getPrivilege();
             if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 

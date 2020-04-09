@@ -54,7 +54,7 @@
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if (int)$dspropFurniturefixturesandequip != 0}
+						{if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>

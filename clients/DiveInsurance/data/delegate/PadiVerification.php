@@ -31,6 +31,7 @@ class PadiVerification extends AbstractAppDelegate
         unset($data['lastname']);
         unset($data['business_name']);
         unset($data['initial']);
+        unset($data['padiNotApplicable']);
         $privileges = $this->getPrivilege();
         if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
             $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
@@ -61,13 +62,53 @@ class PadiVerification extends AbstractAppDelegate
                 $response[] = $result->current();
             }
             $returnArray = array_merge($data,$response[0]);
-            if(isset($data['product']) && (($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (isset($response[0]['firstname']) && $response[0]['firstname'] != '' && $response[0]['firstname'] != null))){
-                $returnArray['padiVerified'] = true;
-                $returnArray['businessPadiVerified'] = false;
-
-            }else if(isset($data['product']) && (($data['product'] == 'Dive Store'|| $data['product'] == 'Dive Boat') && (isset($response[0]['business_name']) && !empty($response[0]['business_name'])))) {
-                $returnArray['businessPadiVerified'] = true;
-                $returnArray['padiVerified'] = false;
+            $returnArray['padiNotApplicable'] = false;
+            if(isset($data['product']) && ($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'|| $data['product'] == 'Dive Boat' )){
+                if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
+                    if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                        $returnArray['padiVerified'] = true;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotFound'] = false;
+                    } else {
+                        $returnArray['padiVerified'] = false;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotApplicable'] = true;
+                        $returnArray['padiNotFound'] = false;
+                    }
+                } else if($data['product'] == 'Dive Boat'){
+                    if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
+                        $returnArray['padiVerified'] = false;
+                        $returnArray['businessPadiVerified'] = true;
+                        $returnArray['padiNotFound'] = false;
+                    } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                        $returnArray['padiVerified'] = true;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotApplicable'] = false;
+                        $returnArray['padiNotFound'] = false;
+                    } else {
+                        $returnArray['padiVerified'] = false;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotFound'] = true;
+                    }
+                } else {
+                    $returnArray['padiVerified'] = true;
+                    $returnArray['businessPadiVerified'] = false;
+                }
+            } else if(isset($data['product']) && ($data['product'] == 'Dive Store')){
+                if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
+                    $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = true;
+                    $returnArray['padiNotFound'] = false;
+                } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                    $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = false;
+                    $returnArray['padiNotApplicable'] = true;
+                    $returnArray['padiNotFound'] = false;
+                } else {
+                    $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = false;
+                    $returnArray['padiNotFound'] = true;
+                }
             } else {
                 if(isset($response[0]['firstname']) && $response[0]['firstname'] != '' && $response[0]['firstname'] != null ){
                     $returnArray['padiVerified'] = true;
@@ -107,6 +148,7 @@ class PadiVerification extends AbstractAppDelegate
             $returnArray['padiNotFound'] = true;
             $returnArray['businessPadiNotFound'] = true;
             $returnArray['padiNotFoundCsrReview'] = true;
+            $returnArray['padiNotApplicable'] = false;
             $data = array_merge($data,$returnArray);
             unset($data['member_number']);
             unset($privileges);

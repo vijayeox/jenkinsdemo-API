@@ -36,6 +36,9 @@ if(isset($data['liabilityCoverageName'])){
 if(isset($data['approved'])){
     unset($data['approved']);
 }
+if(isset($data['disableOptions'])){
+    unset($data['disableOptions']);
+}
 if(isset($data['endorsement_options'])){
  foreach($data['endorsement_options'] as $key=>$value) {
     if(isset($data['endorsement_options'][$key])) {

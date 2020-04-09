@@ -46,11 +46,12 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
                 throw new DelegateException('Cancellation Document Not Found','file.not.found');
             }
             $mailData = array();
-            $mailData['to'] = $data['email'];
+            $mailData = $data;
+            $mailData['email'] = $data['email'];
             $mailData['subject'] = 'Request for cancellation of policy';
             $mailData['template'] = $data['template'];
-            $mailData['attachments'] = $fileData;
-            $response = $this->dispatch($data);
+            $mailData['document'] = $fileData;
+            $response = $this->dispatch($mailData);
             $data['autoRenewalJob'] = '';
             unset($data['confirmReinstatePolicy']);
             return $data;

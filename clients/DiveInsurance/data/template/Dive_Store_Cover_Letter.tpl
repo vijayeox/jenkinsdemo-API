@@ -9,10 +9,10 @@
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
 			<p class="name">{$business_name}</p>
-			<p class="name">{$business_address1}</p>
-			<p class="name">{$business_address2}</p>
-			<p class="name">{$business_city},{$business_state}</p>
-			<p class="name">{$business_country},{$business_zip}</p>
+			<p class="name">{$address1}</p>
+			<p class="name">{$address2}</p>
+			<p class="name">{$city},{$state}</p>
+			<p class="name">{$country},{$zip}</p>
 		</div>
 
 		<p class = "rgard">RE: PADI SPONSORED DIVE CENTER INSURANCE</p>

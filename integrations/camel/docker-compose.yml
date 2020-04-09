@@ -5,6 +5,12 @@ services:
             context: ./docker
             args:
                 HOST: ${HOST}
+                DB_USERNAME: ${DB_USERNAME}
+                DB_PASSWORD: ${DB_PASSWORD}
+                DB_HOST: ${DB_HOST}
+                QUARTZ_DB: ${QUARTZ_DB}
+                API_DB : ${API_DB}
+                ELASTIC_CLUSTER : ${ELASTIC_CLUSTER}
         network_mode: "host"    
         ports:
             - "8161:8161"
