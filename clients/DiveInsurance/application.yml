@@ -477,11 +477,12 @@ menu:
                     content:
                         route: 'file/search/status/Completed'
                         defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                        forceDefaultFilters: true
                         filterable: true
                         resizable: true
                         sortable: 
-                            allowUnsort: false
-                            mode: multiple
+                            allowUnsort: true
+                            mode: single
                         pageable:
                             buttonCount: 3
                             pageSizes:
