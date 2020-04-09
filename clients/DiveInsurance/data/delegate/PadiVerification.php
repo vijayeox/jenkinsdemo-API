@@ -80,6 +80,11 @@ class PadiVerification extends AbstractAppDelegate
                         $returnArray['padiVerified'] = false;
                         $returnArray['businessPadiVerified'] = true;
                         $returnArray['padiNotFound'] = false;
+                    } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                        $returnArray['padiVerified'] = true;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotApplicable'] = false;
+                        $returnArray['padiNotFound'] = false;
                     } else {
                         $returnArray['padiVerified'] = false;
                         $returnArray['businessPadiVerified'] = false;
