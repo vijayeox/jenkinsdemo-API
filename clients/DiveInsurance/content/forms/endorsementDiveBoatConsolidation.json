@@ -173,8 +173,7 @@
 				},
 				"state": true
 			}]
-		}],
-		"customConditional": "show = (data.CSRReviewRequired == false || !data.CSRReviewRequired);"
+		}]
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -9306,7 +9305,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 154,
+	"_vid": 157,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9324,6 +9323,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-09T11:49:09.816Z",
+	"modified": "2020-04-09T14:48:44.808Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

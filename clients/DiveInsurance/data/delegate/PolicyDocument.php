@@ -384,18 +384,42 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                          if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
                             $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
                         }
-                    } else{
+                    }
+                    else{
                         $this->logger->info("DOCUMENT groupPL");
-                        $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
-                        if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
-                        $this->logger->info("DOCUMENT additionalNamedInsured");
-                        $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
-                        }
-                        if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
-                        $this->logger->info("DOCUMENT namedInsured");
-                        $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+
+                        if($this->type == 'endorsement'){
+                            $grpFileName = 'group_endorsement_coi- '.$length;
+                            $documents[$grpFileName] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null,$length);
+
+                            if(isset($temp['additional_insured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                                $this->logger->info("DOCUMENT additionalNamedInsured");
+                                $grpAIFileName = 'group_endorsement_ai- '.$length;
+                                $documents[$grpAIFileName] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter',null,$length);
+                            }
+                            
+                            if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
+                                $grpNIFileName = 'group_endorsement_ni- '.$length;
+                            $this->logger->info("DOCUMENT namedInsured");
+                            $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                            }
+
+                        }else{
+                            $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
+
+
+                            if(isset($temp['additional_insured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                            $this->logger->info("DOCUMENT additionalNamedInsured");
+                            $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                            }
+
+                            if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
+                            $this->logger->info("DOCUMENT namedInsured");
+                            $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                            }
                         }
                     }
+
                     $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
                 }
 
