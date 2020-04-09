@@ -513,12 +513,8 @@ class AnnouncementService extends AbstractService
                 throw new ServiceException("Announcement does not belong to the organization", "announcement.not.found");
             }
         }
-        if (!isset($data['groups']) || empty($data['groups'])) {
-            throw new ServiceException("Enter Group Ids", "select.group");
-        }
         $announcementId = $obj->id;
         $orgId = $params['orgId'];
-        if ($data['groups']) {
             $groupSingleArray = array_map('current', $data['groups']);
             try {
                 $delete = "DELETE oag FROM ox_announcement_group_mapper as oag
@@ -531,7 +527,5 @@ class AnnouncementService extends AbstractService
                 throw $e;
             }
             return 1;
-        }
-        throw new ServiceException("Entity not found", "Announcemnet.not.found");
     }
 }
