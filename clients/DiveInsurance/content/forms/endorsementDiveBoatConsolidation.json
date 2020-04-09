@@ -46,7 +46,7 @@
 			"tableView": false
 		}, {
 			"label": "attachmentsFieldnames",
-			"calculateValue": "value = [[\"groupPL\",\"document\"],'attachments','csrApprovalAttachments'];",
+			"calculateValue": "value = [[\"groupPL\",\"documentattach\"],'attachments','csrApprovalAttachments'];",
 			"calculateServer": false,
 			"key": "attachmentsFieldnames",
 			"type": "hidden",
@@ -4631,10 +4631,11 @@
 						"multiple": true,
 						"persistent": false,
 						"protected": true,
+						"calculateServer": false,
 						"validate": {
 							"multiple": true
 						},
-						"key": "document",
+						"key": "documentattach",
 						"type": "file",
 						"input": true,
 						"lockKey": true,
@@ -4649,11 +4650,11 @@
 					}, {
 						"type": "documentviewer",
 						"key": "document1",
-						"calculateValue": "value = (data.document)",
+						"calculateValue": "value = (data.documentattach)",
 						"dtype": "documentviewer",
 						"datype": "documentviewer",
 						"dattype": "documentviewer",
-						"customConditional": "if (data.privileges){\n  if(data.document !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+						"customConditional": "if (data.privileges){\n  if(data.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 						"datatype": "documentviewer",
 						"data_type": "documentviewer",
 						"label": "Attachments",
@@ -9296,7 +9297,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 136,
+	"_vid": 138,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9314,6 +9315,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-08T14:02:16.777Z",
+	"modified": "2020-04-09T01:58:55.300Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
