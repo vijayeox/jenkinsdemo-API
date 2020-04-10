@@ -231,7 +231,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT blanketForm");
                     $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
                 }
-                $this->logger->info('hello 123');
                 
                 if(isset($this->template[$temp['product']]['card'])){
                     $this->logger->info("generate pocket card");
@@ -254,15 +253,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $NewData[0]['state'] = $data['state'];
                     $NewData[0]['zip'] = $data['zip'];
                     $NewData[0]['entity_name'] = 'Pocket Card Job';
-                    if($data['business_name'] && isset($data['business_name'])){
-                        $NewData[0]['business_name'] = $data['business_name'];
-                    }
                     $newData = json_encode($NewData);
                     $docdata = array('data' => $newData);
                     unset($NewData);
                     unset($newData);
                     $this->logger->info("Data is: ".print_r($docdata, true));
                     $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
+                    $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf'; 
                 }
             }
             else if($data['product'] == "Dive Boat"){
