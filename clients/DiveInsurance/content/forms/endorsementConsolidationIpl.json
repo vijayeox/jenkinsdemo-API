@@ -481,7 +481,6 @@
 			"cancel": true,
 			"next": true
 		},
-		"customConditional": "show = !data.CSRReviewRequired;",
 		"logic": [{
 			"name": "disablePanel",
 			"trigger": {
@@ -982,6 +981,7 @@
 								"label": "Home or Work Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"customMessage": "Please enter a valid home or work phone number"
@@ -1080,6 +1080,8 @@
 								"label": "Mobile Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter a valid mobile phone number"
@@ -3044,18 +3046,6 @@
 			"label": "Transaction Status",
 			"type": "hidden",
 			"lockKey": true
-		}, {
-			"key": "page6Content",
-			"label": "Content",
-			"input": false,
-			"attrs": [{
-				"value": "",
-				"attr": ""
-			}],
-			"content": "</br><b><font color=\"red\">If you click \"Submit Form\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Form\" only once.</b></font>",
-			"type": "htmlelement",
-			"tableView": false,
-			"hideLabel": true
 		}],
 		"input": false,
 		"path": "page6",
@@ -3162,7 +3152,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 47,
+	"_vid": 51,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3181,6 +3171,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-04T11:36:13.509Z",
+	"modified": "2020-04-10T02:39:14.218Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

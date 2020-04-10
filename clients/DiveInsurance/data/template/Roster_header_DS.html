@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="./AgentInfo.js"></script>
+<script>
+  function subst() {
+      var vars = {};
+      var data = {};
+      var split = {};
+
+      var query_strings_from_url = document.location.search.substring(1).split('&');
+      for (var query_string in query_strings_from_url) {
+          if (query_strings_from_url.hasOwnProperty(query_string)) {
+              var temp_var = query_strings_from_url[query_string].split('=', 2);
+              vars[temp_var[0]] = decodeURI(temp_var[1]);
+          }
+      }
+      // document.getElementById("test").textContent = query_strings_from_url;
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','update_date','padi'];
+      for (var css_class in css_selector_classes) {
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+              var element = document.getElementsByClassName(css_selector_classes[css_class]);
+              for (var j = 0; j < element.length; ++j) {
+                  element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+          }
+      }
+      agentInfo();
+      var policyYear = new Date().getFullYear();
+      var policyYear1 = policyYear + 1;
+      document.getElementById("policy_year").textContent = policyYear + '-' +policyYear1; 
+  }
+  </script>
+</head>
+<body onload="subst()" id = "doc_body">  
+ <div class = "main_div">
+	       	<hr class="line1"></hr>
+      		<div class="spacer"></div>
+      		<hr class="line2"></hr>
+
+      		<div class="r_title"><center><p class = 'r_title1'><b>Dive Center Instructional Policy</b><p>
+            <p class="r_title2">Program Application</p></center></div>
+
+          <hr class="line1"></hr>
+          <div class="spacer"></div>
+          <hr class="line2"></hr>
+
+          <div class = "r_label">
+          <p class ='r_label1'><b>Legal Business Name : </b> <span class="business_name"></span></p>
+          <p class ='r_label2'><b>Member #: </b><span class = "padi"></span></p>
+          </div>
+
+          <div>
+            <p class ="r_content">To renew your Store/Resort Professional Liability policy,please follow these steps.</p>
+            <p class ="r_content">1.  Review the members below and make any changes. An application is not required from each renewing member.</p>
+            <p class ="r_content">2.  Delete those members not to be renewed by drawing a line through their name</p>
+            <p class ="r_content">3.  Add any New members Name,Padi # and Status</p>
+            <p class ="r_content">4.  Have any new member complete application #300D T <span id = 'policy_year'> </span>(Professional Liability Dive Center/Resort Instructional Polciy).</p>
+            <p class ="r_content">5.  Sign and Submit this application,along with any new member applications with your signed Dive Center/Resort Renewal Application.</p>
+          </div>
+
+
+          <p class ="r_content1">Premium for the Store/Resort Instructional Policy can be included with the store/resort's general liability premium.There is no limit to the number of individuals who can be added to a store/resort's policy.</p>
+
+          <hr></hr>
+ </div>
+</body>
+</html>

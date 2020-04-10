@@ -52,7 +52,7 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
                     array_push($errorFile,$file);
                 }
             }
-        $data['csrApprovalAttachments'] = array();
+            $data['csrApprovalAttachments'] = array();
         }
 
         if(count($errorFile) > 0){

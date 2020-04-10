@@ -207,7 +207,8 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:serviceTask id="ServiceTask_1jlosnx" name="Policy Status Change During Review" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')</camunda:script>
+          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')
+execution.setVariable('CSRReviewRequired',true);</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">fileSave</camunda:inputParameter>

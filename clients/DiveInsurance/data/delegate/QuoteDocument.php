@@ -65,7 +65,7 @@ class QuoteDocument extends PolicyDocument
                      'alTemplate' => 'DiveStore_AdditionalLocations',
                      'groupExclusions' => 'Group_Exclusions.pdf',
                      'roster' => 'Roster_Certificate',
-                     'rosterHeader' => 'Roster_header.html',
+                     'rosterHeader' => 'Roster_header_DS.html',
                      'rosterFooter' => 'Roster_footer.html',
                      'rosterPdf' => 'Roster.pdf',
                      'businessIncomeWorksheet'=>'DS_Business_Income_Worksheet.pdf'
