@@ -162,6 +162,9 @@ class UserService extends AbstractService
             }
             $data['orgid'] = $orgId;
         }
+        if (!isset($params['orgId']) || $params['orgId'] == '') {
+            $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
+        }
         try {
             if (isset($data['id'])) {
                 unset($data['id']);
@@ -212,10 +215,13 @@ class UserService extends AbstractService
                     throw new ServiceException("Username or Email Exists in other Organization", "user.email.exists");
                 }
             }
-            if (isset($data['address1'])) {
-                $addressid = $this->addressService->addAddress($data);
-                $data['address_id'] = $addressid;
+            if (!isset($data['address1'])) {
+                $addressData = $this->addressService->getOrganizationAddress( $params['orgId']);
+                unset($addressData['id']);
+                $data = array_merge($data, $addressData);
             }
+            $addressid = $this->addressService->addAddress($data);
+            $data['address_id'] = $addressid;
             $data['name'] = $data['firstname'] . " " . $data['lastname'];
             $data['uuid'] = UuidUtil::uuid();
             $data['date_created'] = date('Y-m-d H:i:s');
@@ -274,6 +280,24 @@ class UserService extends AbstractService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function updateUserProjects($userId, $project, $orgId)
+    {
+        $projectSingleArray = array_map('current', $project);
+        try {
+            $delete = "DELETE oxup FROM ox_user_project as oxup
+                        inner join ox_project as oxp on oxup.project_id = oxp.id where oxp.uuid not in 
+                        ('" . implode("','", $projectSingleArray) . "') and oxup.user_id = " . $userId . " and oxp.org_id =" . $orgId;
+            $result = $this->executeQuerywithParams($delete);
+            $query = "Insert into ox_user_project(user_id,project_id) SELECT " . $userId . ",oxp.id from ox_project as oxp 
+                        LEFT OUTER JOIN ox_user_project as oxup on oxp.id = oxup.project_id and oxup.user_id = " . $userId . 
+                        " where oxp.uuid in ('" . implode("','", $projectSingleArray) . "') and oxp.org_id = " . $orgId . " and oxup.user_id is null";
+            $resultInsert = $this->runGenericQuery($query);
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return 1;
     }
 
     public function addRoleToUser($id, $role, $orgId)
@@ -486,6 +510,9 @@ class UserService extends AbstractService
             $this->table->save($form);
             if (isset($data['role'])) {
                 $this->addRoleToUser($form->uuid, $data['role'], $form->orgid);
+            }
+            if (isset($data['project'])) {
+                $this->updateUserProjects($obj->id, $data['project'], $form->orgid);
             }
             $this->commit();
         } catch (Exception $e) {
@@ -752,9 +779,11 @@ class UserService extends AbstractService
      * @return array with minumum information required to use for the User.
      * @return array Returns a JSON Response with Status Code and Created User.
      */
-    public function getUserWithMinimumDetails($id)
+    public function getUserWithMinimumDetails($id, $orgid=null)
     {
-        $select = "SELECT ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.designation,ou.orgid,ou.phone,ou.date_of_birth,ou.date_of_join,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.website,ou.about,ou.gender,ou.managerid,ou.interest,ou.icon,ou.preferences from ox_user as ou left join ox_address as oa on ou.address_id = oa.id where ou.orgid = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ou.id = " . $id . " AND ou.status = 'Active'";
+        $o_id = $orgid != null ? $orgid : AuthContext::get(AuthConstants::ORG_ID);
+        $o_id = $this->getIdFromUuid('ox_organization', $o_id);
+        $select = "SELECT ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.designation,ou.orgid,ou.phone,ou.date_of_birth,ou.date_of_join,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.website,ou.about,ou.gender,ou.managerid,ou.interest,ou.icon,ou.preferences from ox_user as ou left join ox_address as oa on ou.address_id = oa.id where ou.orgid = " . $o_id . " AND ou.id = " . $id . " AND ou.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (empty($response)) {
             return 0;
@@ -1165,7 +1194,13 @@ class UserService extends AbstractService
         $userData = $userData[0];
         $userData['preferences'] = json_decode($userData['preferences'], true);
         $userData['orgid'] = $this->getUuidFromId('ox_organization', $params['orgId']);
-        $userData['managerid'] = $this->getUuidFromId('ox_user', $userData['managerid']);
+        if(isset($userData['managerid']) && $userData['managerid'] != 0 ){
+            $result = $this->getUserWithMinimumDetails($userData['managerid'], $params['orgId']);
+            $userData['managerid'] = $this->getUuidFromId('ox_user', $userData['managerid']);
+            $userData['manager_name'] = $result['firstname']." ".$result['lastname'];
+        } else {
+            $userData['manager_name'] = "";
+        }
         $userData['role'] = $this->getRolesofUser($params['orgId'], $params['userId']);
         return $userData;
     }
