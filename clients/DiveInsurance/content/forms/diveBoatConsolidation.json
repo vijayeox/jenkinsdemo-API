@@ -2325,6 +2325,10 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
 						"key": "if_lessthan_100_please_explain",
 						"customConditional": "show = (data['percentage_of_trips_for_diving_charters'] < 100 && data['percentage_of_trips_for_diving_charters'] != '')",
 						"type": "textfield",
@@ -4931,6 +4935,7 @@
 								"label": "Last Name",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -4981,6 +4986,7 @@
 								"label": "Name of Training Agency",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -5559,6 +5565,7 @@
 									"label": "Last Name",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -5609,6 +5616,7 @@
 									"label": "Name of Training Agency",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -8265,7 +8273,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 360,
+	"_vid": 363,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8283,6 +8291,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-09T11:49:28.471Z",
+	"modified": "2020-04-10T12:32:48.365Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

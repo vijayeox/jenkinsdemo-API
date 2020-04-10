@@ -153,6 +153,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
 
+
+
+
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
                 if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
@@ -263,6 +266,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
             else if($data['product'] == "Dive Boat"){
+                // if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
+                //     $documents['coi_document'] = $data['documents']['coi_document'];
+                // }
+
                 if(isset($this->template[$data['product']]['instruct'])){
                     $this->logger->info("DOCUMENT instruct");
                     $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
@@ -376,7 +383,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-                         $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter',null,$length);
+                         $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter'); 
                          $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
                          if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
                             $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
@@ -804,12 +811,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['documents']['lapse_document'] = $dest['relativePath'].$template.'.pdf'; 
                 return $data;
             }
-            if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
-                if(isset($length) && $length > 0){
-                    return $dest['relativePath'].$template.'-'.$length.'.pdf';
-                }
-                return $dest['relativePath'].$template.'.pdf';
-            }else{
                 if(is_array($docDest)){
                     $filesCreated = array();
                     foreach($docDest as $key => $doc){
@@ -818,9 +819,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     return $filesCreated;
                 } else {
                     return $dest['relativePath'].$template.'.pdf';
-                }
-            }
-            
+                } 
         }
         
         private function copyDocuments(&$data,$dest,$fileKey,$indexKey =null){
