@@ -617,6 +617,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['update_date'])){
                 $data['update_date'] = $updateDate;
             }
+            if(isset($data['disableOptions'])){
+                unset($data['disableOptions']);
+            }
             
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
