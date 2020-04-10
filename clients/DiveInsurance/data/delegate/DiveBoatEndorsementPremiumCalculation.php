@@ -92,7 +92,7 @@ class DiveBoatEndorsementPremiumCalculation extends AbstractAppDelegate
         		$data['increased_crewInWaterPremium'] = (float)$data['CrewMembersinWaterPremium'] - (float)$policy['previous_CrewMembersinWaterPremium'];
         	}else if($crewInWater < 0){
         		$data['decreased_crewInWater'] = $crewInWater;
-        		$data['decreased_crewInWaterPremium'] = (float)$data['previous_CrewMembersinWaterPremium'] - (float)$policy['CrewMembersinWaterPremium'];
+        		$data['decreased_crewInWaterPremium'] = (float)$policy['previous_CrewMembersinWaterPremium'] - (float)$data['CrewMembersinWaterPremium'];
         	}
         }
         return $data;

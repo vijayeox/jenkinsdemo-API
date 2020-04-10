@@ -1915,6 +1915,10 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
 						"key": "if_lessthan_100_please_explain",
 						"conditional": {
 							"show": true,
@@ -3136,8 +3140,15 @@
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "dingy_or_tender",
 					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
 					"input": true,
 					"lockKey": true,
 					"hideOnChildrenHidden": false
@@ -3158,6 +3169,10 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "dingy_manufacturer",
 								"type": "textfield",
 								"input": true,
@@ -3203,6 +3218,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "dingy_age",
 								"type": "select",
 								"indexeddb": {
@@ -3220,6 +3238,10 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "dingy_value",
 								"type": "number",
 								"decimalLimit": 2,
@@ -3268,8 +3290,15 @@
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "trailer",
 					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
 					"input": true,
 					"lockKey": true,
 					"hideOnChildrenHidden": false
@@ -3290,6 +3319,10 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_manufacturer",
 								"type": "textfield",
 								"input": true,
@@ -3311,6 +3344,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_year_built",
 								"type": "select",
 								"indexeddb": {
@@ -3330,6 +3366,10 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_serial_number",
 								"type": "textfield",
 								"input": true,
@@ -3345,6 +3385,10 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_value",
 								"type": "number",
 								"decimalLimit": 2,
@@ -4516,6 +4560,7 @@
 								"label": "Last Name",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -4566,6 +4611,7 @@
 								"label": "Name of Training Agency",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -5191,6 +5237,7 @@
 									"spellcheck": true,
 									"disabled": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -5277,6 +5324,7 @@
 									"spellcheck": true,
 									"disabled": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -6825,7 +6873,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "if(parseFloat(data['boat_age']>24)){\nvalue = ((parseFloat(data['PropertyBasePremium']) || 0) * parseFloat(data['AgeSurcharge'])/100)\n} else {\nvalue = 0\n}",
+							"calculateValue": "if(data['boat_age'] > 24){\nvalue = ((parseFloat(data['PropertyBasePremium']) || 0) * parseFloat(data['AgeSurcharge'])/100)\n} else {\nvalue = 0\n}",
 							"calculateServer": false,
 							"key": "Age25Surcharge",
 							"type": "number",
@@ -9305,7 +9353,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 157,
+	"_vid": 164,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9323,6 +9371,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-09T14:48:44.808Z",
+	"modified": "2020-04-10T12:32:50.047Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
