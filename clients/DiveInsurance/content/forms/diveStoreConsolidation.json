@@ -6742,6 +6742,18 @@
 					"event": "callDelegate",
 					"input": true
 				}, {
+					"label": "HTML",
+					"attrs": [{
+						"attr": "",
+						"value": ""
+					}],
+					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\">link</a> for more information.</h4>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "html1",
+					"type": "htmlelement",
+					"input": false
+				}, {
 					"label": "Members applicable for Group Liability",
 					"disableAddingRemovingRows": false,
 					"hideLabel": true,
@@ -9942,7 +9954,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 11,
+	"_vid": 14,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9959,6 +9971,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-08T16:39:34.990Z",
+	"modified": "2020-04-10T05:48:13.463Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
