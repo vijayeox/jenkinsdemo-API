@@ -6478,6 +6478,18 @@
 					"event": "callDelegate",
 					"input": true
 				}, {
+					"label": "HTML",
+					"attrs": [{
+						"attr": "",
+						"value": ""
+					}],
+					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\">link</a> for more information.</h4>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "html1",
+					"type": "htmlelement",
+					"input": false
+				}, {
 					"label": "Members applicable for Group Liability",
 					"disableAddingRemovingRows": false,
 					"hideLabel": true,
@@ -9934,7 +9946,7 @@
 						"clearOnHide": false,
 						"calculateValue": "value = (parseFloat(data[\"groupTotalAmount\"])||0)",
 						"calculateServer": false,
-						"key": "groupProfessionalLiabilityPrice",
+						"key": "groupProfessionalLiability",
 						"type": "number",
 						"decimalLimit": 2,
 						"input": true,
@@ -10171,7 +10183,7 @@
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiabilityPrice\"])||0);",
+						"calculateValue": "value = (parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0) + (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0);",
 						"calculateServer": false,
 						"key": "totalAmount",
 						"type": "number",
@@ -10229,14 +10241,14 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = data[\"totalAmount\"]-data[\"previous_totalAmount\"]",
+						"calculateValue": "var amount = parseFloat(data[\"totalAmount\"])-parseFloat(data[\"previous_totalAmount\"]);\nif(amount === 0){\n  value = 0.00;\n} else {\n  value = amount\n}",
 						"calculateServer": false,
 						"key": "amount",
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 2
+						"lockKey": true
 					}]
 				}]
 			],
@@ -10303,7 +10315,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 66,
+	"_vid": 71,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10320,6 +10332,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-09T08:26:14.179Z",
+	"modified": "2020-04-10T10:06:41.055Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

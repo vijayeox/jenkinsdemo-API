@@ -2674,7 +2674,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "page3PanelPanel",
-				"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = false;\n}\nelse{\n  show = true;\n}",
+				"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = true;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Attachments",
 				"input": false,
@@ -2719,7 +2719,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "CsrAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && !data.initiatedByCsr) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data.CSRReviewRequired) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Attachments",
 				"input": false,
@@ -2820,14 +2820,31 @@
 			}, {
 				"label": "I Agree",
 				"tableView": false,
+				"defaultValue": false,
 				"calculateServer": false,
 				"validate": {
 					"required": true
 				},
 				"key": "upgradeToIpl",
+				"logic": [{
+					"name": "disableFieldEdit",
+					"trigger": {
+						"type": "javascript",
+						"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
+					},
+					"actions": [{
+						"name": "diableField",
+						"type": "property",
+						"property": {
+							"label": "Disabled",
+							"value": "disabled",
+							"type": "boolean"
+						},
+						"state": true
+					}]
+				}],
 				"type": "checkbox",
-				"input": true,
-				"defaultValue": false
+				"input": true
 			}, {
 				"label": "efrAmountPaid",
 				"calculateServer": false,
@@ -4200,7 +4217,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 215,
+	"_vid": 221,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4221,6 +4238,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-08T06:43:59.665Z",
+	"modified": "2020-04-10T13:53:01.589Z",
 	"machineName": "testdivehub:csrInitiates"
 }

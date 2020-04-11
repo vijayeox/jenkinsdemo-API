@@ -966,8 +966,12 @@
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateServer": false,
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1057,15 +1061,22 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateServer": false,
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1158,6 +1169,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"errorLabel": "Please enter a valid Fax number",
 						"key": "fax",
 						"type": "phoneNumber",
@@ -1240,9 +1252,9 @@
 				"disabled": true,
 				"tableView": true,
 				"persistent": false,
-				"protected": true,
 				"clearOnHide": false,
 				"calculateValue": "try {\nvalue = data['start_date_range'].label\n} catch(e){\nvalue = data['start_date_range'].label\n}",
+				"calculateServer": false,
 				"errorLabel": "Please select a policy period from the list",
 				"key": "startDateRange",
 				"type": "textfield",
@@ -2899,7 +2911,7 @@
 		}, {
 			"label": "amount",
 			"defaultValue": "0",
-			"calculateValue": "value = parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00",
+			"calculateValue": "if(data.CSRReviewRequired ===false || data.CSRReviewRequired ==='false' || data.CSRReviewRequired ===''){\n  value = parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00;\n}",
 			"calculateServer": false,
 			"key": "amount",
 			"properties": {
@@ -3046,6 +3058,20 @@
 			"label": "Transaction Status",
 			"type": "hidden",
 			"lockKey": true
+		}, {
+			"label": "Please process the payment and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "pleaseProcessThePaymentAndApprove",
+			"customConditional": "show = ((parseFloat(data.balanceEndor) > 0) &&(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ;",
+			"type": "htmlelement",
+			"input": false,
+			"hideLabel": true
 		}],
 		"input": false,
 		"path": "page6",
@@ -3067,20 +3093,6 @@
 		"label": "Approval",
 		"input": false,
 		"components": [{
-			"label": "Please process the payment and approve",
-			"attrs": [{
-				"attr": "",
-				"value": ""
-			}],
-			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
-			"refreshOnChange": false,
-			"tableView": false,
-			"key": "pleaseProcessThePaymentAndApprove",
-			"customConditional": "show = (parseFloat(data.balanceEndor) > 0);",
-			"type": "htmlelement",
-			"input": false,
-			"hideLabel": true
-		}, {
 			"label": "Notes",
 			"autoExpand": false,
 			"spellcheck": true,
@@ -3152,7 +3164,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 51,
+	"_vid": 58,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3171,6 +3183,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-10T02:39:14.218Z",
+	"modified": "2020-04-10T14:00:35.650Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
