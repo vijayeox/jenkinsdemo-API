@@ -141,8 +141,7 @@
 				},
 				"state": true
 			}]
-		}],
-		"customConditional": "show = !data.CSRReviewRequired;"
+		}]
 	}, {
 		"key": "panel",
 		"input": false,
@@ -1927,7 +1926,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 89,
+	"_vid": 90,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -1948,7 +1947,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-06T12:17:49.568Z",
+	"modified": "2020-04-11T06:11:42.152Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
