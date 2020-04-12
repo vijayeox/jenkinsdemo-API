@@ -901,7 +901,7 @@
 						"disabled": true,
 						"tableView": true,
 						"defaultValue": "0.00",
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -969,7 +969,7 @@
 								"disabled": true,
 								"tableView": true,
 								"defaultValue": "0.00",
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"calculateValue": "value = parseFloat((data['careerCoveragePrice'])||0);",
@@ -1025,7 +1025,7 @@
 								"disabled": true,
 								"tableView": true,
 								"defaultValue": "0.00",
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1926,7 +1926,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 90,
+	"_vid": 91,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -1947,7 +1947,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-11T06:11:42.152Z",
+	"modified": "2020-04-12T20:11:24.374Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
