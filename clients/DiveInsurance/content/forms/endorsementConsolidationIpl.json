@@ -96,13 +96,13 @@
 			"tableView": true,
 			"lockKey": true
 		}, {
+			"label": "previousCareerCoverage",
+			"calculateServer": false,
+			"key": "previous_careerCoverage",
+			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"key": "previous_careerCoverage",
-			"label": "previousCareerCoverage",
-			"type": "hidden",
-			"lockKey": true,
-			"calculateServer": false
+			"lockKey": true
 		}, {
 			"label": "Previous Scuba fit",
 			"calculateValue": "value = data.previous_scuba?data.previous_scuba:data.previousScubafit",
@@ -111,6 +111,14 @@
 			"input": true,
 			"tableView": true,
 			"lockKey": true
+		}, {
+			"label": "initiatedByCsr",
+			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
+			"calculateServer": false,
+			"key": "initiatedByCsr",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"input": true,
 			"tableView": true,
@@ -420,13 +428,14 @@
 			"lockKey": true,
 			"hideOnChildrenHidden": false
 		}, {
+			"label": "Previous equipment Liability",
+			"calculateValue": "value = data['previous_equipmentLiability'];",
+			"calculateServer": false,
+			"key": "previousequipmentLiability",
+			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"key": "previousequipmentLiability",
-			"label": "Previous equipment Liability",
-			"type": "hidden",
 			"lockKey": true,
-			"calculateValue": "value = data['previous_equipmentLiability'];",
 			"hideOnChildrenHidden": false
 		}, {
 			"label": "previous_excessLiability",
@@ -1286,16 +1295,20 @@
 										"value": "",
 										"label": ""
 									}],
-									"custom": "if(data['endorsementCoverage']){\n  for(var key in data['endorsementCoverage']){\nvar item = {}\nitem.label = data['endorsementCoverage'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+									"custom": "if(data['endorsementCoverage']){\n  for(var key in data['endorsementCoverage']){\n    var item = {}\n    item.label = data['endorsementCoverage'][key];\n    item.value = key;\n    values.push(item);\n  }\n}"
 								},
+								"refreshOn": "endorsement_options",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "upgradeCareerCoverage",
 								"properties": {
 									"target": "careerCoveragePrice"
 								},
 								"type": "select",
-								"refreshOn": "endorsement_options",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1315,11 +1328,12 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"customDefaultValue": "value = 0.00",
+								"calculateServer": false,
 								"key": "careerCoveragePrice",
 								"type": "number",
 								"decimalLimit": 2,
@@ -1394,7 +1408,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1501,7 +1515,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1550,16 +1564,20 @@
 										"value": "",
 										"label": ""
 									}],
-									"custom": "if(data['endorsementCylinder']){\n  for(var key in data['endorsementCylinder']){\nvar item = {}\nitem.label = data['endorsementCylinder'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+									"custom": "if(data['endorsementCylinder']){\n  for(var key in data['endorsementCylinder']){\n    var item = {}\n    item.label = data['endorsementCylinder'][key];\n    item.value = key;\n    values.push(item);\n  }\n}"
 								},
+								"refreshOn": "endorsement_options",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "upgradecylinder",
 								"properties": {
 									"target": "cylinderPrice"
 								},
 								"type": "select",
-								"refreshOn": "endorsement_options",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1579,7 +1597,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1686,7 +1704,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1736,6 +1754,7 @@
 									}],
 									"custom": "if(data['endorsementExcessLiability']){\n    for(var key in data['endorsementExcessLiability']){\n      var item = {}\n      item.label = data['endorsementExcessLiability'][key];\n      item.value = key;\n      values.push(item);\n    }    \n  }"
 								},
+								"refreshOn": "endorsement_options",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1747,7 +1766,6 @@
 								"indexeddb": {
 									"filter": {}
 								},
-								"refreshOn": "endorsement_options",
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1767,7 +1785,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1866,7 +1884,7 @@
 										"disabled": true,
 										"tableView": true,
 										"defaultValue": "0.00",
-										"delimiter": false,
+										"delimiter": true,
 										"requireDecimal": true,
 										"inputFormat": "plain",
 										"clearOnHide": false,
@@ -1925,11 +1943,12 @@
 										"disabled": true,
 										"tableView": true,
 										"defaultValue": 0,
-										"delimiter": false,
+										"delimiter": true,
 										"requireDecimal": true,
 										"inputFormat": "plain",
 										"clearOnHide": false,
 										"calculateValue": "value = (parseFloat(data['endorsementTotal']) - parseFloat(data['amount'])) ;",
+										"calculateServer": false,
 										"key": "balanceEndor",
 										"type": "number",
 										"decimalLimit": 2,
@@ -2313,6 +2332,7 @@
 					"label": "attachmentFields",
 					"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
 					"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\"];",
+					"calculateServer": false,
 					"key": "endorAttachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
@@ -2377,6 +2397,7 @@
 					"multiple": true,
 					"clearOnHide": false,
 					"calculateValue": "if((data.csrEndor_attachments || data.csrEndor_attachments !== undefined) && data.csrEndor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"multiple": true
 					},
@@ -3164,7 +3185,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 58,
+	"_vid": 61,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3183,6 +3204,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-10T14:00:35.650Z",
+	"modified": "2020-04-12T19:25:27.599Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
