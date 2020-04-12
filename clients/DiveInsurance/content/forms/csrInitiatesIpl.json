@@ -1401,10 +1401,11 @@
 							"disabled": true,
 							"tableView": false,
 							"defaultValue": "0.00",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "careerCoveragePrice",
 							"type": "number",
 							"decimalLimit": 2,
@@ -1596,12 +1597,13 @@
 							"disabled": true,
 							"tableView": false,
 							"defaultValue": 0,
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"protected": true,
 							"clearOnHide": false,
 							"customDefaultValue": "value = 0.00",
+							"calculateServer": false,
 							"key": "techRecPrice",
 							"type": "number",
 							"decimalLimit": 2,
@@ -1700,10 +1702,11 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": "0.00",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "scubaFitPrice",
 							"type": "number",
 							"decimalLimit": 2,
@@ -1805,10 +1808,11 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": "0.00",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "cylinderPrice",
 							"type": "number",
 							"decimalLimit": 2,
@@ -1919,10 +1923,11 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": "0.00",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "equipmentPrice",
 							"type": "number",
 							"decimalLimit": 2,
@@ -2031,10 +2036,11 @@
 							"disabled": true,
 							"tableView": false,
 							"defaultValue": "0.00",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "excessLiabilityPrice",
 							"type": "number",
 							"decimalLimit": 2,
@@ -2160,7 +2166,7 @@
 									"disabled": true,
 									"tableView": true,
 									"defaultValue": "0.00",
-									"delimiter": false,
+									"delimiter": true,
 									"requireDecimal": true,
 									"inputFormat": "plain",
 									"clearOnHide": false,
@@ -2218,7 +2224,7 @@
 									"disabled": true,
 									"tableView": true,
 									"defaultValue": 0,
-									"delimiter": false,
+									"delimiter": true,
 									"requireDecimal": true,
 									"inputFormat": "plain",
 									"calculateValue": "value = parseFloat(data.efrAmountPaid);",
@@ -2278,7 +2284,7 @@
 									"disabled": true,
 									"tableView": true,
 									"defaultValue": 0,
-									"delimiter": false,
+									"delimiter": true,
 									"requireDecimal": true,
 									"inputFormat": "plain",
 									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    value =\n      data[\"amount\"] - data[\"amountPayable\"] - data.efrAmountPaid;\n  } else {\n    value = data[\"amount\"] - data.efrAmountPaid;\n  }\n} else {\n  value = data[\"amount\"] - data[\"amountPayable\"];\n}",
@@ -2464,7 +2470,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Technical Certification</b>",
+					"content": "<b>Attach proof of your Technical Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html1",
@@ -2483,13 +2489,26 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"calculateValue": "if((data.techRec_attachments || data.techRec_attachments !== undefined) && data.techRec_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"custom": "valid = data.techRec_attachments.length>0? true : \"help me\";\nconsole.log(valid);",
+						"required": true,
+						"customMessage": "Please attach proof of your Technical Certification",
 						"multiple": true
 					},
+					"errorLabel": "Technical Certification Documents",
 					"key": "techRec_attachments",
+					"logic": [{
+						"name": "Disable Adding Files",
+						"trigger": {
+							"type": "javascript",
+							"simple": {
+								"show": true
+							},
+							"javascript": "if((data.techRec_attachments || data.techRec_attachments !== undefined) && data.techRec_attachments.length >= 10 ){\n  result = false\n  component.multiple = false\n} else {\n  result = true\n  component.multiple = true\n}"
+						},
+						"actions": []
+					}],
 					"type": "file",
 					"input": true
 				}],
@@ -2521,7 +2540,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Cylinder Inspector Certification</b>",
+					"content": "<b>Attach proof of your Cylinder Inspector Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html2",
@@ -2541,10 +2560,13 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"calculateValue": "if((data.cylinderInspector_attachments || data.cylinderInspector_attachments !== undefined) && data.cylinderInspector_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"required": true,
+						"customMessage": "Please attach proof of Cylinder Inspector Certification",
 						"multiple": true
 					},
+					"errorLabel": "Cylinder Inspector Certification",
 					"key": "cylinderInspector_attachments",
 					"type": "file",
 					"input": true
@@ -2577,7 +2599,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Cylinder Inspection Instructor Certification</b>",
+					"content": "<b>Attach proof of your Cylinder Inspection Instructor Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html3",
@@ -2633,7 +2655,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Scuba Fit Certification</b>",
+					"content": "<b>Attach proof of your Scuba Fit Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html4",
@@ -2653,10 +2675,13 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"calculateValue": "if((data.scubaFit_attachments || data.scubaFit_attachments !== undefined) && data.scubaFit_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"required": true,
+						"customMessage": "Please attach proof of your Scuba Fit Certification",
 						"multiple": true
 					},
+					"errorLabel": "Scuba Fit Certification Documents",
 					"key": "scubaFit_attachments",
 					"type": "file",
 					"input": true
@@ -2692,9 +2717,12 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"calculateValue": "if((data.attachments || data.attachments !== undefined) && data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
+						"customMessage": "Please attach any attachments",
 						"multiple": true
 					},
+					"errorLabel": "Addtional Attachments",
 					"key": "attachments",
 					"type": "file",
 					"input": true
@@ -2737,6 +2765,7 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"calculateValue": "if((data.csr_attachments || data.csr_attachments !== undefined) && data.csr_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"multiple": true
 					},
@@ -4217,7 +4246,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 221,
+	"_vid": 226,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4238,6 +4267,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-10T13:53:01.589Z",
+	"modified": "2020-04-12T19:22:25.368Z",
 	"machineName": "testdivehub:csrInitiates"
 }
