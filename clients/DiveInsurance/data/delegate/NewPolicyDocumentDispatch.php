@@ -32,13 +32,16 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
         $fileData =array();
         $errorFile = array();
         foreach($data['documents'] as $doc){
-                $file = $this->destination.$doc;
-                if(file_exists($file)){
-                     array_push($fileData, $file);         
-                }else{
-                    $this->logger->error("File Not Found".$file);
-                    array_push($errorFile,$file);
-                }
+            if(is_array($doc)){
+                $doc = end($doc);
+            }  
+            $file = $this->destination.$doc;
+            if(file_exists($file)){
+                 array_push($fileData, $file);         
+            }else{
+                $this->logger->error("File Not Found".$file);
+                array_push($errorFile,$file);
+            }
         }
 
 
