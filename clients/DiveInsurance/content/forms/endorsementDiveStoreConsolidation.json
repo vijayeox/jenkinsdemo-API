@@ -6620,7 +6620,7 @@
 				"key": "page7Columns2",
 				"columns": [{
 					"components": [{
-						"label": "Select Liability Limit",
+						"label": "Excess Liability Coverage",
 						"widget": "choicesjs",
 						"tableView": true,
 						"dataSrc": "custom",
@@ -10698,7 +10698,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 72,
+	"_vid": 73,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10715,6 +10715,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-12T20:07:34.239Z",
+	"modified": "2020-04-13T04:20:33.807Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
