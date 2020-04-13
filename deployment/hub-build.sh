@@ -39,6 +39,7 @@ buildhelp()
     echo -e "14. setup           -${YELLOW}For fresh setup of the production server${RESET}"
     echo -e "15. package         -${YELLOW}For packaging existing build${RESET}"
     echo -e "16.  insurancemanagement   -${YELLOW}For packaging insurancemanagement app.${RESET}"
+    echo -e "17.  insuranceoi   -${YELLOW}For packaging insuranceoi app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -170,6 +171,16 @@ diveinsurance()
     echo -e "${YELLOW}Copying clients DiveInsurance Completed.${RESET}"
 
 }
+insuranceoi()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients InsuranceOI to build folder.${RESET}"
+    rsync -rl clients/InsuranceOI/ ./build/clients/InsuranceOI/
+    echo -e "${YELLOW}Copying clients InsuranceOI Completed.${RESET}"
+
+}
 insurancemanagement()
 {
     cd ${OXHOME}
@@ -241,6 +252,12 @@ do
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 insurancemanagement
+                package
+                break;;
+        insuranceoi)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                insuranceoi
                 package
                 break;;
         task)
