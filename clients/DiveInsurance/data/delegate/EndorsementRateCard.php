@@ -189,6 +189,7 @@ class EndorsementRatecard extends AbstractAppDelegate
             }
             unset($rate);
         }
+            $selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['equipment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
             $this->logger->info("Executing Endorsement Rate Card Equipment Query".$selectEquipment);
             $resultEquipment= $persistenceService->selectQuery($selectEquipment);
             if($resultEquipment->count() == 0){
