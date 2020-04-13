@@ -142,6 +142,7 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
     {
        $this->logger->info("Executing Endorsement Setup - Dive Boat".print_r($data,true));
        $data['CSRReviewRequired'] = isset($data['CSRReviewRequired']) ? $data['CSRReviewRequired'] : false;
+       $data['upgradeStatus'] = true;
        if($data['CSRReviewRequired'] == false){
             if(isset($data['csrApproved'])){
                 unset($data['csrApproved']);
@@ -214,6 +215,8 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
             $policy['previous_premiumTotalProRated'] = $data['premiumTotalProRated'];
             $policy['previous_annualReceipt'] = isset($data['annualReceipt']) ? $data['annualReceipt'] : 0;
             $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
+            $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
+            $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
             $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
             $policy['previous_groupTaxPercentage'] = isset($data['groupTaxPercentage']) ? $data['groupTaxPercentage'] : 0;
             $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
@@ -275,6 +278,8 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
                     unset($data[$unsetOptions[$i]]);
                 }
             }
+            $data['initial_combinedSingleLimit'] = $data['previous_policy_data'][0]['previous_combinedSingleLimit'];
+            $data['initial_annualAggregate'] = $data['previous_policy_data'][0]['previous_annualAggregate'];
             $data['endorsementCoverage'] = $endorsementCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
 

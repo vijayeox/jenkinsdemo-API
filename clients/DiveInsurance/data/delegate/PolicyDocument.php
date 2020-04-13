@@ -266,10 +266,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
             else if($data['product'] == "Dive Boat"){
-                // if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
-                //     $documents['coi_document'] = $data['documents']['coi_document'];
-                // }
-
                 if(isset($this->template[$data['product']]['instruct'])){
                     $this->logger->info("DOCUMENT instruct");
                     $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
@@ -289,31 +285,86 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
+
+                    // $this->groupProfessionalLiabilityDocuments($temp,)
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-                         $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter',null,$length);
-                         $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');                         
+                         $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter'); 
+                         $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
+                         if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
+                            $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+                        }
                     }
                     else{
                         $this->logger->info("DOCUMENT groupPL");
-                        $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
+
+                        if($this->type == 'endorsement'){
+                            unset($data['upgradeGroupLiability']);
+                            $policy = array();
+                            $policy =  $previous_data[$length - 1];
+                            $upgrade = array();
+
+                            if(isset($data['upgradeGroupLiability'])){
+                                $data['upgradeGroupLiability'] = is_array($data['upgradeGroupLiability']) ? $data['upgradeGroupLiability'] : json_decode($data['upgradeGroupLiability'],true);
+                            }else{
+                                $data['upgradeGroupLiability'] = array();
+                            }
+                            if($policy['previous_combinedSingleLimit'] != $data['combinedSingleLimit']){
+                                $upgrade = array("update_date" => $data['update_date'],"combinedSingleLimit" => $data['combinedSingleLimit'],"annualAggregate" => $data['annualAggregate']);
+                                array_push($data['upgradeGroupLiability'], $upgrade);
+                            }
+                            $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);
 
 
-                        if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
-                        $this->logger->info("DOCUMENT additionalNamedInsured");
-                        $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
-                        }
 
-                        if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
-                        $this->logger->info("DOCUMENT namedInsured");
-                        $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                            $documents['endorsement_group_coi_document'] = isset($documents['endorsement_group_coi_document']) ? $documents['endorsement_group_coi_document'] : array();
+                            $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
+                            array_push($documents['endorsement_group_coi_document'], $endorsementDoc);
+
+                            if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
+                                $documents['endorsement_group_ni_document'] = isset($documents['endorsement_group_ni_document']) ? $documents['endorsement_group_ni_document'] : array();
+                                $this->logger->info("DOCUMENT namedInsured");
+                                $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                                array_push($documents['endorsement_group_ni_document'], $endorsementDoc);
+                            }
+
+                        }else{
+                            $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
+
+                            if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
+                            $this->logger->info("DOCUMENT namedInsured");
+                            $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                            }
                         }
                     }
+
 
                     $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
                 }
 
+
+
+               if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                    if($this->type == 'endorsementQuote'){
+                        $documents['endorsement_quote_ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                    }if($this->type == 'endorsement'){
+                        $documents['endorsement_ani_document'] = isset($documents['endorsement_ani_document']) ? $documents['endorsement_ani_document'] : array();
+                        $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                        array_push($documents['endorsement_ani_document'], $endorsementDoc);
+                    }else{
+                        $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                    }
+                }
                 if(isset($temp['loss_payees']) && $temp['loss_payees'] == 'yes'){
-                    $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+                    if($this->type == 'endorsementQuote'){
+                        $documents['endorsement_quote_loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+                    }if($this->type == 'endorsement'){
+                        $documents['endorsement_loss_payee_document'] = isset($documents['endorsement_loss_payee_document']) ? $documents['endorsement_loss_payee_document'] : array();
+                        $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+                        array_push($documents['endorsement_loss_payee_document'], $endorsementDoc);
+                    }else{
+                        $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+                    }
+                    
                 }
 
                 if(isset($this->template[$temp['product']]['cover_letter'])){
@@ -469,9 +520,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(!isset($documents['property_coi_document']) && !isset($documents['liability_coi_document'])){
                 $this->logger->info("DOCUMENT coi_document");
                 $this->logger->info("Policy Document Generation");
-                if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
-                    $endorsementFileName = 'Endorsement - '.$length;
-                    $documents[$endorsementFileName] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null,$length);
+                if($this->type == 'endorsement'){
+                    $documents['endorsement_coi_document'] = isset($documents['endorsement_coi_document']) ? $documents['endorsement_coi_document'] : array();
+                    // $endorsementFileName = 'Endorsement - '.$length;
+                    $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null,$length);
+                    array_push($documents['endorsement_coi_document'], $endorsementDoc);
+                    
+                }else if($this->type == 'endorsementQuote'){
+                    $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer',null);
                 }else{
                     $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     if(is_array($policyDocuments)){
@@ -568,6 +624,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($data['documents']['roster_pdf'])){
                         unset($data['documents']['roster_pdf']);
                     }
+                    if(isset($data['documents']['endorsement_quote_coi_document'])){
+                        unset($data['documents']['endorsement_quote_coi_document']);   
+                    }
+                    if(isset($data['documents']['endorsement_quote_ani_document'])){
+                        unset($data['documents']['endorsement_quote_ani_document']);   
+                    }
+                    if(isset($data['endorsement_quote_loss_payee_document'])){
+                        unset($data['documents']['endorsement_quote_loss_payee_document']);   
+                    }
                 }
                 $data['documents'] = array_merge($data['documents'],$documents);
             }else{
@@ -620,7 +685,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['disableOptions'])){
                 unset($data['disableOptions']);
             }
-            
+
+            if(isset($data['paymentOptions'])){
+                unset($data['paymentOptions']);
+            }
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }

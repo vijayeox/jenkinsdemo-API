@@ -32,7 +32,10 @@ class DispatchProposalDocument extends DispatchDocument {
         $fileData =array();
         $errorFile = array();
         foreach($data['documents'] as $doc){
-            $file = $this->destination.$doc;
+            if(is_array($doc)){
+                $doc = end($doc);
+            }  
+            $file = $this->destination.$doc;    
             if(file_exists($file)){
                 array_push($fileData, $file);         
             } else {

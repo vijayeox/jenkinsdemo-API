@@ -1656,6 +1656,10 @@
 				"spellcheck": true,
 				"tableView": true,
 				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
 				"key": "current_insurance_company",
 				"type": "textfield",
 				"input": true,
@@ -5139,7 +5143,7 @@
 						"tableView": false,
 						"templates": {
 							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n     {% if(moment(row.start_date) >= moment(data.update_date)) { %}\n       <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n     {% } %}\n     </div>\n    </div>\n  {% } %}\n</div>"
+							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n     {% console.log(row.start_date); console.log(data.update_date); if(moment(row.start_date) >= moment(data.update_date)) { %}\n       <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n     {% } %}\n     </div>\n    </div>\n  {% } %}\n</div>"
 						},
 						"addAnother": "Not registered in system?Click here to add external members",
 						"modal": false,
@@ -8791,6 +8795,22 @@
 					"type": "hidden",
 					"lockKey": true,
 					"hideOnChildrenHidden": false
+				}, {
+					"label": "previous_combinedSingleLimit",
+					"calculateServer": false,
+					"key": "previous_combinedSingleLimit",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "previous_annualAggregate",
+					"calculateServer": false,
+					"key": "previous_annualAggregate",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -9353,7 +9373,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 165,
+	"_vid": 168,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9371,6 +9391,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-12T20:15:02.894Z",
+	"modified": "2020-04-13T09:11:02.787Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
