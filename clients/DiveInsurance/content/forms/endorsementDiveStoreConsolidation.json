@@ -1384,7 +1384,7 @@
 		}
 	}, {
 		"type": "panel",
-		"title": "Property Information",
+		"title": "Property Information (Available in U.S.)",
 		"components": [{
 			"label": "Do you want to apply Property Coverage?",
 			"tableView": true,
@@ -1400,6 +1400,9 @@
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
 			"calculateServer": false,
+			"validate": {
+				"required": true
+			},
 			"key": "propertyCoverageSelect",
 			"type": "select",
 			"indexeddb": {
@@ -1407,7 +1410,7 @@
 			},
 			"input": true
 		}, {
-			"title": "Property Information (Available in U.S.)",
+			"title": "Property Information",
 			"theme": "primary",
 			"breadcrumbClickable": true,
 			"buttonSettings": {
@@ -2063,12 +2066,19 @@
 		"theme": "primary",
 		"tableView": false,
 		"lockKey": true,
-		"label": "Panel",
+		"label": "Property Information",
 		"conditional": {
-			"show": "true",
+			"show": true,
 			"when": "endorsement_options",
 			"eq": "modify_propertyInformation"
-		}
+		},
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false
 	}, {
 		"type": "panel",
 		"title": "General Liability Information/Claims Information",
@@ -10699,7 +10709,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 75,
+	"_vid": 77,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10716,6 +10726,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-13T06:04:07.225Z",
+	"modified": "2020-04-13T20:10:59.051Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

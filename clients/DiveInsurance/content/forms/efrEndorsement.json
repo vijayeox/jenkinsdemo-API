@@ -1696,20 +1696,20 @@
 					"inline": false,
 					"tableView": false,
 					"values": [{
-						"label": "Cash",
-						"value": "cash",
-						"shortcut": ""
-					}, {
 						"label": "Money Order",
 						"value": "moneyOrder",
 						"shortcut": ""
 					}, {
-						"label": "Cheque",
-						"value": "cheque",
+						"label": "Check",
+						"value": "check",
 						"shortcut": ""
 					}, {
 						"label": "Credit Card",
 						"value": "creditCard",
+						"shortcut": ""
+					}, {
+						"label": "Other",
+						"value": "other",
 						"shortcut": ""
 					}],
 					"clearOnHide": false,
@@ -1732,77 +1732,124 @@
 				"size": "md"
 			}, {
 				"components": [{
-					"label": "Cheque Number",
-					"mask": false,
-					"spellcheck": true,
+					"title": "Check Details",
+					"theme": "primary",
+					"collapsible": false,
 					"tableView": false,
-					"delimiter": false,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateServer": false,
-					"validate": {
-						"required": true
-					},
-					"key": "chequeNumber",
+					"key": "checkDetails",
 					"conditional": {
 						"show": true,
 						"when": "paymentOptions",
-						"eq": "cheque"
+						"eq": "check"
 					},
-					"type": "number",
-					"input": true,
+					"type": "panel",
+					"label": "Check Details",
+					"input": false,
+					"components": [{
+						"label": "Check Number",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "chequeNumber",
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Upload Consent Form",
+						"tableView": false,
+						"storage": "base64",
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
+						"key": "chequeConsentForm",
+						"type": "file",
+						"input": true
+					}],
 					"hideOnChildrenHidden": false
 				}, {
-					"type": "convergepay",
-					"key": "custom",
-					"label": "custom",
-					"input": true,
-					"amount_field": "endorAmountPayable",
+					"title": "Card Details",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "cardDetails",
 					"conditional": {
 						"show": true,
 						"when": "paymentOptions",
 						"eq": "creditCard"
 					},
-					"tableView": false,
+					"type": "panel",
+					"label": "Card Details",
+					"input": false,
+					"components": [{
+						"type": "convergepay",
+						"key": "creditcardPayment",
+						"amount_field": "endorAmountPayable",
+						"label": "custom",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Content",
+						"attrs": [{
+							"value": "",
+							"attr": ""
+						}],
+						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "page7Content",
+						"conditional": {
+							"show": true,
+							"when": "paymentOptions",
+							"eq": "creditCard"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
 					"hideOnChildrenHidden": false
 				}, {
-					"label": "Order ID",
-					"spellcheck": true,
-					"tableView": true,
-					"clearOnHide": false,
-					"calculateServer": false,
-					"validate": {
-						"required": true
-					},
-					"key": "orderId",
+					"title": "Money Order Details",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "moneyOrderDetai",
 					"conditional": {
 						"show": true,
 						"when": "paymentOptions",
 						"eq": "moneyOrder"
 					},
-					"type": "textfield",
-					"input": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Content",
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
-					"refreshOnChange": false,
-					"tableView": false,
-					"key": "page7Content",
-					"conditional": {
-						"show": true,
-						"when": "paymentOptions",
-						"eq": "creditCard"
-					},
-					"type": "htmlelement",
+					"type": "panel",
+					"label": "Money Order Details",
 					"input": false,
-					"hideLabel": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"components": [{
+						"label": "Order ID",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "orderId",
+						"type": "textfield",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}]
 				}],
 				"width": 6,
 				"offset": 0,
@@ -1926,7 +1973,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 91,
+	"_vid": 92,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -1947,7 +1994,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-12T20:11:24.374Z",
+	"modified": "2020-04-13T17:25:42.811Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

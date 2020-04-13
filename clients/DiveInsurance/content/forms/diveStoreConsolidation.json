@@ -487,6 +487,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
+							"pattern": "/^[a-zA-Z]*$/",
 							"customMessage": "Please enter your first name."
 						},
 						"key": "firstname",
@@ -530,6 +531,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
+							"pattern": "/^[a-zA-Z]*$/",
 							"customMessage": "Please enter your last name."
 						},
 						"key": "lastname",
@@ -568,6 +570,7 @@
 					"allowCalculateOverride": true,
 					"validate": {
 						"required": true,
+						"pattern": "/^[a-zA-Z]*$/",
 						"customMessage": "Please enter legal business name."
 					},
 					"key": "business_name",
@@ -1490,7 +1493,7 @@
 		"breadcrumbClickable": true
 	}, {
 		"type": "panel",
-		"title": "Property Information",
+		"title": "Property Information (Available in U.S.)",
 		"components": [{
 			"label": "Do you want to apply Property Coverage?",
 			"widget": "choicesjs",
@@ -1517,7 +1520,7 @@
 			},
 			"input": true
 		}, {
-			"title": "Property Information (Available in U.S.)",
+			"title": "Property Information",
 			"theme": "primary",
 			"breadcrumbClickable": true,
 			"buttonSettings": {
@@ -7666,7 +7669,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"calculateServer": false,
 							"key": "groupTaxPercentage",
 							"type": "number",
@@ -10121,7 +10124,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 19,
+	"_vid": 22,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10138,6 +10141,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-13T06:01:01.851Z",
+	"modified": "2020-04-13T20:10:12.695Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
