@@ -2040,6 +2040,10 @@
 				"spellcheck": true,
 				"tableView": true,
 				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
 				"key": "current_insurance_company",
 				"type": "textfield",
 				"input": true,
@@ -2288,7 +2292,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -2307,7 +2311,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -2325,6 +2329,10 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
 						"key": "if_lessthan_100_please_explain",
 						"customConditional": "show = (data['percentage_of_trips_for_diving_charters'] < 100 && data['percentage_of_trips_for_diving_charters'] != '')",
 						"type": "textfield",
@@ -2752,7 +2760,7 @@
 					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": false,
-					"delimiter": false,
+					"delimiter": true,
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
@@ -2814,7 +2822,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": true,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -2856,7 +2864,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": true,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -3046,7 +3054,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"validate": {
@@ -3099,7 +3107,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -3124,7 +3132,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -3569,7 +3577,7 @@
 								"mask": false,
 								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -4931,6 +4939,7 @@
 								"label": "Last Name",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -4981,6 +4990,7 @@
 								"label": "Name of Training Agency",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -5559,6 +5569,7 @@
 									"label": "Last Name",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -5609,6 +5620,7 @@
 									"label": "Name of Training Agency",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -6597,7 +6609,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": "0",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
@@ -7020,7 +7032,7 @@
 					"disabled": true,
 					"tableView": true,
 					"defaultValue": "0",
-					"delimiter": false,
+					"delimiter": true,
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
@@ -8265,7 +8277,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 360,
+	"_vid": 365,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8283,6 +8295,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-09T11:49:28.471Z",
+	"modified": "2020-04-13T06:24:18.744Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

@@ -96,13 +96,13 @@
 			"tableView": true,
 			"lockKey": true
 		}, {
+			"label": "previousCareerCoverage",
+			"calculateServer": false,
+			"key": "previous_careerCoverage",
+			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"key": "previous_careerCoverage",
-			"label": "previousCareerCoverage",
-			"type": "hidden",
-			"lockKey": true,
-			"calculateServer": false
+			"lockKey": true
 		}, {
 			"label": "Previous Scuba fit",
 			"calculateValue": "value = data.previous_scuba?data.previous_scuba:data.previousScubafit",
@@ -111,6 +111,14 @@
 			"input": true,
 			"tableView": true,
 			"lockKey": true
+		}, {
+			"label": "initiatedByCsr",
+			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
+			"calculateServer": false,
+			"key": "initiatedByCsr",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"input": true,
 			"tableView": true,
@@ -420,13 +428,14 @@
 			"lockKey": true,
 			"hideOnChildrenHidden": false
 		}, {
+			"label": "Previous equipment Liability",
+			"calculateValue": "value = data['previous_equipmentLiability'];",
+			"calculateServer": false,
+			"key": "previousequipmentLiability",
+			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"key": "previousequipmentLiability",
-			"label": "Previous equipment Liability",
-			"type": "hidden",
 			"lockKey": true,
-			"calculateValue": "value = data['previous_equipmentLiability'];",
 			"hideOnChildrenHidden": false
 		}, {
 			"label": "previous_excessLiability",
@@ -481,7 +490,6 @@
 			"cancel": true,
 			"next": true
 		},
-		"customConditional": "show = !data.CSRReviewRequired;",
 		"logic": [{
 			"name": "disablePanel",
 			"trigger": {
@@ -967,8 +975,12 @@
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateServer": false,
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -982,6 +994,7 @@
 								"label": "Home or Work Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"customMessage": "Please enter a valid home or work phone number"
@@ -1057,15 +1070,22 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateServer": false,
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1080,6 +1100,8 @@
 								"label": "Mobile Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter a valid mobile phone number"
@@ -1156,6 +1178,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
 						"errorLabel": "Please enter a valid Fax number",
 						"key": "fax",
 						"type": "phoneNumber",
@@ -1238,9 +1261,9 @@
 				"disabled": true,
 				"tableView": true,
 				"persistent": false,
-				"protected": true,
 				"clearOnHide": false,
 				"calculateValue": "try {\nvalue = data['start_date_range'].label\n} catch(e){\nvalue = data['start_date_range'].label\n}",
+				"calculateServer": false,
 				"errorLabel": "Please select a policy period from the list",
 				"key": "startDateRange",
 				"type": "textfield",
@@ -1272,16 +1295,20 @@
 										"value": "",
 										"label": ""
 									}],
-									"custom": "if(data['endorsementCoverage']){\n  for(var key in data['endorsementCoverage']){\nvar item = {}\nitem.label = data['endorsementCoverage'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+									"custom": "if(data['endorsementCoverage']){\n  for(var key in data['endorsementCoverage']){\n    var item = {}\n    item.label = data['endorsementCoverage'][key];\n    item.value = key;\n    values.push(item);\n  }\n}"
 								},
+								"refreshOn": "endorsement_options",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "upgradeCareerCoverage",
 								"properties": {
 									"target": "careerCoveragePrice"
 								},
 								"type": "select",
-								"refreshOn": "endorsement_options",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1301,11 +1328,12 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"customDefaultValue": "value = 0.00",
+								"calculateServer": false,
 								"key": "careerCoveragePrice",
 								"type": "number",
 								"decimalLimit": 2,
@@ -1380,7 +1408,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1487,7 +1515,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1536,16 +1564,20 @@
 										"value": "",
 										"label": ""
 									}],
-									"custom": "if(data['endorsementCylinder']){\n  for(var key in data['endorsementCylinder']){\nvar item = {}\nitem.label = data['endorsementCylinder'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+									"custom": "if(data['endorsementCylinder']){\n  for(var key in data['endorsementCylinder']){\n    var item = {}\n    item.label = data['endorsementCylinder'][key];\n    item.value = key;\n    values.push(item);\n  }\n}"
 								},
+								"refreshOn": "endorsement_options",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"key": "upgradecylinder",
 								"properties": {
 									"target": "cylinderPrice"
 								},
 								"type": "select",
-								"refreshOn": "endorsement_options",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1565,7 +1597,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1672,7 +1704,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1722,6 +1754,7 @@
 									}],
 									"custom": "if(data['endorsementExcessLiability']){\n    for(var key in data['endorsementExcessLiability']){\n      var item = {}\n      item.label = data['endorsementExcessLiability'][key];\n      item.value = key;\n      values.push(item);\n    }    \n  }"
 								},
+								"refreshOn": "endorsement_options",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1733,7 +1766,6 @@
 								"indexeddb": {
 									"filter": {}
 								},
-								"refreshOn": "endorsement_options",
 								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
@@ -1753,7 +1785,7 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -1852,7 +1884,7 @@
 										"disabled": true,
 										"tableView": true,
 										"defaultValue": "0.00",
-										"delimiter": false,
+										"delimiter": true,
 										"requireDecimal": true,
 										"inputFormat": "plain",
 										"clearOnHide": false,
@@ -1911,11 +1943,12 @@
 										"disabled": true,
 										"tableView": true,
 										"defaultValue": 0,
-										"delimiter": false,
+										"delimiter": true,
 										"requireDecimal": true,
 										"inputFormat": "plain",
 										"clearOnHide": false,
 										"calculateValue": "value = (parseFloat(data['endorsementTotal']) - parseFloat(data['amount'])) ;",
+										"calculateServer": false,
 										"key": "balanceEndor",
 										"type": "number",
 										"decimalLimit": 2,
@@ -2057,16 +2090,16 @@
 			}, {
 				"title": "TecRec Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": true,
+				"breadcrumbClickable": false,
 				"buttonSettings": {
 					"previous": true,
-					"cancel": true,
+					"cancel": false,
 					"next": true
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "panel1",
-				"customConditional": "if((data.techRec_attachments.length === 0 && data.tecRecEndorsment === 'accepted') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
+				"key": "techRecAttachment",
+				"customConditional": "if (data.privileges){\n  show = (data.tecRecEndorsment === 'accepted' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr == true))) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "tecRecEndorsment",
@@ -2081,17 +2114,16 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Technical Certification</b>",
+					"content": "<b>Attach proof of your Technical Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
-					"key": "html",
+					"key": "html1",
 					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true
+					"input": false
 				}, {
-					"label": "tecRec Attachments",
+					"label": "TecRec Attachments",
 					"hideLabel": true,
-					"tableView": true,
+					"tableView": false,
 					"storage": "base64",
 					"webcam": true,
 					"fileTypes": [{
@@ -2100,34 +2132,36 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"multiple": true,
-					"clearOnHide": false,
-					"calculateValue": "if((data.techRec_attachments || data.techRec_attachments !== undefined) && data.techRec_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateValue": "if(data.techRec_attachments && data.techRec_attachments.length===0){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"validate": {
 						"required": true,
-						"custom": "console.log(54634);\nconsole.log(data);\nvalid = (!empty(data['endor_techRec_attachments'])) ? true :'Please attach the proof of your TechRec Attachements';",
-						"multiple": true
+						"customMessage": "Please attach proof of your Technical Certification"
 					},
-					"errorLabel": "Please attach the proof of your TechRec Attachements",
-					"key": "endor_techRec_attachments",
+					"errorLabel": "Technical Certification Documents",
+					"key": "techRec_attachments",
 					"type": "file",
 					"input": true
 				}],
-				"path": "panel1"
+				"path": "techRecAttachment"
 			}, {
 				"title": "Cylinder Inspector Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": true,
+				"breadcrumbClickable": false,
 				"buttonSettings": {
 					"previous": true,
-					"cancel": true,
+					"cancel": false,
 					"next": true
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "panel3",
-				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInspector'){\n\tselected = true;\t\n}}\n}\nif((data.cylinderInspector_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInspector\") && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"key": "cylinderInspectorAttachments",
+				"customConditional": "if (data.privileges){\n  show = (data.cylinder === 'cylinderInspector' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true))) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"conditional": {
+					"show": true,
+					"when": "cylinder",
+					"eq": "cylinderInspector"
+				},
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2137,13 +2171,12 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Cylinder Inspection Instructor Certification</b>",
+					"content": "<b>Attach proof of your Cylinder Inspector Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html2",
 					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true
+					"input": false
 				}, {
 					"label": "Cylinder Inspector Attachments",
 					"hideLabel": true,
@@ -2156,31 +2189,37 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if((data.cylinderInspector_attachments || data.cylinderInspector_attachments !== undefined) && data.cylinderInspector_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateValue": "if(data.cylinderInspector_attachments && data.cylinderInspector_attachments.length === 0){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
+					"calculateServer": false,
 					"validate": {
 						"required": true,
-						"multiple": true
+						"customMessage": "Please attach proof of Cylinder Inspector Certification"
 					},
-					"key": "endor_cylinderInspector_attachments",
+					"errorLabel": "Cylinder Inspector Certification",
+					"key": "cylinderInspector_attachments",
 					"type": "file",
 					"input": true
 				}],
-				"path": "panel3"
+				"path": "cylinderInspectorAttachments"
 			}, {
 				"title": "Cylinder Instructor Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": true,
+				"breadcrumbClickable": false,
 				"buttonSettings": {
 					"previous": true,
-					"cancel": true,
+					"cancel": false,
 					"next": true
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "panel4",
-				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInstructor'){\n\tselected = true;\t\n}}}\n\nif((data.cylinderInstructor_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInstructor\" ) && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"key": "cylinderInstructorAttachments",
+				"customConditional": "if (data.privileges){\n  show = (data.cylinder === 'cylinderInstructor' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true)))? true: false;\n}\nelse{\n  show = false;\n}",
+				"conditional": {
+					"show": true,
+					"when": "cylinder",
+					"eq": "cylinderInstructor"
+				},
 				"type": "panel",
 				"label": "Cylinder Instructor Attachments",
 				"input": false,
@@ -2190,13 +2229,12 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Cylinder Inspector Certification</b>",
+					"content": "<b>Attach proof of your Cylinder Inspection Instructor Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
-					"key": "html1",
+					"key": "html3",
 					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true
+					"input": false
 				}, {
 					"label": "Cylinder Instructor Attachments",
 					"hideLabel": true,
@@ -2209,31 +2247,29 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"multiple": true,
-					"clearOnHide": false,
-					"calculateValue": "if((data.cylinderInstructor_attachments || data.cylinderInstructor_attachments !== undefined) && data.cylinderInstructor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateValue": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length === 0 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
-						"required": true,
-						"multiple": true
+						"required": true
 					},
-					"key": "endor_cylinderInstructor_attachments",
+					"key": "cylinderInstructor_attachments",
 					"type": "file",
 					"input": true
 				}],
-				"path": "panel4"
+				"path": "cylinderInstructorAttachments"
 			}, {
 				"title": "Scuba Fit Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": true,
+				"breadcrumbClickable": false,
 				"buttonSettings": {
 					"previous": true,
-					"cancel": true,
+					"cancel": false,
 					"next": true
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "panel5",
-				"customConditional": "if((data.scubaFit_attachments.length === 0 && data.scubaFit === 'scubaFitInstructor') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
+				"key": "scubaFitAttachments",
+				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true))) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "scubaFit",
@@ -2248,13 +2284,12 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attached proof of your Scuba Fit Certification</b>",
+					"content": "<b>Attach proof of your Scuba Fit Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
-					"key": "html3",
+					"key": "html4",
 					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true
+					"input": false
 				}, {
 					"label": "ScubaFit Attachments",
 					"hideLabel": true,
@@ -2267,18 +2302,18 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"multiple": true,
-					"clearOnHide": false,
-					"calculateValue": "if((data.scubaFit_attachments || data.scubaFit_attachments !== undefined) && data.scubaFit_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateValue": "if(data.scubaFit_attachments  && data.scubaFit_attachments.length === 0 ){\n  component.multiple = false\n  instance.redraw();\n} else {\n  component.multiple = true\n  instance.redraw();\n}",
+					"calculateServer": false,
 					"validate": {
 						"required": true,
-						"multiple": true
+						"customMessage": "Please attach proof of your Scuba Fit Certification"
 					},
-					"key": "endor_scubaFit_attachments",
+					"errorLabel": "Scuba Fit Certification Documents",
+					"key": "scubaFit_attachments",
 					"type": "file",
 					"input": true
 				}],
-				"path": "panel5"
+				"path": "scubaFitAttachments"
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2299,6 +2334,7 @@
 					"label": "attachmentFields",
 					"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
 					"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\"];",
+					"calculateServer": false,
 					"key": "endorAttachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
@@ -2363,6 +2399,7 @@
 					"multiple": true,
 					"clearOnHide": false,
 					"calculateValue": "if((data.csrEndor_attachments || data.csrEndor_attachments !== undefined) && data.csrEndor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"multiple": true
 					},
@@ -2897,7 +2934,7 @@
 		}, {
 			"label": "amount",
 			"defaultValue": "0",
-			"calculateValue": "value = parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00",
+			"calculateValue": "if(data.CSRReviewRequired ===false || data.CSRReviewRequired ==='false' || data.CSRReviewRequired ===''){\n  value = parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00;\n}",
 			"calculateServer": false,
 			"key": "amount",
 			"properties": {
@@ -2916,20 +2953,20 @@
 					"inline": false,
 					"tableView": false,
 					"values": [{
-						"label": "Cash",
-						"value": "cash",
-						"shortcut": ""
-					}, {
 						"label": "Money Order",
 						"value": "moneyOrder",
 						"shortcut": ""
 					}, {
-						"label": "Cheque",
-						"value": "cheque",
+						"label": "Check",
+						"value": "check",
 						"shortcut": ""
 					}, {
 						"label": "Credit Card",
 						"value": "creditCard",
+						"shortcut": ""
+					}, {
+						"label": "Other",
+						"value": "other",
 						"shortcut": ""
 					}],
 					"clearOnHide": false,
@@ -2952,69 +2989,124 @@
 				"size": "md"
 			}, {
 				"components": [{
-					"label": "Cheque Number",
-					"mask": false,
-					"spellcheck": true,
+					"title": "Check Details",
+					"theme": "primary",
+					"collapsible": false,
 					"tableView": false,
-					"delimiter": false,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateServer": false,
-					"validate": {
-						"required": true
-					},
-					"key": "chequeNumber",
+					"key": "checkDetails",
 					"conditional": {
 						"show": true,
 						"when": "paymentOptions",
-						"eq": "cheque"
+						"eq": "check"
 					},
-					"type": "number",
-					"input": true,
+					"type": "panel",
+					"label": "Check Details",
+					"input": false,
+					"components": [{
+						"label": "Check Number",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "chequeNumber",
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Upload Consent Form",
+						"tableView": false,
+						"storage": "base64",
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
+						"key": "chequeConsentForm",
+						"type": "file",
+						"input": true
+					}],
 					"hideOnChildrenHidden": false
 				}, {
-					"type": "convergepay",
-					"key": "custom",
-					"label": "custom",
-					"input": true,
-					"amount_field": "amount",
-					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
+					"title": "Card Details",
+					"theme": "primary",
+					"collapsible": false,
 					"tableView": false,
+					"key": "cardDetails",
+					"conditional": {
+						"show": true,
+						"when": "paymentOptions",
+						"eq": "creditCard"
+					},
+					"type": "panel",
+					"label": "Card Details",
+					"input": false,
+					"components": [{
+						"type": "convergepay",
+						"key": "creditcardPayment",
+						"amount_field": "amount",
+						"label": "custom",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Content",
+						"attrs": [{
+							"value": "",
+							"attr": ""
+						}],
+						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "page7Content",
+						"conditional": {
+							"show": true,
+							"when": "paymentOptions",
+							"eq": "creditCard"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
 					"hideOnChildrenHidden": false
 				}, {
-					"label": "Order ID",
-					"spellcheck": true,
-					"tableView": true,
-					"clearOnHide": false,
-					"calculateServer": false,
-					"validate": {
-						"required": true
-					},
-					"key": "orderId",
+					"title": "Money Order Details",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "moneyOrderDetai",
 					"conditional": {
 						"show": true,
 						"when": "paymentOptions",
 						"eq": "moneyOrder"
 					},
-					"type": "textfield",
-					"input": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Content",
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
-					"refreshOnChange": false,
-					"tableView": false,
-					"key": "page7Content",
-					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
-					"type": "htmlelement",
+					"type": "panel",
+					"label": "Money Order Details",
 					"input": false,
-					"hideLabel": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"components": [{
+						"label": "Order ID",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "orderId",
+						"type": "textfield",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}]
 				}],
 				"width": 6,
 				"offset": 0,
@@ -3045,16 +3137,18 @@
 			"type": "hidden",
 			"lockKey": true
 		}, {
-			"key": "page6Content",
-			"label": "Content",
-			"input": false,
+			"label": "Please process the payment and approve",
 			"attrs": [{
-				"value": "",
-				"attr": ""
+				"attr": "",
+				"value": ""
 			}],
-			"content": "</br><b><font color=\"red\">If you click \"Submit Form\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Form\" only once.</b></font>",
-			"type": "htmlelement",
+			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
+			"refreshOnChange": false,
 			"tableView": false,
+			"key": "pleaseProcessThePaymentAndApprove",
+			"customConditional": "show = ((parseFloat(data.balanceEndor) > 0) &&(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ;",
+			"type": "htmlelement",
+			"input": false,
 			"hideLabel": true
 		}],
 		"input": false,
@@ -3077,20 +3171,6 @@
 		"label": "Approval",
 		"input": false,
 		"components": [{
-			"label": "Please process the payment and approve",
-			"attrs": [{
-				"attr": "",
-				"value": ""
-			}],
-			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
-			"refreshOnChange": false,
-			"tableView": false,
-			"key": "pleaseProcessThePaymentAndApprove",
-			"customConditional": "show = (parseFloat(data.balanceEndor) > 0);",
-			"type": "htmlelement",
-			"input": false,
-			"hideLabel": true
-		}, {
 			"label": "Notes",
 			"autoExpand": false,
 			"spellcheck": true,
@@ -3162,7 +3242,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 47,
+	"_vid": 63,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3181,6 +3261,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-04T11:36:13.509Z",
+	"modified": "2020-04-13T18:37:02.493Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

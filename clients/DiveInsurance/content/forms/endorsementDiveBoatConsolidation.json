@@ -1656,6 +1656,10 @@
 				"spellcheck": true,
 				"tableView": true,
 				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
 				"key": "current_insurance_company",
 				"type": "textfield",
 				"input": true,
@@ -1879,7 +1883,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -1898,7 +1902,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -1915,6 +1919,10 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
 						"key": "if_lessthan_100_please_explain",
 						"conditional": {
 							"show": true,
@@ -2346,7 +2354,7 @@
 					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": false,
-					"delimiter": false,
+					"delimiter": true,
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
@@ -2407,7 +2415,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": true,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -2449,7 +2457,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": true,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -2649,7 +2657,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -2703,7 +2711,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -2728,7 +2736,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
+						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
@@ -3136,8 +3144,15 @@
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "dingy_or_tender",
 					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
 					"input": true,
 					"lockKey": true,
 					"hideOnChildrenHidden": false
@@ -3158,6 +3173,10 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "dingy_manufacturer",
 								"type": "textfield",
 								"input": true,
@@ -3168,7 +3187,7 @@
 								"mask": false,
 								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
+								"delimiter": true,
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
@@ -3203,6 +3222,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "dingy_age",
 								"type": "select",
 								"indexeddb": {
@@ -3220,6 +3242,10 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "dingy_value",
 								"type": "number",
 								"decimalLimit": 2,
@@ -3268,8 +3294,15 @@
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
 					"key": "trailer",
 					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
 					"input": true,
 					"lockKey": true,
 					"hideOnChildrenHidden": false
@@ -3290,6 +3323,10 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_manufacturer",
 								"type": "textfield",
 								"input": true,
@@ -3311,6 +3348,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_year_built",
 								"type": "select",
 								"indexeddb": {
@@ -3330,6 +3370,10 @@
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_serial_number",
 								"type": "textfield",
 								"input": true,
@@ -3345,6 +3389,10 @@
 								"requireDecimal": true,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "trailer_value",
 								"type": "number",
 								"decimalLimit": 2,
@@ -4516,6 +4564,7 @@
 								"label": "Last Name",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -4566,6 +4615,7 @@
 								"label": "Name of Training Agency",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -5093,7 +5143,7 @@
 						"tableView": false,
 						"templates": {
 							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n     {% if(moment(row.start_date) >= moment(data.update_date)) { %}\n       <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n     {% } %}\n     </div>\n    </div>\n  {% } %}\n</div>"
+							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n     {% console.log(row.start_date); console.log(data.update_date); if(moment(row.start_date) >= moment(data.update_date)) { %}\n       <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n     {% } %}\n     </div>\n    </div>\n  {% } %}\n</div>"
 						},
 						"addAnother": "Not registered in system?Click here to add external members",
 						"modal": false,
@@ -5191,6 +5241,7 @@
 									"spellcheck": true,
 									"disabled": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -5277,6 +5328,7 @@
 									"spellcheck": true,
 									"disabled": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -5544,7 +5596,7 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
@@ -5567,7 +5619,7 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
@@ -6402,7 +6454,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": "0",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
@@ -6426,7 +6478,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": "0",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
@@ -6825,7 +6877,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "if(parseFloat(data['boat_age']>24)){\nvalue = ((parseFloat(data['PropertyBasePremium']) || 0) * parseFloat(data['AgeSurcharge'])/100)\n} else {\nvalue = 0\n}",
+							"calculateValue": "if(data['boat_age'] > 24){\nvalue = ((parseFloat(data['PropertyBasePremium']) || 0) * parseFloat(data['AgeSurcharge'])/100)\n} else {\nvalue = 0\n}",
 							"calculateServer": false,
 							"key": "Age25Surcharge",
 							"type": "number",
@@ -8124,7 +8176,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": 0,
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
@@ -8148,7 +8200,7 @@
 							"disabled": true,
 							"tableView": true,
 							"defaultValue": "0",
-							"delimiter": false,
+							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
@@ -8743,6 +8795,22 @@
 					"type": "hidden",
 					"lockKey": true,
 					"hideOnChildrenHidden": false
+				}, {
+					"label": "previous_combinedSingleLimit",
+					"calculateServer": false,
+					"key": "previous_combinedSingleLimit",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "previous_annualAggregate",
+					"calculateServer": false,
+					"key": "previous_annualAggregate",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -9305,7 +9373,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 157,
+	"_vid": 168,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9323,6 +9391,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-09T14:48:44.808Z",
+	"modified": "2020-04-13T09:11:02.787Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

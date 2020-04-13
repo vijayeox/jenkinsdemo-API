@@ -189,11 +189,11 @@ export default class DocumentViewerComponent extends Base {
           disableView = true;
         }
         fileList +=
-          `<div class="docList" key="` +
+          `<div class="docList" style="margin:0;" key="` +
           prop +
           `">
            <div class="fileDiv">
-          <div class="singleFile" ` +
+          <div class="singleFile row" ` +
           prop +
           `" data-downloadurl="` +
           downloadUrl +
@@ -204,7 +204,7 @@ export default class DocumentViewerComponent extends Base {
           `" data-url="` +
           url +
           `">
-            <span class="col-md-10 ` +
+            <span class="fileName col-md-10 ` +
           component.key +
           `-downloadFile">` +
           icon +
@@ -241,7 +241,7 @@ export default class DocumentViewerComponent extends Base {
   render(children) {
     var fileList = this.fileList ? this.fileList : null;
     var row =
-      `<div class="row">
+      `<div class="row docViewerComponent">
     <div class="col-md-12" >` +
       fileList +
       `</div>

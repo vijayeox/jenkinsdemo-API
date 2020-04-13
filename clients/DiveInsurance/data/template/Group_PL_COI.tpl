@@ -5,6 +5,16 @@
 </head>
 <body>
 	<div>
+	{if isset($upgradeStatus)}
+		{if $upgradeStatus == true || $upgradeStatus == 'true' }
+			{assign var=list value=$upgradeGroupLiability|json_decode:true}
+			{foreach from=$list item=$upgradeData}
+			    		<p class = "ai_list">
+			    			Effective {$upgradeData.update_date} : The Liability Limit are ${$upgradeData.combinedSingleLimit} per occurance and ${$upgradeData.annualAggregate} Annual Aggregate.
+			    		</p>
+		    {/foreach}
+		{/if}
+	{/if}
 	<div class = "second_content">
 		<hr class = "spacing1"></hr>
 			<p class = "grppolicy_notice">
@@ -231,10 +241,10 @@
 
 	{if $groupProfessionalLiability == 'yes'}
 		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
-		{assign var=list value=$groupAdditionalInsured|json_decode:true}
+		{assign var=list value=$groupPL|json_decode:true}
 		{foreach from=$list item=$additional}
 	    		<p class = "grpai_list">
-	    			&nbsp&nbsp&nbsp{$additional.name}
+	    			&nbsp&nbsp&nbsp{$additional.firstname}&nbsp{$additional.lastname}
 	    		</p>
     		{/foreach}
 	{/if}
