@@ -4414,6 +4414,8 @@
 										"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 									},
 									"template": "<span>{{ item }}</span>",
+									"refreshOn": "row.country",
+									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"calculateServer": false,
@@ -4425,11 +4427,9 @@
 									"indexeddb": {
 										"filter": {}
 									},
-									"refreshOn": "row.country",
 									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false,
-									"clearOnRefresh": true,
 									"isNew": false
 								}],
 								"width": 4,
@@ -6385,7 +6385,7 @@
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.additionalLocationState &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.state &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 											"calculateServer": false,
 											"key": "ALliabilityTaxPercentage",
 											"type": "number",
@@ -6446,7 +6446,8 @@
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.additionalLocationState &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"calculateServer": false,
 											"key": "ALPropertyTaxPercentage",
 											"type": "number",
 											"decimalLimit": 3,
@@ -7665,7 +7666,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.business_state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
 							"calculateServer": false,
 							"key": "groupTaxPercentage",
 							"type": "number",
@@ -9782,7 +9783,7 @@
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var additionalLocationArray =\n\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvar value = 0;\n\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n}",
+						"calculateValue": "var additionalLocationArray = \"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvar value = 0;\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n}",
 						"calculateServer": false,
 						"key": "AddILocTax",
 						"type": "number",
@@ -10120,7 +10121,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 17,
+	"_vid": 19,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10137,6 +10138,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-13T04:14:38.515Z",
+	"modified": "2020-04-13T06:01:01.851Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
