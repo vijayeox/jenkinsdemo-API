@@ -180,14 +180,6 @@
 				"input": true,
 				"tableView": false
 			}, {
-				"label": "amount",
-				"calculateValue": "value = data['amountPayable'];",
-				"calculateServer": false,
-				"key": "amount",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}, {
 				"label": "Would you like to apply for Premium Finance?",
 				"optionsLabelPosition": "right",
 				"inline": false,
@@ -562,7 +554,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 53,
+	"_vid": 54,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -580,6 +572,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-13T11:22:33.691Z",
+	"modified": "2020-04-13T11:30:57.171Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }
