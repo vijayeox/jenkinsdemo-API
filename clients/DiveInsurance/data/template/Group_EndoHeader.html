@@ -19,7 +19,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','combinedSingleLimit','annualAggregate','state_in_short','padi','update_date'];
+     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','initial_combinedSingleLimit','initial_annualAggregate','state_in_short','padi','update_date'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -28,9 +28,9 @@
             for (var j = 0; j < element.length; ++j) {
               element[j].textContent = vars[css_selector_classes[css_class]];
             }
-            if (css_selector_classes[css_class] == "update_date") {
+            if (css_selector_classes[css_class] == "start_date") {
               document.getElementsByClassName(
-                "update_date"
+                "start_date"
               )[0].textContent = moment(
                 vars[css_selector_classes[css_class]]
               ).format("D MMMM YYYY");
@@ -95,7 +95,7 @@
         <div class = "certificate_data1">
           <p class = "grpp_margin"><span class ="group_certificate_no"></span></p>
           <p class = "grpp_margin"><span class ="padi"></span></p>
-          <p class = "grpp_margin"><span class ="update_date"></span></p>
+          <p class = "grpp_margin"><span class ="start_date"></span></p>
           <p class = "grpp_margin"><span class ="end_date"></span></p>
         </div>
         <div>
@@ -120,8 +120,8 @@ Company</p>
             </div>
             <div class = "gin-type1"> 
                 <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
-                  <p class = "grpins_font">$<span class ="combinedSingleLimit"></span>&nbsp&nbsp&nbsp(per occurrence)</p>
-                  <p class = "grpins_font">$<span class ="annualAggregate"></span></p>
+                  <p class = "grpins_font">$<span class ="initial_combinedSingleLimit"></span>&nbsp&nbsp&nbsp(per occurrence)</p>
+                  <p class = "grpins_font">$<span class ="initial_annualAggregate"></span></p>
             </div>
           </div>
           <div class="gi_type2">

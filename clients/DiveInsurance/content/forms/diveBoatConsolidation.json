@@ -2040,6 +2040,10 @@
 				"spellcheck": true,
 				"tableView": true,
 				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
 				"key": "current_insurance_company",
 				"type": "textfield",
 				"input": true,
@@ -8273,7 +8277,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 364,
+	"_vid": 365,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8291,6 +8295,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-12T20:18:32.282Z",
+	"modified": "2020-04-13T06:24:18.744Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
