@@ -1,10 +1,11 @@
 #rainloop/orocrm/calendar
 
-FROM php:7.2-apache
+FROM php:7.3.13-apache
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends apt-utils \
   && apt-get install -y graphviz \
+  && apt-get install -y libzip-dev \
   && apt-get install -y libxslt-dev \
   && apt-get install -y git zlib1g-dev \
   && apt-get install -y supervisor \
