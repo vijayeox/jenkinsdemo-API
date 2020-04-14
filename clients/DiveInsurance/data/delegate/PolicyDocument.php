@@ -618,11 +618,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
+            	$docs = array();
                 if(isset($data['documents'])){
                     if(is_string($data['documents'])) {
-                    $docs = json_decode($data['documents'],true);
-                    }
-                }else {
+                    	$docs = json_decode($data['documents'],true);
+                    } else {
+                    	$docs = $data['documents'];
+                	}
+                } else {
                     $data['documents'] = array();
                     $docs = $data['documents'];
                 }
