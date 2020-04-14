@@ -16,7 +16,7 @@
 				{if !(isset($individual.product) && ($individual.product == 'Dive Boat')) && !(isset($individual.product) && ($individual.product == 'Dive Store'))}
 				<p class = "email"><b>Your certificate and insurance policy <br>were emailed to :<br><u>{$individual.email}</u></b></p><br>
 				<p class = "email" align="left"><b>{$individual.lastname},&nbsp;{$individual.firstname}<br>{$individual.address1}<br>
-					{if isset($individual.address2)}
+					{if isset($individual.address2) && !empty($individual.address2)}
 						{$individual.address2}<br>
 					{/if}
 					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip} </b></p>
