@@ -14,53 +14,53 @@
           <div class = "sectionb">
             <p class="hull_title">Hull Type: {$hull_type}</p>
             <p class="hull_title">Mfg: &nbsp&nbsp{$hull_mfg}</p>  
+            <p>&nbsp</p>
           </div>
+         <hr></hr>
+         {if isset($layup_period_from_date_time) && $layup_period_from_date_time != ""}
+          <p class = "layup"><b>Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}</b></p>
           <hr></hr>
-         {if isset($layup_period_from_date_time)}
-          <hr></hr>
-            Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}
-          <hr></hr>
-         {/if}
+          {/if}
 
 
 
 
          {if isset($increased_hullValue) || isset($decreased_hullValue) || isset($increased_dinghyValue) || isset($decreased_dinghyValue) || isset($increased_trailerValue) || isset($decreased_trailerValue)}
-          <p>*** SECTION A - PROPERTY INSURED - CHANGE(S)</p>
-          <p>{if isset($increased_hullValue)}
-                  *** The Agreed Valuation of said Vessel has increased by ${$increased_hullValue},the deductible has increased by ${$increased_deductible},the premium has increased by ${$increased_hullPremium}
+          <p class ="endo_font">*** SECTION A - PROPERTY INSURED - CHANGE(S)</p>
+          <p class ="endo_font">{if isset($increased_hullValue)}
+                  *** The Agreed Valuation of said Vessel has increased by ${$increased_hullValue},the deductible has increased by ${$increased_deductible|number_format:2:".":","},the premium has increased by ${$increased_hullPremium|number_format:2:".":","}
             {else if isset($decreased_hullValue)}
-                  *** The Agreed Valuation of said Vessel has been decreased by ${$decreased_hullValue},the premium has been decreased by ${$decreased_hullPremium}
+                  *** The Agreed Valuation of said Vessel has been decreased by ${$decreased_hullValue|number_format:2:".":","},the premium has been decreased by ${$decreased_hullPremium|number_format:2:".":","}
             {/if}
           </p>
 
 
-          <p>{if isset($increased_dinghyValue)}
-                *** The amount of DinghyTender Insurance has increased by ${$increased_dinghyValue},the premium has increased by ${$increased_dinghyPremium}
+          <p class ="endo_font">{if isset($increased_dinghyValue)}
+                *** The amount of DinghyTender Insurance has increased by ${$increased_dinghyValue|number_format:2:".":","},the premium has increased by ${$increased_dinghyPremium|number_format:2:".":","}
              {else if isset($decreased_dinghyValue)}
-                *** The amount of DinghyTender Insurance has been decreased by ${$decreased_dinghyValue},the premium has been decreased by ${$decreased_dinghyValue}
+                *** The amount of DinghyTender Insurance has been decreased by ${$decreased_dinghyValue|number_format:2:".":","},the premium has been decreased by ${$decreased_dinghyValue|number_format:2:".":","}
               {/if}
           </p>
 
 
-          <p>{if isset($increased_trailerValue)}
-               *** The amount of Trailer Insurance has increased by ${$increased_trailerValue} and the premium has increased by ${$increased_trailerPremium}
+          <p class ="endo_font">{if isset($increased_trailerValue)}
+               *** The amount of Trailer Insurance has increased by ${$increased_trailerValue|number_format:2:".":","} and the premium has increased by ${$increased_trailerPremium|number_format:2:".":","}
              {else if isset($decreased_trailerValue)}
-               *** The amount of Trailer Insurance has been decreased by ${$decreased_trailerValue} and the premium has been decreased by ${$decreased_trailerPremium}
+               *** The amount of Trailer Insurance has been decreased by ${$decreased_trailerValue|number_format:2:".":","} and the premium has been decreased by ${$decreased_trailerPremium|number_format:2:".":","}
              {/if}
           </p>
         {/if}             
 
 
         {if isset($increased_totalLiabilityLimitValue) || isset($decreased_totalLiabilityLimitValue) || isset($increased_passengers) || isset($decreased_passengers) || isset($increased_crewInBoat) || isset($decreased_crewInBoat) || isset($increased_crewInWater) || isset($decreased_crewInWater)}
-          <p>*** SECTION B - LIABILITY INSURED - CHANGE(S)</p>
-          <p>{if isset($increased_totalLiabilityLimitValue)}
-            *** The Liability limit has now been increased by ${$increased_totalLiabilityLimitValue},with the deductible has increased by ${$liability_deductible}
+          <p class ="endo_font">*** SECTION B - LIABILITY INSURED - CHANGE(S)</p>
+          <p class ="endo_font">{if isset($increased_totalLiabilityLimitValue)}
+            *** The Liability limit has now been increased by ${$increased_totalLiabilityLimitValue|number_format:2:".":","},with the deductible has increased by ${$liability_deductible|number_format:2:".":","}
           {else if isset($decreased_totalLiabilityLimitValue)}
-            *** The Liability limit has now been decreased by ${$decreased_totalLiabilityLimitValue}
+            *** The Liability limit has now been decreased by ${$decreased_totalLiabilityLimitValue|number_format:2:".":","}
           {/if}</p>
 
-          <p>
+          <p class ="endo_font">
             {if isset($increased_passengers)}
              *** Limit of Insurance - Passenger Liability: {$increased_passengers} Passenger(s) have been added to this certificate.
             {else if isset($decreased_passengers)}
@@ -72,22 +72,22 @@
 
          
            {if isset($increased_crewInBoat) || isset($decreased_crewInBoat) || isset($increased_crewInWater) || isset($decreased_crewInWater)} 
-             <p>*** Limit of Insurance - Passenger Liability: Has now been added to this certificate. The Liability limit is now ${$primaryLimit}(plus any Excess Liability already purchased) with a dedcutible of ${$liability_deductible}
+             <p class ="endo_font">*** Limit of Insurance - Passenger Liability: Has now been added to this certificate. The Liability limit is now ${$primaryLimit|number_format:2:".":","}(plus any Excess Liability already purchased) with a dedcutible of ${$liability_deductible|number_format:2:".":","}
             </p>
 
-            <p>{if isset($increased_crewInBoat)}
-              *** {$increased_crewInBoat} Crew on Boat has been added to this certificate with an additional premium of ${$increased_crewInBoatPremium}
+            <p class ="endo_font">{if isset($increased_crewInBoat)}
+              *** {$increased_crewInBoat} Crew on Boat has been added to this certificate with an additional premium of ${$increased_crewInBoatPremium|number_format:2:".":","}
               {else if isset($decreased_crewInBoat)}
-              *** {$decreased_crewInBoat} Crew ob Boat has been deleted from this certificate,the premium has been decreased by ${$decreased_crewInBoatPremium}
+              *** {$decreased_crewInBoat} Crew ob Boat has been deleted from this certificate,the premium has been decreased by ${$decreased_crewInBoatPremium|number_format:2:".":","}
               {/if}
             </p>
           
 
-            <p>
+            <p class ="endo_font">
             {if isset($increased_crewInWater)}
-             *** {$increased_crewInWater} Crew on Water has been added to this certificate with an additional premium of ${$increased_crewInWaterPremium}
+             *** {$increased_crewInWater} Crew on Water has been added to this certificate with an additional premium of ${$increased_crewInWaterPremium|number_format:2:".":","}
               {else if isset($decreased_crewInWater)}
-              *** {$decreased_crewInWater} Crew ob Boat has been deleted from this certificate,the premium has been decreased by ${$decreased_crewInWaterPremium}
+              *** {$decreased_crewInWater} Crew ob Boat has been deleted from this certificate,the premium has been decreased by ${$decreased_crewInWaterPremium|number_format:2:".":","}
             {/if}
           </p>
           {/if}
@@ -99,17 +99,17 @@
 
             <p>Name & Address</p>
                 <center> 
-                    <p>
+                    <p style = "font-size: 13px;">
                     Not withstanding the fact that such parties as advised are hereby named in their capacity as advised as Co-Assured in this Policy, this cover will only extend insofar as they may be found liable to pay in the first instance for liabilities which are properly the responsibility of the Assured, and nothing herein contained shall be construed as extending cover in respect of any amount which would not have been recoverable hereunder by the Assured had such claim been made or enforced against him. Once indemnification hereunder has been made there shall be no further liability hereunder to make any further payment to any person or company whatsoever, including the Assured, in respect of that claim.
                     </p>
 
-                    <p>
+                    <p style = "font-size: 13px;">
                     All rights granted to us together with all duties of an assured under the original insuring agreement shall also apply to any other named co-assured jointly.
                     </p>
                 </center>
 
                 {foreach from=$list item=$additional}
-                   {$additional.name},
+                   <p class="ai_list">{$additional.name}</p>
                 {/foreach}
             {/if}
           </p>
