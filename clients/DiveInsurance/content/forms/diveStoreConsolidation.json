@@ -2063,6 +2063,7 @@
 								"validate": {
 									"required": true
 								},
+								"errorLabel": "The Year in which the Building was built",
 								"key": "built_year",
 								"type": "select",
 								"indexeddb": {
@@ -4800,7 +4801,7 @@
 												"requireDecimal": true,
 												"inputFormat": "plain",
 												"clearOnHide": false,
-												"calculateValue": "value=(parseFloat(row.additionalLocationFurniturefixturesAndEquipment)||0)+(parseFloat(row.additionalLocationTableInventoryStock)||0)+(parseFloat(row.additionalLocationPropertyOfOthers)||0)+(parseFloat(row.additionalLocationSignsAttachedOrDetached)||0)+parseFloat(row.additionalLocationTenantImprovements)+(parseFloat(row.additionalLocationOther)||0)+(parseFloat(row.additionalLocationDoYouOwnPropertyIncludingCompressorsOffPremises)||0)",
+												"calculateValue": "value=(parseFloat(row.additionalLocationFurniturefixturesAndEquipment)||0)+(parseFloat(row.additionalLocationTableInventoryStock)||0)+(parseFloat(row.additionalLocationPropertyOfOthers)||0)+(parseFloat(row.additionalLocationSignsAttachedOrDetached)||0)+(parseFloat(row.additionalLocationTenantImprovements)||0)+(parseFloat(row.additionalLocationOther)||0)+(parseFloat(row.additionalLocationDoYouOwnPropertyIncludingCompressorsOffPremises)||0)",
 												"calculateServer": false,
 												"key": "additionalLocationPropertyTotal",
 												"type": "number",
@@ -6833,7 +6834,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\">link</a> for more information.</h4>",
+					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\" target=\"_blank\">link</a> for more information.</h4>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html1",
@@ -10124,7 +10125,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 22,
+	"_vid": 25,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10141,6 +10142,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-13T20:10:12.695Z",
+	"modified": "2020-04-14T10:10:39.895Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
