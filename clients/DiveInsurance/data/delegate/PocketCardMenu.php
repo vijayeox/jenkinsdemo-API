@@ -18,7 +18,7 @@ class PocketCardMenu extends AbstractAppDelegate
 
     public function execute(array $data, Persistence $persistenceService) 
     {
-        $this->logger->info("Executing Pocket Card Generation with data- ".json_encode($data));
+        $this->logger->info("Executing Pocket Card Menu Generation with data- ".json_encode($data));
         $params['entityName'] = 'Pocket Card Job';
         $sortParams = array("field" => "date_created", "dir" => "desc");
         $filterParams = array("filters" => array());
@@ -30,9 +30,27 @@ class PocketCardMenu extends AbstractAppDelegate
             $this->logger->info("key is : ".$key);
             $this->logger->info("value is : ".print_r($value, true));
             unset($value['data']);
+            if(isset($value['boatStoreNumber']) && !empty($value['boatStoreNumber'])){
+                $value['padiNumber'] = $value['boatStoreNumber'];
+            }
+            if(isset($value['storeNumber']) && !empty($value['storeNumber'])){
+                $value['padiNumber'] = $value['storeNumber'];
+            }
             if(isset($value['padiNumber'])){
                 $value['generationType'] = $value['padiNumber'];
-                $value['pocketCardProductType'] = isset($value['product']) ? $value['product'] : "";
+                $value['pocketCardProductType'] = isset($value['padiProductType']) ? $value['padiProductType'] : "";
+                if(isset($value['pocketCardProductType']) && !empty($value['pocketCardProductType']) && $value['pocketCardProductType'] == 'individualProfessionalLiability'){
+                    $value['pocketCardProductType'] = 'Individual Professional Liability';
+                }
+                if(isset($value['pocketCardProductType']) && !empty($value['pocketCardProductType']) && $value['pocketCardProductType'] == 'emergencyFirstResponse'){
+                    $value['pocketCardProductType'] = 'Emergency First Response';
+                }
+                if(isset($value['pocketCardProductType']) && !empty($value['pocketCardProductType']) && $value['pocketCardProductType'] == 'diveBoat'){
+                    $value['pocketCardProductType'] = 'Dive Boat';
+                }
+                if(isset($value['pocketCardProductType']) && !empty($value['pocketCardProductType']) && $value['pocketCardProductType'] == 'diveStore'){
+                    $value['pocketCardProductType'] = 'Dive Store';
+                }
             }
             else {
                 $time = strtotime($value['pocketCardStartDate']);
