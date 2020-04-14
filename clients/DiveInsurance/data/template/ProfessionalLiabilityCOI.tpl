@@ -117,7 +117,7 @@
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if isset($previous_careerCoverage) && !empty($previous_careerCoverage)}
 					{foreach from=$previousCoverages item=previousCoverage}
-						{if $upgradeCareerCoverageVal != $previousCoverage.label}
+						{if $careerCoverageVal != $previousCoverage.label}
 							<p class = "policy_status">Status of Insured : {$previousCoverage.label} as of {$previousCoverage.update_date|date_format:"%m/%d/%Y"}</p>
 						{/if}
 					{/foreach}
