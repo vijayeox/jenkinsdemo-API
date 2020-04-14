@@ -8,7 +8,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
 {
     public function __construct(){
         parent::__construct();
-        $this->status = array('OWSI' => 'Instructor','MI' => 'Instructor','MSDT' => 'Instructor','UI' => 'Instructor','DM' => 'Dive Master','AI' => 'Assistant Instructor','PM' => 'Instructor','AIN' => 'Assistant Instructor');
+        $this->status = array('OWSI' => 'Instructor','MI' => 'Instructor','AL' => 'Instructor','EFR' => 'Instructor','MSDT' => 'Instructor','UI' => 'Instructor','DM' => 'Dive Master','AI' => 'Assistant Instructor','AIN' => 'Assistant Instructor','LFSI' => 'Swim Instructor','FDIC' => 'Freedive Instructor');
     }
 
     // Padi Verification is performed here
@@ -30,7 +30,11 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
             }
             $response[0]['nameOfInstitution'] = 'PADI';
             if(isset($response[0]['status']) && $response[0]['status'] != ''){
-                if(array_key_exists($response[0]['status'], $this->status)){
+                if($response[0]['status'] == 'PM'){
+                    $returnArray['padi_Verified'] = false;
+                    $data = array_merge($data,$returnArray);
+                    return $data;        
+                }else if(array_key_exists($response[0]['status'], $this->status)){
                     $response[0]['status'] = $this->status[$response[0]['status']];    
                 }else{
                     $response[0]['status'] = " ";
