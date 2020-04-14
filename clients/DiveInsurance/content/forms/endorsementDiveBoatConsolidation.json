@@ -3511,13 +3511,25 @@
 					"label": "Information for each Additional Insured is required as follows",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"name": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"address": "",
+						"zip": "",
+						"businessRelation": "",
+						"additionalInformation": ""
+					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -4113,13 +4125,23 @@
 			"label": "Loss Payees",
 			"disableAddingRemovingRows": false,
 			"reorder": false,
+			"addAnother": "Add More",
 			"addAnotherPosition": "bottom",
 			"defaultOpen": false,
 			"layoutFixed": false,
 			"enableRowGroups": false,
 			"hideLabel": true,
 			"tableView": true,
+			"defaultValue": [{
+				"name": "",
+				"city": "",
+				"country": "",
+				"state": {},
+				"address": "",
+				"zip": ""
+			}],
 			"clearOnHide": false,
+			"calculateServer": false,
 			"validate": {
 				"minLength": 1
 			},
@@ -4809,7 +4831,10 @@
 							"zip": "",
 							"city1": "",
 							"state1": {},
-							"zip1": ""
+							"zip1": "",
+							"businessRelation": "",
+							"additionalInformation1": "",
+							"businessRelationOther": ""
 						}],
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -9382,7 +9407,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 172,
+	"_vid": 173,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9400,6 +9425,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-14T07:37:01.401Z",
+	"modified": "2020-04-14T08:53:48.704Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
