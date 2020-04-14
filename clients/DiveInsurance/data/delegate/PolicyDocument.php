@@ -33,6 +33,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => 'DiveBoatCOI',
                 'header' => 'DiveBoatHeader.html',
                 'footer' => 'DiveBoatFooter.html',
+                'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Dive_Boat_Policy.pdf',
                 'cover_letter' => 'Dive_Boat_Cover_Letter',
@@ -64,6 +65,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                         'header' => 'DiveStoreHeader.html',
                         'footer' => 'DiveStoreFooter.html',
+                        'card' => 'PocketCard',
                         'slWording' => 'SL_Wording.pdf',
                         'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
                         'cover_letter' => 'Dive_Store_Cover_Letter',
@@ -152,9 +154,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp[$key] = json_encode($value);
                 }
             }
-
-
-
 
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
                 if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
@@ -393,15 +392,37 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
 
-
                 if(isset($temp['CrewInWaterCount']) && $temp['CrewInWaterCount'] != ''){
                     $documents['water_endorsement_certificate'] = $this->copyDocuments($temp,$dest['relativePath'],'waterEndorsement');
                 }
-                   
 
-                 if(isset($this->template[$temp['product']]['blanketForm'])){
+                if(isset($this->template[$temp['product']]['blanketForm'])){
                     $this->logger->info("DOCUMENT blanketForm");
                     $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                }
+
+                if(isset($temp['groupPL']) && !empty($temp['groupPL'])){
+                    if (isset($this->template[$temp['product']]['card'])) {
+                        $this->logger->info('inside dive boat pocket card');
+                        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
+                        $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                        $template = $this->template[$temp['product']]['card'];
+                        $options = array();        
+                        $docDest = $dest['absolutePath'].$template.'.pdf';
+                        $result = $this->newDataArray($temp);
+                        if(!isset($result) || empty($result)){
+                            $this->logger->warn('no pocket card generated');   
+                        }
+                        else{                           
+                            $newData = json_encode($result);
+                            $docdata = array('data' => $newData);
+                            unset($NewData);
+                            unset($newData);
+                            $this->logger->info("Data is: ".print_r($docdata, true));
+                            $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
+                            $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
+                        }
+                    }
                 }
             }
             else if($data['product'] == "Dive Store"){
@@ -499,6 +520,29 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT blanketForm");
                     $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
                 }
+                if(isset($temp['groupPL']) && !empty($temp['groupPL'])){
+                    if (isset($this->template[$temp['product']]['card'])) {
+                        $this->logger->info('inside dive boat pocket card');
+                        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
+                        $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                        $template = $this->template[$temp['product']]['card'];
+                        $options = array();        
+                        $docDest = $dest['absolutePath'].$template.'.pdf';
+                        $result = $this->newDataArray($temp);
+                        if(!isset($result) || empty($result)){
+                            $this->logger->warn('no pocket card generated');   
+                        }
+                        else{                           
+                            $newData = json_encode($result);
+                            $docdata = array('data' => $newData);
+                            unset($NewData);
+                            unset($newData);
+                            $this->logger->info("Data is: ".print_r($docdata, true));
+                            $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
+                            $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
+                        } 
+                    }
+                }
             }
 
             if($this->type != 'quote' && $this->type != 'endorsementQuote'){
@@ -574,11 +618,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
+            	$docs = array();
                 if(isset($data['documents'])){
                     if(is_string($data['documents'])) {
-                    $docs = json_decode($data['documents'],true);
-                    }
-                }else {
+                    	$docs = json_decode($data['documents'],true);
+                    } else {
+                    	$docs = $data['documents'];
+                	}
+                } else {
                     $data['documents'] = array();
                     $docs = $data['documents'];
                 }
@@ -952,5 +999,39 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             } 
         }
         return $state;
+    }
+
+    private function newDataArray($data){
+        $this->logger->info('pocket card - padi data to be formatted: '.print_r($data, true));
+        $i = 0;
+        if(isset($data['groupPL']) && !empty($data['groupPL'])){
+            $this->logger->info('group PL members need to be formatted to a new array');
+            $groupData = json_decode($data['groupPL'], true);
+            $this->logger->info('group data is: '.print_r($groupData, true));
+            $total = count($groupData);
+            foreach ($groupData as $key2 => $value2) {
+                $response[$i]['padi'] = $value2['padi'];
+                $response[$i]['firstname'] = $value2['firstname'];
+                $response[$i]['lastname'] = $value2['lastname'];
+                $response[$i]['start_date'] = $value2['start_date'];
+                $response[$i]['product'] = $data['product'];
+                $response[$i]['email'] = $data['email'];
+                $response[$i]['certificate_no'] = $data['certificate_no'];
+                $response[$i]['end_date'] = $data['end_date'];
+                $response[$i]['address1'] = $data['address1'];
+                $response[$i]['address2'] = isset($data['address2']) ? $data['address2'] : '';
+                $response[$i]['city'] = $data['city'];
+                $response[$i]['state'] = $data['state'];
+                $response[$i]['zip'] = $data['zip'];
+                $response[$i]['business_name'] = $data['business_name'];
+                $i += 1;
+            }
+            $this->logger->info('the response data is : '.print_r($response, true));
+            return $response;                
+        }
+        else{
+            $response['data'] = '';
+            return $response;
+        }
     }
 }

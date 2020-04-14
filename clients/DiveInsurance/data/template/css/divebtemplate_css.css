@@ -849,3 +849,61 @@ body{
   width: 33%;
   letter-spacing: 1px;
 }
+
+
+/*Endorsement Quote*/
+.endo_content1{
+  float:left;
+  width : 50%;
+  display: inline-block;
+}
+.endo_content2{
+  float:left;
+  width : 50%;
+  display: inline-block;
+}
+.endo_info{
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-bottom:1px;
+  margin-top:0px;
+  padding: 0px;
+  width: 80%;
+  letter-spacing: 1px;
+}
+
+.endo_info1{
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-bottom:1px;
+  margin-top:0px;
+  padding: 0px;
+  width: 45%;
+  letter-spacing: 1px;
+}
+
+
+.endo_info2{
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-bottom:1px;
+  margin-top:0px;
+  padding: 0px;
+  width: 40%;
+  letter-spacing: 1px;
+}
+.endo_para{
+  padding:0px;
+  margin:0px;
+}
+
+.endo_font{
+  padding:0px;
+  font-size: 15px;
+}

@@ -2250,26 +2250,17 @@
 			"theme": "primary",
 			"tableView": false,
 			"components": [{
-				"clearOnHide": false,
-				"key": "page5ColumnsPanel4Well",
+				"key": "page5ColumnsPanel4Content2",
+				"label": "Content",
 				"input": false,
-				"components": [{
-					"key": "page5ColumnsPanel4Content2",
-					"label": "Content",
-					"input": false,
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "HUB International Insurance will use the information you provide on this form to be in touch with you and to provide updates and marketing. We will treat your information with respect. For more information about our privacy practices please visit our website. By checking this box, you agree that we may process your information in accordance with these terms.",
-					"type": "htmlelement",
-					"hideLabel": true,
-					"tableView": false
+				"attrs": [{
+					"value": "",
+					"attr": ""
 				}],
-				"tableView": false,
-				"type": "well",
+				"content": "HUB International Insurance will use the information you provide on this form to be in touch with you and to provide updates and marketing. We will treat your information with respect. For more information about our privacy practices please visit our website. By checking this box, you agree that we may process your information in accordance with these terms.",
+				"type": "htmlelement",
 				"hideLabel": true,
-				"label": ""
+				"tableView": false
 			}, {
 				"label": "I Agree",
 				"tableView": true,
@@ -2735,20 +2726,20 @@
 						"inline": false,
 						"tableView": false,
 						"values": [{
+							"label": "Cash",
+							"value": "cash",
+							"shortcut": ""
+						}, {
 							"label": "Money Order",
 							"value": "moneyOrder",
 							"shortcut": ""
 						}, {
-							"label": "Check",
-							"value": "check",
+							"label": "Cheque",
+							"value": "cheque",
 							"shortcut": ""
 						}, {
 							"label": "Credit Card",
 							"value": "creditCard",
-							"shortcut": ""
-						}, {
-							"label": "Other",
-							"value": "other",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -2771,124 +2762,77 @@
 					"size": "md"
 				}, {
 					"components": [{
-						"title": "Check Details",
-						"theme": "primary",
-						"collapsible": false,
+						"label": "Cheque Number",
+						"mask": false,
+						"spellcheck": true,
 						"tableView": false,
-						"key": "checkDetails",
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "chequeNumber",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
-							"eq": "check"
+							"eq": "cheque"
 						},
-						"type": "panel",
-						"label": "Check Details",
-						"input": false,
-						"components": [{
-							"label": "Check Number",
-							"mask": false,
-							"spellcheck": true,
-							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"clearOnHide": false,
-							"calculateServer": false,
-							"validate": {
-								"required": true
-							},
-							"key": "chequeNumber",
-							"type": "number",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Upload Consent Form",
-							"tableView": false,
-							"storage": "base64",
-							"webcam": false,
-							"fileTypes": [{
-								"label": "",
-								"value": ""
-							}],
-							"clearOnHide": false,
-							"calculateServer": false,
-							"key": "chequeConsentForm",
-							"type": "file",
-							"input": true
-						}],
+						"type": "number",
+						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"title": "Card Details",
-						"theme": "primary",
-						"collapsible": false,
-						"tableView": false,
-						"key": "cardDetails",
+						"type": "convergepay",
+						"key": "custom",
+						"label": "custom",
+						"input": true,
+						"amount_field": "amountPayable",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
 							"eq": "creditCard"
 						},
-						"type": "panel",
-						"label": "Card Details",
-						"input": false,
-						"components": [{
-							"type": "convergepay",
-							"key": "creditcardPayment",
-							"amount_field": "amountPayable",
-							"label": "custom",
-							"input": true,
-							"tableView": false,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Content",
-							"attrs": [{
-								"value": "",
-								"attr": ""
-							}],
-							"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "page7Content",
-							"conditional": {
-								"show": true,
-								"when": "paymentOptions",
-								"eq": "creditCard"
-							},
-							"type": "htmlelement",
-							"input": false,
-							"hideLabel": true,
-							"hideOnChildrenHidden": false
-						}],
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
-						"title": "Money Order Details",
-						"theme": "primary",
-						"collapsible": false,
-						"tableView": false,
-						"key": "moneyOrderDetai",
+						"label": "Order ID",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "orderId",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
 							"eq": "moneyOrder"
 						},
-						"type": "panel",
-						"label": "Money Order Details",
+						"type": "textfield",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Content",
+						"attrs": [{
+							"value": "",
+							"attr": ""
+						}],
+						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "page7Content",
+						"conditional": {
+							"show": true,
+							"when": "paymentOptions",
+							"eq": "creditCard"
+						},
+						"type": "htmlelement",
 						"input": false,
-						"hideOnChildrenHidden": false,
-						"components": [{
-							"label": "Order ID",
-							"spellcheck": true,
-							"tableView": true,
-							"clearOnHide": false,
-							"calculateServer": false,
-							"validate": {
-								"required": true
-							},
-							"key": "orderId",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}]
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3023,7 +2967,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 431,
+	"_vid": 432,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3107,7 +3051,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-13T17:24:08.205Z",
+	"modified": "2020-04-13T17:29:20.590Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

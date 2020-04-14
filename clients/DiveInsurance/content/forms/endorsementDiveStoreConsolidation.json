@@ -1150,11 +1150,12 @@
 						}, {
 							"components": [{
 								"label": "Work Phone",
-								"spellcheck": true,
-								"tableView": true,
+								"spellcheck": false,
+								"tableView": false,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"customMessage": "Please enter a valid work phone number"
 								},
 								"key": "home_phone_number",
 								"logic": [{
@@ -10709,7 +10710,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 77,
+	"_vid": 78,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10726,6 +10727,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-13T20:10:59.051Z",
+	"modified": "2020-04-14T03:52:07.874Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

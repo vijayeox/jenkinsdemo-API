@@ -1,9 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css"/>
+<link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./AgentInfo.js"></script>
 <script type="text/javascript" src="./js/moment.js"></script>
+
 <script>
   function subst() {
       var vars = {};
@@ -18,8 +19,8 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','update_date','state_in_short','padi'];
-      for (var css_class in css_selector_classes) {
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','state_in_short','padi'];
+       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
               css_selector_classes[css_class]
@@ -27,9 +28,9 @@
             for (var j = 0; j < element.length; ++j) {
               element[j].textContent = vars[css_selector_classes[css_class]];
             }
-            if (css_selector_classes[css_class] == "update_date") {
+            if (css_selector_classes[css_class] == "start_date") {
               document.getElementsByClassName(
-                "update_date"
+                "start_date"
               )[0].textContent = moment(
                 vars[css_selector_classes[css_class]]
               ).format("D MMMM YYYY");
@@ -45,33 +46,34 @@
       agentInfo();
   }
   </script>
-
-
-
-
-
 </head>
 <body onload="subst()" id = "doc_body">  
- <div class = "main_div">
-	       	  <hr class="line1"></hr>
-      		<div class="spacer"></div>
-      		<hr class="line2"></hr>
+ <div class = "main_div1">
+            <hr class="line1"></hr>
+          <div class="spacer"></div>
+          <hr class="line2"></hr>
 
-      		<div class="title1"><center><b>DIVE BOAT MARINE ENDORSEMENT PROPOSAL</b></center></div>
-
+          <center><b><div class="title1">DIVE BOAT MARINE PROPOSAL</div></b></center>
+          <div class="title2">
+            <div class = "claims_title">
+               <p class ="claims"><b>LOSS PAYEES</b></p>
+            </div>
+            <div class = "page_data">
+               <p class ="page_no1">Page <span class="page"></span> of <span class="topage"></span></p>
+            </div>
+          </div>
+ 
           <hr class="line1"></hr>
           <div class="spacer"></div>
           <hr class="line2"></hr>
 
-    <div class = "content">
-      <div class ="endo_content1">
+    <div class = "cont">
+      <div class ="content1">
           <b class = "caption">Agent Information</b>
           <div class = "caption1">
-            <p class ="endo_info" id = "nameVal"></p>
-            <p class ="endo_info1" id = "addressLineVal"></p>
+            <p class ="lp_info" id = "nameVal"></p>
+            <p class ="lp_info1" id = "addressLineVal"></p>
 						<p class ="info" id = "addressLine2Val"></p>
-           <p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
-            <p class ="info" id = "phone2Val" style="margin-bottom:2px;"></p>
            </div>
           <hr class ="hr_caption"></hr>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
@@ -81,7 +83,7 @@
           <p class = "details"><span class ="business_city"></span>,<span class ="state_in_short"></span> - <span class ="business_zip"></span></p>
           <p class = "details"><span class ="business_country"></span></p>
       </div>
-      <div class ="endo_content2">
+      <div class ="content2">
         <div class = "certificate_data">
           <p class = "p_margin"><b>Member #:</b></p>
           <p class = "p_margin"><b>Effective Date:</b></p>
@@ -89,22 +91,17 @@
           <p class = "p_margin"><b>Policy issued by:</b></p>
           <p class = "p_margin"><b>Policy #:</b></p>
         </div>
-        <div class = "certificate_data1">
+        <div class = "certificate1">
           <p class = "p_margin"><span class ="padi"></p>
-          <p class = "p_margin"><span class ="update_date"></p>
-          <p class = "p_margin"><span class ="end_date"></p>
+          <p class = "p_margin"><span class ="start_date"></p>
+          <p class = "p_margin"><span class ="end_date">&nbsp12:01:00 AM</p>
           <p class = "p_margin">U.S. SPECIALTY INSURANCE COMPANY</p>
           <p class = "p_margin"><span class ="policy_id"></p>
         </div>
       </div>
       </div>
     </div>
+    <hr class =" ai_hrtag"></hr>
   </div>
-      <div class = "page_value">
-             <p class ="page_no">Page <span class="page"></span> of <span class="topage"></span></p>
-             <hr class = "endo_para"></hr>   
-             <center><p class = "endo_para" style = "font-size: 13px;"><b>The above is required to be completed only when this endorsement is issued subsequent to the preparation of the policy</b></p></center>
-             <hr class = "endo_para"></hr>
-    </div>
 </body>
 </html>

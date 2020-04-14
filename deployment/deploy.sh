@@ -421,7 +421,7 @@ insuranceoi()
         rsync -rl --delete ./InsuranceOI /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building InsuranceOI app using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
-        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/InsuranceManagement'
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/InsuranceOI'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
         cd /opt/oxzion/view/bos/

@@ -215,7 +215,7 @@ class UserService extends AbstractService
                     throw new ServiceException("Username or Email Exists in other Organization", "user.email.exists");
                 }
             }
-            if (!isset($data['address1'])) {
+            if (!isset($data['address1']) || empty($data['address1'])) {
                 $addressData = $this->addressService->getOrganizationAddress( $params['orgId']);
                 unset($addressData['id']);
                 $data = array_merge($data, $addressData);

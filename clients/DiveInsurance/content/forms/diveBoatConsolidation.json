@@ -2610,9 +2610,6 @@
 					"value": "doYouUseAWaiverOrReleaseOfLiabilityForAllPassengersIfYesSendUsACopy",
 					"label": "Do you use a waiver or release of liability for all passengers? If yes, send us a copy"
 				}, {
-					"value": "doYouWantCoverageForPassengersWhileInTheWaterGroupProfessionalLiability",
-					"label": "Do you want coverage for passengers while in the water? (Group Professional Liability)"
-				}, {
 					"label": "Coast Guard Approved? (Mandatory in U.S.):",
 					"value": "coastGuardApprovedMandatoryInUS"
 				}],
@@ -2760,7 +2757,7 @@
 					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": false,
-					"delimiter": true,
+					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
@@ -2860,7 +2857,7 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
-						"label": "How many Crew Members would you like to Cover ?",
+						"label": "How many Crew Members in the Water?",
 						"mask": false,
 						"spellcheck": true,
 						"tableView": true,
@@ -2871,7 +2868,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter the number of Crew Members you would like to Cover."
+							"customMessage": "Please enter the number of Crew Members in Water."
 						},
 						"key": "CrewInWaterCount",
 						"customConditional": "show = (data['captain_and_crew_schedule_survey'].CrewInWaterYN == 'yes')",
@@ -3893,13 +3890,25 @@
 					"label": "Information for each Additional Insured is required as follows",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"name": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"address": "",
+						"zip": "",
+						"businessRelation": "",
+						"additionalInformation": ""
+					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -4368,13 +4377,23 @@
 				"label": "Loss Payees",
 				"disableAddingRemovingRows": false,
 				"reorder": false,
+				"addAnother": "Add More",
 				"addAnotherPosition": "bottom",
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
 				"hideLabel": true,
 				"tableView": true,
+				"defaultValue": [{
+					"name": "",
+					"city": "",
+					"country": "",
+					"state": {},
+					"address": "",
+					"zip": ""
+				}],
 				"clearOnHide": false,
+				"calculateServer": false,
 				"validate": {
 					"minLength": 1
 				},
@@ -4872,6 +4891,18 @@
 					"event": "callDelegate",
 					"input": true
 				}, {
+					"label": "HTML",
+					"attrs": [{
+						"attr": "",
+						"value": ""
+					}],
+					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\">link</a> for more information.</h4>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "html1",
+					"type": "htmlelement",
+					"input": false
+				}, {
 					"label": "Members applicable for Group Liability",
 					"disableAddingRemovingRows": false,
 					"hideLabel": true,
@@ -5167,7 +5198,10 @@
 							"zip": "",
 							"city1": "",
 							"state1": {},
-							"zip1": ""
+							"zip1": "",
+							"businessRelation": "",
+							"additionalInformation1": "",
+							"businessRelationOther": ""
 						}],
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -8277,7 +8311,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 365,
+	"_vid": 370,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8295,6 +8329,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-13T06:24:18.744Z",
+	"modified": "2020-04-14T08:52:16.651Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

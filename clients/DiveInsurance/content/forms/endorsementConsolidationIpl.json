@@ -96,13 +96,13 @@
 			"tableView": true,
 			"lockKey": true
 		}, {
-			"label": "previousCareerCoverage",
-			"calculateServer": false,
-			"key": "previous_careerCoverage",
-			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"lockKey": true
+			"key": "previous_careerCoverage",
+			"label": "previousCareerCoverage",
+			"type": "hidden",
+			"lockKey": true,
+			"calculateServer": false
 		}, {
 			"label": "Previous Scuba fit",
 			"calculateValue": "value = data.previous_scuba?data.previous_scuba:data.previousScubafit",
@@ -111,14 +111,6 @@
 			"input": true,
 			"tableView": true,
 			"lockKey": true
-		}, {
-			"label": "initiatedByCsr",
-			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
-			"calculateServer": false,
-			"key": "initiatedByCsr",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
 		}, {
 			"input": true,
 			"tableView": true,
@@ -428,14 +420,13 @@
 			"lockKey": true,
 			"hideOnChildrenHidden": false
 		}, {
-			"label": "Previous equipment Liability",
-			"calculateValue": "value = data['previous_equipmentLiability'];",
-			"calculateServer": false,
-			"key": "previousequipmentLiability",
-			"type": "hidden",
 			"input": true,
 			"tableView": true,
+			"key": "previousequipmentLiability",
+			"label": "Previous equipment Liability",
+			"type": "hidden",
 			"lockKey": true,
+			"calculateValue": "value = data['previous_equipmentLiability'];",
 			"hideOnChildrenHidden": false
 		}, {
 			"label": "previous_excessLiability",
@@ -2139,7 +2130,7 @@
 						"customMessage": "Please attach proof of your Technical Certification"
 					},
 					"errorLabel": "Technical Certification Documents",
-					"key": "techRec_attachments",
+					"key": "TechRec_attachments",
 					"type": "file",
 					"input": true
 				}],
@@ -2953,20 +2944,20 @@
 					"inline": false,
 					"tableView": false,
 					"values": [{
+						"label": "Cash",
+						"value": "cash",
+						"shortcut": ""
+					}, {
 						"label": "Money Order",
 						"value": "moneyOrder",
 						"shortcut": ""
 					}, {
-						"label": "Check",
-						"value": "check",
+						"label": "Cheque",
+						"value": "cheque",
 						"shortcut": ""
 					}, {
 						"label": "Credit Card",
 						"value": "creditCard",
-						"shortcut": ""
-					}, {
-						"label": "Other",
-						"value": "other",
 						"shortcut": ""
 					}],
 					"clearOnHide": false,
@@ -2989,124 +2980,69 @@
 				"size": "md"
 			}, {
 				"components": [{
-					"title": "Check Details",
-					"theme": "primary",
-					"collapsible": false,
+					"label": "Cheque Number",
+					"mask": false,
+					"spellcheck": true,
 					"tableView": false,
-					"key": "checkDetails",
+					"delimiter": false,
+					"requireDecimal": false,
+					"inputFormat": "plain",
+					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
+					"key": "chequeNumber",
 					"conditional": {
 						"show": true,
 						"when": "paymentOptions",
-						"eq": "check"
+						"eq": "cheque"
 					},
-					"type": "panel",
-					"label": "Check Details",
-					"input": false,
-					"components": [{
-						"label": "Check Number",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "chequeNumber",
-						"type": "number",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Upload Consent Form",
-						"tableView": false,
-						"storage": "base64",
-						"webcam": false,
-						"fileTypes": [{
-							"label": "",
-							"value": ""
-						}],
-						"clearOnHide": false,
-						"calculateServer": false,
-						"key": "chequeConsentForm",
-						"type": "file",
-						"input": true
-					}],
+					"type": "number",
+					"input": true,
 					"hideOnChildrenHidden": false
 				}, {
-					"title": "Card Details",
-					"theme": "primary",
-					"collapsible": false,
+					"type": "convergepay",
+					"key": "custom",
+					"label": "custom",
+					"input": true,
+					"amount_field": "amount",
+					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
 					"tableView": false,
-					"key": "cardDetails",
-					"conditional": {
-						"show": true,
-						"when": "paymentOptions",
-						"eq": "creditCard"
-					},
-					"type": "panel",
-					"label": "Card Details",
-					"input": false,
-					"components": [{
-						"type": "convergepay",
-						"key": "creditcardPayment",
-						"amount_field": "amount",
-						"label": "custom",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Content",
-						"attrs": [{
-							"value": "",
-							"attr": ""
-						}],
-						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "page7Content",
-						"conditional": {
-							"show": true,
-							"when": "paymentOptions",
-							"eq": "creditCard"
-						},
-						"type": "htmlelement",
-						"input": false,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
-					}],
 					"hideOnChildrenHidden": false
 				}, {
-					"title": "Money Order Details",
-					"theme": "primary",
-					"collapsible": false,
-					"tableView": false,
-					"key": "moneyOrderDetai",
+					"label": "Order ID",
+					"spellcheck": true,
+					"tableView": true,
+					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
+					"key": "orderId",
 					"conditional": {
 						"show": true,
 						"when": "paymentOptions",
 						"eq": "moneyOrder"
 					},
-					"type": "panel",
-					"label": "Money Order Details",
+					"type": "textfield",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "Content",
+					"attrs": [{
+						"value": "",
+						"attr": ""
+					}],
+					"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "page7Content",
+					"customConditional": "if(data.privileges['MANAGE_MY_POLICY_WRITE'] && (data.paymentOptions =='creditCard')){show=true;}else{show=false;}",
+					"type": "htmlelement",
 					"input": false,
-					"hideOnChildrenHidden": false,
-					"components": [{
-						"label": "Order ID",
-						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "orderId",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}]
+					"hideLabel": true,
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -3242,7 +3178,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 63,
+	"_vid": 65,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3261,6 +3197,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-13T18:37:02.493Z",
+	"modified": "2020-04-14T08:19:05.952Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

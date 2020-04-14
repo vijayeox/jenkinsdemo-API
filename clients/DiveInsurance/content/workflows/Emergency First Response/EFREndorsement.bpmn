@@ -12,10 +12,6 @@
         <camunda:properties>
           <camunda:property name="template" value="efrEndorsement" />
         </camunda:properties>
-        <camunda:executionListener event="end">
-          <camunda:script scriptFormat="groovy">execution.removeVariable('approved');
-execution.setVariable('CSRReviewRequired', true);</camunda:script>
-        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_0hd4flu</bpmn:outgoing>
     </bpmn:startEvent>
