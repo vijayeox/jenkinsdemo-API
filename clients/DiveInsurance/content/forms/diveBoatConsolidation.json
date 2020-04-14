@@ -2757,7 +2757,7 @@
 					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": false,
-					"delimiter": true,
+					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
@@ -8286,7 +8286,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 368,
+	"_vid": 369,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8304,6 +8304,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-14T06:28:00.527Z",
+	"modified": "2020-04-14T07:36:55.043Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

@@ -2351,7 +2351,7 @@
 					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": false,
-					"delimiter": true,
+					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
@@ -9382,7 +9382,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 171,
+	"_vid": 172,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9400,6 +9400,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-14T06:27:59.890Z",
+	"modified": "2020-04-14T07:37:01.401Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
