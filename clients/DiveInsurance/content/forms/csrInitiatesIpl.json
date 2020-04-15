@@ -4320,12 +4320,12 @@
 		"showPrevious": "false",
 		"clickable": "false",
 		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"EFRToIPLUpgrade\"},{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]"
+		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]"
 	},
 	"name": "csrInitiatesIpl",
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-15T06:07:31.809Z",
+	"modified": "2020-04-15T06:57:29.542Z",
 	"machineName": "testdivehub:csrInitiates"
 }
