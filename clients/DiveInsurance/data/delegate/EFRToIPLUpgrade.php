@@ -70,6 +70,7 @@ class EFRToIPLUpgrade extends PolicyCheck
             $new_data = parent::execute($new_data, $persistenceService );
         }
         $data['data'] = $new_data;
+        $data['workflow_uuid'] = $data['workflow_id'];
         return $data;
     }
 }
