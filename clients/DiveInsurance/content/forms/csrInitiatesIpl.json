@@ -1562,7 +1562,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "accepted",
+								"value": "withTecRecEndorsementForSelectionAbove",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
@@ -1570,6 +1570,7 @@
 								"label": "With TecRec Endorsement for selection above - Declined",
 								"shortcut": ""
 							}],
+							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please choose one of these options."
@@ -2458,7 +2459,7 @@
 				"conditional": {
 					"show": true,
 					"when": "tecRecEndorsment",
-					"eq": "accepted"
+					"eq": "withTecRecEndorsementForSelectionAbove"
 				},
 				"type": "panel",
 				"label": "TecRec Attachments",
@@ -3554,6 +3555,20 @@
 							"enableRowGroups": false,
 							"hideLabel": true,
 							"tableView": true,
+							"defaultValue": [{
+								"name": "",
+								"address": "",
+								"city": "",
+								"country": "",
+								"zip": "",
+								"businessRelation": "",
+								"businessRelationOther": "",
+								"additionalInformation": ""
+							}],
+							"clearOnHide": false,
+							"customDefaultValue": "value = [{}]",
+							"calculateValue": "if(data.AdditionalInsuredOption==\"noAdditionalInsureds\"){\n  value = [{}]\n}",
+							"calculateServer": false,
 							"validate": {
 								"minLength": 1
 							},
@@ -4290,7 +4305,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 247,
+	"_vid": 251,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4311,6 +4326,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-14T08:18:44.732Z",
+	"modified": "2020-04-15T06:07:31.809Z",
 	"machineName": "testdivehub:csrInitiates"
 }

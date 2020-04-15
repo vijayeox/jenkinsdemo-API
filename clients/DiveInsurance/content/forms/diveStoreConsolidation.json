@@ -3098,7 +3098,7 @@
 			"columns": [{
 				"components": [{
 					"label": "Additional Loss of Business Income",
-					"tableView": true,
+					"tableView": false,
 					"defaultValue": false,
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -3142,8 +3142,26 @@
 					"lockKey": true,
 					"hideOnChildrenHidden": false
 				}, {
+					"label": "Minimum Loss of Business Income",
+					"prefix": "$",
+					"mask": false,
+					"spellcheck": true,
+					"tableView": false,
+					"defaultValue": 40000,
+					"delimiter": true,
+					"requireDecimal": false,
+					"inputFormat": "plain",
+					"clearOnHide": false,
+					"customDefaultValue": "value = 40000",
+					"calculateServer": false,
+					"key": "minimumLossofBusinessIncome",
+					"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n} else {\n  show = false;\n}",
+					"type": "number",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}, {
 					"label": "lossOfBusIncome",
-					"calculateValue": "value = parseFloat(40000)+(parseFloat(data.additionalLossOfBusIncome)||0.00)",
+					"calculateValue": "value = parseFloat(data.minimumLossofBusinessIncome)+(parseFloat(data.additionalLossOfBusIncome)||0.00)",
 					"calculateServer": false,
 					"key": "lossOfBusIncome",
 					"type": "hidden",
@@ -3167,11 +3185,6 @@
 			"hideLabel": true,
 			"tableView": false,
 			"key": "page4PanelPanelPanelColumns3",
-			"conditional": {
-				"show": true,
-				"when": "documentFieldnames",
-				"eq": "yes"
-			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -6792,6 +6805,119 @@
 				"type": "columns",
 				"hideLabel": true
 			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"clearOnHide": false,
+						"input": false,
+						"key": "page4PanelPanelPanelPanelTable",
+						"numRows": 1,
+						"numCols": 4,
+						"rows": [
+							[{
+								"components": [{
+									"label": "Annual Estimated Receipts",
+									"description": "For Scuba/Snorkeling/Swimming/Instructional/Supervisory",
+									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": true,
+									"delimiter": true,
+									"requireDecimal": true,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "estimatedAnnualReceiptsGL",
+									"type": "number",
+									"labelWidth": 0,
+									"labelMargin": 5,
+									"decimalLimit": 2,
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
+								}]
+							}, {
+								"components": [{
+									"label": "Annual Estimated Receipts",
+									"description": "For Emergency First Response Instructional",
+									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": true,
+									"delimiter": true,
+									"requireDecimal": true,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "annualEstimatedResponseRecieptsGL",
+									"type": "number",
+									"labelWidth": 0,
+									"labelMargin": 5,
+									"decimalLimit": 2,
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
+								}]
+							}, {
+								"components": [{
+									"label": "Number of Instructors",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": true,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "NumberofInstructorsGL",
+									"type": "number",
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
+								}]
+							}, {
+								"components": [{
+									"label": "Divemaster/Assistant Instructors",
+									"mask": false,
+									"spellcheck": false,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "DivemasterAssistantInstructorCountGL",
+									"type": "number",
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
+								}]
+							}]
+						],
+						"tableView": false,
+						"type": "table",
+						"hideLabel": true,
+						"label": "Table",
+						"hideOnChildrenHidden": false
+					}],
+					"width": 12,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns5",
+				"type": "columns",
+				"input": false
+			}, {
 				"title": "Add Members",
 				"theme": "primary",
 				"collapsible": false,
@@ -6822,12 +6948,55 @@
 						"sourceDataKey": "groupPadi",
 						"destinationDataKey": "groupPL",
 						"valueKey": "padi",
-						"validationKey": "padi_Verified",
+						"validationKey": "membersPadiVerified",
 						"clearSource": "true"
 					},
 					"type": "button",
 					"event": "callDelegate",
 					"input": true
+				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "HTML",
+							"attrs": [{
+								"attr": "style",
+								"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
+							}],
+							"content": "PADI Membership not found",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html3",
+							"customConditional": "if(data.membersPadiVerified == 'false' || data.membersPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.membersPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
+							"type": "htmlelement",
+							"input": false,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"label": "membersPadiVerified",
+							"calculateServer": false,
+							"key": "membersPadiVerified",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"tableView": false,
+					"key": "columns15",
+					"type": "columns",
+					"input": false
 				}, {
 					"label": "HTML",
 					"attrs": [{
@@ -6854,7 +7023,7 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"customMessage": "Please enter all the required fields before proceeding."
+						"custom": "valid = (data.groupPL.length > 0) ? true : \"Please add the members to group\";"
 					},
 					"key": "groupPL",
 					"type": "editgrid",
@@ -6908,6 +7077,7 @@
 								"label": "Last Name",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -6958,6 +7128,7 @@
 								"label": "Name of Training Agency",
 								"spellcheck": true,
 								"tableView": true,
+								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true
@@ -7014,10 +7185,11 @@
 						"multiple": true,
 						"persistent": false,
 						"protected": true,
+						"calculateServer": false,
 						"validate": {
 							"multiple": true
 						},
-						"key": "document",
+						"key": "documentattach",
 						"type": "file",
 						"input": true,
 						"lockKey": true,
@@ -7032,11 +7204,11 @@
 					}, {
 						"type": "documentviewer",
 						"key": "document1",
-						"calculateValue": "value = (data.document)",
+						"calculateValue": "value = (row.documentattach)",
 						"dtype": "documentviewer",
 						"datype": "documentviewer",
 						"dattype": "documentviewer",
-						"customConditional": "if (data.privileges){\n  if(data.document !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+						"customConditional": "if (data.privileges){\n  if(row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 						"datatype": "documentviewer",
 						"data_type": "documentviewer",
 						"label": "Attachments",
@@ -7404,8 +7576,8 @@
 							"value": "yes",
 							"label": "Yes"
 						}, {
-							"value": "no",
-							"label": "No"
+							"value": "none",
+							"label": "None"
 						}]
 					},
 					"selectThreshold": 0.3,
@@ -7461,12 +7633,55 @@
 							"sourceDataKey": "namedPadi",
 							"destinationDataKey": "namedInsureds",
 							"valueKey": "padi",
-							"validationKey": "padi_Verified",
-							"clearSource": "true"
+							"validationKey": "namedInsuredPadiVerified",
+							"cleanSource": "true"
 						},
 						"type": "button",
 						"event": "callDelegate",
 						"input": true
+					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "HTML",
+								"attrs": [{
+									"attr": "style",
+									"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
+								}],
+								"content": "PADI Membership not found",
+								"refreshOnChange": false,
+								"tableView": false,
+								"key": "html3",
+								"customConditional": "if(data.namedInsuredPadiVerified == 'false' || data.namedInsuredPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.namedInsuredPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
+								"type": "htmlelement",
+								"input": false,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "namedInsuredPadiVerified",
+								"calculateServer": false,
+								"key": "namedInsuredPadiVerified",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"tableView": false,
+						"key": "columns15",
+						"type": "columns",
+						"input": false
 					}, {
 						"label": "Edit Grid",
 						"disableAddingRemovingRows": false,
@@ -7481,7 +7696,7 @@
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"customMessage": "Please enter all the required fields before proceeding."
+							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";"
 						},
 						"key": "namedInsureds",
 						"type": "editgrid",
@@ -7535,6 +7750,7 @@
 									"label": "Last Name",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -7585,6 +7801,7 @@
 									"label": "Name of Training Agency",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true
@@ -10125,7 +10342,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 25,
+	"_vid": 30,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10142,6 +10359,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-14T10:10:39.895Z",
+	"modified": "2020-04-15T09:55:42.147Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

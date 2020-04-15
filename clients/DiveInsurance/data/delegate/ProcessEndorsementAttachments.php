@@ -15,7 +15,7 @@ class ProcessEndorsementAttachments extends AbstractAppDelegate
 
         $this->processAttachments($data,'endor_cylinderInstructor_attachments','cylinderInstructor_attachments');
         $this->processAttachments($data,'endor_cylinderInspector_attachments','cylinderInspector_attachments');
-        $this->processAttachments($data,'endor_techRec_attachments','techRec_attachments');
+        $this->processAttachments($data,'endor_techRec_attachments','TechRec_attachments');
         $this->processAttachments($data,'endor_scubaFit_attachments','scubaFit_attachments');
         $this->processAttachments($data,'endor_attachments','attachments');
         return $data;

@@ -43,10 +43,10 @@ class GroupAddMembers extends AbstractAppDelegate
                 $response[0]['status'] = " ";
             }
             $returnArray = array_merge($data,$response[0]);
-            $returnArray['padi_Verified'] = true;
+            $returnArray['membersPadiVerified'] = true;
             return $returnArray;
         } else {
-            $returnArray['padi_Verified'] = false;
+            $returnArray['membersPadiVerified'] = false;
             $data = array_merge($data,$returnArray);
             return $data;
         }
