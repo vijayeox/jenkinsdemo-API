@@ -1360,7 +1360,7 @@
 								"inline": false,
 								"tableView": true,
 								"values": [{
-									"value": "accepted",
+									"value": "withTecRecEndorsementForSelectionAbove",
 									"label": "With TecRec Endorsement for selection above",
 									"shortcut": ""
 								}, {
@@ -1369,6 +1369,7 @@
 									"shortcut": ""
 								}],
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please choose one of these options."
@@ -2005,7 +2006,9 @@
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
-					"tableView": false
+					"tableView": false,
+					"protected": true,
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInspector_attachments1",
@@ -2020,7 +2023,9 @@
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
-					"tableView": false
+					"tableView": false,
+					"protected": true,
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInstructor_attachments1",
@@ -2035,7 +2040,9 @@
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
-					"tableView": false
+					"tableView": false,
+					"protected": true,
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "scubaFit_attachments1",
@@ -2050,7 +2057,9 @@
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
-					"tableView": false
+					"tableView": false,
+					"protected": true,
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "attachments1",
@@ -2065,9 +2074,12 @@
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
-					"tableView": false
+					"tableView": false,
+					"protected": true,
+					"persistent": false
 				}],
-				"path": "documentPanel"
+				"path": "documentPanel",
+				"protected": true
 			}, {
 				"title": "TecRec Attachments",
 				"theme": "primary",
@@ -2080,11 +2092,11 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel1",
-				"customConditional": "if((data.techRec_attachments.length === 0 && data.tecRecEndorsment === 'accepted') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "if((data.TechRec_attachments.length === 0 && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "tecRecEndorsment",
-					"eq": "accepted"
+					"eq": "withTecRecEndorsementForSelectionAbove"
 				},
 				"type": "panel",
 				"label": "TecRec Attachments",
@@ -2114,16 +2126,13 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if(data.endor_techRec_attachments&& data.endor_techRec_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
+					"calculateValue": "if(data.endor_techRec_attachments && data.endor_techRec_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"validate": {
-						"required": true,
-						"custom": "console.log(54634);\nconsole.log(data);\nvalid = (!empty(data['endor_techRec_attachments'])) ? true :'Please attach the proof of your TechRec Attachements';",
-						"multiple": true
+						"required": true
 					},
-					"errorLabel": "Please attach the proof of your TechRec Attachements",
+					"errorLabel": "Please attach proof of your Technical Certification",
 					"key": "endor_techRec_attachments",
 					"type": "file",
 					"input": true
@@ -2548,7 +2557,21 @@
 				"enableRowGroups": false,
 				"hideLabel": true,
 				"tableView": true,
+				"defaultValue": [{
+					"name": "",
+					"address": "",
+					"city": "",
+					"country": "",
+					"state": {},
+					"zip": "",
+					"businessRelation": "",
+					"businessRelationOther": "",
+					"additionalInformation": ""
+				}],
 				"clearOnHide": false,
+				"customDefaultValue": "value = [{}]",
+				"calculateValue": "if(data.AdditionalInsuredOption==\"noAdditionalInsureds\"){\n  value = [{}]\n}",
+				"calculateServer": false,
 				"validate": {
 					"minLength": 1
 				},
@@ -2576,6 +2599,7 @@
 								"spellcheck": false,
 								"tableView": true,
 								"clearOnHide": false,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter insured name."
@@ -3224,7 +3248,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 68,
+	"_vid": 76,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3243,6 +3267,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-14T16:09:01.048Z",
+	"modified": "2020-04-15T06:33:48.698Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
