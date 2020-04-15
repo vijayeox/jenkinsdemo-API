@@ -650,12 +650,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $coi_number = $this->generateCOINumber($data,$persistenceService);
                     if($this->type == 'endorsement'){
                         $data['certificate_no'] = $data['certificate_no'].' - '.$length;
-                        if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
+                        if(isset($data['groupPL']) && ($data['groupProfessionalLiability'] == 'yes' || $data['groupProfessionalLiabilitySelect'] == 'yes'){
                             $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;
                         }
                     }else{
                         $data['certificate_no'] = $coi_number;
-                        if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
+                       if(isset($data['groupPL']) && ($data['groupProfessionalLiability'] == 'yes' || $data['groupProfessionalLiabilitySelect'] == 'yes'){
                             $data['group_certificate_no'] = 'S'.$coi_number;
                         }
                     }
@@ -691,7 +691,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     } 
                 }
 
-                if(isset($data['groupPL']) && $data['groupProfessionalLiability'] == 'yes'){
+                if(isset($data['groupPL']) && ($data['groupProfessionalLiability'] == 'yes' || $data['groupProfessionalLiabilitySelect'] == 'yes'){
                     $product = 'Group Professional Liability';
                     $policyDetails = $this->getPolicyDetails($data,$persistenceService,$product);
                     if($policyDetails){
