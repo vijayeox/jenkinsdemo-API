@@ -285,7 +285,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
 
-                    // $this->groupProfessionalLiabilityDocuments($temp,)
                     if($this->type == 'quote' || $this->type == 'endorsementQuote'){
                          $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter'); 
                          $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
@@ -297,10 +296,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("DOCUMENT groupPL");
 
                         if($this->type == 'endorsement'){
-                            unset($data['upgradeGroupLiability']);
                             $policy = array();
                             $policy =  $previous_data[$length - 1];
                             $upgrade = array();
+
 
                             if(isset($data['upgradeGroupLiability'])){
                                 $data['upgradeGroupLiability'] = is_array($data['upgradeGroupLiability']) ? $data['upgradeGroupLiability'] : json_decode($data['upgradeGroupLiability'],true);
@@ -308,7 +307,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 $data['upgradeGroupLiability'] = array();
                             }
                             if($policy['previous_combinedSingleLimit'] != $data['combinedSingleLimit']){
-                                $upgrade = array("update_date" => $data['update_date'],"combinedSingleLimit" => $data['combinedSingleLimit'],"annualAggregate" => $data['annualAggregate']);
+                                $upgrade = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"combinedSingleLimit" => $data['combinedSingleLimit'],"annualAggregate" => $data['annualAggregate']);
                                 array_push($data['upgradeGroupLiability'], $upgrade);
                             }
                             $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);

@@ -4891,6 +4891,49 @@
 					"event": "callDelegate",
 					"input": true
 				}, {
+					"label": "Columns",
+					"columns": [{
+						"components": [{
+							"label": "HTML",
+							"attrs": [{
+								"attr": "style",
+								"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
+							}],
+							"content": "PADI Membership not found",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html3",
+							"customConditional": "if(data.padi_Verified == 'false' || data.padi_Verified === false){\n  show = true;\n  setTimeout(function(){\n    console.log(\"PK\");\n    data.padi_Verified = true;\n  },3000);\n}else{\n  show = false;\n}",
+							"type": "htmlelement",
+							"input": false,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"label": "padi_Verified",
+							"calculateServer": false,
+							"key": "padi_Verified",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"tableView": false,
+					"key": "columns15",
+					"type": "columns",
+					"input": false
+				}, {
 					"label": "HTML",
 					"attrs": [{
 						"attr": "",
@@ -8222,7 +8265,7 @@
 				"dtype": "documentviewer",
 				"datype": "documentviewer",
 				"dattype": "documentviewer",
-				"customConditional": "if (data.privileges){\n  if(data.csrApprovalAttachments !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  if(typeof(data.csrApprovalAttachments) != 'string' || data.csrApprovalAttachments != ''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 				"datatype": "documentviewer",
 				"data_type": "documentviewer",
 				"label": "Attachments",
@@ -8311,7 +8354,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 370,
+	"_vid": 378,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8329,6 +8372,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-14T08:52:16.651Z",
+	"modified": "2020-04-14T12:00:52.368Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

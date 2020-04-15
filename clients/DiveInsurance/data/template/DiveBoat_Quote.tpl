@@ -12,7 +12,7 @@
         <div class = "agent_1">
          <p class ="info_margin1" id ="nameVal"></p>
          <p class ="add_margin" id = "addressLineVal"></p>
-						<p class ="info" id = "addressLine2Val"></p>
+				 <p class ="add_margin" id = "addressLine2Val"></p>
          <p></p>
          <p class = "p_info">License#: {$license_number}</p>
        </div>
