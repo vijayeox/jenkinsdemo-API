@@ -233,11 +233,20 @@
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
-			"key": "panelPanel2",
-			"input": false,
-			"title": "Padi Validation",
+			"title": "PADI Validation",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "panelPanel2",
+			"type": "panel",
+			"label": "Padi Validation",
+			"input": false,
 			"components": [{
 				"label": "Columns",
 				"input": false,
@@ -291,9 +300,7 @@
 				}],
 				"type": "columns",
 				"hideLabel": true
-			}],
-			"type": "panel",
-			"label": "Panel"
+			}]
 		}, {
 			"title": "Personal Information",
 			"theme": "primary",
@@ -1973,7 +1980,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 94,
+	"_vid": 95,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -1994,7 +2001,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-14T05:37:14.175Z",
+	"modified": "2020-04-15T20:06:34.998Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
