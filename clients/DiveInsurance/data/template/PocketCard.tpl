@@ -109,7 +109,7 @@
 			</div>
 			<div class = "details">
 				<p class = "email"><b>If you have any questions or need any additional information,<br>Please contact us:<br>Email&nbsp;:&nbsp;
-					{if (isset($individual.product) && ($individual.product == 'Emergency First Response')}
+					{if (isset($individual.product) && ($individual.product == 'Emergency First Response'))}
 					efr@diveinsurance.com 
 					{else} 
 					instructors@diveinsurance.com
