@@ -90,6 +90,15 @@ ox_field:
     required: 1
     sequence: 6
     entity_id: 1
+  - id: 7
+    name: "product"
+    text: "Product"
+    app_id: 99
+    data_type: "text"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 7
+    entity_id: 1
 ox_form:
   - id: 1
     app_id: 99
@@ -160,7 +169,7 @@ ox_workflow_instance:
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
     app_id: 99
     org_id: 1
-    status: "Completed"
+    status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
   - id: 2
@@ -300,6 +309,24 @@ ox_activity_instance:
     workflow_instance_id: 1
     status: "In Progress"
     org_id: 1
+  - id: 4
+    activity_id: 1
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c3422"
+    workflow_instance_id: 3
+    status: "In Progress"
+    org_id: 1
+  - id: 5
+    activity_id: 1
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8106b0722"
+    workflow_instance_id: 4
+    status: "In Progress"
+    org_id: 1
+  - id: 6
+    activity_id: 1
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-21e8105c0722"
+    workflow_instance_id: 6
+    status: "In Progress"
+    org_id: 1
 ox_group:
   - id: 1
     uuid: "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4"
@@ -317,6 +344,10 @@ ox_activity_instance_assignee:
     activity_instance_id: 1
     user_id: 1
     assignee: 1
+  - id: 2
+    activity_instance_id: 4
+    user_id: 1
+    assignee: 1
 ox_file:
   - id: 11
     workflow_instance_id: 1
@@ -328,35 +359,35 @@ ox_file:
   - id: 12
     workflow_instance_id: 2
     org_id: 1
-    data: "New File Data"
+    data: '{"firstname" : "Rai","product": "Individual Professional Liability"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     date_created: "2019-06-28 00:00:00"
     entity_id: 1
   - id: 13
     workflow_instance_id: 3
     org_id: 1
-    data: "New File Data - In Progress"
+    data: '{"firstname" : "Raj","product": "Individual Professional Liability"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     date_created: "2019-06-26 00:00:00"
     entity_id: 1
   - id: 14
     workflow_instance_id: 4
     org_id: 1
-    data: "New File Data - Latest In Progress"
+    data: '{"firstname" : "Ram","product": "Dive Boat"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
   - id: 15
     workflow_instance_id: 6
     org_id: 1
-    data: "New File Data - Latest In Progress"
+    data: '{"firstname" : "Reshma","product": "Dive Store"}'
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c91478"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
   - id: 16
     workflow_instance_id: 7
     org_id: 1
-    data: "New File Data - Latest Completed"
+    data: '{"firstname" : "Arpitha","product": "Dive Store"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c91478"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
@@ -441,6 +472,26 @@ ox_file_attribute:
     org_id: 1
     field_value: "2030-06-20"
     field_id: 3
+  - id: 19
+    file_id: 11
+    org_id: 1
+    field_value: "Individual Professional Liability"
+    field_id: 7
+  - id: 20
+    file_id: 13
+    org_id: 1
+    field_value: "Individual Professional Liability"
+    field_id: 7 
+  - id: 21 
+    file_id: 14
+    org_id: 1
+    field_value: "Dive Boat"
+    field_id: 7 
+  - id: 22 
+    file_id: 15
+    org_id: 1
+    field_value: "Dive Store"
+    field_id: 7 
 ox_wf_user_identifier:
   - id: 1
     user_id: 1

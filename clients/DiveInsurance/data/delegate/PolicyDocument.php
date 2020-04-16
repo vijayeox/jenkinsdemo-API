@@ -601,12 +601,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['endorsementExcessLiability'])){
                     $data['endorsementExcessLiability'] = array();
                 }
-                if(is_string($data['endorsement_options'])){
+                if($this->$type != 'endorsementQuote'){
+                    if(is_string($data['endorsement_options'])){
                     $data['endorsement_options'] = json_decode($data['endorsement_options'],true);
-                }
-                if(is_array($data['endorsement_options'])){
-                    foreach ($data['endorsement_options'] as $key => $val){
-                        $data['endorsement_options'][$key] = false;
+                    }
+                    if(is_array($data['endorsement_options'])){
+                        foreach ($data['endorsement_options'] as $key => $val){
+                            $data['endorsement_options'][$key] = false;
+                        }
                     }
                 }
             }
@@ -637,9 +639,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['disableOptions'])){
                 unset($data['disableOptions']);
             }
-
-            if(isset($data['paymentOptions'])){
-                unset($data['paymentOptions']);
+            if(isset($data['documents1'])){
+                $data['documents1'] = "";
+            }
+            if(isset($data['userApproved'])){
+                $data['userApproved'] = "";
             }
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
@@ -656,8 +660,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }else{
                                 $length = 1;
                             }
+                            $data['certificate_no'] = $data['certificate_no'].' - '.$length;
                         }
-                        $data['certificate_no'] = $data['certificate_no'].' - '.$length;
                         if($endorsementOptions['modify_groupProfessionalLiability'] == true){    
                             if(isset($data['groupPL']) && ($data['groupProfessionalLiability'] == 'yes' || $data['groupProfessionalLiabilitySelect'] == 'yes')){
                                 if(isset($data['documents']['endorsement_group_coi_document'])){

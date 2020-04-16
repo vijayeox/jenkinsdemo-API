@@ -19,6 +19,11 @@ class AppControllerTest extends ControllerTest
         parent::setUp();
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
@@ -51,6 +56,24 @@ class AppControllerTest extends ControllerTest
         $statement = Migration::createAdapter($this->getApplicationConfig(), $database)->query($query);
         $result = $statement->execute();
     }
+
+    public function testGetListOfAssignments()
+    {
+        $this->initAuthToken($this->adminUser);
+        $product = 'Individual Professional Liability';
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments?filter=[{"filter":{"filters":[{"field":"product","operator":"eq","value":"' . $product . '"}]},"skip":0,"take":10}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class);
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('assignments');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['product'], $product);
+        $this->assertEquals($content['total'], 2);
+    }
+
 
     public function testGetList()
     {
@@ -785,22 +808,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testGetListOfAssignments()
-    {
-        $this->initAuthToken($this->adminUser);
-        $workflowName = 'Test Workflow 1';
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments?filter=[{"filter":{"filters":[{"field":"workflow_name","operator":"eq","value":"' . $workflowName . '"}]},"sort":[{"field":"workflow_name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class);
-        $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('assignments');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['workflow_name'], $workflowName);
-        $this->assertEquals($content['total'], 1);
-    }
 
     public function testGetListOfAssignmentsWithoutFiltersValues()
     {
@@ -814,7 +821,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testGetListOfAssignmentsWithoutFilters()
@@ -829,6 +836,6 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals($content['total'], 4);
     }
 }
