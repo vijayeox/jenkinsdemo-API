@@ -537,7 +537,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 	if(is_array($data['endorsement_options'])){
                 		if($data['endorsement_options']['modify_additionalInsured'] == true)
                 			$optionSetCheck = 1;
-                		if($data['endorsement_options']['modify_personalInformation'] == true)
+                		if($data['endorsement_options']['modify_personalInformation'] == true || $data['endorsement_options']['modify_coverage'] == true)
                 			$personalOptionSetCheck = 1;
                 		$this->logger->info("array endorsement_options check value =".$data['endorsement_options']);
                 	}
@@ -547,7 +547,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 		if($endorsementOptions['modify_additionalInsured'] == true){
                 			$optionSetCheck = 1;
                 		}
-                		if($endorsementOptions['modify_personalInformation'] == true){
+                		if($endorsementOptions['modify_personalInformation'] == true || $endorsementOptions['modify_coverage'] == true){
                 			$personalOptionSetCheck = 1;
                 		}
                 		$this->logger->info("string endorsement_options check value =".$data['endorsement_options']);

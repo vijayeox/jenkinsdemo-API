@@ -277,9 +277,13 @@ class AppController extends AbstractApiController
      * @api
      * @link /app/appdeployyml
      * @method GET
-     * @param null </br>
-     * <code>
-     * </code>
+     * @param  $path - Enter the path of the Application to deploy.
+     * @param  $parameters(optional) - Enter the parameters option in a CSV 
+     * format to deploy and these options can be specified in any order. 
+     * It is recommended that if you are deploying for the first time,
+     * then specify the 'initialize' option first and then specify other options. 
+     * Parameters options are : 
+     * initialize, entity, workflow, form, menu, page, job
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
      * </code>
@@ -292,7 +296,21 @@ class AppController extends AbstractApiController
             try {
                 $path = $params['path'];
                 $path .= substr($path, -1) == '/' ? '' : '/';
-                $this->appService->deployApp($path);
+                if(isset($params['parameters']) && !empty($params['parameters'])){
+                    $params['parameters'] = strtolower($params['parameters']);
+                    $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
+                    $params['parameters'] = rtrim($params['parameters'],",");
+                    $params['parameters'] = ltrim($params['parameters'],",");
+                    if(strpos($params['parameters'], ',') !== false){
+                        $params = explode(",",$params['parameters']);
+                    }else{
+                        $params = array($params['parameters']);
+                    }                    
+                }
+                else{
+                    $params = null;
+                }
+                $this->appService->deployApp($path, $params);
                 return $this->getSuccessResponse(200);
             } catch (ValidationException $e) {
                 $this->log->error($e->getMessage(), $e);
