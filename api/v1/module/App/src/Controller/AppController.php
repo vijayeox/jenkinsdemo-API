@@ -219,7 +219,7 @@ class AppController extends AbstractApiController
                 return $this->getErrorResponse("No Apps to display", 404);
             }
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
         }
         return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
