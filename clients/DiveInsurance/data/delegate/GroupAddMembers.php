@@ -28,10 +28,15 @@ class GroupAddMembers extends AbstractAppDelegate
             while ($result->next()) {
                 $response[] = $result->current();
             }
+            if($response[0]['firstname'] == ''){
+                $returnArray['membersPadiVerified'] = false;
+                $data = array_merge($data,$returnArray);
+                return $data;      
+            }
             $response[0]['nameOfInstitution'] = 'PADI';
             if(isset($response[0]['status']) && $response[0]['status'] != ''){
-                if($response[0]['status'] == 'PM'){
-                    $returnArray['padi_Verified'] = false;
+                if($response[0]['status'] == 'PM' || $response[0]['firstname'] == ''){
+                    $returnArray['membersPadiVerified'] = false;
                     $data = array_merge($data,$returnArray);
                     return $data;        
                 }else if(array_key_exists($response[0]['status'], $this->status)){

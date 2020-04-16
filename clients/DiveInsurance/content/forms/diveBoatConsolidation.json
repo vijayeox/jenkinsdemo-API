@@ -15,10 +15,7 @@
 			"key": "product",
 			"type": "hidden",
 			"input": true,
-			"tableView": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true
+			"tableView": false
 		}, {
 			"label": "initiatedByCsr",
 			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && (!data.CSRReviewRequired || data.CSRReviewRequired == false)){\n  value = true\n} else {\n  value = false\n}",
@@ -26,10 +23,7 @@
 			"key": "initiatedByCsr",
 			"type": "hidden",
 			"input": true,
-			"tableView": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true
+			"tableView": false
 		}, {
 			"label": "automatic_renewal",
 			"customDefaultValue": "value = false;",
@@ -37,10 +31,7 @@
 			"key": "automatic_renewal",
 			"type": "hidden",
 			"input": true,
-			"tableView": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true
+			"tableView": false
 		}, {
 			"label": "Columns",
 			"columns": [{
@@ -56,9 +47,7 @@
 					"type": "htmlelement",
 					"hideLabel": true,
 					"hideOnChildrenHidden": false,
-					"tableView": false,
-					"tag": "p",
-					"className": ""
+					"tableView": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -87,9 +76,7 @@
 					"source": "5d52a58c7d69825a5e8dfe7d",
 					"hideLabel": true,
 					"hideOnChildrenHidden": false,
-					"tableView": false,
-					"tag": "p",
-					"className": ""
+					"tableView": false
 				}],
 				"width": 4,
 				"offset": 0,
@@ -104,8 +91,7 @@
 			"type": "columns",
 			"input": false,
 			"lockKey": true,
-			"source": "5d52a3bed4d969439f23bb00",
-			"clearOnHide": false
+			"source": "5d52a3bed4d969439f23bb00"
 		}, {
 			"title": "PADI Validation",
 			"theme": "primary",
@@ -135,10 +121,7 @@
 						"type": "hidden",
 						"lockKey": true,
 						"calculateValue": "value = data['padi'];",
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -146,10 +129,7 @@
 						"label": "verified",
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -158,10 +138,7 @@
 						"type": "hidden",
 						"defaultValue": "padi",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -170,10 +147,7 @@
 						"type": "hidden",
 						"lockKey": true,
 						"defaultValue": "false",
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "ApproverName",
 						"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].name;\n  }\n}",
@@ -181,10 +155,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "ApproverEmailId",
 						"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].email;\n  }\n}",
@@ -192,10 +163,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "ApproverDesignation",
 						"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].designation;\n  }\n}",
@@ -204,10 +172,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -254,14 +219,7 @@
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"placeholder": "",
-						"prefix": "",
-						"suffix": "",
-						"defaultValue": "",
-						"protected": false,
-						"persistent": true,
-						"hidden": false
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Validate PADI Membership",
 						"action": "event",
@@ -298,13 +256,7 @@
 						"event": "callPipeline",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"size": "md",
-						"leftIcon": "",
-						"rightIcon": "",
-						"block": false,
-						"disableOnInvalid": false
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Change PADI Number",
 						"action": "event",
@@ -329,13 +281,7 @@
 						"type": "button",
 						"event": "triggerFormChange",
 						"input": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"size": "md",
-						"leftIcon": "",
-						"rightIcon": "",
-						"block": false,
-						"disableOnInvalid": false
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Content",
 						"attrs": [{
@@ -350,9 +296,7 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
-						"hideOnChildrenHidden": false,
-						"tag": "p",
-						"className": ""
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Content",
 						"attrs": [{
@@ -367,9 +311,7 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
-						"hideOnChildrenHidden": false,
-						"tag": "p",
-						"className": ""
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -384,9 +326,7 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}, {
 						"label": "PADI Verified",
 						"tableView": false,
@@ -404,16 +344,7 @@
 						"type": "checkbox",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"dataGridLabel": false,
-						"autofocus": false,
-						"inputType": "checkbox",
-						"hideLabel": false,
-						"protected": false,
-						"persistent": true,
-						"hidden": false,
-						"name": "",
-						"value": "",
-						"clearOnHide": true
+						"dataGridLabel": false
 					}, {
 						"label": "Content",
 						"attrs": [{
@@ -428,9 +359,7 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
-						"hideOnChildrenHidden": false,
-						"tag": "p",
-						"className": ""
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -449,9 +378,7 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}],
 					"width": 4,
 					"offset": 0,
@@ -466,10 +393,7 @@
 						"label": "workflow_uuid",
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -477,10 +401,7 @@
 						"label": "padiNotFound",
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -490,8 +411,7 @@
 						"persistent": false,
 						"type": "hidden",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"unique": false
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -500,10 +420,7 @@
 						"type": "hidden",
 						"lockKey": true,
 						"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "disableUserInfoEditing",
 						"customDefaultValue": "value = false;",
@@ -511,10 +428,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "padi_empty",
 						"calculateServer": false,
@@ -522,10 +436,7 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -535,8 +446,7 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelColumns",
-				"clearOnHide": false
+				"path": "panelColumns"
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -563,9 +473,7 @@
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}],
 					"width": 4,
 					"offset": 0,
@@ -582,11 +490,8 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelPanel2Columns",
-				"clearOnHide": false
-			}],
-			"clearOnHide": false,
-			"hideLabel": false
+				"path": "panelPanel2Columns"
+			}]
 		}, {
 			"title": "Personal Information",
 			"theme": "primary",
@@ -621,23 +526,7 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"inputType": "text",
-						"inputMask": "",
-						"placeholder": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -658,24 +547,7 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
-						"placeholder": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -697,24 +569,7 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
-						"placeholder": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -726,8 +581,7 @@
 				"tableView": false,
 				"key": "panelColumns2",
 				"type": "columns",
-				"input": false,
-				"clearOnHide": false
+				"input": false
 			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
@@ -772,19 +626,7 @@
 							},
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"placeholder": "",
-							"defaultValue": "",
-							"refreshOn": "",
-							"filter": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true
+							"hideOnChildrenHidden": false
 						}, {
 							"label": "City",
 							"spellcheck": true,
@@ -796,25 +638,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -833,25 +657,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}, {
 							"label": "State",
 							"widget": "choicesjs",
@@ -880,19 +686,7 @@
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false,
-							"clearOnRefresh": true,
-							"autofocus": false,
-							"placeholder": "",
-							"valueProperty": "",
-							"defaultValue": "",
-							"filter": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true
+							"clearOnRefresh": true
 						}],
 						"width": 4,
 						"offset": 0,
@@ -908,33 +702,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"validate": {
-								"required": false,
-								"minLength": "",
-								"maxLength": "",
-								"pattern": "",
-								"custom": "",
-								"customPrivate": false
-							},
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}, {
 							"label": "Zip Code",
 							"spellcheck": false,
@@ -948,25 +716,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"placeholder": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -976,11 +726,8 @@
 					}],
 					"type": "columns",
 					"hideLabel": true,
-					"path": "panelPanelColumns",
-					"clearOnHide": false
-				}],
-				"clearOnHide": false,
-				"hideLabel": false
+					"path": "panelPanelColumns"
+				}]
 			}, {
 				"title": "Physical Address",
 				"theme": "primary",
@@ -1004,17 +751,6 @@
 					"style": {
 						"margin-top": "5px",
 						"margin-bottom": "5px"
-					},
-					"autofocus": false,
-					"inputType": "checkbox",
-					"hideLabel": false,
-					"protected": false,
-					"persistent": true,
-					"hidden": false,
-					"name": "",
-					"value": "",
-					"validate": {
-						"required": false
 					}
 				}, {
 					"label": "Columns",
@@ -1056,19 +792,7 @@
 									},
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"placeholder": "",
-									"defaultValue": "",
-									"refreshOn": "",
-									"filter": "",
-									"authenticate": false,
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true
+									"hideOnChildrenHidden": false
 								}, {
 									"label": "City",
 									"spellcheck": true,
@@ -1081,25 +805,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -1120,24 +826,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}, {
 									"label": "State",
 									"widget": "choicesjs",
@@ -1172,18 +861,7 @@
 									"input": true,
 									"lockKey": true,
 									"clearOnRefresh": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"placeholder": "",
-									"valueProperty": "",
-									"defaultValue": "",
-									"filter": "",
-									"authenticate": false,
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -1200,33 +878,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
-									"validate": {
-										"required": false,
-										"minLength": "",
-										"maxLength": "",
-										"pattern": "",
-										"custom": "",
-										"customPrivate": false
-									},
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}, {
 									"label": "Zip Code",
 									"spellcheck": true,
@@ -1240,25 +892,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -1268,8 +902,7 @@
 							}],
 							"type": "columns",
 							"hideLabel": true,
-							"path": "panelPanel3Columns2Columns",
-							"clearOnHide": false
+							"path": "panelPanel3Columns2Columns"
 						}],
 						"width": 12,
 						"offset": 0,
@@ -1294,11 +927,8 @@
 					},
 					"customConditional": "if(data['sameasmailingaddress'] === false || data['sameasmailingaddress'] == 'false'){\nshow = true\n} else {\n  show = false\n}",
 					"type": "columns",
-					"input": false,
-					"clearOnHide": false
-				}],
-				"clearOnHide": false,
-				"hideLabel": false
+					"input": false
+				}]
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -1326,21 +956,7 @@
 								"key": "home_country_code",
 								"type": "select",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"placeholder": "",
-								"defaultValue": "",
-								"refreshOn": "",
-								"filter": "",
-								"authenticate": false,
-								"multiple": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"validate": {
-									"required": false
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -1397,24 +1013,7 @@
 								}],
 								"type": "textfield",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"clearOnHide": true,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -1422,10 +1021,7 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true
+								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
 							"offset": 0,
@@ -1438,8 +1034,7 @@
 						"key": "columns3",
 						"type": "columns",
 						"input": false,
-						"path": "columns3",
-						"clearOnHide": false
+						"path": "columns3"
 					}, {
 						"label": "Columns",
 						"columns": [{
@@ -1463,21 +1058,7 @@
 								"key": "phone_country_code",
 								"type": "select",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"placeholder": "",
-								"defaultValue": "",
-								"refreshOn": "",
-								"filter": "",
-								"authenticate": false,
-								"multiple": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"validate": {
-									"required": false
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -1535,24 +1116,7 @@
 								}],
 								"type": "textfield",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"clearOnHide": true,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -1560,10 +1124,7 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true
+								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
 							"offset": 0,
@@ -1576,8 +1137,7 @@
 						"key": "columns4",
 						"type": "columns",
 						"input": false,
-						"path": "columns4",
-						"clearOnHide": false
+						"path": "columns4"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1595,22 +1155,7 @@
 						"type": "phoneNumber",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "tel",
-						"inputMask": "(999) 999-9999",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"defaultValue": "",
-						"clearOnHide": true,
-						"validate": {
-							"required": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
@@ -1624,21 +1169,7 @@
 						"type": "email",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "email",
-						"placeholder": "",
-						"prefix": "",
-						"suffix": "",
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"clearOnHide": true,
-						"kickbox": {
-							"enabled": false
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1648,11 +1179,8 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "panelPanel3Columns",
-				"clearOnHide": false
-			}],
-			"clearOnHide": false,
-			"hideLabel": false
+				"path": "panelPanel3Columns"
+			}]
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
@@ -1665,9 +1193,7 @@
 			"next": true
 		},
 		"collapsible": false,
-		"path": "panel",
-		"clearOnHide": false,
-		"hideLabel": false
+		"path": "panel"
 	}, {
 		"key": "panel2",
 		"input": false,
@@ -3639,15 +3165,15 @@
 						"spellcheck": true,
 						"tableView": false,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "hull_market_value",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false,
 						"inputType": "number"
@@ -3665,15 +3191,15 @@
 						"spellcheck": true,
 						"tableView": false,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "purchase_price_currency",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false,
 						"inputType": "number"
@@ -4101,7 +3627,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -4113,8 +3639,7 @@
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"decimalLimit": 2
+								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
 							"offset": 0,
@@ -4241,7 +3766,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -4253,8 +3778,7 @@
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"decimalLimit": 2
+								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
 							"offset": 0,
@@ -4312,9 +3836,7 @@
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
-				"lockKey": true,
-				"tag": "p",
-				"className": ""
+				"lockKey": true
 			}, {
 				"label": "well",
 				"tableView": false,
@@ -4344,14 +3866,7 @@
 					"errorLabel": "Please choose whether you would like to add Additional Insured",
 					"key": "additional_insured_select",
 					"type": "radio",
-					"input": true,
-					"inputType": "radio",
-					"defaultValue": "",
-					"protected": false,
-					"fieldSet": false,
-					"persistent": true,
-					"hidden": false,
-					"clearOnHide": true
+					"input": true
 				}],
 				"path": "well4",
 				"clearOnHide": false,
@@ -4426,24 +3941,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}, {
 									"label": "City",
 									"spellcheck": true,
@@ -4457,24 +3955,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -4514,18 +3995,7 @@
 									"input": true,
 									"lockKey": true,
 									"source": "5d347da33e9be31e15d3b115",
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"placeholder": "",
-									"defaultValue": "",
-									"refreshOn": "",
-									"filter": "",
-									"authenticate": false,
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false
+									"hideOnChildrenHidden": false
 								}, {
 									"label": "State",
 									"widget": "choicesjs",
@@ -4554,18 +4024,7 @@
 									},
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"placeholder": "",
-									"valueProperty": "",
-									"defaultValue": "",
-									"filter": "",
-									"authenticate": false,
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -4586,24 +4045,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}, {
 									"label": "Zip",
 									"spellcheck": true,
@@ -4618,24 +4060,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -4680,22 +4105,7 @@
 									},
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"placeholder": "",
-									"dataSrc": "values",
-									"valueProperty": "",
-									"defaultValue": "",
-									"refreshOn": "",
-									"filter": "",
-									"authenticate": false,
-									"template": "<span>{{ item.label }}</span>",
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true
+									"hideOnChildrenHidden": false
 								}, {
 									"label": "Please Mention",
 									"spellcheck": true,
@@ -4712,20 +4122,7 @@
 									},
 									"type": "textfield",
 									"input": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -4745,25 +4142,7 @@
 									"type": "textarea",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"rows": 3,
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"persistent": true,
-									"hidden": false,
-									"wysiwyg": false,
-									"validate": {
-										"required": false,
-										"minLength": "",
-										"maxLength": "",
-										"pattern": "",
-										"custom": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 8,
 								"offset": 0,
@@ -4777,36 +4156,19 @@
 							"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns1",
 							"type": "columns",
 							"input": false,
-							"inDataGrid": true,
-							"clearOnHide": false
+							"inDataGrid": true
 						}],
 						"inDataGrid": true,
 						"clearOnHide": false,
-						"hideLabel": true,
-						"tags": [],
-						"conditional": {
-							"show": "",
-							"when": null,
-							"eq": ""
-						},
-						"properties": {}
+						"hideLabel": true
 					}],
-					"lockKey": true,
-					"autofocus": false,
-					"tree": true,
-					"protected": false,
-					"persistent": true,
-					"hidden": false
+					"lockKey": true
 				}],
-				"path": "page4PanelPanel2",
-				"clearOnHide": false,
-				"hideLabel": false
+				"path": "page4PanelPanel2"
 			}],
 			"type": "panel",
 			"label": "Panel",
-			"path": "page4Panel",
-			"clearOnHide": false,
-			"hideLabel": false
+			"path": "page4Panel"
 		}, {
 			"label": "Would you like to add Additional Named Insureds?",
 			"widget": "choicesjs",
@@ -4831,22 +4193,7 @@
 				"filter": {}
 			},
 			"input": true,
-			"lockKey": true,
-			"autofocus": false,
-			"placeholder": "",
-			"dataSrc": "values",
-			"valueProperty": "",
-			"defaultValue": "",
-			"refreshOn": "",
-			"filter": "",
-			"authenticate": false,
-			"template": "<span>{{ item.label }}</span>",
-			"multiple": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"hidden": false,
-			"clearOnHide": true
+			"lockKey": true
 		}, {
 			"key": "additional_named_insureds",
 			"input": false,
@@ -4892,24 +4239,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "City",
 								"spellcheck": true,
@@ -4923,24 +4253,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -4980,18 +4293,7 @@
 								"input": true,
 								"lockKey": true,
 								"source": "5d347da33e9be31e15d3b115",
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"placeholder": "",
-								"defaultValue": "",
-								"refreshOn": "",
-								"filter": "",
-								"authenticate": false,
-								"multiple": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "State",
 								"widget": "choicesjs",
@@ -5020,18 +4322,7 @@
 								},
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"placeholder": "",
-								"valueProperty": "",
-								"defaultValue": "",
-								"filter": "",
-								"authenticate": false,
-								"multiple": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -5052,24 +4343,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "Zip",
 								"spellcheck": true,
@@ -5084,24 +4358,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -5115,27 +4372,13 @@
 						"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
 						"type": "columns",
 						"input": false,
-						"inDataGrid": true,
-						"clearOnHide": false
+						"inDataGrid": true
 					}],
 					"inDataGrid": true,
 					"clearOnHide": false,
-					"hideLabel": true,
-					"tags": [],
-					"conditional": {
-						"show": "",
-						"when": null,
-						"eq": ""
-					},
-					"properties": {}
+					"hideLabel": true
 				}],
-				"path": "additionalNamedInsured",
-				"autofocus": false,
-				"tree": true,
-				"protected": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true
+				"path": "additionalNamedInsured"
 			}],
 			"type": "panel",
 			"conditional": {
@@ -5145,9 +4388,7 @@
 			},
 			"lockKey": true,
 			"label": "Panel",
-			"path": "additional_named_insureds",
-			"clearOnHide": false,
-			"hideLabel": false
+			"path": "additional_named_insureds"
 		}, {
 			"label": "Would you like to add Loss Payees?",
 			"widget": "choicesjs",
@@ -5175,21 +4416,7 @@
 			"labelWidth": 27,
 			"labelMargin": 1,
 			"input": true,
-			"lockKey": true,
-			"autofocus": false,
-			"placeholder": "",
-			"dataSrc": "values",
-			"valueProperty": "",
-			"defaultValue": "",
-			"refreshOn": "",
-			"filter": "",
-			"authenticate": false,
-			"template": "<span>{{ item.label }}</span>",
-			"multiple": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"hidden": false
+			"lockKey": true
 		}, {
 			"key": "pageNaNPanel6",
 			"input": false,
@@ -5245,24 +4472,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "City",
 								"spellcheck": true,
@@ -5276,24 +4486,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -5333,18 +4526,7 @@
 								"input": true,
 								"lockKey": true,
 								"source": "5d347da33e9be31e15d3b115",
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"placeholder": "",
-								"defaultValue": "",
-								"refreshOn": "",
-								"filter": "",
-								"authenticate": false,
-								"multiple": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "State",
 								"widget": "choicesjs",
@@ -5373,18 +4555,7 @@
 								},
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"placeholder": "",
-								"valueProperty": "",
-								"defaultValue": "",
-								"filter": "",
-								"authenticate": false,
-								"multiple": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -5405,24 +4576,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "Zip Code",
 								"spellcheck": true,
@@ -5435,25 +4589,7 @@
 								"key": "zip",
 								"type": "textfield",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"clearOnHide": true,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -5467,26 +4603,13 @@
 						"key": "lossPayeesColumns",
 						"type": "columns",
 						"input": false,
-						"inDataGrid": true,
-						"clearOnHide": false
+						"inDataGrid": true
 					}],
 					"inDataGrid": true,
 					"clearOnHide": false,
-					"hideLabel": true,
-					"tags": [],
-					"conditional": {
-						"show": "",
-						"when": null,
-						"eq": ""
-					},
-					"properties": {}
+					"hideLabel": true
 				}],
-				"lockKey": true,
-				"autofocus": false,
-				"tree": true,
-				"protected": false,
-				"persistent": true,
-				"hidden": false
+				"lockKey": true
 			}],
 			"type": "panel",
 			"conditional": {
@@ -5495,9 +4618,7 @@
 				"eq": "yes"
 			},
 			"label": "Panel",
-			"path": "pageNaNPanel6",
-			"clearOnHide": false,
-			"hideLabel": false
+			"path": "pageNaNPanel6"
 		}, {
 			"key": "additional_required_information",
 			"input": false,
@@ -5517,9 +4638,7 @@
 				"type": "htmlelement",
 				"input": false,
 				"hideLabel": true,
-				"lockKey": true,
-				"tag": "p",
-				"className": ""
+				"lockKey": true
 			}, {
 				"input": true,
 				"tableView": true,
@@ -5537,24 +4656,7 @@
 				},
 				"type": "select",
 				"hideLabel": true,
-				"lockKey": true,
-				"autofocus": false,
-				"dataSrc": "values",
-				"valueProperty": "",
-				"defaultValue": "",
-				"refreshOn": "",
-				"filter": "",
-				"authenticate": false,
-				"template": "<span>{{ item.label }}</span>",
-				"multiple": false,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"validate": {
-					"required": false
-				}
+				"lockKey": true
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -5591,16 +4693,7 @@
 					},
 					"key": "attachments",
 					"type": "file",
-					"input": true,
-					"autofocus": false,
-					"image": false,
-					"imageSize": "200",
-					"placeholder": "",
-					"defaultValue": "",
-					"protected": false,
-					"persistent": true,
-					"hidden": false,
-					"fileMinSize": "0KB"
+					"input": true
 				}, {
 					"label": "attachmentFields",
 					"calculateValue": "value = [[\"groupPL\",\"documentattach\"],\"attachments\",\"csrApprovalAttachments\",\"csr_attachments\"];",
@@ -5608,14 +4701,9 @@
 					"key": "attachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
-					"tableView": false,
-					"protected": false,
-					"unique": false,
-					"persistent": true
+					"tableView": false
 				}],
-				"path": "attachments",
-				"clearOnHide": false,
-				"hideLabel": false
+				"path": "attachments"
 			}, {
 				"type": "documentviewer",
 				"key": "attachments1",
@@ -5637,9 +4725,7 @@
 			"type": "panel",
 			"lockKey": true,
 			"label": "Panel",
-			"path": "additional_required_information",
-			"clearOnHide": false,
-			"hideLabel": false
+			"path": "additional_required_information"
 		}],
 		"input": false,
 		"key": "page4",
@@ -5647,9 +4733,7 @@
 		"tableView": false,
 		"breadcrumb": "none",
 		"label": "Panel",
-		"path": "page4",
-		"clearOnHide": false,
-		"hideLabel": false
+		"path": "page4"
 	}, {
 		"type": "panel",
 		"title": "Group Professional Liability",
@@ -5673,31 +4757,14 @@
 			},
 			"key": "groupProfessionalLiability",
 			"type": "select",
-			"input": true,
-			"autofocus": false,
-			"placeholder": "",
-			"dataSrc": "values",
-			"valueProperty": "",
-			"defaultValue": "",
-			"refreshOn": "",
-			"filter": "",
-			"authenticate": false,
-			"template": "<span>{{ item.label }}</span>",
-			"multiple": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"hidden": false
+			"input": true
 		}, {
 			"label": "groupCoverageSelect",
 			"calculateValue": "if(parseFloat(data['annualReceipt']) >= 0 && parseFloat(data['annualReceipt']) <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']) >= 25001 && parseFloat(data['annualReceipt']) <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']) >= 50001 && parseFloat(data['annualReceipt']) <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']) >= 100001 && parseFloat(data['annualReceipt']) <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']) >= 150001 && parseFloat(data['annualReceipt']) <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']) >= 200001 && parseFloat(data['annualReceipt']) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']) >= 250001 && data['annualReceipt'] <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']) >= 350001 && data['annualReceipt'] <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
 			"key": "groupCoverageSelect",
 			"type": "hidden",
 			"input": true,
-			"tableView": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true
+			"tableView": false
 		}, {
 			"label": "well",
 			"tableView": false,
@@ -5734,14 +4801,7 @@
 						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "number",
-						"placeholder": "",
-						"suffix": "",
-						"defaultValue": "",
-						"protected": false,
-						"persistent": true,
-						"hidden": false
+						"inputType": "number"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -5757,38 +4817,23 @@
 						"spellcheck": true,
 						"disabled": true,
 						"tableView": true,
+						"defaultValue": 0,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = data[data[\"groupCoverageSelect\"]]",
+						"calculateValue": "value = (parseFloat(data[data[\"groupCoverageSelect\"]])).toFixed(0);",
+						"calculateServer": false,
 						"key": "groupCoverage",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"style": {
 							"margin-top": "25px"
 						},
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"placeholder": "",
-						"suffix": "",
-						"defaultValue": "",
-						"protected": false,
-						"persistent": true,
-						"hidden": false,
-						"validate": {
-							"required": false,
-							"min": "",
-							"max": "",
-							"step": "any",
-							"integer": "",
-							"multiple": "",
-							"custom": ""
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -5798,8 +4843,7 @@
 				}],
 				"type": "columns",
 				"hideLabel": true,
-				"path": "page7Columns",
-				"clearOnHide": false
+				"path": "page7Columns"
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -5844,21 +4888,7 @@
 						},
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"placeholder": "",
-						"dataSrc": "values",
-						"valueProperty": "",
-						"defaultValue": "",
-						"refreshOn": "",
-						"filter": "",
-						"authenticate": false,
-						"template": "<span>{{ item.label }}</span>",
-						"multiple": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -5874,15 +4904,14 @@
 						"disabled": true,
 						"tableView": true,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100\n}",
+						"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = (parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100).toFixed(0);\n}",
 						"calculateServer": false,
 						"key": "groupExcessLiability",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
@@ -5890,22 +4919,7 @@
 							"margin-top": "25px"
 						},
 						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"placeholder": "",
-						"suffix": "",
-						"defaultValue": "",
-						"protected": false,
-						"persistent": true,
-						"hidden": false,
-						"validate": {
-							"required": false,
-							"min": "",
-							"max": "",
-							"step": "any",
-							"integer": "",
-							"multiple": "",
-							"custom": ""
-						}
+						"defaultValue": 0
 					}],
 					"width": 6,
 					"offset": 0,
@@ -5914,8 +4928,7 @@
 					"size": "md"
 				}],
 				"type": "columns",
-				"hideLabel": true,
-				"clearOnHide": false
+				"hideLabel": true
 			}, {
 				"title": "Add Members",
 				"theme": "primary",
@@ -5934,32 +4947,7 @@
 					"calculateServer": false,
 					"key": "groupPadi",
 					"type": "textfield",
-					"input": true,
-					"autofocus": false,
-					"inputType": "text",
-					"inputMask": "",
-					"placeholder": "",
-					"prefix": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": "",
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false,
-					"validate": {
-						"required": false,
-						"minLength": "",
-						"maxLength": "",
-						"pattern": "",
-						"custom": "",
-						"customPrivate": false
-					},
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					}
+					"input": true
 				}, {
 					"label": "Validate and Add PADI Members",
 					"action": "event",
@@ -5972,18 +4960,12 @@
 						"sourceDataKey": "groupPadi",
 						"destinationDataKey": "groupPL",
 						"valueKey": "padi",
-						"validationKey": "padi_Verified",
+						"validationKey": "membersPadiVerified",
 						"clearSource": "true"
 					},
 					"type": "button",
 					"event": "callDelegate",
-					"input": true,
-					"autofocus": false,
-					"size": "md",
-					"leftIcon": "",
-					"rightIcon": "",
-					"block": false,
-					"disableOnInvalid": false
+					"input": true
 				}, {
 					"label": "Columns",
 					"columns": [{
@@ -5997,13 +4979,11 @@
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html3",
-							"customConditional": "if(data.padi_Verified == 'false' || data.padi_Verified === false){\n  show = true;\n  setTimeout(function(){\n    console.log(\"PK\");\n    data.padi_Verified = true;\n  },3000);\n}else{\n  show = false;\n}",
+							"customConditional": "if(data.membersPadiVerified == 'false' || data.membersPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.membersPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false,
 							"hideOnChildrenHidden": false,
-							"hideLabel": true,
-							"tag": "p",
-							"className": ""
+							"hideLabel": true
 						}],
 						"width": 6,
 						"offset": 0,
@@ -6012,16 +4992,13 @@
 						"size": "md"
 					}, {
 						"components": [{
-							"label": "padi_Verified",
+							"label": "membersPadiVerified",
 							"calculateServer": false,
-							"key": "padi_Verified",
+							"key": "membersPadiVerified",
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
-							"hideOnChildrenHidden": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true
+							"hideOnChildrenHidden": false
 						}],
 						"width": 6,
 						"offset": 0,
@@ -6033,7 +5010,6 @@
 					"key": "columns15",
 					"type": "columns",
 					"input": false,
-					"clearOnHide": false,
 					"hideLabel": true
 				}, {
 					"label": "HTML",
@@ -6047,9 +5023,7 @@
 					"key": "html1",
 					"type": "htmlelement",
 					"input": false,
-					"hideLabel": true,
-					"tag": "p",
-					"className": ""
+					"hideLabel": true
 				}, {
 					"label": "Members applicable for Group Liability",
 					"disableAddingRemovingRows": false,
@@ -6085,24 +5059,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
 							"push": 0,
@@ -6123,24 +5080,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
 							"push": 0,
@@ -6160,24 +5100,7 @@
 								"key": "lastname",
 								"type": "textfield",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
 							"push": 0,
@@ -6191,8 +5114,7 @@
 						"key": "page7GroupColumns",
 						"type": "columns",
 						"input": false,
-						"inDataGrid": true,
-						"clearOnHide": false
+						"inDataGrid": true
 					}, {
 						"label": "Columns",
 						"columns": [{
@@ -6209,24 +5131,7 @@
 								"type": "textfield",
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
 							"push": 0,
@@ -6246,24 +5151,7 @@
 								"key": "nameOfInstitution",
 								"type": "textfield",
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"autofocus": false,
-								"inputType": "text",
-								"inputMask": "",
-								"placeholder": "",
-								"prefix": "",
-								"suffix": "",
-								"multiple": false,
-								"defaultValue": "",
-								"protected": false,
-								"unique": false,
-								"persistent": true,
-								"hidden": false,
-								"conditional": {
-									"show": null,
-									"when": null,
-									"eq": ""
-								}
+								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
 							"push": 0,
@@ -6278,10 +5166,7 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "start_date",
 								"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
@@ -6290,10 +5175,7 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
-								"hideOnChildrenHidden": false,
-								"protected": false,
-								"unique": false,
-								"persistent": true
+								"hideOnChildrenHidden": false
 							}],
 							"size": "md",
 							"offset": 0,
@@ -6305,7 +5187,6 @@
 						"key": "columns",
 						"type": "columns",
 						"input": false,
-						"clearOnHide": false,
 						"hideLabel": true
 					}, {
 						"label": "Document",
@@ -6328,27 +5209,14 @@
 						"type": "file",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"image": false,
-						"imageSize": "200",
-						"placeholder": "",
-						"defaultValue": "",
-						"hidden": false,
-						"clearOnHide": true,
-						"filePattern": "*",
-						"fileMinSize": "0KB",
-						"fileMaxSize": "1GB"
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "verified",
 						"calculateServer": false,
 						"key": "verified",
 						"type": "hidden",
 						"input": true,
-						"tableView": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"tableView": false
 					}, {
 						"type": "documentviewer",
 						"key": "document1",
@@ -6369,16 +5237,9 @@
 						"keyModified": true
 					}],
 					"path": "groupPL",
-					"keyModified": true,
-					"tree": true,
-					"multiple": false,
-					"protected": false,
-					"persistent": true,
-					"hidden": false
+					"keyModified": true
 				}],
-				"path": "addMembers",
-				"clearOnHide": false,
-				"hideLabel": false
+				"path": "addMembers"
 			}, {
 				"title": "Additional Insureds",
 				"theme": "primary",
@@ -6419,21 +5280,7 @@
 						"filter": {}
 					},
 					"input": true,
-					"lockKey": true,
-					"autofocus": false,
-					"placeholder": "",
-					"dataSrc": "values",
-					"valueProperty": "",
-					"defaultValue": "",
-					"refreshOn": "",
-					"filter": "",
-					"authenticate": false,
-					"template": "<span>{{ item.label }}</span>",
-					"multiple": false,
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false
+					"lockKey": true
 				}, {
 					"title": "Information for each Additional Insured is required as follows",
 					"theme": "primary",
@@ -6509,24 +5356,7 @@
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"inputType": "text",
-										"inputMask": "",
-										"placeholder": "",
-										"prefix": "",
-										"suffix": "",
-										"multiple": false,
-										"defaultValue": "",
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false,
-										"conditional": {
-											"show": null,
-											"when": null,
-											"eq": ""
-										}
+										"hideOnChildrenHidden": false
 									}, {
 										"label": "City",
 										"spellcheck": true,
@@ -6540,24 +5370,7 @@
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"inputType": "text",
-										"inputMask": "",
-										"placeholder": "",
-										"prefix": "",
-										"suffix": "",
-										"multiple": false,
-										"defaultValue": "",
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false,
-										"conditional": {
-											"show": null,
-											"when": null,
-											"eq": ""
-										}
+										"hideOnChildrenHidden": false
 									}],
 									"width": 4,
 									"offset": 0,
@@ -6596,18 +5409,7 @@
 										},
 										"input": true,
 										"lockKey": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"placeholder": "",
-										"defaultValue": "",
-										"refreshOn": "",
-										"filter": "",
-										"authenticate": false,
-										"multiple": false,
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false
+										"hideOnChildrenHidden": false
 									}, {
 										"label": "State",
 										"widget": "choicesjs",
@@ -6637,18 +5439,7 @@
 										},
 										"input": true,
 										"lockKey": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"placeholder": "",
-										"valueProperty": "",
-										"defaultValue": "",
-										"filter": "",
-										"authenticate": false,
-										"multiple": false,
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false
+										"hideOnChildrenHidden": false
 									}],
 									"width": 4,
 									"offset": 0,
@@ -6669,24 +5460,7 @@
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"inputType": "text",
-										"inputMask": "",
-										"placeholder": "",
-										"prefix": "",
-										"suffix": "",
-										"multiple": false,
-										"defaultValue": "",
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false,
-										"conditional": {
-											"show": null,
-											"when": null,
-											"eq": ""
-										}
+										"hideOnChildrenHidden": false
 									}, {
 										"label": "Zip Code",
 										"spellcheck": true,
@@ -6700,24 +5474,7 @@
 										"key": "zip",
 										"type": "textfield",
 										"input": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"inputType": "text",
-										"inputMask": "",
-										"placeholder": "",
-										"prefix": "",
-										"suffix": "",
-										"multiple": false,
-										"defaultValue": "",
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false,
-										"conditional": {
-											"show": null,
-											"when": null,
-											"eq": ""
-										}
+										"hideOnChildrenHidden": false
 									}],
 									"width": 4,
 									"offset": 0,
@@ -6763,21 +5520,7 @@
 										},
 										"input": true,
 										"lockKey": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"placeholder": "",
-										"dataSrc": "values",
-										"valueProperty": "",
-										"defaultValue": "",
-										"refreshOn": "",
-										"filter": "",
-										"authenticate": false,
-										"template": "<span>{{ item.label }}</span>",
-										"multiple": false,
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false
+										"hideOnChildrenHidden": false
 									}, {
 										"label": "Please Mention",
 										"spellcheck": true,
@@ -6795,19 +5538,7 @@
 										},
 										"type": "textfield",
 										"input": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"inputType": "text",
-										"inputMask": "",
-										"placeholder": "",
-										"prefix": "",
-										"suffix": "",
-										"multiple": false,
-										"defaultValue": "",
-										"protected": false,
-										"unique": false,
-										"persistent": true,
-										"hidden": false
+										"hideOnChildrenHidden": false
 									}],
 									"size": "md",
 									"width": 4,
@@ -6824,26 +5555,7 @@
 										"key": "additionalInformation",
 										"type": "textarea",
 										"input": true,
-										"hideOnChildrenHidden": false,
-										"autofocus": false,
-										"placeholder": "",
-										"prefix": "",
-										"suffix": "",
-										"rows": 3,
-										"multiple": false,
-										"defaultValue": "",
-										"protected": false,
-										"persistent": true,
-										"hidden": false,
-										"wysiwyg": false,
-										"clearOnHide": true,
-										"validate": {
-											"required": false,
-											"minLength": "",
-											"maxLength": "",
-											"pattern": "",
-											"custom": ""
-										}
+										"hideOnChildrenHidden": false
 									}],
 									"size": "md",
 									"width": 8,
@@ -6857,34 +5569,17 @@
 								"key": "groupAdditionalInsuredsColumns",
 								"type": "columns",
 								"input": false,
-								"inDataGrid": true,
-								"clearOnHide": false
+								"inDataGrid": true
 							}],
 							"inDataGrid": true,
 							"clearOnHide": false,
-							"hideLabel": true,
-							"tags": [],
-							"conditional": {
-								"show": "",
-								"when": null,
-								"eq": ""
-							},
-							"properties": {}
+							"hideLabel": true
 						}],
-						"path": "groupAdditionalInsured",
-						"autofocus": false,
-						"tree": true,
-						"protected": false,
-						"persistent": true,
-						"hidden": false
+						"path": "groupAdditionalInsured"
 					}],
 					"lockKey": true,
-					"path": "additional_insureds",
-					"clearOnHide": false,
-					"hideLabel": false
-				}],
-				"clearOnHide": false,
-				"hideLabel": false
+					"path": "additional_insureds"
+				}]
 			}, {
 				"title": "Additional Named Insureds",
 				"theme": "primary",
@@ -6925,22 +5620,7 @@
 						"filter": {}
 					},
 					"input": true,
-					"lockKey": true,
-					"autofocus": false,
-					"placeholder": "",
-					"dataSrc": "values",
-					"valueProperty": "",
-					"defaultValue": "",
-					"refreshOn": "",
-					"filter": "",
-					"authenticate": false,
-					"template": "<span>{{ item.label }}</span>",
-					"multiple": false,
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false,
-					"clearOnHide": true
+					"lockKey": true
 				}, {
 					"title": "Information for each Additional Named Insureds is required as follows",
 					"theme": "primary",
@@ -6969,33 +5649,7 @@
 						"calculateServer": false,
 						"key": "namedPadi",
 						"type": "textfield",
-						"input": true,
-						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
-						"placeholder": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"clearOnHide": true,
-						"validate": {
-							"required": false,
-							"minLength": "",
-							"maxLength": "",
-							"pattern": "",
-							"custom": "",
-							"customPrivate": false
-						},
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						}
+						"input": true
 					}, {
 						"label": "Validate and Add Named Insureds",
 						"action": "event",
@@ -7008,18 +5662,57 @@
 							"sourceDataKey": "namedPadi",
 							"destinationDataKey": "namedInsureds",
 							"valueKey": "padi",
-							"validationKey": "padi_Verified",
-							"clearSource": "true"
+							"validationKey": "namedInsuredPadiVerified",
+							"cleanSource": "true"
 						},
 						"type": "button",
 						"event": "callDelegate",
-						"input": true,
-						"autofocus": false,
-						"size": "md",
-						"leftIcon": "",
-						"rightIcon": "",
-						"block": false,
-						"disableOnInvalid": false
+						"input": true
+					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "HTML",
+								"attrs": [{
+									"attr": "style",
+									"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
+								}],
+								"content": "PADI Membership not found",
+								"refreshOnChange": false,
+								"tableView": false,
+								"key": "html3",
+								"customConditional": "if(data.namedInsuredPadiVerified == 'false' || data.namedInsuredPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.namedInsuredPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
+								"type": "htmlelement",
+								"input": false,
+								"hideOnChildrenHidden": false,
+								"hideLabel": true
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "namedInsuredPadiVerified",
+								"calculateServer": false,
+								"key": "namedInsuredPadiVerified",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"tableView": false,
+						"key": "columns15",
+						"type": "columns",
+						"input": false,
+						"hideLabel": true
 					}, {
 						"label": "Edit Grid",
 						"disableAddingRemovingRows": false,
@@ -7055,24 +5748,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
 								"push": 0,
@@ -7093,24 +5769,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
 								"push": 0,
@@ -7130,24 +5789,7 @@
 									"key": "lastname",
 									"type": "textfield",
 									"input": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
 								"push": 0,
@@ -7161,8 +5803,7 @@
 							"key": "additionalNamedInsuredsColumns",
 							"type": "columns",
 							"input": false,
-							"inDataGrid": true,
-							"clearOnHide": false
+							"inDataGrid": true
 						}, {
 							"label": "Columns",
 							"columns": [{
@@ -7179,24 +5820,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
 								"push": 0,
@@ -7216,24 +5840,7 @@
 									"key": "nameOfInstitution",
 									"type": "textfield",
 									"input": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
 								"push": 0,
@@ -7249,10 +5856,7 @@
 									"type": "hidden",
 									"input": true,
 									"tableView": false,
-									"hideOnChildrenHidden": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true
+									"hideOnChildrenHidden": false
 								}],
 								"size": "md",
 								"offset": 0,
@@ -7264,31 +5868,18 @@
 							"key": "columns",
 							"type": "columns",
 							"input": false,
-							"clearOnHide": false,
 							"hideLabel": true
 						}, {
 							"label": "verified",
 							"key": "verified",
 							"type": "hidden",
 							"input": true,
-							"tableView": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true
+							"tableView": false
 						}],
-						"path": "namedInsureds",
-						"tree": true,
-						"multiple": false,
-						"protected": false,
-						"persistent": true,
-						"hidden": false
+						"path": "namedInsureds"
 					}],
-					"path": "page7Panel",
-					"clearOnHide": false,
-					"hideLabel": false
-				}],
-				"clearOnHide": false,
-				"hideLabel": false
+					"path": "page7Panel"
+				}]
 			}, {
 				"label": "Table",
 				"cellAlignment": "left",
@@ -7312,18 +5903,18 @@
 							"content": "Taxes",
 							"type": "htmlelement",
 							"hideLabel": true,
-							"tableView": false,
-							"className": ""
+							"tableView": false
 						}]
 					}, {
 						"components": [{
 							"label": "Tax Percentage",
-							"prefix": "%",
+							"suffix": "%",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
+							"defaultValue": 0,
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
@@ -7333,26 +5924,10 @@
 							"calculateServer": false,
 							"key": "groupTaxPercentage",
 							"type": "number",
-							"decimalLimit": 2,
+							"decimalLimit": 3,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true,
-							"autofocus": false,
-							"placeholder": "",
-							"suffix": "",
-							"defaultValue": "",
-							"protected": false,
-							"persistent": true,
-							"hidden": false,
-							"validate": {
-								"required": false,
-								"min": "",
-								"max": "",
-								"step": "any",
-								"integer": "",
-								"multiple": "",
-								"custom": ""
-							}
+							"lockKey": true
 						}]
 					}, {
 						"components": [{
@@ -7364,34 +5939,17 @@
 							"disabled": true,
 							"tableView": true,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = ((parseFloat(data[\"groupCoverage\"]) || 0)+ (parseFloat(data[\"groupExcessLiability\"]) || 0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100",
+							"calculateValue": "value = (((parseFloat(data[\"groupCoverage\"]) || 0)+ (parseFloat(data[\"groupExcessLiability\"]) || 0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100).toFixed(0);",
 							"calculateServer": false,
 							"key": "groupTaxAmount",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true,
-							"autofocus": false,
-							"placeholder": "",
-							"suffix": "",
-							"defaultValue": "",
-							"protected": false,
-							"persistent": true,
-							"hidden": false,
-							"validate": {
-								"required": false,
-								"min": "",
-								"max": "",
-								"step": "any",
-								"integer": "",
-								"multiple": "",
-								"custom": ""
-							}
+							"lockKey": true
 						}]
 					}],
 					[{
@@ -7407,8 +5965,7 @@
 							"content": "PADI Fee",
 							"type": "htmlelement",
 							"hideLabel": true,
-							"tableView": false,
-							"className": ""
+							"tableView": false
 						}]
 					}, {
 						"components": []
@@ -7421,35 +5978,19 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
+							"defaultValue": 0,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = parseFloat(data[\"groupPadiFee\"])",
+							"calculateValue": "value = (parseFloat(data[\"groupPadiFee\"])).toFixed(0);",
 							"calculateServer": false,
 							"key": "groupPadiFeeAmount",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true,
-							"autofocus": false,
-							"placeholder": "",
-							"suffix": "",
-							"defaultValue": "",
-							"protected": false,
-							"persistent": true,
-							"hidden": false,
-							"validate": {
-								"required": false,
-								"min": "",
-								"max": "",
-								"step": "any",
-								"integer": "",
-								"multiple": "",
-								"custom": ""
-							}
+							"lockKey": true
 						}]
 					}],
 					[{
@@ -7465,8 +6006,7 @@
 							"content": "Total",
 							"type": "htmlelement",
 							"hideLabel": true,
-							"tableView": false,
-							"className": ""
+							"tableView": false
 						}]
 					}, {
 						"components": []
@@ -7479,48 +6019,24 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0",
+							"defaultValue": 0,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = (parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00)+(parseFloat(data[\"groupExcessLiability\"])||0.00)",
+							"calculateValue": "var val = (parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00)+(parseFloat(data[\"groupExcessLiability\"])||0.00);\nif(parseFloat(val) > 175){\n  value = parseFloat(val).toFixed(0);\n}else{\n  value = 0;\n}",
 							"calculateServer": false,
 							"key": "groupTotalAmount",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true,
-							"autofocus": false,
-							"placeholder": "",
-							"suffix": "",
-							"protected": false,
-							"persistent": true,
-							"hidden": false,
-							"validate": {
-								"required": false,
-								"min": "",
-								"max": "",
-								"step": "any",
-								"integer": "",
-								"multiple": "",
-								"custom": ""
-							}
+							"lockKey": true
 						}]
 					}]
 				],
 				"hideLabel": true,
-				"path": "page7Table",
-				"numRows": 3,
-				"numCols": 3,
-				"header": [],
-				"caption": "",
-				"striped": false,
-				"bordered": false,
-				"hover": false,
-				"condensed": false
+				"path": "page7Table"
 			}],
 			"path": "well2",
 			"clearOnHide": false,
@@ -7538,9 +6054,7 @@
 			"cancel": true,
 			"next": true
 		},
-		"collapsible": false,
-		"clearOnHide": false,
-		"hideLabel": false
+		"collapsible": false
 	}, {
 		"type": "panel",
 		"title": "Terms & Conditions",
@@ -8306,19 +6820,20 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0",
+							"defaultValue": 0,
 							"delimiter": true,
-							"requireDecimal": false,
+							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"calculateValue": "if(parseFloat(data['boat_age'])<5){\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000LessThan5']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000LessThan5']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000LessThan5']);\n\t}\n} else if(parseFloat(data['boat_age']) > 5 && parseFloat(data['boat_age']) <= 11) {\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000LessThan11']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000LessThan11']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000LessThan11']);\n\t}\n}else if(parseFloat(data['boat_age']) > 11 && parseFloat(data['boat_age']) <= 25) {\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000LessThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000LessThan25']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000LessThan25']);\n\t}\n} else {\n\tif(parseFloat(data['hull_market_value']) >= 0 && parseFloat(data['hull_market_value']) <= 25000){\n\t\tvalue = parseFloat(data['hull25000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 25000 && parseFloat(data['hull_market_value']) <= 50000) {\n\t\tvalue = parseFloat(data['hull50000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 50000 && parseFloat(data['hull_market_value']) <= 100000) {\n\t\tvalue = parseFloat(data['hull100000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 100000 && parseFloat(data['hull_market_value']) <= 150000) {\n\t\tvalue = parseFloat(data['hull150000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 150000 && parseFloat(data['hull_market_value']) <= 200000) {\n\t\tvalue = parseFloat(data['hull200000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 200000 && parseFloat(data['hull_market_value']) <= 250000) {\n\t\tvalue = parseFloat(data['hull250000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 250000 && parseFloat(data['hull_market_value']) <= 300000) {\n\t\tvalue = parseFloat(data['hull300000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 300000 && parseFloat(data['hull_market_value']) <= 400000) {\n\t\tvalue = parseFloat(data['hull350000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 400000 && parseFloat(data['hull_market_value']) <= 500000) {\n\t\tvalue = parseFloat(data['hull400000GreaterThan25']);\n\t} else if(parseFloat(data['hull_market_value']) > 500000 && parseFloat(data['hull_market_value']) <= 600000) {\n\t\tvalue = parseFloat(data['hull500000GreaterThan25']);\n\t} else {\n\t\tvalue = parseFloat(data['hull600000GreaterThan25']);\n\t}\n}",
+							"calculateServer": false,
 							"key": "hullRate",
 							"type": "number",
-							"decimalLimit": 3,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"decimalLimit": 3
 						}],
 						"width": 4,
 						"offset": 0,
@@ -8333,15 +6848,15 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0",
+							"defaultValue": 0,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "if((parseFloat(data['hull_market_value']) * parseFloat(data['hullRate'])/100)<500){\nvalue = 500\n} else {\nvalue = (parseFloat(data['hull_market_value']) * parseFloat(data['hullRate'])/100)\n}",
+							"calculateValue": "if((parseFloat(data['hull_market_value']) * parseFloat(data['hullRate'])/100)<500){\nvalue = 500\n} else {\nvalue = (parseFloat(data['hull_market_value']) * parseFloat(data['hullRate'])/100).toFixed(0);\n}",
+							"calculateServer": false,
 							"key": "HullPremium",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -8361,15 +6876,15 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0",
+							"defaultValue": 0,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "value = ((parseFloat(data['dingy_value']) || 0) * parseFloat(data['hullRate'])/100)",
+							"calculateValue": "value = ((parseFloat(data['dingy_value']) || 0) * parseFloat(data['hullRate'])/100).toFixed(0);",
+							"calculateServer": false,
 							"key": "DingyTenderPremium",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -8381,15 +6896,15 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0",
+							"defaultValue": 0,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "value = ((parseFloat(data['trailer_value']) || 0) * parseFloat(data['hullRate'])/100)",
+							"calculateValue": "value = ((parseFloat(data['trailer_value']) || 0) * parseFloat(data['hullRate'])/100).toFixed(0);",
+							"calculateServer": false,
 							"key": "TrailerPremium",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -8411,15 +6926,15 @@
 					"spellcheck": true,
 					"disabled": true,
 					"tableView": true,
-					"defaultValue": "0",
+					"defaultValue": 0,
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = ((parseFloat(data['TrailerPremium']) || 0 )+ (parseFloat(data['DingyTenderPremium']) || 0)+(parseFloat(data['HullPremium']) || 0))",
+					"calculateValue": "value = ((parseFloat(data['TrailerPremium']) || 0 )+ (parseFloat(data['DingyTenderPremium']) || 0)+(parseFloat(data['HullPremium']) || 0)).toFixed(0);",
+					"calculateServer": false,
 					"key": "PropertyBasePremium",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -8437,11 +6952,10 @@
 					"inputFormat": "plain",
 					"redrawOn": "data",
 					"clearOnHide": false,
-					"calculateValue": "if(data['boat_age']>24){\nvalue = (parseFloat(data['PropertyBasePremium']) * parseFloat(data['AgeSurcharge'])/100)\n} else {\nvalue = 0\n}",
+					"calculateValue": "if(data['boat_age']>24){\nvalue = (parseFloat(data['PropertyBasePremium']) * parseFloat(data['AgeSurcharge'])/100).toFixed(0);\n} else {\nvalue = 0\n}",
 					"calculateServer": false,
 					"key": "Age25Surcharge",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -8478,14 +6992,13 @@
 							"tableView": true,
 							"defaultValue": "0",
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "value = data['NavWaterSurchargeYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['NavWaterSurcharge'])/100):0",
+							"calculateValue": "value = data['NavWaterSurchargeYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['NavWaterSurcharge'])/100).toFixed(0):0",
 							"calculateServer": false,
 							"key": "NavWaterSurchargePremium",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -8537,12 +7050,12 @@
 									"tableView": true,
 									"defaultValue": "0",
 									"delimiter": true,
-									"requireDecimal": true,
+									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "value = data['PortRiskYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['PortRisk'])/100):0",
+									"calculateValue": "value = data['PortRiskYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['PortRisk'])/100).toFixed(0):0",
+									"calculateServer": false,
 									"key": "PortRiskCredit",
 									"type": "number",
-									"decimalLimit": 2,
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
@@ -8588,13 +7101,13 @@
 									"tableView": true,
 									"defaultValue": "0",
 									"delimiter": true,
-									"requireDecimal": true,
+									"requireDecimal": false,
 									"inputFormat": "plain",
 									"clearOnHide": false,
-									"calculateValue": "value = data['NavigationCreditYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['Navigation'])/100):0",
+									"calculateValue": "value = data['NavigationCreditYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['Navigation'])/100).toFixed(0):0",
+									"calculateServer": false,
 									"key": "NavigationCredit",
 									"type": "number",
-									"decimalLimit": 2,
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
@@ -8640,12 +7153,12 @@
 									"tableView": true,
 									"defaultValue": "0",
 									"delimiter": true,
-									"requireDecimal": true,
+									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "value = data['SuperiorRiskCreditYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['SuperiorRisk'])/100):0",
+									"calculateValue": "value = data['SuperiorRiskCreditYN']?(parseFloat(data['PropertyBasePremium'])*parseFloat(data['SuperiorRisk'])/100).toFixed(0):0",
+									"calculateServer": false,
 									"key": "SuperiorRiskCredit",
 									"type": "number",
-									"decimalLimit": 2,
 									"input": true,
 									"inputType": "number",
 									"lockKey": true,
@@ -8668,13 +7181,13 @@
 							"tableView": true,
 							"defaultValue": "0",
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "value =(parseFloat(data['PropertyBasePremium'])+(parseFloat(data['Age25Surcharge']) || 0)+(parseFloat(data['NavWaterSurchargePremium']) || 0)) -  ((parseFloat(data['PortRiskCredit']) || 0) + (parseFloat(data['SuperiorRiskCredit']) || 0) + (parseFloat(data['NavigationCredit']) || 0))",
+							"calculateValue": "value =((parseFloat(data['PropertyBasePremium'])+(parseFloat(data['Age25Surcharge']) || 0)+(parseFloat(data['NavWaterSurchargePremium']) || 0)) -  ((parseFloat(data['PortRiskCredit']) || 0) + (parseFloat(data['SuperiorRiskCredit']) || 0) + (parseFloat(data['NavigationCredit']) || 0))).toFixed(0);",
+							"calculateServer": false,
 							"key": "PropertySubTotal",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -8688,14 +7201,13 @@
 							"tableView": true,
 							"defaultValue": "0",
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
-							"calculateValue": "value = (parseFloat(data['ProRataFactor'])*parseFloat(data['PropertySubTotal'])) - (parseFloat(data['layupDeductible']) || 0)",
+							"calculateValue": "value = ((parseFloat(data['ProRataFactor'])*parseFloat(data['PropertySubTotal'])) - (parseFloat(data['layupDeductible']) || 0)).toFixed(0);",
 							"calculateServer": false,
 							"key": "PropertySubTotalProRated",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -8731,17 +7243,18 @@
 					"tableView": true,
 					"defaultValue": "0",
 					"delimiter": true,
-					"requireDecimal": false,
+					"requireDecimal": true,
 					"inputFormat": "plain",
 					"redrawOn": "data",
 					"calculateValue": "value = (parseFloat(data['ProRataDays'])/365)",
+					"calculateServer": false,
 					"key": "ProRataFactor",
 					"type": "number",
-					"decimalLimit": 3,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"decimalLimit": 3
 				}, {
 					"key": "page5PanelColumnsContent2",
 					"label": "Content",
@@ -8785,10 +7298,10 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = parseFloat(data['LiabilityPremium1M'])",
+					"calculateValue": "value = (parseFloat(data['LiabilityPremium1M'])).toFixed(0);",
+					"calculateServer": false,
 					"key": "LiabilityPremiumCost",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -8806,18 +7319,18 @@
 					"inputFormat": "plain",
 					"redrawOn": "excess_liability_coverage",
 					"clearOnHide": false,
-					"calculateValue": "value = data[data['excess_liability_coverage']];",
+					"calculateValue": "value = (parseFloat(data[data['excess_liability_coverage']])).toFixed(0);",
 					"calculateServer": false,
 					"key": "ExcessLiabilityPremium",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "primaryLimit",
-					"calculateValue": "value = '1000000.00';",
+					"calculateValue": "value = '1000000';",
+					"calculateServer": false,
 					"key": "primaryLimit",
 					"type": "hidden",
 					"input": true,
@@ -8825,7 +7338,8 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "excessLiabilityLimit",
-					"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9000000.00';\n}",
+					"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1000000';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2000000';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3000000';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4000000';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9000000';\n}",
+					"calculateServer": false,
 					"key": "excessLiabilityLimit",
 					"type": "hidden",
 					"input": true,
@@ -8851,10 +7365,10 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "if(parseFloat(data['DingyTenderPremium'])>0){\nvalue = parseFloat(data['DingyLiabilityPremium']);\n} else {\nvalue = 0\n}",
+					"calculateValue": "if(parseFloat(data['DingyTenderPremium'])>0){\nvalue = (parseFloat(data['DingyLiabilityPremium'])).toFixed(0);\n} else {\nvalue = 0\n}",
+					"calculateServer": false,
 					"key": "DingyLiability",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -8871,10 +7385,10 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = parseFloat(data['PassengerPremium']) * (parseFloat(data['certified_for_max_number_of_passengers']) || 0)",
+					"calculateValue": "value = (parseFloat(data['PassengerPremium']) * (parseFloat(data['certified_for_max_number_of_passengers']) || 0)).toFixed(0);",
+					"calculateServer": false,
 					"key": "PassengerPremiumCost",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -8891,10 +7405,10 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = ((parseFloat(data['CrewInBoatCount']) || 0)* (parseFloat(data['CrewInBoat']) || 0))",
+					"calculateValue": "value = ((parseFloat(data['CrewInBoatCount']) || 0)* (parseFloat(data['CrewInBoat']) || 0)).toFixed(0);",
+					"calculateServer": false,
 					"key": "CrewOnBoatPremium",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -8911,7 +7425,8 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = ((parseFloat(data['CrewInWaterCount']) || 0) * (parseFloat(data['CrewInWater']) || 0))",
+					"calculateValue": "value = ((parseFloat(data['CrewInWaterCount']) || 0) * (parseFloat(data['CrewInWater']) || 0)).toFixed(0);",
+					"calculateServer": false,
 					"key": "CrewMembersinWaterPremium",
 					"type": "number",
 					"input": true,
@@ -8923,7 +7438,8 @@
 					"persistent": false,
 					"protected": true,
 					"redrawOn": "data",
-					"calculateValue": "value = (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) || 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0)",
+					"calculateValue": "value = ((parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) || 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0)).toFixed(0);",
+					"calculateServer": false,
 					"key": "totalLiability",
 					"type": "hidden",
 					"input": true,
@@ -8964,10 +7480,10 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"calculateValue": "if(data['FL-HISurchargeYN']){\nvalue = (parseFloat(data['totalLiability'])*parseFloat(data['FL-HISurcharge']))/100\n} else {\nvalue = 0\n}",
+							"calculateValue": "if(data['FL-HISurchargeYN']){\nvalue = ((parseFloat(data['totalLiability'])*parseFloat(data['FL-HISurcharge']))/100).toFixed(0);\n} else {\nvalue = 0\n}",
+							"calculateServer": false,
 							"key": "FlHiSurchargePremium",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -8993,10 +7509,10 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
+					"calculateValue": "value = (((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))).toFixed(0);",
+					"calculateServer": false,
 					"key": "LiabilitySubTotal",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9008,14 +7524,15 @@
 					"spellcheck": true,
 					"disabled": true,
 					"tableView": true,
+					"defaultValue": 0,
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = (parseFloat(data['ProRataFactor'])*parseFloat(data['LiabilitySubTotal']))",
+					"calculateValue": "value = ((parseFloat(data['ProRataFactor'])*parseFloat(data['LiabilitySubTotal']))).toFixed(0);",
+					"calculateServer": false,
 					"key": "LiabilitySubTotalProRated",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9061,15 +7578,16 @@
 						"spellcheck": true,
 						"disabled": true,
 						"tableView": true,
+						"defaultValue": 0,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data['PropertySubTotalProRated']) || 0)+(parseFloat(data['LiabilitySubTotalProRated']) || 0);",
+						"calculateValue": "value = ((parseFloat(data['PropertySubTotalProRated']) || 0)+(parseFloat(data['LiabilitySubTotalProRated']) || 0)).toFixed(0);",
+						"calculateServer": false,
 						"key": "premiumTotalProRated",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9099,15 +7617,16 @@
 						"spellcheck": true,
 						"disabled": true,
 						"tableView": true,
+						"defaultValue": 0,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[\"groupTotalAmount\"]) || 0)",
+						"calculateValue": "value = (parseFloat(data[\"groupTotalAmount\"]) || 0).toFixed(0);",
+						"calculateServer": false,
 						"key": "groupProfessionalLiabilityPrice",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9140,13 +7659,13 @@
 						"tableView": true,
 						"defaultValue": 75,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"key": "padiFee",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9177,16 +7696,16 @@
 						"spellcheck": true,
 						"disabled": true,
 						"tableView": true,
-						"defaultValue": "0",
+						"defaultValue": 0,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data['premiumTotalProRated']) || 0)+(parseFloat(data['groupProfessionalLiabilityPrice']) || 0)+(parseFloat(data['padiFee']) || 0))",
+						"calculateValue": "value = (((parseFloat(data['premiumTotalProRated']) || 0)+(parseFloat(data['groupProfessionalLiabilityPrice']) || 0)+(parseFloat(data['padiFee']) || 0))).toFixed(0);",
+						"calculateServer": false,
 						"key": "total",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9582,7 +8101,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "combinedSingleLimit",
-					"calculateValue": "var limit = '100000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
+					"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
 					"calculateServer": false,
 					"key": "combinedSingleLimit",
 					"type": "hidden",
@@ -9591,7 +8110,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "annualAggregate",
-					"calculateValue": "var limit = '100000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
+					"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
 					"calculateServer": false,
 					"key": "annualAggregate",
 					"type": "hidden",
@@ -9975,7 +8494,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 385,
+	"_vid": 398,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9993,6 +8512,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-15T12:20:02.948Z",
+	"modified": "2020-04-16T14:26:07.042Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
