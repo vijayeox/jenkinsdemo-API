@@ -74,6 +74,7 @@ ox_field:
     entity_id: 1
   - id: 5
     name: "policy_document"
+    text: "Policy Documents"
     app_id: 99
     data_type: "document"
     template: '{"persistent" : "true"}'
@@ -82,6 +83,7 @@ ox_field:
     entity_id: 1
   - id: 6
     name: "coi_number"
+    text: "Policy Documents"
     app_id: 99
     data_type: "document"
     template: '{"persistent" : "true"}'
@@ -412,12 +414,12 @@ ox_file_attribute:
   - id: 11
     file_id: 11
     org_id: 1
-    field_value: 47
+    field_value: "[array1]"
     field_id: 5
   - id: 12
     file_id: 11
     org_id: 1
-    field_value: 6
+    field_value: "[array]"
     field_id: 6
   - id: 13
     file_id: 15

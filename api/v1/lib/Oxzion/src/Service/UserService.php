@@ -781,7 +781,7 @@ class UserService extends AbstractService
      */
     public function getUserWithMinimumDetails($id, $orgid=null)
     {
-        $o_id = $orgid != null ? $orgid : AuthContext::get(AuthConstants::ORG_ID);
+        $o_id = $orgid != null ? $orgid : AuthContext::get(AuthConstants::ORG_UUID);
         $o_id = $this->getIdFromUuid('ox_organization', $o_id);
         $select = "SELECT ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.designation,ou.orgid,ou.phone,ou.date_of_birth,ou.date_of_join,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.website,ou.about,ou.gender,ou.managerid,ou.interest,ou.icon,ou.preferences from ox_user as ou left join ox_address as oa on ou.address_id = oa.id where ou.orgid = " . $o_id . " AND ou.id = " . $id . " AND ou.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();

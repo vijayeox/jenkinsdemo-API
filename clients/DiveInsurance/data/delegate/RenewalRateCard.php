@@ -25,13 +25,26 @@ class RenewalRateCard extends RateCard
         //Set Date Period
         $startYear = date("Y");
         $endYear = date("Y") + 1;
-        // UPDATE YEAR + 1
-        $policy_period = "July 01,".$startYear." - June 30,".$endYear;
-        $data['form_data']['start_date'] = $startYear."-07-01";
-        $data['form_data']['end_date'] = $endYear."-06-30";
-        // UPDATE DEFAULT RANGE
-        $date_range = array("label" => $policy_period,"value" => $data['form_data']['start_date']);
-        $data['form_data']['start_date_range'] = $date_range;
+        
+        
+        if($data['form_data']['product'] == 'Dive Boat'){
+            // SET DEFAULT DATE FOR DIVE BOAT
+            $data['form_data']['start_date'] = $startYear."-07-22";
+            $data['form_data']['end_date'] = $endYear."-07-22";
+            $data['form_data']['policyPeriod'] = $$data['form_data']['start_date']."(MM DD YYYY)";
+        }
+        else{
+            // UPDATE YEAR + 1
+            $data['form_data']['start_date'] = $startYear."-07-01";
+            $data['form_data']['end_date'] = $endYear."-06-30";
+            $policy_period = "July 01,".$startYear." - June 30,".$endYear;
+            // UPDATE DEFAULT RANGE
+            $date_range = array("label" => $policy_period,"value" => $data['form_data']['start_date']);
+            $data['form_data']['start_date_range'] = $date_range;
+        }
+       
+
+        
         //END DATE PERIOD SELECTION
         $this->logger->info("AUTO RATE CARD PERSISTENCE".print_r($data,true));
         $data['form_data'] = parent::execute($data['form_data'],$persistenceService);

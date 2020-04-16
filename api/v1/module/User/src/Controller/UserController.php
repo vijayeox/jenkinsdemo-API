@@ -358,6 +358,7 @@ class UserController extends AbstractApiController
                     unset($options[$pos]);
                 }
             } else {
+                $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : null;
                 $userInfo = $this->userService->getUserWithMinimumDetails($id, $params['orgId']);
             }
             foreach ($options as $key => $value) {

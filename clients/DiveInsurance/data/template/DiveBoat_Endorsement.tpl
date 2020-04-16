@@ -113,6 +113,28 @@
                 {/foreach}
             {/if}
           </p>
+
+          {if isset($additionalNamedInsured) && $additional_named_insureds_option == 'yes'} 
+          {assign var=list value=$additionalNamedInsured|json_decode:true}
+          <p><b>***Additional Named Insureds</b></p>
+          <p style = "font-size: 15px;padding: 0px;">&nbsp&nbsp&nbsp&nbsp&nbspName & Address</p>
+          {foreach from=$list item=$additional}
+          <p class = "ai_list">
+            &nbsp&nbsp&nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state}&nbsp&nbsp&nbsp{$additional.zip}
+          </p>
+          {/foreach}
+          {/if}
+
+          {if isset($lossPayees) && $loss_payees == 'yes'}
+          {assign var=lossPayeeList value=$additionalInsured|json_decode:true}
+          <b>***Any loss under Part I of this policy is payable to the Named Insured and the following:</b>
+          <p style = "font-size: 15px;padding: 0px;">&nbsp&nbsp&nbsp&nbsp&nbspName & Address</p>
+          {foreach from=$lossPayeeList item=$additional}
+          <p class = "ai_list">
+            &nbsp&nbsp&nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state} &nbsp&nbsp{$additional.zip}
+          </p>
+          {/foreach}
+          {/if}
         </div>
 	</div>
 </body>

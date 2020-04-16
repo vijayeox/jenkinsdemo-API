@@ -480,7 +480,8 @@ class CommandService extends AbstractService
         } else if(isset($data['workflowInstanceId'])){
             $file = $this->fileService->getFileByWorkflowInstanceId($data['workflowInstanceId']);
             if(isset($file)){
-                $data['data'] = $file;
+                $data['data'] = $file['data'];
+                $data['fileId'] = $file['fileId'];
                 return $data;
             } else {
                 throw new EntityNotFoundException("File not Found");
@@ -532,7 +533,8 @@ class CommandService extends AbstractService
         if (isset($data['workflow_id']) && isset($data['appId'])) {
             $workFlowId = $data['workflow_id'];
             $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
-            $data['data'] = $result;
+            $data['template'] = $result['template'];
+            $data['formName'] = $result['formName'];
             return $data;
         } else {
             throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found");

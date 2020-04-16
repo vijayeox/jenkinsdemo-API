@@ -21,18 +21,19 @@ class AutoRenewalRateCard extends RateCard{
         $this->cleanData($data);
         $startYear = date_parse($data['endDate'])['year'];
         $endYear = $startYear + 1;
-        $data['start_date'] = $startYear."-07-01";
-        $data['end_date'] = $endYear."-06-30";
+        
         if($data['product'] == 'Dive Boat'){
             $data['start_date'] = $startYear."-07-22";
-            $data['end_date'] = $endYear."-06-22";
+            $data['end_date'] = $endYear."-07-22";
+            $data['policyPeriod'] = $data['start_date']."(MM DD YYYY)";
         }
-        // else{
-
-        //     $data['policyPeriod'] = $data['start_date']."(MM DD YYYY)";
-        // }
-        $policy_period = "July 01,".$startYear." - June 30,".$endYear;
-        $data['start_date_range'] = array("label" => $policy_period,"value" => $data['start_date']);
+        else{
+            $data['start_date'] = $startYear."-07-01";
+            $data['end_date'] = $endYear."-06-30";
+            $policy_period = "July 01,".$startYear." - June 30,".$endYear;
+            $data['start_date_range'] = array("label" => $policy_period,"value" => $data['start_date']); 
+        }
+       
 
         $this->logger->info("AUTO RATE CARD PERSISTENCE".print_r($data,true));
         $data = parent::execute($data,$persistenceService);

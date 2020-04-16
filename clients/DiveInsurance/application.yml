@@ -148,8 +148,19 @@ menu:
                                 details:
                                     -
                                         type: Form
-                                        url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
-                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                        url: pipeline
+                                        urlPostParams:
+                                            appId: '{{appId}}'
+                                            workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
+                                            workflowInstanceId: '{{workflowInstanceId}}'
+                                            commands: 
+                                                -
+                                                    command: startform
+                                                -
+                                                    command: file
+                                                -
+                                                    command: delegate
+                                                    delegate: EFRToIPLUpgrade
                                 icon: 'fa fa-arrow-circle-up'
                             -
                                 name: Endorsement
@@ -515,8 +526,19 @@ menu:
                                 details:
                                     -
                                         type: Form
-                                        url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
-                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                        url: pipeline
+                                        urlPostParams:
+                                            appId: '{{appId}}'
+                                            workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
+                                            workflowInstanceId: '{{workflowInstanceId}}'
+                                            commands: 
+                                                -
+                                                    command: startform
+                                                -
+                                                    command: file
+                                                -
+                                                    command: delegate
+                                                    delegate: EFRToIPLUpgrade
                                 icon: 'fa fa-arrow-circle-up'
                             -
                                 name: Endorsement

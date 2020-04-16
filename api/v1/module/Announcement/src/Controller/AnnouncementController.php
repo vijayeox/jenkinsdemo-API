@@ -199,7 +199,7 @@ class AnnouncementController extends AbstractApiController
         try {
             $result = $this->announcementService->getAnnouncement($id, $params);
         } catch (AccessDeniedException $e) {
-            $this->logger->error('Error occured during get announcement for ID - ' . print_r($id, true));
+            $this->log->error('Error occured during get announcement for ID - ' . print_r($id, true));
             return $this->getErrorResponse($e->getMessage(), 403);
         }
         return $this->getSuccessResponseWithData($result);
@@ -218,7 +218,7 @@ class AnnouncementController extends AbstractApiController
         try {
             $result = $this->announcementService->getAnnouncementsList($filterParams, $params);
         } catch (AccessDeniedException $e) {
-            $this->logger->error('\ngetAnnouncementsList AccessDeniedException - ' .$e->getMessage(), $e);
+            $this->log->error('\ngetAnnouncementsList AccessDeniedException - ' .$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 403);
         } catch (Exception $e) {
             $this->log->error("-> \ngetAnnouncementsList - Exception".$e->getMessage(), $e);

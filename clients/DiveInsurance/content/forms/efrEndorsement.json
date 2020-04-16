@@ -233,11 +233,20 @@
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
-			"key": "panelPanel2",
-			"input": false,
-			"title": "Padi Validation",
+			"title": "PADI Validation",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "panelPanel2",
+			"type": "panel",
+			"label": "Padi Validation",
+			"input": false,
 			"components": [{
 				"label": "Columns",
 				"input": false,
@@ -291,9 +300,7 @@
 				}],
 				"type": "columns",
 				"hideLabel": true
-			}],
-			"type": "panel",
-			"label": "Panel"
+			}]
 		}, {
 			"title": "Personal Information",
 			"theme": "primary",
@@ -978,21 +985,18 @@
 				}, {
 					"components": [{
 						"label": "Number",
-						"placeholder": "0",
 						"hideLabel": true,
 						"mask": false,
 						"spellcheck": true,
 						"disabled": true,
 						"tableView": true,
-						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"key": "careerCoveragePrice",
 						"customConditional": "show = false;",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
@@ -1052,15 +1056,13 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"defaultValue": "0.00",
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"calculateValue": "value = parseFloat((data['careerCoveragePrice'])||0);",
 								"calculateServer": false,
 								"key": "endorAmount",
 								"type": "number",
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1108,16 +1110,14 @@
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"defaultValue": "0.00",
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateValue": "var temp = (parseFloat(data['endorAmount']) - parseFloat(data['endorAmountPayable'])) ;\nif(parseInt(temp) < 0){\n  value = 0;\n} else {\n  value = temp;\n}",
 								"calculateServer": false,
 								"key": "balanceEndor",
 								"type": "number",
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1801,6 +1801,18 @@
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "Transaction ID",
+						"spellcheck": false,
+						"disabled": true,
+						"tableView": false,
+						"clearOnHide": false,
+						"calculateValue": "value = data.transaction_id",
+						"calculateServer": false,
+						"key": "transactionId",
+						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"type": "textfield",
+						"input": true
+					}, {
 						"label": "Content",
 						"attrs": [{
 							"value": "",
@@ -1973,7 +1985,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 94,
+	"_vid": 96,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -1994,7 +2006,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-14T05:37:14.175Z",
+	"modified": "2020-04-16T10:27:11.771Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

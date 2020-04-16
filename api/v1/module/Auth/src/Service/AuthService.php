@@ -78,8 +78,8 @@ class AuthService extends AbstractService
     }
 
     private function storeCacheData($data, $params, $rawData)
-    {
-        if (is_array($params['user']) && ArrayUtils::isKeyDefined($params['user'], 'username')) {
+    {  
+        if (isset($params['user']) && is_array($params['user']) && ArrayUtils::isKeyDefined($params['user'], 'username')) {
             $user = $this->userService->getUserDetailsbyUserName($params['user']['username']);
         } elseif (ArrayUtils::isKeyDefined($params, 'username')) {
             $user = $this->userService->getUserDetailsbyUserName($params['username']);

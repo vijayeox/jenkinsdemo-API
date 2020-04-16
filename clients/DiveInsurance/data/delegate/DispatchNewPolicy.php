@@ -49,7 +49,7 @@ class DispatchNewPolicy extends DispatchDocument {
             foreach($this->document[$data['product']]['docs'] as $file){
                 if(array_key_exists($file,$data['documents'])){
                     if(is_array($data['documents'][$file])){
-                            $doc = end($data['documents'][$file]);
+                            $doc = $data['documents'][$file][0];
                     }else{
                             $doc = $data['documents'][$file];
                     }

@@ -487,7 +487,6 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"pattern": "/^[a-zA-Z]*$/",
 							"customMessage": "Please enter your first name."
 						},
 						"key": "firstname",
@@ -531,7 +530,6 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"pattern": "/^[a-zA-Z]*$/",
 							"customMessage": "Please enter your last name."
 						},
 						"key": "lastname",
@@ -570,7 +568,6 @@
 					"allowCalculateOverride": true,
 					"validate": {
 						"required": true,
-						"pattern": "/^[a-zA-Z]*$/",
 						"customMessage": "Please enter legal business name."
 					},
 					"key": "business_name",
@@ -826,7 +823,7 @@
 								"showMeridian": false
 							},
 							"clearOnHide": false,
-							"customDefaultValue": "value = moment().format('MM-DD-YYYY')",
+							"customDefaultValue": "value = moment().format('MM-DD-YYYY')\ninstance.redraw();",
 							"calculateServer": false,
 							"validate": {
 								"required": true
@@ -1682,7 +1679,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1690,7 +1687,6 @@
 								"type": "number",
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1709,7 +1705,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1717,7 +1713,6 @@
 								"type": "number",
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1743,7 +1738,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1751,7 +1746,6 @@
 								"type": "number",
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1770,7 +1764,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1778,7 +1772,6 @@
 								"type": "number",
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1804,7 +1797,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1812,7 +1805,6 @@
 								"type": "number",
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1831,7 +1823,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1839,7 +1831,6 @@
 								"type": "number",
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1865,7 +1856,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -1873,7 +1864,6 @@
 								"type": "number",
 								"labelWidth": 0,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1921,14 +1911,13 @@
 								"disabled": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateValue": "value=(parseFloat(data['dspropFurniturefixturesandequip'])||0)+(parseFloat(data['dspropinventory'])||0)+(parseFloat(data['dspropofothers'])||0)+(parseFloat(data['dspropsignsattachedordetached'])||0)+(parseFloat(data['dspropTennantImprv'])||0)+(parseFloat(data['dspropother'])||0)+(parseFloat(data['dspropownpropincludingcompr'])||0);",
 								"calculateServer": false,
 								"key": "dspropTotal",
 								"type": "number",
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"labelWidth": null,
@@ -1997,7 +1986,7 @@
 								"spellcheck": true,
 								"tableView": true,
 								"delimiter": true,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"calculateServer": false,
@@ -2012,7 +2001,6 @@
 								"type": "number",
 								"labelWidth": 2,
 								"labelMargin": 3,
-								"decimalLimit": 2,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -2211,7 +2199,7 @@
 				"spellcheck": true,
 				"tableView": true,
 				"delimiter": true,
-				"requireDecimal": true,
+				"requireDecimal": false,
 				"inputFormat": "plain",
 				"clearOnHide": false,
 				"calculateServer": false,
@@ -2221,7 +2209,6 @@
 				},
 				"key": "dsglestmonthretailreceipt",
 				"type": "number",
-				"decimalLimit": 2,
 				"input": true,
 				"inputType": "number",
 				"labelWidth": null,
@@ -2334,7 +2321,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -2350,7 +2337,6 @@
 						"type": "number",
 						"labelWidth": 30,
 						"labelMargin": 3,
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
@@ -2480,7 +2466,7 @@
 						"spellcheck": true,
 						"tableView": true,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -2494,7 +2480,6 @@
 							"eq": "yes"
 						},
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"labelWidth": null,
@@ -2884,7 +2869,8 @@
 						"dataGridLabel": false,
 						"tableView": false,
 						"datePicker": {
-							"maxDate": "moment().format('MM-dd-yyyy')",
+							"minDate": "moment().subtract(5, 'years')",
+							"maxDate": "moment()",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"datepickerMode": "day"
@@ -2893,6 +2879,7 @@
 						"timePicker": {
 							"showMeridian": false
 						},
+						"defaultDate": "moment()",
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
@@ -2916,10 +2903,10 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": null,
+							"minDate": "moment().subtract(5, 'years')",
 							"disableWeekends": false,
 							"disableWeekdays": false,
-							"maxDate": "moment().format('MM-dd-yyyy')"
+							"maxDate": "moment()"
 						},
 						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 					}, {
@@ -2930,7 +2917,7 @@
 						"dataGridLabel": false,
 						"tableView": true,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -2941,7 +2928,6 @@
 						"type": "number",
 						"labelWidth": 0,
 						"labelMargin": 3,
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"inDataGrid": true
@@ -2953,7 +2939,7 @@
 						"dataGridLabel": false,
 						"tableView": true,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -2964,7 +2950,6 @@
 						"type": "number",
 						"labelWidth": 0,
 						"labelMargin": 3,
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"inDataGrid": true
@@ -3056,7 +3041,7 @@
 					"spellcheck": true,
 					"tableView": true,
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -3070,7 +3055,6 @@
 						"eq": "true"
 					},
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"labelWidth": null,
@@ -3120,7 +3104,7 @@
 					"spellcheck": true,
 					"tableView": true,
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -3135,7 +3119,6 @@
 					},
 					"type": "number",
 					"labelMargin": 3,
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"labelWidth": null,
@@ -3158,7 +3141,12 @@
 					"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n} else {\n  show = false;\n}",
 					"type": "number",
 					"input": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"conditional": {
+						"show": true,
+						"when": "additionalLossofBusinessIncomePL",
+						"eq": "true"
+					}
 				}, {
 					"label": "lossOfBusIncome",
 					"calculateValue": "value = parseFloat(data.minimumLossofBusinessIncome)+(parseFloat(data.additionalLossOfBusIncome)||0.00)",
@@ -3404,7 +3392,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
 							"calculateServer": false,
@@ -3412,7 +3400,6 @@
 							"type": "number",
 							"labelWidth": 0,
 							"labelMargin": 5,
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -3426,7 +3413,7 @@
 							"spellcheck": true,
 							"tableView": true,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
 							"calculateServer": false,
@@ -3434,7 +3421,6 @@
 							"type": "number",
 							"labelWidth": 0,
 							"labelMargin": 5,
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -3480,6 +3466,923 @@
 				"hideLabel": true,
 				"label": "Table"
 			}]
+		}, {
+			"label": "well",
+			"hidden": true,
+			"tableView": false,
+			"key": "rateCard",
+			"type": "well",
+			"clearOnHide": false,
+			"input": false,
+			"components": [{
+				"input": true,
+				"tableView": true,
+				"key": "liability",
+				"label": "liability",
+				"type": "hidden",
+				"lockKey": true,
+				"defaultValue": "true"
+			}, {
+				"input": true,
+				"tableView": true,
+				"key": "property",
+				"label": "property",
+				"type": "hidden",
+				"lockKey": true,
+				"defaultValue": "true"
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "limitOver500000CoverBuildingCat",
+						"label": "limitOver500000CoverBuildingCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver250000CoverBuildingCat",
+						"label": "limitOver250000CoverBuildingCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver100000CoverBuildingCat",
+						"label": "limitOver100000CoverBuildingCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver0CoverBuildingCat",
+						"label": "limitOver0CoverBuildingCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "limitOver500000CoverBuildingNonCat",
+						"persistent": "client-only",
+						"calculateServer": false,
+						"key": "limitOver500000CoverBuildingNonCat",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver250000CoverBuildingNonCat",
+						"label": "limitOver250000CoverBuildingNonCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver100000CoverBuildingNonCat",
+						"label": "limitOver100000CoverBuildingNonCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver0CoverBuildingNonCat",
+						"label": "limitOver0CoverBuildingNonCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "limitOver500000CoverBusIncomeCat",
+						"label": "limitOver500000CoverBusIncomeCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver250000CoverBusIncomeCat",
+						"label": "limitOver250000CoverBusIncomeCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver100000CoverBusIncomeCat",
+						"label": "limitOver100000CoverBusIncomeCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver0CoverBusIncomeCat",
+						"label": "limitOver0CoverBusIncomeCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver500000CoverBusIncomeNonCat",
+						"label": "limitOver500000CoverBusIncomeNonCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver250000CoverBusIncomeNonCat",
+						"label": "limitOver250000CoverBusIncomeNonCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver100000CoverBusIncomeNonCat",
+						"label": "limitOver100000CoverBusIncomeNonCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "limitOver0CoverBusIncomeNonCat",
+						"label": "limitOver0CoverBusIncomeNonCat",
+						"protected": true,
+						"persistent": false,
+						"type": "hidden",
+						"lockKey": true,
+						"defaultValue": "0.00997272",
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns3",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "standardCoverageUpTo50000",
+						"label": "standardCoverageUpTo50000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "standardCoverage50001To100000",
+						"label": "standardCoverage50001To100000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "standardCoverage100001To200000",
+						"label": "standardCoverage100001To200000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "standardCoverage200001To350000",
+						"label": "standardCoverage200001To350000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "standardCoverage350001To500000",
+						"label": "standardCoverage350001To500000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "standardCoverage500001To1M",
+						"label": "standardCoverage500001To1M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "standardCoverage1MAndOver",
+						"label": "standardCoverage1MAndOver",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "liabilityOnlyUpTo50000",
+						"label": "liabilityOnlyUpTo50000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "liabilityOnly50001To100000",
+						"label": "liabilityOnly50001To100000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "liabilityOnly100001To200000",
+						"label": "liabilityOnly100001To200000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "liabilityOnly200001To350000",
+						"label": "liabilityOnly200001To350000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "liabilityOnly350001To500000",
+						"label": "liabilityOnly350001To500000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "liabilityOnly500001To1M",
+						"label": "liabilityOnly500001To1M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "liabilityOnly1MAndOver",
+						"label": "liabilityOnly1MAndOver",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "discontinuedOperation",
+						"label": "discontinuedOperation",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"input": true,
+				"tableView": true,
+				"key": "medicalExpense",
+				"label": "medicalExpense",
+				"type": "hidden",
+				"lockKey": true
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns4",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "nonOwnedAutoLiability100K",
+						"label": "NON-Owned Auto Liability 100k",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "page5PanelColumns4HiddenField",
+						"label": "NON-Owned Auto Liability 1M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns5",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "excessLiabilityCoverage1M",
+						"label": "excessLiabilityCoverage1M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "excessLiabilityCoverage2M",
+						"label": "excessLiabilityCoverage2M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "excessLiabilityCoverage3M",
+						"label": "excessLiabilityCoverage3M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "excessLiabilityCoverage4M",
+						"label": "excessLiabilityCoverage4M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "excessLiabilityCoverage9M",
+						"label": "excessLiabilityCoverage9M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "TAEOunder100k",
+						"label": "TAEOunder100k",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "TAEO100kTo500k",
+						"label": "TAEO100kTo500k",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns6",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "poolLiabilityOver0",
+						"label": "poolLiabilityOver0",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "poolLiabilityOver20k",
+						"label": "poolLiabilityOver20k",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "poolLiabilityOver50k",
+						"label": "poolLiabilityOver50k",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns7",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsJan",
+						"label": "proRataFactorsJan",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsApr",
+						"label": "proRataFactorsApr",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsJul",
+						"label": "proRataFactorsJul",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsOct",
+						"label": "proRataFactorsOct",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsFeb",
+						"label": "proRataFactorsFeb",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsMay",
+						"label": "proRataFactorsMay",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsAug",
+						"label": "proRataFactorsAug",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsNov",
+						"label": "proRataFactorsNov",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsMar",
+						"label": "proRataFactorsMar",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsJun",
+						"label": "proRataFactorsJun",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsSep",
+						"label": "proRataFactorsSep",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "proRataFactorsDec",
+						"label": "proRataFactorsDec",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"input": true,
+				"tableView": true,
+				"key": "padiFee",
+				"label": "padiFee",
+				"type": "hidden",
+				"lockKey": true
+			}, {
+				"input": true,
+				"tableView": true,
+				"key": "stateTaxData",
+				"label": "stateTaxData",
+				"type": "hidden",
+				"lockKey": true,
+				"protected": true,
+				"persistent": false
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns8",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan25000",
+						"label": "groupCoverageMoreThan25000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan50000",
+						"label": "groupCoverageMoreThan50000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan200000",
+						"label": "groupCoverageMoreThan200000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan100000",
+						"label": "groupCoverageMoreThan100000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan150000",
+						"label": "groupCoverageMoreThan150000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan0",
+						"label": "groupCoverageMoreThan0",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan250000",
+						"label": "groupCoverageMoreThan250000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan350000",
+						"label": "groupCoverageMoreThan350000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupCoverageMoreThan500000",
+						"label": "groupCoverageMoreThan500000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns9",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "groupExcessLiability1M",
+						"label": "groupExcessLiability1M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupExcessLiability4M",
+						"label": "groupExcessLiability4M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "groupExcessLiability2M",
+						"label": "groupExcessLiability2M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"input": true,
+						"tableView": true,
+						"key": "groupExcessLiability9M",
+						"label": "groupExcessLiability9M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "groupExcessLiability3M",
+						"label": "groupExcessLiability3M",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "combinedSingalLimit",
+						"calculateValue": "var limit = '100000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
+						"key": "combinedSingalLimit",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annualAggregate",
+						"calculateValue": "var limit = '1,00,000';\nvalue = parseFloat(data['primaryCombinedSingalLimit']) + parseFloat(limit);",
+						"key": "annualAggregate",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"input": true,
+				"tableView": true,
+				"key": "groupPadiFee",
+				"label": "groupPadiFee",
+				"type": "hidden",
+				"lockKey": true
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "page5PanelColumns10",
+				"columns": [{
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "propertyDeductibles1000",
+						"label": "propertyDeductibles1000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "propertyDeductibles2500",
+						"label": "propertyDeductibles2500",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"key": "propertyDeductibles5000",
+						"label": "propertyDeductibles5000",
+						"type": "hidden",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}],
+			"hideLabel": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
 		}]
 	}, {
 		"type": "panel",
@@ -4659,13 +5562,12 @@
 													"spellcheck": true,
 													"tableView": true,
 													"delimiter": true,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateServer": false,
 													"key": "additionalLocationFurniturefixturesAndEquipment",
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true
@@ -4678,13 +5580,12 @@
 													"spellcheck": true,
 													"tableView": true,
 													"delimiter": true,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateServer": false,
 													"key": "additionalLocationTableInventoryStock",
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true
@@ -4698,13 +5599,12 @@
 													"spellcheck": true,
 													"tableView": true,
 													"delimiter": true,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateServer": false,
 													"key": "additionalLocationPropertyOfOthers",
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true
@@ -4718,13 +5618,12 @@
 													"spellcheck": true,
 													"tableView": true,
 													"delimiter": true,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateServer": false,
 													"key": "additionalLocationSignsAttachedOrDetached",
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true
@@ -4738,13 +5637,12 @@
 													"spellcheck": true,
 													"tableView": true,
 													"delimiter": true,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateServer": false,
 													"key": "additionalLocationTenantImprovements",
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true
@@ -4757,13 +5655,12 @@
 													"spellcheck": true,
 													"tableView": true,
 													"delimiter": true,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateServer": false,
 													"key": "additionalLocationOther",
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true
@@ -4777,13 +5674,12 @@
 													"spellcheck": true,
 													"tableView": true,
 													"delimiter": true,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateServer": false,
 													"key": "additionalLocationDoYouOwnPropertyIncludingCompressorsOffPremises",
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true
@@ -4811,14 +5707,13 @@
 												"disabled": true,
 												"tableView": true,
 												"delimiter": true,
-												"requireDecimal": true,
+												"requireDecimal": false,
 												"inputFormat": "plain",
 												"clearOnHide": false,
-												"calculateValue": "value=(parseFloat(row.additionalLocationFurniturefixturesAndEquipment)||0)+(parseFloat(row.additionalLocationTableInventoryStock)||0)+(parseFloat(row.additionalLocationPropertyOfOthers)||0)+(parseFloat(row.additionalLocationSignsAttachedOrDetached)||0)+(parseFloat(row.additionalLocationTenantImprovements)||0)+(parseFloat(row.additionalLocationOther)||0)+(parseFloat(row.additionalLocationDoYouOwnPropertyIncludingCompressorsOffPremises)||0)",
+												"calculateValue": "value=((parseFloat(row.additionalLocationFurniturefixturesAndEquipment)||0)+(parseFloat(row.additionalLocationTableInventoryStock)||0)+(parseFloat(row.additionalLocationPropertyOfOthers)||0)+(parseFloat(row.additionalLocationSignsAttachedOrDetached)||0)+(parseFloat(row.additionalLocationTenantImprovements)||0)+(parseFloat(row.additionalLocationOther)||0)+(parseFloat(row.additionalLocationDoYouOwnPropertyIncludingCompressorsOffPremises)||0)).toFixed(0)",
 												"calculateServer": false,
 												"key": "additionalLocationPropertyTotal",
 												"type": "number",
-												"decimalLimit": 2,
 												"input": true,
 												"inputType": "number",
 												"lockKey": true,
@@ -4888,7 +5783,7 @@
 												"spellcheck": false,
 												"tableView": false,
 												"delimiter": true,
-												"requireDecimal": true,
+												"requireDecimal": false,
 												"inputFormat": "plain",
 												"clearOnHide": false,
 												"calculateServer": false,
@@ -4897,7 +5792,6 @@
 												},
 												"key": "ALBuildingReplacementValue",
 												"type": "number",
-												"decimalLimit": 2,
 												"input": true,
 												"inputType": "number",
 												"lockKey": true,
@@ -5025,7 +5919,7 @@
 									"spellcheck": false,
 									"tableView": true,
 									"delimiter": true,
-									"requireDecimal": true,
+									"requireDecimal": false,
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"calculateServer": false,
@@ -5034,7 +5928,6 @@
 									},
 									"key": "estimatedMonthlyReceipts",
 									"type": "number",
-									"decimalLimit": 2,
 									"input": true,
 									"inputType": "number",
 									"lockKey": true
@@ -5140,7 +6033,7 @@
 											"spellcheck": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateServer": false,
@@ -5150,11 +6043,10 @@
 											"key": "ALPoolLiability",
 											"conditional": {
 												"show": true,
-												"when": "ifyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformAL",
+												"when": "doyouhaveapoolonpremisesAL",
 												"eq": "yes"
 											},
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true,
@@ -5557,7 +6449,8 @@
 												"format": "MM-dd-yyyy",
 												"tableView": false,
 												"datePicker": {
-													"maxDate": "moment().format('MM-dd-yyyy');",
+													"minDate": "moment().subtract(5, 'years')",
+													"maxDate": "moment()",
 													"disableWeekends": false,
 													"disableWeekdays": false,
 													"datepickerMode": "day"
@@ -5587,10 +6480,10 @@
 													"hourIncrement": 1,
 													"minuteIncrement": 1,
 													"time_24hr": true,
-													"minDate": null,
+													"minDate": "moment().subtract(5, 'years')",
 													"disableWeekends": false,
 													"disableWeekdays": false,
-													"maxDate": "moment().format('MM-dd-yyyy');"
+													"maxDate": "moment()"
 												},
 												"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 											}],
@@ -5607,7 +6500,7 @@
 												"spellcheck": true,
 												"tableView": true,
 												"delimiter": true,
-												"requireDecimal": true,
+												"requireDecimal": false,
 												"inputFormat": "plain",
 												"clearOnHide": false,
 												"calculateServer": false,
@@ -5616,7 +6509,6 @@
 												},
 												"key": "claimAmountPaid",
 												"type": "number",
-												"decimalLimit": 2,
 												"input": true,
 												"inputType": "number",
 												"hideOnChildrenHidden": false,
@@ -5635,7 +6527,7 @@
 												"spellcheck": true,
 												"tableView": true,
 												"delimiter": true,
-												"requireDecimal": true,
+												"requireDecimal": false,
 												"inputFormat": "plain",
 												"clearOnHide": false,
 												"calculateServer": false,
@@ -5721,7 +6613,7 @@
 										"spellcheck": true,
 										"tableView": true,
 										"delimiter": false,
-										"requireDecimal": true,
+										"requireDecimal": false,
 										"inputFormat": "plain",
 										"clearOnHide": false,
 										"calculateServer": false,
@@ -5735,7 +6627,6 @@
 											"eq": "true"
 										},
 										"type": "number",
-										"decimalLimit": 2,
 										"input": true,
 										"inputType": "number",
 										"lockKey": true,
@@ -5781,13 +6672,12 @@
 										"spellcheck": true,
 										"tableView": true,
 										"delimiter": true,
-										"requireDecimal": true,
+										"requireDecimal": false,
 										"inputFormat": "plain",
 										"clearOnHide": false,
 										"calculateServer": false,
 										"validate": {
-											"required": true,
-											"min": 40000
+											"required": true
 										},
 										"key": "ALLossofBusIncomeVal",
 										"conditional": {
@@ -5796,14 +6686,34 @@
 											"eq": "true"
 										},
 										"type": "number",
-										"decimalLimit": 2,
 										"input": true,
 										"inputType": "number",
 										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
+										"label": "Minimum Loss of Business Income",
+										"prefix": "$",
+										"mask": false,
+										"spellcheck": true,
+										"tableView": false,
+										"delimiter": true,
+										"requireDecimal": false,
+										"inputFormat": "plain",
+										"clearOnHide": false,
+										"customDefaultValue": "value = 40000",
+										"calculateServer": false,
+										"key": "minimumLossOfBusinessIncomeAL",
+										"type": "number",
+										"input": true,
+										"hideOnChildrenHidden": false,
+										"conditional": {
+											"show": true,
+											"when": "ALLossofBusIncomeCheckBox",
+											"eq": "true"
+										}
+									}, {
 										"label": "ALLossofBusIncome",
-										"calculateValue": "value = parseFloat(40000)+(parseFloat(row.ALLossofBusIncomeVal)||0.00)",
+										"calculateValue": "value = parseFloat(row.minimumLossOfBusinessIncomeAL)+(parseFloat(row.ALLossofBusIncomeVal)||0.00)",
 										"calculateServer": false,
 										"key": "ALLossofBusIncome",
 										"type": "hidden",
@@ -5871,41 +6781,48 @@
 													"lockKey": true,
 													"hideOnChildrenHidden": false
 												}, {
-													"input": true,
-													"tableView": true,
-													"inputType": "number",
 													"label": "Coverage",
-													"key": "ALCoverageFP",
 													"prefix": "$",
+													"hideLabel": true,
+													"mask": false,
+													"spellcheck": true,
+													"disabled": true,
+													"tableView": true,
+													"delimiter": false,
+													"requireDecimal": false,
+													"inputFormat": "plain",
 													"clearOnHide": false,
-													"type": "number",
+													"calculateValue": "if(row.ALCoverageCheckBox == \"true\" || row.ALCoverageCheckBox === true){\n  value=((parseFloat(data[\"CoverageFP\"])||0)/10).toFixed(0);\n} else {\n  value = 0;\n}",
+													"calculateServer": false,
+													"key": "ALCoverageFP",
 													"conditional": {
-														"show": "true",
+														"show": true,
 														"when": "ALCoverageCheckBox",
 														"eq": "true"
 													},
+													"type": "number",
+													"input": true,
+													"inputType": "number",
 													"lockKey": true,
-													"disabled": true,
-													"calculateValue": "if(row.ALCoverageCheckBox == \"true\" || row.ALCoverageCheckBox == true){\nvalue=(parseFloat(data[\"CoverageFP\"])||0)/10;\n}\nelse{\nvalue = 0;\n}",
-													"calculateServer": false,
-													"decimalLimit": 2,
-													"requireDecimal": true,
-													"hideLabel": true,
 													"hideOnChildrenHidden": false
 												}, {
-													"input": true,
-													"tableView": true,
-													"inputType": "number",
 													"label": "Non-Diving Pool",
-													"key": "ALnonDivingPoolAmount",
 													"prefix": "$",
-													"clearOnHide": false,
-													"type": "number",
-													"lockKey": true,
-													"decimalLimit": 2,
-													"requireDecimal": true,
-													"calculateValue": "if ((parseFloat(row.ALPoolLiability)||0) > 50000) {\n  value = data[\"poolLiabilityOver50k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 20000) {\n  value = data[\"poolLiabilityOver20k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 0) {\n  value = data[\"poolLiabilityOver0\"];\n} else {\n  value = 0;\n}",
+													"mask": false,
+													"spellcheck": true,
 													"disabled": true,
+													"tableView": true,
+													"delimiter": false,
+													"requireDecimal": false,
+													"inputFormat": "plain",
+													"clearOnHide": false,
+													"calculateValue": "if ((parseFloat(row.ALPoolLiability)||0) > 50000) {\n  value = data[\"poolLiabilityOver50k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 20000) {\n  value = data[\"poolLiabilityOver20k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 0) {\n  value = data[\"poolLiabilityOver0\"];\n} else {\n  value = 0;\n}",
+													"calculateServer": false,
+													"key": "ALnonDivingPoolAmount",
+													"type": "number",
+													"input": true,
+													"inputType": "number",
+													"lockKey": true,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Travel Agent E & O",
@@ -5916,7 +6833,7 @@
 													"tableView": true,
 													"defaultValue": "0",
 													"delimiter": false,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
 													"calculateValue": "var amount = (parseInt(row.ReceiptsAmont)||0);\nif((parseInt(amount)||0) > 100000){\nvalue=data[\"TAEO100kTo500k\"]\n}\nelse if((parseInt(amount)||0) > 0){\nvalue=data[\"TAEOunder100k\"]\n}",
@@ -5925,7 +6842,6 @@
 														"show": true
 													},
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
@@ -5951,10 +6867,10 @@
 													"disabled": true,
 													"tableView": true,
 													"delimiter": false,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALMedicalExpenseCheckBox == \"true\" || row.ALMedicalExpenseCheckBox == true){\nvalue = (parseFloat(data[\"MedicalExpenseFP\"])||0)/10;\n}\nelse{\nvalue = 0;\n}",
+													"calculateValue": "if(row.ALMedicalExpenseCheckBox == \"true\" || row.ALMedicalExpenseCheckBox === true){\nvalue = ((parseFloat(data[\"medicalExpense\"])||0)/10).toFixed(0);\n}\nelse{\nvalue = 0;\n}",
 													"calculateServer": false,
 													"key": "ALMedicalExpenseFP",
 													"conditional": {
@@ -5963,7 +6879,6 @@
 														"eq": "true"
 													},
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
@@ -5981,25 +6896,29 @@
 													"lockKey": true,
 													"hideOnChildrenHidden": false
 												}, {
-													"input": true,
-													"tableView": true,
-													"inputType": "number",
 													"label": "Non-Owned Auto",
-													"key": "ALNonOwnedAutoFP",
 													"prefix": "$",
+													"hideLabel": true,
+													"mask": false,
+													"spellcheck": false,
+													"disabled": true,
+													"tableView": false,
+													"delimiter": false,
+													"requireDecimal": false,
+													"inputFormat": "plain",
 													"clearOnHide": false,
-													"type": "number",
+													"calculateValue": "if(row.ALNonOwnedAutoCheckBox == \"true\" || row.ALNonOwnedAutoCheckBox === true){\nvalue=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);\n}\nelse{\nvalue = 0;\n}",
+													"calculateServer": false,
+													"key": "ALNonOwnedAutoFP",
 													"conditional": {
 														"show": "true",
 														"when": "ALNonOwnedAutoCheckBox",
 														"eq": "true"
 													},
+													"type": "number",
+													"input": true,
+													"inputType": "number",
 													"lockKey": true,
-													"disabled": true,
-													"requireDecimal": true,
-													"decimalLimit": 2,
-													"calculateValue": "if(row.ALNonOwnedAutoCheckBox == \"true\" || row.ALNonOwnedAutoCheckBox == true){\nvalue=(parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10;\n}\nelse{\nvalue = 0;\n}",
-													"hideLabel": true,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Excess Liability",
@@ -6022,10 +6941,10 @@
 													"disabled": true,
 													"tableView": true,
 													"delimiter": false,
-													"requireDecimal": true,
+													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALExcessLiabilityCheckBox == \"true\" || row.ALExcessLiabilityCheckBox === true){\nvalue = (parseInt(data[\"ExcessLiabilityFP\"])||0)/10;\n}\nelse{\nvalue = 0;\n}",
+													"calculateValue": "if(row.ALExcessLiabilityCheckBox == \"true\" || row.ALExcessLiabilityCheckBox === true){\n  value = ((parseInt(data[\"ALExcessLiabilityFP\"])||0)/10).toFixed(0);\n} else {\n  value = 0;\n}",
 													"calculateServer": false,
 													"key": "ALExcessLiabilityFP",
 													"conditional": {
@@ -6034,7 +6953,6 @@
 														"eq": "true"
 													},
 													"type": "number",
-													"decimalLimit": 2,
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
@@ -6075,10 +6993,12 @@
 										"theme": "primary",
 										"tableView": false,
 										"components": [{
-											"input": true,
+											"label": "Cat/NonCat AL",
+											"optionsLabelPosition": "right",
+											"inline": true,
+											"hideLabel": true,
 											"tableView": true,
-											"label": "Radio",
-											"key": "ALPropertyCoverageOption",
+											"defaultValue": "nonCat",
 											"values": [{
 												"value": "nonCat",
 												"label": "NON CAT",
@@ -6088,13 +7008,12 @@
 												"label": "CAT",
 												"shortcut": ""
 											}],
-											"defaultValue": "nonCat",
+											"clearOnHide": false,
+											"calculateServer": false,
+											"key": "ALPropertyCoverageOption",
 											"type": "radio",
-											"optionsLabelPosition": "right",
-											"inline": true,
-											"hideLabel": true,
-											"lockKey": true,
-											"clearOnHide": false
+											"input": true,
+											"lockKey": true
 										}, {
 											"clearOnHide": false,
 											"input": false,
@@ -6103,36 +7022,45 @@
 											"rows": [
 												[{
 													"components": [{
-														"input": true,
-														"tableView": true,
-														"inputType": "number",
 														"label": "Contents",
-														"key": "ALContentsFP",
 														"prefix": "$",
+														"mask": false,
+														"spellcheck": true,
+														"disabled": true,
+														"tableView": true,
+														"delimiter": false,
+														"requireDecimal": false,
+														"inputFormat": "plain",
+														"redrawOn": "additionalLocations.ALPropertyCoverageOption",
 														"clearOnHide": false,
+														"calculateValue": "var amount = ((parseFloat(row.additionalLocationPropertyTotal)||0)).toFixed(0);\nconsole.log(amount);\nvar option = row.ALPropertyCoverageOption;\nconsole.log(option);\nif (amount > 500000 && option == \"nonCat\") {\n    value = (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount;\n} else if (amount > 500000 && option == \"cat\") {\n    value = (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount;\n} else if (amount > 250000 && option == \"nonCat\") {\n    value = (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount;\n} else if (amount > 250000 && option == \"cat\") {\n    value = (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount;\n} else if (amount > 100000 && option == \"nonCat\") {\n    value = (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount;\n} else if (amount > 100000 && option == \"cat\") {\n    value = (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount;\n} else if (amount > 0 && option == \"nonCat\") {\n    value = (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount;\n} else if (amount > 0 && option == \"cat\") {\n    value = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount;\n} else {\n    value = 0;\n}",
+														"calculateServer": false,
+														"key": "ALContentsFP",
 														"type": "number",
-														"lockKey": true,
-														"requireDecimal": true,
-														"decimalLimit": 2,
-														"calculateValue": "(parseFloat(data['careerCoveragePrice']) || 0)\n\nvar amount = (parseFloat(row.additionalLocationPropertyTotal)||0);\nvar option = row.ALPropertyCoverageOption;\nif (amount > 500000 &&\n    option == \"nonCat\"\n) {\n    value = (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 500000 &&\n    option == \"cat\"\n) {\n    value = (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 250000 &&\n    option == \"nonCat\"\n) {\n    value = (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 250000 &&\n    option == \"cat\"\n) {\n    value = (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 100000 &&\n    option == \"nonCat\"\n) {\n    value = (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 100000 &&\n    option == \"cat\"\n) {\n    value = (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 0 &&\n    option == \"nonCat\"\n) {\n    value = (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount;\n} else if (amount > 0 && option == \"cat\") {\n    value = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount;\n} else {\n    value = 0;\n}",
-														"disabled": true
+														"input": true,
+														"inputType": "number",
+														"lockKey": true
 													}]
 												}],
 												[{
 													"components": [{
-														"input": true,
-														"tableView": true,
-														"inputType": "number",
 														"label": "Loss of Bus Income",
-														"key": "ALLossofBusIncomeFP",
 														"prefix": "$",
-														"clearOnHide": false,
-														"type": "number",
-														"lockKey": true,
+														"mask": false,
+														"spellcheck": true,
 														"disabled": true,
-														"decimalLimit": 2,
-														"requireDecimal": true,
-														"calculateValue": "var amount = (parseFloat(row.ALLossofBusIncome)||0);\nvar option = row.ALPropertyCoverageOption\n\nif (\n  amount > 500000 &&\n  option == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount;\n} else if (\n  amount > 500000 &&\n  option == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount;\n} else if (\n  amount > 250000 &&\n  option == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount;\n} else if (\n  amount > 250000 &&\n  option == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount;\n} else if (\n  amount > 100000 &&\n  option == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount;\n} else if (\n  amount > 100000 &&\n  option == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount;\n} else if (\n  amount > 0 &&\n  option == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount;\n} else if (\n  amount > 0 &&\n  option == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount;\n} else {\n  value = 0;\n}"
+														"tableView": true,
+														"delimiter": false,
+														"requireDecimal": false,
+														"inputFormat": "plain",
+														"clearOnHide": false,
+														"calculateValue": "var amount = (parseFloat(row.ALLossofBusIncome)||0);\nvar option = row.ALPropertyCoverageOption\n\nif (amount > 500000 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 500000 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else {\n  value = 0;\n}",
+														"calculateServer": false,
+														"key": "ALLossofBusIncomeFP",
+														"type": "number",
+														"input": true,
+														"inputType": "number",
+														"lockKey": true
 													}]
 												}],
 												[{
@@ -6146,8 +7074,7 @@
 														"clearOnHide": false,
 														"type": "number",
 														"disabled": true,
-														"decimalLimit": 2,
-														"requireDecimal": true,
+														"requireDecimal": false,
 														"calculateValue": "var amount = (parseFloat(row.ALBuildingReplacementValue)||0);\nvar option = row.ALPropertyCoverageOption\n\n\nif (\n    amount > 500000 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 500000 &&\n    option == \"cat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 250000 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 250000 &&\n    option == \"cat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 100000 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 100000 &&\n    option == \"cat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 0 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 0 &&\n    option == \"cat\"\n) {\n    value = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount;\n} else {\n    value = 0;\n}",
 														"lockKey": true
 													}]
@@ -6220,14 +7147,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value = (parseFloat(row.ALCoverageFP)||0) + (parseFloat(row.ALnonDivingPoolAmount)||0) + (parseFloat(row.ALMedicalExpenseFP)||0) + (parseFloat(row.ALNonOwnedAutoFP)||0) + (parseFloat(row.ALExcessLiabilityFP)||0) + (parseFloat(row.ALTravelAgentEOFP)||0);",
+											"calculateValue": "value = ((parseFloat(row.ALCoverageFP)||0) + (parseFloat(row.ALnonDivingPoolAmount)||0) + (parseFloat(row.ALMedicalExpenseFP)||0) + (parseFloat(row.ALNonOwnedAutoFP)||0) + (parseFloat(row.ALExcessLiabilityFP)||0) + (parseFloat(row.ALTravelAgentEOFP)||0)).toFixed(0);",
 											"calculateServer": false,
 											"key": "ALliabilityCoveragesTotal",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6260,14 +7186,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "value = (parseFloat(row.ALContentsFP)||0) + (parseFloat(row.ALLossofBusIncomeFP)||0) + (parseFloat(row.ALBuildingLimitFP)||0);",
 											"calculateServer": false,
 											"key": "ALPropertyCoveragesTotal",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6300,14 +7225,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value = (parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)",
+											"calculateValue": "value = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)",
 											"calculateServer": false,
 											"key": "ALLiabilityPropertyCoveragesTotal",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6360,14 +7284,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value=(parseFloat(row.ALLiabilityPropertyCoveragesTotal)||0)*(parseFloat(row.ALProRataPremiumPercentage)||0);",
+											"calculateValue": "value=((parseFloat(row.ALLiabilityPropertyCoveragesTotal)||0)*(parseFloat(row.ALProRataPremiumPercentage)||0)).toFixed(0);",
 											"calculateServer": false,
 											"key": "ALProRataPremium",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6421,14 +7344,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value=(parseFloat(row.ALliabilityCoveragesTotal)||0)*(parseFloat(row.ALliabilityTaxPercentage)||0)/100;",
+											"calculateValue": "value=((parseFloat(row.ALliabilityCoveragesTotal)||0)*(parseFloat(row.ALliabilityTaxPercentage)||0)/100).toFixed(0);",
 											"calculateServer": false,
 											"key": "ALliabilityTaxTotal",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6482,14 +7404,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "if(data.additionalLocationsSelect=='yes'){\nvalue=(parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALPropertyTaxPercentage)||0)/100;\n} else {\n  value = 0.00\n}",
+											"calculateValue": "if(data.additionalLocationsSelect=='yes'){\nvalue=((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALPropertyTaxPercentage)||0)/100).toFixed(0);\n} else {\n  value = 0\n}",
 											"calculateServer": false,
 											"key": "ALPropertyTaxTotal",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6522,14 +7443,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value=(parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)",
+											"calculateValue": "value=((parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)).toFixed(0);",
 											"calculateServer": false,
 											"key": "ALTotalTax",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6562,14 +7482,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": true,
+											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "value=(parseFloat(row.ALProRataPremium)||0)+(parseFloat(row.ALTotalTax)||0);",
 											"calculateServer": false,
 											"key": "locationTotal",
 											"type": "number",
-											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -6665,7 +7584,7 @@
 						"spellcheck": true,
 						"tableView": false,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -6674,7 +7593,6 @@
 						},
 						"key": "annualReceipt",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -6693,7 +7611,7 @@
 						"disabled": true,
 						"tableView": true,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "value = data[data[\"groupCoverageSelect\"]]",
@@ -6701,7 +7619,6 @@
 						"key": "groupCoverage",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
@@ -6779,7 +7696,7 @@
 						"disabled": true,
 						"tableView": true,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100\n}",
@@ -6787,7 +7704,6 @@
 						"key": "groupExcessLiability",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
@@ -6823,7 +7739,7 @@
 									"spellcheck": true,
 									"tableView": true,
 									"delimiter": true,
-									"requireDecimal": true,
+									"requireDecimal": false,
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"calculateServer": false,
@@ -6831,7 +7747,6 @@
 									"type": "number",
 									"labelWidth": 0,
 									"labelMargin": 5,
-									"decimalLimit": 2,
 									"input": true,
 									"inputType": "number",
 									"lockKey": true
@@ -6845,7 +7760,7 @@
 									"spellcheck": true,
 									"tableView": true,
 									"delimiter": true,
-									"requireDecimal": true,
+									"requireDecimal": false,
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"calculateServer": false,
@@ -6853,7 +7768,6 @@
 									"type": "number",
 									"labelWidth": 0,
 									"labelMargin": 5,
-									"decimalLimit": 2,
 									"input": true,
 									"inputType": "number",
 									"lockKey": true
@@ -7891,10 +8805,10 @@
 							"calculateServer": false,
 							"key": "groupTaxPercentage",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"decimalLimit": 3
 						}]
 					}, {
 						"components": [{
@@ -7906,7 +8820,7 @@
 							"disabled": true,
 							"tableView": true,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
@@ -7914,7 +8828,6 @@
 							"calculateServer": false,
 							"key": "groupTaxAmount",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -7947,7 +8860,7 @@
 							"disabled": true,
 							"tableView": true,
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
@@ -7955,7 +8868,6 @@
 							"calculateServer": false,
 							"key": "groupPadiFeeAmount",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -7989,7 +8901,7 @@
 							"tableView": true,
 							"defaultValue": "0",
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
@@ -7997,7 +8909,6 @@
 							"calculateServer": false,
 							"key": "groupTotalAmount",
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -8205,923 +9116,6 @@
 					"type": "panel",
 					"hideOnChildrenHidden": false,
 					"label": "Panel"
-				}, {
-					"label": "well",
-					"hidden": true,
-					"tableView": false,
-					"key": "rateCard",
-					"type": "well",
-					"clearOnHide": false,
-					"input": false,
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "liability",
-						"label": "liability",
-						"type": "hidden",
-						"lockKey": true,
-						"defaultValue": "true"
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "property",
-						"label": "property",
-						"type": "hidden",
-						"lockKey": true,
-						"defaultValue": "true"
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "limitOver500000CoverBuildingCat",
-								"label": "limitOver500000CoverBuildingCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver250000CoverBuildingCat",
-								"label": "limitOver250000CoverBuildingCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver100000CoverBuildingCat",
-								"label": "limitOver100000CoverBuildingCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver0CoverBuildingCat",
-								"label": "limitOver0CoverBuildingCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver500000CoverBuildingNonCat",
-								"label": "limitOver500000CoverBuildingNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver250000CoverBuildingNonCat",
-								"label": "limitOver250000CoverBuildingNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver100000CoverBuildingNonCat",
-								"label": "limitOver100000CoverBuildingNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver0CoverBuildingNonCat",
-								"label": "limitOver0CoverBuildingNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "limitOver500000CoverBusIncomeCat",
-								"label": "limitOver500000CoverBusIncomeCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver250000CoverBusIncomeCat",
-								"label": "limitOver250000CoverBusIncomeCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver100000CoverBusIncomeCat",
-								"label": "limitOver100000CoverBusIncomeCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver0CoverBusIncomeCat",
-								"label": "limitOver0CoverBusIncomeCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver500000CoverBusIncomeNonCat",
-								"label": "limitOver500000CoverBusIncomeNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver250000CoverBusIncomeNonCat",
-								"label": "limitOver250000CoverBusIncomeNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver100000CoverBusIncomeNonCat",
-								"label": "limitOver100000CoverBusIncomeNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "limitOver0CoverBusIncomeNonCat",
-								"label": "limitOver0CoverBusIncomeNonCat",
-								"protected": true,
-								"persistent": false,
-								"type": "hidden",
-								"lockKey": true,
-								"defaultValue": "0.00997272",
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns3",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "standardCoverageUpTo50000",
-								"label": "standardCoverageUpTo50000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "standardCoverage50001To100000",
-								"label": "standardCoverage50001To100000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "standardCoverage100001To200000",
-								"label": "standardCoverage100001To200000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "standardCoverage200001To350000",
-								"label": "standardCoverage200001To350000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "standardCoverage350001To500000",
-								"label": "standardCoverage350001To500000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "standardCoverage500001To1M",
-								"label": "standardCoverage500001To1M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "standardCoverage1MAndOver",
-								"label": "standardCoverage1MAndOver",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "liabilityOnlyUpTo50000",
-								"label": "liabilityOnlyUpTo50000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "liabilityOnly50001To100000",
-								"label": "liabilityOnly50001To100000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "liabilityOnly100001To200000",
-								"label": "liabilityOnly100001To200000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "liabilityOnly200001To350000",
-								"label": "liabilityOnly200001To350000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "liabilityOnly350001To500000",
-								"label": "liabilityOnly350001To500000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "liabilityOnly500001To1M",
-								"label": "liabilityOnly500001To1M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "liabilityOnly1MAndOver",
-								"label": "liabilityOnly1MAndOver",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "discontinuedOperation",
-								"label": "discontinuedOperation",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "medicalExpense",
-						"label": "medicalExpense",
-						"type": "hidden",
-						"lockKey": true
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns4",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "nonOwnedAutoLiability100K",
-								"label": "NON-Owned Auto Liability 100k",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "page5PanelColumns4HiddenField",
-								"label": "NON-Owned Auto Liability 1M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideLabel": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns5",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "excessLiabilityCoverage1M",
-								"label": "excessLiabilityCoverage1M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "excessLiabilityCoverage2M",
-								"label": "excessLiabilityCoverage2M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "excessLiabilityCoverage3M",
-								"label": "excessLiabilityCoverage3M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "excessLiabilityCoverage4M",
-								"label": "excessLiabilityCoverage4M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "excessLiabilityCoverage9M",
-								"label": "excessLiabilityCoverage9M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "TAEOunder100k",
-								"label": "TAEOunder100k",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "TAEO100kTo500k",
-								"label": "TAEO100kTo500k",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns6",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "poolLiabilityOver0",
-								"label": "poolLiabilityOver0",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "poolLiabilityOver20k",
-								"label": "poolLiabilityOver20k",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "poolLiabilityOver50k",
-								"label": "poolLiabilityOver50k",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns7",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsJan",
-								"label": "proRataFactorsJan",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsApr",
-								"label": "proRataFactorsApr",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsJul",
-								"label": "proRataFactorsJul",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsOct",
-								"label": "proRataFactorsOct",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsFeb",
-								"label": "proRataFactorsFeb",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsMay",
-								"label": "proRataFactorsMay",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsAug",
-								"label": "proRataFactorsAug",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsNov",
-								"label": "proRataFactorsNov",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsMar",
-								"label": "proRataFactorsMar",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsJun",
-								"label": "proRataFactorsJun",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsSep",
-								"label": "proRataFactorsSep",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "proRataFactorsDec",
-								"label": "proRataFactorsDec",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "padiFee",
-						"label": "padiFee",
-						"type": "hidden",
-						"lockKey": true
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "stateTaxData",
-						"label": "stateTaxData",
-						"type": "hidden",
-						"lockKey": true,
-						"protected": true,
-						"persistent": false
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns8",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan25000",
-								"label": "groupCoverageMoreThan25000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan50000",
-								"label": "groupCoverageMoreThan50000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan200000",
-								"label": "groupCoverageMoreThan200000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan100000",
-								"label": "groupCoverageMoreThan100000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan150000",
-								"label": "groupCoverageMoreThan150000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan0",
-								"label": "groupCoverageMoreThan0",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan250000",
-								"label": "groupCoverageMoreThan250000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan350000",
-								"label": "groupCoverageMoreThan350000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupCoverageMoreThan500000",
-								"label": "groupCoverageMoreThan500000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns9",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "groupExcessLiability1M",
-								"label": "groupExcessLiability1M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupExcessLiability4M",
-								"label": "groupExcessLiability4M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "groupExcessLiability2M",
-								"label": "groupExcessLiability2M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"input": true,
-								"tableView": true,
-								"key": "groupExcessLiability9M",
-								"label": "groupExcessLiability9M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "groupExcessLiability3M",
-								"label": "groupExcessLiability3M",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "combinedSingalLimit",
-								"calculateValue": "var limit = '100000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
-								"key": "combinedSingalLimit",
-								"type": "hidden",
-								"input": true,
-								"tableView": false,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "annualAggregate",
-								"calculateValue": "var limit = '1,00,000';\nvalue = parseFloat(data['primaryCombinedSingalLimit']) + parseFloat(limit);",
-								"key": "annualAggregate",
-								"type": "hidden",
-								"input": true,
-								"tableView": false,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupPadiFee",
-						"label": "groupPadiFee",
-						"type": "hidden",
-						"lockKey": true
-					}, {
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page5PanelColumns10",
-						"columns": [{
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "propertyDeductibles1000",
-								"label": "propertyDeductibles1000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "propertyDeductibles2500",
-								"label": "propertyDeductibles2500",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"input": true,
-								"tableView": true,
-								"key": "propertyDeductibles5000",
-								"label": "propertyDeductibles5000",
-								"type": "hidden",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"hideLabel": true
-					}],
-					"hideLabel": true,
-					"lockKey": true,
-					"hideOnChildrenHidden": false
 				}],
 				"width": 12,
 				"offset": 0,
@@ -9269,8 +9263,7 @@
 							"defaultValue": "0.00",
 							"clearOnHide": false,
 							"type": "number",
-							"requireDecimal": true,
-							"decimalLimit": 2,
+							"requireDecimal": false,
 							"calculateValue": "value=(data[data[\"liabilityCoverageOption\"]]||0)",
 							"lockKey": true,
 							"disabled": true,
@@ -9293,14 +9286,13 @@
 					"tableView": true,
 					"defaultValue": "0.00",
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateValue": "if((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}",
 					"calculateServer": false,
 					"key": "nonDivingPoolAmount",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9340,7 +9332,7 @@
 							"tableView": false,
 							"defaultValue": "0.00",
 							"delimiter": true,
-							"requireDecimal": true,
+							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
 							"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
@@ -9352,7 +9344,6 @@
 								"eq": "true"
 							},
 							"type": "number",
-							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
@@ -9375,14 +9366,13 @@
 					"tableView": true,
 					"defaultValue": "0.00",
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateValue": "value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)",
 					"calculateServer": false,
 					"key": "Non-OwnedAutoFP",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9396,14 +9386,13 @@
 					"tableView": true,
 					"defaultValue": "0.00",
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateValue": "value=(data[data[\"excessLiabilityCoverage\"]]||0)",
 					"calculateServer": false,
 					"key": "ExcessLiabilityFP",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9417,14 +9406,13 @@
 					"tableView": true,
 					"defaultValue": "0.00",
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
 					"calculateServer": false,
 					"key": "TravelAgentEOFP",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9483,14 +9471,13 @@
 					"tableView": true,
 					"defaultValue": "0.00",
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 500000) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 500000) &&\n  (data[\"propertyCoverageOption\"] == \"cat\")\n) {\n  value = (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 250000) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 250000) &&\n  (data[\"propertyCoverageOption\"] == \"cat\")\n) {\n  value = (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 100000) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 100000) &&\n  (data[\"propertyCoverageOption\"] == \"cat\")\n) {\n  value = (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 0) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else if (((parseFloat(data[\"dspropTotal\"])||0) > 0) && (data[\"propertyCoverageOption\"] == \"cat\")) {\n  value = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0);\n} else {\n  value = 0;\n}",
+					"calculateValue": "if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 500000) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 500000) &&\n  (data[\"propertyCoverageOption\"] == \"cat\")\n) {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 250000) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 250000) &&\n  (data[\"propertyCoverageOption\"] == \"cat\")\n) {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 100000) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 100000) &&\n  (data[\"propertyCoverageOption\"] == \"cat\")\n) {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (\n  ((parseFloat(data[\"dspropTotal\"])||0) > 0) &&\n  (data[\"propertyCoverageOption\"] == \"nonCat\")\n) {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropTotal\"])||0) > 0) && (data[\"propertyCoverageOption\"] == \"cat\")) {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
 					"calculateServer": false,
 					"key": "ContentsFP",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9504,14 +9491,13 @@
 					"tableView": true,
 					"defaultValue": "0.00",
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateValue": "if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 0 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value = (parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else if (\n  (parseFloat(data[\"lossOfBusIncome\"])||0) > 0 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0);\n} else {\n  value = 0;\n}",
 					"calculateServer": false,
 					"key": "LossofBusIncomeFP",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9525,14 +9511,13 @@
 					"tableView": true,
 					"defaultValue": "0.00",
 					"delimiter": true,
-					"requireDecimal": true,
+					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 500000 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value =\n    (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 500000 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value =\n    (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 250000 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value =\n    (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 250000 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value =\n    (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 100000 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value =\n    (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 100000 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value =\n    (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 0 &&\n  data[\"propertyCoverageOption\"] == \"nonCat\"\n) {\n  value =\n    (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else if (\n  (parseFloat(data[\"dspropreplacementvalue\"])||0) > 0 &&\n  data[\"propertyCoverageOption\"] == \"cat\"\n) {\n  value = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0);\n} else {\n  value = 0;\n}",
+					"calculateValue": "if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
 					"calculateServer": false,
 					"key": "BuildingLimitFP",
 					"type": "number",
-					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
@@ -9579,14 +9564,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(parseFloat(data[\"CoverageFP\"])||0)+(parseFloat(data[\"nonDivingPoolAmount\"])||0)+(parseFloat(data[\"MedicalExpenseFP\"])||0)+(parseFloat(data[\"Non-OwnedAutoFP\"]||0))+(parseFloat(data[\"ExcessLiabilityFP\"])||0)+(parseFloat(data[\"TravelAgentEOFP\"])||0)",
+						"calculateValue": "value=((parseFloat(data[\"CoverageFP\"])||0)+(parseFloat(data[\"nonDivingPoolAmount\"])||0)+(parseFloat(data[\"MedicalExpenseFP\"])||0)+(parseFloat(data[\"Non-OwnedAutoFP\"]||0))+(parseFloat(data[\"ExcessLiabilityFP\"])||0)+(parseFloat(data[\"TravelAgentEOFP\"])||0)).toFixed(0)",
 						"calculateServer": false,
 						"key": "liabilityCoveragesTotalPL",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9619,14 +9603,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "value=(parseFloat(data[\"ContentsFP\"])||0)+(parseFloat(data[\"LossofBusIncomeFP\"])||0)+(parseFloat(data[\"BuildingLimitFP\"])||0)",
 						"calculateServer": false,
 						"key": "propertyCoveragesTotalPL",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9659,14 +9642,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)+(parseFloat(data[\"propertyCoveragesTotalPL\"])||0)",
+						"calculateValue": "value=((parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)+(parseFloat(data[\"propertyCoveragesTotalPL\"])||0)).toFixed(0)",
 						"calculateServer": false,
 						"key": "liabilityPropertyCoveragesTotalPL",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9704,10 +9686,10 @@
 						"calculateServer": false,
 						"key": "proRataPercentage",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 3
 					}]
 				}, {
 					"components": [{
@@ -9719,14 +9701,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)",
+						"calculateValue": "value=((parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
 						"calculateServer": false,
 						"key": "liabilityProRataPremium",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9759,14 +9740,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)",
+						"calculateValue": "value=((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
 						"calculateServer": false,
 						"key": "propertyProRataPremium",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9799,14 +9779,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(parseFloat(data[\"liabilityPropertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)",
+						"calculateValue": "value=((parseFloat(data[\"liabilityPropertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
 						"calculateServer": false,
 						"key": "ProRataPremium",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9859,14 +9838,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100;",
+						"calculateValue": "value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100).toFixed(0);",
 						"calculateServer": false,
 						"key": "PropTax",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9919,14 +9897,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100;",
+						"calculateValue": "value = ((parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100).toFixed(0);",
 						"calculateServer": false,
 						"key": "LiaTax",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -9960,14 +9937,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "var additionalLocationArray =\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvalue = 0;\n\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALProRataPremium)||0);\n}",
 						"calculateServer": false,
 						"key": "AddILocPremium",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -10001,14 +9977,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "var additionalLocationArray = \"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvar value = 0;\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n}",
 						"calculateServer": false,
 						"key": "AddILocTax",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -10041,14 +10016,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "value = (parseFloat(data[\"groupTotalAmount\"])||0)",
 						"calculateServer": false,
 						"key": "groupProfessionalLiability",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -10081,14 +10055,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "value = data[\"padiFee\"];",
 						"calculateServer": false,
 						"key": "padiFeePL",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -10127,10 +10100,10 @@
 						"calculateServer": false,
 						"key": "propertyDeductiblesPercentage",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 3
 					}]
 				}, {
 					"components": [{
@@ -10142,14 +10115,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100",
+						"calculateValue": "value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100).toFixed(0)",
 						"calculateServer": false,
 						"key": "PropDeductibleCredit",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -10181,14 +10153,13 @@
 						"disabled": true,
 						"tableView": false,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "var amount=0.00;\nif(data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nvalue = amount",
 						"calculateServer": false,
 						"key": "PAORFee",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -10221,14 +10192,13 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "value = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) -(parseFloat(data[\"PropDeductibleCredit\"])||0) ;",
 						"calculateServer": false,
 						"key": "totalAmount",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -10342,7 +10312,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 30,
+	"_vid": 44,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10359,6 +10329,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-15T09:55:42.147Z",
+	"modified": "2020-04-16T07:56:12.903Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
