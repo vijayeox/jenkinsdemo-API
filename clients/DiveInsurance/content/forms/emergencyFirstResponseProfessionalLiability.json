@@ -1347,14 +1347,12 @@
 						"disabled": true,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"customDefaultValue": "value = 0.00",
 						"key": "coverageAmount",
 						"customConditional": "show = false;",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -1453,13 +1451,11 @@
 								"disabled": true,
 								"tableView": false,
 								"delimiter": false,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
-								"customDefaultValue": "value = 0.00",
 								"calculateValue": "value = parseFloat(data.coverageAmount);",
 								"key": "amount",
 								"type": "number",
-								"decimalLimit": 2,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1509,14 +1505,12 @@
 								"disabled": true,
 								"tableView": true,
 								"delimiter": false,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
-								"customDefaultValue": "value = 0.00",
 								"calculateValue": "value = parseFloat(data['amount'] - data['amountPayable']) ;",
 								"key": "balance",
 								"type": "number",
-								"decimalLimit": 2,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -2726,20 +2720,20 @@
 						"inline": false,
 						"tableView": false,
 						"values": [{
-							"label": "Cash",
-							"value": "cash",
-							"shortcut": ""
-						}, {
 							"label": "Money Order",
 							"value": "moneyOrder",
 							"shortcut": ""
 						}, {
-							"label": "Cheque",
-							"value": "cheque",
+							"label": "Check",
+							"value": "check",
 							"shortcut": ""
 						}, {
 							"label": "Credit Card",
 							"value": "creditCard",
+							"shortcut": ""
+						}, {
+							"label": "Other",
+							"value": "other",
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
@@ -2762,77 +2756,136 @@
 					"size": "md"
 				}, {
 					"components": [{
-						"label": "Cheque Number",
-						"mask": false,
-						"spellcheck": true,
+						"title": "Check Details",
+						"theme": "primary",
+						"collapsible": false,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "chequeNumber",
+						"key": "checkDetails",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
-							"eq": "cheque"
+							"eq": "check"
 						},
-						"type": "number",
-						"input": true,
+						"type": "panel",
+						"label": "Check Details",
+						"input": false,
+						"components": [{
+							"label": "Check Number",
+							"mask": false,
+							"spellcheck": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"required": true
+							},
+							"key": "chequeNumber",
+							"type": "number",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Upload Consent Form",
+							"tableView": false,
+							"storage": "base64",
+							"webcam": false,
+							"fileTypes": [{
+								"label": "",
+								"value": ""
+							}],
+							"clearOnHide": false,
+							"calculateServer": false,
+							"key": "chequeConsentForm",
+							"type": "file",
+							"input": true
+						}],
 						"hideOnChildrenHidden": false
 					}, {
-						"type": "convergepay",
-						"key": "custom",
-						"label": "custom",
-						"input": true,
-						"amount_field": "amountPayable",
+						"title": "Card Details",
+						"theme": "primary",
+						"collapsible": false,
+						"tableView": false,
+						"key": "cardDetails",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
 							"eq": "creditCard"
 						},
-						"tableView": false,
+						"type": "panel",
+						"label": "Card Details",
+						"input": false,
+						"components": [{
+							"label": "Transaction ID",
+							"spellcheck": false,
+							"disabled": true,
+							"tableView": false,
+							"clearOnHide": false,
+							"calculateValue": "value = data.transaction_id",
+							"calculateServer": false,
+							"key": "transactionId",
+							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+							"type": "textfield",
+							"input": true
+						}, {
+							"type": "convergepay",
+							"key": "creditcardPayment",
+							"amount_field": "amountPayable",
+							"label": "custom",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Content",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7Content",
+							"conditional": {
+								"show": true,
+								"when": "paymentOptions",
+								"eq": "creditCard"
+							},
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true,
+							"hideOnChildrenHidden": false
+						}],
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "Order ID",
-						"spellcheck": true,
-						"tableView": true,
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "orderId",
+						"title": "Money Order Details",
+						"theme": "primary",
+						"collapsible": false,
+						"tableView": false,
+						"key": "moneyOrderDetai",
 						"conditional": {
 							"show": true,
 							"when": "paymentOptions",
 							"eq": "moneyOrder"
 						},
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Content",
-						"attrs": [{
-							"value": "",
-							"attr": ""
-						}],
-						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "page7Content",
-						"conditional": {
-							"show": true,
-							"when": "paymentOptions",
-							"eq": "creditCard"
-						},
-						"type": "htmlelement",
+						"type": "panel",
+						"label": "Money Order Details",
 						"input": false,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"components": [{
+							"label": "Order ID",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"required": true
+							},
+							"key": "orderId",
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}]
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2897,16 +2950,6 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
-			"label": "Notes:",
-			"autoExpand": false,
-			"autofocus": true,
-			"spellcheck": true,
-			"tableView": true,
-			"calculateServer": false,
-			"key": "notes",
-			"type": "textarea",
-			"input": true
-		}, {
 			"label": "la",
 			"tableView": false,
 			"key": "pagenew",
@@ -2967,7 +3010,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 432,
+	"_vid": 434,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3051,7 +3094,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-13T17:29:20.590Z",
+	"modified": "2020-04-16T10:23:03.173Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
