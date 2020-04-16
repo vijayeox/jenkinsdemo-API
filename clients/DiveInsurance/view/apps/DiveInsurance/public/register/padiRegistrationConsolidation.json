@@ -1155,6 +1155,7 @@
 							"placeholder": " ",
 							"spellcheck": true,
 							"tableView": true,
+							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please enter a valid mobile phone number"
@@ -1233,7 +1234,11 @@
 					"placeholder": " ",
 					"spellcheck": true,
 					"tableView": true,
-					"errorLabel": "Please enter a valid Fax number",
+					"calculateServer": false,
+					"validate": {
+						"customMessage": "Please enter a valid Fax number"
+					},
+					"errorLabel": "Fax",
 					"key": "fax",
 					"type": "phoneNumber",
 					"input": true,
@@ -1276,7 +1281,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 78,
+	"_vid": 80,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1290,6 +1295,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-04-14T14:34:55.787Z",
+	"modified": "2020-04-16T15:16:38.862Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
