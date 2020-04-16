@@ -298,7 +298,9 @@ class AppController extends AbstractApiController
                 $path .= substr($path, -1) == '/' ? '' : '/';
                 if(isset($params['parameters']) && !empty($params['parameters'])){
                     $params['parameters'] = strtolower($params['parameters']);
+                    $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
                     $params['parameters'] = rtrim($params['parameters'],",");
+                    $params['parameters'] = ltrim($params['parameters'],",");
                     if(strpos($params['parameters'], ',') !== false){
                         $params = explode(",",$params['parameters']);
                     }else{
