@@ -480,7 +480,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         foreach ($policyDocuments as $key => $value) {
                             $documents[$key] = $value;
                         }
-                    }else if($temp['product'] == 'Individual Professional Liability'){
+                    }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
                         $documents['coi_document']  = array($policyDocuments);
                     }else{
                         $documents['coi_document']  = $policyDocuments;
