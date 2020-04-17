@@ -18,8 +18,8 @@ class RenewalRateCard extends RateCard
     {
         $this->logger->info("CLEAN DATA");
         if(isset($data['data'])){
-            if(is_string($data['data']['data'])){
-                $data['form_data'] = json_decode($data['data']['data'],true);
+            if(is_string($data['data'])){
+                $data['form_data'] = json_decode($data['data'],true);
             }
         }
         //Set Date Period

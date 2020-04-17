@@ -535,6 +535,7 @@ class CommandService extends AbstractService
             $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
             $data['template'] = $result['template'];
             $data['formName'] = $result['formName'];
+            $data['id'] = $result['id'];
             return $data;
         } else {
             throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found");

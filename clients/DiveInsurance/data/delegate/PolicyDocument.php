@@ -480,7 +480,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         foreach ($policyDocuments as $key => $value) {
                             $documents[$key] = $value;
                         }
-                    }else if($temp['product'] == 'Individual Professional Liability'){
+                    }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
                         $documents['coi_document']  = array($policyDocuments);
                     }else{
                         $documents['coi_document']  = $policyDocuments;
@@ -601,7 +601,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['endorsementExcessLiability'])){
                     $data['endorsementExcessLiability'] = array();
                 }
-                if($this->$type != 'endorsementQuote'){
+                if($this->type != 'endorsementQuote'){
                     if(is_string($data['endorsement_options'])){
                     $data['endorsement_options'] = json_decode($data['endorsement_options'],true);
                     }

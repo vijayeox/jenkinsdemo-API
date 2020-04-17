@@ -313,11 +313,6 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "panelPanel4",
-			"customConditional": "show =\n  (data.verified == true || data.verified == \"true\") &&\n  (data.policy_exists == false || data.policy_exists == \"false\") &&\n  (data.padiVerified == true || data.padiVerified == \"true\") &&\n  (data.padiNotFound == false || data.padiNotFound == \"false\");",
-			"conditional": {
-				"show": true,
-				"when": "html"
-			},
 			"type": "panel",
 			"label": "Personal Information",
 			"input": false,
@@ -1918,7 +1913,8 @@
 			"type": "textarea",
 			"input": true
 		}, {
-			"title": "    ",
+			"title": "Approve/Reject the Application",
+			"theme": "primary",
 			"breadcrumbClickable": false,
 			"buttonSettings": {
 				"previous": true,
@@ -1929,12 +1925,13 @@
 			"tableView": false,
 			"key": "page77Panel",
 			"type": "panel",
-			"label": "    ",
+			"label": "Approve/Reject the Application",
 			"input": false,
 			"components": [{
 				"label": "Approve/Reject the Application",
 				"optionsLabelPosition": "top",
 				"inline": true,
+				"hideLabel": true,
 				"autofocus": true,
 				"tableView": true,
 				"values": [{
@@ -1985,7 +1982,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 96,
+	"_vid": 98,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2006,7 +2003,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-16T10:27:11.771Z",
+	"modified": "2020-04-17T00:35:58.854Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
