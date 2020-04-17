@@ -1109,7 +1109,7 @@
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
-								"calculateValue": "var temp = (parseFloat(data['endorAmount']) - parseFloat(data['endorAmountPayable'])) ;\nif(parseInt(temp) < 0){\n  value = 0;\n} else {\n  value = temp;\n}",
+								"calculateValue": "var temp = (parseFloat(data['endorAmount']) - parseFloat(data['endorAmountPayable'])) ;\nif(parseInt(temp) < 0){\n  value = 0;\n} else {\n  value = temp ? temp : 0 ;\n}",
 								"calculateServer": false,
 								"key": "balanceEndor",
 								"type": "number",
@@ -1179,11 +1179,22 @@
 				}],
 				"path": "techrecPanel"
 			}, {
-				"key": "page5Panel",
-				"input": false,
 				"title": "Attachments",
 				"theme": "primary",
+				"breadcrumb": "none",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
 				"tableView": false,
+				"key": "page5Panel",
+				"customConditional": "if(data.CSRReviewRequired == true || data.CSRReviewRequired == \"true\"){\n  show = false;\n}",
+				"type": "panel",
+				"label": "Attachments",
+				"input": false,
 				"components": [{
 					"label": "Attachments",
 					"hideLabel": true,
@@ -1215,9 +1226,6 @@
 					"input": true,
 					"tableView": false
 				}],
-				"type": "panel",
-				"breadcrumb": "none",
-				"label": "Panel",
 				"path": "page5Panel"
 			}, {
 				"title": "Attachments",
@@ -1983,7 +1991,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 99,
+	"_vid": 102,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2004,7 +2012,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-17T02:52:14.176Z",
+	"modified": "2020-04-17T05:36:20.823Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
