@@ -1175,8 +1175,16 @@
 			"path": "panelPanel4"
 		}],
 		"type": "panel",
-		"label": "Panel",
-		"path": "panel"
+		"label": "Personal Information",
+		"path": "panel",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"pageNaN\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);"
 	}, {
 		"type": "panel",
 		"title": "Coverage",
@@ -1951,15 +1959,18 @@
 									"format": "yyyy-MM-dd",
 									"tableView": true,
 									"datePicker": {
+										"minDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
 										"datepickerMode": "day"
 									},
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
 									},
+									"calculateServer": false,
 									"validate": {
-										"required": true,
-										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+										"required": true
 									},
 									"key": "date_of_incident",
 									"type": "datetime",
@@ -1979,7 +1990,9 @@
 										"hourIncrement": 1,
 										"minuteIncrement": 1,
 										"time_24hr": true,
-										"minDate": null,
+										"minDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
 										"maxDate": null
 									},
 									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
@@ -3037,7 +3050,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 463,
+	"_vid": 465,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3121,7 +3134,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-17T04:33:03.713Z",
+	"modified": "2020-04-17T05:26:19.248Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
