@@ -571,9 +571,6 @@
 				"hideLabel": true
 			}, {
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "panelColumns2",
 				"columns": [{
 					"components": [{
 						"label": "First Name",
@@ -638,21 +635,28 @@
 					"pull": 0,
 					"size": "md"
 				}],
-				"type": "columns",
-				"conditional": {
-					"show": "true",
-					"when": "padiVerified",
-					"eq": "true"
-				},
 				"hideLabel": true,
+				"tableView": false,
+				"key": "panelColumns2",
+				"type": "columns",
+				"input": false,
 				"path": "panelColumns2"
 			}]
 		}, {
-			"key": "panelPanel",
-			"input": false,
 			"title": "Mailing Address",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "panelPanel",
+			"type": "panel",
+			"label": "Mailing Address",
+			"input": false,
 			"components": [{
 				"label": "Columns",
 				"input": false,
@@ -782,11 +786,20 @@
 				"hideLabel": true,
 				"path": "panelPanelColumns"
 			}, {
-				"key": "panelPanel3",
-				"input": false,
 				"title": "Physical Address",
 				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
 				"tableView": false,
+				"key": "panelPanel3",
+				"type": "panel",
+				"label": "Physical Address",
+				"input": false,
 				"components": [{
 					"label": "Same as mailing address",
 					"tableView": true,
@@ -930,14 +943,7 @@
 					"customConditional": "show = (data['sameasmailingaddress'] == false)",
 					"hideLabel": true,
 					"path": "panelPanel3Columns2"
-				}],
-				"type": "panel",
-				"conditional": {
-					"show": "true",
-					"when": "padiVerified",
-					"eq": "true"
-				},
-				"label": "Panel"
+				}]
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -1204,9 +1210,7 @@
 				"hideLabel": true,
 				"path": "panelPanel3Columns"
 			}],
-			"type": "panel",
 			"lockKey": true,
-			"label": "Panel",
 			"path": "panelPanel"
 		}],
 		"type": "panel",
@@ -3242,7 +3246,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 77,
+	"_vid": 78,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3261,6 +3265,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-16T10:16:45.640Z",
+	"modified": "2020-04-17T00:34:40.270Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

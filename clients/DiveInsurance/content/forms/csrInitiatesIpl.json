@@ -275,34 +275,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "style",
-							"value": "text-align: center;background-color: #fcf4ac;color: black;border-radius: 10px;line-height: 30px;"
-						}],
-						"content": "The PADI could not be verified by the system. Please check with the PADI Office and select the PADI Verified checkbox below.",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "PadiNotFoundCSRMessage",
-						"customConditional": "show = ((data['padiNotFound']==true||data['padiNotFound']=='true') && \n    (data['verified'] == true || data['verified']=='true') && \n    (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == 'true' || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] === true) &&\n    (data.policy_exists !== 'true' && data.policy_exists !== true));",
-						"type": "htmlelement",
-						"input": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "PADI Verified",
-						"tableView": false,
-						"defaultValue": false,
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "padiVerifiedCSRCheck",
-						"customConditional": "show = ((data['padiNotFound']==true||data['padiNotFound']=='true') && \n    (data['verified'] == true || data['verified']=='true') && \n    (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == 'true' || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] === true) &&\n    (data.policy_exists !== 'true' && data.policy_exists !== true));",
-						"type": "checkbox",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}, {
 						"key": "panelColumnsContent4",
 						"label": "Content",
 						"input": false,
@@ -4235,6 +4207,43 @@
 			"type": "textarea",
 			"input": true
 		}, {
+			"label": "aw",
+			"tableView": false,
+			"key": "aw",
+			"customConditional": "show =\n  (data.padiNotFound == true || data.padiNotFound == \"true\") &&\n  (data.verified == true || data.verified == \"true\") &&\n  (data.privileges.MANAGE_POLICY_APPROVAL_WRITE == \"true\" ||\n    data.privileges.MANAGE_POLICY_APPROVAL_WRITE === true) &&\n  (data.policy_exists !== \"true\" || data.policy_exists !== true);",
+			"type": "well",
+			"input": false,
+			"components": [{
+				"label": "Please process the payment and approve",
+				"tag": "h4",
+				"attrs": [{
+					"attr": "style",
+					"value": "background-color:#FFEB3B;font-size:20px; padding:10px;font-weight:400"
+				}],
+				"content": "The PADI used for the policy could not be verified by the system. </br>\nPlease check with the PADI Office and select the PADI Verified checkbox below.",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page6Pleaseprocessthepaymentandapprove1",
+				"customConditional": "show = (parseFloat(data.balance) > 0);",
+				"type": "htmlelement",
+				"input": false
+			}, {
+				"label": "PADI Verified",
+				"customClass": "bigText",
+				"tableView": false,
+				"defaultValue": false,
+				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n} else {\n  data.padiVerified = false;\n}"
+				},
+				"key": "padiVerifiedCSRCheck",
+				"type": "checkbox",
+				"input": true,
+				"hideOnChildrenHidden": false
+			}]
+		}, {
 			"title": "Approve/Reject the Application",
 			"theme": "primary",
 			"breadcrumbClickable": false,
@@ -4305,7 +4314,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 254,
+	"_vid": 255,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4326,6 +4335,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-16T10:18:51.099Z",
+	"modified": "2020-04-17T00:30:17.716Z",
 	"machineName": "testdivehub:csrInitiates"
 }
