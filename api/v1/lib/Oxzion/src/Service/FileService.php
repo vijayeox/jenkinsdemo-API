@@ -57,14 +57,11 @@ class FileService extends AbstractService
         } else {
             $formId = null;
         }
-        if (isset($data['activity_id'])) {
-            $activityId = $data['activity_id'];
-        } else {
-            $activityId = null;
-        }
+
         $data['uuid'] = $uuid = isset($data['uuid']) && UuidUtil::isValidUuid($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
+
         if (!$entityId && isset($data['entity_name'])) {
             $select = "select id from ox_app_entity where name = :entityName";
             $params = array('entityName' => $data['entity_name']);
@@ -178,8 +175,11 @@ class FileService extends AbstractService
         $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         if (isset($data['workflow_instance_id'])) {
             $select = "SELECT ox_file.* from ox_file where ox_file.workflow_instance_id = " . $data['workflow_instance_id'];
-            $obj = $this->executeQuerywithParams($select)->toArray()[0];
-            if (is_null($obj)) {
+            $obj = $this->executeQuerywithParams($select)->toArray();
+            if(!empty($obj)&& !is_null($obj)) {
+                $obj = $obj[0];
+            }
+            else {
                 throw new EntityNotFoundException("File Id not found -- " . $id);
             }
         } else {
@@ -193,24 +193,6 @@ class FileService extends AbstractService
         $latestcheck = 0;
         if (isset($data['islatest']) && $data['islatest'] == 0) {
             $latestcheck = 1;
-        }
-        if (isset($data['form_uuid'])) {
-            $data['form_id'] = $this->getIdFromUuid('ox_form', $data['form_uuid']);
-            unset($data['form_uuid']);
-        }
-        if (isset($data['app_uuid'])) {
-            $data['app_id'] = $this->getIdFromUuid('ox_app', $data['app_uuid']);
-            unset($data['app_uuid']);
-        }
-        if (isset($data['form_id'])) {
-            $formId = $data['form_id'];
-        } else {
-            $formId = null;
-        }
-        if (isset($data['activity_id'])) {
-            $activityId = $data['activity_id'];
-        } else {
-            $activityId = null;
         }
 
         $fileObject = json_decode($obj['data'], true);
@@ -246,7 +228,6 @@ class FileService extends AbstractService
             $file->exchangeArray($fileObject);
             $file->validate();
             $count = $this->table->save($file);
-
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
                 $query = "Delete from ox_file_attribute where file_id = :fileId";
@@ -270,7 +251,7 @@ class FileService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $id;
+        return $obj['id'];
     }
 
     /**
@@ -412,6 +393,7 @@ class FileService extends AbstractService
             //     }
             // }
             foreach ($fields as $field) {
+
                 if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
                     // Update the existing record
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
@@ -419,14 +401,7 @@ class FileService extends AbstractService
                     // Insert the Record
                     $keyValueFields[$i]['id'] = null;
                 }
-                $fieldProperties = json_decode($field['template'], true);
-                //$this->logger->info("FIELD PROPERTIES - " . json_encode($fieldProperties));
-                if (isset($fieldProperties['persistent']) && !$fieldProperties['persistent']) {
-                    if (isset($fieldData[$field['name']])) {
-                        unset($fieldData[$field['name']]);
-                    }
-                    continue;
-                }
+
                 if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
                 }

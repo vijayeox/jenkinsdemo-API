@@ -1175,8 +1175,16 @@
 			"path": "panelPanel4"
 		}],
 		"type": "panel",
-		"label": "Panel",
-		"path": "panel"
+		"label": "Personal Information",
+		"path": "panel",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"pageNaN\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);"
 	}, {
 		"type": "panel",
 		"title": "Coverage",
@@ -1542,7 +1550,7 @@
 			}],
 			"path": "pageNaNPanel"
 		}, {
-			"title": "Policy Holder Attachments",
+			"title": "  User Attachments",
 			"theme": "primary",
 			"breadcrumbClickable": false,
 			"buttonSettings": {
@@ -1553,11 +1561,19 @@
 			"collapsible": false,
 			"tableView": true,
 			"key": "techrecPanel",
-			"customConditional": "if (data.privileges) {\n  show =\n    data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n    data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] &&\n    data.attachments !='' &&\n    data.initiatedByCsr != true\n      ? true\n      : false;\n} else {\n  show = false;\n}",
+			"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
-			"label": "Policy Holder Attachments",
+			"label": "  ",
 			"input": false,
 			"components": [{
+				"label": "documentFields",
+				"calculateValue": "value = [\"attachments1\"];",
+				"calculateServer": false,
+				"key": "documentFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"type": "documentviewer",
 				"key": "attachments1",
 				"calculateValue": "value = (data['attachments'])",
@@ -1567,21 +1583,13 @@
 				"dattype": "documentviewer",
 				"datatype": "documentviewer",
 				"data_type": "documentviewer",
-				"label": "Policy Holder Attachments",
+				"label": "Attachments",
 				"hideLabel": true,
 				"inputType": "documentviewer",
 				"input": 1,
 				"tableView": false,
 				"protected": true,
 				"persistent": false
-			}, {
-				"label": "documentFields",
-				"calculateValue": "value = [\"attachments1\"];",
-				"calculateServer": false,
-				"key": "documentFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}],
 			"path": "techrecPanel"
 		}, {
@@ -1596,7 +1604,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "page3PanelPanel",
-			"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = true;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (!(data.CSRReviewRequired == true || data.CSRReviewRequired == \"true\")) {\n  show = true;\n} else {\n  show = false;\n}\nconsole.log(\"Please\");",
 			"type": "panel",
 			"label": "Attachments",
 			"input": false,
@@ -1625,7 +1633,8 @@
 				"input": true
 			}, {
 				"label": "attachmentFields",
-				"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\"];",
+				"customDefaultValue": "value = [\"attachments\"];",
+				"calculateValue": "value = [\"attachments\"];",
 				"calculateServer": false,
 				"key": "attachmentsFieldnames",
 				"type": "hidden",
@@ -1645,7 +1654,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "CsrAttachments",
-			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && \n          data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && \n          data.CSRReviewRequired) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data.CSRReviewRequired) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
 			"label": "Attachments",
 			"input": false,
@@ -1672,7 +1681,9 @@
 				"input": true
 			}, {
 				"label": "csrAttachmentsFieldnames",
+				"customDefaultValue": "value = [\"csr_attachments\"];",
 				"calculateValue": "value = [\"csr_attachments\"];",
+				"calculateServer": false,
 				"key": "csrAttachmentsFieldnames",
 				"type": "hidden",
 				"input": true,
@@ -1948,15 +1959,18 @@
 									"format": "yyyy-MM-dd",
 									"tableView": true,
 									"datePicker": {
+										"minDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
 										"datepickerMode": "day"
 									},
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
 									},
+									"calculateServer": false,
 									"validate": {
-										"required": true,
-										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+										"required": true
 									},
 									"key": "date_of_incident",
 									"type": "datetime",
@@ -1976,7 +1990,9 @@
 										"hourIncrement": 1,
 										"minuteIncrement": 1,
 										"time_24hr": true,
-										"minDate": null,
+										"minDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
 										"maxDate": null
 									},
 									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
@@ -2944,7 +2960,6 @@
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "page6Pleaseprocessthepaymentandapprove1",
-				"customConditional": "show = (parseFloat(data.balance) > 0);",
 				"type": "htmlelement",
 				"input": false
 			}, {
@@ -2956,7 +2971,7 @@
 				"calculateServer": false,
 				"validate": {
 					"required": true,
-					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n} else {\n  data.padiVerified = false;\n}"
+					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n  data.padiNotFound = false;\n} else {\n  data.padiVerified = false;\n  data.padiNotFound = true;\n}"
 				},
 				"key": "padiVerifiedCSRCheck",
 				"type": "checkbox",
@@ -2987,7 +3002,7 @@
 				"tableView": true,
 				"values": [{
 					"label": "Approved",
-					"value": "approved",
+					"value": "accepted",
 					"shortcut": ""
 				}, {
 					"label": "Rejected",
@@ -3035,7 +3050,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 445,
+	"_vid": 465,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3119,7 +3134,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-17T00:30:13.607Z",
+	"modified": "2020-04-17T05:26:19.248Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

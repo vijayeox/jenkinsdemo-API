@@ -539,7 +539,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 			$optionSetCheck = 1;
                 		if($data['endorsement_options']['modify_personalInformation'] == true || $data['endorsement_options']['modify_coverage'] == true)
                 			$personalOptionSetCheck = 1;
-                		$this->logger->info("array endorsement_options check value =".$data['endorsement_options']);
+                		$this->logger->info("array endorsement_options check value =".print_r($data['endorsement_options'],true));
                 	}
                 	if(is_string($data['endorsement_options']))
                 	{

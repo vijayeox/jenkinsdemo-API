@@ -1943,6 +1943,7 @@
 					"value": "rejected",
 					"shortcut": ""
 				}],
+				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please Approve/Reject the Application"
@@ -1982,7 +1983,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 98,
+	"_vid": 99,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2003,7 +2004,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-17T00:35:58.854Z",
+	"modified": "2020-04-17T02:52:14.176Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

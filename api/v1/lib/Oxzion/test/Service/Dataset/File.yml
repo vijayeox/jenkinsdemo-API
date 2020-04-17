@@ -217,6 +217,14 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 2
+  - id: 9
+    workflow_deployment_id: 1
+    process_instance_id: "a1f9af89-8113-4b15-a647-96991f1a98f1"
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
 ox_app_menu:
   - id: 1
     uuid: "7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4"
@@ -393,6 +401,15 @@ ox_file:
     org_id: 1
     data: "New File Data with different Workflow- Latest"
     uuid: "39bcde37-1c2a-4461-800d-a5ab4b801491"
+    date_created: "2019-06-26 10:00:00"
+    created_by: 2
+    entity_id: 1
+    latest: 1
+  - id: 19
+    workflow_instance_id: 9
+    org_id: 1
+    data: '{"firstname" : "brian","email" : "brian@gmail.com"}'
+    uuid: "553eae5b-db37-4fa9-94a2-21272aaae11e"
     date_created: "2019-06-26 10:00:00"
     created_by: 2
     entity_id: 1
