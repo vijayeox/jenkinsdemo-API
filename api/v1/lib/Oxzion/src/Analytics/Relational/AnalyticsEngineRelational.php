@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Analytics\Relational;
 
+use Oxzion\Analytics\AnalyticsAbstract;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Oxzion\Auth\AuthContext;
@@ -8,16 +9,17 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Analytics\AnalyticsPostProcessing;
 use Zend\Db\ResultSet\ResultSet;
 
-class AnalyticsEngineRelational {
-	private $dbAdapter;
-	private $dbConfig;
+class AnalyticsEngineRelational extends AnalyticsAbstract {
+	protected $dbAdapter;
+	protected $dbConfig;
 
-    public function __construct($dbConfig) {
+    public function __construct($dbConfig,$appDBAdapter,$appConfig)  {
 		$this->dbConfig = $dbConfig;
-        $this->dbAdapter = new Adapter($dbConfig);
+		$this->dbAdapter = new Adapter($dbConfig);
+		parent::__construct($dbConfig,$appDBAdapter,$appConfig);
     }
 
-    public function runQuery($app_name,$entity_name,$parameters)
+    public function getData($app_name,$entity_name,$parameters)
     {
         try {
 			
@@ -32,9 +34,7 @@ class AnalyticsEngineRelational {
 			} else {
 				$formatedPara = $this->formatQuery($parameters);
 				$result = $this->getResultsFromPara($orgId,$app_name,$entity_name,$formatedPara);
-			}
-			if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
-				$finalResult['data'] = AnalyticsPostProcessing::postProcess($finalResult['data'],$parameters);
+				$finalResult['data'] = $result;
 			}
 			return $finalResult;
 			
