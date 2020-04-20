@@ -87,12 +87,6 @@ class FileIndexerControllerTest extends ControllerTest
                 'latest' => '1',
                 'org_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
-                'user_id' => NULL,
-                'workflow_instance_id' => '1',
-                'status' => 'In Progress',
-                'activity_instance_id' => '[activityInstanceId]',
-                'workflow_name' => 'Test Workflow 1',
-                'activities' => '{"Task" : "In Progress","Test Form 2" : "In Progress"}',
                 'field3' => 3,
                 'field4' => 4,
             ),
@@ -124,7 +118,7 @@ class FileIndexerControllerTest extends ControllerTest
               '_seq_no' => 14,
               '_primary_term' => 1,
               'found' => true,
-              '_source' => 
+              '_source' =>
               array (
                 'id' => '101',
                 'app_name' => 'SampleApp',
@@ -133,15 +127,8 @@ class FileIndexerControllerTest extends ControllerTest
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
                 'parent_id' => NULL,
-                'latest' => '1',
                 'org_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
-                'user_id' => NULL,
-                'workflow_instance_id' => '1',
-                'status' => 'In Progress',
-                'activity_instance_id' => '[activityInstanceId]',
-                'workflow_name' => 'Test Workflow 1',
-                'activities' => '{"Task" : "In Progress","Test Form 2" : "In Progress"}',
                 'field1' => 3,
                 'field2' => 4,
             ),
@@ -157,8 +144,8 @@ class FileIndexerControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $data['id']);
-        $this->arrayHasKey('Task', json_decode($content['data']['activities'],true));
-        $this->assertEquals($content['data']['workflow_name'], 'Test Workflow 1');
+        $this->arrayHasKey($content['data']['org_id'],1);
+        $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
     }
 
     public function testCreateScenario3()
@@ -189,12 +176,6 @@ class FileIndexerControllerTest extends ControllerTest
                 'latest' => '1',
                 'org_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
-                'user_id' => NULL,
-                'workflow_instance_id' => NULL,
-                'status' => NULL,
-                'activity_instance_id' => NULL,
-                'workflow_name' => NULL,
-                'activities' => NULL,
                 'some key' => 'some value ',
             ),
           ))));
@@ -210,7 +191,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $data['id']);
         $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
-        $this->assertEquals($content['data']['activities'], null);
+        $this->assertEquals($content['data']['some key'], 'some value ');
     }
 
     public function testCreateScenario4()
@@ -218,33 +199,6 @@ class FileIndexerControllerTest extends ControllerTest
         //Scenario where file id does not exist
         $this->initAuthToken($this->adminUser);
         $data = ['id' => 35];
-        $this->dispatch('/fileindexer', 'POST', $data);
-        if (enableElastic==0) {
-            $mockRestClient = $this->getMockRestClientForFileIndexerService();
-            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/35")->once()->andReturn(array("body" => json_encode(array (
-              '_index' => 'sampleapp_index',
-              '_type' => '_doc',
-              '_id' => '35',
-              'found' => false
-          ))));
-        }
-        if(enableActiveMQ == 0){
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
-        }
-        $this->assertResponseStatusCode(400);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('index');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Failure to Index File ');
-    }
-
-    public function testCreateScenario5()
-    {
-        //where  file.latest = 0
-        $this->initAuthToken($this->adminUser);
-        $data = ['id' => 104];
         $this->dispatch('/fileindexer', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
