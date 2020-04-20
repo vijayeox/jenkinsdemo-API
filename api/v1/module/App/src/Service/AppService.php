@@ -215,7 +215,7 @@ class AppService extends AbstractService
                         break;
                     case 'form': $this->processForm($ymlData, $path);
                         break;
-                    case 'menu': $this->processMenu($ymlData);
+                    case 'menu': $this->processMenu($ymlData, $path);
                         break;
                     case 'page': $this->processPage($ymlData, $path);
                         break;
@@ -303,7 +303,7 @@ class AppService extends AbstractService
         }     
     }
 
-    public function processMenu(&$yamlData)
+    public function processMenu(&$yamlData, $path)
     {
         $this->logger->info("Deploy App - Process Menu with YamlData ");
         if (isset($yamlData['menu'])) {
@@ -317,14 +317,17 @@ class AppService extends AbstractService
                 $menuUpdated = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 if ($menuUpdated == 0) {
                     $count = $this->menuItemService->saveMenuItem($appUuid, $menu);
-
                 }
+                if (isset($menu['page_name']) && !empty($menu['page_name'])) {
+                    $menu['page'] = Yaml::parse(file_get_contents($path . 'content/pages/' . $menu['page_name']));
+                }
+                $this->logger->info('The menu data is: '.print_r($menu, true));
                 $page = $menu['page'];
                 if (isset($menu['page_id'])) {
                     $pageId = $menu['page_id'];
                 } else {
                     $pageId = null;
-                    $page['uuid'] = UuidUtil::uuid();
+                    $page['uuid'] = isset($page['uuid']) ? $page['uuid'] :UuidUtil::uuid();
                 }
                 $routedata = array("appId" => $appUuid, "orgId" => $yamlData['org'][0]['uuid']);
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
@@ -508,6 +511,16 @@ class AppService extends AbstractService
         if (file_exists($formsTarget)) {
             $this->setupLink($formsTarget, $formlink);
         }
+
+        $formlink = $this->config['PAGE_FOLDER'] . $appId;
+        $formsTarget = $path . "content/pages";
+        if (is_link($formlink)) {
+            FileUtils::unlink($formlink);
+        }
+        if (file_exists($formsTarget)) {
+            $this->setupLink($formsTarget, $formlink);
+        }
+
         if ($orgId) {
             $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
             $target = $path . "data/template";

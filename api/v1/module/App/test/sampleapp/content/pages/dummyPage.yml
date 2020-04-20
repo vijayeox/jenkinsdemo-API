@@ -1,0 +1,7 @@
+name: Dashboard
+description: 'Shows dashboard'
+content:
+    -
+        type: Dashboard
+        content:
+            uuid: 4796e7fe-50b5-469c-9737-35f3921891ba
