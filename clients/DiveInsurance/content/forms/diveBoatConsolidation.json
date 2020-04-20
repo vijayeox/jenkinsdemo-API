@@ -4714,13 +4714,14 @@
 				"customConditional": "if (data.privileges){\n  if(data.attachments !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 				"datatype": "documentviewer",
 				"data_type": "documentviewer",
-				"label": "Attachments",
+				"label": " ",
 				"hideLabel": true,
 				"inputType": "documentviewer",
 				"input": 1,
 				"tableView": false,
 				"protected": true,
-				"persistent": false
+				"persistent": false,
+				"keyModified": true
 			}],
 			"type": "panel",
 			"lockKey": true,
@@ -5227,7 +5228,7 @@
 						"customConditional": "if (data.privileges){\n  if(row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 						"datatype": "documentviewer",
 						"data_type": "documentviewer",
-						"label": "Attachments",
+						"label": " ",
 						"hideLabel": true,
 						"inputType": "documentviewer",
 						"input": 1,
@@ -8408,7 +8409,7 @@
 				"customConditional": "if (data.privileges){\n  if(typeof(data.csrApprovalAttachments) != 'string' || data.csrApprovalAttachments != ''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 				"datatype": "documentviewer",
 				"data_type": "documentviewer",
-				"label": "Attachments",
+				"label": " ",
 				"hideLabel": true,
 				"inputType": "documentviewer",
 				"input": 1,
@@ -8494,7 +8495,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 398,
+	"_vid": 400,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8512,6 +8513,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-16T14:26:07.042Z",
+	"modified": "2020-04-20T03:47:49.654Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

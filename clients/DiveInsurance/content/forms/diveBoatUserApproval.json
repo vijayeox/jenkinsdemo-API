@@ -33,7 +33,7 @@
 			"key": "documents1",
 			"datatype": "documentviewer",
 			"data_type": "documentviewer",
-			"label": "Quote Information",
+			"label": " ",
 			"calculateValue": "value = (data['documents'])",
 			"hideLabel": true,
 			"inputType": "documentviewer",
@@ -550,7 +550,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 58,
+	"_vid": 59,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -568,6 +568,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-16T14:26:56.093Z",
+	"modified": "2020-04-20T04:00:44.622Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }
