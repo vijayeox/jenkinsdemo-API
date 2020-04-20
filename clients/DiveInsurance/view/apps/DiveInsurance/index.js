@@ -1,15 +1,13 @@
 import osjs from "osjs";
 import { name as applicationName, icon_white } from "./metadata.json";
-import React from "react";
-import ReactDOM from "react-dom";
+import {React,ReactDOM} from "oxziongui";
 import Home from "./home";
 
 // Our launcher
 const register = (core, args, options, metadata) => {
   // Create a new Application instance
   const proc = core.make("osjs/application", { args, options, metadata });
-  proc
-    .createWindow({
+  proc.createWindow({
       id: "Window_DiveInsurance",
       title: metadata.title.en_EN,
       icon: proc.resource(icon_white),
@@ -27,9 +25,7 @@ const register = (core, args, options, metadata) => {
     })
     .on("destroy", () => proc.destroy())
     .render($content => ReactDOM.render(<Home args={core} params={args} proc={proc} />, $content));
-
   return proc;
 };
-
 // Creates the internal callback function when OS.js launches an application
 osjs.register(applicationName, register);

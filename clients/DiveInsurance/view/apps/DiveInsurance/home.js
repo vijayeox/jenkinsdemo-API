@@ -1,7 +1,5 @@
-import React from "react";
+import {React,ReactDOM,LeftMenuTemplate,FormRender} from "oxziongui";
 import { appId as application_id } from "./metadata.json";
-import LeftMenuTemplate from "OxzionGUI/LeftMenuTemplate";
-import FormRender from "OxzionGUI/components/App/FormRender";
 import "./index.scss";
 
 class Home extends React.Component {
