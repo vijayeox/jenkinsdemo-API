@@ -140,7 +140,7 @@ content:
                             type: Form
                             url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{disableReinstate}}'' == ''false'') && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '((''{{disableReinstate}}'' == ''false'') || (''{{disableReinstate}}'' == ''undefined'')) && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
