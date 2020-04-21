@@ -111,16 +111,13 @@ def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
           <camunda:script scriptFormat="groovy">def variables = execution.getVariables()
 def workflowId = variables.workflowId
 
-if(fileId){
-  execution.setVariable("previous_fileId",fileId)
-} 
-
 if(workflowId){
   execution.setVariable("parent_workflow_id",workflowId)
 execution.setVariable("parentWorkflowInstanceId",execution.processInstanceId)
 
 }
 execution.removeVariable("workflowId")
+execution.removeVariable("previous_fileId")
 execution.removeVariable("approved")
 execution.setVariable("process_reminder",true)</camunda:script>
         </camunda:executionListener>
