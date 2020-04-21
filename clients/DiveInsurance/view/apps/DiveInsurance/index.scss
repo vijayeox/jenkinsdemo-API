@@ -14,6 +14,14 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 }
 // ---SweetAlert2 Fixes (End)---
 
+.k-list-scroller{
+  font-size: 14px;
+}
+
+.k-popup{
+  padding: 0px;
+}
+
 .osjs-window[data-id="Window_DiveInsurance"] {
   $primary-color: #053b6d !important;
 
