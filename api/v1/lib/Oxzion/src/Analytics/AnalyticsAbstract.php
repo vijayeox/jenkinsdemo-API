@@ -76,7 +76,6 @@ class AnalyticsAbstract
         $templateName = $parameters['template'];
         $templateEngine = new TemplateService($this->appConfig,$this->appDBAdapter);
         $templateEngine->init();
-        print_r($resultData['data']);
         $result = $templateEngine->getContent($templateName,$resultData);
         return $result;
     }
