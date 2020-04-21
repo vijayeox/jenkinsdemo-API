@@ -147,6 +147,7 @@ class PocketCard extends PolicyDocument
             $newData[$key]['city'] = $value['city'];
             $newData[$key]['state'] = $value['state'];
             $newData[$key]['zip'] = $value['zip'];
+            $newData[$key]['product_email_id'] = $value['product_email_id'];
             $newData[$key]['entity_name'] = 'Pocket Card Job';
             if(isset($value['business_name']) && $value['business_name']){
                 $newData[$key]['business_name'] = $value['business_name'];
@@ -201,6 +202,7 @@ class PocketCard extends PolicyDocument
                     $response[$i]['city'] = $value['city'];
                     $response[$i]['state'] = $value['state'];
                     $response[$i]['zip'] = $value['zip'];
+                    $response[$i]['product_email_id'] = $value['product_email_id'];
                     $response[$i]['business_name'] = $value['business_name'];
                     $response[$i]['policyStatus'] = $value['policyStatus'];
                     $responseData['data'] = $response;

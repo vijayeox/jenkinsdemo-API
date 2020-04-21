@@ -263,6 +263,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $NewData[0]['city'] = $data['city'];
                     $NewData[0]['state'] = $data['state'];
                     $NewData[0]['zip'] = $data['zip'];
+                    $NewData[0]['product'] = $data['product'];
+                    $NewData[0]['product_email_id'] = $data['product_email_id'];
                     $NewData[0]['entity_name'] = 'Pocket Card Job';
                     $newData = json_encode($NewData);
                     $docdata = array('data' => $newData);
@@ -974,6 +976,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $response[$i]['lastname'] = $value2['lastname'];
                 $response[$i]['start_date'] = $value2['start_date'];
                 $response[$i]['product'] = $data['product'];
+                $response[$i]['product_email_id'] = $data['product_email_id'];
                 $response[$i]['email'] = $data['email'];
                 $response[$i]['certificate_no'] = $data['certificate_no'];
                 $response[$i]['end_date'] = $data['end_date'];
