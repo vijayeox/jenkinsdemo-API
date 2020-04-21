@@ -346,6 +346,8 @@ class CommandService extends AbstractService
                     throw new EntityNotFoundException("Workflow Instance Id Not Found");
                 }
                 $file = $this->fileService->updateFile($data, $result[0]['uuid']);
+            }else if(isset($data['fileId'])){
+                $file = $this->fileService->updateFile($data, $data['fileId']);
             }else if(isset($data['uuid'])){
                 $file = $this->fileService->updateFile($data, $data['uuid']);
             }else{
