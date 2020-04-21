@@ -87,4 +87,13 @@ menu:
 form:
   - { description: description, template: {"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":[]},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":[],"properties":[],"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleFormForTests"}, entity: Padi}
 job:
-    - { import_padi: [{ stored_procedure_name: ox_padi_verification, upload_host_name: 206.107.76.164, upload_host_user: vbinsurance, upload_user_password: '<<InsureName>>' }] }
+    -
+        uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
+        name: 'Import Padi'
+        url: /workflow/f0efea9e-7863-4368-a9b2-baa1a1603067
+        cron: '0 4 12 18 * ? 2020'
+        data:
+            EFR2M: 204
+            padi: 2165
+            padiVerified: true
+            internationalNonteachingSupervisoryInstructor: 99
