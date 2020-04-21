@@ -56,38 +56,17 @@ menu:
         name: Production
         icon: 'fa fa-home'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page:
-            name: 'Production OI'
-            description: 'Shows Production OI'
-            content:
-                -
-                    type: Dashboard
-                    content:
-                        uuid: 230959ac-b4d6-4faf-8419-dad267115c02
+        page_name: ManagerProductionOIPage.yml
         uuid: d02ffb8f-a3ae-476a-a85f-198dd73359ac
     -
         name: Underwriter
         icon: 'fa fa-book'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page:
-            name: 'Underwriter OI'
-            description: 'Shows Underwriter OI'
-            content:
-                -
-                    type: Dashboard
-                    content:
-                        uuid: 793bb8cb-4aa6-4160-9540-0f7a6cbd7a77
+        page_name: ManagerUnderwriterOIPage.yml
         uuid: 234e4f1b-1e44-40f3-a944-3a9b89d855a5
     -
         name: Agent
         icon: 'fa fa-book'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page:
-            name: 'Agent OI'
-            description: 'Shows Agent OI'
-            content:
-                -
-                    type: Dashboard
-                    content:
-                        uuid: f6a4cad5-b35b-4368-9b71-1c2792fc157e
+        page_name: ManagerAgentOIPage.yml
         uuid: 775f784d-0f25-4fab-85ef-c8b0a0832339
