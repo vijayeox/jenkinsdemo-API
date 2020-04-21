@@ -36,4 +36,9 @@ trait FileTrait
         $this->logger->info("SAVE FILE");
         return $this->fileService->updateFile($params,$fileId);
     }
+
+    protected function getWorkflowInstanceByFileId($fileId){
+        $this->logger->info("GET FILE BY WORKFLOW INSTANCE ID");
+        return $this->fileService->getWorkflowInstanceByFileId($fileId);
+    }
 }

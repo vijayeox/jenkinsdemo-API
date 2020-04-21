@@ -338,7 +338,7 @@ class CommandService extends AbstractService
         try {
             $this->logger->info("File Save Service Start" . print_r($data, true));
             if(isset($data['workflow_instance_id'])){
-                $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
+                $select = "Select ox_file.uuid from ox_file join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where ox_workflow_instance.id=:workflowInstanceId;";
                 $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
                 $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
                 if (count($result) == 0) {
@@ -535,6 +535,7 @@ class CommandService extends AbstractService
         if (isset($data['workflow_id']) && isset($data['appId'])) {
             $workFlowId = $data['workflow_id'];
             $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
+            // print_r($result);exit;
             $data['template'] = $result['template'];
             $data['formName'] = $result['formName'];
             $data['id'] = $result['id'];
@@ -639,6 +640,7 @@ class CommandService extends AbstractService
         return $this->startWorkflow($data);
     }
 
+// verify
     protected function processFileData(&$data){
         $this->logger->info("Process File Data--");
         if(isset($data['data'])){
@@ -653,18 +655,6 @@ class CommandService extends AbstractService
             return $processedData;
         } else {
             return $data;
-        }
-    }
-
-    protected function deactivateFile(&$data){
-        $this->logger->info("Decativate File");
-        if (isset($data['fileId_fieldName']) && isset($data[$data['fileId_fieldName']])) {
-            $fileId = $data[$data['fileId_fieldName']];
-            $this->logger->info("FileId".print_r($fileId,true));
-            $update = "UPDATE ox_file SET latest = 0 where uuid = :fileId";
-            $updateArray = array('fileId' => $fileId);
-            $this->logger->info("Executing query - $update with params ".print_r($updateArray,true));
-            $result = $this->executeUpdatewithBindParameters($update, $updateArray);
         }
     }
 }

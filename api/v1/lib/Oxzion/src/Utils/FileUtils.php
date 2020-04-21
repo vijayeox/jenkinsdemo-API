@@ -194,4 +194,18 @@ class FileUtils
         }
         return $image;
     }
+
+    public static function getUniqueFile($baseLocation,$file){
+        if(!endsWith($baseLocation,'/')){
+            $baseLocation .= "/";
+        }
+        $counter = 0;
+        while(true){
+            $file = ($counter == 0) ? $file : $file.$counter;
+            if(!file_exists($baseLocation.$file)){
+                return $file;
+            }
+            $counter++;
+        }
+    }
 }

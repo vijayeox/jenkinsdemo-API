@@ -54,7 +54,7 @@ class ActivityInstanceService extends AbstractService
             LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id
             LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id
             LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
-            LEFT JOIN ox_file on ox_file.workflow_instance_id=ox_workflow_instance.id
+            LEFT JOIN ox_file on ox_file.id=ox_workflow_instance.file_id
             LEFT JOIN ox_app on ox_app.id = ox_form.app_id
             WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND
             ox_activity_instance.activity_instance_id=:activityInstanceId;";
@@ -231,7 +231,7 @@ class ActivityInstanceService extends AbstractService
                             $userId = $userQuery[0]['id'];
                         }
                         if ($candidate['userid'] == 'owner') {
-                            $getOwner = $this->executeQuerywithParams("SELECT created_by FROM `ox_file` WHERE `workflow_instance_id` = '" . $workflowInstanceId . "';")->toArray();
+                            $getOwner = $this->executeQuerywithParams("SELECT ox_file.created_by FROM `ox_file` join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id WHERE ox_workflow_instance.`id` = '" . $workflowInstanceId . "';")->toArray();
                             if (isset($getOwner) && count($getOwner) > 0) {
                                 $userId = $getOwner[0]['created_by'];
                             }
@@ -255,7 +255,7 @@ class ActivityInstanceService extends AbstractService
             }
             if (isset($data['variables']) && isset($data['variables']['postCreate'])) {
                 $commandData = $data['variables'];
-                $fileQuery = "SELECT data FROM `ox_file` WHERE workflow_instance_id = :workflow_instance_id;";
+                $fileQuery = "SELECT ox_file.data FROM `ox_file` join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id WHERE ox_workflow_instance.id = :workflow_instance_id;";
                 $resultSet = $this->executeQuerywithBindParameters($fileQuery, array("workflow_instance_id" => $commandData['workflow_instance_id']))->toArray();
                 if (count($resultSet) > 0) {
                     $fileData = json_decode($resultSet[0]['data'], true);

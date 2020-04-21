@@ -481,7 +481,7 @@ class WorkflowService extends AbstractService
     INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
     INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id
     INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
-    INNER JOIN ox_file on ox_file.workflow_instance_id = ox_workflow_instance.id
+    INNER JOIN ox_file on ox_file.id = ox_workflow_instance.file_id
     INNER JOIN ox_app_entity on ox_app_entity.id = ox_file.entity_id
     INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
     INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
