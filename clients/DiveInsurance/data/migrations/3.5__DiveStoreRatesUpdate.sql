@@ -539,3 +539,62 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`is_upgrade`,`previous_key`) VALUES ('Dive Store', '3M','groupExcessLiability3M','2020-01-01', '2020-12-31',160.00,1,'groupLiabilityNoneSelected');
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`is_upgrade`,`previous_key`) VALUES ('Dive Store', '4M','groupExcessLiability4M','2020-01-01', '2020-12-31',200.00,1,'groupLiabilityNoneSelected');
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`is_upgrade`,`previous_key`) VALUES ('Dive Store', '9M','groupExcessLiability9M','2020-01-01', '2020-12-31',350.00,1,'groupLiabilityNoneSelected');
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability1M','groupExcessLiability1M','2020-01-01', '2020-12-31',65);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability2M','groupExcessLiability2M','2020-01-01', '2020-12-31',125);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability3M','groupExcessLiability3M','2020-01-01', '2020-12-31',160);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability4M','groupExcessLiability4M','2020-01-01', '2020-12-31',200);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability9M','groupExcessLiability9M','2020-01-01', '2020-12-31',350);
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-09-01', '2020-09-30',1040);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-09-01', '2020-09-30',1905);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-09-01', '2020-09-30',2425);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-09-01', '2020-09-30',2945);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-09-01', '2020-09-30',3810);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-09-01', '2020-09-30',4045);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-09-01', '2020-09-30',4850);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-09-01', '2020-09-30',5200);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-09-01', '2020-09-30',5775);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-10-01', '2020-10-31',924);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-10-01', '2020-10-31',1715);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-10-01', '2020-10-31',2183);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-10-01', '2020-10-31',2651);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-10-01', '2020-10-31',3429);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-10-01', '2020-10-31',3641);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-10-01', '2020-10-31',4365);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-10-01', '2020-10-31',4680);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-10-01', '2020-10-31',5198);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-11-01', '2020-11-30',809);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-11-01', '2020-11-30',1524);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-11-01', '2020-11-30',1940);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-11-01', '2020-11-30',2356);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-11-01', '2020-11-30',3048);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-11-01', '2020-11-30',3236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-11-01', '2020-11-30',3880);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-11-01', '2020-11-30',4160);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-11-01', '2020-11-30',4620);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-12-01', '2020-12-31',674);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-12-01', '2020-12-31',1334);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-12-01', '2020-12-31',1698);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-12-01', '2020-12-31',2062);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-12-01', '2020-12-31',2667);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-12-01', '2020-12-31',2832);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-12-01', '2020-12-31',3395);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-12-01', '2020-12-31',3640);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-12-01', '2020-12-31',4043);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability1M','groupExcessLiability1M','2020-01-01', '2020-12-31',65);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability2M','groupExcessLiability2M','2020-01-01', '2020-12-31',125);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability3M','groupExcessLiability3M','2020-01-01', '2020-12-31',160);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability4M','groupExcessLiability4M','2020-01-01', '2020-12-31',200);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupExcessLiability9M','groupExcessLiability9M','2020-01-01', '2020-12-31',350);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'groupPadiFee','groupPadiFee','2020-01-01', '2020-12-31',175);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'propertyDeductibles1000','propertyDeductibles1000','2020-01-01', '2020-12-31',0);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'propertyDeductibles2500','propertyDeductibles2500','2020-01-01', '2020-12-31',4.37);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'propertyDeductibles5000','propertyDeductibles5000','2020-01-01', '2020-12-31',8.93);

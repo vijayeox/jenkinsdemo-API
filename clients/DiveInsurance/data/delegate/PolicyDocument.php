@@ -668,11 +668,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                             if(isset($data['groupPL'])){
                              $groupVal = false;   
-                             if($data['product'] = 'Dive Boat'){
+                             if($data['product'] == 'Dive Boat'){
                                 if($data['groupProfessionalLiability'] == 'yes'){
                                     $groupVal = true;
                                 }
-                             }else if($data['product'] = 'Dive Store'){
+                             }else if($data['product'] == 'Dive Store'){
                                 if($data['groupProfessionalLiabilitySelect'] == 'yes'){
                                     $groupVal = true;
                                 }
@@ -691,11 +691,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $data['certificate_no'] = $coi_number;
                         if(isset($data['groupPL'])){
                          $groupVal = false;   
-                         if($data['product'] = 'Dive Boat'){
+                         if($data['product'] == 'Dive Boat'){
                             if($data['groupProfessionalLiability'] == 'yes'){
                                 $groupVal = true;
                             }
-                         }else if($data['product'] = 'Dive Store'){
+                         }else if($data['product'] == 'Dive Store'){
                             if($data['groupProfessionalLiabilitySelect'] == 'yes'){
                                 $groupVal = true;
                             }
@@ -738,11 +738,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($data['groupPL'])){
                     $groupVal = false;
-                    if($data['product'] = 'Dive Boat'){
+                    if($data['product'] == 'Dive Boat'){
                         if($data['groupProfessionalLiability'] == 'yes'){
                             $groupVal = true;
                         }
-                    }else if($data['product'] = 'Dive Store'){
+                    }else if($data['product'] == 'Dive Store'){
                         if($data['groupProfessionalLiabilitySelect'] == 'yes'){
                             $groupVal = true;
                         }
