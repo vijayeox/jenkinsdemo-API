@@ -521,7 +521,7 @@ class FileService extends AbstractService
                 $queryParams['entityName'] = $params['entityName'];
                 if (isset($params['assocId'])) {
                     if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId'])) {
-                        $entityFilter .= " AND of.assoc_id = :assocId";
+                        $entityFilter .= " AND oxf.assoc_id = :assocId";
                     }
 
                 }
@@ -542,22 +542,22 @@ class FileService extends AbstractService
                 }
             }
             if (isset($params['gtCreatedDate'])) {
-                $createdFilter .= " AND of.date_created >= :gtCreatedDate";
+                $createdFilter .= " AND oxf.date_created >= :gtCreatedDate";
                 $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
                 $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
             }
             if (isset($params['ltCreatedDate'])) {
-                $createdFilter .= " AND of.date_created < :ltCreatedDate";
+                $createdFilter .= " AND oxf.date_created < :ltCreatedDate";
                 $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
                 /* modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
                  the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
                  till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
                 $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
             }
-            $where = " $appFilter $statusFilter $entityFilter $createdFilter and of.latest=1";
-            $fromQuery = " from ox_file as of
-            inner join ox_app_entity as en on en.id = of.entity_id
-            inner join ox_app as oa on (oa.id = en.app_id)";
+            $where = " $appFilter $statusFilter $entityFilter $createdFilter and oxf.latest=1";
+            $fromQuery = " from ox_file as oxf
+            inner join ox_app_entity as en on en.id = oxf.entity_id
+            inner join ox_app as oa on (oa.id = en.app_id) ";
             if (isset($params['userId'])) {
                 if ($params['userId'] == 'me') {
                     $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -568,7 +568,7 @@ class FileService extends AbstractService
                     }
                 }
                 $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=oa.id
-                INNER JOIN ox_file_attribute ofa on ofa.file_id = of.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
+                INNER JOIN ox_file_attribute ofa on ofa.file_id = oxf.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
                 $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
                 $queryParams['orgId'] = $orgId;
@@ -576,7 +576,7 @@ class FileService extends AbstractService
                 $userWhere = "";
             }
 
-            $fromQuery .= " left join ox_workflow_instance as wi on of.workflow_instance_id = wi.id
+            $fromQuery .= " left join ox_workflow_instance as wi on oxf.workflow_instance_id = wi.id
             left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id
             left join ox_workflow as ow on ow.id = wd.workflow_id";
             $prefix = 1;
@@ -614,9 +614,9 @@ class FileService extends AbstractService
                         $tablePrefix = "tblf" . $prefix;
                         if (!empty($val)) {
                             if ($subQuery != '') {
-                                $subQuery .= " " . $filterlogic . " of.id in ";
+                                $subQuery .= " " . $filterlogic . " oxf.id in ";
                             } else {
-                                $subQuery = " of.id in ";
+                                $subQuery = " oxf.id in ";
                             }
                             $subQuery .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as " . $val['field'] . $tablePrefix . " on( " . $val['field'] . $tablePrefix . ".id = " . $tablePrefix . ".field_id )";
                             $filterOperator = $this->processFilters($val);
@@ -643,9 +643,9 @@ class FileService extends AbstractService
                             $sort .= "," . $fieldName . " " . $value['dir'];
                         }
                         if($fieldName == 'date_created'){
-                            $field .= ", of.date_created";
+                            $field .= ", oxf.date_created";
                         }else{
-                            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $fieldName;
+                            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=oxf.id) as " . $fieldName;
                         }
                         $sortCount += 1;
                     }
@@ -656,11 +656,11 @@ class FileService extends AbstractService
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $countQuery = "select DISTINCT count(of.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
+                $countQuery = "select DISTINCT count(oxf.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
-                $select = "SELECT of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT oxf.id,oxf.data, oxf.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if ($resultSet) {

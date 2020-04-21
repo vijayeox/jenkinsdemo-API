@@ -4096,7 +4096,7 @@
 					"customConditional": "if (data.privileges){\n  if(data.attachments !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "Attachments",
+					"label": " ",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -4861,7 +4861,7 @@
 						"customConditional": "if (data.privileges){\n  if(data.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 						"datatype": "documentviewer",
 						"data_type": "documentviewer",
-						"label": "Attachments",
+						"label": " ",
 						"hideLabel": true,
 						"inputType": "documentviewer",
 						"input": 1,
@@ -9478,7 +9478,7 @@
 					"customConditional": "if (data.privileges){\n  if(data.csrApprovalAttachments !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "Attachments",
+					"label": " ",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -9568,7 +9568,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 189,
+	"_vid": 191,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9586,6 +9586,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-16T14:26:06.940Z",
+	"modified": "2020-04-20T03:48:42.945Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

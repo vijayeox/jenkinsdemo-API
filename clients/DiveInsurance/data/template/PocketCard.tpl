@@ -108,12 +108,7 @@
 				</div>
 			</div>
 			<div class = "details">
-				<p class = "email"><b>If you have any questions or need any additional information,<br>Please contact us:<br>Email&nbsp;:&nbsp;
-					{if (isset($individual.product) && ($individual.product == 'Emergency First Response'))}
-					efr@diveinsurance.com 
-					{else} 
-					instructors@diveinsurance.com
-					{/if}<br>
+				<p class = "email"><b>If you have any questions or need any additional information,<br>Please contact us:<br>Email&nbsp;:&nbsp;{$individual.product_email_id}<br>
 				Phone:&nbsp;(800)&nbsp;223-9998<br>or (714)&nbsp;739-3177</b></p>
 			</div>
 		</div>

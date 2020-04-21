@@ -2310,7 +2310,8 @@
 				"components": [{
 					"label": "attachmentFields",
 					"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
-					"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\"];",
+					"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\",\"chequeConsentFile\"];",
+					"calculateServer": false,
 					"key": "endorAttachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
@@ -2357,6 +2358,7 @@
 				"components": [{
 					"label": "csrEndorAttachmentsFieldnames",
 					"calculateValue": "value = [\"csr_attachments\"];",
+					"calculateServer": false,
 					"key": "csrEndorAttachmentsFieldnames",
 					"type": "hidden",
 					"input": true,
@@ -3022,7 +3024,7 @@
 						}],
 						"clearOnHide": false,
 						"calculateServer": false,
-						"key": "chequeConsentForm",
+						"key": "chequeConsentFile",
 						"type": "file",
 						"input": true
 					}],
@@ -3246,7 +3248,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 78,
+	"_vid": 79,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3265,6 +3267,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-17T00:34:40.270Z",
+	"modified": "2020-04-20T15:46:06.567Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

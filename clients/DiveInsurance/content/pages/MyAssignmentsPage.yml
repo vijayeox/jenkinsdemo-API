@@ -1,0 +1,58 @@
+name: 'My Assignments'
+description: 'My Assignments'
+content:
+    -
+        type: Document
+        content: '<p><h2>My Assignments</h2></p><p></p>'
+    -
+        type: List
+        content:
+            route: assignments
+            filterable: true
+            resizable: true
+            sortable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: Review
+                    rule: '{{to_be_claimed}} == 1'
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
+                        -
+                            type: Form
+                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                    icon: 'fa fa-check-circle'
+                -
+                    name: Review
+                    rule: '{{to_be_claimed}} == 0'
+                    details:
+                        -
+                            type: Form
+                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                    icon: 'fa fa-check-circle'
+            columnConfig:
+                -
+                    title: PADI
+                    field: padi
+                -
+                    title: Name
+                    field: firstname
+                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                -
+                    title: Product
+                    field: entity_name
+                -
+                    title: 'Policy Start Date'
+                    field: start_date
+                -
+                    title: 'Policy End Date'
+                    field: end_date

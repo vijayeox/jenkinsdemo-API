@@ -1,0 +1,148 @@
+name: 'My Policies'
+description: 'Shows a list of users policies'
+content:
+    -
+        type: List
+        content:
+            route: 'file/user/me'
+            filterable: false
+            defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"},{"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: 'View Policy'
+                    rule: '''{{policyStatus}}'' == ''In Force'''
+                    icon: 'fa fa-envelope-open'
+                    details:
+                        -
+                            type: Document
+                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> The Policy will expire on {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+                -
+                    name: 'Upgrade To IPL'
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands: 
+                                    -
+                                        command: startform
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: EFRToIPLUpgrade
+                    icon: 'fa fa-arrow-circle-up'
+                -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625993/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
+                    name: 'Cancel Policy'
+                    icon: 'fa fa-ban'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/91cb9e10-5845-4379-97c9-f9486b702bda/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                -
+                    name: 'Cancel Policy'
+                    icon: 'fa fa-ban'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+            toolbarTemplate: '<h4>List of all policies</h4>'
+            operations:
+                title: 'Get Policy'
+                actions:
+                    -
+                        name: IPL
+                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Individual Professional Liability\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                        details:
+                            -
+                                type: Form
+                                url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                    -
+                        name: 'Dive Boat'
+                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Boat\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                        details:
+                            -
+                                type: Form
+                                url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
+                    -
+                        name: 'Dive Store'
+                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Store\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                        details:
+                            -
+                                type: Form
+                                url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                    -
+                        name: 'Emergency First Response'
+                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Emergency First Response\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                        details:
+                            -
+                                type: Form
+                                url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
+            columnConfig:
+                -
+                    title: Name
+                    field: entity_name
+                    cell: '<td>{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}</td>'
+                -
+                    title: 'Policy Status'
+                    field: policyStatus
+                -
+                    title: 'Policy Effective Period'
+                    cell: '<td>{item.start_date}&nbsp;-&nbsp;{item.end_date}</td>'
+                    field: start_date

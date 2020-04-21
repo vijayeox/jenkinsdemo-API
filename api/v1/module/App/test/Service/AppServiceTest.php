@@ -196,9 +196,10 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessMenu()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')),'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'menu' => array(array('name' => 'Home', 'icon' => 'fa fa-home', 'uuid' => '24176975-8f4d-499d-8b2d-86902de26c14', 'page' => array( 'name' => 'Home', 'description' => 'Shows Dashboard'))));
+        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')),'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'menu' => array(array('name' => 'Home', 'icon' => 'fa fa-home', 'uuid' => '24176975-8f4d-499d-8b2d-86902de26c14', 'page_name' => 'dummyPage.yml')));
         $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processMenu($data);
+        $path = __DIR__ . '/../sampleapp/';
+        $content = $delegateService->processMenu($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_menu WHERE app_id = 299 and name = 'Home'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -214,7 +215,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')),'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')));
         $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processMenu($data);
+        $path = __DIR__ . '/../sampleapp/';
+        $content = $delegateService->processMenu($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_menu WHERE app_id = 299 and name = 'Home'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);

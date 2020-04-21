@@ -35,33 +35,13 @@ class FileIndexerService extends AbstractService
         if(isset($fileId))
         {
             $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
-            file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.latest,file.org_id,
-            CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields,
-            wf_user.user_id, file.workflow_instance_id,
-            w.id as workflow_instance_id, w.status,
-            w.name as workflow_name, w.activities
+            file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.org_id,
+            CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
             from ox_file as file
             INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
             INNER JOIN ox_app as app on entity.app_id = app.id
-            left join (select wf_user.user_id, idfa.file_id, wf_user.app_id, wf_user.org_id from ox_file_attribute idfa
-            inner join ox_field id_fd on id_fd.id = idfa.field_id
-            inner JOIN ox_wf_user_identifier as wf_user on idfa.field_value = wf_user.identifier 
-            and wf_user.identifier_name = id_fd.name) as wf_user on wf_user.file_id = file.id and wf_user.app_id = app.id 
-            and wf_user.org_id = file.org_id 
-            INNER JOIN ox_field as field ON field.entity_id = entity.id 
-            LEFT JOIN (SELECT wf_inst.id, wf_inst.status,
-            act_inst.activity_instance_id,
-            wf.name, CONCAT('{', GROUP_CONCAT(CONCAT('\"', activity.name, '\" : \"', act_inst.status, '\"') SEPARATOR ','), '}') as activities
-            FROM ox_workflow_instance as wf_inst
-            INNER JOIN ox_workflow_deployment as wd on wf_inst.workflow_deployment_id = wd.id 
-            INNER JOIN ox_workflow as wf on wd.workflow_id = wf.id
-            LEFT JOIN ox_activity_instance as act_inst on wf_inst.id = act_inst.workflow_instance_id
-            LEFT JOIN ox_activity as activity on wd.id = activity.workflow_deployment_id
-            GROUP BY wf_inst.id, wf_inst.status, act_inst.activity_instance_id, wf.name) w
-            ON w.id = file.workflow_instance_id
-            where file.id = ".$fileId." and file.latest =1
-            GROUP BY wf_user.user_id,file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.latest,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id,w.id, w.status,w.name, w.activities";
-
+            INNER JOIN ox_field as field ON field.entity_id = entity.id
+            where file.id = ".$fileId." GROUP BY file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id";
             $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
             $this->logger->info("Executing Query - $select");
             $body=$this->executeQuerywithParams($select)->toArray();
@@ -124,31 +104,13 @@ class FileIndexerService extends AbstractService
                     $fileIds = implode(',', $batch);
                     //Index list
                     $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
-                    file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.latest,file.org_id,
-                    CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields,
-                    wf_user.user_id, file.workflow_instance_id,
-                    w.id as workflow_instance_id, w.status,
-                    w.name as workflow_name, w.activities
+                    file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.org_id,
+                    CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
                     from ox_file as file
                     INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
                     INNER JOIN ox_app as app on entity.app_id = app.id
-                    left join (select wf_user.user_id, idfa.file_id, wf_user.app_id, wf_user.org_id from ox_file_attribute idfa
-                    inner join ox_field id_fd on id_fd.id = idfa.field_id
-                    inner JOIN ox_wf_user_identifier as wf_user on idfa.field_value = wf_user.identifier 
-                    and wf_user.identifier_name = id_fd.name) as wf_user on wf_user.file_id = file.id and wf_user.app_id = app.id 
-                    and wf_user.org_id = file.org_id 
-                    INNER JOIN ox_field as field ON field.entity_id = entity.id 
-                    LEFT JOIN (SELECT wf_inst.id, wf_inst.status,
-                    act_inst.activity_instance_id,
-                    wf.name, CONCAT('{', GROUP_CONCAT(CONCAT('\"', activity.name, '\" : \"', act_inst.status, '\"') SEPARATOR ','), '}') as activities
-                    FROM ox_workflow_instance as wf_inst
-                    INNER JOIN ox_workflow_deployment as wd on wf_inst.workflow_deployment_id = wd.id 
-                    INNER JOIN ox_workflow as wf on wd.workflow_id = wf.id
-                    LEFT JOIN ox_activity_instance as act_inst on wf_inst.id = act_inst.workflow_instance_id
-                    LEFT JOIN ox_activity as activity on wd.id = activity.workflow_deployment_id
-                    GROUP BY wf_inst.id, wf_inst.status, act_inst.activity_instance_id, wf.name) w
-                    ON w.id = file.workflow_instance_id
-                    where file.id in (".$fileIds.") AND app.id =".$appID." and file.latest =1 GROUP BY wf_user.user_id,file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.latest,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id,w.id, w.status,w.name, w.activities";
+                    INNER JOIN ox_field as field ON field.entity_id = entity.id
+                    where file.id in (".$fileIds.") AND app.id =".$appID." and file.latest =1 GROUP BY file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id";
                     $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
                     $this->logger->info("Executing Query - $select");
                     $bodys=$this->executeQuerywithParams($select)->toArray();

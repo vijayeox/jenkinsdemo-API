@@ -263,6 +263,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $NewData[0]['city'] = $data['city'];
                     $NewData[0]['state'] = $data['state'];
                     $NewData[0]['zip'] = $data['zip'];
+                    $NewData[0]['product'] = $data['product'];
+                    $NewData[0]['product_email_id'] = $data['product_email_id'];
                     $NewData[0]['entity_name'] = 'Pocket Card Job';
                     $newData = json_encode($NewData);
                     $docdata = array('data' => $newData);
@@ -662,23 +664,47 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }
                             $data['certificate_no'] = $data['certificate_no'].' - '.$length;
                         }
-                        if($endorsementOptions['modify_groupProfessionalLiability'] == true){    
-                            if(isset($data['groupPL']) && ($data['groupProfessionalLiability'] == 'yes' || $data['groupProfessionalLiabilitySelect'] == 'yes')){
-                                if(isset($data['documents']['endorsement_group_coi_document'])){
+                        if($endorsementOptions['modify_groupProfessionalLiability'] == true){  
+
+                            if(isset($data['groupPL'])){
+                             $groupVal = false;   
+                             if($data['product'] == 'Dive Boat'){
+                                if($data['groupProfessionalLiability'] == 'yes'){
+                                    $groupVal = true;
+                                }
+                             }else if($data['product'] == 'Dive Store'){
+                                if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+                                    $groupVal = true;
+                                }
+                             }
+                             if($groupVal == true){
+                               if(isset($data['documents']['endorsement_group_coi_document'])){
                                     $length = sizeof($data['documents']['endorsement_group_coi_document']) + 1;
                                 }else{
                                     $length = 1;
                                 }
                                 $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;
-                            }
+                             }
+                            }  
                         }
                     }else{
                         $data['certificate_no'] = $coi_number;
-                       if(isset($data['groupPL']) && ($data['groupProfessionalLiability'] == 'yes' || $data['groupProfessionalLiabilitySelect'] == 'yes')){
+                        if(isset($data['groupPL'])){
+                         $groupVal = false;   
+                         if($data['product'] == 'Dive Boat'){
+                            if($data['groupProfessionalLiability'] == 'yes'){
+                                $groupVal = true;
+                            }
+                         }else if($data['product'] == 'Dive Store'){
+                            if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+                                $groupVal = true;
+                            }
+                         }
+                         if($groupVal == true){
                             $data['group_certificate_no'] = 'S'.$coi_number;
+                         }
                         }
                     }
-                    
                 }
                 
                 $date=date_create($data['start_date']);
@@ -710,13 +736,25 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     } 
                 }
 
-                if(isset($data['groupPL']) && ($data['groupProfessionalLiability'] == 'yes' || $data['groupProfessionalLiabilitySelect'] == 'yes')){
-                    $product = 'Group Professional Liability';
-                    $policyDetails = $this->getPolicyDetails($data,$persistenceService,$product);
-                    if($policyDetails){
-                        $data['group_policy_id'] = $policyDetails['policy_number'];
-                        $data['group_carrier'] = $policyDetails['carrier'];
-                    }    
+                if(isset($data['groupPL'])){
+                    $groupVal = false;
+                    if($data['product'] == 'Dive Boat'){
+                        if($data['groupProfessionalLiability'] == 'yes'){
+                            $groupVal = true;
+                        }
+                    }else if($data['product'] == 'Dive Store'){
+                        if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+                            $groupVal = true;
+                        }
+                    }
+                    if($groupVal == true){
+                        $product = 'Group Professional Liability';
+                        $policyDetails = $this->getPolicyDetails($data,$persistenceService,$product);
+                        if($policyDetails){
+                            $data['group_policy_id'] = $policyDetails['policy_number'];
+                            $data['group_carrier'] = $policyDetails['carrier'];
+                        }     
+                    }
                 }
                 
                 $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
@@ -938,6 +976,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $response[$i]['lastname'] = $value2['lastname'];
                 $response[$i]['start_date'] = $value2['start_date'];
                 $response[$i]['product'] = $data['product'];
+                $response[$i]['product_email_id'] = $data['product_email_id'];
                 $response[$i]['email'] = $data['email'];
                 $response[$i]['certificate_no'] = $data['certificate_no'];
                 $response[$i]['end_date'] = $data['end_date'];

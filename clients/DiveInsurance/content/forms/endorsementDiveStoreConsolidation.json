@@ -1887,8 +1887,10 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please enter the Replacement Value"
 								},
+								"errorLabel": "Replacement value",
 								"key": "dspropreplacementvalue",
 								"conditional": {
 									"show": true,
@@ -1903,13 +1905,16 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "What is the square footage of your building?",
+								"suffix": "ft<sup>2</sup>",
 								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please enter the area of the building in sq ft"
 								},
+								"errorLabel": "Property Size",
 								"key": "dspropWhatisthesquarefootageofyourbuilding",
 								"conditional": {
 									"show": true,
@@ -1947,6 +1952,7 @@
 								"validate": {
 									"required": true
 								},
+								"errorLabel": "The Year in which the Building was built",
 								"key": "built_year",
 								"type": "select",
 								"indexeddb": {
@@ -1957,23 +1963,26 @@
 							}, {
 								"label": "Updates on plumbing, electrical, roof, etc.",
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please give us information on the plumbing ,electrical ,roof,etc"
 								},
+								"errorLabel": "Additional Information",
 								"key": "dspropUpdatesonplumbingelectricalroofetc",
 								"conditional": {
 									"show": true,
 									"when": "pageNaNColumnsDoyouownthebuilding"
 								},
-								"type": "textfield",
+								"type": "textarea",
 								"labelWidth": 2,
 								"labelMargin": 3,
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputFormat": "plain"
 							}],
 							"width": 6,
 							"offset": 0,
@@ -2104,6 +2113,7 @@
 				"clearOnHide": false,
 				"calculateServer": false,
 				"validate": {
+					"required": true,
 					"min": null,
 					"max": null
 				},
@@ -2430,6 +2440,22 @@
 						},
 						"key": "recreationalorbusinessactivitiesfacilityPL",
 						"type": "radio",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Please Explain",
+						"autoExpand": false,
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"key": "recreationalBusinessActivitiesInformation",
+						"conditional": {
+							"show": true,
+							"when": "recreationalorbusinessactivitiesfacilityPL",
+							"eq": "yes"
+						},
+						"type": "textarea",
 						"input": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -3211,6 +3237,16 @@
 			"key": "page4PanelPanelPanelColumns",
 			"columns": [{
 				"components": [{
+					"label": "Do you want to apply for Non Owner Auto?",
+					"tableView": false,
+					"clearOnHide": false,
+					"calculateServer": false,
+					"key": "doYouWantToApplyForNonOwnerAuto",
+					"type": "checkbox",
+					"input": true,
+					"defaultValue": false,
+					"hideOnChildrenHidden": false
+				}, {
 					"label": "NON-Owned Auto Liability (U.S. Only)",
 					"widget": "choicesjs",
 					"tableView": true,
@@ -3234,6 +3270,11 @@
 						"customMessage": "Please Choose the Auto Liability Coverage"
 					},
 					"key": "nonOwnedAutoLiabilityPL",
+					"conditional": {
+						"show": true,
+						"when": "doYouWantToApplyForNonOwnerAuto",
+						"eq": "true"
+					},
 					"type": "select",
 					"indexeddb": {
 						"filter": {}
@@ -3267,10 +3308,11 @@
 				"next": true
 			},
 			"collapsible": false,
+			"hidden": true,
 			"tableView": false,
 			"key": "page4PanelPanelPanelPanel",
 			"type": "panel",
-			"label": "STORE/RESORT INSTRUCTIONAL POLICY",
+			"label": "Store/Resort Instructional Policy",
 			"input": false,
 			"components": [{
 				"label": "Content",
@@ -6641,15 +6683,27 @@
 						"label": "Excess Liability Coverage",
 						"widget": "choicesjs",
 						"tableView": true,
-						"dataSrc": "custom",
 						"data": {
 							"values": [{
-								"label": "",
-								"value": ""
-							}],
-							"custom": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  values = [{\"value\": \"groupExcessLiability1M\",\"label\": \"1M\"}, \n  {\"value\": \"groupExcessLiability2M\",\"label\": \"2M\"},\n  {\"value\": \"groupExcessLiability3M\",\"label\": \"3M\"}, \n  {\"value\": \"groupExcessLiability4M\",\"label\": \"4M\"},\n  {\"value\": \"groupExcessLiability9M\",\"label\": \"9M\"}]\n} else {\n  if(data['endorsementGroupLiability']){\n    for(var key in data['endorsementGroupLiability']){\n      var item = {}\n      item.label = data['endorsementGroupLiability'][key];\n      item.value = key;\n      values.push(item);\n    }\n  }\n}"
+								"label": "No",
+								"value": "0"
+							}, {
+								"value": "groupExcessLiability1M",
+								"label": "1M"
+							}, {
+								"value": "groupExcessLiability2M",
+								"label": "2M"
+							}, {
+								"value": "groupExcessLiability3M",
+								"label": "3M"
+							}, {
+								"value": "groupExcessLiability4M",
+								"label": "4M"
+							}, {
+								"value": "groupExcessLiability9M",
+								"label": "9M"
+							}]
 						},
-						"valueProperty": "value",
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -6678,17 +6732,17 @@
 						"label": "Amount",
 						"prefix": "$",
 						"mask": false,
-						"spellcheck": false,
+						"spellcheck": true,
 						"disabled": true,
-						"tableView": false,
+						"tableView": true,
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = parseFloat(data[data[\"groupExcessLiabilitySelect\"]]*data[\"groupCoverage\"]/100)||0.00",
+						"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100\n}",
 						"calculateServer": false,
 						"key": "groupExcessLiability",
-						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -6806,7 +6860,7 @@
 				"label": "Pane",
 				"input": false,
 				"components": [{
-					"label": "PADI Number in System?",
+					"label": "PADI Number?",
 					"description": "Enter the PADI Membership to Validate",
 					"spellcheck": true,
 					"tableView": true,
@@ -7183,17 +7237,7 @@
 						"enableRowGroups": false,
 						"hideLabel": true,
 						"tableView": false,
-						"defaultValue": [{
-							"name": "",
-							"country": "",
-							"address": "",
-							"city": "",
-							"state": {},
-							"zip": "",
-							"city1": "",
-							"state1": {},
-							"zip1": ""
-						}],
+						"defaultValue": [{}],
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
@@ -7285,6 +7329,8 @@
 										"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 									},
 									"template": "<span>{{ item }}</span>",
+									"refreshOn": "country",
+									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"calculateServer": false,
@@ -7297,10 +7343,8 @@
 									"indexeddb": {
 										"filter": {}
 									},
-									"refreshOn": "country",
 									"input": true,
 									"lockKey": true,
-									"clearOnRefresh": true,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
@@ -7414,10 +7458,11 @@
 									"spellcheck": true,
 									"tableView": true,
 									"calculateServer": false,
-									"key": "additionalInformation1",
+									"key": "additionalInformation",
 									"type": "textarea",
 									"input": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"clearOnHide": false
 								}],
 								"size": "md",
 								"width": 8,
@@ -7501,7 +7546,7 @@
 					"label": "Named Insureds",
 					"input": false,
 					"components": [{
-						"label": "PADI Number in System?",
+						"label": "PADI Number?",
 						"description": "Enter the PADI Membership to Validate",
 						"spellcheck": true,
 						"tableView": true,
@@ -10868,7 +10913,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 87,
+	"_vid": 89,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10885,6 +10930,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-16T09:24:17.311Z",
+	"modified": "2020-04-20T12:16:29.495Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

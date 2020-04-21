@@ -403,3 +403,6 @@ input:focus {
 .padi h4{
   font-weight: bold;
 }
+.formio-errors.invalid-feedback{
+  display:block;
+}

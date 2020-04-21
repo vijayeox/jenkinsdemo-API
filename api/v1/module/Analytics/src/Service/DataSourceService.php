@@ -169,24 +169,28 @@ class DataSourceService extends AbstractService
             throw new Exception("Error Processing Request", 1);
         }
         $type = $response[0]['type'];
-
-        $config = json_decode($response[0]['configuration'],1);
-
+        $dsConfig = json_decode($response[0]['configuration'],1);
+        $type = strtoupper($type);
         try{
             switch($type) {
-                case 'Elastic':
-                case 'ElasticSearch':
-                    $elasticConfig['elasticsearch'] = $config['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
+                case 'ELASTIC':
+                case 'ELASTICSEARCH':
+                    $elasticConfig['elasticsearch'] = $dsConfig['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig,$this->dbAdapter,$this->config);
                     break;
-                case 'MySQL':
-                    $config = $config['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEngineMySQLImpl($config);
+                case 'MYSQL':
+                    $dsConfig = $dsConfig['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEngineMySQLImpl($dsConfig,$this->dbAdapter,$this->config);
                     break;
-                case 'Postgres':
-                case 'PostgreSQL':
-                    $config = $config['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEnginePostgresImpl($config);
+                case 'POSTGRES':
+                case 'POSTGRESQL':
+                    $dsConfig = $dsConfig['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEnginePostgresImpl($dsConfig,$this->dbAdapter,$this->config);
+                    break;
+                case 'QUICKBOOKS':
+                    $dsConfig = $dsConfig['data'];
+                    $dsConfig['dsid']=$response[0]['id'];
+                    $analyticsObject = new  \Oxzion\Analytics\API\AnalyticsEngineQuickBooksImpl($dsConfig,$this->dbAdapter,$this->config);
                     break;
             }
         }

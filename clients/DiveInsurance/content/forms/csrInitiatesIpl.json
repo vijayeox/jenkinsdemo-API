@@ -1533,7 +1533,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "withTecRecEndorsementForSelectionAbove",
+								"value": "withTecRecEndorsementForSelectionAbove5",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
@@ -2677,7 +2677,7 @@
 					"input": true
 				}, {
 					"label": "attachmentFields",
-					"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\"];",
+					"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\",\"chequeConsentFile\"];",
 					"calculateServer": false,
 					"key": "attachmentsFieldnames",
 					"type": "hidden",
@@ -3101,15 +3101,19 @@
 							}, {
 								"components": [{
 									"label": "Date of incident",
-									"format": "yyyy-MM-dd",
+									"format": "MM-dd-yyyy",
 									"tableView": true,
 									"datePicker": {
+										"maxDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
 										"datepickerMode": "day"
 									},
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
 									},
+									"calculateServer": false,
 									"validate": {
 										"required": true,
 										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
@@ -3128,12 +3132,14 @@
 										"mode": "single",
 										"enableTime": false,
 										"noCalendar": false,
-										"format": "yyyy-MM-dd",
+										"format": "MM-dd-yyyy",
 										"hourIncrement": 1,
 										"minuteIncrement": 1,
 										"time_24hr": true,
 										"minDate": null,
-										"maxDate": null
+										"disableWeekends": false,
+										"disableWeekdays": false,
+										"maxDate": "moment()"
 									},
 									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 								}],
@@ -4047,7 +4053,7 @@
 							}],
 							"clearOnHide": false,
 							"calculateServer": false,
-							"key": "chequeConsentForm",
+							"key": "chequeConsentFile",
 							"type": "file",
 							"input": true
 						}],
@@ -4314,7 +4320,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 261,
+	"_vid": 262,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4335,6 +4341,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-17T05:16:19.480Z",
+	"modified": "2020-04-20T15:45:32.021Z",
 	"machineName": "testdivehub:csrInitiates"
 }
