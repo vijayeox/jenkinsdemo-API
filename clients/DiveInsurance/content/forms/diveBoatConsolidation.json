@@ -1305,6 +1305,9 @@
 					"shortcut": ""
 				}],
 				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
 				"key": "doYouHaveABoatMembershipPadiNumber",
 				"customConditional": "show = false;\nif(data['businessPadiVerified'] == 'false' || data['businessPadiVerified'] === false){\n  show = true;\n}",
 				"logic": [{
@@ -8495,7 +8498,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 400,
+	"_vid": 401,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8513,6 +8516,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-20T03:47:49.654Z",
+	"modified": "2020-04-20T10:45:57.432Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
