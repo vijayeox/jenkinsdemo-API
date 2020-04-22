@@ -119,6 +119,12 @@ menu:
         page_name: UserHistoryPage.yml
         uuid: 623132d9-8ccb-4c8a-b7b7-a3b0921defdc
     -
+        name: 'Approval Request'
+        privilege: MANAGE_MY_POLICY_WRITE
+        icon: 'fa fa-list'
+        page_name: UserApprovalRequest.yml
+        uuid: 7794c91e-b708-41be-83e1-cc0bb6cd789e
+    -
         name: Home
         icon: 'fa fa-home'
         privilege: MANAGE_POLICY_APPROVAL_READ
@@ -168,71 +174,6 @@ menu:
         uuid: 3b396d26-c0cb-4436-8804-f22431d6ac8c
 workflow:
     -
-        name: 'Individual Liability'
-        uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
-        bpmn_file: 'Individual Professional Liability/NewUserApplicationSubmission.bpmn'
-        entity: 'Individual Professional Liability'
-    -
-        name: 'Individual Liability Endorsement'
-        uuid: 7d302209-667d-46e4-80f0-3dd1a4079509
-        bpmn_file: 'Individual Professional Liability/IPLEndorsement.bpmn'
-        entity: 'Individual Professional Liability'
-    -
-        name: 'Individual Liability Auto Renewal'
-        uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
-        bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
-        entity: 'Individual Professional Liability'
-    -
-        name: 'Emergency First Response'
-        uuid: cb74d176-225a-11ea-978f-2e728ce88125
-        bpmn_file: 'Emergency First Response/NewApplication.bpmn'
-        entity: 'Emergency First Response'
-    -
-        name: 'Emergency First Response Endorsement'
-        uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
-        bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
-        entity: 'Emergency First Response'
-    -
-        name: 'Individual Liability Reinstate Policy'
-        uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
-        bpmn_file: 'Cancel Policy/ReinstatePolicyIPL.bpmn'
-        entity: 'Individual Professional Liability'
-    -
-        name: 'Emergency First Response Reinstate Policy'
-        entity: 'Emergency First Response'
-        uuid: a484ac20-0bc6-4c3f-9426-199e6fadc4a2
-        bpmn_file: 'Cancel Policy/ReinstatePolicyEFR.bpmn'
-    -
-        name: 'Dive Boat Reinstate Policy'
-        entity: 'Dive Boat'
-        uuid: 2d94a2f0-c64c-48e0-a4f0-f85f626f0626
-        bpmn_file: 'Cancel Policy/ReinstatePolicyDB.bpmn'
-    -
-        name: 'Dive Store Reinstate Policy'
-        entity: 'Dive Store'
-        uuid: 5a2ed122-3f12-4240-b197-a24469721e87
-        bpmn_file: 'Cancel Policy/ReinstatePolicyDS.bpmn'
-    -
-        bpmn_file: 'Cancel Policy/CancelPolicyIPL.bpmn'
-        entity: 'Individual Professional Liability'
-        name: 'IPL Cancel Policy'
-        uuid: 71cb9e10-5845-4379-97c9-f9486b702bda
-    -
-        bpmn_file: 'Cancel Policy/CancelPolicyEFR.bpmn'
-        entity: 'Emergency First Response'
-        name: 'EFR Cancel Policy'
-        uuid: 81cb9e10-5845-4379-97c9-f9486b702bda
-    -
-        bpmn_file: 'Cancel Policy/CancelPolicyDB.bpmn'
-        entity: 'Dive Boat'
-        name: 'DB Cancel Policy'
-        uuid: 91cb9e10-5845-4379-97c9-f9486b702bda
-    -
-        bpmn_file: 'Cancel Policy/CancelPolicyDS.bpmn'
-        entity: 'Dive Store'
-        name: 'DS Cancel Policy'
-        uuid: 61cb9e10-5845-4379-97c9-f9486b702bda
-    -
         name: 'Dive Boat'
         uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
         bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
@@ -242,16 +183,6 @@ workflow:
         uuid: 2bc1caaa-9628-486d-8b42-104534625993
         bpmn_file: 'Dive Boat/DiveBoatEndorsement.bpmn'
         entity: 'Dive Boat'
-    -
-        name: 'Dive Store'
-        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
-        bpmn_file: 'Dive Store/NewApplication.bpmn'
-        entity: 'Dive Store'
-    -
-        name: 'Dive Store Endorsement'
-        uuid: 2bc1caaa-9628-486d-8b42-104534625994
-        bpmn_file: 'Dive Store/DiveStoreEndorsement.bpmn'
-        entity: 'Dive Store'
 form:
     -
         name: 'PADI Verification'
