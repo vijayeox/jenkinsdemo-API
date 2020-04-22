@@ -105,18 +105,49 @@ entity:
                 name: documents
                 text: 'Pocket Card'
                 data_type: document
+pages:
+    -
+        page_name: UserHomePage.yml
+        uuid: c718e435-efc4-4677-ba72-4b8996b78a64
+    -
+        page_name: UserHistoryPage.yml
+        uuid: e0a85518-7657-470f-92d8-00b3dea0bcf4
+    -
+        page_name: CSRDashboardPage.yml
+        uuid: 016a34e6-4af6-4863-b8e2-0cee142b09a2
+    -
+        page_name: CSRRequestsPage.yml
+        uuid: 9b52ced7-80b7-4cd6-a986-d4df6812b139
+    -
+        page_name: ErrorHandlerPage.yml
+        uuid: 3af8eeb0-7f43-422a-90f4-2b30b7aab9b7
+    -
+        page_name: CSRManagePolicyPage.yml
+        uuid: a488af79-31ee-4f11-8715-5bec00f85c8d
+    -
+        page_name: CSRSearchPage.yml
+        uuid: 38b1b9c7-0f6e-4e80-bb08-63262e56c2f9
+    -
+        page_name: VerifyPadiPage.yml
+        uuid: 0c17785a-b7ae-46c4-a1c3-8bed234b4482
+    -
+        page_name: PocketCardPage.yml
+        uuid: 11cd5446-c2fa-42cc-93b1-638670f4adf7
+    -
+        page_name: MyAssignmentsPage.yml
+        uuid: 151ba91d-f17a-4034-a25f-86f108594637
 menu:
     -
         name: Home
         privilege: MANAGE_MY_POLICY_WRITE
         icon: 'fa fa-home'
-        page_name: UserHomePage.yml
+        page_uuid: c718e435-efc4-4677-ba72-4b8996b78a64
         uuid: 7794c91e-b708-41be-83e1-cc0bb6cd667a
     -
         name: 'My History'
         privilege: MANAGE_MY_POLICY_READ
         icon: 'fa fa-book'
-        page_name: UserHistoryPage.yml
+        page_uuid: e0a85518-7657-470f-92d8-00b3dea0bcf4
         uuid: 623132d9-8ccb-4c8a-b7b7-a3b0921defdc
     -
         name: 'Approval Request'
@@ -128,49 +159,49 @@ menu:
         name: Home
         icon: 'fa fa-home'
         privilege: MANAGE_POLICY_APPROVAL_READ
-        page_name: CSRHomePage.yml
+        page_uuid: 016a34e6-4af6-4863-b8e2-0cee142b09a2
         uuid: 24176975-8f4d-499d-8b2d-86902de26c14
     -
         name: Requests
         privilege: MANAGE_POLICY_APPROVAL_WRITE
         icon: 'fa fa-list'
-        page_name: CSRRequestsPage.yml
+        page_uuid: 9b52ced7-80b7-4cd6-a986-d4df6812b139
         uuid: 50fd8782-3e08-4a4c-9ff2-10d404904e5e
     -
         name: Errors
         privilege: MANAGE_DIVEINSURANCE_ERRORS_WRITE
         icon: 'fa fa-warning'
-        page_name: ErrorHandlerPage.yml
+        page_uuid: 3af8eeb0-7f43-422a-90f4-2b30b7aab9b7
         uuid: 41551bff-e30e-4ba5-abc1-1a864f12e061
     -
         name: 'Manage Policies'
         icon: 'fa fa-folder-open'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
-        page_name: CSRManagePolicyPage.yml
+        page_uuid: a488af79-31ee-4f11-8715-5bec00f85c8d
         uuid: 576f6ce4-74e6-11ea-bc55-0242ac130003
     -
         name: 'Search Policies'
         icon: 'fa fa-search'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
-        page_name: CSRSearchPage.yml
+        page_uuid: 38b1b9c7-0f6e-4e80-bb08-63262e56c2f9
         uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'
         icon: 'fa fa-list-alt'
         privilege: MANAGE_POLICY_APPROVAL_READ
-        page_name: VerifyPadiPage.yml
+        page_uuid: 0c17785a-b7ae-46c4-a1c3-8bed234b4482
         uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
     -
         name: 'Pocket Card'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
         icon: 'fa fa-address-card'
-        page_name: PocketCardPage.yml
+        page_uuid: 11cd5446-c2fa-42cc-93b1-638670f4adf7
         uuid: 7794c91e-b708-41be-83e1-cc0bb6cd669a
     -
         name: MyAssignments
         privilege: HIDE_FOR_NOW
         icon: 'fa fa-list'
-        page_name: MyAssignmentsPage.yml
+        page_uuid: 151ba91d-f17a-4034-a25f-86f108594637
         uuid: 3b396d26-c0cb-4436-8804-f22431d6ac8c
 workflow:
     -
@@ -196,3 +227,10 @@ form:
         description: 'Lets CSR generate and view Pocket Cards'
         template_file: pocketCard.json
         entity: 'Pocket Card Job'
+group:
+    reactivate: null
+    status: null
+    org_id: (optional)
+    name: null
+    parent_id: (optional)
+    manager_id: null
