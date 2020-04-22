@@ -203,6 +203,14 @@ class CommandService extends AbstractService
                 $this->logger->info("SUBMIT WORKFLOW");
                 return $this->submitWorkflow($data);
                 break;
+            case 'claimForm':
+                $this->logger->info("Claim Form");
+                return $this->claimActivityInstance($data);
+                break;
+            case 'instanceForm':
+                $this->logger->info("Instance Form");
+                return $this->getActivityInstanceForm($data);
+                break;
             default:
                 break;
         };
@@ -655,6 +663,34 @@ class CommandService extends AbstractService
             return $processedData;
         } else {
             return $data;
+        }
+    }
+
+    protected function deactivateFile(&$data){
+        $this->logger->info("Decativate File");
+        if (isset($data['fileId_fieldName']) && isset($data[$data['fileId_fieldName']])) {
+            $fileId = $data[$data['fileId_fieldName']];
+            $this->logger->info("FileId".print_r($fileId,true));
+            $update = "UPDATE ox_file SET latest = 0 where uuid = :fileId";
+            $updateArray = array('fileId' => $fileId);
+            $this->logger->info("Executing query - $update with params ".print_r($updateArray,true));
+            $result = $this->executeUpdatewithBindParameters($update, $updateArray);
+        }
+    }
+
+
+    protected function claimActivityInstance(&$data){
+        $this->logger->info("claimForm");
+        if(isset($data['workflowInstanceId']) && isset($data['activityInstanceId'])){
+           $result = $this->workflowInstanceService->claimActivityInstance($data);    
+        }
+    }
+
+    protected function getActivityInstanceForm(&$data){
+        $this->logger->info("InstanceForm");
+        if(isset($data['workflowInstanceId']) && isset($data['activityInstanceId'])){
+            $result = $this->workflowInstanceService->getActivityInstanceForm($data); 
+            return $result;   
         }
     }
 }

@@ -451,4 +451,14 @@ class WorkflowInstanceService extends AbstractService
         return $params;
 
     }
+
+    public function claimActivityInstance(&$data){
+        $result = $this->activityInstanceService->claimActivityInstance($data);     
+        return $result;
+    }
+
+    public function getActivityInstanceForm(&$data){
+        $result = $this->activityInstanceService->getActivityInstanceForm($data);     
+        return $result;
+    }
 }
