@@ -183,6 +183,7 @@ def cylinder = execution.getVariable('upgradecylinder')
 def paymentOptions = execution.getVariable('paymentOptions')
 def initiatedByCsr = execution.getVariable('initiatedByCsr')
 
+boolean result0 = false
 boolean result1 = false
 boolean result3 = false
 boolean result4 = false
@@ -191,9 +192,8 @@ boolean result6 = true
 
 if(personalInfo){
     if(country != "United States of America"){
-       result3=true 
+       result0=true 
     }
-    execution.setVariable('CSRReviewRequired', result3)
 }
 if(cylinder){
   if(cylinder == "cylinderInspector" || cylinder == "cylinderInstructor"){
@@ -219,7 +219,7 @@ if(paymentOptions){
   }
 }
 
-if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6)) {
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6 || result0)) {
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)
