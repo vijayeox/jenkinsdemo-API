@@ -30,18 +30,6 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     icon: 'fa fa-pencil'
                 -
-                    name: Comment
-                    rule: 'true'
-                    details:
-                        -
-                            type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
-                            useRowData: true
-                        -
-                            type: Comment
-                            url: 'file/{{uuid}}/data'
-                    icon: 'fa fa-comments-o'
-                -
                     name: Endorsement
                     rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'')'
                     details:
