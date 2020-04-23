@@ -349,7 +349,7 @@ class WorkflowService extends AbstractService
         $params = array();
         $where = "where wf.uuid = :id and wd.latest=1";
         $params['id'] = $id;
-        if (isset($params['app_id'])) {
+        if (isset($appId)) {
             $where .= " and app.uuid = :appId";
             $params['appId'] = $appId;
         }
@@ -357,6 +357,7 @@ class WorkflowService extends AbstractService
     from ox_workflow wf inner join ox_workflow_deployment wd on wd.workflow_id = wf.id
     inner join ox_app as app on app.id = wf.app_id
     $where";
+
         $response = $this->executeQueryWithBindParameters($query, $params)->toArray();
         if (count($response) == 0) {
             return 0;

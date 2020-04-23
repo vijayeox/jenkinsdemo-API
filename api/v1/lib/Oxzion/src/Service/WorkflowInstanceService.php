@@ -190,7 +190,12 @@ class WorkflowInstanceService extends AbstractService
         }
         $workflowId = $params['workflowId'];
 
-        $workflow = $this->workflowService->getWorkflow($workflowId);
+        if (!isset($params['app_id'])) {
+            $params['app_id'] = null;
+        }
+
+        $workflow = $this->workflowService->getWorkflow($workflowId, $params['app_id']);
+
         if (empty($workflow)) {
             $this->logger->info("EMPTY WORKFLOW --- ");
             throw new EntityNotFoundException("No workflow found for workflow $workflowId");
