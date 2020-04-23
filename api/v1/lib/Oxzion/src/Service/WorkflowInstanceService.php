@@ -193,8 +193,11 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['app_id'])) {
             $params['app_id'] = null;
         }
+        if (!isset($params['appId'])) {
+            $params['appId'] = null;
+        }
 
-        $workflow = $this->workflowService->getWorkflow($workflowId, $params['app_id']);
+        $workflow = $this->workflowService->getWorkflow($workflowId, $params['appId']);
 
         if (empty($workflow)) {
             $this->logger->info("EMPTY WORKFLOW --- ");
