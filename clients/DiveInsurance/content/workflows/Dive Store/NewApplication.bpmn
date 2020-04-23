@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_18i6ekd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="Process_0mek3rd" name="Dive Store Application" isExecutable="true">
-    <bpmn:userTask id="UserTask_1vfu0fp" name="CSR Rating and Quoating" camunda:asyncAfter="true">
+    <bpmn:userTask id="UserTask_1vfu0fp" name="CSR Rating and Quoating" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveStoreConsolidation" />
@@ -173,7 +173,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_0rbc8h6" name="Payment Not Verified" sourceRef="ExclusiveGateway_0ze1h12" targetRef="Task_1atws1o">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paymentVerified == "declined"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_1atws1o" name="CSR Payment Verification" camunda:asyncAfter="true">
+    <bpmn:userTask id="Task_1atws1o" name="CSR Payment Verification" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveStoreUserApprovalForm" />

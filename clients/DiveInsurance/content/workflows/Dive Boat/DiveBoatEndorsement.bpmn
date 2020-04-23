@@ -60,7 +60,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:endEvent id="EndEvent_1rrbloo" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_1d9s78d</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="UserTask_17tssw0" name="CSR Rating and Quoating" camunda:asyncAfter="true">
+    <bpmn:userTask id="UserTask_17tssw0" name="CSR Rating and Quoating" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="endorsementDiveBoatConsolidation" />
@@ -187,7 +187,7 @@ execution.setVariable('CSRReviewRequired',true);</camunda:script>
       <bpmn:outgoing>SequenceFlow_1hqzh4l</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1imdpib</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="UserTask_0139gd0" name="CSR Payment Verification" camunda:asyncAfter="true">
+    <bpmn:userTask id="UserTask_0139gd0" name="CSR Payment Verification" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveBoatUserApproval" />
