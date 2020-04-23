@@ -1259,44 +1259,14 @@
 			}, {
 				"components": [{
 					"label": "Expiration Date",
-					"allowInput": false,
-					"format": "MM-dd-yyyy",
+					"spellcheck": true,
 					"disabled": true,
-					"tableView": false,
-					"datePicker": {
-						"disableWeekends": false,
-						"disableWeekdays": false,
-						"datepickerMode": "day"
-					},
-					"enableTime": false,
-					"timePicker": {
-						"showMeridian": false
-					},
-					"clearOnHide": false,
-					"calculateValue": "value = moment(data.end_date).format('YYYY MM DD');",
+					"tableView": true,
+					"calculateValue": "if(data.policyPeriod || data.policyPeriod != ''){\n  value = moment(data.end_date).format('MM-DD-YYYY');\n}else{\n  today = moment();\n  month = today.month();\n  year = today.year();\n  if(month > 5){\n    expdate = (year + 1) + \"-07-22\";\n    value = moment(expdate).format('MM-DD-YYYY');\n  }else{\n    expdate = (year)+ \"-07-22\";\n    value = moment(expdate).format('MM-DD-YYYY');\n  }\n}",
 					"calculateServer": false,
 					"key": "expirationDate",
-					"type": "datetime",
+					"type": "textfield",
 					"input": true,
-					"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-					"widget": {
-						"type": "calendar",
-						"displayInTimezone": "viewer",
-						"language": "en",
-						"useLocaleSettings": false,
-						"allowInput": false,
-						"mode": "single",
-						"enableTime": false,
-						"noCalendar": false,
-						"format": "MM-dd-yyyy",
-						"hourIncrement": 1,
-						"minuteIncrement": 1,
-						"time_24hr": true,
-						"minDate": null,
-						"disableWeekends": false,
-						"disableWeekdays": false,
-						"maxDate": null
-					},
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "start_date",
@@ -1310,7 +1280,7 @@
 				}, {
 					"label": "end_date",
 					"defaultValue": "2020-07-31",
-					"calculateValue": "if(data.start_date && data.start_date !== \"\"){\n  var today = moment(data['start_date']); \n  var month = today.month();\n  var year = today.year();\n  if(month > 5){\n    value = (year + 1) + \"-07-22\";\n  }else{\n    value = (year)+ \"-07-22\";\n  }\n}",
+					"calculateValue": "if(data.start_date && data.start_date !== \"\"){\n  var today = moment(data['start_date']); \n  var month = today.month();\n  var year = today.year();\n  if(month > 5){\n    value = (year + 1) + \"-07-22\";\n  }else{\n    value = (year)+ \"-07-22\";\n  }\n}else{\n  value = \"\";\n}",
 					"calculateServer": false,
 					"key": "end_date",
 					"type": "hidden",
@@ -8549,7 +8519,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 403,
+	"_vid": 408,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8567,6 +8537,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-23T04:48:06.529Z",
+	"modified": "2020-04-23T06:38:11.975Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

@@ -1047,44 +1047,14 @@
 			}, {
 				"components": [{
 					"label": "Expiration Date",
-					"allowInput": false,
-					"format": "MM-dd-yyyy",
+					"spellcheck": true,
 					"disabled": true,
-					"tableView": false,
-					"datePicker": {
-						"disableWeekends": false,
-						"disableWeekdays": false,
-						"datepickerMode": "day"
-					},
-					"enableTime": false,
-					"timePicker": {
-						"showMeridian": false
-					},
-					"clearOnHide": false,
-					"calculateValue": "value = moment(data.end_date).format('YYYY MM DD');",
+					"tableView": true,
+					"calculateValue": "if(data.policyPeriod || data.policyPeriod != ''){\n  value = moment(data.end_date).format('MM-DD-YYYY');\n}else{\n  today = moment();\n  month = today.month();\n  year = today.year();\n  if(month > 5){\n    expdate = (year + 1) + \"-07-22\";\n    value = moment(expdate).format('MM-DD-YYYY');\n  }else{\n    expdate = (year)+ \"-07-22\";\n    value = moment(expdate).format('MM-DD-YYYY');\n  }\n}",
 					"calculateServer": false,
 					"key": "expirationDate",
-					"type": "datetime",
+					"type": "textfield",
 					"input": true,
-					"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-					"widget": {
-						"type": "calendar",
-						"displayInTimezone": "viewer",
-						"language": "en",
-						"useLocaleSettings": false,
-						"allowInput": false,
-						"mode": "single",
-						"enableTime": false,
-						"noCalendar": false,
-						"format": "MM-dd-yyyy",
-						"hourIncrement": 1,
-						"minuteIncrement": 1,
-						"time_24hr": true,
-						"minDate": null,
-						"disableWeekends": false,
-						"disableWeekdays": false,
-						"maxDate": null
-					},
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "end_date",
@@ -9610,7 +9580,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 193,
+	"_vid": 194,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9628,6 +9598,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-23T04:48:04.367Z",
+	"modified": "2020-04-23T06:41:04.234Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
