@@ -994,7 +994,7 @@
 			"label": "Columns",
 			"columns": [{
 				"components": [{
-					"label": "Policy Period",
+					"label": "Policy Start Date",
 					"allowInput": false,
 					"format": "MM-dd-yyyy",
 					"disabled": true,
@@ -1046,7 +1046,7 @@
 				"width": 6
 			}, {
 				"components": [{
-					"label": "Expiration Date",
+					"label": "Policy End Date",
 					"spellcheck": true,
 					"disabled": true,
 					"tableView": true,
@@ -9580,7 +9580,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 194,
+	"_vid": 195,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9598,6 +9598,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-23T06:41:04.234Z",
+	"modified": "2020-04-23T13:13:00.620Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
