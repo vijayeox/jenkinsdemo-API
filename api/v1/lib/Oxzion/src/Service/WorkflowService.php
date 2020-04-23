@@ -414,11 +414,7 @@ class WorkflowService extends AbstractService
         $appFilter = "ox_app.uuid ='" . $appId . "'";
 
         $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR ox_user_role.user_id = $userId) 
-                                OR ox_activity_instance_assignee.user_id = $userId
-                                 OR (ox_activity_instance_assignee.user_id is null AND (
-                                ox_activity_instance_assignee.group_id is null
-                                AND ox_activity_instance_assignee.role_id is null
-                                OR ox_activity_instance_assignee.id is null)))
+                                OR ox_activity_instance_assignee.user_id = $userId)
                                 AND $appFilter AND ox_activity_instance.status = 'In Progress'
                                 AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
 
