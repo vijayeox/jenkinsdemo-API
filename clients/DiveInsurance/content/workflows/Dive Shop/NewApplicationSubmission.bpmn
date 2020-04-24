@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1s5itgx" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1s5itgx" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="Process_117wbrp" isExecutable="true">
-    <bpmn:userTask id="UserTask_129zygj" name="CSR Rating and Quoating">
+    <bpmn:userTask id="UserTask_129zygj" name="CSR Rating and Quoating" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="FormField_3sfmm70" type="enum">
@@ -35,7 +35,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_10hmere" sourceRef="ServiceTask_15h6exu" targetRef="ServiceTask_1653ole" />
     <bpmn:sequenceFlow id="SequenceFlow_18ll1di" sourceRef="Task_1dnatga" targetRef="ServiceTask_15h6exu" />
     <bpmn:sequenceFlow id="SequenceFlow_133s8pu" sourceRef="Task_1cdmzmw" targetRef="ExclusiveGateway_1j3y4rx" />
-    <bpmn:userTask id="Task_1dnatga" name="Customer E-Signs and completes payment">
+    <bpmn:userTask id="Task_1dnatga" name="Customer E-Signs and completes payment" camunda:candidateUsers="{{padi}},{{role:CSR}}">
       <bpmn:incoming>SequenceFlow_0zp27r9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_18ll1di</bpmn:outgoing>
     </bpmn:userTask>
@@ -50,7 +50,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_1o9pmr0" name="No" sourceRef="ExclusiveGateway_1j3y4rx" targetRef="UserTask_129zygj">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${FormField_00q3for=="Value_3m37u8g"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_1cdmzmw" name="Customer Approval">
+    <bpmn:userTask id="Task_1cdmzmw" name="Customer Approval" camunda:candidateUsers="{{padi}},{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="FormField_00q3for" label="Accept Quote?" type="enum">

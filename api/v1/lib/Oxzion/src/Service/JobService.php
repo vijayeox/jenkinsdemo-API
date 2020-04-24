@@ -129,7 +129,8 @@ class JobService extends AbstractService
             $this->logger->info("EXECUTING CANCEL JOB WITH JOB NAME AND GROUP AS PARAMETERS");
             if(!isset($jobName) && !isset($jobName)){
                 $this->logger->info('Job Name/Group not specified');
-                throw new ServiceException("Job name/group not specified", "jobname.or.jobgroup not specified");
+                //throw new ServiceException("Job name/group not specified", "jobname.or.jobgroup not specified");
+                return;
             }
             $appNewId = $this->getIdFromUuid('ox_app', $appId);
             if($appNewId != 0){

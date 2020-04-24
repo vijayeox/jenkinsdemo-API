@@ -49,7 +49,7 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
                     }
                     return $this->getSuccessResponse();
                 } else {
-                    return $this->getErrorResponse("Process Instance Id not set", 404, $response);
+                    return $this->getErrorResponse("Process Instance Id not set", 404);
                 }
                 break;
         }

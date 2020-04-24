@@ -196,7 +196,7 @@ class AppService extends AbstractService
         try {
             $ymlData = $this->loadAppDescriptor($path);
             if(!isset($params)){
-                $params = array("initialize", "entity", "workflow", "form", "menu", "page", "job");
+                $params = array("initialize", "entity", "workflow", "form", "page", "menu", "job");
             }
             foreach ($params as $key => $value) {
                 $value = trim($value," ");
@@ -215,9 +215,9 @@ class AppService extends AbstractService
                         break;
                     case 'form': $this->processForm($ymlData, $path);
                         break;
-                    case 'menu': $this->processMenu($ymlData, $path);
-                        break;
                     case 'page': $this->processPage($ymlData, $path);
+                        break;
+                    case 'menu': $this->processMenu($ymlData, $path);
                         break;
                     case 'job': $this->processJob($ymlData);
                         break;
@@ -318,20 +318,9 @@ class AppService extends AbstractService
                 if ($menuUpdated == 0) {
                     $count = $this->menuItemService->saveMenuItem($appUuid, $menu);
                 }
-                if (isset($menu['page_name']) && !empty($menu['page_name'])) {
-                    $menu['page'] = Yaml::parse(file_get_contents($path . 'content/pages/' . $menu['page_name']));
+                if(isset($menu['page_uuid'])){
+                    $menu['page_id'] = $this->getIdFromUuid('ox_app_page', $menu['page_uuid']);
                 }
-                $this->logger->info('The menu data is: '.print_r($menu, true));
-                $page = $menu['page'];
-                if (isset($menu['page_id'])) {
-                    $pageId = $menu['page_id'];
-                } else {
-                    $pageId = null;
-                    $page['uuid'] = isset($page['uuid']) ? $page['uuid'] :UuidUtil::uuid();
-                }
-                $routedata = array("appId" => $appUuid, "orgId" => $yamlData['org'][0]['uuid']);
-                $result = $this->pageService->savePage($routedata, $page, $pageId);
-                $menu['page_id'] = isset($menu['page_id']) ? $menu['page_id'] : $page['id'];
                 $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 $menuData['uuid'] = isset($menuData['uuid']) ? $menuData['uuid'] : $menu['uuid'];
             }
@@ -345,17 +334,14 @@ class AppService extends AbstractService
             $appUuid = $yamlData['app'][0]['uuid'];
             $sequence = 0;
             foreach ($yamlData['pages'] as &$pageData) {
-                $page = $pageData['page'];
-                if (isset($page['page_id'])) {
-                    $pageId = $page['page_id'];
-                } else {
-                    $pageId = null;
-                    $page['uuid'] = isset($page['uuid']) ? $page['uuid'] : UuidUtil::uuid();
+                if (isset($pageData['page_name']) && !empty($pageData['page_name'])) {
+                    $page = Yaml::parse(file_get_contents($path . 'content/pages/' . $pageData['page_name']));
                 }
+                $page['page_id'] = $pageData['uuid'];
+                $pageId = $page['page_id'];
+                $this->logger->info('the page data is: '.print_r($page, true));
                 $routedata = array("appId" => $appUuid, "orgId" => $yamlData['org'][0]['uuid']);
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
-                $page['page_id'] = isset($page['page_id']) ? $page['page_id'] : $page['id'];
-                $pageData['uuid'] = isset($pageData['uuid']) ? $pageData['uuid'] : $page['uuid'];
             }
         }
     }

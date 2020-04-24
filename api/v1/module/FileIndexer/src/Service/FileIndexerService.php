@@ -35,13 +35,13 @@ class FileIndexerService extends AbstractService
         if(isset($fileId))
         {
             $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
-            file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.org_id,
+            file.data as file_data, file.uuid as file_uuid, file.is_active, file.org_id,
             CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
             from ox_file as file
             INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
             INNER JOIN ox_app as app on entity.app_id = app.id
             INNER JOIN ox_field as field ON field.entity_id = entity.id
-            where file.id = ".$fileId." GROUP BY file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id";
+            where file.id = ".$fileId." GROUP BY file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.is_active, file.org_id";
             $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
             $this->logger->info("Executing Query - $select");
             $body=$this->executeQuerywithParams($select)->toArray();
@@ -104,13 +104,13 @@ class FileIndexerService extends AbstractService
                     $fileIds = implode(',', $batch);
                     //Index list
                     $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
-                    file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.org_id,
+                    file.data as file_data, file.uuid as file_uuid, file.is_active,file.org_id,
                     CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
                     from ox_file as file
                     INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
                     INNER JOIN ox_app as app on entity.app_id = app.id
                     INNER JOIN ox_field as field ON field.entity_id = entity.id
-                    where file.id in (".$fileIds.") AND app.id =".$appID." and file.latest =1 GROUP BY file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.workflow_instance_id,file.is_active, file.parent_id, file.org_id";
+                    where file.id in (".$fileIds.") AND app.id =".$appID." GROUP BY file.id,app_name,entity.id, entity.name,file_data,file_uuid,file.is_active, file.org_id";
                     $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
                     $this->logger->info("Executing Query - $select");
                     $bodys=$this->executeQuerywithParams($select)->toArray();
@@ -123,7 +123,7 @@ class FileIndexerService extends AbstractService
                     $select = 'SELECT file.id from ox_file as file
                     INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
                     INNER JOIN ox_app as app on entity.app_id = app.id
-                    where file.id in ('.$fileIds.') AND app.id ='.$appID.' and file.latest =0';
+                    where file.id in ('.$fileIds.') AND app.id ='.$appID.'';
                     $list = $this->executeQuerywithParams($select)->toArray();
                     $deleteIdList = array_column($list, 'id');
 

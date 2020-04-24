@@ -51,22 +51,32 @@ role:
                 privileges_name: MANAGE_MANAGERVIEW
                 permission: 15
         uuid: a6745b11-9aa4-45f1-81c2-92deaba95171
+pages:
+    -
+        page_name: ManagerProductionOIPage.yml
+        uuid: 356ab802-2de7-4b5b-a76e-97a863e1332b
+    -
+        page_name: ManagerUnderwriterOIPage.yml
+        uuid: 1dee3f2e-9952-4390-9d42-904d28b9f91f
+    -
+        page_name: ManagerAgentOIPage.yml
+        uuid: 68e1c30c-9bfd-456a-a99b-da4fc80b9186
 menu:
     -
         name: Production
         icon: 'fa fa-home'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page_name: ManagerProductionOIPage.yml
+        page_uuid: 356ab802-2de7-4b5b-a76e-97a863e1332b
         uuid: d02ffb8f-a3ae-476a-a85f-198dd73359ac
     -
         name: Underwriter
         icon: 'fa fa-book'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page_name: ManagerUnderwriterOIPage.yml
+        page_uuid: 1dee3f2e-9952-4390-9d42-904d28b9f91f
         uuid: 234e4f1b-1e44-40f3-a944-3a9b89d855a5
     -
         name: Agent
         icon: 'fa fa-book'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page_name: ManagerAgentOIPage.yml
+        page_uuid: 68e1c30c-9bfd-456a-a99b-da4fc80b9186
         uuid: 775f784d-0f25-4fab-85ef-c8b0a0832339

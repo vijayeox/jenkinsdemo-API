@@ -49,6 +49,19 @@ content:
             actions:
                 -
                     name: Review
+                    rule: '{{to_be_claimed}} == 2'
+                    confirmationMessage: "This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded."
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/reclaim'
+                        -
+                            type: Form
+                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                    icon: 'fa fa-check-circle'
+                -
+                    name: Review
                     rule: '{{to_be_claimed}} == 1'
                     details:
                         -

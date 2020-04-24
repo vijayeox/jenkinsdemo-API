@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0s90c27" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0s90c27" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="Process_1jsc7lc" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Auto Renewal Process" camunda:asyncAfter="true">
       <bpmn:outgoing>SequenceFlow_1xtw30t</bpmn:outgoing>
@@ -111,16 +111,13 @@ def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
           <camunda:script scriptFormat="groovy">def variables = execution.getVariables()
 def workflowId = variables.workflowId
 
-if(fileId){
-  execution.setVariable("previous_fileId",fileId)
-} 
-
 if(workflowId){
   execution.setVariable("parent_workflow_id",workflowId)
 execution.setVariable("parentWorkflowInstanceId",execution.processInstanceId)
 
 }
 execution.removeVariable("workflowId")
+execution.removeVariable("previous_fileId")
 execution.removeVariable("approved")
 execution.setVariable("process_reminder",true)</camunda:script>
         </camunda:executionListener>
@@ -143,7 +140,7 @@ execution.setVariable("process_reminder",true)</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_06ys4y1" name="Not Approved" sourceRef="Task_1rdb4rd" targetRef="EndEvent_1f7bqcc">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_1rdb4rd" name="IPL CSR Review">
+    <bpmn:userTask id="Task_1rdb4rd" name="IPL CSR Review" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="csrInitiatesIpl" />
@@ -245,7 +242,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
       <bpmn:outgoing>SequenceFlow_0dcdc0j</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_04lfhtm</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Task_1vk8q6k" name="EFR CSR Review">
+    <bpmn:userTask id="Task_1vk8q6k" name="EFR CSR Review" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="efrCsrReview" />
@@ -264,7 +261,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_1pbw1kb" name="Not Approved" sourceRef="Task_1vk8q6k" targetRef="EndEvent_1f7bqcc">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_07nprhc" name="Dive Boat CSR Review">
+    <bpmn:userTask id="Task_07nprhc" name="Dive Boat CSR Review" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveBoatCsrReviewForm" />
@@ -283,7 +280,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_10eg5wo" name="Not Approved" sourceRef="Task_07nprhc" targetRef="EndEvent_0cah3te">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved== "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_0jy4bra" name="Dive Store CSR Review">
+    <bpmn:userTask id="Task_0jy4bra" name="Dive Store CSR Review" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveStoreCsrCopy" />

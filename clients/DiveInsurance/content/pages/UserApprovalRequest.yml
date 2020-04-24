@@ -1,9 +1,6 @@
-name: 'My Assignments'
-description: 'My Assignments'
+name: 'Approval Request'
+description: 'Shows a list of requests for approval'
 content:
-    -
-        type: Document
-        content: '<p><h2>My Assignments</h2></p><p></p>'
     -
         type: List
         content:

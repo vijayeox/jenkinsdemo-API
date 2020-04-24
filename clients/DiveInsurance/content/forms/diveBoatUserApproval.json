@@ -59,7 +59,7 @@
 				"type": "well",
 				"input": false,
 				"components": [{
-					"label": "<b>I hereby declare that I accept the proposal</b>",
+					"label": "I hereby declare that I accept the proposal",
 					"optionsLabelPosition": "right",
 					"inline": false,
 					"tableView": true,
@@ -438,7 +438,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "paymentApprovalPanel",
-			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data.policyStatus != 'Quote Approval Pending') ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
 			"label": "Payment Approval",
 			"input": false,
@@ -550,7 +550,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 59,
+	"_vid": 65,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -568,6 +568,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-20T04:00:44.622Z",
+	"modified": "2020-04-23T07:14:08.155Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

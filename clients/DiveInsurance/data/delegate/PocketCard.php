@@ -182,7 +182,7 @@ class PocketCard extends PolicyDocument
         $this->logger->info('pocket card - padi data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
-            if(isset($value['groupPL']) && !empty($value['groupPL'])){
+            if(isset($value['groupPL']) && !empty($value['groupPL']) && $data['groupPL'] != "[]"){
                 $this->logger->info('group PL members need to be formatted to a new array');
                 $groupData = json_decode($value['groupPL'], true);
                 $this->logger->info('group data is: '.print_r($groupData, true));

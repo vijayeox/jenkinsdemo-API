@@ -54,7 +54,7 @@ class ActivityInstanceService extends AbstractService
             LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id
             LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id
             LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
-            LEFT JOIN ox_file on ox_file.workflow_instance_id=ox_workflow_instance.id
+            LEFT JOIN ox_file on ox_file.id=ox_workflow_instance.file_id
             LEFT JOIN ox_app on ox_app.id = ox_form.app_id
             WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND
             ox_activity_instance.activity_instance_id=:activityInstanceId;";
@@ -167,6 +167,63 @@ class ActivityInstanceService extends AbstractService
         }
         return 1;
     }
+
+    public function unclaimActivityInstance($data)
+    {
+        $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id
+        FROM `ox_activity_instance`
+        INNER JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id
+        INNER JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
+        INNER JOIN ox_app on ox_app.id = ox_workflow_instance.app_id
+        WHERE ox_activity_instance.org_id =:orgId
+        AND ox_app.uuid=:appId
+        AND ox_activity_instance.activity_instance_id=:activityInstanceId;";
+        $activityParams = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),
+            "appId" => $data['appId'],
+            "activityInstanceId" => $data['activityInstanceId']);
+        $this->logger->info("Executing query - $activityQuery with params " . json_encode($activityParams));
+        $activityInstance = $this->executeQuerywithBindParameters($activityQuery, $activityParams)->toArray();
+
+        if (isset($activityInstance) && is_array($activityInstance) && !empty($activityInstance)) {
+            $taskId = str_replace($activityInstance[0]["task_id"] . ":", "", $activityInstance[0]['activity_instance_id']);
+            try {
+                $test = $this->activityEngine->unclaimActivity($taskId, AuthContext::get(AuthConstants::USERNAME));
+            } catch (Exception $e) {
+                throw $e;
+            }
+        } else {
+            $this->logger->info("No data found");
+            return 0;
+        }
+        try {
+            $updateQuery = "UPDATE ox_activity_instance_assignee SET assignee = :assignee WHERE activity_instance_id = (SELECT id from ox_activity_instance WHERE activity_instance_id = :activityInstanceId)";
+            $updateParams = array("assignee" => 0, "activityInstanceId" => $data['activityInstanceId']);
+            $update = $this->executeQuerywithBindParameters($updateQuery, $updateParams);
+            $this->commit();
+            return 1;
+        } catch (Exception $e) {
+            $this->logger->info("Creation of Activity Instance Entry Failed" . $e->getMessage());
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+
+
+    public function reclaimActivityInstance($data){
+        try{
+            $result = $this->unclaimActivityInstance($data);
+            if($result == 1){
+                $result = $this->claimActivityInstance($data);   
+                return $result;
+            }
+        }catch(Exception $e){
+            throw $e;
+        }
+         
+    }
+
+    
     public function createActivityInstanceEntry(&$data, $commandService)
     {
         if (!isset($data['processInstanceId'])) {
@@ -208,7 +265,23 @@ class ActivityInstanceService extends AbstractService
             if (isset($data['candidates'])) {
                 foreach ($data['candidates'] as $candidate) {
                     $assignee = 0;
+                    if (isset($candidate['roleid'])) {
+                        $this->logger->info("Creation of Activity Instance role".print_r($candidate['roleid'],true));
+                        if ($candidate['type'] == 'assignee') {
+                            $assignee = 1;
+                        }
+                        $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_role` WHERE `name` = '" . $candidate['roleid'] . "';")->toArray();
+                        if ($groupQuery) {
+                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`role_id`)
+                            VALUES (:activityInstanceId,:roleId)";
+                            $insertParams = array("activityInstanceId" => $activityInstance['id'], "roleId" => $groupQuery[0]['id']);
+                            $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
+                            unset($resultSet);
+                            unset($insert);
+                        }
+                    }
                     if (isset($candidate['groupid'])) {
+                         $this->logger->info("Creation of Activity Instance group".print_r($candidate['groupid'],true));
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
                         }
@@ -223,6 +296,8 @@ class ActivityInstanceService extends AbstractService
                         }
                     }
                     if (isset($candidate['userid'])) {
+                        $this->logger->info("Creation of Activity Instance user".print_r($candidate['userid'],true));
+                        $userId = null;
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
                         }
@@ -231,7 +306,7 @@ class ActivityInstanceService extends AbstractService
                             $userId = $userQuery[0]['id'];
                         }
                         if ($candidate['userid'] == 'owner') {
-                            $getOwner = $this->executeQuerywithParams("SELECT created_by FROM `ox_file` WHERE `workflow_instance_id` = '" . $workflowInstanceId . "';")->toArray();
+                            $getOwner = $this->executeQuerywithParams("SELECT ox_file.created_by FROM `ox_file` join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id WHERE ox_workflow_instance.`id` = '" . $workflowInstanceId . "';")->toArray();
                             if (isset($getOwner) && count($getOwner) > 0) {
                                 $userId = $getOwner[0]['created_by'];
                             }
@@ -243,6 +318,7 @@ class ActivityInstanceService extends AbstractService
                             }
                         }
                         if (isset($userId)) {
+                            $this->logger->info("Creation of Activity Instance userID".print_r($userId,true));
                             $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`)
                             VALUES (:activityInstanceId,:userId,:assignee)";
                             $insertParams = array("activityInstanceId" => $activityInstance['id'], "userId" => $userId, "assignee" => $assignee);
@@ -255,7 +331,7 @@ class ActivityInstanceService extends AbstractService
             }
             if (isset($data['variables']) && isset($data['variables']['postCreate'])) {
                 $commandData = $data['variables'];
-                $fileQuery = "SELECT data FROM `ox_file` WHERE workflow_instance_id = :workflow_instance_id;";
+                $fileQuery = "SELECT ox_file.data FROM `ox_file` join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id WHERE ox_workflow_instance.id = :workflow_instance_id;";
                 $resultSet = $this->executeQuerywithBindParameters($fileQuery, array("workflow_instance_id" => $commandData['workflow_instance_id']))->toArray();
                 if (count($resultSet) > 0) {
                     $fileData = json_decode($resultSet[0]['data'], true);

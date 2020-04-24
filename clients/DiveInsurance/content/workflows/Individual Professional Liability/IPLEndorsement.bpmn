@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="IPLEndorsement" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -82,7 +82,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:endEvent id="EndEvent_1ki3ogb" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_1qz971h</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="UserTask_14i3m9l" name="CSR Review" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR Group">
+    <bpmn:userTask id="UserTask_14i3m9l" name="CSR Review" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="endorsementConsolidationIpl" />
@@ -183,6 +183,7 @@ def cylinder = execution.getVariable('upgradecylinder')
 def paymentOptions = execution.getVariable('paymentOptions')
 def initiatedByCsr = execution.getVariable('initiatedByCsr')
 
+boolean result0 = false
 boolean result1 = false
 boolean result3 = false
 boolean result4 = false
@@ -191,9 +192,8 @@ boolean result6 = true
 
 if(personalInfo){
     if(country != "United States of America"){
-       result3=true 
+       result0=true 
     }
-    execution.setVariable('CSRReviewRequired', result3)
 }
 if(cylinder){
   if(cylinder == "cylinderInspector" || cylinder == "cylinderInstructor"){
@@ -219,7 +219,7 @@ if(paymentOptions){
   }
 }
 
-if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6)) {
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6 || result0)) {
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)

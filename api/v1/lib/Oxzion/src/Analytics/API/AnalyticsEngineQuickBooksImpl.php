@@ -37,6 +37,7 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI implements Analyt
     $result = $qbService->getReport($parameters);
     $finalResult['data']=$result['data'];
     $dsid = $this->config['dsid'];
+    unset($result['config']['dsid']);
     $this->updateConfig($result['config'], $dsid);
     return $finalResult;
   }

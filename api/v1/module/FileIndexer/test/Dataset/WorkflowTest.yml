@@ -279,25 +279,20 @@ ox_form_field:
 ox_file:
 -
     id: 101
-    workflow_instance_id: 1
     org_id: 1
     data: "{\"field1\":3,\"field2\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     form_id: 1
     date_created: '2019-12-19 11:03:08'
     entity_id: 1
-    latest: 1
 -
     id: 102
-    workflow_instance_id: 1
-    activity_id: 1
     org_id: 1
     data: "{\"field3\":3,\"field4\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     form_id: 2
     date_created: '2020-01-19 11:03:08'
     entity_id: 1
-    latest: 1
 -
     id: 103
     org_id: 1
@@ -306,7 +301,6 @@ ox_file:
     form_id: 3
     date_created: '2020-02-19 11:03:08'
     entity_id: 1
-    latest: 1
 -
     id: 104
     org_id: 1
@@ -315,7 +309,6 @@ ox_file:
     form_id: 3
     date_created: '2020-03-19 11:03:08'
     entity_id: 1
-    latest: 0
 ox_file_attribute:
 -
     id: 1

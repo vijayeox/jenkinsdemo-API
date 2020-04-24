@@ -35,26 +35,47 @@ class CustomTaskListener implements TaskListener, Serializable {
   void notify(DelegateTask delegateTask) {
     Map taskDetails = [:]
     taskDetails.name = delegateTask.name
+
     def execution = delegateTask.execution
     def candidatesArray = []
     def i=0
+    def reg1 = /\{\{[A-Za-z0-9]*\}\}/
+    def reg2 = /\{\{role:[A-Za-z]*\}\}/
+    def reg3 = /\{\{group:[A-Za-z]*\}\}/
+    taskDetails.variables = execution.getVariables()
     for (IdentityLink item : delegateTask.getCandidates()){
       Map candidateList = [:]
-      candidateList.groupid = item.getGroupId()
       candidateList.type = item.getType()
-      candidateList.userid = item.getUserId()
+      def userId = item.getUserId()
+      def  typeArray = [] 
+      if(userId ==~ reg1){
+        def val = userId.substring(2, userId.length()-2)
+        candidateList.userid = taskDetails.variables[val] ? taskDetails.variables[val]  : item.getUserId();
+      }else{
+        candidateList.userid = item.getUserId();
+      }
+      if(userId ==~ reg2){
+        def val = userId.substring(2, userId.length()-2)
+        typeArray = val.split(":")
+        candidateList.roleid = typeArray[1]
+      }else if(userId ==~ reg3){
+        def val = userId.substring(2, userId.length()-2)
+        typeArray = val.split(":")
+        candidateList.groupid = typeArray[1]
+      }else{
+        candidateList.groupid = item.getGroupId()
+      }
       candidatesArray[i] = candidateList
       i++
     }
     taskDetails.candidates = candidatesArray
     taskDetails.owner = delegateTask.getOwner()
-    taskDetails.variables = execution.getVariables()
     taskDetails.assignee = delegateTask.getAssignee()
     logger.info("Task Data")
-    def reg = /\{\{[A-Za-z0-9]*\}\}/
+   
     println "Task Assignee - ${taskDetails.assignee}"
-    println "Task Assignee match - ${taskDetails.assignee ==~ reg}"
-    if(taskDetails.assignee ==~ reg){
+    println "Task Assignee match - ${taskDetails.assignee ==~ reg1}"
+    if(taskDetails.assignee ==~ reg1){
       logger.info("TaskAssigneeList")
       println "TaskAssigneeList"
       def val = taskDetails.assignee.substring(2, taskDetails.assignee.length()-2)

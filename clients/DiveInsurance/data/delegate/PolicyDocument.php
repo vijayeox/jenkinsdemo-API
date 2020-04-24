@@ -4,10 +4,13 @@ use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ArtifactUtils;
+use Oxzion\Utils\FileUtils;
 use Oxzion\PDF\PDF_Watermarker;
+use Oxzion\AppDelegate\FileTrait;
 
 class PolicyDocument extends AbstractDocumentAppDelegate
 {
+    use FileTrait;
     protected $type;
     protected $template;
     
@@ -246,7 +249,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($this->template[$temp['product']]['card'])){
                     $this->logger->info("generate pocket card");
                     $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                    $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
                     $template = $this->template[$temp['product']]['card'];
                     $options = array();        
                     $docDest = $dest['absolutePath'].$template.'.pdf';
@@ -348,7 +350,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if (isset($this->template[$temp['product']]['card'])) {
                         $this->logger->info('inside dive boat pocket card');
                         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                        $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                        //$dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
                         $template = $this->template[$temp['product']]['card'];
                         $options = array();        
                         $docDest = $dest['absolutePath'].$template.'.pdf';
@@ -426,7 +428,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if (isset($this->template[$temp['product']]['card'])) {
                         $this->logger->info('inside dive boat pocket card');
                         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                        $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                        // $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
                         $template = $this->template[$temp['product']]['card'];
                         $options = array();        
                         $docDest = $dest['absolutePath'].$template.'.pdf';
@@ -522,13 +524,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("temp".print_r($data,true));
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
-            	$docs = array();
+                $docs = array();
                 if(isset($data['documents'])){
                     if(is_string($data['documents'])) {
-                    	$docs = json_decode($data['documents'],true);
+                        $docs = json_decode($data['documents'],true);
                     } else {
-                    	$docs = $data['documents'];
-                	}
+                        $docs = $data['documents'];
+                    }
                 } else {
                     $data['documents'] = array();
                     $docs = $data['documents'];
@@ -536,42 +538,42 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $optionSetCheck = 0;
                 $personalOptionSetCheck = 0;
                 if(isset($data['endorsement_options'])){
-                	if(is_array($data['endorsement_options'])){
-                		if($data['endorsement_options']['modify_additionalInsured'] == true)
-                			$optionSetCheck = 1;
-                		if($data['endorsement_options']['modify_personalInformation'] == true || $data['endorsement_options']['modify_coverage'] == true)
-                			$personalOptionSetCheck = 1;
-                		$this->logger->info("array endorsement_options check value =".print_r($data['endorsement_options'],true));
-                	}
-                	if(is_string($data['endorsement_options']))
-                	{
-                		$endorsementOptions = json_decode($data['endorsement_options'],true);
-                		if($endorsementOptions['modify_additionalInsured'] == true){
-                			$optionSetCheck = 1;
-                		}
-                		if($endorsementOptions['modify_personalInformation'] == true || $endorsementOptions['modify_coverage'] == true){
-                			$personalOptionSetCheck = 1;
-                		}
-                		$this->logger->info("string endorsement_options check value =".$data['endorsement_options']);
-                	}
+                    if(is_array($data['endorsement_options'])){
+                        if($data['endorsement_options']['modify_additionalInsured'] == true)
+                            $optionSetCheck = 1;
+                        if($data['endorsement_options']['modify_personalInformation'] == true || $data['endorsement_options']['modify_coverage'] == true)
+                            $personalOptionSetCheck = 1;
+                        $this->logger->info("array endorsement_options check value =".print_r($data['endorsement_options'],true));
+                    }
+                    if(is_string($data['endorsement_options']))
+                    {
+                        $endorsementOptions = json_decode($data['endorsement_options'],true);
+                        if($endorsementOptions['modify_additionalInsured'] == true){
+                            $optionSetCheck = 1;
+                        }
+                        if($endorsementOptions['modify_personalInformation'] == true || $endorsementOptions['modify_coverage'] == true){
+                            $personalOptionSetCheck = 1;
+                        }
+                        $this->logger->info("string endorsement_options check value =".$data['endorsement_options']);
+                    }
                 }
                 if(isset($docs['coi_document']) && isset($documents['coi_document'][0])){
-                	if($personalOptionSetCheck == 1){
-                		$destinationForWatermark = $dest['absolutePath'].'../../'.$docs['coi_document'][0];
-                		$this->addWaterMark($destinationForWatermark,"INVALID");
-                		foreach ($docs['coi_document'] as $key => $value) {
-                			array_push($documents['coi_document'],$docs['coi_document'][$key]);
-                		}
-                	}
+                    if($personalOptionSetCheck == 1){
+                        $destinationForWatermark = $dest['absolutePath'].'../../../'.$docs['coi_document'][0];
+                        $this->addWaterMark($destinationForWatermark,"INVALID");
+                        foreach ($docs['coi_document'] as $key => $value) {
+                            array_push($documents['coi_document'],$docs['coi_document'][$key]);
+                        }
+                    }
                 }
                 if(isset($docs['additionalInsured_document']) && isset($documents['additionalInsured_document'][0])){
-                	if($optionSetCheck == 1){
-                		$destinationForWatermark = $dest['absolutePath'].'../../'.$docs['additionalInsured_document'][0];
-                		$this->addWaterMark($destinationForWatermark,"INVALID");
-                		foreach ($docs['additionalInsured_document'] as $key => $value) {
-                			array_push($documents['additionalInsured_document'],$docs['additionalInsured_document'][$key]);
-                		}
-                	}
+                    if($optionSetCheck == 1){
+                        $destinationForWatermark = $dest['absolutePath'].'../../../'.$docs['additionalInsured_document'][0];
+                        $this->addWaterMark($destinationForWatermark,"INVALID");
+                        foreach ($docs['additionalInsured_document'] as $key => $value) {
+                            array_push($documents['additionalInsured_document'],$docs['additionalInsured_document'][$key]);
+                        }
+                    }
                 }
                 $data['documents'] = $documents;
             }else if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
@@ -757,8 +759,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
                 
-                $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
-                
+                $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
+
+                if(!is_null($endorsementOptions)){
+                    $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
+                    if( count($workflowInstUuid) > 0 && (isset($workflowInstUuid[0]['process_instance_id']))){
+                        $dest['absolutePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
+                        $dest['relativePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
+                        FileUtils::createDirectory($dest['absolutePath']);
+                    }
+                }
+                $data['dest'] = $dest;
                 return $data;
         }
             
@@ -965,7 +976,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     private function newDataArray($data){
         $this->logger->info('pocket card - padi data to be formatted: '.print_r($data, true));
         $i = 0;
-        if(isset($data['groupPL']) && !empty($data['groupPL'])){
+        if(isset($data['groupPL']) && !empty($data['groupPL']) && $data['groupPL'] != "[]"){
             $this->logger->info('group PL members need to be formatted to a new array');
             $groupData = json_decode($data['groupPL'], true);
             $this->logger->info('group data is: '.print_r($groupData, true));
@@ -992,7 +1003,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             return $response;                
         }
         else{
-            $response['data'] = '';
+            $response = '';
             return $response;
         }
     }
