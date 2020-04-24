@@ -113,6 +113,9 @@ pages:
         page_name: UserHistoryPage.yml
         uuid: e0a85518-7657-470f-92d8-00b3dea0bcf4
     -
+        page_name: UserApprovalRequest.yml
+        uuid: d3af6a0d-b680-4a68-ab3c-912ebd2bb391
+    -
         page_name: CSRDashboardPage.yml
         uuid: 016a34e6-4af6-4863-b8e2-0cee142b09a2
     -
@@ -153,7 +156,7 @@ menu:
         name: 'Approval Request'
         privilege: MANAGE_MY_POLICY_WRITE
         icon: 'fa fa-list'
-        page_name: UserApprovalRequest.yml
+        page_uuid: d3af6a0d-b680-4a68-ab3c-912ebd2bb391
         uuid: 7794c91e-b708-41be-83e1-cc0bb6cd789e
     -
         name: Home
