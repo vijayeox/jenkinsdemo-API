@@ -66,6 +66,15 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
+			"label": "product_email_id",
+			"calculateValue": "value = 'instructors@diveinsurance.com';",
+			"calculateServer": false,
+			"key": "product_email_id",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
 			"label": "disableOptions",
 			"customDefaultValue": "value = false;",
 			"calculateServer": false,
@@ -3205,7 +3214,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 81,
+	"_vid": 82,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3224,6 +3233,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-23T08:39:49.458Z",
+	"modified": "2020-04-24T11:03:44.797Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
