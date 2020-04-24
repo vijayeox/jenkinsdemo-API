@@ -413,6 +413,15 @@
 						"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c",
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "workflowId",
+						"calculateValue": "value = 'cb99e634-de00-468d-9230-d6f77d241c5b'",
+						"calculateServer": false,
+						"key": "workflowId",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
 						"label": "disableUserInfoEditing",
 						"customDefaultValue": "value = false;",
 						"key": "disableUserInfoEdit",
@@ -620,7 +629,8 @@
 					"tableView": false,
 					"key": "columns11",
 					"type": "columns",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}, {
 					"label": "Columns",
 					"input": false,
@@ -772,7 +782,8 @@
 					"tableView": false,
 					"key": "columns12",
 					"type": "columns",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}, {
 					"label": "Columns",
 					"columns": [{
@@ -806,7 +817,8 @@
 					"tableView": false,
 					"key": "columns13",
 					"type": "columns",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}]
 			}, {
 				"title": "Policy Information",
@@ -829,7 +841,7 @@
 							"format": "MM-dd-yyyy",
 							"tableView": false,
 							"datePicker": {
-								"minDate": "moment().subtract(1, 'days')",
+								"minDate": "2020-04-23T04:36:39.000Z",
 								"disableWeekends": false,
 								"disableWeekdays": false,
 								"datepickerMode": "day"
@@ -866,7 +878,7 @@
 								"hourIncrement": 1,
 								"minuteIncrement": 1,
 								"time_24hr": true,
-								"minDate": "moment().subtract(1, 'days')",
+								"minDate": "2020-04-23T04:36:39.000Z",
 								"disableWeekends": false,
 								"disableWeekdays": false,
 								"maxDate": null
@@ -897,7 +909,8 @@
 							"tableView": false,
 							"datePicker": {
 								"disableWeekends": false,
-								"disableWeekdays": false
+								"disableWeekdays": false,
+								"datepickerMode": "day"
 							},
 							"enableTime": false,
 							"timePicker": {
@@ -5519,8 +5532,7 @@
 										},
 										"input": true,
 										"lockKey": true,
-										"hideOnChildrenHidden": false,
-										"isNew": false
+										"hideOnChildrenHidden": false
 									}],
 									"width": 4,
 									"offset": 0,
@@ -10579,7 +10591,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 70,
+	"_vid": 73,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10596,6 +10608,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-23T17:15:15.116Z",
+	"modified": "2020-04-24T09:05:10.495Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
