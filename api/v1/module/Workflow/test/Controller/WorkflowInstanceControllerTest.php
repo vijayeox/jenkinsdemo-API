@@ -197,6 +197,49 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
+    public function testUnclaimActivityInstance()
+    {
+        $this->initAuthToken($this->adminUser);
+        if (enableCamunda == 0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);
+            $mockActivityEngine->expects('unclaimActivity')->with('3f6622fd-0124-11ea-a8a0-22e8105c0778', $this->adminUser)->once()->andReturn(1);
+            $activityInstanceService->setActivityEngine($mockActivityEngine);
+        }
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflowinstance/1/activityinstance/3f6622fd-0124-11ea-a8a0-22e8105c0778/unclaim', 'POST');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('unclaimActivityInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testReclaimActivityInstance()
+    {
+        $this->initAuthToken($this->adminUser);
+        if (enableCamunda == 0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);
+            $mockActivityEngine->expects('unclaimActivity')->with('3f6622fd-0124-11ea-a8a0-22e8105c0778', $this->adminUser)->once()->andReturn(1);
+            $activityInstanceService->setActivityEngine($mockActivityEngine);
+            $mockActivityEngine->expects('claimActivity')->with('3f6622fd-0124-11ea-a8a0-22e8105c0778', $this->adminUser)->once()->andReturn(1);
+            $activityInstanceService->setActivityEngine($mockActivityEngine);
+        }
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflowinstance/1/activityinstance/3f6622fd-0124-11ea-a8a0-22e8105c0778/reclaim', 'POST');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('reclaimActivityInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
     public function testGetActivityInstance()
     {
         $this->initAuthToken($this->adminUser);

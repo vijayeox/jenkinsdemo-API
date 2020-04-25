@@ -29,7 +29,7 @@ class QuoteDocument extends PolicyDocument
                      'rosterFooter' => 'Roster_footer.html',
                      'rosterPdf' => 'Roster.pdf',
                      'lpTemplate' => 'DiveBoat_LP',
-                     'lpheader' => 'DiveBoat_LP_header.html',
+                     'lpheader' => 'DB_Quote_LP_header.html',
                      'lpfooter' => 'DiveBoat_LP_footer.html',
                      'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
                      'boatAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT.pdf',

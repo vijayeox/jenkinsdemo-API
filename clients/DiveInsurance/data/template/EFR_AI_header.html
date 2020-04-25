@@ -16,7 +16,10 @@
         for (var query_string in query_strings_from_url) {
           if (query_strings_from_url.hasOwnProperty(query_string)) {
             var temp_var = query_strings_from_url[query_string].split("=", 2);
-            vars[temp_var[0]] = decodeURI(temp_var[1]);
+            vars[temp_var[0]] = unescape(temp_var[1]);
+            
+            // vars[temp_var[0]] = decodeURIComponent(temp_var[1]);
+            // vars[temp_var[0]] = decodeURIComponent(unescape(temp_var[1]));
           }
         }
         var css_selector_classes = [
@@ -81,7 +84,7 @@
       <div class="spacer"></div>
       <hr class="line2" />
       <center>
-        <div class="title1"><b>PADI PROFESSIONAL LIABILITY</b></div>
+        <div class="title1"><b>Prajwal PADI PROFESSIONAL LIABILITY</b></div>
         <div class="title2"><b>ADDITIONAL INSURED(S) ENDORSEMENT</b></div>
       </center>
       <hr class="line1" />
@@ -92,7 +95,8 @@
           <b class="caption">Contact Agent for information reporting Claims</b>
           <div class="caption1">
             <p class="info" id="nameVal"></p>
-            <p class="info" id="addressVal"></p>
+            <p class="info" id="addressLineVal"></p>
+						<p class ="info" id = "addressLine2Val"></p>
             <p class="info" style="margin-bottom:2px;">
               <span id="phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX
               <span id="faxVal"></span>

@@ -116,7 +116,6 @@ ox_activity_form:
     form_id: 1
 ox_file:
   - id: 11
-    workflow_instance_id: 1
     org_id: 1
     data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
@@ -125,7 +124,6 @@ ox_file:
     is_active: 1
     form_id: 1
   - id: 12
-    workflow_instance_id: 2
     org_id: 1
     data: "New File Data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
@@ -134,7 +132,6 @@ ox_file:
     is_active: 1
     form_id: 1
   - id: 13
-    workflow_instance_id: 2
     org_id: 1
     data: "New File Data - Completed"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
@@ -143,7 +140,6 @@ ox_file:
     is_active: 1
     form_id: 1
   - id: 14
-    workflow_instance_id: 2
     org_id: 1
     data: "New File Data - Latest Completed"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
@@ -160,6 +156,8 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 11
+    file_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
   - id: 2
     workflow_deployment_id: 1
     process_instance_id: 2
@@ -168,6 +166,8 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 12
+    file_data: "New File Data"
   - id: 3
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
@@ -176,6 +176,8 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 11
+    file_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
   - id: 4
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -184,6 +186,8 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 0
+    file_data: ""
 ox_file_attribute:
   - id: 1
     file_id: 11

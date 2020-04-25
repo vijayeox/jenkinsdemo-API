@@ -625,12 +625,15 @@
 			"hidden": true,
 			"spellcheck": false,
 			"tableView": false,
+			"clearOnHide": false,
+			"calculateValue": "value = data.business_name",
 			"calculateServer": false,
+			"allowCalculateOverride": true,
 			"validate": {
 				"required": true
 			},
 			"key": "business_name",
-			"customConditional": "if(data['product'] == 'Dive Store'){\n  if(data.businessPadiVerified===true||data.businessPadiVerified==\"true\"){\n    show =true;\n  } else {\n    show = false;\n  }\n} else {\n  show = false;\n}",
+			"customConditional": "if(data['product'] == 'Dive Store' || data['product'] == 'Dive Boat'){\n  if(data.businessPadiVerified===true||data.businessPadiVerified==\"true\"){\n    show =true;\n  } else {\n    show = false;\n  }\n} else {\n  show = false;\n}",
 			"type": "textfield",
 			"input": true
 		}, {
@@ -1071,6 +1074,10 @@
 										"type": "string"
 									},
 									"text": "Work Phone"
+								}, {
+									"name": "Change Error Label Based on Store",
+									"type": "mergeComponentSchema",
+									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid Work phone number\""
 								}]
 							}, {
 								"name": "Set Label Name based on Product",
@@ -1091,6 +1098,10 @@
 										"type": "string"
 									},
 									"text": "Home or Work Phone"
+								}, {
+									"name": "Change Error Message to work or home phone",
+									"type": "mergeComponentSchema",
+									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid home or work phone number\""
 								}]
 							}],
 							"type": "textfield",
@@ -1152,6 +1163,7 @@
 							"placeholder": " ",
 							"spellcheck": true,
 							"tableView": true,
+							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please enter a valid mobile phone number"
@@ -1230,7 +1242,11 @@
 					"placeholder": " ",
 					"spellcheck": true,
 					"tableView": true,
-					"errorLabel": "Please enter a valid Fax number",
+					"calculateServer": false,
+					"validate": {
+						"customMessage": "Please enter a valid Fax number"
+					},
+					"errorLabel": "Fax",
 					"key": "fax",
 					"type": "phoneNumber",
 					"input": true,
@@ -1267,13 +1283,13 @@
 		"showValidations": false,
 		"tableView": false,
 		"key": "submit",
-		"customConditional": "show = (((data.padiVerified === true && (data.product!='Dive Store' && data.product !='Dive Boat')) || ((data.businessPadiVerified === true || data.padiVerified === true) && (data.product=='Dive Store' || data.product =='Dive Boat'))) && (data.user_exists===0||data.user_exists=='0')) || ((data.padiNotFound===true||data.padiNotFound=='true') && (data.verified === true || data.verified=='true') && (data.user_exists===0||data.user_exists=='0'))",
+		"customConditional": "show = (((data.padiVerified === true && (data.product!='Dive Store')) || ((data.businessPadiVerified === true || data.padiVerified === true) && (data.product=='Dive Store' || data.product =='Dive Boat'))) && (data.user_exists===0||data.user_exists=='0')) || ((data.padiNotFound===true||data.padiNotFound=='true') && (data.verified === true || data.verified=='true') && (data.user_exists===0||data.user_exists=='0'))",
 		"type": "button",
 		"input": true
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 74,
+	"_vid": 81,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1287,6 +1303,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-04-08T05:29:15.225Z",
+	"modified": "2020-04-23T11:53:36.839Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

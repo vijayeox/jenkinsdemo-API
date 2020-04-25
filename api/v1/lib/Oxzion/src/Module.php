@@ -308,7 +308,8 @@ class Module
                 },
                 Analytics\AnalyticsEngine::class => function ($container) {
                     $config = $container->get('config');
-                    return new Analytics\Elastic\AnalyticsEngineImpl($config);
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Elastic\AnalyticsEngineImpl($config,$dbAdapter,$config);
                 },
                 Search\SearchEngine::class => function ($container) {
                     $config = $container->get('config');

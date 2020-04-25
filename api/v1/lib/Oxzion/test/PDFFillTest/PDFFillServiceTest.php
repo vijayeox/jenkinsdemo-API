@@ -3,6 +3,7 @@ namespace PDFFillTest;
 
 use Oxzion\Document\DocumentGeneratorImpl;
 use Oxzion\Test\ServiceTest;
+use Oxzion\Utils\FileUtils;
 
 class PDFServiceTest extends ServiceTest
 {
@@ -24,7 +25,7 @@ class PDFServiceTest extends ServiceTest
         $this->assertEquals($output, 1);
         $this->assertTrue(file_exists($destination));
         $this->assertTrue(filesize($destination)>0);
-        FileUtils::deleteFile("filledpdf.pdf", $destFolder);
+        FileUtils::deleteFile("w2filledpdf.pdf", $destFolder);
 
     }
 

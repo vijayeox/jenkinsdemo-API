@@ -88,6 +88,14 @@ ox_field:
     required: 1
     sequence: 6
     entity_id: 1
+  - id: 7
+    name: "field1"
+    app_id: 99
+    data_type: "integer"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 2
+    entity_id: 2
 ox_form:
   - id: 1
     app_id: 99
@@ -161,6 +169,8 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 11
+    file_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
   - id: 2
     workflow_deployment_id: 1
     process_instance_id: 2
@@ -169,6 +179,8 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 12
+    file_data: "New File Data"
   - id: 3
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
@@ -177,6 +189,8 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 13
+    file_data: "New File Data - In Progress"
   - id: 4
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -185,6 +199,8 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 14
+    file_data: "New File Data - Latest In Progress"
   - id: 5
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -193,6 +209,8 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 0
+    file_data: ""
   - id: 6
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
@@ -201,6 +219,8 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 2
+    file_id: 15
+    file_data: "New File Data - Latest In Progress"
   - id: 7
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
@@ -209,6 +229,8 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 2
+    file_id: 16
+    file_data: "New File Data - Latest Completed"
   - id: 8
     workflow_deployment_id: 2
     process_instance_id: "a1f9af89-8113-4b15-a647-96991f1a98f1"
@@ -217,6 +239,28 @@ ox_workflow_instance:
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 2
+    file_id: 17
+    file_data: "New File Data - Not Latest"
+  - id: 9
+    workflow_deployment_id: 1
+    process_instance_id: "a1f9af89-8113-4b15-a647-96991f1a98f1"
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    file_id: 18
+    file_data: "New File Data with different Workflow- Latest"
+  - id: 10
+    workflow_deployment_id: 1
+    process_instance_id: "d321b276-9e1c-4bdf-8238-7340f9599383"
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    file_id: 18
+    file_data: '{"firstname" : "brian","email" : "brian@gmail.com"}'
 ox_app_menu:
   - id: 1
     uuid: "7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4"
@@ -325,78 +369,69 @@ ox_activity_instance_assignee:
     assignee: 1
 ox_file:
   - id: 11
-    workflow_instance_id: 1
     org_id: 1
     data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     date_created: "2019-06-25 00:00:00"
     created_by: 1
     entity_id: 1
-    latest: 1
   - id: 12
-    workflow_instance_id: 2
     org_id: 1
     data: "New File Data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     date_created: "2019-06-28 00:00:00"
     created_by: 1
     entity_id: 1
-    latest: 1
     assoc_id: 11
   - id: 13
-    workflow_instance_id: 3
     org_id: 1
     data: "New File Data - In Progress"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     entity_id: 1
-    latest: 1
   - id: 14
-    workflow_instance_id: 4
     org_id: 1
     data: "New File Data - Latest In Progress"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
     date_created: "2019-06-26 10:00:00"
     created_by: 1
     entity_id: 1
-    latest: 1
   - id: 15
-    workflow_instance_id: 6
     org_id: 1
     data: "New File Data - Latest In Progress"
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c91478"
     date_created: "2019-06-26 10:00:00"
     created_by: 1
     entity_id: 1
-    latest: 1
   - id: 16
-    workflow_instance_id: 7
     org_id: 1
     data: "New File Data - Latest Completed"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c91478"
     date_created: "2019-06-26 10:00:00"
     created_by: 1
     entity_id: 1
-    latest: 1
   - id: 17
-    workflow_instance_id: 7
     org_id: 1
     data: "New File Data - Not Latest"
     uuid: "37d94567-466a-46c1-8bce-9bdd4e0c0d97"
     date_created: "2019-06-26 10:00:00"
     created_by: 1
     entity_id: 1
-    latest: 0
   - id: 18
-    workflow_instance_id: 8
     org_id: 1
-    data: "New File Data with different Workflow- Latest"
+    data: '{"firstname" : "brian","email" : "brian@gmail.com"}'
     uuid: "39bcde37-1c2a-4461-800d-a5ab4b801491"
     date_created: "2019-06-26 10:00:00"
     created_by: 2
     entity_id: 1
-    latest: 1
+  - id: 19
+    org_id: 1
+    data: "New File Data with different Workflow- Latest"
+    uuid: "553eae5b-db37-4fa9-94a2-21272aaae11e"
+    date_created: "2019-06-26 10:00:00"
+    created_by: 2
+    entity_id: 1
 ox_file_attribute:
   - id: 1
     file_id: 11

@@ -13,7 +13,7 @@ class PolicyCheck extends FileDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Policy Check".print_r($data,true));
-        if(trim($data['padi']) == ''){
+        if(!isset($data['padi']) || (isset($data['padi']) && trim($data['padi']) == '')){
             return $data;
         }
         $params = array();

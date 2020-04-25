@@ -8,7 +8,7 @@ class GroupAddMembers extends AbstractAppDelegate
 {
     public function __construct(){
         parent::__construct();
-        $this->status = array('OWSI' => 'Instructor','MI' => 'Instructor','MSDT' => 'Instructor','UI' => 'Instructor','DM' => 'Dive Master','AI' => 'Assistant Instructor','PM' => 'Instructor','AIN' => 'Assistant Instructor');
+        $this->status = array('OWSI' => 'Instructor','MI' => 'Instructor','AL' => 'Instructor','EFR' => 'Instructor','MSDT' => 'Instructor','UI' => 'Instructor','DM' => 'Dive Master','AI' => 'Assistant Instructor','AIN' => 'Assistant Instructor','LFSI' => 'Swim Instructor','FDIC' => 'Freedive Instructor');
     }
 
     // Padi Verification is performed here
@@ -28,9 +28,18 @@ class GroupAddMembers extends AbstractAppDelegate
             while ($result->next()) {
                 $response[] = $result->current();
             }
+            if($response[0]['firstname'] == ''){
+                $returnArray['membersPadiVerified'] = false;
+                $data = array_merge($data,$returnArray);
+                return $data;      
+            }
             $response[0]['nameOfInstitution'] = 'PADI';
             if(isset($response[0]['status']) && $response[0]['status'] != ''){
-                if(array_key_exists($response[0]['status'], $this->status)){
+                if($response[0]['status'] == 'PM' || $response[0]['firstname'] == ''){
+                    $returnArray['membersPadiVerified'] = false;
+                    $data = array_merge($data,$returnArray);
+                    return $data;        
+                }else if(array_key_exists($response[0]['status'], $this->status)){
                     $response[0]['status'] = $this->status[$response[0]['status']];    
                 }else{
                     $response[0]['status'] = " ";
@@ -39,10 +48,10 @@ class GroupAddMembers extends AbstractAppDelegate
                 $response[0]['status'] = " ";
             }
             $returnArray = array_merge($data,$response[0]);
-            $returnArray['padi_Verified'] = true;
+            $returnArray['membersPadiVerified'] = true;
             return $returnArray;
         } else {
-            $returnArray['padi_Verified'] = false;
+            $returnArray['membersPadiVerified'] = false;
             $data = array_merge($data,$returnArray);
             return $data;
         }

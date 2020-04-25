@@ -17,7 +17,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.0.0",
-    "react-server-boilerplate": "^1.0.2",
     "react-tabs": "^3.0.0",
     "url-loader": "^2.1.0"
   },

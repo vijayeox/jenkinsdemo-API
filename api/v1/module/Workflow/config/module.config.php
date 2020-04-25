@@ -123,6 +123,32 @@ return [
                     ],
                 ],
             ],
+            'unclaimActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/unclaim',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'unclaimActivityInstance',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'reclaimActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/reclaim',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'reclaimActivityInstance',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
             'activityInstanceForm' => [
                 'type' => Segment::class,
                 'options' => [

@@ -42,7 +42,7 @@ class FieldControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 6);
+        $this->assertEquals(count($content['data']), 7);
         $this->assertEquals($content['data'][0]['id'] > 0, true);
         $this->assertEquals($content['data'][0]['name'], 'field1');
         $this->assertEquals($content['data'][1]['id'] > 1, true);

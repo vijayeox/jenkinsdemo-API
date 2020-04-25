@@ -47,7 +47,6 @@
         </testsuite> 
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
-            <directory>./module/Form/test</directory>
         </testsuite>
         <testsuite name="Dive Insurance Fixtures">
             <directory>../../clients/DiveInsurance/test/</directory>

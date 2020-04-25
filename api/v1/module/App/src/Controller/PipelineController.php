@@ -8,6 +8,7 @@ use Oxzion\Service\CommandService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
+use Oxzion\Workflow\Camunda\WorkflowException;
 use Oxzion\EntityNotFoundException;
 use Zend\Http\Request as HttpRequest;
 
@@ -56,7 +57,13 @@ class PipelineController extends AbstractApiController
             $this->log->info(":Entity Not found -" . $e->getMessage());
             $response = ['data' => $params];
             return $this->getErrorResponse($e->getMessage(), 404, $response);
-        } catch (Exception $e) {
+        } catch (WorkflowException $e) {
+            $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
+            if ($e->getReason() == 'TaskAlreadyClaimedException') {
+                return $this->getErrorResponse("Task has already been claimed by someone else", 409);
+            }
+            return $this->getErrorResponse($e->getMessage(), 409);
+        }catch (Exception $e) {
             $this->log->error(":Error -" . $e->getMessage(), $e);
             $response = ['data' => $params];
             return $this->getErrorResponse($e->getMessage(), 500, $response);

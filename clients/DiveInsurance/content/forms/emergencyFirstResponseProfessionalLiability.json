@@ -335,36 +335,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "style",
-							"value": "text-align: center;background-color: #fcf4ac;color: black;border-radius: 10px;line-height: 30px;"
-						}],
-						"content": "The PADI could not be verified by the system. Please check with the PADI Office and select the PADI Verified checkbox below.",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "PadiNotFoundCSRMessage",
-						"customConditional": "show = ((data['padiNotFound']==true||data['padiNotFound']=='true') && \n    (data['verified'] == true || data['verified']=='true') && \n    (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == 'true' || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] === true) &&\n    (data.policy_exists !== 'true' && data.policy_exists !== true));",
-						"type": "htmlelement",
-						"input": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "PADI Verified",
-						"tableView": false,
-						"defaultValue": false,
-						"clearOnHide": false,
-						"validate": {
-							"required": true
-						},
-						"key": "padiVerifiedCSRCheck",
-						"properties": {
-							"negate": "padiVerified"
-						},
-						"customConditional": "show = ((data['padiNotFound']==true||data['padiNotFound']=='true') && \n    (data['verified'] == true || data['verified']=='true') && \n    (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == 'true' || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] === true) &&\n    (data.policy_exists !== 'true' && data.policy_exists !== true));",
-						"type": "checkbox",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}, {
 						"key": "panelColumnsContent4",
 						"label": "Content",
 						"input": false,
@@ -1205,8 +1175,16 @@
 			"path": "panelPanel4"
 		}],
 		"type": "panel",
-		"label": "Panel",
-		"path": "panel"
+		"label": "Personal Information",
+		"path": "panel",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"pageNaN\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);"
 	}, {
 		"type": "panel",
 		"title": "Coverage",
@@ -1347,14 +1325,13 @@
 						"disabled": true,
 						"tableView": true,
 						"delimiter": false,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"customDefaultValue": "value = 0.00",
+						"calculateServer": false,
 						"key": "coverageAmount",
 						"customConditional": "show = false;",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -1452,14 +1429,15 @@
 								"spellcheck": false,
 								"disabled": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": true,
+								"defaultValue": 0,
+								"delimiter": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
-								"customDefaultValue": "value = 0.00",
-								"calculateValue": "value = parseFloat(data.coverageAmount);",
+								"clearOnHide": false,
+								"calculateValue": "value = data.coverageAmount?parseFloat(data.coverageAmount):0;",
+								"calculateServer": false,
 								"key": "amount",
 								"type": "number",
-								"decimalLimit": 2,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1509,14 +1487,12 @@
 								"disabled": true,
 								"tableView": true,
 								"delimiter": false,
-								"requireDecimal": true,
+								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
-								"customDefaultValue": "value = 0.00",
 								"calculateValue": "value = parseFloat(data['amount'] - data['amountPayable']) ;",
 								"key": "balance",
 								"type": "number",
-								"decimalLimit": 2,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1574,7 +1550,7 @@
 			}],
 			"path": "pageNaNPanel"
 		}, {
-			"title": "Policy Holder Attachments",
+			"title": "  User Attachments",
 			"theme": "primary",
 			"breadcrumbClickable": false,
 			"buttonSettings": {
@@ -1587,9 +1563,17 @@
 			"key": "techrecPanel",
 			"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
-			"label": "Attachments",
+			"label": "  ",
 			"input": false,
 			"components": [{
+				"label": "documentFields",
+				"calculateValue": "value = [\"attachments1\"];",
+				"calculateServer": false,
+				"key": "documentFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"type": "documentviewer",
 				"key": "attachments1",
 				"calculateValue": "value = (data['attachments'])",
@@ -1599,7 +1583,7 @@
 				"dattype": "documentviewer",
 				"datatype": "documentviewer",
 				"data_type": "documentviewer",
-				"label": "Policy Holder Attachments",
+				"label": "Attachments",
 				"hideLabel": true,
 				"inputType": "documentviewer",
 				"input": 1,
@@ -1620,9 +1604,9 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "page3PanelPanel",
-			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (!(data.CSRReviewRequired == true || data.CSRReviewRequired == \"true\")) {\n  show = true;\n} else {\n  show = false;\n}\nconsole.log(\"Please\");",
 			"type": "panel",
-			"label": "Policy Holder Attachments",
+			"label": "Attachments",
 			"input": false,
 			"components": [{
 				"label": "Attachments",
@@ -1638,32 +1622,28 @@
 				"fileMaxSize": "10MB",
 				"multiple": true,
 				"calculateValue": "if((data.attachments || data.attachments !== undefined) && data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+				"calculateServer": false,
 				"validate": {
+					"customMessage": "Please attach any attachments",
 					"multiple": true
 				},
+				"errorLabel": "Addtional Attachments",
 				"key": "attachments",
 				"type": "file",
 				"input": true
 			}, {
-				"label": "endorAttachmentsFieldnames",
+				"label": "attachmentFields",
+				"customDefaultValue": "value = [\"attachments\"];",
 				"calculateValue": "value = [\"attachments\"];",
 				"calculateServer": false,
 				"key": "attachmentsFieldnames",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
-			}, {
-				"label": "documentFieldnames",
-				"calculateValue": "value = [\"attachments1\"];",
-				"calculateServer": false,
-				"key": "documentFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}],
 			"path": "page3PanelPanel"
 		}, {
-			"title": "CSR Attachments",
+			"title": "Attachments",
 			"theme": "primary",
 			"breadcrumbClickable": false,
 			"buttonSettings": {
@@ -1674,7 +1654,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "CsrAttachments",
-			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data.CSRReviewRequired) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
 			"label": "Attachments",
 			"input": false,
@@ -1701,7 +1681,9 @@
 				"input": true
 			}, {
 				"label": "csrAttachmentsFieldnames",
+				"customDefaultValue": "value = [\"csr_attachments\"];",
 				"calculateValue": "value = [\"csr_attachments\"];",
+				"calculateServer": false,
 				"key": "csrAttachmentsFieldnames",
 				"type": "hidden",
 				"input": true,
@@ -1977,15 +1959,18 @@
 									"format": "yyyy-MM-dd",
 									"tableView": true,
 									"datePicker": {
+										"minDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
 										"datepickerMode": "day"
 									},
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
 									},
+									"calculateServer": false,
 									"validate": {
-										"required": true,
-										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+										"required": true
 									},
 									"key": "date_of_incident",
 									"type": "datetime",
@@ -2005,7 +1990,9 @@
 										"hourIncrement": 1,
 										"minuteIncrement": 1,
 										"time_24hr": true,
-										"minDate": null,
+										"minDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
 										"maxDate": null
 									},
 									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
@@ -2250,26 +2237,17 @@
 			"theme": "primary",
 			"tableView": false,
 			"components": [{
-				"clearOnHide": false,
-				"key": "page5ColumnsPanel4Well",
+				"key": "page5ColumnsPanel4Content2",
+				"label": "Content",
 				"input": false,
-				"components": [{
-					"key": "page5ColumnsPanel4Content2",
-					"label": "Content",
-					"input": false,
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "HUB International Insurance will use the information you provide on this form to be in touch with you and to provide updates and marketing. We will treat your information with respect. For more information about our privacy practices please visit our website. By checking this box, you agree that we may process your information in accordance with these terms.",
-					"type": "htmlelement",
-					"hideLabel": true,
-					"tableView": false
+				"attrs": [{
+					"value": "",
+					"attr": ""
 				}],
-				"tableView": false,
-				"type": "well",
+				"content": "HUB International Insurance will use the information you provide on this form to be in touch with you and to provide updates and marketing. We will treat your information with respect. For more information about our privacy practices please visit our website. By checking this box, you agree that we may process your information in accordance with these terms.",
+				"type": "htmlelement",
 				"hideLabel": true,
-				"label": ""
+				"tableView": false
 			}, {
 				"label": "I Agree",
 				"tableView": true,
@@ -2832,6 +2810,18 @@
 						"label": "Card Details",
 						"input": false,
 						"components": [{
+							"label": "Transaction ID",
+							"spellcheck": false,
+							"disabled": true,
+							"tableView": false,
+							"clearOnHide": false,
+							"calculateValue": "value = data.transaction_id",
+							"calculateServer": false,
+							"key": "transactionId",
+							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+							"type": "textfield",
+							"input": true
+						}, {
 							"type": "convergepay",
 							"key": "creditcardPayment",
 							"amount_field": "amountPayable",
@@ -2953,25 +2943,61 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
-			"label": "Notes:",
-			"autoExpand": false,
-			"autofocus": true,
-			"spellcheck": true,
-			"tableView": true,
-			"calculateServer": false,
-			"key": "notes",
-			"type": "textarea",
-			"input": true
-		}, {
-			"label": "la",
+			"label": "aw",
 			"tableView": false,
-			"key": "pagenew",
+			"key": "aw",
+			"customConditional": "show =\n  (data.padiNotFound == true || data.padiNotFound == \"true\") &&\n  (data.verified == true || data.verified == \"true\") &&\n  (data.privileges.MANAGE_POLICY_APPROVAL_WRITE == \"true\" ||\n    data.privileges.MANAGE_POLICY_APPROVAL_WRITE === true) &&\n  (data.policy_exists !== \"true\" || data.policy_exists !== true);",
 			"type": "well",
 			"input": false,
 			"components": [{
+				"label": "Please process the payment and approve",
+				"tag": "h4",
+				"attrs": [{
+					"attr": "style",
+					"value": "background-color:#FFEB3B;font-size:20px; padding:10px;font-weight:400"
+				}],
+				"content": "The PADI used for the policy could not be verified by the system. </br>\nPlease check with the PADI Office and select the PADI Verified checkbox below.",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page6Pleaseprocessthepaymentandapprove1",
+				"type": "htmlelement",
+				"input": false
+			}, {
+				"label": "PADI Verified",
+				"customClass": "bigText",
+				"tableView": false,
+				"defaultValue": false,
+				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n  data.padiNotFound = false;\n} else {\n  data.padiVerified = false;\n  data.padiNotFound = true;\n}"
+				},
+				"key": "padiVerifiedCSRCheck",
+				"type": "checkbox",
+				"input": true,
+				"hideOnChildrenHidden": false
+			}]
+		}, {
+			"title": "Approve/Reject the Application",
+			"theme": "primary",
+			"breadcrumbClickable": false,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "page77Panel",
+			"type": "panel",
+			"label": "Approve/Reject the Application",
+			"input": false,
+			"components": [{
 				"label": "Approve/Reject the Application",
-				"optionsLabelPosition": "right",
+				"optionsLabelPosition": "top",
 				"inline": true,
+				"hideLabel": true,
 				"autofocus": true,
 				"tableView": true,
 				"values": [{
@@ -2983,6 +3009,7 @@
 					"value": "rejected",
 					"shortcut": ""
 				}],
+				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please Approve/Reject the Application"
@@ -2991,7 +3018,7 @@
 				"type": "radio",
 				"input": true
 			}],
-			"path": "pagenew"
+			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
 			"placeholder": "Please enter the reason for Rejection",
@@ -3023,7 +3050,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 431,
+	"_vid": 465,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3107,7 +3134,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-13T17:24:08.205Z",
+	"modified": "2020-04-17T05:26:19.248Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

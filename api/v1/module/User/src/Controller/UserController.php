@@ -260,7 +260,7 @@ class UserController extends AbstractApiController
 
     public function usersListAction()
     {
-        $filterParams = $this->extractPostData();
+        $filterParams = $this->params()->fromQuery();
         $params = $this->params()->fromRoute();
         $result = $this->userService->getUsers($filterParams, $this->getBaseUrl(), $params);
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
@@ -358,6 +358,7 @@ class UserController extends AbstractApiController
                     unset($options[$pos]);
                 }
             } else {
+                $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : null;
                 $userInfo = $this->userService->getUserWithMinimumDetails($id, $params['orgId']);
             }
             foreach ($options as $key => $value) {

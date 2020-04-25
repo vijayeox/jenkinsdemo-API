@@ -14,12 +14,13 @@ class WorkflowInstance extends Entity
         'org_id' => 0,
         'process_instance_id' => null,
         'status' => null,
-        'data' => null,
         'date_created' => null,
         'date_modified' => null,
         'created_by' => null,
         'modified_by' => null,
-        'parent_workflow_instance_id' => null
+        'parent_workflow_instance_id' => null,
+        'file_id' => 0,
+        'file_data' => null
     );
     
     public function validate()

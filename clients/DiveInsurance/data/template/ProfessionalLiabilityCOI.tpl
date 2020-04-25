@@ -12,7 +12,8 @@
 					<b class = "caption">Agent Information</b>
 					<div class = "caption1">
 						<p class ="info" id = "nameVal"></p>
-						<p class ="info" id = "addressVal"></p>
+						<p class ="info" id = "addressLineVal"></p>
+						<p class ="info" id = "addressLine2Val"></p>
 						<p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
 						<p class ="info" id = "phone2Val" style="margin-bottom:2px;"></p>
 						<p class = "info">License#: {$license_number}</p>
@@ -116,7 +117,7 @@
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if isset($previous_careerCoverage) && !empty($previous_careerCoverage)}
 					{foreach from=$previousCoverages item=previousCoverage}
-						{if $upgradeCareerCoverageVal != $previousCoverage.label}
+						{if $careerCoverageVal != $previousCoverage.label}
 							<p class = "policy_status">Status of Insured : {$previousCoverage.label} as of {$previousCoverage.update_date|date_format:"%m/%d/%Y"}</p>
 						{/if}
 					{/foreach}

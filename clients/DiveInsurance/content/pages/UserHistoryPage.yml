@@ -1,0 +1,37 @@
+name: 'My History'
+description: 'Shows all the policies'
+content:
+    -
+        type: List
+        content:
+            route: 'file/user/me/status/Completed'
+            filterable: false
+            defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
+            resizable: true
+            sortable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            columnConfig:
+                -
+                    title: PADI
+                    field: padi
+                -
+                    title: Name
+                    field: firstname
+                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                -
+                    title: Product
+                    field: entity_name
+                -
+                    title: 'Policy Start Date'
+                    field: start_date
+                    cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}</td>'
+                -
+                    title: 'Policy End Date'
+                    field: end_date
+                    cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'

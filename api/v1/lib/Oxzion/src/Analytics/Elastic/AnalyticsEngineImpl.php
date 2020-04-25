@@ -6,19 +6,17 @@ use Elasticsearch\ClientBuilder;
 use Oxzion\Service\ElasticService;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\Analytics;
-use Oxzion\Analytics\AnalyticsPostProcessing;
-use Logger;
+use Oxzion\Analytics\AnalyticsAbstract;
 
-class AnalyticsEngineImpl implements AnalyticsEngine {
-	private $config;
+
+class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
+
 	private $hasGroup;
-    public function __construct($config) {
-        $this->config = $config;
-        $this->logger = Logger::getLogger(get_class($this));
+    public function __construct($config,$appDBAdapter,$appConfig) {
+		parent::__construct($config,$appDBAdapter,$appConfig);
     }
 
-    public function runQuery($app_name,$entity_name,$parameters)
+    public function getData($app_name,$entity_name,$parameters)
     {
         $this->logger->debug('Run query parameters:');
         $this->logger->debug(
@@ -50,9 +48,6 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				if (isset($query['displaylist'])) {
 					$finalResult['meta']['displaylist'] = $query['displaylist'];
 				}
-			}
-			if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
-				$finalResult['data'] = AnalyticsPostProcessing::postProcess($finalResult['data'],$parameters);
 			}
 			return $finalResult;
 			

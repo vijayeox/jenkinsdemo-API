@@ -1,0 +1,118 @@
+name: Requests
+description: 'Shows requests'
+content:
+    -
+        type: List
+        content:
+            route: assignments
+            filterable: true
+            resizable: true
+            sortable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            operations:
+                title: 'Create Policies'
+                actions:
+                    -
+                        name: IPL
+                        rule: 'true'
+                        details:
+                            -
+                                type: Form
+                                url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                    -
+                        name: 'Emergency First Response'
+                        rule: 'true'
+                        details:
+                            -
+                                type: Form
+                                url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
+                    -
+                        name: 'Dive Boat'
+                        rule: 'true'
+                        details:
+                            -
+                                type: Form
+                                url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
+                    -
+                        name: 'Dive Store'
+                        rule: 'true'
+                        details:
+                            -
+                                type: Form
+                                url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+            actions:
+                -
+                    name: Review
+                    rule: '{{to_be_claimed}} == 2'
+                    confirmationMessage: "This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded."
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/reclaim'
+                        -
+                            type: Form
+                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                    icon: 'fa fa-check-circle'
+                -
+                    name: Review
+                    rule: '{{to_be_claimed}} == 1'
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
+                        -
+                            type: Form
+                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                    icon: 'fa fa-check-circle'
+                -
+                    name: Review
+                    rule: '{{to_be_claimed}} == 0'
+                    details:
+                        -
+                            type: Form
+                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                    icon: 'fa fa-check-circle'
+            columnConfig:
+                -
+                    title: PADI
+                    field: padi
+                -
+                    title: Name
+                    field: firstname
+                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    multiFieldFilter:
+                        - lastname
+                -
+                    title: Policy Status
+                    field: policyStatus
+                -
+                    title: Product
+                    field: entity_name
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Individual Professional Liability'
+                            - 'Dive Boat'
+                            - 'Dive Store'
+                            - 'Emergency First Response'
+                        placeholder: 'Select Policy'
+                -
+                    title: 'Policy Start Date'
+                    field: start_date
+                    cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}</td>'
+                    filter: date
+                    filterFormat: MM-DD-YYYY
+                -
+                    title: 'Policy End Date'
+                    field: end_date
+                    cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
+                    filter: date
+                    filterFormat: MM-DD-YYYY

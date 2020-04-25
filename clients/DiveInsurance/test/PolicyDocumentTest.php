@@ -53,7 +53,7 @@ class PolicyDocumentTest extends DelegateTest
             unlink($path);
         }
         FileUtils::unlink($this->tempFile);
-        $query = "DROP DATABASE " . $this->database;
+        $query = "DROP DATABASE " . $this->database;//comment
         $statement = $this->getDbAdapter()->query($query);
         $result = $statement->execute();
 

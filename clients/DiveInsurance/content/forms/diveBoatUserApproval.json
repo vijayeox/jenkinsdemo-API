@@ -33,7 +33,7 @@
 			"key": "documents1",
 			"datatype": "documentviewer",
 			"data_type": "documentviewer",
-			"label": "Quote Information",
+			"label": " ",
 			"calculateValue": "value = (data['documents'])",
 			"hideLabel": true,
 			"inputType": "documentviewer",
@@ -59,7 +59,7 @@
 				"type": "well",
 				"input": false,
 				"components": [{
-					"label": "<b>I hereby declare that I accept the proposal</b>",
+					"label": "I hereby declare that I accept the proposal",
 					"optionsLabelPosition": "right",
 					"inline": false,
 					"tableView": true,
@@ -173,7 +173,7 @@
 				"tableView": false
 			}, {
 				"label": "amountPayable",
-				"calculateValue": "console.log(data.amount);\nif(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  console.log(month);\n  if(month == 6 ||month == 7){\n    value = (parseFloat(data.amount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.amount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.amount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.amount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.amount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.amount).toFixed(2);\n}",
+				"calculateValue": "var amountPay;\nif(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  console.log(month);\n  if(month == 6 ||month == 7){\n    amountPay = (parseFloat(data.amount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    amountPay = (parseFloat(data.amount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.amount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    amountPay = (parseFloat(data.amount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    amountPay = parseFloat(data.amount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\namountPay = parseFloat(data.amount).toFixed(2);\n}\nvalue = (parseFloat(amountPay)).toFixed(0);",
 				"calculateServer": false,
 				"key": "amountPayable",
 				"type": "hidden",
@@ -226,15 +226,14 @@
 				"disabled": true,
 				"tableView": false,
 				"delimiter": true,
-				"requireDecimal": true,
+				"requireDecimal": false,
 				"inputFormat": "plain",
 				"redrawOn": "amountPayable",
 				"clearOnHide": false,
-				"calculateValue": "value = data.amountPayable",
+				"calculateValue": "value = parseFloat(data.amountPayable).toFixed(0);",
 				"calculateServer": false,
 				"key": "finalAmountPayable",
 				"type": "number",
-				"decimalLimit": 2,
 				"input": true,
 				"inputType": "text"
 			}, {
@@ -439,7 +438,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "paymentApprovalPanel",
-			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data.policyStatus != 'Quote Approval Pending') ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
 			"label": "Payment Approval",
 			"input": false,
@@ -453,13 +452,12 @@
 						"spellcheck": true,
 						"tableView": false,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
 						"key": "paymentRecieved",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -469,12 +467,11 @@
 						"spellcheck": true,
 						"tableView": false,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"calculateServer": false,
 						"key": "amountPending",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -504,14 +501,13 @@
 				"disabled": true,
 				"tableView": false,
 				"delimiter": true,
-				"requireDecimal": true,
+				"requireDecimal": false,
 				"inputFormat": "plain",
-				"calculateValue": "value = data.refund_amt;",
+				"calculateValue": "value = (parseFloat(data.refund_amt)).toFixed(0);",
 				"calculateServer": false,
 				"key": "amountToBeRefunded",
 				"customConditional": "show = (parseFloat(data.amount) < 0)",
 				"type": "number",
-				"decimalLimit": 2,
 				"input": true
 			}, {
 				"label": "Payment Verified",
@@ -554,7 +550,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 54,
+	"_vid": 65,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -572,6 +568,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-13T11:30:57.171Z",
+	"modified": "2020-04-23T07:14:08.155Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

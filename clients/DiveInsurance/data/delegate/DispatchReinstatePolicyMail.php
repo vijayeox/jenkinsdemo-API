@@ -36,15 +36,23 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         $this->logger->info("Dispatch reinstate policy mail notification - data consists of:".json_encode($temp));
         foreach($temp as $key => $value){
             if (is_array($value)) {
-                $value = $value[0];
+                $i = 0; 
+                foreach ($value as $val) {
+                    $fileName = basename($val);
+                    $data['documents'][$key][$i] = $dest['relativePath'].$fileName;
+                    FileUtils::copy($this->destination.$val, $fileName, $this->destination.$dest['relativePath']);
+                    $i += 1;
+                }
             }
-            $fileName = basename($value);
-            $this->logger->info("the fileName is: ".print_r($fileName, true));
-            $this->logger->info("the new path is : ".json_encode($dest));
-            $data['documents'][$key] = $dest['relativePath'].$fileName;
-            $this->logger->info("The destination value is : ".print_r($this->destination.$value, true));
-            $this->logger->info("The destination relative path is : ".print_r($this->destination.$dest['relativePath'], true));
-            FileUtils::copy($this->destination.$value, $fileName, $this->destination.$dest['relativePath']);
+            else {
+                $fileName = basename($value);
+                $this->logger->info("the fileName is: ".print_r($fileName, true));
+                $this->logger->info("the new path is : ".json_encode($dest));
+                $data['documents'][$key] = $dest['relativePath'].$fileName;
+                $this->logger->info("The destination value is : ".print_r($this->destination.$value, true));
+                $this->logger->info("The destination relative path is : ".print_r($this->destination.$dest['relativePath'], true));
+                FileUtils::copy($this->destination.$value, $fileName, $this->destination.$dest['relativePath']);
+            }
         }
         if(isset($data[$data['jobName']])){
             unset($data[$data['jobName']]);
