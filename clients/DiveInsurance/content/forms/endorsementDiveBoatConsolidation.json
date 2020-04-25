@@ -5270,7 +5270,8 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Named Insureds is required"
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -9591,7 +9592,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 197,
+	"_vid": 198,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9609,6 +9610,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-25T09:53:45.761Z",
+	"modified": "2020-04-25T10:50:36.080Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

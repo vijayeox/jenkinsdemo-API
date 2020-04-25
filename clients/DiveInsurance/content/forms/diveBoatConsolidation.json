@@ -5674,7 +5674,8 @@
 					"selectThreshold": 0.3,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Named Insureds is required"
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -8556,7 +8557,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 415,
+	"_vid": 416,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8574,6 +8575,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-25T09:54:01.971Z",
+	"modified": "2020-04-25T10:50:41.582Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
