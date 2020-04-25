@@ -77,6 +77,7 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
             }
         }
         if(isset($data['documentFieldnames'])){
+            $data['documentFieldnames'] = is_string($data['documentFieldnames']) ? json_decode($data['documentFieldnames'],true) : $data['documentFieldnames'];
             $this->cleanDocumentFields($data, $data['documentFieldnames']);
         }
         return $data;
