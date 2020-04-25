@@ -281,6 +281,8 @@ class AppService extends AbstractService
                     {
                         $cancel = $this->jobService->cancelJob($jobName, $jobGroup, $appUuid);
                     }
+                    $this->logger->info("executing schedule job ");
+                    $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
                 }
             }
             catch (Exception $e) {
@@ -298,8 +300,6 @@ class AppService extends AbstractService
                     throw $e;
                 }
             }
-            $this->logger->info("executing schedule job ");
-            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
         }     
     }
 
