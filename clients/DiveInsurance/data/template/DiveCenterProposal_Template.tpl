@@ -617,7 +617,7 @@
             <div class="value_main">
                 <p>{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>{if isset($groupPadiFeeAmount)}${(float)$groupTaxAmount|number_format:2:".":","}{else}$0.00{/if}</p>
+                <p>{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2:".":","}{else}$0.00{/if}</p>
                 <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format:2:".":","}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">

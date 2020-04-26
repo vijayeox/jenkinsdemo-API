@@ -65,7 +65,7 @@ class DispatchProposalDocument extends DispatchDocument {
         
         $data['document'] =$fileData;
         $data['subject'] = 'Proposal Document';
-        $data['url'] = $this->baseUrl. '?app=DiveInsurance&params={"name":" ","detail":[{"type":"Form","url": "pipeline","urlPostParams":{"activityInstanceId":"'.$data['activityInstanceId'].'","workflowInstanceId":"'.$data['workflowInstanceId'].'","commands": [{"command": "claimForm"},{"command": "instanceForm"}]}}]}';
+        $data['url'] = $this->baseUrl. '?app=DiveInsurance&params={"name":"","detail":[{"type":"Form","url": "pipeline","urlPostParams":{"activityInstanceId":"'.$data['activityInstanceId'].'","workflowInstanceId":"'.$data['workflowInstanceId'].'","commands":[{"command":"claimForm"},{"command":"instanceForm"}]}}]}';
         $response = $this->dispatch($data);
         return $response;
     }

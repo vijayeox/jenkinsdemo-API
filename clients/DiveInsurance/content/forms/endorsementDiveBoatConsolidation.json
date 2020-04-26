@@ -38,12 +38,13 @@
 			"tableView": false
 		}, {
 			"label": "documentFields",
-			"calculateValue": "value = [[\"groupPL\",\"document1\"],'attachments1','csrApprovalAttachments1'];",
+			"calculateValue": "value = ['attachments1','csrApprovalAttachments1',[\"groupPL\",\"document1\"]]",
 			"calculateServer": false,
-			"key": "documentFields",
+			"key": "documentFieldnames",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"hideOnChildrenHidden": false
 		}, {
 			"label": "attachmentsFieldnames",
 			"calculateValue": "value = [[\"groupPL\",\"documentattach\"],'attachments','csrApprovalAttachments'];",
@@ -2344,7 +2345,8 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Do they have Professional Liability Insurance is required"
 					},
 					"key": "do_they_have_professional_liability_insurance",
 					"type": "select",
@@ -3821,7 +3823,8 @@
 			"clearOnHide": false,
 			"calculateServer": false,
 			"validate": {
-				"required": true
+				"required": true,
+				"customMessage": "Would you like to add Additional Named Insureds is required"
 			},
 			"key": "additional_named_insureds_option",
 			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
@@ -4174,7 +4177,8 @@
 			"clearOnHide": false,
 			"calculateServer": false,
 			"validate": {
-				"required": true
+				"required": true,
+				"customMessage": "Would you like to add Loss Payees is required"
 			},
 			"key": "loss_payees",
 			"type": "select",
@@ -4397,11 +4401,16 @@
 			},
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
+			"calculateServer": false,
 			"validate": {
-				"required": true
+				"required": true,
+				"customMessage": "Would you like to apply for Coverage for divers in the water is required"
 			},
 			"key": "groupProfessionalLiability",
 			"type": "select",
+			"indexeddb": {
+				"filter": {}
+			},
 			"input": true
 		}, {
 			"label": "groupCoverageSelect",
@@ -4440,7 +4449,8 @@
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Annual receipt instructional supervision is required"
 						},
 						"key": "annualReceipt",
 						"type": "number",
@@ -4917,7 +4927,8 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Insureds is required"
 					},
 					"key": "additional_insured",
 					"type": "select",
@@ -5259,7 +5270,8 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Named Insureds is required"
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -9580,7 +9592,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 195,
+	"_vid": 198,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9598,6 +9610,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-23T13:13:00.620Z",
+	"modified": "2020-04-25T10:50:36.080Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

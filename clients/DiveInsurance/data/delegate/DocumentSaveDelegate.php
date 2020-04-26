@@ -77,6 +77,7 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
             }
         }
         if(isset($data['documentFieldnames'])){
+            $data['documentFieldnames'] = is_string($data['documentFieldnames']) ? json_decode($data['documentFieldnames'],true) : $data['documentFieldnames'];
             $this->cleanDocumentFields($data, $data['documentFieldnames']);
         }
         return $data;
@@ -119,8 +120,14 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                 $gridFieldName = $documentFieldnames[$i][0];
                 if(sizeof($documentFieldnames[$i]) > 1){
                     for ($j=1; $j < sizeof($documentFieldnames[$i]); $j++) {
-                        if(isset($documentFieldnames[$i][$j]) && isset($gridFieldName[$documentFieldnames[$i][$j]]) && isset($data[$gridFieldName[$documentFieldnames[$i][$j]]])){
-                            unset($data[$gridFieldName[$documentFieldnames[$i][$j]]]);
+                        if(isset($documentFieldnames[$i][$j]) ){
+                            if(is_array($data[$gridFieldName])){
+                                foreach ($data[$gridFieldName] as $k => $v) {
+                                    if(isset($data[$gridFieldName][$k][$documentFieldnames[$i][$j]])){
+                                        unset($data[$gridFieldName][$k][$documentFieldnames[$i][$j]]);
+                                    }
+                                }
+                            }
                         }
                     }
                 } else {
