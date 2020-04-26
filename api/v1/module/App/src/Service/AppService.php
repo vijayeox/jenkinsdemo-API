@@ -221,6 +221,8 @@ class AppService extends AbstractService
                         break;
                     case 'job': $this->processJob($ymlData);
                         break;
+                    case 'symlink': $this->processSymlinks($ymlData, $path);
+                    break;
                    default: $this->logger->info("no matching parameter found");
                        break;
                }
@@ -505,6 +507,19 @@ class AppService extends AbstractService
         }
         if (file_exists($formsTarget)) {
             $this->setupLink($formsTarget, $formlink);
+        }
+
+        $guilink = $this->config['GUI_FOLDER'] . $appId;
+        if(!is_dir($this->config['GUI_FOLDER'])){
+            mkdir($this->config['GUI_FOLDER']);
+        }
+        $guiTarget = $path . "view/gui";
+        if (is_link($guilink)) {
+            FileUtils::unlink($guilink);
+        }
+        if (file_exists($guiTarget)) {
+            $this->setupLink($guiTarget, $guilink);
+            $this->executeCommands($guilink);
         }
 
         if ($orgId) {
