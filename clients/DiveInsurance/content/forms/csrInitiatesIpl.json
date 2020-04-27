@@ -1550,6 +1550,7 @@
 								"label": "With TecRec Endorsement for selection above - Declined",
 								"shortcut": ""
 							}],
+							"clearOnHide": false,
 							"calculateServer": false,
 							"validate": {
 								"required": true,
@@ -4309,7 +4310,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 268,
+	"_vid": 269,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4330,6 +4331,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-27T19:54:13.568Z",
+	"modified": "2020-04-27T20:41:03.334Z",
 	"machineName": "testdivehub:csrInitiates"
 }
