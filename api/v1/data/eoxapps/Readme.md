@@ -1,5 +1,6 @@
 Some quick tips on how to use deploy app:
 
+
 Scenario 1: Deploy App - path only
 =========================================
 
@@ -16,3 +17,5 @@ Scenario 2: Deploy App - path + parameters
 2. If you choose to deploy page then 'parameters' to be specified is: page, menu
 
 3. If you choose to deploy menu then 'parameters' to be specified is: menu
+
+4. All the options must be written in CSV format.
