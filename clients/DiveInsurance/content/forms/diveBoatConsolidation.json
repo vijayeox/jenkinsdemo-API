@@ -274,7 +274,7 @@
 						"customClass": "alignCenter",
 						"tableView": false,
 						"key": "changePadi",
-						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if(((data.padiVerified === true || data.padiVerified == 'true')  || (data.businessPadiVerified === true || data.businessPadiVerified == 'true')) &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n} else {\n    show = false;\n}",
+						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\")&&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = false;\n} else if(((data.padiVerified === true || data.padiVerified == 'true')  || (data.businessPadiVerified === true || data.businessPadiVerified == 'true')) &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n} else {\n    show = false;\n}",
 						"logic": [{
 							"name": "Event Handler",
 							"trigger": {
@@ -1353,7 +1353,8 @@
 				}],
 				"calculateServer": false,
 				"validate": {
-					"required": true
+					"required": true,
+					"customMessage": "Do you have a Boat Membership PADI Number is required"
 				},
 				"key": "doYouHaveABoatMembershipPadiNumber",
 				"customConditional": "show = false;\nif(data['businessPadiVerified'] == 'false' || data['businessPadiVerified'] === false){\n  show = true;\n}",
@@ -1409,7 +1410,6 @@
 						"clearOnHide": false,
 						"calculateValue": "if(data.businessPadiVerified == true || data.businessPadiVerified == 'true'){\n  value = data.padi;\n}",
 						"calculateServer": false,
-						"validateOn": "blur",
 						"validate": {
 							"required": true
 						},
@@ -1419,7 +1419,7 @@
 							"name": "Disable",
 							"trigger": {
 								"type": "javascript",
-								"javascript": "result = false;\nif((data.businessPadiVaidated ===true || data.businessPadiVaidated =='true') || (data.businessPadiVerified ===true || data.businessPadiVerified =='true')){\n    result = true;\n}"
+								"javascript": "if(data.businessPadiValidated ===true || data.businessPadiValidated =='true' || data.businessPadiVerified ===true || data.businessPadiVerified =='true'){\n    result = true;\n}else{\n  result = false;\n}"
 							},
 							"actions": [{
 								"name": "DisableField",
@@ -1460,11 +1460,7 @@
 						"properties": {
 							"delegate": "BusinessPadiVerification"
 						},
-						"conditional": {
-							"show": true,
-							"when": "doYouHaveABoatMembershipPadiNumber",
-							"eq": "yes"
-						},
+						"customConditional": "if(data.doYouHaveABoatMembershipPadiNumber == \"yes\" && data.businessPadiValidated == ''){\n  show = true;\n}else{\n  show = false;\n}",
 						"logic": [{
 							"name": "Hide",
 							"trigger": {
@@ -1484,6 +1480,31 @@
 						}],
 						"type": "button",
 						"event": "callDelegate",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Change PADI Number",
+						"action": "event",
+						"showValidations": false,
+						"theme": "warning",
+						"customClass": "alignCenter",
+						"tableView": false,
+						"key": "changeBusinessPadiNumber",
+						"customConditional": "if(data.CSRReviewRequired == true && data.businessPadiValidated && data.businessPadiValidated != \"\" && data.businessPadiValidated == true && data.doYouHaveABoatMembershipPadiNumber == 'yes' && (data.initiatedByUser === true ||  data.initiatedByUser ==  'true')){\n   show =true;\n}else if(data.CSRReviewRequired == true && data.businessPadiValidated && data.businessPadiValidated != \"\" && data.businessPadiValidated == true && data.doYouHaveABoatMembershipPadiNumber == 'yes'){\n  show = false;\n}else if(data.businessPadiValidated && data.businessPadiValidated != \"\" && data.businessPadiValidated == true && data.doYouHaveABoatMembershipPadiNumber == 'yes'){\n  show = true;\n}else{\n  show = false;\n}",
+						"logic": [{
+							"name": "Event Handler",
+							"trigger": {
+								"type": "event",
+								"event": "triggerFormChange"
+							},
+							"actions": [{
+								"name": "Reset Form",
+								"type": "value",
+								"value": "data.businessPadiValidated = false;\ndata.business_padi = \"\";\ndata.businessPadiVerified = false;\ndata.business_name = \"\";"
+							}]
+						}],
+						"type": "button",
+						"event": "triggerFormChange",
 						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -1530,6 +1551,7 @@
 				}, {
 					"components": [{
 						"label": "businessPadiValidated",
+						"calculateServer": false,
 						"key": "businessPadiValidated",
 						"type": "hidden",
 						"input": true,
@@ -8575,7 +8597,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 425,
+	"_vid": 445,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8593,6 +8615,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-27T06:49:40.360Z",
+	"modified": "2020-04-27T10:34:07.805Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
