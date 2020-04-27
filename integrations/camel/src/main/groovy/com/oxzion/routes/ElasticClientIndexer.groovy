@@ -79,6 +79,23 @@ class ElasticClientIndexer extends RouteBuilder {
                                 def deleteRequest = new DeleteRequest(indexName,type,ID)
                                 client.delete(deleteRequest, RequestOptions.DEFAULT)
                             }
+                            else if(operation == 'Bulk')
+                            {
+                                BulkRequest bulk = new BulkRequest()
+                                for(obj in object.body) {
+                                    String id = obj.id
+                                    String content = JsonOutput.toJson(obj)
+                                    bulk.add(new IndexRequest(indexName,type,id).source(content, XContentType.JSON))
+                                }
+                                BulkResponse bulkResponse = client.bulk(bulk, RequestOptions.DEFAULT)
+                                for (BulkItemResponse bulkItemResponse : bulkResponse) {
+                                    if (bulkItemResponse.isFailed()) {
+                                        BulkItemResponse.Failure failure =
+                                                bulkItemResponse.getFailure()
+                                        logger.error("BULK INDEXING (EXCEPTION) Failure is---"+failure)
+                                    }
+                                }
+                            }
                             else if(operation == 'Batch')
                             {
                                 int i = 0
