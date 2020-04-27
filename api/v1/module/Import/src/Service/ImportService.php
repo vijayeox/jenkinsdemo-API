@@ -64,6 +64,7 @@ class ImportService extends AbstractService
         {
             $index = $data['index'];
         }
+        $index = (substr($index,-6)!="_index") ? $index.'_index':$index;        
         $file = fopen($fileName,"r");
         $header = fgetcsv($file);
         $params = array();
