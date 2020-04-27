@@ -102,7 +102,7 @@
 						to the date that the alleged negligent act, error, or omission occurred.
 					</p></center>
 					<hr class = "spacing1"></hr>
-					<b><center><p class = "phy_add">Physical Address {if !$sameasmailingaddress} 
+					<b><center><p class = "phy_add">Physical Address {if $sameasmailingaddress == "false" || $sameasmailingaddress == false }
 													: {$mailaddress1},{$mailaddress2}
 												{else}
 													is the same as the mailing address

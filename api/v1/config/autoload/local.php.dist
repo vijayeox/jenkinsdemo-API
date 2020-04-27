@@ -78,6 +78,7 @@ return [
     'APP_DOCUMENT_FOLDER' => __DIR__.'/../../data/file_docs/',
     'CLIENT_FOLDER' => __DIR__.'/../../../../clients/',
     'APPS_FOLDER' => __DIR__."/../../../../view/apps/",
+    'GUI_FOLDER' => __DIR__."/../../../../view/gui/src/externals/",
     'THEME_FOLDER' => __DIR__."/../../../../view/themes/",
     'internalBaseUrl' => 'http://'.$host.':8080',
     'baseUrl' => 'http://'.$host.':8080',

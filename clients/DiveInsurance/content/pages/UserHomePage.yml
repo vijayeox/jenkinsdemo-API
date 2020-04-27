@@ -129,7 +129,7 @@ content:
                                 url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
                     -
                         name: 'Emergency First Response'
-                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Emergency First Response\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Emergency First Response\" || i.entity_name == \"Individual Professional Liability\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
                         details:
                             -
                                 type: Form
