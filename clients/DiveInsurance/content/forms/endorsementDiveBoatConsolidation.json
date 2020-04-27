@@ -38,12 +38,13 @@
 			"tableView": false
 		}, {
 			"label": "documentFields",
-			"calculateValue": "value = [[\"groupPL\",\"document1\"],'attachments1','csrApprovalAttachments1'];",
+			"calculateValue": "value = ['attachments1','csrApprovalAttachments1',[\"groupPL\",\"document1\"]]",
 			"calculateServer": false,
-			"key": "documentFields",
+			"key": "documentFieldnames",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"hideOnChildrenHidden": false
 		}, {
 			"label": "attachmentsFieldnames",
 			"calculateValue": "value = [[\"groupPL\",\"documentattach\"],'attachments','csrApprovalAttachments'];",
@@ -931,7 +932,10 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
-						"errorLabel": "Please enter a valid Fax number",
+						"calculateServer": false,
+						"validate": {
+							"customMessage": "Please enter a valid Fax number"
+						},
 						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
@@ -1428,6 +1432,9 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"calculateServer": false,
+							"validate": {
+								"customMessage": "Please enter a valid Fax number"
+							},
 							"key": "business_fax",
 							"type": "phoneNumber",
 							"input": true,
@@ -1780,6 +1787,8 @@
 					"dataGridLabel": false,
 					"tableView": false,
 					"datePicker": {
+						"disableWeekends": false,
+						"disableWeekdays": false,
 						"datepickerMode": "day"
 					},
 					"enableTime": false,
@@ -1787,9 +1796,10 @@
 						"showMeridian": false
 					},
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true,
-						"custom": "if(row['data_grid_date'] && row['data_grid_date'] != ''){\n  valid = (moment(row['data_grid_date']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
+						"custom": "if(row['data_grid_date'] && row['data_grid_date'] != ''){\n  valid = (moment(row['data_grid_date']) < moment()) ? true : 'Please choose the date before '+moment().format('MM-DD-YYYY');\n}"
 					},
 					"key": "data_grid_date",
 					"type": "datetime",
@@ -1809,6 +1819,8 @@
 						"minuteIncrement": 1,
 						"time_24hr": true,
 						"minDate": null,
+						"disableWeekends": false,
+						"disableWeekdays": false,
 						"maxDate": null
 					},
 					"inDataGrid": true
@@ -1947,6 +1959,10 @@
 						"spellcheck": true,
 						"tableView": true,
 						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"custom": "if(data['registry_number'] && data['registry_number'] != ''){\n valid = (data['registry_number'].match(/^[0-9a-zA-Z]+$/)) ?  true : 'Please enter a valid register number';\n}"
+						},
 						"key": "registry_number",
 						"type": "textfield",
 						"input": true,
@@ -2344,7 +2360,8 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Do they have Professional Liability Insurance is required"
 					},
 					"key": "do_they_have_professional_liability_insurance",
 					"type": "select",
@@ -3652,7 +3669,8 @@
 									},
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"isNew": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -3821,7 +3839,8 @@
 			"clearOnHide": false,
 			"calculateServer": false,
 			"validate": {
-				"required": true
+				"required": true,
+				"customMessage": "Would you like to add Additional Named Insureds is required"
 			},
 			"key": "additional_named_insureds_option",
 			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
@@ -3969,7 +3988,8 @@
 								},
 								"input": true,
 								"lockKey": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"isNew": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -4174,7 +4194,8 @@
 			"clearOnHide": false,
 			"calculateServer": false,
 			"validate": {
-				"required": true
+				"required": true,
+				"customMessage": "Would you like to add Loss Payees is required"
 			},
 			"key": "loss_payees",
 			"type": "select",
@@ -4322,7 +4343,8 @@
 							},
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"isNew": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -4397,11 +4419,16 @@
 			},
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
+			"calculateServer": false,
 			"validate": {
-				"required": true
+				"required": true,
+				"customMessage": "Would you like to apply for Coverage for divers in the water is required"
 			},
 			"key": "groupProfessionalLiability",
 			"type": "select",
+			"indexeddb": {
+				"filter": {}
+			},
 			"input": true
 		}, {
 			"label": "groupCoverageSelect",
@@ -4440,7 +4467,8 @@
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Annual receipt instructional supervision is required"
 						},
 						"key": "annualReceipt",
 						"type": "number",
@@ -4917,7 +4945,8 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Insureds is required"
 					},
 					"key": "additional_insured",
 					"type": "select",
@@ -5068,7 +5097,7 @@
 											"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 										},
 										"template": "<span>{{ item }}</span>",
-										"refreshOn": "country",
+										"refreshOn": "document1",
 										"clearOnRefresh": true,
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
@@ -5220,8 +5249,7 @@
 							"clearOnHide": false,
 							"hideLabel": true
 						}],
-						"path": "groupAdditionalInsured",
-						"isNew": false
+						"path": "groupAdditionalInsured"
 					}],
 					"lockKey": true,
 					"path": "additional_insureds"
@@ -5259,7 +5287,8 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Named Insureds is required"
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -9580,7 +9609,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 195,
+	"_vid": 203,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9598,6 +9627,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-23T13:13:00.620Z",
+	"modified": "2020-04-27T06:49:52.391Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

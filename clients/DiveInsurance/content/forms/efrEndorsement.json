@@ -1181,7 +1181,6 @@
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
-				"breadcrumb": "none",
 				"breadcrumbClickable": true,
 				"buttonSettings": {
 					"previous": true,
@@ -1190,8 +1189,8 @@
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "page5Panel",
-				"customConditional": "if(data.CSRReviewRequired == true || data.CSRReviewRequired == \"true\"){\n  show = false;\n}",
+				"key": "panel2",
+				"customConditional": "if (data.CSRReviewRequired === \"\" || data.CSRReviewRequired === false || data.CSRReviewRequired == 'false'){\n show = true;\n} else {\n  show = false;\n}",
 				"type": "panel",
 				"label": "Attachments",
 				"input": false,
@@ -1208,25 +1207,25 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"calculateValue": "if(data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateValue": "if((data.endor_attachments || data.endor_attachments !== undefined) && data.endor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"multiple": true
 					},
-					"key": "attachments",
+					"key": "endor_attachments",
 					"type": "file",
-					"url": "https://localhost:8080/attachment",
-					"input": true,
-					"lockKey": true
-				}, {
-					"label": "endorAttachmentsFieldnames",
-					"calculateValue": "value = [\"attachments\"];",
-					"calculateServer": false,
-					"key": "endorAttachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false
+					"input": true
 				}],
-				"path": "page5Panel"
+				"path": "panel2"
+			}, {
+				"label": "attachmentFields",
+				"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
+				"calculateValue": "value = [\"endor_attachments\" , \"chequeConsentFile\"];",
+				"calculateServer": false,
+				"key": "endorAttachmentsFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -1258,49 +1257,23 @@
 					"multiple": true,
 					"clearOnHide": false,
 					"calculateValue": "if((data.csrEndor_attachments || data.csrEndor_attachments !== undefined) && data.csrEndor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
 					"validate": {
 						"multiple": true
 					},
 					"key": "csr_attachments",
 					"type": "file",
 					"input": true
-				}, {
-					"label": "csrEndorAttachmentsFieldnames",
-					"calculateValue": "value = [\"csr_attachments\"];",
-					"calculateServer": false,
-					"key": "csrEndorAttachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false
 				}],
 				"path": "attachmentsCsrEndor"
 			}, {
-				"clearOnHide": false,
-				"key": "pageNaNPanelFieldset",
-				"input": false,
-				"tableView": false,
-				"legend": "Premium Fully Earned",
-				"components": [{
-					"key": "pageNaNPanelContent",
-					"label": "Content",
-					"input": false,
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "<h4>The insurance costs include a premium, a $11 EFR administration fee, plus applicable taxes and fees.</h4>",
-					"type": "htmlelement",
-					"hideLabel": true,
-					"tableView": false
-				}],
-				"type": "fieldset",
-				"hideLabel": true,
-				"style": {
-					"margin-right": "00px",
-					"margin-left": "00px"
-				},
-				"tooltip": "Premium fully earned means there is no refund if you cancel your insurance.",
-				"label": "Field Set"
+				"label": "csrEndorAttachmentsFieldnames",
+				"calculateValue": "value = [\"csr_attachments\"];",
+				"calculateServer": false,
+				"key": "csrEndorAttachmentsFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -1340,7 +1313,7 @@
 					"inline": false,
 					"tableView": true,
 					"values": [{
-						"value": "newListOfAdditionalInsureds",
+						"value": "addAdditionalInsureds",
 						"label": "Update Additional Insureds",
 						"shortcut": ""
 					}, {
@@ -1349,6 +1322,7 @@
 						"shortcut": ""
 					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"key": "AdditionalInsuredOption",
 					"type": "radio",
 					"input": true
@@ -1373,6 +1347,19 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"name": "",
+						"address": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"zip": "",
+						"businessRelation": "",
+						"businessRelationOther": "",
+						"additionalInformation": ""
+					}],
+					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true,
 						"minLength": 1
@@ -1470,16 +1457,22 @@
 									"template": "<span>{{ item.country }}</span>",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Please enter your country."
 									},
 									"key": "country",
 									"properties": {
 										"clear_field": "state"
 									},
 									"type": "select",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
 									"lockKey": true,
+									"source": "5d347da33e9be31e15d3b115",
 									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
@@ -1491,31 +1484,31 @@
 								"components": [{
 									"label": "State",
 									"widget": "choicesjs",
-									"customClass": "additionalInsuredPanelColumns2State",
-									"tableView": false,
+									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
 										"values": [{
-											"value": "",
-											"label": ""
+											"label": "",
+											"value": ""
 										}],
-										"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
+										"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 									},
 									"template": "<span>{{ item }}</span>",
+									"refreshOn": "row.country",
+									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
+									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
 									"key": "state",
-									"conditional": {
-										"show": true,
-										"when": "country"
-									},
 									"customConditional": "show = (row.country)",
 									"type": "select",
-									"refreshOn": "country",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
-									"clearOnRefresh": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -1660,7 +1653,6 @@
 		"properties": {
 			"payment_confirmation_page": "true"
 		},
-		"customConditional": "if (data.privileges) {\n  if (\n    data.endorsement_options.modify_coverage === true &&\n    data.endorAmount > 0 &&\n    data.endorAmount !== undefined &&\n    data.privileges[\"MANAGE_MY_POLICY_WRITE\"]\n  ) {\n    show = true;\n  } else {\n    show = false;\n  }\n}",
 		"type": "panel",
 		"label": "Payment",
 		"buttonSettings": {
@@ -1991,7 +1983,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 102,
+	"_vid": 108,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2012,7 +2004,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-17T05:36:20.823Z",
+	"modified": "2020-04-27T17:14:37.433Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

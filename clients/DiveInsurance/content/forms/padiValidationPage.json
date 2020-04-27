@@ -1642,7 +1642,7 @@
                 }
                 ,
                 {
-                    "label":"Home Phone",
+                    "label":"Work Phone",
                     "placeholder":"Work Phone",
                     "spellcheck":true,
                     "tableView":true,

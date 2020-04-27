@@ -196,7 +196,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessMenu()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')),'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'menu' => array(array('name' => 'Home', 'icon' => 'fa fa-home', 'uuid' => '24176975-8f4d-499d-8b2d-86902de26c14', 'page_name' => 'dummyPage.yml')));
+        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')),'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'menu' => array(array('name' => 'Home', 'icon' => 'fa fa-home', 'uuid' => '24176975-8f4d-499d-8b2d-86902de26c14', 'page_uuid' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c')));
         $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
         $path = __DIR__ . '/../sampleapp/';
         $content = $delegateService->processMenu($data, $path);
@@ -230,11 +230,11 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessPage()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'pages' => array(array('page' => array('name' => 'View Policy', 'description' => 'View Policy', 'page_id' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c', 'content' => array(array('content' => '<p> The page trial. </p>','type' => 'Document'), array('type' => 'DocumentViewer'))), 'uuid' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c')));        
+        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'pages' => array(array('page_name' => 'dummyPage.yml', 'uuid' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c')));        
         $path = __DIR__ . '/../sampleapp/';
         $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $delegateService->processPage($data, $path);
-        $sqlQuery = "SELECT count(name) as count FROM ox_app_page WHERE app_id = 299 and name = 'View Policy'";
+        $sqlQuery = "SELECT count(name) as count FROM ox_app_page WHERE app_id = 299 and uuid = 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);

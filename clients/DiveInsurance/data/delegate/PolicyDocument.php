@@ -13,7 +13,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     use FileTrait;
     protected $type;
     protected $template;
-    
     public function __construct(){
         parent::__construct();
         $this->type = 'policy';
@@ -111,9 +110,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
         $this->endorsementOptions = array('modify_personalInformation','modify_coverage','modify_additionalInsured','modify_businessAndPolicyInformation','modify_boatUsageCaptainCrewSchedule','modify_boatDeatails','modify_additionalInsured','modify_lossPayees','modify_groupProfessionalLiability');
     }
-        
         public function execute(array $data,Persistence $persistenceService) 
-        {     
+        {
             $documents = array();
             $options = array();
             $this->logger->info("Template Data Source - ".print_r($data, true));
@@ -126,7 +124,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['update_date'])){
                 $updateDate = $data['update_date'];
             }
-            
             if(isset($data['previous_policy_data'])){
                 $previous_data = array();
                 $previous_data = json_decode($data['previous_policy_data'],true);
@@ -141,7 +138,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             $this->setPolicyInfo($data,$persistenceService,$endorsementOptions);
-            
             $dest = $data['dest'];
             if($this->type == 'quote' || $this->type == 'endorsementQuote'){
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
@@ -181,7 +177,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents['cylinder_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplCylinder');
                             array_push($coverageList,$data['cylinder']);
                         }
-                        
                         if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
                             $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
                         }
@@ -236,16 +231,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
                 }
 
-                if(isset($temp['AdditionalInsuredOption']) && $temp['AdditionalInsuredOption'] == 'newListOfAdditionalInsureds'){
+                if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
                     $documents['additionalInsured_document'] = array($this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter'));
+                    if(isset($this->template[$temp['product']]['blanketForm'])){
+                        $this->logger->info("DOCUMENT blanketForm");
+                        $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                    }
                 }
 
-                if(isset($this->template[$temp['product']]['blanketForm'])){
-                    $this->logger->info("DOCUMENT blanketForm");
-                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
-                }
-                
                 if(isset($this->template[$temp['product']]['card'])){
                     $this->logger->info("generate pocket card");
                     $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
@@ -294,8 +288,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                     }    
                 }
-                
-
                 if(isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes'){
                     $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
                 }
@@ -375,7 +367,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT instruct");
                     $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
                 }
-                if(isset($temp['additionalInsured']) && (isset($temp['additionalInsuredSelect']) && $temp['additionalInsuredSelect']=="yes")){
+                if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
                     $this->logger->info("DOCUMENT additionalInsured");
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                 }
@@ -456,7 +448,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT liability_policy_document");
                     $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
                 }
-                
                 if(isset($temp['property'])){
                     $this->logger->info("DOCUMENT property_coi_document");
                     $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
@@ -469,13 +460,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->logger->info("DOCUMENT coi_document");
                 $this->logger->info("Policy Document Generation");
                 if($this->type == 'endorsement'){
-                    if($endorsementOptions['modify_businessAndPolicyInformation'] == true || $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true || $endorsementOptions['modify_boatDeatails'] == true || $endorsementOptions['modify_additionalInsured']  == true|| $endorsementOptions['modify_lossPayees'] == true){
+                    if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
                         $documents['endorsement_coi_document'] = isset($documents['endorsement_coi_document']) ? $documents['endorsement_coi_document'] : array();
                         $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                         array_push($documents['endorsement_coi_document'], $endorsementDoc);
                     }
                 }else if($this->type == 'endorsementQuote'){
-                    if($endorsementOptions['modify_businessAndPolicyInformation'] == true || $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true || $endorsementOptions['modify_boatDeatails'] == true || $endorsementOptions['modify_additionalInsured']  == true|| $endorsementOptions['modify_lossPayees'] == true){
+                    if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
                         $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     }
                 }else{
@@ -502,12 +493,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
             }
-            
             if($this->type == 'lapse'){
                 $this->logger->info("DOCUMENT lapse");
                 return $this->generateDocuments($data,$dest,$options,'ltemplate','lheader','lfooter');
             }
-            
             if(isset($this->template[$temp['product']]['slWording'])){        
                 if($temp['product'] == 'Dive Store'){
                     if($temp['state'] == 'California'){
@@ -594,7 +583,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else{
                 $data['documents'] = $documents;
             }
-             
+
             if(isset($data['endorsement_options'])){
                 if(isset($data['endorsementCoverage'])){
                     $data['endorsementCoverage'] = array();
@@ -652,13 +641,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }
-                 
+
         protected function setPolicyInfo(&$data,$persistenceService,$endorsementOptions = null)
         {
                 if($this->type != "quote" || $this->type != "lapse" || $this->type != 'endorsementQuote'){
                     $coi_number = $this->generateCOINumber($data,$persistenceService);
                     if($this->type == 'endorsement'){
-                        if($endorsementOptions['modify_businessAndPolicyInformation'] == true || $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true || $endorsementOptions['modify_boatDeatails'] == true || $endorsementOptions['modify_additionalInsured']  == true|| $endorsementOptions['modify_lossPayees'] == true){
+                        if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
                             if(isset($data['documents']['endorsement_coi_document'])){
                                 $length = sizeof($data['documents']['endorsement_coi_document']) + 1;
                             }else{
@@ -708,7 +697,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                 }
-                
                 $date=date_create($data['start_date']);
                 $data['start_date'] = date_format($date,"m/d/Y");
                 $date=date_create($data['end_date']);
@@ -723,15 +711,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(!isset($data['uuid'])){
                     $data['uuid'] = UuidUtil::uuid();
                 }
-                
                 $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
                 $data['orgUuid'] = $orgUuid;
-                
                 if($this->type != "lapse"){
                     $license_number = $this->getLicenseNumber($data,$persistenceService);
                     $policyDetails = $this->getPolicyDetails($data,$persistenceService);
                     $data['license_number'] = $license_number;
-                    
                     if($policyDetails){
                         $data['policy_id'] = $policyDetails['policy_number'];
                         $data['carrier'] = $policyDetails['carrier'];
@@ -758,7 +743,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }     
                     }
                 }
-                
                 $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
 
                 if(!is_null($endorsementOptions)){
@@ -772,7 +756,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['dest'] = $dest;
                 return $data;
         }
-            
         private function generateCOINumber($data,$persistenceService)
         {  
                 $sequence = 0;
@@ -804,7 +787,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $coi_number = $year. str_pad($sequence,5,'0',STR_PAD_LEFT);
                 return $coi_number;
         }
-            
         private function getCoverageName($data,$product,$persistenceService){
             $selectQuery = "SELECT group_concat(distinct concat('\"',`key`,'\":\"',coverage,'\"')) as name FROM premium_rate_card WHERE `key` in ('".implode("','", $data) . "')  AND product = '".$product."'";
             $resultQuery = $persistenceService->selectQuery($selectQuery);
@@ -814,7 +796,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if($resultQuery->count()!=0){
                 return '{'.$coverageName[0]['name'].'}';
             }
-            
         }
         private function getLicenseNumber($data,$persistenceService)
         {
@@ -834,7 +815,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return $stateLicenseDetails[0]['license_number'];
             }
         }
-        
         private function getPolicyDetails($data,$persistenceService,$product = null)
         {  
             if(!isset($product)){
@@ -850,7 +830,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             return NULL;
         }
-        
         protected function generateDocuments(&$data,$dest,$options,$templateKey,$headerKey = null,$footerKey = null,$indexKey = null,$length = 0){
             $this->logger->info("Generate documents parameters templatekey is : ".print_r($templateKey, true));
             $this->logger->info("policy document destination is : ".print_r($dest, true));
@@ -859,7 +838,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("Product : ".print_r($this->template[$data['product']], true));
             $this->logger->info("TEMPLATE KEY ARRAY : ".print_r($this->template[$data['product']][$templateKey],true));
             $this->logger->info("index key : ".print_r($indexKey,true));
-            
             if(isset($indexKey)){
                 $this->logger->info("template with indexKey");
                 $template =  $this->template[$data['product']][$templateKey][$indexKey];
@@ -876,11 +854,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             } else {
                 $docDest = $dest['absolutePath'].$template.'.pdf';
             }
-            
             if($template == 'Group_PL_COI' || $template == 'Group_PL_COI_DS'){
                 $options['generateOptions'] = array('disable_smart_shrinking' => 1);
             }
-            
             if(isset($headerKey) && $headerKey !=null){ 
                 $options['header'] =  $this->template[$data['product']][$headerKey];
             }
@@ -911,7 +887,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     return $dest['relativePath'].$template.'.pdf';
                 } 
         }
-        
         private function copyDocuments(&$data,$dest,$fileKey,$indexKey =null){
             if(isset($indexKey)){
                 $file =  $this->template[$data['product']][$fileKey][$indexKey];
@@ -932,7 +907,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
         }
-
         private function processAttachments(&$data){
             if(isset($data['csr_attachments']) && (!empty($data['csr_attachments']))){
                 if(is_string($data['csr_attachments'])){
@@ -966,8 +940,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             while ($resultSet->next()) {
                 $stateDetails[] = $resultSet->current();
             }       
-            if(isset($stateDetails) && count($stateDetails)>0){                
-                 $state = $stateDetails[0]['state_in_short'];                
+            if(isset($stateDetails) && count($stateDetails)>0){
+                 $state = $stateDetails[0]['state_in_short'];
             } 
         }
         return $state;
@@ -1000,7 +974,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $i += 1;
             }
             $this->logger->info('the response data is : '.print_r($response, true));
-            return $response;                
+            return $response;
         }
         else{
             $response = '';

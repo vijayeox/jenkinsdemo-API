@@ -389,6 +389,15 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "product_email_id",
+						"calculateValue": "value = 'efr@diveinsurance.com';",
+						"calculateServer": false,
+						"key": "product_email_id",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -437,7 +446,8 @@
 						"key": "firstnameLabel",
 						"type": "htmlelement",
 						"input": false,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"hideLabel": true
 					}],
 					"offset": 0,
 					"push": 0,
@@ -457,7 +467,8 @@
 						"key": "initialLabel",
 						"type": "htmlelement",
 						"input": false,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"hideLabel": true
 					}],
 					"offset": 0,
 					"push": 0,
@@ -477,7 +488,8 @@
 						"key": "lastnameLabel",
 						"type": "htmlelement",
 						"input": false,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"hideLabel": true
 					}],
 					"offset": 0,
 					"push": 0,
@@ -490,7 +502,8 @@
 				"customConditional": "show = !data.padiNotFound;",
 				"type": "columns",
 				"input": false,
-				"path": "columns5"
+				"path": "columns5",
+				"hideLabel": true
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -1604,7 +1617,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "page3PanelPanel",
-			"customConditional": "if (!(data.CSRReviewRequired == true || data.CSRReviewRequired == \"true\")) {\n  show = true;\n} else {\n  show = false;\n}\nconsole.log(\"Please\");",
+			"customConditional": "if (!(data.CSRReviewRequired == true || data.CSRReviewRequired == \"true\")) {\n  show = true;\n} else {\n  show = false;\n}",
 			"type": "panel",
 			"label": "Attachments",
 			"input": false,
@@ -1634,7 +1647,7 @@
 			}, {
 				"label": "attachmentFields",
 				"customDefaultValue": "value = [\"attachments\"];",
-				"calculateValue": "value = [\"attachments\"];",
+				"calculateValue": "value = [\"attachments\", \"chequeConsentForm\"];",
 				"calculateServer": false,
 				"key": "attachmentsFieldnames",
 				"type": "hidden",
@@ -1956,10 +1969,10 @@
 							}, {
 								"components": [{
 									"label": "Date of incident",
-									"format": "yyyy-MM-dd",
+									"format": "MM-dd-yyyy",
 									"tableView": true,
 									"datePicker": {
-										"minDate": "moment()",
+										"maxDate": "moment()",
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"datepickerMode": "day"
@@ -1970,7 +1983,8 @@
 									},
 									"calculateServer": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
 									},
 									"key": "date_of_incident",
 									"type": "datetime",
@@ -1986,14 +2000,14 @@
 										"mode": "single",
 										"enableTime": false,
 										"noCalendar": false,
-										"format": "yyyy-MM-dd",
+										"format": "MM-dd-yyyy",
 										"hourIncrement": 1,
 										"minuteIncrement": 1,
 										"time_24hr": true,
-										"minDate": "moment()",
+										"minDate": null,
 										"disableWeekends": false,
 										"disableWeekdays": false,
-										"maxDate": null
+										"maxDate": "moment()"
 									},
 									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
 								}],
@@ -2318,7 +2332,7 @@
 					"tableView": true,
 					"defaultValue": "noAdditionalInsureds",
 					"values": [{
-						"value": "newListOfAdditionalInsureds",
+						"value": "addAdditionalInsureds",
 						"label": "Add Additional Insureds",
 						"shortcut": ""
 					}, {
@@ -2326,6 +2340,8 @@
 						"label": "No Additional Insureds",
 						"shortcut": ""
 					}],
+					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true
 					},
@@ -2451,16 +2467,22 @@
 									"template": "<span>{{ item.country }}</span>",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Please enter your country."
 									},
 									"key": "country",
 									"properties": {
 										"clear_field": "state"
 									},
 									"type": "select",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
 									"lockKey": true,
+									"source": "5d347da33e9be31e15d3b115",
 									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
@@ -2472,31 +2494,31 @@
 								"components": [{
 									"label": "State",
 									"widget": "choicesjs",
-									"customClass": "additionalInsuredPanelColumns2State",
-									"tableView": false,
+									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
 										"values": [{
-											"value": "",
-											"label": ""
+											"label": "",
+											"value": ""
 										}],
-										"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
+										"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 									},
 									"template": "<span>{{ item }}</span>",
+									"refreshOn": "row.country",
+									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
+									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
 									"key": "state",
-									"conditional": {
-										"show": true,
-										"when": "country"
-									},
 									"customConditional": "show = (row.country)",
 									"type": "select",
-									"refreshOn": "country",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
-									"clearOnRefresh": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -3050,7 +3072,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 465,
+	"_vid": 479,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3134,7 +3156,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-17T05:26:19.248Z",
+	"modified": "2020-04-27T16:41:19.641Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

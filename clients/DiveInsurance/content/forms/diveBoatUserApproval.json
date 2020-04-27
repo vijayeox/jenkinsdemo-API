@@ -68,8 +68,8 @@
 						"label": "Accept",
 						"shortcut": ""
 					}, {
-						"value": "rejected",
 						"label": "Decline",
+						"value": "rejected",
 						"shortcut": ""
 					}],
 					"calculateServer": false,
@@ -85,8 +85,10 @@
 					"autoExpand": false,
 					"spellcheck": true,
 					"tableView": true,
+					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": " Reason for Rejecting the Quote is required"
 					},
 					"key": "userRejectionReason",
 					"conditional": {
@@ -196,7 +198,8 @@
 				"clearOnHide": false,
 				"calculateServer": false,
 				"validate": {
-					"required": true
+					"required": true,
+					"customMessage": "Would you like to apply for Premium Finance is required"
 				},
 				"key": "premiumFinanceSelect",
 				"type": "radio",
@@ -550,7 +553,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 65,
+	"_vid": 66,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -568,6 +571,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-04-23T07:14:08.155Z",
+	"modified": "2020-04-25T09:53:12.850Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

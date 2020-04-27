@@ -38,7 +38,7 @@ class FollowUp extends DispatchNotification
                     $val['to'] = $val['email'];
                     $val['subject'] = "Renewal Notification";
                    
-                    $val['url'] = $this->baseUrl. '?app=DiveInsurance&params={"name" : "","detail":[{"type":"Form","url":"pipeline","urlPostParams":{"workflowInstanceId":"'.$val['workflowInstanceId'].'","workflow_id":"'.$data['workflowId'].'","commands":[{"command":"file"},{"command":"delegate","delegate":"RenewalRateCard"},{"command":"startform"}]}}]}';
+                    $val['url'] = $this->baseUrl. '?app=DiveInsurance&params={"name":"","detail":[{"type":"Form","url":"pipeline","urlPostParams":{"workflowInstanceId":"'.$val['workflowInstanceId'].'","workflow_id":"'.$data['workflowId'].'","commands":[{"command":"file"},{"command":"delegate","delegate":"RenewalRateCard"},{"command":"startform"}]}}]}';
                     $response[] = $this->dispatch($val);
                 }
             }

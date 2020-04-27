@@ -2518,7 +2518,7 @@
 				"tableView": true,
 				"defaultValue": "noAdditionalInsureds",
 				"values": [{
-					"value": "newListOfAdditionalInsureds",
+					"value": "updateAdditionalInsureds",
 					"label": "Update Additional Insureds",
 					"shortcut": ""
 				}, {
@@ -2527,6 +2527,7 @@
 					"shortcut": ""
 				}],
 				"clearOnHide": false,
+				"calculateServer": false,
 				"key": "AdditionalInsuredOption",
 				"type": "radio",
 				"input": true,
@@ -3214,7 +3215,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 82,
+	"_vid": 83,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3233,6 +3234,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-24T11:03:44.797Z",
+	"modified": "2020-04-27T16:40:18.872Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
