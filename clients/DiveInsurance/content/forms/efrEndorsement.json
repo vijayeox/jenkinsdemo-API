@@ -1313,7 +1313,7 @@
 					"inline": false,
 					"tableView": true,
 					"values": [{
-						"value": "newListOfAdditionalInsureds",
+						"value": "addAdditionalInsureds",
 						"label": "Update Additional Insureds",
 						"shortcut": ""
 					}, {
@@ -1322,6 +1322,7 @@
 						"shortcut": ""
 					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"key": "AdditionalInsuredOption",
 					"type": "radio",
 					"input": true
@@ -1346,6 +1347,19 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"name": "",
+						"address": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"zip": "",
+						"businessRelation": "",
+						"businessRelationOther": "",
+						"additionalInformation": ""
+					}],
+					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true,
 						"minLength": 1
@@ -1639,7 +1653,6 @@
 		"properties": {
 			"payment_confirmation_page": "true"
 		},
-		"customConditional": "if (data.privileges) {\n  if (\n    data.endorsement_options.modify_coverage === true &&\n    data.endorAmount > 0 &&\n    data.endorAmount !== undefined &&\n    data.privileges[\"MANAGE_MY_POLICY_WRITE\"]\n  ) {\n    show = true;\n  } else {\n    show = false;\n  }\n}",
 		"type": "panel",
 		"label": "Payment",
 		"buttonSettings": {
@@ -1970,7 +1983,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 104,
+	"_vid": 108,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -1991,7 +2004,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-04-23T20:35:45.713Z",
+	"modified": "2020-04-27T17:14:37.433Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

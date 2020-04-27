@@ -47,7 +47,7 @@
                             $0
                         {/if}</p>
 					<p class = "sec_title2">
-						{if $dspropownbuilding != "no"}
+						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
                             ${$dspropreplacementvalue|number_format:2:".":","}
                         {else}
                             $0

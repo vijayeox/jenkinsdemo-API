@@ -231,15 +231,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
                 }
 
-                if(isset($temp['AdditionalInsuredOption']) && $temp['AdditionalInsuredOption'] == 'newListOfAdditionalInsureds'){
+                if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
                     $documents['additionalInsured_document'] = array($this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter'));
+                    if(isset($this->template[$temp['product']]['blanketForm'])){
+                        $this->logger->info("DOCUMENT blanketForm");
+                        $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                    }
                 }
 
-                if(isset($this->template[$temp['product']]['blanketForm'])){
-                    $this->logger->info("DOCUMENT blanketForm");
-                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
-                }
                 if(isset($this->template[$temp['product']]['card'])){
                     $this->logger->info("generate pocket card");
                     $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
@@ -367,7 +367,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT instruct");
                     $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
                 }
-                if(isset($temp['additionalInsured']) && (isset($temp['additionalInsuredSelect']) && $temp['additionalInsuredSelect']=="yes")){
+                if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
                     $this->logger->info("DOCUMENT additionalInsured");
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                 }

@@ -2332,7 +2332,7 @@
 					"tableView": true,
 					"defaultValue": "noAdditionalInsureds",
 					"values": [{
-						"value": "newListOfAdditionalInsureds",
+						"value": "addAdditionalInsureds",
 						"label": "Add Additional Insureds",
 						"shortcut": ""
 					}, {
@@ -2340,6 +2340,8 @@
 						"label": "No Additional Insureds",
 						"shortcut": ""
 					}],
+					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"required": true
 					},
@@ -3070,7 +3072,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 478,
+	"_vid": 479,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3154,7 +3156,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-26T20:53:32.288Z",
+	"modified": "2020-04-27T16:41:19.641Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

@@ -2151,7 +2151,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "updatesOnPlumbingRoofEtc",
+								"key": "dspropUpdatesonplumbingelectricalroofetc",
 								"type": "textfield",
 								"autoExpand": false,
 								"input": true,
@@ -2624,9 +2624,10 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Please Explain",
-						"autoExpand": false,
 						"spellcheck": true,
 						"tableView": true,
+						"inputFormat": "html",
+						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
 							"required": true
@@ -2638,9 +2639,9 @@
 							"eq": "yes"
 						},
 						"type": "textfield",
+						"autoExpand": false,
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputFormat": "html",
 						"rows": 3,
 						"wysiwyg": false
 					}],
@@ -4635,9 +4636,17 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": false,
-					"defaultValue": [{}],
+					"defaultValue": [{
+						"name": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"address": "",
+						"zip": "",
+						"businessRelation": "",
+						"additionalInformation": ""
+					}],
 					"clearOnHide": false,
-					"customDefaultValue": "value = [{}]",
 					"calculateServer": false,
 					"validate": {
 						"minLength": 1
@@ -10853,7 +10862,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 83,
+	"_vid": 86,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10870,6 +10879,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-26T19:33:37.529Z",
+	"modified": "2020-04-27T19:30:24.522Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

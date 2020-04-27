@@ -20,17 +20,16 @@
 					"optionsLabelPosition": "right",
 					"tableView": true,
 					"defaultValue": {
-						"modify_personinformation": false,
+						"modify_personalInformation": false,
 						"modify_businessAndPolicyInformation": false,
 						"modify_propertyInformation": false,
 						"modify_generalLiabilityInformation": false,
 						"modify_additional": false,
 						"modify_groupProfessionalLiability": false,
-						"modify_personalInformation": false,
 						"modify_optionalCoverages": false
 					},
 					"values": [{
-						"value": "businessAndPolicyInformation",
+						"value": "modify_personalInformation",
 						"label": "Business and Policy Information",
 						"shortcut": ""
 					}, {
@@ -2043,7 +2042,7 @@
 								"validate": {
 									"required": true
 								},
-								"key": "updatesOnPlumbingRoofEtc",
+								"key": "dspropUpdatesonplumbingelectricalroofetc",
 								"type": "textfield",
 								"autoExpand": false,
 								"input": true,
@@ -2519,9 +2518,10 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Please Explain",
-						"autoExpand": false,
 						"spellcheck": true,
 						"tableView": true,
+						"inputFormat": "html",
+						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
 							"required": true
@@ -2533,9 +2533,9 @@
 							"eq": "yes"
 						},
 						"type": "textfield",
+						"autoExpand": false,
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"inputFormat": "html",
 						"rows": 3,
 						"wysiwyg": false
 					}],
@@ -3564,20 +3564,22 @@
 					"autofocus": true,
 					"tableView": false,
 					"values": [{
-						"label": "Add Additional Insureds",
-						"value": "newListOfAdditionalInsureds",
+						"label": "Update Additional Insureds",
+						"value": "addAdditionalInsureds",
 						"shortcut": ""
 					}, {
 						"label": "No Additional Insureds",
 						"value": "noAdditionalInsureds",
 						"shortcut": ""
 					}],
+					"clearOnHide": false,
 					"customDefaultValue": "value = 'noAdditionalInsureds';",
+					"calculateServer": false,
 					"validate": {
 						"required": true,
 						"customMessage": "Please choose whether you would like to add Additional Insured"
 					},
-					"errorLabel": "Please choose whether you would like to add Additional Insured",
+					"errorLabel": "Additional Insured",
 					"key": "additional_insured_select",
 					"type": "radio",
 					"input": true
@@ -11415,21 +11417,23 @@
 				"input": true,
 				"lockKey": true
 			}, {
-				"input": true,
-				"tableView": true,
 				"label": "Comment",
-				"key": "rejectComment",
+				"autoExpand": false,
 				"spellcheck": true,
+				"tableView": true,
+				"inputFormat": "plain",
+				"calculateServer": false,
 				"validate": {
 					"required": true
 				},
-				"type": "textarea",
-				"inputFormat": "plain",
+				"key": "rejectionReason",
 				"conditional": {
-					"show": "true",
+					"show": true,
 					"when": "approved",
 					"eq": "false"
 				},
+				"type": "textarea",
+				"input": true,
 				"lockKey": true
 			}],
 			"type": "panel",
@@ -11445,7 +11449,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 108,
+	"_vid": 114,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11462,6 +11466,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-26T19:43:28.557Z",
+	"modified": "2020-04-27T19:30:56.864Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
