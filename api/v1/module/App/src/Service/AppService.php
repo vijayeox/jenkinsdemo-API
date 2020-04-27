@@ -262,10 +262,10 @@ class AppService extends AbstractService
 
     public function processJob(&$yamlData) {
         $this->logger->info("Deploy App - Process Job with YamlData ");
-        if(isset($yamlData['job'])){  
-            try{
-                $appUuid = $yamlData['app'][0]['uuid'];
-                foreach ($yamlData['job'] as $data){
+        if(isset($yamlData['job'])){
+            $appUuid = $yamlData['app'][0]['uuid'];
+            foreach ($yamlData['job'] as $data) {
+                try {
                     if(!isset($data['name']) || !isset($data['url']) || !isset($data['uuid']) || !isset($data['cron']) || !isset($data['data']))
                     {
                         throw new ServiceException('Job Name/url/uuid/cron/data not specified', 'job.details.not.specified');                    
@@ -286,20 +286,22 @@ class AppService extends AbstractService
                     $this->logger->info("executing schedule job ");
                     $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
                 }
-            }
-            catch (Exception $e) {
-                $this->logger->info("there is an exception: ");
-                $response = json_decode($e->getCode());
-                if($response == 404){
-                    $this->logger->info("deleting from db ");
-                    $query = "DELETE from ox_job where name = :jobName and group_name = :groupName and app_id = :appId";
-                    $params = array('jobName' => $jobName, 'groupName' => $jobGroup, 'appId' => $appId);
-                    $result = $this->executeQueryWithBindParameters($query, $params);
-                }
-                else
-                {
-                    $this->logger->info("Process Job ---- Exception" . print_r($e->getMessage(), true));
-                    throw $e;
+                catch (Exception $e) {
+                    $this->logger->info("there is an exception: ");
+                    $response = json_decode($e->getCode());
+                    if($response == 404){
+                        $this->logger->info("deleting from db ");
+                        $query = "DELETE from ox_job where name = :jobName and group_name = :groupName and app_id = :appId";
+                        $params = array('jobName' => $jobName, 'groupName' => $jobGroup, 'appId' => $appId);
+                        $result = $this->executeQueryWithBindParameters($query, $params);
+                        $this->logger->info("executing schedule job - ");
+                        $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
+                    }
+                    else
+                    {
+                        $this->logger->info("Process Job ---- Exception" . print_r($e->getMessage(), true));
+                        throw $e;
+                    }
                 }
             }
         }     
