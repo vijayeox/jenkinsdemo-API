@@ -15,9 +15,6 @@ return [
                         'controller' => Controller\ImportController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => 'MANAGE_IMPORT_WRITE',
-                            'post' => 'MANAGE_IMPORT_WRITE',
-                            'delete' => 'MANAGE_IMPORT_WRITE'
                         ],
                     ],
                 ],
