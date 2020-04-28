@@ -18,15 +18,13 @@
 		{if $type eq 'Data'}
 			{$trflag = 0}
 				{foreach key=k item=v  from=$value['ColData']}
-					{if isset($v['value']) && !empty($v['value'])}
-						{if $trflag == 0}{$trflag =1}
-							<tr>
-						{/if}
-						{if $k == 0}
-						<td style = "padding: 8px 0px 8px 0px;">{$indenttext}{$v['value']}</td>
-						{elseif $k ==1}
-						<td style = "text-align:right;padding: 8px 0px 8px 0px;">{$v['value']}</td>
-						{/if}
+					{if $trflag == 0}{$trflag =1}
+						<tr>
+					{/if}
+					{if $k == 0}
+					<td>{$indenttext}{$v['value']}</td>
+					{elseif $k !=0}
+					<td style = "text-align:right;">{$v['value']}</td>
 					{/if}
 				{/foreach}
 				{if $trflag == 1}
@@ -37,12 +35,10 @@
 					{if isset($value['ColData']) && !empty($value['ColData'])}
 						<tr>
 						{foreach key=k item=v from=$value['ColData']}
-							{if !empty($v['value'])}
-								{if $k == 0}
-									<td style = "padding: 8px 0px 8px 0px;">{$indenttext}{$v['value']}</td>
-								{elseif $k ==1}
-									<td style = "text-align:right;padding: 8px 0px 8px 0px;">{$v['value']}</td>
-								{/if}
+							{if $k == 0}
+								<td>{$indenttext}{$v['value']}</td>
+							{elseif $k !=0}
+								<td style = "text-align:right;">{$v['value']}</td>
 							{/if}
 						{/foreach}
 						</tr>
@@ -53,12 +49,10 @@
 					{if isset($value['ColData']) && !empty($value['ColData'])}
 					<tr>
 						{foreach key=k2 item=v2 from=$value['ColData']}
-							{if !empty($v2['value'])}
-								{if $k2 == 0}
-									<td style = "padding: 8px 0px 8px 0px;"><hr><b>{$indenttext}{$v2['value']}</b></td>
-								{elseif $k2 == 1}
-									<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr><b>{$v2['value']}</b></td>
-								{/if}
+							{if $k2 == 0}
+								<td style = "padding: 8px 0px 8px 0px;"><hr><b>{$indenttext}{$v2['value']}</b></td>
+							{elseif $k2 != 0}
+								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr><b>{$v2['value']}</b></td>
 							{/if}
 						{/foreach}
 						</tr>
@@ -68,9 +62,9 @@
 					 <tr>
 						{foreach key=k2 item=v2 from=$value['ColData']}
 							{if $k2 == 0}
-								<td style = "padding: 8px 0px 8px 0px;"><hr><b>{$indenttext}{$v2['value']}</b></td>
-							{elseif $k2 == 1}
-								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr><b>{$v2['value']}</b></td>
+								<td><b>{$indenttext}{$v2['value']}</b></td>
+							{elseif $k2 != 0}
+								<td style = "text-align:right;"><b>{$v2['value']}</b></td>
 							{/if}
 						{/foreach}
 					</tr>
@@ -92,30 +86,39 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+table {
+	border: 1px solid #dddddd;
+}
+</style>
 </head>
 <body>
-	<table style = "border-spacing: 0; width: 100%; font-size: 28px; text-align: left;">
+	<table style = "border-spacing: 0; width: 100%; font-size: 28px; text-align: left; border: 0px;">
 		<tr>
 			<th>Report Name : {$Header['ReportName']}</th>
 		</tr>
 	</table>
-	<table style = "border-spacing: 0; width: 100%; font-size: 26px;">
+	<table style = "border-spacing: 0; width: 100%; font-size: 26px; border: 0px;">
 		<tr>
 			{if isset($Header['StartPeriod']) && !empty($Header['StartPeriod'])}<th style = "text-align: left;">Period : {$Header['StartPeriod']} to {$Header['EndPeriod']}</th>{/if}
 			{if isset ($Header['ReportBasis']) && !empty($Header['ReportBasis'])}<th style = "text-align: center;">Payment Type : {$Header['ReportBasis']}</th>{/if}
 			{if isset ($Header['Currency']) && !empty($Header['Currency'])}<th style = "text-align: right;">Currency : {$Header['Currency']}</th>{/if}
 		</tr>
 	</table>
-	<hr>
-	<table style = "border-spacing: 0; width: 100%; padding 8px;">
+	
+	<table style = "border-spacing: 0; width: 100%; padding: 8px;">
 		<thead>
 			<tr>
 				{foreach name=outer item=column from=$data["Columns"]}
 					{foreach key=key item=item from=$column}
-						{if $key == 0}
-							<th >{$item['ColTitle']}</th>
-						{elseif $key ==1}
-							<th style = "text-align:right; padding: 8px 0px 8px 0px; font-size: 18px;">{$item['ColTitle']}</th>
+						{if isset($item['ColTitle']) && !empty($item['ColTitle'])}
+							{if $key == 0}
+								<th style = "padding: 8px 0px 8px 0px;">{$item['ColTitle']}<hr/></th>
+							{elseif $key !=0}
+								<th style = "text-align:right; font-size: 20px;padding: 8px 0px 8px 0px;">{$item['ColTitle']}<hr/></th>
+							{/if}						
+						{else}
+							<th style = 'padding-top: 25px;'><hr></th>
 						{/if}
 					{/foreach}
 				{/foreach}
