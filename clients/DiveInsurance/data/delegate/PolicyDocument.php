@@ -797,9 +797,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return '{'.$coverageName[0]['name'].'}';
             }
         }
-        private function getLicenseNumber($data,$persistenceService)
-        {
+        private function getLicenseNumber($data,$persistenceService){
             $selectQuery = "Select * FROM state_license WHERE state = '".$data['state']."'";
+            if($data['product'] == 'Dive Boat'){
+                $selectQuery = "Select * FROM state_license WHERE state = '".$data['business_state']."'";
+            }
             $resultQuery = $persistenceService->selectQuery($selectQuery);
             while ($resultQuery->next()) {
                 $stateLicenseDetails[] = $resultQuery->current();

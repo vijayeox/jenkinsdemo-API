@@ -41,7 +41,7 @@ class QuoteDocument extends PolicyDocument
                      'template' => 'DiveCenterProposal_Template', 
                      'header' => 'DiveCenterProposal_header.html',
                      'footer' => 'DiveCenterProposal_footer.html', 
-                     'cover_letter' => 'Dive_Store_Cover_Letter',
+                     'cover_letter' => 'DS_Quote_Cover_Letter',
                      'lheader' => 'letter_header.html',
                      'lfooter' => 'letter_footer.html',
                      'aiTemplate' => 'DiveStore_AI',
