@@ -46,6 +46,8 @@ class ElasticClientIndexer extends RouteBuilder {
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody())
                         def HOST = env.getProperty("elastic.host")
                         def CORE = env.getProperty("elastic.core")
+                        def USERNAME = env.getProperty("elastic.username")
+                        def PASSWORD = env.getProperty("elastic.password")
                         int PORT = env.getProperty("elastic.port").toInteger()
                         def idList,deleteList
                         String ID;
@@ -64,9 +66,18 @@ class ElasticClientIndexer extends RouteBuilder {
                             deleteList = object.deleteList
                         }
                         String operation = object.operation.toString()
+                        final CredentialsProvider credentialsProvider =
+                        new BasicCredentialsProvider();
+                        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(USERNAME, PASSWORD));
                         def output = JsonOutput.toJson(object.body)
-                        def client = new RestHighLevelClient(
-                                RestClient.builder(new HttpHost(HOST, PORT, "http")))
+                        RestClientBuilder builder = RestClient.builder(new HttpHost(HOST, PORT, "http")).setHttpClientConfigCallback(new HttpClientConfigCallback() {
+                            @Override
+                            public HttpAsyncClientBuilder customizeHttpClient(
+                                HttpAsyncClientBuilder httpClientBuilder) {
+                                return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+                            }
+                            });
+                        def client = new RestHighLevelClient(builder)
                         try{
                             if(operation == 'Index')
                             {
