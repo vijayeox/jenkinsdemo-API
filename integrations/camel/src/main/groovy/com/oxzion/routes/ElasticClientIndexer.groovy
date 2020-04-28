@@ -8,8 +8,13 @@ import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.properties.PropertiesComponent
 import org.apache.camel.impl.DefaultCamelContext
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.HttpHost
 import org.elasticsearch.ElasticsearchException
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.action.bulk.BulkItemResponse
 import org.elasticsearch.action.bulk.BulkRequest
 import org.elasticsearch.action.bulk.BulkResponse
@@ -70,7 +75,7 @@ class ElasticClientIndexer extends RouteBuilder {
                         new BasicCredentialsProvider();
                         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(USERNAME, PASSWORD));
                         def output = JsonOutput.toJson(object.body)
-                        RestClientBuilder builder = RestClient.builder(new HttpHost(HOST, PORT, "http")).setHttpClientConfigCallback(new HttpClientConfigCallback() {
+                        RestClientBuilder builder = RestClient.builder(new HttpHost(HOST, PORT, "http")).setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                             @Override
                             public HttpAsyncClientBuilder customizeHttpClient(
                                 HttpAsyncClientBuilder httpClientBuilder) {
