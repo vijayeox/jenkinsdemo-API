@@ -20,7 +20,7 @@ To build the docker container
 $ docker build -t workflow .
 
 To run the docker container in foreground
-$ docker run --network="host" -it  workflow
+$ docker run --network="host" --env-file .env -it  workflow
 
 To run the docker container in background
 $ docker run --network="host" -d --rm --name wf_1 workflow
