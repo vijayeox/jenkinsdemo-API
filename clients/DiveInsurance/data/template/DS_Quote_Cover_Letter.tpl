@@ -8,11 +8,10 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name1">{$orgname}</p>
-			<p class="name1">{$address1}</p>
-			<p class="name1">{$address2}</p>
-			<p class="name1">{$city},{$state}</p>
-			<p class="name1">{$country},{$zip}</p>
+			<p class="name1">{$business_name}</p>
+			<p class="name1">{if isset($dba)}
+								DBA : {$dba} 
+							{/if}#{$padi}</p>
 		</div>
 
 		<p>Dear <span class ="rgaard1">{$firstname}&nbsp{$lastname}</span></p>
@@ -35,22 +34,30 @@
 		</ul>
 
 		<p>To purchase your insurance coverage, please provide us with the following items:</p>
-		
-			{foreach from=$list.name item=$value}
-	  			<p class = "ai_list">
-	    			&nbsp&nbsp&nbsp{$value}
-	  			</p>
-			{/foreach}
+		{if isset($quoteInfo) && $quoteInfo != '[]'}
+			{assign var=list value=$quoteInfo|json_decode:true}
+			{foreach from=$list item=$quoteData key = key}
+					{if $key == 'Other' &&  ($quoteData == true || $quoteData == 'true')}
+						 {assign var=other value=$quoteInfoOther|json_decode:true}
+						 {foreach from=$other item=$otherInfo}
+						  <p class = "quote_list">[X]{$otherInfo.info}</p>
+						 {/foreach}
+					{else if $key == 'Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX' && ($quoteData == true || $quoteData == 'true')}
+	    			   	  {assign var=marineInfo value=str_replace('XXX',$marineX,$key)}
+	    			   	  <p class = "quote_list">[X]{$marineInfo}</p>
+	    			{else if $quoteData == true || $quoteData == 'true'}
+						  <p class = "quote_list">[X]{$key}</p>	    			   		
+	    			{/if}
+    	{/foreach}
+     	{/if}
 		
 		<p class = "line_end">Thank you for your support of the PADI Endorsed Insurance Program, if you have any questions, please call or email me if you have any questions.</p>
 </div>
 		<p>Sincerely,</p>
-		<p>Vicencia & Buckley A Division of HUB International</p>
-		<p class="acc_name">{$manager_name},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
+		<p class ="footer_line">{$approverName},CISR, {$approverDesignation}</p>
 		<p class ="footer_line">(800) 223-9998 or (714) 739-3176</p>
-		<p class ="footer_line">{$manager_email}</p>
-
+		<p class ="footer_line">{$approverEmailId}</p>
 	</div>
 </body>
 </html>

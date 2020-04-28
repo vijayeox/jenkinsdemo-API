@@ -39,4 +39,5 @@ return [
     'Workflow',
     'PaymentGateway',
     'ErrorLog',
+    'Import'
 ];

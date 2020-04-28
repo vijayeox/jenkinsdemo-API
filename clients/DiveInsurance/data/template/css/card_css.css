@@ -271,6 +271,6 @@ p.break { page-break-after: always; }
 }
 
 .quote_list{
-  margin:0px;
+  margin:1px;
   padding:0px;
 }

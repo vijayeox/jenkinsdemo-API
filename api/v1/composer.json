@@ -106,7 +106,8 @@
       "ProspectResearch\\":"module/ProspectResearch/src/",
       "Workflow\\":"module/Workflow/src/",
       "PaymentGateway\\":"module/PaymentGateway/src/",
-      "ErrorLog\\":"module/ErrorLog/src/"
+      "ErrorLog\\":"module/ErrorLog/src/",
+      "Import\\":"module/Import/src/"
     }
   },
   "autoload-dev": {

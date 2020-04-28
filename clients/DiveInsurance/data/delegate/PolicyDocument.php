@@ -234,12 +234,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
                     $documents['additionalInsured_document'] = array($this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter'));
-                    if(isset($this->template[$temp['product']]['blanketForm'])){
-                        $this->logger->info("DOCUMENT blanketForm");
-                        $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
-                    }
                 }
 
+                if(isset($this->template[$temp['product']]['blanketForm'])){
+                    $this->logger->info("DOCUMENT blanketForm");
+                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                }
                 if(isset($this->template[$temp['product']]['card'])){
                     $this->logger->info("generate pocket card");
                     $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));

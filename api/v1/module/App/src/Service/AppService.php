@@ -512,9 +512,6 @@ class AppService extends AbstractService
         }
 
         $guilink = $this->config['GUI_FOLDER'] . $appId;
-        if(!is_dir($this->config['GUI_FOLDER'])){
-            mkdir($this->config['GUI_FOLDER']);
-        }
         $guiTarget = $path . "view/gui";
         if (is_link($guilink)) {
             FileUtils::unlink($guilink);
