@@ -305,13 +305,6 @@ form:
         description: 'Lets CSR generate and view Pocket Cards'
         template_file: pocketCard.json
         entity: 'Pocket Card Job'
-group:
-    reactivate: null
-    status: null
-    org_id: (optional)
-    name: null
-    parent_id: (optional)
-    manager_id: null
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03
