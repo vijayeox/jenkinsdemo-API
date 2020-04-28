@@ -7,7 +7,7 @@ use Zend\Router\Http\Segment;
 return [
     'router' => [
         'routes' => [
-            'attachment' => [
+            'import' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/import[/:importId]',
