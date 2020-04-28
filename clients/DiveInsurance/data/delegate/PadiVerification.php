@@ -25,7 +25,6 @@ class PadiVerification extends AbstractAppDelegate
         unset($data['businessPadiNotFound']);
         unset($data['padiNotFoundCsrReview']);
         unset($data['padiNotFound']);
-        unset($data['user_exists']);
         unset($data['policy_exists']);
         unset($data['firstname']);
         unset($data['lastname']);
@@ -39,6 +38,15 @@ class PadiVerification extends AbstractAppDelegate
         }else{
             $data['initiatedByCsr'] = false;
         }
+
+        if(isset($data['user_exists']) && ($data['user_exists'] == 1 || $data['user_exists'] == "1")){
+            $data['padiNotApplicable'] = false;
+            $data['padi_empty'] = false;
+            $data['padiNotFound'] = false;
+            $data['businessPadiNotFound'] = false;
+            $data['verified'] = false;
+            return $data;
+        }
         if(isset($data['padi']) && $data['padi'] != ''){
             $data['member_number'] = $data['padi'];
         } 
@@ -51,7 +59,6 @@ class PadiVerification extends AbstractAppDelegate
             $data['padiNotFound'] = false;
             $data['businessPadiNotFound'] = false;
             $data['verified'] = false;
-            $data['user_exists'] = 0;
             return $data;
         }
         $select = "Select firstname, MI as initial, lastname, business_name FROM padi_data WHERE member_number ='".$data['member_number']."'";
