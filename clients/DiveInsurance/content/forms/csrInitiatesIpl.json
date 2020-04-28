@@ -1550,6 +1550,7 @@
 								"label": "With TecRec Endorsement for selection above - Declined",
 								"shortcut": ""
 							}],
+							"clearOnHide": false,
 							"calculateServer": false,
 							"validate": {
 								"required": true,
@@ -3093,6 +3094,8 @@
 									"autofocus": true,
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -3110,8 +3113,9 @@
 							}, {
 								"components": [{
 									"label": "Date of incident",
+									"allowInput": false,
 									"format": "MM-dd-yyyy",
-									"tableView": true,
+									"tableView": false,
 									"datePicker": {
 										"maxDate": "moment()",
 										"disableWeekends": false,
@@ -3122,6 +3126,7 @@
 									"timePicker": {
 										"showMeridian": false
 									},
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true,
@@ -3137,7 +3142,7 @@
 										"displayInTimezone": "viewer",
 										"language": "en",
 										"useLocaleSettings": false,
-										"allowInput": true,
+										"allowInput": false,
 										"mode": "single",
 										"enableTime": false,
 										"noCalendar": false,
@@ -3162,6 +3167,8 @@
 									"label": "Location of incident",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "locationofincident",
 									"type": "textfield",
 									"input": true,
@@ -3183,11 +3190,13 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"label": "Report Details :",
+									"label": "Report Details",
 									"autoExpand": false,
 									"spellcheck": true,
 									"tableView": true,
 									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "reportcanbeobtained",
 									"type": "textarea",
 									"input": true,
@@ -3201,11 +3210,13 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Brief Summary :",
+									"label": "Brief Summary",
 									"autoExpand": false,
 									"spellcheck": true,
 									"tableView": true,
 									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "briefSummary",
 									"type": "textarea",
 									"input": true,
@@ -3227,10 +3238,10 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Incident report filed?",
-									"key": "page4Panel2ColumnsIncidentreportfiled",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -3240,10 +3251,13 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "page4Panel2ColumnsIncidentreportfiled",
 									"type": "radio",
-									"optionsLabelPosition": "right",
 									"labelWidth": 30,
 									"labelMargin": 3,
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -3254,21 +3268,24 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Fatality?",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
+									"values": [{
+										"value": "yes",
+										"label": "Yes",
+										"shortcut": ""
+									}, {
+										"value": "no",
+										"label": "No",
+										"shortcut": ""
+									}],
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "page4Panel2Columns2Fatality",
-									"values": [{
-										"value": "yes",
-										"label": "Yes",
-										"shortcut": ""
-									}, {
-										"value": "no",
-										"label": "No",
-										"shortcut": ""
-									}],
 									"type": "radio",
-									"optionsLabelPosition": "right",
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -3279,10 +3296,10 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Serious Injury?",
-									"key": "page4Panel2Columns2SeriousInjury",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -3292,8 +3309,11 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "page4Panel2Columns2SeriousInjury",
 									"type": "radio",
-									"optionsLabelPosition": "right",
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -3304,10 +3324,10 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "In Training?",
-									"key": "page4Panel2ColumnsInTraining",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": false,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -3317,8 +3337,11 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "page4Panel2ColumnsInTraining",
 									"type": "radio",
-									"optionsLabelPosition": "right",
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -3487,10 +3510,11 @@
 							"label": "Please choose one of these options",
 							"optionsLabelPosition": "right",
 							"inline": false,
+							"autofocus": true,
 							"tableView": true,
 							"defaultValue": "noAdditionalInsureds",
 							"values": [{
-								"value": "newListOfAdditionalInsureds",
+								"value": "addAdditionalInsureds",
 								"label": "Add Additional Insureds",
 								"shortcut": ""
 							}, {
@@ -3498,6 +3522,8 @@
 								"label": "No Additional Insureds",
 								"shortcut": ""
 							}],
+							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please choose whether you would like to add Additional Insured"
@@ -3506,8 +3532,7 @@
 							"key": "AdditionalInsuredOption",
 							"type": "radio",
 							"input": true,
-							"lockKey": true,
-							"autofocus": true
+							"lockKey": true
 						}],
 						"tableView": false,
 						"type": "well",
@@ -4285,7 +4310,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 266,
+	"_vid": 269,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4306,6 +4331,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-24T11:09:43.242Z",
+	"modified": "2020-04-27T20:41:03.334Z",
 	"machineName": "testdivehub:csrInitiates"
 }

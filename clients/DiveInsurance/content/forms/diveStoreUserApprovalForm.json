@@ -42,38 +42,6 @@
       "tableView": false,
       "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
     }, {
-      "title": "Attachments",
-      "theme": "primary",
-      "collapsible": false,
-      "tableView": false,
-      "key": "csrAttachmentsPanel",
-      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-      "type": "panel",
-      "label": "Attachments",
-      "input": false,
-      "components": [{
-        "label": "Attachments",
-        "hideLabel": true,
-        "tableView": true,
-        "storage": "base64",
-        "webcam": false,
-        "fileTypes": [{
-          "label": "",
-          "value": ""
-        }],
-        "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
-        "fileMaxSize": "10MB",
-        "multiple": true,
-        "calculateServer": false,
-        "validate": {
-          "multiple": true
-        },
-        "key": "csrApprovalAttachments",
-        "type": "file",
-        "input": true
-      }],
-      "keyModified": true
-    }, {
       "key": "page5Panel2",
       "input": false,
       "title": "Approval",
@@ -135,6 +103,40 @@
       "lockKey": true,
       "label": "Panel",
       "path": "page5Panel2"
+    }, {
+      "title": "Attachments",
+      "theme": "primary",
+      "collapsible": false,
+      "tableView": false,
+      "key": "csrAttachmentsPanel",
+      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+      "type": "panel",
+      "label": "Attachments",
+      "input": false,
+      "components": [{
+        "label": "Attachments",
+        "hideLabel": true,
+        "tableView": true,
+        "storage": "base64",
+        "webcam": false,
+        "fileTypes": [{
+          "label": "",
+          "value": ""
+        }],
+        "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+        "fileMaxSize": "10MB",
+        "multiple": true,
+        "clearOnHide": false,
+        "calculateServer": false,
+        "validate": {
+          "custom": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
+          "multiple": true
+        },
+        "key": "csrApprovalAttachments",
+        "customConditional": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
+        "type": "file",
+        "input": true
+      }]
     }, {
       "title": "Payment Information",
       "theme": "primary",
@@ -543,7 +545,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 2,
+  "_vid": 3,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -554,12 +556,13 @@
   "settings": {},
   "properties": {
     "commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-    "submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"}, {\"command\" : \"submitWorkflow\"}]"
+    "submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"}, {\"command\" : \"submitWorkflow\"}]",
+    "post_delegate_referesh": "csrApprovalAttachments"
   },
   "name": "diveStoreUserApprovalForm",
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-04-23T11:20:41.421Z",
+  "modified": "2020-04-27T15:04:10.275Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

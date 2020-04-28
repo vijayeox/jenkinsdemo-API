@@ -33,27 +33,24 @@ function subst() {
 		<p>(This is a summary of coverage and does not change the policy language. The policy is what determines the coverage and
 a policy will be sent to you.)</p>
 
-	{if isset($quote_due_date) && $quote_due_date != '' && isset($quoteRequirement) && $quoteRequirement != '[]'}
-	{assign var=list value=$quoteRequirement|json_decode:true}
+	{if isset($quote_due_date) && $quote_due_date != '' && isset($quoteInfo) && $quoteInfo != '[]'}
+	{assign var=list value=$quoteInfo|json_decode:true}
 	<p><b>To purchase your insurance coverage, please provide us with the following items prior to {$quote_due_date|date_format:"%m/%d/%Y"}</b></p>
-		{foreach from=$list item=$quoteData}
-				<p class = "quote_list">
-					[X]{if !isset($quoteData.quoteInfoOther) || $quoteData.quoteInfoOther == ''}
-					 	    {$quoteData.quoteInfo}
-	    			   {else}
-	    			   		{if isset($quoteData.quoteInfo) && $quoteData.quoteInfo !=''}
-	    			   			{if $quoteData.quoteInfo == 'Copy of Captain’s License (front & back) for XXX'}
-	    			   			{assign var=quoteInfoOther value=str_replace('XXX',$quoteData.quoteInfoOther,$quoteData.quoteInfo)}
-	    			   			{$quoteInfoOther}
-	    			   			{else if $quoteData.quoteInfo == 'Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX'}
-	    			   			{assign var=quoteInfoOther value=str_replace('XXX',$quoteData.quoteInfoOther,$quoteData.quoteInfo)}
-	    			   			{$quoteInfoOther}
-	    			   			{/if}
-	    			   		{else}
-								{$quoteData.quoteInfoOther}	    			   		
-	    			   		{/if}
-	    			   	{/if}
-	    		</p>
+		{foreach from=$list item=$quoteData key = key}
+					{if $key == 'Other' &&  ($quoteData == true || $quoteData == 'true')}
+						 {assign var=other value=$quoteInfoOther|json_decode:true}
+						 {foreach from=$other item=$otherInfo}
+						  <p class = "quote_list">[X]{$otherInfo.info}</p>
+						 {/foreach}
+					{else if $key == 'Copy of Captain’s License (front & back) for XXX' && ($quoteData == true || $quoteData == 'true')}
+	    			   	  {assign var=captainInfo value=str_replace('XXX',$captainX,$key)}
+	    			   	  <p class = "quote_list">[X]{$captainInfo}</p>
+	    			{else if $key == 'Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX' && ($quoteData == true || $quoteData == 'true')}
+	    			   	  {assign var=marineInfo value=str_replace('XXX',$marineX,$key)}
+	    			   	  <p class = "quote_list">[X]{$marineInfo}</p>
+	    			{else if $quoteData == true || $quoteData == 'true'}
+						  <p class = "quote_list">[X]{$key}</p>	    			   		
+	    			{/if}
     	{/foreach}
      {/if}
 		<p class = "line_end">Thank you for your support of the PADI Endorsed Dive Boat program. Please call or email me if you have any questions.</p>

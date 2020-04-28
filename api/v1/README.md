@@ -59,9 +59,9 @@ $ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./migrations migrat
 To run tests using the mysql database running on your machine run the following command
 ```bash
 For Linux
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./phpunit
+$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf ./phpunit
 For Windows
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./phpunit
+$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf ./phpunit
 ```
 To run Documentation Generator on your machine run the following command
 This will create the Documentation in a new folder "Doc" which will have an index.html file which contains the list of subpages across the features

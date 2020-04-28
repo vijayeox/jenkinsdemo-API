@@ -10,7 +10,7 @@
 				{$city},{$state},{$zip}<br/></p>
 
 
-				<p>Coverage Level: {$careerCoverage}</p><br/>
+				<p>Coverage Level: {$careerCoverageVal}</p><br/>
 				<p>Equipment Liability: {if $equipment == "equipmentLiabilityCoverage"}
 											Selected
 									 {else} 
