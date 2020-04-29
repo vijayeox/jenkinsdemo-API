@@ -27,25 +27,10 @@ final class Version20200414082217 extends AbstractMigration
               $this->addSql("ALTER TABLE `ox_file_audit_log` DROP COLUMN `server_info`");
               $this->addSql("ALTER TABLE `ox_file` DROP COLUMN `workflow_instance_id`");
               $this->addSql("ALTER TABLE `ox_file` DROP  FOREIGN KEY `FK_FileParentId`;");
-              $this->addSql("ALTER TABLE `ox_file` DROP COLUMN `parent_id`");
-              $this->addSql("DROP TABLE IF EXISTS  ox_file_audit_log;");
+              $this->addSql("ALTER TABLE `ox_file` DROP COLUMN `parent_id`");              
               $this->addSql("DROP TRIGGER IF EXISTS `ox_file_insert`");
               $this->addSql("DROP TRIGGER IF EXISTS `ox_file_update`");
               $this->addSql("DROP TRIGGER IF EXISTS `ox_file_delete`");
-              $this->addSql("CREATE TABLE IF NOT EXISTS `ox_file_audit_log` (
-                `id` int(32) NULL DEFAULT NULL,
-                `action` varchar(128) NULL DEFAULT NULL,
-                `uuid` varchar(128) NULL DEFAULT NULL,
-                `org_id` int(64) NULL DEFAULT NULL,
-                `form_id` int(32) NULL DEFAULT NULL,
-                `data` text NULL DEFAULT NULL,
-                `created_by` int(32) NULL DEFAULT NULL,
-                `modified_by` int(32) NULL DEFAULT NULL,
-                `date_created` datetime NULL DEFAULT NULL,
-                `date_modified` datetime NULL DEFAULT NULL,
-                `assoc_id` int NULL DEFAULT NULL,
-                `is_active` int(2) NOT NULL DEFAULT '1',
-                `entity_id` int(32) NULL DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
               $this->addSql("CREATE TRIGGER `ox_file_insert` AFTER INSERT ON `ox_file` FOR EACH ROW INSERT INTO `ox_file_audit_log` (`id`, `action`, `uuid`, `org_id`, `form_id`, `data`, `created_by`,`modified_by`, `date_created`, `date_modified`,`assoc_id`,`is_active`,`entity_id`) VALUES (new.`id`, 'create', new.`uuid`, new.`org_id`, new.`form_id`, new.`data`, new.`created_by`, new.`modified_by`, new.`date_created`, new.`date_modified`,new.`assoc_id`,new.`is_active`,new.`entity_id`);");
               $this->addSql("CREATE TRIGGER `ox_file_update` AFTER UPDATE on `ox_file` FOR EACH ROW INSERT INTO `ox_file_audit_log` (`id`, `action`, `uuid`, `org_id`, `form_id`, `data`, `created_by`,`modified_by`, `date_created`, `date_modified`,`assoc_id`,`is_active`,`entity_id`) VALUES (new.`id`, 'update', new.`uuid`, new.`org_id`, new.`form_id`, new.`data`, new.`created_by`, new.`modified_by`, new.`date_created`, new.`date_modified`,new.`assoc_id`,new.`is_active`,new.`entity_id`);");
               $this->addSql("CREATE TRIGGER `ox_file_delete` AFTER DELETE ON ox_file FOR EACH ROW INSERT INTO `ox_file_audit_log` (`id`, `action`, `uuid`, `org_id`, `form_id`, `data`, `created_by`,`modified_by`, `date_created`, `date_modified`,`assoc_id`,`is_active`,`entity_id`) VALUES (old.`id`, 'delete', old.`uuid`, old.`org_id`, old.`form_id`, old.`data`, old.`created_by`, old.`modified_by`, old.`date_created`, old.`date_modified`,old.`assoc_id`,old.`is_active`,old.`entity_id`);");
