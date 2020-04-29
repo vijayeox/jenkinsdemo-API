@@ -432,6 +432,8 @@ class ActivityInstanceService extends AbstractService
                       LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
                       WHERE ox_activity_instance.activity_instance_id=? and ox_activity_instance.org_id=? and ox_workflow_instance.process_instance_id=?";
             $queryParams = array($activityInstanceId, AuthContext::get(AuthConstants::ORG_ID), $workflowInstanceId);
+            $this->logger->info("query " .$query);
+            $this->logger->info("query params" . print_r($queryParams,true));
             $activityInstance = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             $this->logger->info("getActivityInstance -> activityInstance - " . print_r($activityInstance, true));
 
