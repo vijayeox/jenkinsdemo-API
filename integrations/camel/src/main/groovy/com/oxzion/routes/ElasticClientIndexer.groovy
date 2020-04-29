@@ -8,6 +8,7 @@ import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.properties.PropertiesComponent
 import org.apache.camel.impl.DefaultCamelContext
+import org.apache.http.auth.AuthScope;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
