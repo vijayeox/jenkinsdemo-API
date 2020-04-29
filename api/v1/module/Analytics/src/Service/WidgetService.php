@@ -406,7 +406,13 @@ class WidgetService extends AbstractService
                     $data = $this->evaluteExpression($data,$expression);
                 }
             }
-            $response['widget']['data'] = $data;
+            if (isset($data[0]['calculated']) && count($data)==1) { 
+                //Send only the calculated value if left oprand not specified and aggregate values
+                $response['widget']['data'] = $data[0]['calculated'];    
+            } else {
+                $response['widget']['data'] = $data;
+            }
+            
         }
         return $response;
     }
