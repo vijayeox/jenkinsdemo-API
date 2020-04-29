@@ -1996,11 +1996,11 @@
 				"components": [{
 					"type": "documentviewer",
 					"key": "techRec_attachments1",
-					"calculateValue": "value = (data['techRec_attachments'])",
+					"calculateValue": "value = (data['endor_techRec_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.techRec_attachments !='');",
+					"customConditional": "show = (data.endor_techRec_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "TecRec Attachments",
@@ -2013,11 +2013,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInspector_attachments1",
-					"calculateValue": "value = (data['cylinderInspector_attachments'])",
+					"calculateValue": "value = (data['endor_cylinderInspector_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.cylinderInspector_attachments !='');",
+					"customConditional": "show = (data.endor_cylinderInspector_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Cylinder Inspector Attachments",
@@ -2030,11 +2030,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInstructor_attachments1",
-					"calculateValue": "value = (data['cylinderInstructor_attachments'])",
+					"calculateValue": "value = (data['endor_cylinderInstructor_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.cylinderInstructor_attachments !='');",
+					"customConditional": "show = (data.endor_cylinderInstructor_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Cylinder Instructor Attachments",
@@ -2047,11 +2047,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "scubaFit_attachments1",
-					"calculateValue": "value = (data['scubaFit_attachments'])",
+					"calculateValue": "value = (data['endor_scubaFit_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.scubaFit_attachments !='');",
+					"customConditional": "show = (data.endor_scubaFit_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Scuba Fit Attachments",
@@ -2064,11 +2064,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "attachments1",
-					"calculateValue": "value = (data['attachments'])",
+					"calculateValue": "value = (data['endor_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.attachments !='');",
+					"customConditional": "show = (data.endor_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Attachments",
@@ -2518,7 +2518,7 @@
 				"tableView": true,
 				"defaultValue": "noAdditionalInsureds",
 				"values": [{
-					"value": "updateAdditionalInsureds",
+					"value": "addAdditionalInsureds",
 					"label": "Update Additional Insureds",
 					"shortcut": ""
 				}, {
@@ -2528,6 +2528,10 @@
 				}],
 				"clearOnHide": false,
 				"calculateServer": false,
+				"validate": {
+					"customMessage": "Please choose one of the options"
+				},
+				"errorLabel": "Additional Insureds",
 				"key": "AdditionalInsuredOption",
 				"type": "radio",
 				"input": true,
@@ -3215,7 +3219,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 83,
+	"_vid": 85,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3234,6 +3238,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-27T16:40:18.872Z",
+	"modified": "2020-04-29T14:59:49.859Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
