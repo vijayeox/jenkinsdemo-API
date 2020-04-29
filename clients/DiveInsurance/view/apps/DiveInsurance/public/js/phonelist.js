@@ -320,6 +320,11 @@ var phoneList = [
 "code": "SV"
 },
 {
+"name": "England",
+"dial_code": "+240",
+"code": "GQ"
+},
+{
 "name": "Equatorial Guinea",
 "dial_code": "+240",
 "code": "GQ"
@@ -483,6 +488,11 @@ var phoneList = [
 "name": "Iceland",
 "dial_code": "+354",
 "code": "IS"
+},
+{
+"name": "Ireland",
+"dial_code": "+44",
+"code": "IR"
 },
 {
 "name": "India",
@@ -955,6 +965,11 @@ var phoneList = [
 "code": "SA"
 },
 {
+"name": "Scotland",
+"dial_code": "+44",
+"code": "SC"
+},
+{
 "name": "Senegal",
 "dial_code": "+221",
 "code": "SN"
@@ -1195,6 +1210,11 @@ var phoneList = [
 "code": "WF"
 },
 {
+"name": "Wales",
+"dial_code": "+44",
+"code": "WL"
+},
+{
 "name": "Yemen",
 "dial_code": "+967",
 "code": "YE"
@@ -1210,3 +1230,5 @@ var phoneList = [
 "code": "ZW"
 }
 ];
+
+module.exports.phoneList = phoneList;
