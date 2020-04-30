@@ -79,3 +79,13 @@ ox_widget_query:
     ox_widget_id: 120
     sequence: 1
     configuration: '{"filter":null,"sort":null,"group":null}'
+  -
+    ox_query_id: 114
+    ox_widget_id: 121
+    sequence: 2
+    configuration: ''
+  -
+    ox_query_id: 115
+    ox_widget_id: 121
+    sequence: 1
+    configuration: ''

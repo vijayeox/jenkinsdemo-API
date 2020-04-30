@@ -65,7 +65,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "panelColumns3Content",
@@ -80,7 +80,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2019 through 12:01 AM July 22, 2020  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2019 through 12:01 AM July 22, 2020  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "panelColumns3Content1",
@@ -150,17 +150,15 @@
 					"label": "PADI Number",
 					"mask": false,
 					"autofocus": true,
-					"spellcheck": true,
+					"spellcheck": false,
 					"tableView": false,
 					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"calculateServer": false,
-					"validateOn": "blur",
 					"validate": {
 						"required": true,
 						"customMessage": "Please provide a valid PADI Number",
-						"min": 0,
 						"max": null
 					},
 					"key": "padi",
@@ -168,7 +166,7 @@
 						"name": "Check PADI Verified",
 						"trigger": {
 							"type": "javascript",
-							"javascript": "if (\n  (data[\"padiVerified\"] == true || (data[\"padiNotFound\"] == true || data[\"padiNotFound\"] == 'true')) &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  result = true;\n} else if((data['businessPadiVerified']===true || data['businessPadiVerified']=='true') && \n(data['product'] != 'Individual Professional Liability' && data['product']!='Emergency First Response')){\n  result = true;\n} else {\n  result = false;\n}"
+							"javascript": "if (\n  (data[\"padiVerified\"] == true || (data[\"padiNotFound\"] == true || data[\"padiNotFound\"] == 'true')) &&\n  (data[\"user_exists\"] == 0 || data[\"user_exists\"] == \"0\")\n) {\n  result = true;\n} else if((data['businessPadiVerified']===true || data['businessPadiVerified']=='true') && \n(data['product'] != 'Individual Professional Liability' && data['product']!='Emergency First Response')){\n  result = true;\n} else if((data['padiNotApplicable']===true || data['padiNotApplicable']=='true')){\n  result = false;\n} else {\n  result = false;\n}"
 						},
 						"actions": [{
 							"name": "Disable editing",
@@ -1289,7 +1287,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 81,
+	"_vid": 85,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1303,6 +1301,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-04-23T11:53:36.839Z",
+	"modified": "2020-04-29T21:11:35.593Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

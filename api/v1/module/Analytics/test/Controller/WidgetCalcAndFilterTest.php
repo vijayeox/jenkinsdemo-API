@@ -172,6 +172,21 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($jsoncontent, '[{"q1":14000,"q2":13400,"sum":27400}]');
     }
 
+    public function testGetWithSingleExpressionDataWithOutName() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/667781c3-344d-44d8-9295-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '27400');
+    }
+
     public function testGetWithFilterParametersData() {
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');  

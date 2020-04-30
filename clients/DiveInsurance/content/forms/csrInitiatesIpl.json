@@ -231,20 +231,6 @@
 						"input": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"key": "panelColumnsContent",
-						"label": "Content",
-						"input": false,
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "PADI number already Registered!",
-						"type": "htmlelement",
-						"hideLabel": true,
-						"customConditional": "show = ((data['user_exists']==1||data['user_exists']=='1'))",
-						"hideOnChildrenHidden": false,
-						"tableView": false
-					}, {
 						"label": "Content",
 						"attrs": [{
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
@@ -288,6 +274,16 @@
 						"customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==true||data['policy_exists']=='true') )",
 						"hideOnChildrenHidden": false,
 						"tableView": false
+					}, {
+						"label": "product",
+						"customDefaultValue": "value =\"Individual Professional Liability\";",
+						"calculateServer": false,
+						"key": "product",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -1198,15 +1194,6 @@
 		"type": "panel",
 		"title": "Coverage",
 		"components": [{
-			"label": "product",
-			"customDefaultValue": "value =\"Individual Professional Liability\";",
-			"calculateServer": false,
-			"key": "product",
-			"type": "hidden",
-			"input": true,
-			"tableView": true,
-			"lockKey": true
-		}, {
 			"key": "page3Panel3",
 			"input": false,
 			"title": "Policy Period",
@@ -2331,11 +2318,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "techRec_attachments1",
-					"calculateValue": "value = (data['techRec_attachments'])",
+					"calculateValue": "value = (data['TechRec_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.techRec_attachments !='');",
+					"customConditional": "show = (data.TechRec_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "TecRec Attachments",
@@ -2427,7 +2414,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "techRecAttachment",
-				"customConditional": "if (data.privileges){\n  show = (data.tecRecEndorsment === 'accepted' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr == true))) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr == true))) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"conditional": {
 					"show": true,
 					"when": "tecRecEndorsment",
@@ -3539,11 +3526,25 @@
 						"hideLabel": true,
 						"label": ""
 					}, {
-						"key": "page5ColumnsPanel",
-						"input": false,
 						"title": "Information for each Additional Insured is required as follows",
 						"theme": "primary",
+						"breadcrumbClickable": true,
+						"buttonSettings": {
+							"previous": true,
+							"cancel": true,
+							"next": true
+						},
+						"collapsible": false,
 						"tableView": false,
+						"key": "page5ColumnsPanel",
+						"conditional": {
+							"show": true,
+							"when": "AdditionalInsuredOption",
+							"eq": "addAdditionalInsureds"
+						},
+						"type": "panel",
+						"label": "Information for each Additional Insured is required as follows",
+						"input": false,
 						"components": [{
 							"label": "Information for each Additional Insured is required as follows",
 							"disableAddingRemovingRows": false,
@@ -3572,10 +3573,6 @@
 								"minLength": 1
 							},
 							"key": "additionalInsured",
-							"conditional": {
-								"show": true,
-								"when": "page4PanelSelect"
-							},
 							"type": "datagrid",
 							"input": true,
 							"components": [{
@@ -3823,15 +3820,7 @@
 							}],
 							"lockKey": true
 						}],
-						"type": "panel",
-						"conditional": {
-							"show": "true",
-							"when": "AdditionalInsuredOption",
-							"eq": "newListOfAdditionalInsureds"
-						},
-						"collapsible": false,
-						"collapsed": false,
-						"label": "Panel"
+						"collapsed": false
 					}],
 					"type": "panel",
 					"hideOnChildrenHidden": false,
@@ -4310,7 +4299,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 269,
+	"_vid": 274,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4331,6 +4320,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-04-27T20:41:03.334Z",
+	"modified": "2020-04-29T20:28:29.325Z",
 	"machineName": "testdivehub:csrInitiates"
 }

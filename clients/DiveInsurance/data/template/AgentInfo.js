@@ -5,7 +5,8 @@ function agentInfo(){
 	"address2" : "La Palma,CA 90623-2538",
 	"phone1" : "(714) 739-3177",
 	"phone2" : "(800) 223-9998",
-	"fax" : "(714) 739-3188"
+	"fax" : "(714) 739-3188",
+	"website" : "www.diveinsurance.com"
 	};
 	document.getElementById('nameVal').innerHTML= data.name; 
 	document.getElementById('addressLineVal').innerHTML= data.address;
@@ -13,4 +14,5 @@ function agentInfo(){
 	document.getElementById('phone1Val').innerHTML= data.phone1;
 	document.getElementById('phone2Val').innerHTML= data.phone2;
     document.getElementById('faxVal').innerHTML= data.fax; 
+    document.getElementById('producerwebsite').innerHTML= data.website; 
 }
