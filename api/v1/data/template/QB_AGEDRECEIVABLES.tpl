@@ -73,61 +73,42 @@
 			{/if}
 		{/if}
 	{/foreach}
-{/function}
-
-{function createrows} 
+{/function}{function createrows} 
 	{foreach key=key item=value from=$data}
 		{if (isset($value) && ($value!=empty))}
 		   {looprows data=$value}
 		{/if}
 	{/foreach}
-{/function}
-
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-table {
-	border: 1px solid #dddddd;
-}
-</style>
-</head>
-<body>
-	<table style = "border-spacing: 0; width: 100%; font-size: 28px; text-align: left; border: 0px;">
-		<tr>
-			<th>Report Name : {$Header['ReportName']}</th>
-		</tr>
-	</table>
-	<table style = "border-spacing: 0; width: 100%; font-size: 26px; border: 0px;">
-		<tr>
-			{if isset($Header['StartPeriod']) && !empty($Header['StartPeriod'])}<th style = "text-align: left;">Period : {$Header['StartPeriod']} to {$Header['EndPeriod']}</th>{/if}
-			{if isset ($Header['ReportBasis']) && !empty($Header['ReportBasis'])}<th style = "text-align: center;">Payment Type : {$Header['ReportBasis']}</th>{/if}
-			{if isset ($Header['Currency']) && !empty($Header['Currency'])}<th style = "text-align: right;">Currency : {$Header['Currency']}</th>{/if}
-		</tr>
-	</table>
-	<div style = 'border-width:5px;border-bottom-style:double;'>
-	<table style = "border-spacing: 0; width: 100%; padding: 8px;">
-		<thead>
-			<tr>
-				{foreach name=outer item=column from=$data["Columns"]}
-					{foreach key=key item=item from=$column}
-						{if isset($item['ColTitle']) && !empty($item['ColTitle'])}
-							{if $key == 0}
-								<th style = "padding: 8px 0px 8px 0px;">{$item['ColTitle']}<hr/></th>
-							{elseif $key !=0}
-								<th style = "text-align:right; font-size: 20px;padding: 8px 0px 8px 0px;">{$item['ColTitle']}<hr/></th>
-							{/if}						
-						{else}
-							<th style = 'padding-top: 25px;'><hr></th>
-						{/if}
-					{/foreach}
+{/function}<table style = "border-spacing: 0; width: 100%; font-size: 28px; text-align: left; border: 0px;">
+	<tr><th>Report Name : {$Header['ReportName']}</th></tr>
+</table>
+<table style = "border-spacing: 0; width: 100%; font-size: 26px; border: 0px;">
+	<tr>
+		{if isset($Header['StartPeriod']) && !empty($Header['StartPeriod'])}<th style = "text-align: left;">Period : {$Header['StartPeriod']} to {$Header['EndPeriod']}</th>{/if}
+		{if isset ($Header['ReportBasis']) && !empty($Header['ReportBasis'])}<th style = "text-align: center;">Payment Type : {$Header['ReportBasis']}</th>{/if}
+		{if isset ($Header['Currency']) && !empty($Header['Currency'])}<th style = "text-align: right;">Currency : {$Header['Currency']}</th>{/if}
+	</tr>
+</table>
+<div style = 'border-width:5px;border-bottom-style:double;'>
+<table style = "border-spacing: 0; width: 100%; padding: 8px; border: 1px solid #dddddd;">
+	<thead>
+		<tr>{foreach name=outer item=column from=$data["Columns"]}
+				{foreach key=key item=item from=$column}
+					{if isset($item['ColTitle']) && !empty($item['ColTitle'])}
+						{if $key == 0}
+							<th style = "padding: 8px 0px 8px 0px;">{$item['ColTitle']}<hr/></th>
+						{elseif $key !=0}
+							<th style = "text-align:right; font-size: 20px;padding: 8px 0px 8px 0px;">{$item['ColTitle']}<hr/></th>
+						{/if}						
+					{else}
+						<th style = 'padding-top: 25px;'><hr></th>
+					{/if}
 				{/foreach}
-			</tr>
-		</thead>
-		<tbody>
-			{createrows data=$data['Rows']}
-		</tbody>
-	</table>
-	</div>
-</body>
-</html>
+			{/foreach}
+		</tr>
+	</thead>
+	<tbody>
+		{createrows data=$data['Rows']}
+	</tbody>
+</table>
+</div>
