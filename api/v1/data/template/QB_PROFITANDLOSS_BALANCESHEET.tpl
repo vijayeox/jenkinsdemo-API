@@ -25,7 +25,7 @@
 						{if $k == 0}
 						<td style = "padding: 8px 0px 8px 0px;">{$indenttext}{$v['value']}</td>
 						{elseif $k ==1}
-						<td style = "text-align:right;padding: 8px 0px 8px 0px;">{$v['value']|number_format:2:".":","}</td>
+						<td style = "text-align:right;padding: 8px 0px 8px 0px;">${$v['value']|number_format:2:".":","}</td>
 						{/if}
 					{/if}
 				{/foreach}
@@ -41,7 +41,7 @@
 								{if $k == 0}
 									<td style = "padding: 8px 0px 8px 0px;">{$indenttext}{$v['value']}</td>
 								{elseif $k ==1}
-									<td style = "text-align:right;padding: 8px 0px 8px 0px;">{$v['value']|number_format:2:".":","}</td>
+									<td style = "text-align:right;padding: 8px 0px 8px 0px;">${$v['value']|number_format:2:".":","}</td>
 								{/if}
 							{/if}
 						{/foreach}
@@ -57,7 +57,7 @@
 								{if $k2 == 0}
 									<td style = "padding: 8px 0px 8px 0px;"><hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$indenttext}{$v2['value']}</b></td>
 								{elseif $k2 == 1}
-									<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$v2['value']|number_format:2:".":","}</b></td>
+									<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>${$v2['value']|number_format:2:".":","}</b></td>
 								{/if}
 							{/if}
 						{/foreach}
@@ -70,7 +70,7 @@
 							{if $k2 == 0}
 								<td style = "padding: 8px 0px 8px 0px;"><hrstyle="height:1px;border-width:0;color:gray;background-color:gray"><b>{$indenttext}{$v2['value']}</b></td>
 							{elseif $k2 == 1}
-								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$v2['value']|number_format:2:".":","}</b></td>
+								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>${$v2['value']|number_format:2:".":","}</b></td>
 							{/if}
 						{/foreach}
 					</tr>
