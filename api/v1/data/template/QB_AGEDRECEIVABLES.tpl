@@ -24,7 +24,8 @@
 					{if $k == 0}
 					<td>{$indenttext}{$v['value']}</td>
 					{elseif $k !=0}
-					<td style = "text-align:right;">{$v['value']}</td>
+					{$v['value'] = $v['value']|floatval}
+					<td style = "text-align:right;">{if $v['value']!='0.00'}{$v['value']|number_format:2:".":","}{else}&nbsp;{/if}</td>
 					{/if}
 				{/foreach}
 				{if $trflag == 1}
@@ -38,7 +39,8 @@
 							{if $k == 0}
 								<td>{$indenttext}{$v['value']}</td>
 							{elseif $k !=0}
-								<td style = "text-align:right;">{$v['value']}</td>
+								{$v['value'] = $v['value']|floatval}
+								<td style = "text-align:right;">{if $v['value']!='0.00'}{$v['value']|number_format:2:".":","}{else}&nbsp;{/if}</td>
 							{/if}
 						{/foreach}
 						</tr>
@@ -52,7 +54,8 @@
 							{if $k2 == 0}
 								<td style = "padding: 8px 0px 8px 0px;"><hr  style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$indenttext}{$v2['value']}</b></td>
 							{elseif $k2 != 0}
-								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr  style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$v2['value']}</b></td>
+								{$v2['value'] = $v2['value']|floatval}
+								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr  style="height:1px;border-width:0;color:gray;background-color:gray"><b>{if $v2['value']!='0.00'}{$v2['value']|number_format:2:".":","}{else}&nbsp;{/if}</b></td>
 							{/if}
 						{/foreach}
 						</tr>
@@ -62,9 +65,10 @@
 					 <tr>
 						{foreach key=k2 item=v2 from=$value['ColData']}
 							{if $k2 == 0}
-								<td><b>{$indenttext}{$v2['value']}</b></td>
+								<td>{$indenttext}{$v2['value']}</td>
 							{elseif $k2 != 0}
-								<td style = "text-align:right;"><b>{$v2['value']}</b></td>
+								{$v2['value'] = $v2['value']|floatval}
+								<td style = "text-align:right;">{if $v2['value']!='0.00'}{$v2['value']|number_format:2:".":","}{else}&nbsp;{/if}</td>
 							{/if}
 						{/foreach}
 					</tr>
