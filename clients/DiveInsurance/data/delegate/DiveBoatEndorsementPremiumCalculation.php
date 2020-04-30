@@ -22,7 +22,7 @@ class DiveBoatEndorsementPremiumCalculation extends AbstractAppDelegate
 
         $data['update_date'] = $policy['update_date'];
         
-        if(($data['previous_address1'] != $data['address1']  || $data['previous_address2'] != $data['address2'] || $data['previous_country'] != $data['country'] || $data['previous_city'] != $data['city'] || $data['previous_state'] != $data['state'] || $data['previous_zip'] != $data['zip']) && ($data['basameAsMailingAddress'] == true || $data['basameAsMailingAddress'] == 'true')){
+        if(($policy['previous_address1'] != $data['address1']  || $policy['previous_address2'] != $data['address2'] || $policy['previous_country'] != $data['country'] || $policy['previous_city'] != $data['city'] || $policy['previous_state'] != $data['state'] || $policy['previous_zip'] != $data['zip']) && ($data['basameAsMailingAddress'] == true || $data['basameAsMailingAddress'] == 'true')){
             $data['generatePersonalInfo'] = true;
         }
 

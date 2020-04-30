@@ -173,12 +173,12 @@ class SetupEndorsementDiveBoat extends AbstractAppDelegate
                 $policy['update_date'] = $data['update_date'] = $update_date;
             }
             $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
-            $data['previous_address1'] = $data['address1'];
-            $data['previous_address2'] = $data['address2'];
-            $data['previous_city'] = $data['city'];
-            $data['previous_state'] = $data['state'];
-            $data['previous_zip'] = $data['zip'];
-            $data['previous_country'] = $data['country'];
+            $policy['previous_address1'] = $data['address1'];
+            $policy['previous_address2'] = $data['address2'];
+            $policy['previous_city'] = $data['city'];
+            $policy['previous_state'] = $data['state'];
+            $policy['previous_zip'] = $data['zip'];
+            $policy['previous_country'] = $data['country'];
             $policy['previous_hull_market_value'] = isset($data['hull_market_value']) ? $data['hull_market_value'] : 0;
             $policy['previous_hull_deductible'] = isset($data['hull_deductible']) ? $data['hull_deductible'] : 0;
             $policy['previous_purchase_price_currency'] = isset($data['purchase_price_currency']) ? $data['purchase_price_currency'] : 0;
