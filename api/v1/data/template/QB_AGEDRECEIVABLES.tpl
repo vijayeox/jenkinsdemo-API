@@ -50,9 +50,9 @@
 					<tr>
 						{foreach key=k2 item=v2 from=$value['ColData']}
 							{if $k2 == 0}
-								<td style = "padding: 8px 0px 8px 0px;"><hr><b>{$indenttext}{$v2['value']}</b></td>
+								<td style = "padding: 8px 0px 8px 0px;"><hr  style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$indenttext}{$v2['value']}</b></td>
 							{elseif $k2 != 0}
-								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr><b>{$v2['value']}</b></td>
+								<td style = "text-align:right;padding: 8px 0px 8px 0px;"><hr  style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$v2['value']}</b></td>
 							{/if}
 						{/foreach}
 						</tr>
@@ -105,7 +105,7 @@ table {
 			{if isset ($Header['Currency']) && !empty($Header['Currency'])}<th style = "text-align: right;">Currency : {$Header['Currency']}</th>{/if}
 		</tr>
 	</table>
-	
+	<div style = 'border-width:5px;border-bottom-style:double;'>
 	<table style = "border-spacing: 0; width: 100%; padding: 8px;">
 		<thead>
 			<tr>
@@ -128,5 +128,6 @@ table {
 			{createrows data=$data['Rows']}
 		</tbody>
 	</table>
+	</div>
 </body>
 </html>
