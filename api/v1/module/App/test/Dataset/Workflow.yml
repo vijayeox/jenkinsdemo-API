@@ -244,6 +244,7 @@ ox_app_menu:
     sequence: 1
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    privilege_name: MANAGE_USER_READ
   - id: 2
     uuid: "7b5b359c-df8c-11e9-8a34-2a2ae2dbcce4"
     name: "menu2"
@@ -262,6 +263,27 @@ ox_app_menu:
     sequence: 3
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    privilege_name: MANAGE_USER_READ
+  - id: 4
+    uuid: "7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4"
+    name: "menu4"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 4
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    privilege_name: '{"eq" : "MANAGE_USER_READ","neq" : "MANAGE_PROJECT_READ"}'
+  - id: 5
+    uuid: "050283ae-df8d-11e9-8a34-2a2ae2dbcce4"
+    name: "menu4"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 5
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    privilege_name: 'MANAGE_PROJECT_READ'
 ox_app_page:
   - id: 1
     name: "page1"
