@@ -126,7 +126,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             if(isset($data['previous_policy_data'])){
                 $previous_data = array();
-                $previous_data = json_decode($data['previous_policy_data'],true);
+                $previous_data = is_string($data['previous_policy_data']) ? json_decode($data['previous_policy_data'],true) : $data['previous_policy_data'];
                 $length = sizeof($previous_data);
             }else{
                 $previous_data = array();
@@ -460,13 +460,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->logger->info("DOCUMENT coi_document");
                 $this->logger->info("Policy Document Generation");
                 if($this->type == 'endorsement'){
-                    if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
+                    if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) && ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true'))){
                         $documents['endorsement_coi_document'] = isset($documents['endorsement_coi_document']) ? $documents['endorsement_coi_document'] : array();
                         $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                         array_push($documents['endorsement_coi_document'], $endorsementDoc);
                     }
                 }else if($this->type == 'endorsementQuote'){
-                    if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
+                    if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) && ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true'))){
                         $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     }
                 }else{
@@ -566,7 +566,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $data['documents'] = $documents;
             }else if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
-                $data['documents'] = json_decode($data['documents'],true);
+                $data['documents'] = is_string($data['documents']) ? json_decode($data['documents'],true) : $data['documents'];
                 if($this->type == 'endorsement'){
                     if(isset($data['documents']['roster_certificate'])){
                         unset($data['documents']['roster_certificate']);
