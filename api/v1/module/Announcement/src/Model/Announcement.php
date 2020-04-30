@@ -20,11 +20,12 @@ class Announcement extends Entity
         'created_id' => 0,
         'media_type' => null,
         'media' => null,
+        'type' => null
     );
 
     public function validate()
     {
-        $required = array('name', 'org_id', 'status', 'start_date', 'end_date', 'media');
+        $required = array('name', 'status', 'start_date', 'end_date', 'media','type');
         $this->validateWithParams($required);
     }
 }

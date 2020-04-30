@@ -83,7 +83,7 @@ class WidgetControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->assertEquals(12, $this->getConnection()->getRowCount('ox_widget'));
-        $data = null;
+        $data = array('queries' => array(array('uuid' =>'8f1d2819-c5ff-4426-bc40-f7a20704a738','configuration' => 'sample_conf'),array('uuid' =>'86c0cc5b-2567-4e5f-a741-f34e9f6f1af1','configuration' => 'sample_conf')));
         $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc/copy', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -96,7 +96,7 @@ class WidgetControllerTest extends ControllerTest
     public function testCopyNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = [];
+        $data = array('queries' => array(array('uuid' =>'8f1d2819-c5ff-4426-bc40-f7a20704a738','configuration' => 'sample_conf'),array('uuid' =>'86c0cc5b-2567-4e5f-a741-f34e9f6f1af1','configuration' => 'sample_conf')));
         $this->assertEquals(12, $this->getConnection()->getRowCount('ox_widget'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafab/copy', 'POST', $data);
@@ -105,8 +105,8 @@ class WidgetControllerTest extends ControllerTest
         $this->assertMatchedRouteName('copyWidget');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Failed to copy the entity');
-        $this->assertEquals($content['data']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafab');
+        $this->assertEquals($content['message'], 'Exception occured');
+        $this->assertEquals($content['data']['message'], 'Given wiget id 51e881c3-040d-44d8-9295-f2c3130bafab either does not exist OR user has no permission to read the widget.');
     }
 
     //DO NOT ADD THIS AT IS NOT NEEDED. LEAVING THIS HERE IN CASE THE REQUIREMENT CHANGES

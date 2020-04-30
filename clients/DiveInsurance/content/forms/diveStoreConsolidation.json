@@ -845,23 +845,27 @@
 					"columns": [{
 						"components": [{
 							"label": "Policy Start Date",
+							"displayInTimezone": "utc",
 							"allowInput": false,
 							"format": "MM-dd-yyyy",
 							"tableView": false,
 							"datePicker": {
-								"minDate": "moment()",
+								"minDate": "moment().startOf('day')",
 								"disableWeekends": false,
 								"disableWeekdays": false
 							},
 							"enableTime": false,
+							"timePicker": {
+								"showMeridian": false
+							},
 							"defaultDate": "moment()",
 							"clearOnHide": false,
-							"calculateServer": true,
+							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"custom": "var yesterday = moment(). subtract(1, \"days\");\nvar dateselected = moment(input);\nvalid = (dateselected > yesterday) ? true : 'Policy Start Date cannot be before the current date';"
+								"customMessage": "Please select the Policy Start Date"
 							},
-							"validateOn": "blur",
+							"errorLabel": "Policy Start Date",
 							"key": "policyPeriod",
 							"properties": {
 								"delegate": "RateCard"
@@ -871,7 +875,7 @@
 							"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 							"widget": {
 								"type": "calendar",
-								"displayInTimezone": "viewer",
+								"displayInTimezone": "utc",
 								"language": "en",
 								"useLocaleSettings": false,
 								"allowInput": false,
@@ -881,8 +885,8 @@
 								"format": "MM-dd-yyyy",
 								"hourIncrement": 1,
 								"minuteIncrement": 1,
-								"time_24hr": false,
-								"minDate": "moment()",
+								"time_24hr": true,
+								"minDate": "moment().startOf('day')",
 								"disableWeekends": false,
 								"disableWeekdays": false,
 								"maxDate": null
@@ -10863,7 +10867,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 96,
+	"_vid": 97,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10880,6 +10884,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-28T19:34:24.539Z",
+	"modified": "2020-04-29T20:00:09.622Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

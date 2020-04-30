@@ -274,6 +274,8 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['orgId'])) {
             $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
         }
+
+        // SADHITHA CHANGE CREATED BY TO SUBMITTED BY
         if (!isset($params['created_by'])) {
             $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         }

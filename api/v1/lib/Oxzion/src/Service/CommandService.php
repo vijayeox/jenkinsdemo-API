@@ -208,7 +208,7 @@ class CommandService extends AbstractService
                 return $this->claimActivityInstance($data);
                 break;
             case 'activityInstanceForm':
-                $this->logger->info("Instance Form");
+                $this->logger->info("Activity Instance Form");
                 return $this->getActivityInstanceForm($data);
                 break;
             default:

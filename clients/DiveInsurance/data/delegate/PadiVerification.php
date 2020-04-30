@@ -78,7 +78,7 @@ class PadiVerification extends AbstractAppDelegate
                         $returnArray['padiNotFound'] = false;
                     } else {
                         $returnArray['padiVerified'] = false;
-                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['businessPadiVerified'] = true;
                         $returnArray['padiNotApplicable'] = true;
                         $returnArray['padiNotFound'] = false;
                     }

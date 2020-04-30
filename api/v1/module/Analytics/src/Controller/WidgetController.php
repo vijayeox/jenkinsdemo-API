@@ -183,6 +183,10 @@ class WidgetController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse('Validation Errors', 404, $response);
         }
+        catch (Exception $e) {
+            $response = ['data' => $data, 'message' => $e->getMessage()];
+            return $this->getErrorResponse('Exception occured', 404, $response);
+        }
         return $this->getErrorResponse('Failed to copy the entity', 404, array('uuid' => $params['widgetUuid']));
     }
 }
