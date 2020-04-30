@@ -61,11 +61,18 @@ class DocumentController extends AbstractApiControllerHelper
     public function get($id)
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/" . $params['fileId'] . "/" . $params['document'];
+        $params = array_merge($params ,$this->params()->fromQuery());
 
-        if (isset($params['folder'])) {
-            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/" . $params['fileId'] . "/" . $params['folder'] . "/" . $params['document'];
+        if(isset($params['docPath'])){
+            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['docPath'];
+        }else{
+           $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/" . $params['fileId'] . "/" . $params['document'];
+
+           if (isset($params['folder1'])) {
+            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/" . $params['fileId'] . "/" . $params['folder1'] . "/" . $params['document'];
+           } 
         }
+        
         if (file_exists($attachment_location)) {
             header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
             header("Cache-Control: public"); // needed for internet explorer            
@@ -73,7 +80,7 @@ class DocumentController extends AbstractApiControllerHelper
             header("Content-Type:".$mimeType );  
             header("Content-Transfer-Encoding: Binary");
             header("Content-Length:" . filesize($attachment_location));
-            header("Content-Disposition: attachment; filename=" . $params['document']);
+            header("Content-Disposition: inline; filename=" . $params['document']);
             readfile($attachment_location);
             die();
         } else {
