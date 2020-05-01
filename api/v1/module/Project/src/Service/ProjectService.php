@@ -288,8 +288,9 @@ class ProjectService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getProjectsOfUserById($userId)
+    public function getProjectsOfUserById($userId, $orgId = null)
     {
+        $orgId = isset($orgId) ? $this->getIdFromUuid('ox_organization', $orgId) :  AuthContext::get(AuthConstants::ORG_ID);
         $queryString = "select ox_project.* , ox_user.username as manager_username, ox_user.uuid as manager_uuid from ox_project
                 inner join ox_user_project on ox_user_project.project_id = ox_project.id inner join ox_user on ox_project.manager_id = ox_user.id";
         $where = "where ox_user_project.user_id ='" . $userId . "' AND ox_project.org_id=" . AuthContext::get(AuthConstants::ORG_ID) . " AND ox_project.isdeleted!=1";
