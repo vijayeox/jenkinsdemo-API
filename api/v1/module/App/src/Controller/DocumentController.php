@@ -72,6 +72,9 @@ class DocumentController extends AbstractApiControllerHelper
             $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/" . $params['fileId'] . "/" . $params['folder1'] . "/" . $params['document'];
            } 
         }
+
+        $ext = pathinfo($attachment_location, PATHINFO_EXTENSION);
+        $dispositionType = isset($ext) && $ext=="pdf"  ? "inline" : "attachment";
         
         if (file_exists($attachment_location)) {
             header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
@@ -80,7 +83,7 @@ class DocumentController extends AbstractApiControllerHelper
             header("Content-Type:".$mimeType );  
             header("Content-Transfer-Encoding: Binary");
             header("Content-Length:" . filesize($attachment_location));
-            header("Content-Disposition: inline; filename=" . $params['document']);
+            header("Content-Disposition: ". $dispositionType ."; filename=" . $params['document']);
             readfile($attachment_location);
             die();
         } else {
