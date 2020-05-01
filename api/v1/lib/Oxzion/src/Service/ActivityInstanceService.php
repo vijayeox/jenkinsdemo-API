@@ -536,11 +536,30 @@ class ActivityInstanceService extends AbstractService
         }
         $initialData = $startDataTemp[$value['name']];
         if($value['data_type'] == 'text'){
-            $fieldValue = json_decode($initialData, true);
+            //handle string data being sent
+            if(is_string($initialData)){
+                $fieldValue = json_decode($initialData, true);
+            } else {
+                $fieldValue = $initialData;
+            }
             //handle select component values having an object with keys value and label 
             if(!empty($fieldValue) && is_array($fieldValue)){
-                print_r($fieldValue);exit;
-                $initialData = $fieldValue['label'];
+                //Add Handler for default Labels
+                if(isset($fieldValue['label'])){
+                    $initialData = $fieldValue['label'];
+                } else {
+                    // Add for single values array
+                    if(isset($fieldValue[0]) && count($fieldValue) == 1){
+                        $initialData = $fieldValue[0];
+                    } else {
+                        //Case multiple values allowed
+                        if(count($fieldValue) > 1){
+                            foreach ($fieldValue as $k => $v) {
+                                $initialData .= $v;
+                            } 
+                        }
+                    }
+                }
             }
        
         }else if($value['data_type'] == 'boolean'){
@@ -575,7 +594,6 @@ class ActivityInstanceService extends AbstractService
                 }
             }
         }
-        
         if($labelMapping && isset($labelMapping[$initialData])){
             $initialData = $labelMapping[$initialData];
         }
