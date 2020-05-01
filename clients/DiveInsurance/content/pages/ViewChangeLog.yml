@@ -1,0 +1,70 @@
+name: 'View Log'
+description: 'Page to list activities for a file'
+content:
+    -
+        type: List
+        content:
+            route: 'file/{{uuid}}/activitylog'
+            filterable: true
+            resizable: true
+            sortable: 
+                allowUnsort: true
+                mode: single
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: 'View Changes'
+                    details:
+                        -
+                            type: HTMLViewer
+                            content: '<h4>Workflow:{data.workflowName} - Activity:{data.activityName} - Performed By:{data.activityModifiedBy} - Performed On:{data.activitySubmittedDate}</h4>'
+                            useRowData: true
+                        -
+                            type: List
+                            content: 
+                                route: delegate/ChangeLogDelegate
+                                columnConfig:
+                                    -
+                                        title: Parent Field Name
+                                        field: parentText
+                                    -
+                                        title: Field Name
+                                        field: text
+                                    -
+                                        title: Initial Value
+                                        field: initialValue
+                                    -
+                                        title: Submitted Value
+                                        field: submittedValue
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                activityInstanceId: '{{activityInstanceId}}'
+                    rule: 'true'
+                    icon: 'fa fa-th-list'
+            columnConfig:
+                -
+                    title: Workflow
+                    field: workflowName
+                -
+                    title: Initiated On
+                    field: workflowInstanceSubmissionDate
+                    cell: '<td>{moment(item.workflowInstanceSubmissionDate).format("MM-DD-YYYY HH:mm:ss")}</td>'
+                -
+                    title: Initiated By
+                    field: ModifiedBy
+                -
+                    title: Activity
+                    field: activityName
+                -
+                    title: Performed By
+                    field: activityModifiedBy
+                -
+                    title: Performed On
+                    field: activitySubmittedDate
+                    cell: '<td>{moment(item.activitySubmittedDate).format("MM-DD-YYYY HH:mm:ss")}</td>'
