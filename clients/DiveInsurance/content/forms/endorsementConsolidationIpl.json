@@ -2543,11 +2543,25 @@
 			"lockKey": true,
 			"label": ""
 		}, {
-			"key": "page5ColumnsPanel",
-			"input": false,
 			"title": "Information for each Additional Insured is required as follows",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "page5ColumnsPanel",
+			"conditional": {
+				"show": true,
+				"when": "AdditionalInsuredOption",
+				"eq": "addAdditionalInsureds"
+			},
+			"type": "panel",
+			"label": "Information for each Additional Insured is required as follows",
+			"input": false,
 			"components": [{
 				"label": "Information for each Additional Insured is required as follows",
 				"disableAddingRemovingRows": false,
@@ -2827,14 +2841,7 @@
 				}],
 				"lockKey": true
 			}],
-			"type": "panel",
-			"conditional": {
-				"show": "true",
-				"when": "AdditionalInsuredOption",
-				"eq": "newListOfAdditionalInsureds"
-			},
-			"lockKey": true,
-			"label": "Panel"
+			"lockKey": true
 		}],
 		"input": false,
 		"key": "page5",
@@ -3219,7 +3226,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 85,
+	"_vid": 86,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3238,6 +3245,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-04-29T14:59:49.859Z",
+	"modified": "2020-04-30T17:01:32.098Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
