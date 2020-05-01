@@ -2355,11 +2355,25 @@
 				"hideLabel": true,
 				"label": ""
 			}, {
-				"key": "page4PanelPanel",
-				"input": false,
 				"title": "Information for each Additional Insured is required as follows",
 				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
 				"tableView": false,
+				"key": "page4PanelPanel",
+				"conditional": {
+					"show": true,
+					"when": "AdditionalInsuredOption",
+					"eq": "addAdditionalInsureds"
+				},
+				"type": "panel",
+				"label": "Information for each Additional Insured is required as follows",
+				"input": false,
 				"components": [{
 					"label": "Data Grid",
 					"disableAddingRemovingRows": false,
@@ -2632,14 +2646,7 @@
 						"label": ""
 					}],
 					"lockKey": true
-				}],
-				"type": "panel",
-				"conditional": {
-					"show": "true",
-					"when": "AdditionalInsuredOption",
-					"eq": "newListOfAdditionalInsureds"
-				},
-				"label": "Panel"
+				}]
 			}],
 			"type": "panel",
 			"label": "Panel"
@@ -2936,8 +2943,7 @@
 			"cancel": false,
 			"next": true
 		},
-		"collapsible": false,
-		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? false: true;\n}"
+		"collapsible": false
 	}, {
 		"input": false,
 		"label": "Approval",
@@ -3072,7 +3078,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 479,
+	"_vid": 481,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3156,7 +3162,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-04-27T16:41:19.641Z",
+	"modified": "2020-04-30T12:19:15.604Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
