@@ -27,6 +27,9 @@ class FieldService extends AbstractService
             $appId = $appUUId;
         }
         $data['app_id'] = $appId;
+        if(isset($data['data_type']) && !isset($data['type'])){
+            $data['type'] = $this->getFieldTypeByDataType($data['data_type']);
+        }
         if (!isset($data['id']) || $data['id'] == 0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
@@ -41,7 +44,7 @@ class FieldService extends AbstractService
         try {
             $count = $this->table->save($field);
             if ($count == 0) {
-                $this->rollback();
+                $this->commit();
                 return 0;
             }
             if (!isset($data['id']) || $data['id'] == 0) {
@@ -67,6 +70,9 @@ class FieldService extends AbstractService
         $data['id'] = $this->getIdFromUuid('ox_field', $id);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        if(isset($data['data_type']) && !isset($data['type'])){
+            $data['type'] = $this->getFieldTypeByDataType($data['data_type']);
+        }
         $file = $obj->toArray();
         $changedArray = array_merge($obj->toArray(), $data);
         $this->logger->info(__CLASS__ . "-> Data modified before Update - " . print_r($changedArray, true));
@@ -172,4 +178,18 @@ class FieldService extends AbstractService
             throw $e;
         }
     }
+
+    private function getFieldTypeByDataType($dataType){
+        switch ($dataType) {
+            case 'document':
+                $type = 'document';
+                break;
+            
+            default:
+                $type = 'text';
+                break;
+        }
+        return $type;
+    }
+
 }

@@ -181,4 +181,32 @@ class WorkflowInstanceController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($result, 200);
     }
+
+    public function getActivityLogAction(){
+        $params = $this->params()->fromRoute();
+        try{
+            $result = $this->workflowInstanceService->getActivityLog($params['fileId'], $params['appId']);
+            if ($result == 0) {
+                return $this->getErrorResponse("No Activity found for the specified file", 404, ['id' => $fileId]);
+            }
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }
+        return $this->getSuccessResponseWithData($result,200);
+    }
+
+    public function getFieldDiffAction(){
+        $params = $this->params()->fromRoute();
+        try{
+            $result = $this->activityInstanceService->getActivityChangeLog($params['activityInstanceId']);
+            if ($result == 0) {
+                return $this->getErrorResponse("No Activity found for the specified file", 404, ['id' => $fileId]);
+            }
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }
+        return $this->getSuccessResponseWithData($result,200);
+    }
 }

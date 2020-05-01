@@ -11,11 +11,12 @@ class ActivityInstance extends Entity
         'id'=>0 ,
         'workflow_instance_id' => 0,
         'activity_instance_id' => 0,
-        'data'=>null,
         'activity_id' => 0,
-        'data' => null,
+        'start_data' => null,
+        'completion_data' => null,
         'status' => 0,
-        'act_by_date' => null,
+        'modified_by' => null,
+        'submitted_date' => null,
         'org_id' => 0,
         'start_date' => null
     );
