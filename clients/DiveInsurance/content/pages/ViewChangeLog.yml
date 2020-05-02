@@ -23,7 +23,7 @@ content:
                     details:
                         -
                             type: HTMLViewer
-                            content: '<h4>Workflow:{data.workflowName} - Activity:{data.activityName} - Performed By:{data.activityModifiedBy} - Performed On:{data.activitySubmittedDate}</h4>'
+                            content: '<h4>Workflow: {data.workflowName} - Activity:{data.activityName} - Performed By: {data.activityModifiedBy} - on: {data.activitySubmittedDate}</h4>'
                             useRowData: true
                         -
                             type: List
@@ -45,19 +45,13 @@ content:
                             urlPostParams:
                                 appId: '{{appId}}'
                                 activityInstanceId: '{{activityInstanceId}}'
+                                workflowInstanceId: '{{workflowInstanceId}}'
                     rule: 'true'
                     icon: 'fa fa-th-list'
             columnConfig:
                 -
                     title: Workflow
                     field: workflowName
-                -
-                    title: Initiated On
-                    field: workflowInstanceSubmissionDate
-                    cell: '<td>{moment(item.workflowInstanceSubmissionDate).format("MM-DD-YYYY HH:mm:ss")}</td>'
-                -
-                    title: Initiated By
-                    field: ModifiedBy
                 -
                     title: Activity
                     field: activityName

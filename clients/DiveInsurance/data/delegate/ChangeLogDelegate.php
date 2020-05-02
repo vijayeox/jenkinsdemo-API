@@ -14,16 +14,29 @@ class ChangeLogDelegate extends AbstractAppDelegate
     }
 
     public function execute(array $data,Persistence $persistenceService)
-    {  
+    {
         $rateArray = array();
-        $fileData = $this->getFileDataByActivityInstanceId($data['activityInstanceId']);
-        $product = json_decode($fileData['data'],true);
-        $data['product'] = $product['product'];
-        $rates = $this->getRates($data,$persistenceService);
-        foreach ($rates as $key => $value) {
-            $rateArray[$value['key']] =  $value['coverage'];
+        if(isset($data['activityInstanceId'])){
+            $fileData = $this->getFileDataByActivityInstanceId($data['activityInstanceId']);
+            $product = json_decode($fileData['data'],true);
+            $data['product'] = $product['product'];
+            $rates = $this->getRates($data,$persistenceService);
+            foreach ($rates as $key => $value) {
+                $rateArray[$value['key']] =  $value['coverage'];
+            }
+            $changeLogData = $this->getActivityChangeLog($data['activityInstanceId'],$rateArray); 
+        } else {
+            if(isset($data['workflowInstanceId'])){
+                $fileData = $this->getWorkflowSubmissionData($data['workflowInstanceId']);
+                $product = json_decode($fileData['data'],true);
+                $data['product'] = $product['product'];
+                $rates = $this->getRates($data,$persistenceService);
+                foreach ($rates as $key => $value) {
+                    $rateArray[$value['key']] =  $value['coverage'];
+                }
+                $changeLogData = $this->getWorkflowChangeLog($data['workflowInstanceId'],$rateArray);
+            }
         }
-        $changeLogData = $this->getActivityChangeLog($data['activityInstanceId'],$rateArray);  
         return $changeLogData;
     }
 
