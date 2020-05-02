@@ -34,4 +34,10 @@ trait WorkflowTrait
     public function getFileDataByActivityInstanceId($activityInstanceId){
         return $this->activityInstanceService->getFileDataByActivityInstanceId($activityInstanceId);
     }
+    public function getWorkflowSubmissionData($workflowInstanceId){
+        return $this->workflowInstanceService->getWorkflowSubmissionData($workflowInstanceId);
+    }
+    public function getWorkflowChangeLog($workflowInstanceId,$labelMapping){
+       return $this->workflowInstanceService->getWorkflowChangeLog($workflowInstanceId,$labelMapping);
+    }
 }

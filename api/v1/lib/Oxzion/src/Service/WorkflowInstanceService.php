@@ -326,11 +326,11 @@ class WorkflowInstanceService extends AbstractService
     {
         $this->logger->info("Workflow Instance Start" . print_r($data, true));
         try {
-            if (isset($data['variables'])) {
+            if (isset($data['variables']) && isset($data['variables']['workflowId'])) {
                 $workflowInstance = $this->setupWorkflowInstance($data['variables']['workflowId'], $data['processInstanceId'], $data['variables']);
             } else {
                 $this->logger->info("Invalid Data ----- " . print_r($data, true));
-                throw new InvalidParameterException("Invalid Data" . $data);
+                throw new InvalidParameterException("Invalid Data - " . json_encode($data));
             }
             $this->logger->info("Initiate Workflow Data ----- " . print_r($workflowInstance, true));
             return $workflowInstance;
@@ -478,17 +478,66 @@ class WorkflowInstanceService extends AbstractService
     }
 
     public function getActivityLog($fileId,$appId){
-        $selectQuery = "SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName,oai.start_date, owi.date_created as workflowInstanceCreatedDate,owi.date_modified as workflowInstanceSubmissionDate,owi.created_by,ouu.name as ModifiedBy,ou.name as activityModifiedBy,owi.modified_by,oa.name as activityName, oai.submitted_date as activitySubmittedDate,oai.modified_by,oai.activity_instance_id as activityInstanceId from ox_workflow_instance owi 
-            inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id 
-            inner join ox_workflow ow on ow.id = owd.workflow_id
-            inner join ox_activity_instance oai on oai.workflow_instance_id = owi.id
-            inner join ox_activity oa on oa.id = oai.activity_id
-            inner join ox_file of on of.id = owi.file_id
-            inner join ox_user ou on ou.id = oai.modified_by
-            inner join ox_user ouu on ouu.id = owi.created_by
-            where of.uuid = :fileId and owi.app_id = :appId ORDER BY oai.start_date ASC";         
+        $selectQuery = "(SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName,oai.start_date, owi.date_created as workflowInstanceCreatedDate,owi.date_modified as workflowInstanceSubmissionDate,owi.created_by,ouu.name as ModifiedBy,ou.name as activityModifiedBy,owi.modified_by,oa.name as activityName, oai.submitted_date as activitySubmittedDate,oai.modified_by,oai.activity_instance_id as activityInstanceId from ox_workflow_instance owi 
+        inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id 
+        inner join ox_workflow ow on ow.id = owd.workflow_id
+        inner join ox_activity_instance oai on oai.workflow_instance_id = owi.id
+        inner join ox_activity oa on oa.id = oai.activity_id
+        inner join ox_file of on of.id = owi.file_id
+        inner join ox_user ou on ou.id = oai.modified_by
+        inner join ox_user ouu on ouu.id = owi.created_by
+        where of.uuid = :fileId and owi.app_id = :appId ORDER BY oai.start_date ASC) UNION (SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName,
+        owi.date_created, owi.date_created as workflowInstanceCreatedDate,
+        owi.date_modified as workflowInstanceSubmissionDate,
+        owi.created_by,ouu.name as ModifiedBy,ouu.name as activityModifiedBy,
+        owi.modified_by,'Submitted' as activityName
+        , owi.date_created as activitySubmittedDate,
+        owi.created_by,null as activityInstanceId from ox_workflow_instance owi 
+        inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id 
+        inner join ox_workflow ow on ow.id = owd.workflow_id
+        inner join ox_file of on of.id = owi.file_id
+        left join ox_activity_instance oai on oai.workflow_instance_id = owi.id
+        left join ox_activity oa on oa.id = oai.activity_id
+        inner join ox_user ouu on ouu.id = owi.created_by
+        where of.uuid = :fileId and owi.app_id = :appId and oai.id is NULL)";         
         $selectQueryParams = array('fileId' => $fileId, 'appId' => $this->getIdFromUuid('ox_app', $appId));
-        $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray(); 
+        $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
         return $result;
+    }
+
+    public function getWorkflowSubmissionData($workflowInstanceId){
+        try{
+            $selectQuery = "SELECT of.data from ox_file of
+                            INNER JOIN ox_workflow_instance owi on owi.file_id = of.id where owi.process_instance_id = :workflowInstanceId ";
+            $selectQueryParams = array('workflowInstanceId' => $workflowInstanceId);
+            $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
+            if(isset($result[0])){
+                return $result[0]; 
+            } else {
+                return;
+            }
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+
+    public function getWorkflowChangeLog($workflowInstanceId,$labelMapping=null){
+        $selectQuery = "SELECT owi.start_data, owi.completion_data ,owd.form_id,owi.parent_workflow_instance_id from ox_workflow_instance owi inner join ox_workflow_deployment owd on owi.workflow_deployment_id = owd.id where owi.process_instance_id = :workflowInstanceId ";
+        $selectQueryParams = array('workflowInstanceId' => $workflowInstanceId);
+        $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
+        if(count($result) > 0){
+            $formId = $result[0]['form_id'];
+            if(isset($result[0]['parent_workflow_instance_id'])){
+                $startData = json_decode($result[0]['start_data'],true);
+            } else {
+                $startData = null;
+            }
+            $completionData = json_decode($result[0]['completion_data'],true);
+            $resultData = $this->workflowService->getChangeLog($formId,$startData,$completionData,$labelMapping);
+            return $resultData;
+        } else {
+            return $result;
+        }
     }
 }

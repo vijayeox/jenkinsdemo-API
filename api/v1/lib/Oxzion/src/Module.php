@@ -461,7 +461,8 @@ class Module
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\ActivityInstanceTable::class),
-                        $container->get(Workflow\WorkflowFactory::class)
+                        $container->get(Workflow\WorkflowFactory::class),
+                        $container->get(Service\WorkflowService::class)
                     );
                 },
                  Model\JobTable::class => function ($container) {
