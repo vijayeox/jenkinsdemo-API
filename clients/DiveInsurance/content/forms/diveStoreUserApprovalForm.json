@@ -189,67 +189,66 @@
         "input": true,
         "tableView": false
       }, {
-        "label": "Would you like to apply for Premium Finance?",
-        "optionsLabelPosition": "right",
-        "inline": false,
-        "tableView": false,
-        "values": [{
-          "label": "Yes",
-          "value": "yes",
-          "shortcut": ""
-        }, {
-          "label": "No",
-          "value": "no",
-          "shortcut": ""
-        }],
-        "clearOnHide": false,
-        "calculateServer": false,
-        "validate": {
-          "required": true
-        },
-        "key": "premiumFinanceSelect",
-        "type": "radio",
-        "input": true
-      }, {
-        "label": "HTML",
-        "attrs": [{
-          "attr": "",
-          "value": ""
-        }],
-        "content": "<h3>Number of Installments would be {{data.paymentInstallments}}</h3>",
-        "refreshOnChange": false,
-        "tableView": false,
-        "key": "html",
-        "conditional": {
-          "show": true,
-          "when": "premiumFinanceSelect",
-          "eq": "yes"
-        },
-        "type": "htmlelement",
-        "input": false
-      }, {
-        "label": "Final Amount Payable",
-        "prefix": "$",
-        "mask": false,
-        "spellcheck": false,
-        "disabled": true,
-        "tableView": false,
-        "delimiter": true,
-        "requireDecimal": true,
-        "inputFormat": "plain",
-        "redrawOn": "amountPayable",
-        "clearOnHide": false,
-        "calculateValue": "value = data.amountPayable",
-        "calculateServer": false,
-        "key": "finalAmountPayable",
-        "type": "number",
-        "input": true,
-        "inputType": "text",
-        "decimalLimit": 2
-      }, {
         "label": "Columns",
         "columns": [{
           "components": [{
+            "label": "Final Amount Payable",
+            "prefix": "$",
+            "mask": false,
+            "spellcheck": false,
+            "disabled": true,
+            "tableView": false,
+            "delimiter": true,
+            "requireDecimal": true,
+            "inputFormat": "plain",
+            "redrawOn": "amountPayable",
+            "clearOnHide": false,
+            "calculateValue": "value = data.amountPayable",
+            "calculateServer": false,
+            "key": "finalAmountPayable",
+            "type": "number",
+            "input": true,
+            "inputType": "text",
+            "decimalLimit": 2,
+            "hideOnChildrenHidden": false
+          }, {
+            "label": "Would you like to apply for Premium Finance?",
+            "optionsLabelPosition": "right",
+            "inline": false,
+            "tableView": false,
+            "values": [{
+              "label": "Yes",
+              "value": "yes",
+              "shortcut": ""
+            }, {
+              "label": "No",
+              "value": "no",
+              "shortcut": ""
+            }],
+            "clearOnHide": false,
+            "calculateServer": false,
+            "validate": {
+              "required": true
+            },
+            "key": "premiumFinanceSelect",
+            "type": "radio",
+            "input": true,
+            "hideOnChildrenHidden": false
+          }, {
+            "label": "HTML",
+            "attrs": [{
+              "attr": "",
+              "value": ""
+            }],
+            "content": "<h3>Number of Installments would be {{data.paymentInstallments}}</h3>",
+            "refreshOnChange": false,
+            "tableView": false,
+            "key": "html",
+            "customConditional": "if(data.premiumFinanceSelect == \"yes\" && data.paymentInstallments > 0){\n  show = true;\n}",
+            "type": "htmlelement",
+            "input": false,
+            "hideOnChildrenHidden": false
+          }, {
             "label": "Payment Options",
             "optionsLabelPosition": "right",
             "inline": false,
@@ -332,7 +331,7 @@
               }],
               "clearOnHide": false,
               "calculateServer": false,
-              "key": "chequeConsentFile",
+              "key": "chequeConsentForm",
               "type": "file",
               "input": true
             }],
@@ -421,7 +420,6 @@
         "properties": {
           "payment_confirmation_page": "true"
         },
-        "customConditional": "if(data.premiumFinanceSelect=='yes'||data.premiumFinanceSelect=='no'){\n  show = true\n} else {\n  show = false\n}",
         "type": "columns",
         "input": false
       }, {
@@ -547,7 +545,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 4,
+  "_vid": 6,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -565,6 +563,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-04-30T13:24:22.863Z",
+  "modified": "2020-05-02T20:29:49.490Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
