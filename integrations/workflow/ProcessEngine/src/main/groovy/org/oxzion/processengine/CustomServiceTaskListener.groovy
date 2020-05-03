@@ -43,12 +43,13 @@ class CustomServiceTaskListener implements ExecutionListener, Serializable {
   @Override
   void notify(DelegateExecution execution) throws Exception {
     Map taskDetails = [:]
-    taskDetails.activityInstanceId = execution.activityInstanceId
     taskDetails.processInstanceId = execution.processInstanceId
     taskDetails.variables = execution.getVariables()
     taskDetails.activityInstanceId = execution.getActivityInstanceId()
     taskDetails.parentInstanceId = execution.getParentActivityInstanceId()
     taskDetails.parentActivity = execution.getParentId()
+    taskDetails.activityName = execution.getCurrentActivityName()
+    taskDetails.activityId = execution.getCurrentActivityId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
       logger.info("Custom Service Task Listener -- ${taskDetails.variables.command}")
       try{
