@@ -490,7 +490,7 @@ class WorkflowInstanceService extends AbstractService
         owi.date_created, owi.date_created as workflowInstanceCreatedDate,
         owi.date_modified as workflowInstanceSubmissionDate,
         owi.created_by,ouu.name as ModifiedBy,ouu.name as activityModifiedBy,
-        owi.modified_by,'Submitted' as activityName
+        owi.modified_by,'Initiated' as activityName
         , owi.date_created as activitySubmittedDate,
         owi.created_by,null as activityInstanceId from ox_workflow_instance owi 
         inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id 
