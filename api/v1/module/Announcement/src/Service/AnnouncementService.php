@@ -575,9 +575,8 @@ class AnnouncementService extends AbstractService
             $query = "Select id from ox_organization where subdomain ='".$params['subdomain']."'";
             $resultSet = $this->executeQuerywithParams($query)->toArray();
             if(empty($resultSet)) {
-                throw new Exception("subdomain does not exist");
-            }
-            else {
+                $orgId = null;
+            } else {
                 $orgId = $resultSet[0]['id'];
             }
         }
@@ -600,7 +599,8 @@ class AnnouncementService extends AbstractService
             $pageSize = $filterArray[0]['take'];
             $offset = $filterArray[0]['skip'];
         }
-        $where .= strlen($where) > 0 ? " AND org_id in (null,".$orgId.") AND end_date >= curdate() AND type ='HOMESCREEN'" : " WHERE org_id in (null,".$orgId.") AND end_date >= curdate() AND type ='HOMESCREEN'";
+        $org = isset($orgId)?",".$orgId:"";
+        $where .= strlen($where) > 0 ? " AND org_id in (null".$org.") AND end_date >= curdate() AND type ='HOMESCREEN'" : " WHERE org_id in (null".$org.") AND end_date >= curdate() AND type ='HOMESCREEN'";
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
