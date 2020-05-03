@@ -497,6 +497,25 @@ class Module
                         $container->get(Service\WorkflowService::class),
                         $container->get(Service\UserService::class));
                 },
+                Model\ServiceTaskInstanceTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\ServiceTaskInstanceTableGateway::class);
+                    return new Model\ServiceTaskInstanceTable($tableGateway);
+                },
+                Model\ServiceTaskInstanceTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\ServiceTaskInstance());
+                    return new TableGateway('ox_service_task_instance', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\ServiceTaskService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ServiceTaskService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\ServiceTaskInstanceTable::class),
+                        $container->get(Service\CommandService::class)
+                    );
+                },
             ],
         ];
     }
