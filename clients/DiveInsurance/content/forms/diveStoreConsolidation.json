@@ -4626,7 +4626,7 @@
 				"label": "Information for each Additional Insured is required as follows",
 				"input": false,
 				"components": [{
-					"label": "Information for each Additional Insured is required as follows",
+					"label": "Additional Insureds",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
 					"addAnother": "Add More",
@@ -4974,7 +4974,7 @@
 				"label": "Information for each Additional Named Insureds is required as follows",
 				"input": false,
 				"components": [{
-					"label": "Data Grid",
+					"label": "Additional Named Insured",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
 					"addAnother": "Add More",
@@ -4984,6 +4984,15 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": false,
+					"defaultValue": [{
+						"name": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"address": "",
+						"zip": ""
+					}],
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -5151,8 +5160,7 @@
 						"clearOnHide": false,
 						"hideLabel": true
 					}],
-					"path": "additionalNamedInsured",
-					"defaultValue": [{}]
+					"path": "additionalNamedInsured"
 				}],
 				"lockKey": true,
 				"path": "additional_named_insureds"
@@ -5218,7 +5226,14 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
-					"defaultValue": [{}],
+					"defaultValue": [{
+						"name": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"address": "",
+						"zip": ""
+					}],
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
@@ -5461,6 +5476,84 @@
 				"label": "Additional Locations",
 				"input": false,
 				"components": [{
+					"label": "Information for each Additional Location is required as follows.",
+					"tooltip": "You will need to complete another application for these locations.",
+					"disableAddingRemovingRows": false,
+					"reorder": false,
+					"addAnother": "Add another location",
+					"addAnotherPosition": "bottom",
+					"defaultOpen": false,
+					"layoutFixed": false,
+					"enableRowGroups": false,
+					"tableView": true,
+					"defaultValue": [{
+						"name": "",
+						"city": "",
+						"country": "",
+						"state": {},
+						"address": "",
+						"zip": "",
+						"buildingConstruction": "",
+						"pleaseSpecify": "",
+						"dsPropCentralFireAL": {},
+						"additionalLocationDoYouOwntheBuilding": "",
+						"built_year": {},
+						"explainationAL": "",
+						"receiptsAL": [],
+						"doyouhaveapoolonpremisesAL": "",
+						"ifyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformAL": "",
+						"doYouConductRecreationalOrBusinessActivitiesOtherThanDivingAtYourFacility": "",
+						"pleaseExplain": "",
+						"cylinderhydrostatictestingAL": false,
+						"otherequipmentsalesAL": false,
+						"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentsales": "",
+						"otherequipmentrepairsAL": false,
+						"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentrepairs": "",
+						"otherequipmentrentalsAL": false,
+						"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentrentals": "",
+						"otherbusinessactivityAL": false,
+						"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplainotherbusinessactivity": "",
+						"claimsinLast5Years": "",
+						"claimsMade": [{
+							"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime": ""
+						}],
+						"ALTravelAgentEoCheckBox": false,
+						"ALLossofBusIncomeCheckBox": false,
+						"minimumLossOfBusinessIncomeAL": 40000,
+						"ALLossofBusIncome": 40000,
+						"ALMedicalExpenseCheckBox": false,
+						"doYouWantToApplyForNonOwnerAutoAL": false,
+						"nonOwnedAutoLiabilityPL": "",
+						"ALCoverageCheckBox": false,
+						"ALTravelAgentEOFP": "0",
+						"ALNonOwnedAutoCheckBox": false,
+						"ALExcessLiabilityCheckBox": false,
+						"ALPropertyCoverageOption": "nonCat",
+						"ALliabilityTaxPercentage": "0",
+						"ALPropertyTaxPercentage": "0",
+						"additionalLocationPropertyTotal": "0",
+						"receiptsAL1": [],
+						"ALCoverageFP": 0,
+						"ALnonDivingPoolAmount": 0,
+						"ALMedicalExpenseFP": 0,
+						"ALNonOwnedAutoFP": 0,
+						"ALExcessLiabilityFP": 0,
+						"ALContentsFP": 0,
+						"ALLossofBusIncomeFP": "0",
+						"ALBuildingLimitFP": 0,
+						"ALliabilityCoveragesTotal": "0",
+						"ALPropertyCoveragesTotal": "0",
+						"ALLiabilityPropertyCoveragesTotal": "0",
+						"ALProRataPremium": "0",
+						"ALliabilityTaxTotal": "0",
+						"ALPropertyTaxTotal": 0,
+						"ALTotalTax": "0",
+						"locationTotal": 0
+					}],
+					"clearOnHide": false,
+					"calculateServer": false,
+					"key": "additionalLocations",
+					"type": "datagrid",
 					"input": true,
 					"components": [{
 						"key": "page4PanelPanelPanel2",
@@ -7867,13 +7960,6 @@
 						"label": "Panel",
 						"hideLabel": true
 					}],
-					"tableView": true,
-					"label": "Information for each Additional Location is required as follows. (You will need to complete another application for these locations.)",
-					"key": "additionalLocations",
-					"clearOnHide": false,
-					"type": "datagrid",
-					"addAnotherPosition": "bottom",
-					"addAnother": "Add another location",
 					"lockKey": true
 				}]
 			}]
@@ -8532,7 +8618,7 @@
 					"label": "Information for each Additional Insured is required as follows",
 					"input": false,
 					"components": [{
-						"label": "Data Grid",
+						"label": "Group Additional Insured",
 						"disableAddingRemovingRows": false,
 						"reorder": false,
 						"addAnother": "Add More",
@@ -8554,7 +8640,8 @@
 							"zip1": "",
 							"businessRelation": "",
 							"additionalInformation1": "",
-							"businessRelationOther": ""
+							"businessRelationOther": "",
+							"additionalInformation": ""
 						}],
 						"clearOnHide": false,
 						"calculateServer": false,
@@ -8943,7 +9030,7 @@
 						"type": "columns",
 						"input": false
 					}, {
-						"label": "Edit Grid",
+						"label": "Group Named Insureds",
 						"disableAddingRemovingRows": false,
 						"hideLabel": true,
 						"tableView": false,
@@ -10867,7 +10954,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 97,
+	"_vid": 98,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10884,6 +10971,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-04-29T20:00:09.622Z",
+	"modified": "2020-05-02T20:36:26.849Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

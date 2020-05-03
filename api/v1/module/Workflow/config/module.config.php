@@ -149,6 +149,29 @@ return [
                     ],
                 ],
             ],
+            
+            'activitylog' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/activitylog',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'getActivityLog',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
+            'fielddiff' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/activity/:activityInstanceId',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'getFieldDiff',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
             'activityInstanceForm' => [
                 'type' => Segment::class,
                 'options' => [

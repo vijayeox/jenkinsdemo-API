@@ -14,7 +14,11 @@ class DiveStoreEndorsementPremiumCalculation extends AbstractAppDelegate
         $this->logger->info("Premium Calculation".print_r($data,true));
 
 		$policy = array();
-        $policy = json_decode($data['previous_policy_data'],true);
+        if(is_string($data['previous_policy_data'])){
+            $policy = json_decode($data['previous_policy_data'],true);
+        } else {
+            $policy = $data['previous_policy_data'];
+        }
         $length = sizeof($policy) - 1;
         $policy =  $policy[$length];
       

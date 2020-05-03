@@ -329,4 +329,32 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_array($content['data']), true);
     }
+    // NEED TO ADD FEW MORE TEST CASES  - SADHITHA
+    //     public function testGetListActivityLogByFileId()
+    // {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145b/activitylog', 'GET');
+    //     $this->assertResponseStatusCode(200);
+    //     $this->assertModuleName('Workflow');
+    //     $this->assertControllerName(WorkflowInstanceController::class);
+    //     $this->assertControllerClass('WorkflowInstanceController');
+    //     $this->assertMatchedRouteName('activitylog');
+    //     $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'success');
+    // }
+
+    // public function testGetListActivityLogByActivityInstanceId()
+    // {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/activity/3f6622fd-0124-11ea-a8a0-22e8105c0778', 'GET');
+    //     $this->assertResponseStatusCode(200);
+    //     $this->assertModuleName('Workflow');
+    //     $this->assertControllerName(WorkflowInstanceController::class);
+    //     $this->assertControllerClass('WorkflowInstanceController');
+    //     $this->assertMatchedRouteName('fielddiff');
+    //     $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'success');
+    // }
 }

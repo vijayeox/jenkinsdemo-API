@@ -53,6 +53,7 @@ export default class Register extends React.Component {
                           required
                           id="username_field"
                           name="username"
+                          title="Please enter your Username"
                           autoComplete="off"
                           placeholder="Username"
                         />
@@ -63,16 +64,17 @@ export default class Register extends React.Component {
                           type="password"
                           id="password_field"
                           name="password"
+                          title="Please enter your Password"
                           placeholder="Password"
                           required
                           autoComplete="off"
                         />
                         <label htmlFor="password_field">Password:</label>
                       </div>
-                      <button className="button button-block loginButton">
+                      <button title="Login" className="button button-block loginButton">
                         Log In
                       </button>
-                      <a className="resetPassword">Forgot your password?</a>
+                      <a title="Forgot Password?Please click here to change Password" className="resetPassword">Forgot your password?</a>
                     </div>
                   </div>
                 </div>

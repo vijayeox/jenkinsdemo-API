@@ -12,6 +12,7 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\WorkflowInstanceService;
+use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
 
@@ -24,14 +25,16 @@ class AppDelegateService extends AbstractService
     private $templateService;
     private $organizationService;
     private $workflowInstanceService;
+    private $activityInstanceService;
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
                                  MessageProducer $messageProducer, FileService $fileService, 
-                                WorkflowInstanceService $workflowInstanceService)
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
         $this->workflowInstanceService = $workflowInstanceService;
+        $this->activityInstanceService = $activityInstanceService;
         $this->messageProducer = $messageProducer;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
@@ -79,6 +82,9 @@ class AppDelegateService extends AbstractService
                 }
                 if (method_exists($obj, "setWorkflowInstanceService")) {
                     $obj->setWorkflowInstanceService($this->workflowInstanceService);
+                }
+                if (method_exists($obj, "setActivityInstanceService")) {
+                    $obj->setActivityInstanceService($this->activityInstanceService);
                 }
                 if (method_exists($obj, "setAppId")) {
                     $obj->setAppId($appId);

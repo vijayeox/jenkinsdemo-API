@@ -12,6 +12,7 @@ use Oxzion\Model\ActivityInstance;
 use Oxzion\Model\ActivityInstanceTable;
 use Oxzion\Service\AbstractService;
 use Oxzion\Workflow\WorkFlowFactory;
+use Oxzion\Service\WorkflowService;
 
 class ActivityInstanceService extends AbstractService
 {
@@ -21,17 +22,19 @@ class ActivityInstanceService extends AbstractService
     private $fileExt = ".json";
     protected $workflowFactory;
     protected $activityEngine;
+    protected $workflowService;
     /**
      * @ignore __construct
      */
 
-    public function __construct($config, $dbAdapter, ActivityInstanceTable $table, WorkflowFactory $workflowFactory)
+    public function __construct($config, $dbAdapter, ActivityInstanceTable $table, WorkflowFactory $workflowFactory, WorkflowService $workflowService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->formsFolder = $this->config['FORM_FOLDER'];
         $this->workFlowFactory = $workflowFactory;
         $this->activityEngine = $this->workFlowFactory->getActivity();
+        $this->workflowService = $workflowService;
     }
 
     public function setActivityEngine($activityEngine)
@@ -254,7 +257,11 @@ class ActivityInstanceService extends AbstractService
             } else {
                 $activity_instance_id = $data['executionActivityinstanceId'];
             }
-            $activityInstance = array('workflow_instance_id' => $workflowInstanceId, 'activity_id' => $activityId, 'activity_instance_id' => $activity_instance_id, 'status' => 'In Progress', 'org_id' => $orgId, 'data' => json_encode($data['processVariables']));
+            $fileRecord = "SELECT data from ox_file where id=:fileID";
+            $fileParams = array('fileID' => $resultSet[0]['file_id']);
+            $fileResult = $this->executeQuerywithBindParameters($fileRecord, $fileParams)->toArray();
+
+            $activityInstance = array('workflow_instance_id' => $workflowInstanceId, 'activity_id' => $activityId, 'activity_instance_id' => $activity_instance_id, 'status' => 'In Progress', 'org_id' => $orgId, 'start_data' => $fileResult[0]['data']);
             $activityCreated = $this->createActivityInstance($activityInstance);
             if (isset($data['assignee'])) {
                 if (!isset($data['candidates'])) {
@@ -445,6 +452,40 @@ class ActivityInstanceService extends AbstractService
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
 
+            throw $e;
+        }
+    }
+
+
+    public function getActivityChangeLog($activityInstanceId,$labelMapping=null){
+        $selectQuery = "SELECT oai.start_data, oai.completion_data ,oaf.form_id from ox_activity_instance oai inner join ox_activity_form oaf on oai.activity_id = oaf.activity_id where oai.activity_instance_id = :activityInstanceId ";
+        $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
+        $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
+        if(count($result) > 0){
+            $formId = $result[0]['form_id'];
+            $startData = json_decode($result[0]['start_data'],true);
+            $completionData = json_decode($result[0]['completion_data'],true);
+            $resultData = $this->workflowService->getChangeLog($formId,$startData,$completionData,$labelMapping);
+            return $resultData;
+        } else {
+            return $result;
+        }
+    }
+
+    public function getFileDataByActivityInstanceId($activityInstanceId){
+        try{
+            $selectQuery = "SELECT of.data from ox_file of
+                            INNER JOIN ox_workflow_instance owi on owi.file_id = of.id
+                            INNER JOIN ox_activity_instance oai on oai.workflow_instance_id = owi.id where oai.activity_instance_id = :activityInstanceId ";
+            $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
+            $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
+            if(isset($result[0])){
+                return $result[0]; 
+            } else {
+                return;
+            }
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

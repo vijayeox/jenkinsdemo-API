@@ -152,7 +152,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $result = $this->workflowInstanceService->startWorkflow($params);
         $sqlQuery = 'SELECT * FROM ox_file order by id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals('{"field1":1,"field2":2}',$newQueryResult[0]['data']);
+        $this->assertEquals('{"field1":1,"field2":2,"appId":null}',$newQueryResult[0]['data']);
         $this->assertEquals(1,$newQueryResult[0]['created_by']);
     }
 
@@ -282,7 +282,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $result = $this->workflowInstanceService->startWorkflow($params);
         $sqlQuery = 'SELECT data FROM ox_file where id = 18';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals('{"firstname":"brian","email":"brian@gmail.com","field1":1,"field2":2}',$newQueryResult[0]['data']);
+        $this->assertEquals('{"firstname":"brian","email":"brian@gmail.com","field1":1,"field2":2,"appId":null}',$newQueryResult[0]['data']);
     }
 
     public function testStartWorkflowUpdateWorkflowInstanceScenario(){

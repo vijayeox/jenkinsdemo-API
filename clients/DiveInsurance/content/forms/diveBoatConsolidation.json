@@ -612,7 +612,6 @@
 						"components": [{
 							"label": "Country",
 							"widget": "choicesjs",
-							"customClass": "countryDropDown",
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -620,24 +619,20 @@
 									"value": "",
 									"label": ""
 								}],
-								"custom": "function arrayColumn(array, columnName) {\n    return array.map(function(value,index) {\n        return value[columnName];\n    })\n}\n\nif(data['countryList']){\n  values = arrayColumn(data['countryList'],'country')\n}"
+								"custom": "values = data['countryList'];"
 							},
 							"valueProperty": "country",
-							"dataType": "auto",
 							"template": "<span>{{ item.country }}</span>",
 							"selectThreshold": 0.3,
-							"calculateServer": false,
+							"clearOnHide": false,
 							"validate": {
-								"required": true,
-								"customMessage": "Please enter your country."
+								"required": true
 							},
 							"key": "country",
 							"type": "select",
-							"indexeddb": {
-								"filter": {}
-							},
 							"input": true,
 							"lockKey": true,
+							"source": "5d347da33e9be31e15d3b115",
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "City",
@@ -783,25 +778,18 @@
 											"value": "",
 											"label": ""
 										}],
-										"headers": [{
-											"value": "",
-											"key": ""
-										}],
-										"custom": "function arrayColumn(array, columnName) {\n    return array.map(function(value,index) {\n        return value[columnName];\n    })\n}\nif(data['countryList']){\n  values = arrayColumn(data['countryList'],'country')\n}"
+										"custom": "values = data['countryList'];"
 									},
 									"valueProperty": "country",
-									"template": "<span>{{ item }}</span>",
+									"dataType": "string",
+									"template": "<span>{{ item.country }}</span>",
 									"selectThreshold": 0.3,
-									"calculateServer": false,
+									"clearOnHide": false,
 									"validate": {
-										"required": true,
-										"customMessage": "Please enter your country."
+										"required": true
 									},
 									"key": "physical_country",
 									"type": "select",
-									"indexeddb": {
-										"filter": {}
-									},
 									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
@@ -1393,7 +1381,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.businessPadiVerified == true || data.businessPadiVerified == 'true'){\n  value = data.padi;\n}",
+						"calculateValue": "if(data.businessPadiVerified == true || data.businessPadiVerified == 'true'){\n  value = data.padi;\n}else if(data.doYouHaveABoatMembershipPadiNumber == 'no'){\n  value = \"\";\n}",
 						"calculateServer": false,
 						"validate": {
 							"required": true
@@ -1502,7 +1490,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html6",
-						"customConditional": "show = false;\nif(data.doYouHaveABoatMembershipPadiNumber==='no'){\n  show =false; \n   }else if((data['businessPadiValidated'] === false || data['businessPadiValidated']=='false') && (data['businessPadiEmpty']===false || data['businessPadiEmpty']==='false')){  \n  if(data['businessPadiEmpty'] === true){   \n     show =false; \n  } else {  \n      show = true;  \n    \n  }\n}",
+						"customConditional": "show = false;\nif(data.doYouHaveABoatMembershipPadiNumber==='no' || data.doYouHaveABoatMembershipPadiNumber=== ''){\n  show =false; \n   }else if((data['businessPadiValidated'] === false || data['businessPadiValidated']=='false') && (data['businessPadiEmpty']===false || data['businessPadiEmpty']==='false')){  \n  if(data['businessPadiEmpty'] === true){   \n     show =false; \n  } else {  \n      show = true;  \n  }\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
@@ -1517,12 +1505,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html5",
-						"conditional": {
-							"show": true,
-							"when": "businessPadiEmpty",
-							"eq": "true"
-						},
-						"customConditional": "show = false;\nif(data.doYouHaveABoatMembershipPadiNumber==='no'){\n  show =false; \n}else if(data['businessPadiEmpty'] === true){\n\tshow = true;\n}else{\n\tshow = false;\n}",
+						"customConditional": "show = false;\nif(data.doYouHaveABoatMembershipPadiNumber==='no' || data.doYouHaveABoatMembershipPadiNumber===''){\n  show =false; \n}else if(data['businessPadiEmpty'] === true){\n\tshow = true;\n}else{\n\tshow = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
@@ -2532,6 +2515,7 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
+									"required": true,
 									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_from_date_time']) >= moment(data['start_date'])) ? true : 'Please choose the date after '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
 								},
 								"key": "layup_period_from_date_time",
@@ -2586,6 +2570,7 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
+									"required": true,
 									"custom": "if(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  valid = (moment(data['layup_period_to_date_time']) > moment(data['layup_period_from_date_time'])) ? true : 'Please choose a date after '+moment(data.layup_period_from_date_time).format('MM-DD-YYYY');\n}"
 								},
 								"key": "layup_period_to_date_time",
@@ -2594,23 +2579,6 @@
 									"when": "layUpPeriodIfAny",
 									"eq": "yes"
 								},
-								"logic": [{
-									"name": "Add Property",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = false;\nif(data['layup_period_from_date_time'] && data['layup_period_from_date_time'] != ''){\n  result = true;\n}"
-									},
-									"actions": [{
-										"name": "Change Property",
-										"type": "property",
-										"property": {
-											"label": "Required",
-											"value": "validate.required",
-											"type": "boolean"
-										},
-										"state": true
-									}]
-								}],
 								"type": "datetime",
 								"input": true,
 								"lockKey": true,
@@ -6364,16 +6332,6 @@
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
-			"input": true,
-			"tableView": true,
-			"key": "product1",
-			"label": "product",
-			"protected": true,
-			"persistent": false,
-			"type": "hidden",
-			"lockKey": true,
-			"defaultValue": "Dive Boat"
-		}, {
 			"label": "Columns",
 			"input": false,
 			"tableView": false,
@@ -8274,6 +8232,9 @@
 						"hideLabel": true,
 						"tableView": true,
 						"datePicker": {
+							"minDate": "moment().format('YYYY MM DD')",
+							"disableWeekends": false,
+							"disableWeekdays": false,
 							"datepickerMode": "day"
 						},
 						"enableTime": false,
@@ -8281,9 +8242,10 @@
 							"showMeridian": false
 						},
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data['quote_due_date'] && data['quote_due_date'] != ''){\n  valid = (moment(data['quote_due_date']) > moment()) ? true : \"Date must not be less than today's date \"+moment().format('MM-DD-YYYY');\n}"
+							"customMessage": "Quote Due Date is required"
 						},
 						"key": "quote_due_date",
 						"type": "datetime",
@@ -8304,7 +8266,9 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": null,
+							"minDate": "moment().format('YYYY MM DD')",
+							"disableWeekends": false,
+							"disableWeekdays": false,
 							"maxDate": null
 						}
 					}],
@@ -8389,7 +8353,7 @@
 							"attr": "",
 							"value": ""
 						}],
-						"content": "<style>\n  .selectboxesSpacing{\n    .checkbox{\n      margin-top:15px;\n      margin-bottom:15px;\n    }\n  }\n</style>",
+						"content": "<style>\n  .selectboxesSpacing{\n    .checkbox{\n      margin-top:20px;\n      margin-bottom:20px;\n    }\n  }\n</style>",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html4",
@@ -8618,7 +8582,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 479,
+	"_vid": 491,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8636,6 +8600,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-04-29T20:37:30.272Z",
+	"modified": "2020-04-30T09:59:08.827Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

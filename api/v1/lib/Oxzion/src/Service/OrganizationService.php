@@ -684,7 +684,7 @@ class OrganizationService extends AbstractService
         $where = "";
         $sort = "oxa.name";
 
-        $select = "SELECT oxa.uuid,oxa.name,oxa.description,oxa.link,oxa.end_date,
+        $select = "SELECT oxa.uuid,oxa.name,oxa.description,oxa.link, oxa.type,oxa.end_date,
                     oxa.start_date,oxa.media_type,oxa.media,oxo.uuid as org_id";
         $from = "FROM `ox_announcement` as oxa
     LEFT JOIN ox_organization as oxo on oxa.org_id = oxo.id";

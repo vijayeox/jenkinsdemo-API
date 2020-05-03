@@ -135,9 +135,11 @@ class MenuItemService extends AbstractService
                 if(isset($menuItem['privilege_name']) && $menuItem['privilege_name']!=""){
                     $privilegeList = json_decode($menuItem['privilege_name'],true);
                     if(isset($privilegeList) && is_array($privilegeList)){
-                        if(AuthContext::isPrivileged($privilegeList['eq']) && AuthContext::isPrivileged($privilegeList['neq'])){
-                                unset($menuList[$key]);
-                                continue;
+                        if(AuthContext::isPrivileged($privilegeList['eq']) && !AuthContext::isPrivileged($privilegeList['neq'])){
+                             continue;   
+                        }else{
+                            unset($menuList[$key]);
+                            continue;
                         }
                     }else if(!AuthContext::isPrivileged($menuItem['privilege_name'])){
                         unset($menuList[$key]);

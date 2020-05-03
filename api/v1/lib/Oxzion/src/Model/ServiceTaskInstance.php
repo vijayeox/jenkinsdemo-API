@@ -5,26 +5,23 @@ namespace Oxzion\Model;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class ActivityInstance extends Entity
+class ServiceTaskInstance extends Entity
 {
     protected $data = array(
         'id'=>0 ,
+        'name' => 0,
         'workflow_instance_id' => 0,
-        'activity_instance_id' => 0,
-        'activity_id' => 0,
+        'task_id' => 0,
         'start_data' => null,
         'completion_data' => null,
-        'status' => 0,
-        'modified_by' => null,
-        'submitted_date' => null,
-        'org_id' => 0,
-        'start_date' => null
+        'date_executed' => 0,
+        'file_id' => null
     );
     protected $attributes = array();
 
     public function validate()
     {
-        $required = array('workflow_instance_id','activity_instance_id');
+        $required = array('workflow_instance_id','task_id');
         $this->validateWithParams($required);
     }
 }

@@ -139,6 +139,9 @@ pages:
     -
         page_name: MyAssignmentsPage.yml
         uuid: 151ba91d-f17a-4034-a25f-86f108594637
+    -
+        page_name: ViewChangeLog.yml
+        uuid: 121ba91d-f17a-2034-a25f-86f108594637
 menu:
     -
         name: Home

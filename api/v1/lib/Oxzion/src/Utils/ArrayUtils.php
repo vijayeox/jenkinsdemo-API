@@ -37,6 +37,23 @@ class ArrayUtils
         return false;
     }
 
+    public static function multiFieldSearch($array, array $fieldValues)
+    {
+        foreach ($array as $key => $item) {
+            $found = 0;
+            foreach ($fieldValues as $field => $value) {
+                if ($item[$field] === $value) {
+                    $found++;                    
+                }
+            }
+            if($found == count($fieldValues)){
+                return $item;
+            }
+
+        }
+        return false;
+    }
+
     public static function isJson($string)
     {
         json_decode($string);
@@ -52,4 +69,12 @@ class ArrayUtils
 		}
     	return true; 
 	}
+
+    public static function convertListToMap($list, $key,$value){
+        $map =array();
+        foreach ($list as $index => $item) {
+            $map[$item[$key]]=  $item[$value];
+        }
+        return $map;
+    }
 }

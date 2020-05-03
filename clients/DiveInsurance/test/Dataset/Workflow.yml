@@ -1,7 +1,7 @@
 ox_app:
   - id: 99
-    name: "SampleApp"
-    uuid: "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4"
+    name: "ox_client_app"
+    uuid: "8765765"
     category: "OTHERS"
     date_created: "2019-06-26 00:00:00"
     type: 2
@@ -120,6 +120,16 @@ ox_field:
     parent_id: 9
     sequence: 11
     entity_id: 1
+  - id: 12
+    name: "coverage"
+    text: "Coverage"
+    app_id: 99
+    data_type: "text"
+    type: "radio"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 12
+    entity_id: 1
 ox_form:
   - id: 1
     app_id: 99
@@ -157,6 +167,9 @@ ox_form_field:
   - id: 7
     form_id: 1
     field_id: 11
+  - id: 8
+    form_id: 1
+    field_id: 12
 ox_workflow:
   - id: 1
     app_id: 99
@@ -316,60 +329,13 @@ ox_file_attribute:
     org_id: 1
     field_value: 6
     field_id: 6
-ox_app_menu:
-  - id: 1
-    uuid: "menu1"
-    name: "menu1"
-    app_id: 99
-    parent_id: 0
-    icon: "new data"
-    sequence: 1
-    date_created: "2019-06-26 00:00:00"
-    created_by: 1
-  - id: 2
-    uuid: "menu2"
-    name: "menu2"
-    app_id: 99
-    parent_id: 0
-    icon: "new data"
-    sequence: 2
-    date_created: "2019-06-26 00:00:00"
-    created_by: 1
-  - id: 3
-    uuid: "menu3"
-    name: "menu3"
-    app_id: 99
-    parent_id: 1
-    icon: "icon3"
-    sequence: 3
-    date_created: "2019-06-26 00:00:00"
-    created_by: 1
-ox_app_page:
-  - id: 1
-    name: "page1"
-    uuid: "page1"
-    app_id: 99
-    date_created: "2019-06-26 00:00:00"
-    created_by: 1
-  - id: 2
-    name: "page2"
-    uuid: "page2"
-    app_id: 99
-    date_created: "2019-06-26 00:00:00"
-    created_by: 1
-  - id: 3
-    name: "page3"
-    uuid: "page3"
-    app_id: 99
-    date_created: "2019-06-26 00:00:00"
-    created_by: 1
 ox_activity_instance:
   - id: 1
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0778"
     workflow_instance_id: 1
-    start_data: '{"firstname":"Sadhitha","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
-    completion_data: '{"firstname":"Sadhitha","product":"P","fax" : "","additionalInsured": [{"firstname":"SHASHI","city":"City","age" : ""}]}'
+    start_data: '{"firstname":"Sadhitha","product":"","fax" : "","coverage":"scubaFitInstructorDeclined", "additionalInsured": {"firstname":"Shwetha","city":"","age" : ""}}'
+    completion_data: '{"firstname":"Sadhitha","product":"P","fax" : "","coverage":"scubaFitInstructor","additionalInsured": {"firstname":"Shwetha","city":"City","age" : ""}}'
     status: "Completed"
     start_date: "2019-06-26 00:00:00"
     org_id: 1
@@ -387,26 +353,3 @@ ox_activity_instance:
     status: "In Progress"
     start_date: "2019-06-26 02:00:00"
     org_id: 1
-ox_activity_instance_assignee:
-  - activity_instance_id: 1
-    user_id: 1
-    assignee: 1
-  - activity_instance_id: 3
-    user_id: 1
-    assignee: 1
-ox_wf_user_identifier:
-  - id: 1
-    app_id: 99
-    org_id: 1
-    user_id: 1
-    identifier_name: "field1"
-    identifier: "32552"
-  - id: 2
-    app_id: 99
-    org_id: 1
-    user_id: 1
-    identifier_name: "expiry_data"
-    identifier: "2019-01-01"
-ox_app_registry:
-  - org_id: 1
-    app_id: 99

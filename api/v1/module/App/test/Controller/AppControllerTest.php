@@ -79,7 +79,7 @@ class AppControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['product'], $product);
-        $this->assertEquals($content['total'], 2);
+        $this->assertEquals($content['total'], 1);
     }
 
 
@@ -853,7 +853,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['total'], 1);
     }
 
     public function testGetListOfAssignmentsWithoutFilters()
@@ -868,6 +868,6 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['total'], 1);
     }
 }
