@@ -856,6 +856,7 @@
 							"label": " Address 1",
 							"spellcheck": true,
 							"tableView": true,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
@@ -1597,6 +1598,7 @@
 							"inputFormat": "plain",
 							"protected": true,
 							"clearOnHide": false,
+							"calculateValue": "value = 0;",
 							"calculateServer": false,
 							"key": "techRecPrice",
 							"type": "number",
@@ -1610,6 +1612,8 @@
 							"persistent": false,
 							"protected": true,
 							"customDefaultValue": "value = \"0.00\"",
+							"calculateValue": "value = 0;",
+							"calculateServer": false,
 							"key": "withTecRecEndorsementForSelectionAbove",
 							"type": "hidden",
 							"input": true,
@@ -1622,6 +1626,8 @@
 							"persistent": false,
 							"protected": true,
 							"customDefaultValue": "value = \"0.00\"",
+							"calculateValue": "value = 0;",
+							"calculateServer": false,
 							"key": "withTecRecEndorsementForSelectionAboveDeclined",
 							"type": "hidden",
 							"input": true,
@@ -2474,9 +2480,9 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"multiple": true,
 					"calculateValue": "if(data.techRec_attachments && data.techRec_attachments.length===0){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
+					"allowCalculateOverride": true,
 					"validate": {
 						"required": true,
 						"customMessage": "Please attach proof of your Technical Certification",
@@ -2485,7 +2491,8 @@
 					"errorLabel": "Technical Certification Documents",
 					"key": "TechRec_attachments",
 					"type": "file",
-					"input": true
+					"input": true,
+					"multiple": true
 				}],
 				"path": "techRecAttachment"
 			}, {
@@ -3604,8 +3611,10 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please enter the Name of the Additional Insured"
 								},
+								"errorLabel": "Additional Insured Name",
 								"key": "name",
 								"type": "textfield",
 								"input": true,
@@ -3625,8 +3634,10 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please enter the Address of the Additional Insured"
 								},
+								"errorLabel": "Additional Insured Address",
 								"key": "address",
 								"type": "textfield",
 								"input": true,
@@ -3645,8 +3656,10 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please enter the City of the Additional Insured"
 								},
+								"errorLabel": "Additional Insured City",
 								"key": "city",
 								"type": "textfield",
 								"input": true,
@@ -3686,8 +3699,9 @@
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter your country."
+									"customMessage": "Please select the Country of the Additional Insured"
 								},
+								"errorLabel": "Additional Insured Country",
 								"key": "country",
 								"properties": {
 									"clear_field": "state"
@@ -3726,8 +3740,10 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please select the State of the Additional Insured"
 								},
+								"errorLabel": "Additional Insured State",
 								"key": "state",
 								"customConditional": "show = (row.country)",
 								"type": "select",
@@ -3752,8 +3768,10 @@
 								"calculateServer": false,
 								"validate": {
 									"required": true,
+									"customMessage": "Please enter the Zip Code of the Additional Insured",
 									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
+								"errorLabel": "Additional Insured Zip Code",
 								"key": "zip",
 								"type": "textfield",
 								"input": true,
@@ -3794,8 +3812,10 @@
 								"selectThreshold": 0.3,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please select the Business Relation with the Additional Insured"
 								},
+								"errorLabel": "Additional Insured Business Relation",
 								"key": "businessRelation",
 								"type": "select",
 								"indexeddb": {
@@ -3811,8 +3831,10 @@
 								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Please specify the Business Relation"
 								},
+								"errorLabel": "Additonal Insured Business Relation Details",
 								"key": "businessRelationOther",
 								"conditional": {
 									"show": true,
@@ -3842,6 +3864,11 @@
 						"tableView": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"customMessage": "Please enter Additional Information about the Additional Insured"
+						},
+						"errorLabel": "Additional Insured Additional Information",
 						"key": "additionalInformation",
 						"type": "textarea",
 						"input": true
@@ -4202,6 +4229,8 @@
 			"autofocus": true,
 			"spellcheck": true,
 			"tableView": true,
+			"clearOnHide": false,
+			"calculateServer": false,
 			"key": "notes",
 			"type": "textarea",
 			"input": true
@@ -4312,7 +4341,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 275,
+	"_vid": 279,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4333,6 +4362,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-02T20:12:41.764Z",
+	"modified": "2020-05-04T21:28:51.380Z",
 	"machineName": "testdivehub:csrInitiates"
 }
