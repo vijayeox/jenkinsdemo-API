@@ -25,7 +25,7 @@ final class Version20200503071129 extends AbstractMigration
             name VARCHAR(256) NOT NULL,
             task_id VARCHAR(256) NOT NULL,
             start_data LONGTEXT NOT NULL,
-            completion_data Long NOT NULL,
+            completion_data LONGTEXT NOT NULL,
             date_executed DATETIME DEFAULT NOW() NOT NULL,
             workflow_instance_id VARCHAR(256) NOT NULL,
             file_id varchar(256) NOT NULL,
