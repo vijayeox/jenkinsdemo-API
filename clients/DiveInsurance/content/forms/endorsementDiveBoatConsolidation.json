@@ -9393,8 +9393,7 @@
 						}],
 						"calculateServer": false,
 						"validate": {
-							"customMessage": "Please select any one of the option",
-							"minSelectedCount": 1
+							"customMessage": "Please select any one of the option"
 						},
 						"key": "quoteInfo",
 						"type": "selectboxes",
@@ -9635,7 +9634,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 212,
+	"_vid": 213,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9653,6 +9652,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-04-30T09:58:31.947Z",
+	"modified": "2020-05-04T10:10:51.572Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

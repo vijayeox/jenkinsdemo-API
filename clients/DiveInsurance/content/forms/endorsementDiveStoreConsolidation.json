@@ -11266,8 +11266,7 @@
 						}],
 						"calculateServer": false,
 						"validate": {
-							"customMessage": "Please select any one of the option",
-							"minSelectedCount": 1
+							"customMessage": "Please select any one of the option"
 						},
 						"key": "quoteInfo",
 						"type": "selectboxes",
@@ -11459,7 +11458,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 116,
+	"_vid": 118,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11476,6 +11475,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-04-29T11:17:38.504Z",
+	"modified": "2020-05-04T11:50:45.501Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
