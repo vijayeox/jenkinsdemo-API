@@ -135,10 +135,8 @@ content:
                     rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     icon: 'fa fa-repeat'
             filterColumns:
-                - name
                 - padi
                 - firstname
-                - lastname
                 - product
                 - phone
             placeholder: 'Search using Name or PADI or Product or Phone'
@@ -181,6 +179,8 @@ content:
                     title: Name
                     field: firstname
                     cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    multiFieldFilter:
+                        - lastname
                 -
                     title: Product
                     field: entity_name
