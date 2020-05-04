@@ -25,10 +25,10 @@ class ServiceTaskService extends AbstractService
 		$this->commandService->updateOrganizationContext($data['variables']);
         $variables = isset($data['variables']) ? $data['variables'] : null;
         $response = $this->commandService->runCommand($variables, $request);
-        $serviceTaskInstance = $this->createServiceTaskInstance($data,$variables,$response);
+        $serviceTaskInstance = $this->createServiceTaskInstance($data,$response);
         return $response;
 	}
-	private function createServiceTaskInstance(&$data,$startData,$completionData)
+	private function createServiceTaskInstance(&$data,$completionData)
     {
     	$taskInfo = array();
         $serviceTaskInstance = new ServiceTaskInstance();
@@ -44,7 +44,7 @@ class ServiceTaskService extends AbstractService
         }
         $taskInfo['name'] = $data['activityName'];
         $taskInfo['task_id'] = $data['activityInstanceId'];
-        $taskInfo['start_data'] = json_encode($startData);
+        $taskInfo['start_data'] = json_encode($data);
         $taskInfo['completion_data'] = json_encode($completionData);
         $taskInfo['date_executed'] = date('Y-m-d H:i:s');
         $this->logger->info("ServiceTaskInstance BEFCHANGE" . print_r($data, true));
