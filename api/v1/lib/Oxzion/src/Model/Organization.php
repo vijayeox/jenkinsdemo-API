@@ -9,6 +9,7 @@ class Organization extends Entity
         'id' => null,
         'uuid' => null,
         'name' => null,
+        'subdomain' => null,
         'address_id' => null,
         'labelfile' => null,
         'languagefile' => 'en',
@@ -29,6 +30,7 @@ class Organization extends Entity
     {
         $required = array(
             'name',
+            'subdomain',
             'status',
             'preferences'
         );
