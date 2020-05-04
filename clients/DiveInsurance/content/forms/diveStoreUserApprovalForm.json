@@ -31,12 +31,6 @@
       "protected": true,
       "persistent": false
     }, {
-      "label": "documents",
-      "key": "documents",
-      "type": "hidden",
-      "input": true,
-      "tableView": false
-    }, {
       "label": "orgId",
       "key": "orgId",
       "type": "hidden",
@@ -545,7 +539,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 6,
+  "_vid": 7,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -563,6 +557,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-05-02T20:29:49.490Z",
+  "modified": "2020-05-04T07:43:09.010Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

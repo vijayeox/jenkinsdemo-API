@@ -139,7 +139,7 @@
 				{if isset($previous_cylinder) && !empty($previous_cylinder)}				
 				{assign var=previousCylinder value=$previous_cylinder|json_decode:true}
 					{foreach from=$previousCylinder item=previousCylinderNew}
-					{if $previousCylinderNew.label != $cylinderPriceVal}
+					{if $previousCylinderNew.label != $cylinder}
 							<p class = "policy_status">Cylinder Coverage : {$previousCylinderNew.label} as of {$previousCylinderNew.update_date|date_format:"%m/%d/%Y"}</p>
 					{/if}
 					{/foreach}
@@ -149,7 +149,7 @@
 				{if isset($previous_excessLiability) && !empty($previous_excessLiability)}
 				{assign var=previousExcessLiability value=$previous_excessLiability|json_decode:true}
 					{foreach from=$previousExcessLiability item=previousExcessLiabilityEndor}
-					{if $previousExcessLiabilityEndor.label != $upgradeExcessLiabilityVal}
+					{if $previousExcessLiabilityEndor.label != $excessLiability}
 							<p class = "policy_status">Excess Liability Coverage : {$previousExcessLiabilityEndor.label} as of {$previousExcessLiabilityEndor.update_date|date_format:"%m/%d/%Y"}</p>
 					{/if}
 					{/foreach}

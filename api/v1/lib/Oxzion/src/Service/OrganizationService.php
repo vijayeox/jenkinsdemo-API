@@ -350,7 +350,7 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizationByUuid($id)
     {
-        $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid from ox_organization as og join ox_address as oa on og.address_id = oa.id WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid from ox_organization as og join ox_address as oa on og.address_id = oa.id WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -386,7 +386,7 @@ class OrganizationService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid";
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid";
         $from = " from ox_organization as og join ox_address as oa on og.address_id = oa.id";
         $cntQuery = "SELECT count(og.id) " . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {

@@ -22,8 +22,8 @@
 					<p class = "details">{$firstname},{$initial},{$lastname}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state}</p>
-					<p class = "details">{$country},{$zip}</p>
+					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
 				<div class = "certificate_data">

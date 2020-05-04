@@ -1,4 +1,4 @@
-import React from "react";
+import {React,ReactDOM} from "oxziongui";
 import screenfull from "screenfull";
 import SlidingPanel from "react-sliding-panel";
 
@@ -237,7 +237,7 @@ class Slider extends React.Component {
                     }
                     className="actionButton popupButtons"
                   >
-                    VIST LINK
+                    VISIT LINK
                   </button>
                 ) : null}
                 <button

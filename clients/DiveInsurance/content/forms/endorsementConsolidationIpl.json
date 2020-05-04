@@ -814,6 +814,8 @@
 					"tableView": true,
 					"defaultValue": "true",
 					"clearOnHide": false,
+					"calculateValue": "if(value == \"true\"){\n  value = true;\n}",
+					"calculateServer": false,
 					"key": "sameasmailingaddress",
 					"type": "checkbox",
 					"input": true,
@@ -1411,7 +1413,7 @@
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
-								"calculateValue": "console.log(data['techRecPrice']);",
+								"calculateValue": "value = 0;",
 								"calculateServer": false,
 								"key": "techRecPrice",
 								"type": "number",
@@ -1932,7 +1934,7 @@
 										"requireDecimal": false,
 										"inputFormat": "plain",
 										"clearOnHide": false,
-										"calculateValue": "value = ((parseFloat(data['endorsementTotal']) - parseFloat(data['amount']))).toFixed(0) ;",
+										"calculateValue": "if(parseFloat(data['amount']).toFixed(0) < parseFloat(data['endorsementTotal']).toFixed(0)){\n  value = (parseFloat(data['endorsementTotal'])).toFixed(0) - (parseFloat(data['amount'])).toFixed(0);\n} else {\n  value = 0;\n}",
 										"calculateServer": false,
 										"key": "balanceEndor",
 										"type": "number",
@@ -3188,7 +3190,9 @@
 			"autoExpand": false,
 			"spellcheck": true,
 			"tableView": true,
-			"key": "endorsement_notes",
+			"clearOnHide": false,
+			"calculateServer": false,
+			"key": "notes",
 			"type": "textarea",
 			"input": true
 		}, {
@@ -3266,7 +3270,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 91,
+	"_vid": 96,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3285,6 +3289,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-02T20:22:08.033Z",
+	"modified": "2020-05-04T21:29:26.342Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
