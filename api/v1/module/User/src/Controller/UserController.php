@@ -350,6 +350,7 @@ class UserController extends AbstractApiController
         try {
             $userInfo = array();
             $type = (isset($params['type'])) ? ($params['type']) : 'm';
+            $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : null;
             $options = explode('+', $type);
             if (in_array('a', $options)) {
                 $userInfo = $this->userService->getUser($id);
@@ -382,7 +383,7 @@ class UserController extends AbstractApiController
                         $userInfo['blackListedApps'] = $this->userService->getAppsWithoutAccessForUser();
                         break;
                     case "pr":
-                        $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
+                        $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id, $params['orgId']);
                         break;
                     case "role":
                         $userInfo['role'] = $this->userService->getRolesofUser($userInfo['orgid'], $id);

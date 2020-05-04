@@ -173,7 +173,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     file_id: 11
-    file_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
   - id: 2
     workflow_deployment_id: 1
     process_instance_id: 2
@@ -183,7 +183,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     file_id: 12
-    file_data: '{"firstname" : "Rai","product": "Individual Professional Liability"}'
+    start_data: '{"firstname" : "Rai","product": "Individual Professional Liability"}'
   - id: 3
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
@@ -193,7 +193,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     file_id: 13
-    file_data: '{"firstname" : "Raj","product": "Individual Professional Liability"}'
+    start_data: '{"firstname" : "Raj","product": "Individual Professional Liability"}'
   - id: 4
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -203,7 +203,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     file_id: 14
-    file_data: '{"firstname" : "Ram","product": "Dive Boat"}'
+    start_data: '{"firstname" : "Ram","product": "Dive Boat"}'
   - id: 5
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -213,7 +213,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     file_id: 0
-    file_data: ""
+    start_data: ""
   - id: 6
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
@@ -223,7 +223,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 2
     file_id: 15
-    file_data: '{"firstname" : "Reshma","product": "Dive Store"}'
+    start_data: '{"firstname" : "Reshma","product": "Dive Store"}'
   - id: 7
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
@@ -233,7 +233,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 2
     file_id: 16
-    file_data: '{"firstname" : "Arpitha","product": "Dive Store"}'
+    start_data: '{"firstname" : "Arpitha","product": "Dive Store"}'
 ox_app_menu:
   - id: 1
     uuid: "7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4"
@@ -244,6 +244,7 @@ ox_app_menu:
     sequence: 1
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    privilege_name: MANAGE_USER_READ
   - id: 2
     uuid: "7b5b359c-df8c-11e9-8a34-2a2ae2dbcce4"
     name: "menu2"
@@ -262,6 +263,27 @@ ox_app_menu:
     sequence: 3
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    privilege_name: MANAGE_USER_READ
+  - id: 4
+    uuid: "7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4"
+    name: "menu4"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 4
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    privilege_name: '{"eq" : "MANAGE_USER_READ","neq" : "MANAGE_PROJECT_READ"}'
+  - id: 5
+    uuid: "050283ae-df8d-11e9-8a34-2a2ae2dbcce4"
+    name: "menu4"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 5
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    privilege_name: 'MANAGE_PROJECT_READ'
 ox_app_page:
   - id: 1
     name: "page1"

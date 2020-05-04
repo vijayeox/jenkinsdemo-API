@@ -77,6 +77,7 @@ class AnalyticsAbstract
         $templateEngine = new TemplateService($this->appConfig,$this->appDBAdapter);
         $templateEngine->init();
         $result = $templateEngine->getContent($templateName,$resultData);
+        $result = str_replace(array("\r\n","\r","\n","\t"), '', $result);
         return $result;
     }
 

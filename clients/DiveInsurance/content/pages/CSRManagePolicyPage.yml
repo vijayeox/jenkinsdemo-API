@@ -160,6 +160,14 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     icon: 'fa fa-repeat'
+                -
+                    name: 'View Activity Log'
+                    details: 
+                        -
+                            params:
+                                page_id: '121ba91d-f17a-2034-a25f-86f108594637' 
+                    rule: 'true'
+                    icon: 'fa fa-list'
             columnConfig:
                 -
                     title: PADI

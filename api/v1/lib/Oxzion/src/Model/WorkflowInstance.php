@@ -20,7 +20,8 @@ class WorkflowInstance extends Entity
         'modified_by' => null,
         'parent_workflow_instance_id' => null,
         'file_id' => 0,
-        'file_data' => null
+        'start_data' => null,
+        'completion_data' => null
     );
     
     public function validate()

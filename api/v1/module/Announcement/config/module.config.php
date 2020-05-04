@@ -25,9 +25,20 @@ return [
             'announcementList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement/a',
+                    'route' => '/[organization/:orgId/]announcement/a/:type',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
+                        'method' => 'GET',
+                        'action' => 'announcementList'
+                    ],
+                ],
+            ],
+            'homescreenAnnouncementList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/homescreen/announcement/:subdomain',
+                    'defaults' => [
+                        'controller' => Controller\HomescreenAnnouncementController::class,
                         'method' => 'GET',
                         'action' => 'announcementList'
                     ],

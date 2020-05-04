@@ -2,9 +2,22 @@
 namespace Oxzion\FormEngine\Formio;
 
 use Oxzion\FormEngine\Engine;
+use Logger;
 
 class EngineImpl implements Engine
 {
+    protected $logger;
+
+    public function __construct()
+    {
+        $this->initLogger();
+    }
+
+    protected function initLogger()
+    {
+        $this->logger = Logger::getLogger(__CLASS__);
+    }
+
     public function parseForm($form)
     {
         $template = json_decode($form, true);
@@ -32,44 +45,50 @@ class EngineImpl implements Engine
         }
         return $formTemplate;
     }
-    protected function searchNodes($itemlist =array(), $items)
+    protected function searchNodes($itemlist =array(), $items,$parent=null)
     {
         foreach ($items as $item) {
             if (isset($item['input']) && $item['input']==1) {
                 if (isset($item['tree']) && $item['tree']) {
-                    return $this->searchNodes($itemlist, $item['components']);
+                    $itemlist = $this->searchNodes($itemlist, $item['components'],$parent);
                 } else {
                     if (isset($item['type']) && $item['type']!='button') {
+                        if((isset($item['type']) == 'datagrid' || isset($item['type']) == 'editgrid' || isset($item['type']) == 'survey') && (isset($item['components']))){
+                            $this->logger->info("DATA GRID-----".json_encode($item));
+                            $itemlist = $this->searchNodes($itemlist, $item['components'],$item);
+                        }
+                        if(isset($parent)){
+                            $item['parent'] = $parent;
+                        }
                         $itemlist[] = $item;
-                    } else {
-                        break;
                     }
                 }
             } else {
                 $flag =0;
                 if (isset($item['components'])) {
                     $flag =1;
-                    $itemlist = $this->searchNodes($itemlist, $item['components']);
+                    $itemlist = $this->searchNodes($itemlist, $item['components'],$parent);
                 }
                 if (isset($item['columns']) && is_array($item['columns'])) {
-                    $itemlist = $this->searchNodes($itemlist, $item['columns']);
+                    $this->logger->info("EngineImpl------columns".json_encode($item['columns']));
+                    $itemlist = $this->searchNodes($itemlist, $item['columns'],$parent);
                     $flag =1;
                 }
                 if (isset($item['rows']) && is_array($item['rows'])) {
-                    $itemlist = $this->searchNodes($itemlist, $item['rows']);
+                    $itemlist = $this->searchNodes($itemlist, $item['rows'],$parent);
                     $flag =1;
-                }
-                if (isset($item['rows']) && is_array($item['rows'])) {
-                    $flag =1;
-                    $itemlist = $this->searchNodes($itemlist, $item['rows']);
                 }
                 if (!$flag) {
                     if (isset($item['input']) && $item['input'] && isset($item['type']) && $item['type']!='button') {
+                        if(isset($parrent)){
+                          $item['parent'] = $parent;
+                        }
+                        $this->logger->info("Item------4".json_encode($item));
                         $itemlist[] = $item;
                     } else {
                         if (!isset($item['type'])) {
                             if (is_array($item)) {
-                                $itemlist = $this->searchNodes($itemlist, $item);
+                                $itemlist = $this->searchNodes($itemlist, $item,$parent);
                             } else {
                                 return $itemlist;
                             }

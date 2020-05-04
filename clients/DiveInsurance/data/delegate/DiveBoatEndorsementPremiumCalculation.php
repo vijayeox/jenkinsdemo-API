@@ -14,7 +14,7 @@ class DiveBoatEndorsementPremiumCalculation extends AbstractAppDelegate
         $this->logger->info("Premium Calculation".print_r($data,true));
 
 		$policy = array();
-        $policy = json_decode($data['previous_policy_data'],true);
+        $policy = is_string($data['previous_policy_data']) ? json_decode($data['previous_policy_data'],true) : $data['previous_policy_data'];
         $length = sizeof($policy) - 1;
         $policy =  $policy[$length];
         $upgrade = array();
@@ -22,6 +22,11 @@ class DiveBoatEndorsementPremiumCalculation extends AbstractAppDelegate
 
         $data['update_date'] = $policy['update_date'];
         
+        if(($policy['previous_address1'] != $data['address1']  || $policy['previous_address2'] != $data['address2'] || $policy['previous_country'] != $data['country'] || $policy['previous_city'] != $data['city'] || $policy['previous_state'] != $data['state'] || $policy['previous_zip'] != $data['zip']) && ($data['basameAsMailingAddress'] == true || $data['basameAsMailingAddress'] == 'true')){
+            $data['generatePersonalInfo'] = true;
+        }
+
+
         if(isset($data['hull_market_value'])){
 	        $hull_value = (float)$data['hull_market_value'] - (float)$policy['previous_hull_market_value'];
 	        if($hull_value > 0){

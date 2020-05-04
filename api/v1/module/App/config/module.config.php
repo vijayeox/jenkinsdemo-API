@@ -606,6 +606,22 @@ return [
                     ],
                 ],
             ],
+            'getFileDocuments' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/document/:document',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\DocumentController::class,
+                        'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'file_document_get' => [
                 'type' => Segment::class,
                 'options' => [
