@@ -20,15 +20,6 @@
 		"label": "Rate Car",
 		"input": false,
 		"components": [{
-			"label": "documents",
-			"key": "documents",
-			"properties": {
-				"data_type": "document"
-			},
-			"type": "hidden",
-			"input": true,
-			"tableView": false
-		}, {
 			"type": "documentviewer",
 			"key": "documents1",
 			"datatype": "documentviewer",
@@ -191,8 +182,8 @@
 						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
-						"delimiter": true,
-						"requireDecimal": true,
+						"delimiter": false,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
@@ -202,7 +193,6 @@
 						"type": "number",
 						"input": true,
 						"inputType": "text",
-						"decimalLimit": 2,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Would you like to apply for Premium Finance?",
@@ -552,7 +542,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 71,
+	"_vid": 73,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -570,6 +560,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-05-04T03:24:09.393Z",
+	"modified": "2020-05-04T10:00:09.068Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

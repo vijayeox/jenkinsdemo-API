@@ -17,8 +17,16 @@ html {
 }
 
 .osjs-window[data-id="Window_DiveInsurance"] {
-  .sidenav---sidenav---_2tBP {
+  .sidenav---sidenav---_2tBP,
+  .sidenav---sidenav-subnav---1EN61 {
     background-color: #043b6d;
+  }
+
+  .sidenav---sidenav-subnav---1EN61 > .sidenav---sidenav-subnavitem---1cD47 > .sidenav---navitem---9uL5T:hover{
+    background-color: #295883;
+  }
+  .sidenav---navitem---9uL5T {
+    color: white!important;
   }
   .k-button.k-primary {
     background-color: #053b6d;

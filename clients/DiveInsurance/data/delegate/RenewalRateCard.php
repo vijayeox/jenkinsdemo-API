@@ -85,6 +85,10 @@ class RenewalRateCard extends RateCard
         $data['form_data']['policyStatus'] = "Renewal Approval Pending"; 
         //END CLEAN FILE DATA FOR CURRENT YEAR
         $this->logger->info("CLEAN DATA END" . print_r($data, true));
+        $data['form_data']['userApproved'] = "";
+        $data['form_data']['premiumFinanceSelect'] = "";
+        $data['form_data']['paymentOptions'] = "";
+        $data['form_data']['paymentVerified'] = "";
         $data['data'] = json_encode($data['form_data']);
         unset($data['form_data']);
         return $data;

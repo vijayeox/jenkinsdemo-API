@@ -17,10 +17,12 @@ class DocumentController extends AbstractApiControllerHelper
      * @ignore __construct
      */
     private $config;
+    protected $log;
     public function __construct($config)
     {
         $this->setIdentifierName('document');
         $this->config = $config;
+        $this->log = $this->getLogger();
     }
 
     public function head($id = null)
@@ -77,17 +79,23 @@ class DocumentController extends AbstractApiControllerHelper
         $dispositionType = isset($ext) && $ext=="pdf"  ? "inline" : "attachment";
         
         if (file_exists($attachment_location)) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-            header("Cache-Control: public"); // needed for internet explorer            
-            $mimeType = ArtifactUtils::getMimeType($params['document']);
-            header("Content-Type:".$mimeType );  
-            header("Content-Transfer-Encoding: Binary");
-            header("Content-Length:" . filesize($attachment_location));
-            header("Content-Disposition: ". $dispositionType ."; filename=" . $params['document']);
-            readfile($attachment_location);
-            die();
+            if (!headers_sent()) {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                header("Cache-Control: public"); // needed for internet explorer            
+                $mimeType = ArtifactUtils::getMimeType($params['document']);
+                header("Content-Type:".$mimeType );  
+                header("Content-Transfer-Encoding: Binary");
+                header("Content-Length:" . filesize($attachment_location));
+                header("Content-Disposition: ". $dispositionType ."; filename=" . $params['document']);
+            }
+            $fp = @fopen($attachment_location, 'rb');
+            fpassthru($fp);
+            fclose($fp);
+            $this->response->setStatusCode(200);
+            return $this->response;
         } else {
-            die("Error: File not found.");
+            $this->log->error("Error: File Not Found");
+            return $this->getErrorResponse("File Not Found", 404);
         }
     }
 
