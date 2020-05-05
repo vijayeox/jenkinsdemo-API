@@ -462,7 +462,7 @@ class Module
                         $dbAdapter,
                         $container->get(Model\ActivityInstanceTable::class),
                         $container->get(Workflow\WorkflowFactory::class),
-                        $container->get(Service\WorkflowService::class)
+                        $container->get(Service\FileService::class)
                     );
                 },
                  Model\JobTable::class => function ($container) {

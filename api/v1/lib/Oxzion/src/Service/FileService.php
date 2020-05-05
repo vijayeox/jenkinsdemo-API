@@ -11,6 +11,7 @@ use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Service\FieldService;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Utils\ArrayUtils;
 
 class FileService extends AbstractService
 {
@@ -840,7 +841,7 @@ class FileService extends AbstractService
     }
 
     public function getWorkflowInstanceByFileId($fileId,$status=null){
-        $select = " SELECT ox_workflow_instance.process_instance_id,ox_workflow_instance.status,ox_workflow_instance.date_created from ox_workflow_instance INNER JOIN ox_file on ox_file.id = ox_workflow_instance.file_id WHERE ox_file.uuid =:fileId";
+        $select = " SELECT ox_workflow_instance.process_instance_id,ox_workflow_instance.status,ox_workflow_instance.date_created,ox_file.entity_id from ox_workflow_instance INNER JOIN ox_file on ox_file.id = ox_workflow_instance.file_id WHERE ox_file.uuid =:fileId";
         $params = array('fileId' => $fileId);
         if($status){
             $select .= " AND ox_workflow_instance.status =:status";
@@ -849,5 +850,155 @@ class FileService extends AbstractService
         $select .= " ORDER BY ox_workflow_instance.date_created DESC";
         $result = $this->executeQuerywithBindParameters($select,$params)->toArray();
         return $result;
+    }
+
+    public function getChangeLog($entityId,$startData,$completionData,$labelMapping){
+        $fieldSelect = "SELECT ox_field.name,ox_field.template,ox_field.type,ox_field.text,ox_field.data_type,COALESCE(parent.name,'') as parentName,COALESCE(parent.text,'') as parentText,parent.data_type as parentDataType FROM ox_field 
+                    left join ox_field as parent on ox_field.parent_id = parent.id WHERE ox_field.entity_id=:entityId AND ox_field.type NOT IN ('hidden','file','document','documentviewer') ORDER BY parentName, ox_field.name ASC";
+                    
+        $fieldParams = array('entityId' => $entityId);
+        $resultSet = $this->executeQueryWithBindParameters($fieldSelect,$fieldParams)->toArray();
+        
+        $resultData = array();
+        $gridResult = array();
+        foreach ($resultSet as $key => $value) {
+            if($value['data_type'] == 'grid' || $value['data_type'] == 'survey'){
+                continue;
+            }
+            $initialparentData = null;
+            $submissionparentData = null;
+            if($value['parentName'] !="") {
+                if(isset($gridResult[$value['parentName']])){
+                    $gridResult[$value['parentName']]['fields'][] = $value;
+                } else {
+                    $initialParentData =  isset($startData[$value['parentName']]) ? $startData[$value['parentName']] : '[]';
+                    $initialParentData =   is_string($initialParentData) ? json_decode($initialParentData, true) : $initialParentData;
+                    // checkbox check 
+                    // coverage check within grid
+                    $submissionparentData = isset($completionData[$value['parentName']]) ? $completionData[$value['parentName']] : '[]';
+                    $submissionparentData =   is_string($submissionparentData) ? json_decode($submissionparentData, true) : $submissionparentData;
+                    $gridResult[$value['parentName']] = array("initial" => $initialParentData, "submission" => $submissionparentData, 'fields' => array($value));
+                }
+                
+            } else{
+                $this->buildChangeLog($startData, $completionData, $value, $labelMapping, $resultData);
+            }         
+        }
+        if(count($gridResult) > 0){    
+            foreach($gridResult as $parentName => $data){
+                $initialDataset = $data['initial'];
+                $submissionDataset = $data['submission'];
+                $count = max(count($initialDataset), count($submissionDataset));
+                for($i = 0; $i < $count; $i++) {
+                    $initialRowData = isset($initialDataset[$i]) ? $initialDataset[$i] : array();
+                    $submissionRowData = isset($submissionDataset[$i]) ? $submissionDataset[$i] : array();
+                    foreach($data['fields'] as $key => $field) {
+                        $this->buildChangeLog($initialRowData, $submissionRowData, $field, $labelMapping, $resultData,$i+1);
+                    }
+                }
+            }
+         }
+        return $resultData;
+    }
+
+    public function getFieldValue($startDataTemp,$value,$labelMapping=null){
+        if(!isset($startDataTemp[$value['name']])){
+            return "";
+        }
+        $initialData = $startDataTemp[$value['name']];
+        if($value['data_type'] == 'text'){
+            //handle string data being sent
+            if(is_string($initialData)){
+                $fieldValue = json_decode($initialData, true);
+            } else {
+                $fieldValue = $initialData;
+            }
+            //handle select component values having an object with keys value and label 
+            if(!empty($fieldValue) && is_array($fieldValue)){
+                //Add Handler for default Labels
+                if(isset($fieldValue['label'])){
+                    $initialData = $fieldValue['label'];
+                } else {
+                    // Add for single values array
+                    if(isset($fieldValue[0]) && count($fieldValue) == 1){
+                        $initialData = $fieldValue[0];
+                    } else {
+                        //Case multiple values allowed
+                        // print_r($fieldValue);exit;
+                        if(count($fieldValue) > 1){
+                            foreach ($fieldValue as $k => $v) {//print_r($v);exit;
+                                $initialData .= $v;
+                            } 
+                        }
+                    }
+                }
+            }
+       
+        }else if($value['data_type'] == 'boolean'){
+            if((is_bool($initialData) && $initialData == false) || (is_string($initialData) && ($initialData=="false" || $initialData=="0"))){
+                $initialData = "No";
+            } else {
+                $initialData = "Yes";
+            }
+        }else if($value['data_type'] =='list'){
+            $radioFields =json_decode($value['template'],true);
+            if(is_string($initialData)){
+                $selectValues = json_decode($initialData,true);
+            } else {
+                if(is_array($initialData)){
+                    $selectValues = $initialData;
+                }
+            }
+            $initialData = "";
+            $processed =0;
+            foreach ($selectValues as $key => $value) {
+                if($value == 1){
+                    if($processed == 0){
+                       $radioFields = ArrayUtils::convertListToMap($radioFields['values'],'value','label');
+                        $processed = 1;
+                    }
+                    if(isset($radioFields[$key])){
+                        if($initialData !=""){
+                            $initialData = $initialData . ",";
+                        }
+                        $initialData .= $radioFields[$key];
+                    }
+                }
+            }
+        }
+        
+        if($value['type'] =='radio'){
+            $radioFields =json_decode($value['template'],true);
+            if(isset($radioFields['values'])){
+                foreach ($radioFields['values'] as $key => $radiovalues) {
+                    if($initialData == $radiovalues['value']){
+                        $initialData = $radiovalues['label'];
+                        break;
+                    }
+                }
+            }
+        }
+        // print_r($initialData);exit;
+        if($labelMapping && !empty($initialData) && isset($labelMapping[$initialData])){
+            $initialData = $labelMapping[$initialData];
+        }
+        return $initialData;
+    }
+
+    private function buildChangeLog($startData, $completionData, $value, $labelMapping, &$resultData,$rowNumber=""){
+        $initialData =  $this->getFieldValue($startData,$value,$labelMapping);
+        $submissionData = $this->getFieldValue($completionData,$value,$labelMapping);
+        if((isset($initialData) && ($initialData != '[]') && (!empty($initialData))) || 
+                (isset($submissionData) && ($submissionData != '[]') && (!empty($submissionData)))){
+                $resultData[] = array('name' => $value['name'],
+                                       'text' => $value['text'],
+                                       'dataType' => $value['data_type'],
+                                       'parentName' => $value['parentName'],
+                                       'parentText' => $value['parentText'],
+                                       'parentDataType' => $value['parentDataType'],
+                                       'initialValue' => $initialData,
+                                       'submittedValue' => $submissionData,
+                                        'rowNumber' => $rowNumber);
+        }
     }
 }

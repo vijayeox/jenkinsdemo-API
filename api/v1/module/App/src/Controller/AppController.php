@@ -314,7 +314,7 @@ class AppController extends AbstractApiController
                 return $this->getSuccessResponse(200);
             } catch (ValidationException $e) {
                 $this->log->error($e->getMessage(), $e);
-                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                $response = ['data' => $params, 'errors' => $e->getErrors()];
                 return $this->getErrorResponse("Validation Errors", 406, $response);
             } catch (ServiceException $e) {
                 $this->log->error($e->getMessage(), $e);

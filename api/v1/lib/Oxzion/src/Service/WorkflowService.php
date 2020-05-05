@@ -574,7 +574,4 @@ class WorkflowService extends AbstractService
         }
         return $sort;
     }
-    public function getChangeLog($formId,$initialData,$completionData,$labelMapping){
-        return $this->formService->getChangeLog($formId,$initialData,$completionData,$labelMapping);
-    }
 }
