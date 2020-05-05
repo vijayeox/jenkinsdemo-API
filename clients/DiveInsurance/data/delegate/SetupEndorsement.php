@@ -121,6 +121,24 @@ class SetupEndorsement extends AbstractAppDelegate
         if(isset($stateTaxData)){
             $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
         }
+        if(isset($data['paymentOptions'])){
+            unset($data['paymentOptions']);
+        }
+        if(isset($data['chequeNumber'])){
+            unset($data['chequeNumber']);
+        }
+        if(isset($data['chequeConsentFile'])){
+            unset($data['chequeConsentFile']);
+        }
+        if(isset($data['orderId'])){
+            unset($data['orderId']);
+        }
+        if(isset($data['transactionId'])){
+            unset($data['transactionId']);
+        }
+        if(isset($data['approved'])){
+            unset($data['approved']);
+        }
         if(isset($premiumRateCardDetails)){
             return $premiumRateCardDetails;
         } else {
