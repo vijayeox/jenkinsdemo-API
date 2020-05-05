@@ -76,7 +76,7 @@ class FormServiceTest extends AbstractServiceTest
         $this->assertEquals(1,count($sqlQueryResult));
         $sqlQuery = "SELECT distinct type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(19,count($sqlQueryResult));
+        $this->assertEquals(18,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where required = 1";
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(14,count($sqlQueryResult));
