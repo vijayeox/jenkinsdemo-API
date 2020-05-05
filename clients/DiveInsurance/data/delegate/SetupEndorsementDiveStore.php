@@ -295,6 +295,21 @@ public function execute(array $data,Persistence $persistenceService)
             }
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
         }
+        if(isset($data['paymentOptions'])){
+            unset($data['paymentOptions']);
+        }
+        if(isset($data['chequeNumber'])){
+            unset($data['chequeNumber']);
+        }
+        if(isset($data['chequeConsentFile'])){
+            unset($data['chequeConsentFile']);
+        }
+        if(isset($data['orderId'])){
+            unset($data['orderId']);
+        }
+        if(isset($data['transactionId'])){
+            unset($data['transactionId']);
+        }
         return $data;
     }
 }

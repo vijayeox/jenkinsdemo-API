@@ -101,7 +101,6 @@
       "Privilege\\": "module/Privilege/src/",
       "Callback\\": "module/Callback/src/",
       "FileIndexer\\": "module/FileIndexer/src/",
-      "Mlet\\": "module/Mlet/src/",
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
       "Workflow\\":"module/Workflow/src/",

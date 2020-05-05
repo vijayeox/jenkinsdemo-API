@@ -33,7 +33,6 @@ return [
     'Privilege',
     'Callback',
     'FileIndexer',
-    'Mlet',
     'Messaging',
     'ProspectResearch',
     'Workflow',

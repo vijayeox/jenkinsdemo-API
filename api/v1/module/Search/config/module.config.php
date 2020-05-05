@@ -6,7 +6,7 @@ use Zend\Router\Http\Segment;
 return [
     'router' => [
         'routes' => [
-            'mlet' => [
+            'search' => [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/search',
