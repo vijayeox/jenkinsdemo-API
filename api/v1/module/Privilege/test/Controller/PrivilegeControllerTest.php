@@ -63,7 +63,6 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_GROUP');
         $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_PROJECT');
         $this->assertEquals($content['data']['masterPrivilege'][2]['privilege_name'], 'MANAGE_ROLE');
-        $this->assertEquals($content['data']['masterPrivilege'][3]['privilege_name'], 'MANAGE_MLET');
     }
 
     public function testGetMasterPrivilegeListWithRolePrivilege()
