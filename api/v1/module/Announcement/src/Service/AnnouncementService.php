@@ -66,7 +66,7 @@ class AnnouncementService extends AbstractService
             }
         } else{
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
-                $orgId = AuthContext::get(AuthConstants::ORG_ID);
+                $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
             }
         }
 
@@ -78,7 +78,12 @@ class AnnouncementService extends AbstractService
 
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : null;
-            $select = "SELECT uuid,name,status,end_date from ox_announcement where name = '" . $data['name'] . "' and org_id = " . $data['org_id'] . " and end_date >= curdate()";
+            if(isset($data['org_id'])){
+                $select = "SELECT uuid,name,status,end_date from ox_announcement where name = '" . $data['name'] . "' and org_id = " . $data['org_id'] . " and end_date >= curdate()";
+            }
+            else{
+                $select = "SELECT uuid,name,status,end_date from ox_announcement where name = '" . $data['name'] . "' and end_date >= curdate()";
+            }
             $result = $this->executeQuerywithParams($select)->toArray();
             if (count($result) > 0) {
                 throw new ServiceException("Announcement already exists", "announcement.exists");
@@ -437,7 +442,7 @@ class AnnouncementService extends AbstractService
             } else {
                 $orgId = $this->getIdFromUuid('ox_organization', $params['orgId']);
             }
-        } else{
+        } else {
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
                 $orgId = AuthContext::get(AuthConstants::ORG_ID);
             }
@@ -446,6 +451,8 @@ class AnnouncementService extends AbstractService
             if(!($params['type'] == 'ANNOUNCEMENT' || $params['type'] == 'HOMESCREEN')){
                 throw new Exception("Type must be ANNOUNCEMENT or HOMESCREEN only");
             }
+        } else {
+            throw new Exception("type must be specified");
         }
         $where = "";
         $pageSize = 20;
@@ -468,7 +475,12 @@ class AnnouncementService extends AbstractService
         }
         if($params['type'] == 'ANNOUNCEMENT')
         {
-            $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'" : " WHERE org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'";
+            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
+                $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'" : " WHERE org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'";
+            }
+            else{
+                $where .= strlen($where) > 0 ? " AND end_date >= curdate() AND type ='ANNOUNCEMENT'" : " WHERE end_date >= curdate() AND type ='ANNOUNCEMENT'";
+            }
         }
         else {
             if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
@@ -482,7 +494,7 @@ class AnnouncementService extends AbstractService
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
         $count = $resultSet->toArray()[0]['count(id)'];
-        $query = "SELECT uuid, name, org_id, status, description, link, start_date, end_date, media_type, media FROM `ox_announcement`" . $where . " " . $sort . " " . $limit;
+        $query = "SELECT uuid, name, org_id, status, description, link, start_date, end_date, media_type, media, type FROM `ox_announcement`" . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         return array('data' => $resultSet, 'total' => $count);
     }
