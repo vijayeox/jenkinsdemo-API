@@ -443,9 +443,7 @@ class AnnouncementService extends AbstractService
                 $orgId = $this->getIdFromUuid('ox_organization', $params['orgId']);
             }
         } else {
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
-                $orgId = AuthContext::get(AuthConstants::ORG_ID);
-            }
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
         if(isset($params['type'])) {
             if(!($params['type'] == 'ANNOUNCEMENT' || $params['type'] == 'HOMESCREEN')){
@@ -479,7 +477,7 @@ class AnnouncementService extends AbstractService
                 $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'" : " WHERE org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'";
             }
             else{
-                $where .= strlen($where) > 0 ? " AND end_date >= curdate() AND type ='ANNOUNCEMENT'" : " WHERE end_date >= curdate() AND type ='ANNOUNCEMENT'";
+                $where .= strlen($where) > 0 ? " AND end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)" : " WHERE end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)";
             }
         }
         else {
@@ -487,7 +485,7 @@ class AnnouncementService extends AbstractService
                 $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND end_date >= curdate() AND type ='HOMESCREEN'" : " WHERE org_id =" . $orgId . " AND end_date >= curdate() AND type ='HOMESCREEN'";
             }
             else {
-                $where .= strlen($where) > 0 ? " AND end_date >= curdate() AND type ='HOMESCREEN'" : " WHERE end_date >= curdate() AND type ='HOMESCREEN'";
+                $where .= strlen($where) > 0 ? " AND end_date >= curdate() AND type ='HOMESCREEN' AND org_id IN (".$orgId.",null)" : " WHERE end_date >= curdate() AND type ='HOMESCREEN' AND org_id IN (".$orgId.",null)";
             }
         }
         $sort = " ORDER BY " . $sort;
