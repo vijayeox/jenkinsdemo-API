@@ -27,6 +27,10 @@ class FormioField
             }
         }
         switch ($this->data['type']) {
+            case 'select':
+                $template = json_decode($this->data['template'],true);
+                $this->data['data_type'] = isset($template['multiple'])? 'list':'text';
+                break;
             case 'checkbox':
                 $this->data['data_type'] = 'boolean';
                 break;
@@ -44,7 +48,7 @@ class FormioField
                 $this->data['data_type'] = 'file';
                 break;
             case 'selectboxes':
-            $this->data['data_type'] = 'selectboxes';
+            $this->data['data_type'] = 'list';
             break;
             case 'datagrid':
             case 'editgrid':
@@ -52,6 +56,9 @@ class FormioField
                 break;
             case 'survey':
                 $this->data['data_type'] = 'survey';
+                break;
+            case 'url':
+                $this->data['data_type'] = 'url';
                 break;
             default:
                 $this->data['data_type'] = 'text';
