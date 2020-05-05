@@ -30,7 +30,6 @@ class Organization extends Entity
     {
         $required = array(
             'name',
-            'subdomain',
             'status',
             'preferences'
         );
