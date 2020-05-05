@@ -24,7 +24,7 @@ class ChangeLogDelegate extends AbstractAppDelegate
             foreach ($rates as $key => $value) {
                 $rateArray[$value['key']] =  $value['coverage'];
             }
-            $changeLogData = $this->getActivityChangeLog($data['activityInstanceId'],$rateArray); 
+            return $changeLogData = $this->getActivityChangeLog($data['activityInstanceId'],$rateArray); 
         } else {
             if(isset($data['workflowInstanceId'])){
                 $fileData = $this->getWorkflowSubmissionData($data['workflowInstanceId']);
@@ -34,10 +34,10 @@ class ChangeLogDelegate extends AbstractAppDelegate
                 foreach ($rates as $key => $value) {
                     $rateArray[$value['key']] =  $value['coverage'];
                 }
-                $changeLogData = $this->getWorkflowChangeLog($data['workflowInstanceId'],$rateArray);
+                return $changeLogData = $this->getWorkflowChangeLog($data['workflowInstanceId'],$rateArray);
             }
         }
-        return $changeLogData;
+        return $data;
     }
 
      protected function getRates($data,$persistenceService){

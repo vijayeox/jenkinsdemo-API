@@ -33,7 +33,6 @@ ox_field:
     data_type: "numeric"
     template: '{"persistent" : "true"}'
     required: 1
-    parent_id: 9
     sequence: 1
     entity_id: 1
   - id: 3
@@ -121,14 +120,45 @@ ox_field:
     sequence: 11
     entity_id: 1
   - id: 12
-    name: "coverage"
-    text: "Coverage"
+    name: "sameasmailingaddress"
+    text: "Same as mailing address"
     app_id: 99
-    data_type: "text"
-    type: "radio"
+    data_type: "boolean"
+    type: "checkbox"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 12
+    parent_id: 9
+    entity_id: 1
+  - id: 13
+    name: "section1Agreement"
+    text: "I Agree"
+    app_id: 99
+    data_type: "boolean"
+    type: "checkbox"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 13
+    entity_id: 1
+  - id: 14
+    name: "careerCoverage"
+    text: "Career Coverage"
+    app_id: 99
+    data_type: "text"
+    type: "radio"
+    template: '{"label":"Career Coverage","optionsLabelPosition":"right","inline":false,"tableView":false,"values":[{"value":"instructor","label":"Instructor","shortcut":""},{"value":"assistantInstructor","label":"Assistant Instructor","shortcut":""},{"value":"divemaster","label":"Divemaster","shortcut":""},{"value":"nonteachingSupervisoryInstructor","label":"Nonteaching\/Supervisory Instructor (4)","shortcut":""},{"value":"retiredInstructor","label":"Retired Instructor (4)","shortcut":""},{"value":"divemasterAssistantInstructorAssistingOnly","label":"Divemaster\/Assistant Instructor Assisting Only (2)","shortcut":""},{"value":"freediveInstructor","label":"Freedive Instructor","shortcut":""},{"value":"internationalInstructor","label":"International Instructor (3)","shortcut":""},{"value":"internationalAssistantInstructor","label":"International Assistant Instructor (3)","shortcut":""},{"value":"internationalDivemaster","label":"International Divemaster (3)","shortcut":""},{"value":"internationalNonteachingSupervisoryInstructor","label":"International Nonteaching\/Supervisory Instructor (3)(4)","shortcut":""},{"value":"internationalDivemasterAssistantInstructorAssistingOnly","label":"International Divemaster\/Assistant Instructor Assisting Only (2)(3)","shortcut":""}],"dataType":"auto","clearOnHide":false,"validate":{"required":true,"customMessage":"Please choose one of these options."},"key":"careerCoverage","properties":{"target":"careerCoveragePrice"},"type":"radio","input":true,"lockKey":true,"labelWidth":30,"labelMargin":3,"hideOnChildrenHidden":false,"persistent" : "true"}'
+    required: 1
+    sequence: 14
+    entity_id: 1
+  - id: 15
+    name: "endorsement_options"
+    text: "Please select areas you want to modify"
+    app_id: 99
+    data_type: "list"
+    type: "selectboxes"
+    template: '{"label":"Please select areas you want to modify","optionsLabelPosition":"right","autofocus":true,"tableView":true,"defaultValue":{"modify_personalInformation":false,"modify_coverage":false,"modify_additionalInsured":false},"values":[{"value":"modify_personalInformation","label":"Personal Information","shortcut":""},{"value":"modify_coverage","label":"Coverage","shortcut":""},{"value":"modify_additionalInsured","label":"Additional Insured","shortcut":""}],"calculateServer":false,"validate":{"required":true,"minSelectedCount":1},"minSelectedCountMessage":"Select atleast one option to go next.","key":"endorsement_options","properties":{"render":"page6"},"type":"selectboxes","input":true,"lockKey":true,"inputType":"checkbox","persistent" : "true"}'
+    required: 1
+    sequence: 15
     entity_id: 1
 ox_form:
   - id: 1
@@ -170,6 +200,15 @@ ox_form_field:
   - id: 8
     form_id: 1
     field_id: 12
+  - id: 9
+    form_id: 1
+    field_id: 13
+  - id: 10
+    form_id: 1
+    field_id: 14
+  - id: 15
+    form_id: 1
+    field_id: 15
 ox_workflow:
   - id: 1
     app_id: 99
@@ -218,7 +257,7 @@ ox_file:
     form_id: 1
   - id: 13
     org_id: 1
-    data: "New File Data - Completed"
+    data: '{"firstname":"Nehal","product" : "Individual Professional Liability","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     date_created: "2019-06-26 00:00:00"
     entity_id: 1
@@ -261,8 +300,9 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
-    file_id: 11
-    start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    file_id: 13
+    start_data: '{"firstname":"Nehal","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha S","city":"","age" : ""}]}'
+    completion_data: '{"firstname":"Nehal","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
   - id: 4
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -334,11 +374,12 @@ ox_activity_instance:
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0778"
     workflow_instance_id: 1
-    start_data: '{"firstname":"Sadhitha","product":"","fax" : "","coverage":"scubaFitInstructorDeclined", "additionalInsured": {"firstname":"Shwetha","city":"","age" : ""}}'
-    completion_data: '{"firstname":"Sadhitha","product":"P","fax" : "","coverage":"scubaFitInstructor","additionalInsured": {"firstname":"Shwetha","city":"City","age" : ""}}'
+    start_data: '{"careerCoverage": "instructor","firstname":"Sadhitha","product":"","fax" : "","section1Agreement": "true","additionalInsured": [{"firstname":"Shwetha","city":"","age" : "","sameasmailingaddress" :"false"}]}'
+    completion_data: '{"endorsement_options": {"modify_personalInformation":true,"modify_coverage":false,"modify_additionalInsured":false},"careerCoverage": "divemaster","firstname":"Sadhitha","product":"P","fax" : "","section1Agreement": "true","additionalInsured": [{"firstname":"SHASHI","city":"City","age" : "","sameasmailingaddress":"false"}]}'
     status: "Completed"
     start_date: "2019-06-26 00:00:00"
     org_id: 1
+    modified_by: 1
   - id: 2
     activity_id: 2
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0772"
@@ -346,6 +387,7 @@ ox_activity_instance:
     status: "Completed"
     start_date: "2019-06-26 01:00:00"
     org_id: 1
+    modified_by: 1
   - id: 3
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0722"
@@ -353,3 +395,4 @@ ox_activity_instance:
     status: "In Progress"
     start_date: "2019-06-26 02:00:00"
     org_id: 1
+    modified_by: 1
