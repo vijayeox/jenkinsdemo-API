@@ -48,7 +48,7 @@ class ChangeLogDelegateTest extends DelegateTest
 
     }
 
-    public function testChangeLogDelegateExecute()
+    public function testChangeLogDelegateExecuteWithActivityInstanceId()
     {
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
         $data =['product' =>'Individual Professional Liability','activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0778'];
@@ -57,7 +57,40 @@ class ChangeLogDelegateTest extends DelegateTest
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'ChangeLogDelegate', $data);  
+        $this->assertEquals(8, count($content));
+        $select = "SELECT distinct `type`,data_type from ox_field of inner join ox_form_field off on off.field_id = of.id";
+        $statement = $this->getDbAdapter()->query($select);
+        $result = $statement->execute();
+        while ($result->next()) {
+            $tableFieldName[] = $result->current();
+        }
+        $this->assertEquals(6, count($tableFieldName));
+    }
+
+    public function testChangeLogDelegateExecuteWithWorkflowInstanceId()
+    {
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        $data =['product' =>'Individual Professional Liability','activityInstanceId' => null,'workflowInstanceId' => '3f20b5c5-0124-11ea-a8a0-22e8105c0790'];
+        $appId = $this->data['UUID'];
+        $appName = $this->data['appName'];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'ChangeLogDelegate', $data);
-        $this->assertEquals(5 , count($content));
+        $this->assertEquals(2, count($content));
+    }
+
+    public function testChangeLogNotFound()
+    {
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        $data =['product' =>'Individual Professional Liability','activityInstanceId' => null,'workflowInstanceId' => null];
+        $appId = $this->data['UUID'];
+        $appName = $this->data['appName'];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'ChangeLogDelegate', $data);
+        $this->assertEquals($data['product'], $content['product']);
     }
 }

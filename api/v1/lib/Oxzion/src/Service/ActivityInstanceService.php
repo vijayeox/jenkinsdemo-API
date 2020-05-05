@@ -12,7 +12,7 @@ use Oxzion\Model\ActivityInstance;
 use Oxzion\Model\ActivityInstanceTable;
 use Oxzion\Service\AbstractService;
 use Oxzion\Workflow\WorkFlowFactory;
-use Oxzion\Service\WorkflowService;
+use Oxzion\Service\FileService;
 
 class ActivityInstanceService extends AbstractService
 {
@@ -22,19 +22,19 @@ class ActivityInstanceService extends AbstractService
     private $fileExt = ".json";
     protected $workflowFactory;
     protected $activityEngine;
-    protected $workflowService;
+    protected $fileService;
     /**
      * @ignore __construct
      */
 
-    public function __construct($config, $dbAdapter, ActivityInstanceTable $table, WorkflowFactory $workflowFactory, WorkflowService $workflowService)
+    public function __construct($config, $dbAdapter, ActivityInstanceTable $table, WorkflowFactory $workflowFactory, FileService $fileService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->formsFolder = $this->config['FORM_FOLDER'];
         $this->workFlowFactory = $workflowFactory;
         $this->activityEngine = $this->workFlowFactory->getActivity();
-        $this->workflowService = $workflowService;
+        $this->fileService = $fileService;
     }
 
     public function setActivityEngine($activityEngine)
@@ -458,20 +458,21 @@ class ActivityInstanceService extends AbstractService
 
 
     public function getActivityChangeLog($activityInstanceId,$labelMapping=null){
-        $selectQuery = "SELECT oai.start_data, oai.completion_data ,oaf.form_id from ox_activity_instance oai inner join ox_activity_form oaf on oai.activity_id = oaf.activity_id where oai.activity_instance_id = :activityInstanceId ";
+        $selectQuery = "SELECT oai.start_data, oai.completion_data ,owi.file_id from ox_activity_instance oai inner join ox_workflow_instance owi on oai.workflow_instance_id = owi.id where oai.activity_instance_id = :activityInstanceId ";
         $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
         $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
         if(count($result) > 0){
-            $formId = $result[0]['form_id'];
+            $recordSet = $this->fileService->getWorkflowInstanceByFileId($this->getUuidFromId('ox_file',$result[0]['file_id']));
             $startData = json_decode($result[0]['start_data'],true);
             $completionData = json_decode($result[0]['completion_data'],true);
-            $resultData = $this->workflowService->getChangeLog($formId,$startData,$completionData,$labelMapping);
+            $resultData = $this->fileService->getChangeLog($recordSet[0]['entity_id'],$startData,$completionData,$labelMapping);
             return $resultData;
         } else {
             return $result;
         }
     }
 
+// USED IN DELEGATE
     public function getFileDataByActivityInstanceId($activityInstanceId){
         try{
             $selectQuery = "SELECT of.data from ox_file of

@@ -102,7 +102,7 @@
 						to the date that the alleged negligent act, error, or omission occurred.
 					</p></center>
 					<hr class = "spacing1"></hr>
-					<b><center><p class = "phy_add">Physical Address {if $sameasmailingaddress == "false" || $sameasmailingaddress == false }
+					<b><center><p class = "phy_add">Physical Address {if ($sameasmailingaddress == "false" || $sameasmailingaddress == false) && ($mailaddress1 != "") }
 													: {$mailaddress1},{$mailaddress2}
 												{else}
 													is the same as the mailing address
@@ -114,15 +114,18 @@
 		<div class = "second_content">
 			{if isset($update_date)}
 			{assign var=previousCoverages value=$previous_careerCoverage|json_decode:true}
+			{assign var=upgradeCareerCoverages value=$upgradeCareerCoverage|json_decode:true}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if isset($previous_careerCoverage) && !empty($previous_careerCoverage)}
 					{foreach from=$previousCoverages item=previousCoverage}
-						{if $careerCoverageVal != $previousCoverage.label}
+						{if $careerCoverage != $previousCoverage.value}
 							<p class = "policy_status">Status of Insured : {$previousCoverage.label} as of {$previousCoverage.update_date|date_format:"%m/%d/%Y"}</p>
 						{/if}
 					{/foreach}
 				{/if}
+				{if $careerCoverage != $upgradeCareerCoverages.value}
 				<p class = "policy_status" >Status of Insured : {$upgradeCareerCoverageVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+				{/if}
 
 				{if isset($scubaFit) && !empty($scubaFit)}
 					{if $scubaFit != "scubaFitInstructorDeclined" && $scubaFit != $previous_scuba}
@@ -136,25 +139,31 @@
 					{/if}
 				{/if}
 
+			{assign var=upgradecylinders value=$upgradecylinder|json_decode:true}
 				{if isset($previous_cylinder) && !empty($previous_cylinder)}				
 				{assign var=previousCylinder value=$previous_cylinder|json_decode:true}
 					{foreach from=$previousCylinder item=previousCylinderNew}
-					{if $previousCylinderNew.label != $cylinder}
+					{if $previousCylinderNew.value != $cylinder}
 							<p class = "policy_status">Cylinder Coverage : {$previousCylinderNew.label} as of {$previousCylinderNew.update_date|date_format:"%m/%d/%Y"}</p>
 					{/if}
 					{/foreach}
 				{/if}
+					{if $upgradecylinders.value != $cylinder}
 					<p class = "policy_status" >Cylinder Coverage : {$cylinderPriceVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+				{/if}
 
+				{assign var=upgradeExcessLiabilitys value=$upgradeExcessLiability|json_decode:true}
 				{if isset($previous_excessLiability) && !empty($previous_excessLiability)}
 				{assign var=previousExcessLiability value=$previous_excessLiability|json_decode:true}
 					{foreach from=$previousExcessLiability item=previousExcessLiabilityEndor}
-					{if $previousExcessLiabilityEndor.label != $excessLiability}
+					{if $previousExcessLiabilityEndor.value != $excessLiability}
 							<p class = "policy_status">Excess Liability Coverage : {$previousExcessLiabilityEndor.label} as of {$previousExcessLiabilityEndor.update_date|date_format:"%m/%d/%Y"}</p>
 					{/if}
 					{/foreach}
 				{/if}
+				{if $upgradeExcessLiabilitys.value != $excessLiability}
 					<p class = "policy_status" >Excess Liability Coverage : {$upgradeExcessLiabilityVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+				{/if}
 
 			{/if}
 				
