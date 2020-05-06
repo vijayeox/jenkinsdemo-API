@@ -1,16 +1,14 @@
 <?php
 namespace Analytics\Service;
 
-use Oxzion\Service\AbstractService;
 use Analytics\Model\Dashboard;
 use Analytics\Model\DashboardTable;
-use Oxzion\Auth\AuthContext;
+use Exception;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FilterUtils;
 use Ramsey\Uuid\Uuid;
-use Exception;
-use Oxzion\VersionMismatchException;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class DashboardService extends AbstractService
@@ -23,7 +21,6 @@ class DashboardService extends AbstractService
         $this->table = $table;
     }
 
-
     public function createDashboard($data)
     {
         $form = new Dashboard();
@@ -32,28 +29,27 @@ class DashboardService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['uuid'] = Uuid::uuid4()->toString();
         $check = null;
-        try{
+        try {
             $query = 'Select id from ox_dashboard where isdefault = 1 and org_id=:org_id';
             $queryParams = [
-                'org_id' => AuthContext::get(AuthConstants::ORG_ID)
+                'org_id' => AuthContext::get(AuthConstants::ORG_ID),
             ];
             $check = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if(count($check) == 0)
-            {
+            if (count($check) == 0) {
                 $data['isdefault'] = 1;
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
-        $form->exchangeWithSpecificKey($data,'value');
+        $form->exchangeWithSpecificKey($data, 'value');
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {
-            if(isset($data['isdefault']) && ($data['isdefault'] == 1)) {
+            if (isset($data['isdefault']) && ($data['isdefault'] == 1)) {
                 $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
                 $queryParams = [
-                    'org_id' => AuthContext::get(AuthConstants::ORG_ID)
+                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
                 ];
                 $this->executeUpdateWithBindParameters($query, $queryParams);
             }
@@ -78,20 +74,19 @@ class DashboardService extends AbstractService
         if (is_null($obj)) {
             return 0;
         }
-        if(!isset($data['version']))
-        {
+        if (!isset($data['version'])) {
             throw new Exception("Version is not specified, please specify the version");
         }
         $form = new Dashboard();
         $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->exchangeWithSpecificKey($data, 'value', true);
         $form->updateValidate($data);
         $count = 0;
         try {
-            if(isset($data['isdefault']) && $data['isdefault'] == 1) {
+            if (isset($data['isdefault']) && $data['isdefault'] == 1) {
                 $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
                 $queryParams = [
-                    'org_id' => AuthContext::get(AuthConstants::ORG_ID)
+                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
                 ];
                 $this->executeUpdateWithBindParameters($query, $queryParams);
             }
@@ -108,8 +103,8 @@ class DashboardService extends AbstractService
         return [
             'dashboard' => [
                 'version' => $formArray['version']['value'] + 1,
-                'data' => $data
-            ]
+                'data' => $data,
+            ],
         ];
     }
 
@@ -119,14 +114,13 @@ class DashboardService extends AbstractService
         if (is_null($obj)) {
             return 0;
         }
-        if(!isset($version))
-        {
+        if (!isset($version)) {
             throw new Exception("Version is not specified, please specify the version");
         }
-        $data = array('version' => $version,'isdeleted' => 1);
+        $data = array('version' => $version, 'isdeleted' => 1);
         $form = new Dashboard();
         $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->exchangeWithSpecificKey($data, 'value', true);
         $form->updateValidate($data);
         $count = 0;
         try {
@@ -148,18 +142,17 @@ class DashboardService extends AbstractService
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-            'uuid' => $uuid
+            'uuid' => $uuid,
         ];
-        try{
+        try {
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (0 == count($resultSet)) {
                 return 0;
             }
             return [
-                'dashboard' => $resultSet[0]
+                'dashboard' => $resultSet[0],
             ];
-        }
-        catch (ZendDbException $e) {
+        } catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error($e);
             return 0;
@@ -170,21 +163,19 @@ class DashboardService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
-        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+        if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
             $dashboardConditions = '(d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
-        }
-        else{
+        } else {
             $dashboardConditions = 'd.isdeleted <> 1 AND (d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
         }
         $where .= empty($where) ? "WHERE ${dashboardConditions}" : " AND ${dashboardConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY d.' . $paginateOptions['sort']) : '';
-        $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' offset ' . $paginateOptions['offset'];
+        $limit = ' ';
 
         $countQuery = "SELECT COUNT(id) as 'count' FROM ox_dashboard d ${where}";
         try {
             $resultSet = $this->executeQuerywithParams($countQuery);
-        }
-        catch (ZendDbException $e) {
+        } catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred. Query:');
             $this->logger->error($countQuery);
             $this->logger->error($e);
@@ -192,16 +183,14 @@ class DashboardService extends AbstractService
         }
         $count = $resultSet->toArray()[0]['count'];
 
-        if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ='SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdeleted, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
-        }
-        else{
-            $query ='SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+        if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
+            $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdeleted, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+        } else {
+            $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         }
         try {
             $resultSet = $this->executeQuerywithParams($query);
-        }
-        catch (ZendDbException $e) {
+        } catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred. Query:');
             $this->logger->error($query);
             $this->logger->error($e);
@@ -210,7 +199,6 @@ class DashboardService extends AbstractService
         $result = $resultSet->toArray();
 
         return array('data' => $result,
-                     'total' => $count);
+            'total' => $count);
     }
 }
-

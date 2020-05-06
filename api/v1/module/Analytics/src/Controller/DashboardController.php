@@ -2,12 +2,10 @@
 
 namespace Analytics\Controller;
 
-use Zend\Log\Logger;
 use Analytics\Model\Dashboard;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
-use Exception;
 
 class DashboardController extends AbstractApiController
 {
@@ -45,8 +43,7 @@ class DashboardController extends AbstractApiController
             $data['uuid'] = $this->dashboardService->createDashboard($data);
             $data['version'] = 0;
             $count = 1;
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -69,13 +66,11 @@ class DashboardController extends AbstractApiController
     {
         try {
             $result = $this->dashboardService->updateDashboard($uuid, $data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
+        } catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         if ($result == 0) {
             return $this->getErrorResponse("Dashboard update failed for uuid - $uuid", 404);
@@ -83,14 +78,14 @@ class DashboardController extends AbstractApiController
         return $this->getSuccessResponseWithData($result, 200);
     }
 
-    public function delete($uuid) {
+    public function delete($uuid)
+    {
         $params = $this->params()->fromQuery();
-        if(isset($params['version'])){
+        if (isset($params['version'])) {
             try {
                 $response = $this->dashboardService->deleteDashboard($uuid, $params['version']);
-            }
-            catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
+            } catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
                 return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404, ['uuid' => $uuid]);
@@ -158,7 +153,6 @@ class DashboardController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dashboardService->getDashboardList($params);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }
-
