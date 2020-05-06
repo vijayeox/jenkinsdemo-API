@@ -184,8 +184,9 @@ class WorkflowInstanceController extends AbstractApiController
 
     public function getActivityLogAction(){
         $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
         try{
-            $result = $this->workflowInstanceService->getActivityLog($params['fileId'], $params['appId']);
+            $result = $this->workflowInstanceService->getActivityLog($params['fileId'], $params['appId'], $filterParams);
             if ($result == 0) {
                 return $this->getErrorResponse("No Activity found for the specified file", 404, ['id' => $fileId]);
             }
