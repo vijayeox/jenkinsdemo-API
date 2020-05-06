@@ -26,6 +26,9 @@ class MenuItemService extends AbstractService
         $MenuItem = new MenuItem();
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
+        if(isset($data['parent_id'])){
+            $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+        }
         if(isset($data['page_id'])){
             $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_id']);
         }
@@ -66,6 +69,9 @@ class MenuItemService extends AbstractService
             return 0;
         }
         $data['id'] = $this->getIdFromUuid('ox_app_menu',$menuUuid);
+        if(isset($data['parent_id'])){
+            $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+        }
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $file = $obj->toArray();
@@ -130,35 +136,30 @@ class MenuItemService extends AbstractService
         $menuList = array();
         if ($resultSet->count()) {
             $menuList = $resultSet->toArray();
+            $menuArray = array();
             $i = 0;
             foreach ($menuList as $key => $menuItem) {
                 if(isset($menuItem['privilege_name']) && $menuItem['privilege_name']!=""){
                     $privilegeList = json_decode($menuItem['privilege_name'],true);
                     if(isset($privilegeList) && is_array($privilegeList)){
                         if(AuthContext::isPrivileged($privilegeList['eq']) && !AuthContext::isPrivileged($privilegeList['neq'])){
-                             continue;   
-                        }else{
-                            unset($menuList[$key]);
-                            continue;
+                             array_push($menuArray,$menuItem);
                         }
-                    }else if(!AuthContext::isPrivileged($menuItem['privilege_name'])){
-                        unset($menuList[$key]);
-                        continue;
+                    }else if(AuthContext::isPrivileged($menuItem['privilege_name'])){
+                        array_push($menuArray,$menuItem);
                     }
-                }else{
-                    unset($menuList[$key]);
-                    continue;
                 }
-                if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != 0) {
-                    $parentKey = array_search($menuItem['parent_id'], array_column($menuList, 'id'));
-                    $menuList[$parentKey]['submenu'][] = $menuItem;
-                    unset($menuList[$key]);
+                if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '') {
+                    $menuItem['parent_id'] = $this->getUuidFromId('ox_app_menu',$menuItem['parent_id']);
+                    $parentKey = array_search($menuItem['parent_id'], array_column($menuArray, 'uuid'));
+                    $menuArray[$parentKey]['submenu'][] = $menuItem;
+                    array_pop($menuArray);
                 }
             }
         }else{
             return 0;
         }
-        return array_values($menuList);
+        return array_values($menuArray);
     }
     public function getMenuItem($appUuid, $menuUuid)
     {
