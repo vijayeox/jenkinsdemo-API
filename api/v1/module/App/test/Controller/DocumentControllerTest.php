@@ -59,7 +59,7 @@ class DocumentControllerTest extends ControllerTest
         $this->assertModuleName('App');
         $this->assertControllerName(DocumentController::class); // as specified in router's controller name alias
         $this->assertControllerClass('DocumentController');
-        $this->assertMatchedRouteName('getFileDocument');
+        $this->assertMatchedRouteName('getFileDocuments');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
     }  
 
@@ -71,7 +71,7 @@ class DocumentControllerTest extends ControllerTest
         $this->assertControllerName(DocumentController::class); // as specified in router's controller name alias
         $this->assertControllerClass('DocumentController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $this->assertMatchedRouteName('getFileDocument');
+        $this->assertMatchedRouteName('getFileDocuments');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'File Not Found');

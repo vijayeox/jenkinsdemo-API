@@ -41,7 +41,8 @@ class MenuControllerTest extends ControllerTest
         $this->assertEquals(count($appList), 5);
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'menu1');
-        $this->assertEquals($content['data'][1]['name'], 'menu4');
+        $this->assertEquals($content['data'][0]['submenu'][0]['name'], 'menu3');
+        $this->assertEquals($content['data'][1]['name'], 'menu5');
     }
 
     public function testGetListNotFound()
