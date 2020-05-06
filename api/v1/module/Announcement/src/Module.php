@@ -63,6 +63,11 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Controller\HomescreenAnnouncementController::class => function ($container) {
+                    return new Controller\HomescreenAnnouncementController(
+                        $container->get(Service\AnnouncementService::class)
+                    );
+                },
             ],
         ];
     }

@@ -61,26 +61,25 @@ class AttachmentControllerTest extends ControllerTest
         $_FILES = null; // Since this is a global variable, we need to set it to null
         $data = array('type' => 'ANNOUNCEMENT');
         $this->dispatch('/attachment', 'POST', $data);
-        $this->assertResponseStatusCode(201);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Attachment');
         $this->assertControllerName(AttachmentController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AttachmentController');
         $this->assertMatchedRouteName('attachment');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        // print_r($content);exit;
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'File Not attached');
     }
 
-    public function testAnnouncementWithoutFileTypeCreate()
+    public function testAnnouncementWithoutDataSetCreate()
     {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/oxzionlogo.png", $tempFolder . "oxzionlogo.png");
-
+        $data = array('type' => 'ANNOUNCEMENT');
         $_FILES['file'] = array();
         $_FILES['file']['name'] = 'oxzionlogo.png';
         $_FILES['file']['type'] = 'png';
@@ -90,14 +89,15 @@ class AttachmentControllerTest extends ControllerTest
 
         $data = null;
         $this->dispatch('/attachment', 'POST', $data);
-        $this->assertResponseStatusCode(400);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Attachment');
         $this->assertControllerName(AttachmentController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AttachmentController');
         $this->assertMatchedRouteName('attachment');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
+        // print_r($content);exit;
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'File type not specified');
+        $this->assertEquals($content['message'], 'Empty Dataset Sent');
     }
 }

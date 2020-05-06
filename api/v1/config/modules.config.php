@@ -33,10 +33,10 @@ return [
     'Privilege',
     'Callback',
     'FileIndexer',
-    'Mlet',
     'Messaging',
     'ProspectResearch',
     'Workflow',
     'PaymentGateway',
     'ErrorLog',
+    'Import'
 ];

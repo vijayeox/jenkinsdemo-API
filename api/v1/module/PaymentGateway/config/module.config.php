@@ -2,8 +2,8 @@
 
 namespace PaymentGateway;
 
-use Zend\Router\Http\Segment;
 use Oxzion\Utils\UuidUtil;
+use Zend\Router\Http\Segment;
 
 return [
     'router' => [
@@ -13,7 +13,7 @@ return [
                 'options' => [
                     'route' => '/app/:appId/paymentgateway[/:paymentId]',
                     'constraints' => [
-                        // 'appId' => UuidUtil::UUID_PATTERN,                   
+                        // 'appId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\PaymentGatewayController::class,
@@ -33,7 +33,7 @@ return [
                 'options' => [
                     'route' => '/app/:appId/paymentgateway/initiate',
                     'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,                   
+                        'appId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\PaymentGatewayController::class,
@@ -53,6 +53,17 @@ return [
                         'controller' => Controller\PaymentGatewayController::class,
                         'method' => 'POST',
                         'action' => 'updateTransactionStatus',
+                    ],
+                ],
+            ],
+            'paymentcallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/fortewebhook/callback',
+                    'defaults' => [
+                        'controller' => Controller\PaymentCallbackController::class,
+                        'method' => 'POST',
+                        'action' => 'forteWebhookCallback'
                     ],
                 ],
             ],

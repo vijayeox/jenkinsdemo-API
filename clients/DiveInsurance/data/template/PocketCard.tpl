@@ -13,8 +13,14 @@
 		{/if}
 		<div class="main_div">
 			<div class = "details">
-				<p class = "email"><b>Your certificate and insurance policy <br>were mailed to :</b></p><br>
-				<p class = "email"><u><b>{$individual.email}</b></u></p>
+				{if !(isset($individual.product) && ($individual.product == 'Dive Boat')) && !(isset($individual.product) && ($individual.product == 'Dive Store'))}
+				<p class = "email"><b>Your certificate and insurance policy <br>were emailed to :<br><u>{$individual.email}</u></b></p><br>
+				<p class = "email" align="left"><b>{$individual.lastname},&nbsp;{$individual.firstname}<br>{$individual.address1}<br>
+					{if isset($individual.address2) && !empty($individual.address2)}
+						{$individual.address2}<br>
+					{/if}
+					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip} </b></p>
+				{/if}
 			</div>
 			<div class = "insure">
 				<div class = "header">
@@ -22,7 +28,9 @@
 					<p class = "heading2"><b>Insured's Pocket Card</b></p>
 				</div>
 				<div class = "main_section">
-					<p class = "card_holder_name">Cardholder Name: &nbsp{$individual.firstname}&nbsp{$individual.lastname}</p>
+					<p class = "card_holder_name">{if isset($individual.business_name)}Business Name:&nbsp;
+						{$individual.business_name}<br> Insured: &nbsp;{$individual.firstname}&nbsp{$individual.lastname}
+					{else}Cardholder Name: &nbsp;{$individual.firstname}&nbsp{$individual.lastname}</p>{/if}
 					<div class = "section">
 						<div class = "sec1">
 							<p class = "info">Certificate #: &nbsp{$individual.certificate_no}</p>
@@ -100,11 +108,10 @@
 				</div>
 			</div>
 			<div class = "details">
-				<p class = "email"><b>If you have any questions or need any additional information,<br>Please contact us:<br>Email&nbsp;:&nbsp;instructors@diveinsurance.com<br>
+				<p class = "email"><b>If you have any questions or need any additional information,<br>Please contact us:<br>Email&nbsp;:&nbsp;{$individual.product_email_id}<br>
 				Phone:&nbsp;(800)&nbsp;223-9998<br>or (714)&nbsp;739-3177</b></p>
 			</div>
 		</div>
 	{/foreach}
 </body>
 </html>
-

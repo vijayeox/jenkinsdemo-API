@@ -3,6 +3,7 @@
 <head>
 <link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./AgentInfo.js"></script>
+<script type="text/javascript" src="./js/moment.js"></script>
 
 <script>
   function subst() {
@@ -18,15 +19,30 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2'];
-      for (var css_class in css_selector_classes) {
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','state_in_short','padi'];
+       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
-              var element = document.getElementsByClassName(css_selector_classes[css_class]);
-              for (var j = 0; j < element.length; ++j) {
-                  element[j].textContent = vars[css_selector_classes[css_class]];
-              }
+            var element = document.getElementsByClassName(
+              css_selector_classes[css_class]
+            );
+            for (var j = 0; j < element.length; ++j) {
+              element[j].textContent = vars[css_selector_classes[css_class]];
+            }
+            if (css_selector_classes[css_class] == "start_date") {
+              document.getElementsByClassName(
+                "start_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+            }
+            if (css_selector_classes[css_class] == "end_date") {
+              document.getElementsByClassName("end_date")[0].textContent =
+                moment(vars[css_selector_classes[css_class]]).format(
+                  "D MMMM YYYY"
+                ) + " - 12:01:00 AM";
+            }
           }
-      }
+        }
       agentInfo();
   }
   </script>
@@ -55,16 +71,19 @@
       <div class ="content1">
           <b class = "caption">Agent Information</b>
           <div class = "caption1">
-            <p class ="info" id = "nameVal"></p>
-            <p class ="info" id = "addressVal"></p>
+            <p class ="lp_info" id = "nameVal"></p>
+            <p class ="lp_info1" id = "addressLineVal"></p>
+						<p class ="lp_info1" id = "addressLine2Val"></p>
+            <p></p>
+            <p class = "lp_info1">License#: <span class="license_number"></span></p>
            </div>
           <hr class ="hr_caption"></hr>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
           <p class = "details"><span class ="business_name"></span></p>
           <p class = "details"><span class ="business_address1"></span></p>
           <p class = "details"><span class ="business_address2"></span></p>
-          <p class = "details"><span class ="business_city"></span>,<span class ="business_state"></span></p>
-          <p class = "details"><span class ="business_country"></span>,<span class ="business_zip"></span></p>
+          <p class = "details"><span class ="business_city"></span>,<span class ="state_in_short"></span> - <span class ="business_zip"></span></p>
+          <p class = "details"><span class ="business_country"></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -77,7 +96,7 @@
         </div>
         <div class = "certificate1">
           <p class = "p_margin"><span class ="certificate_no"></span></p>
-          <p class = "p_margin"><span class ="business_padi"></p>
+          <p class = "p_margin"><span class ="padi"></p>
           <p class = "p_margin"><span class ="start_date"></p>
           <p class = "p_margin"><span class ="end_date">&nbsp12:01:00 AM</p>
           <p class = "p_margin">U.S. SPECIALTY INSURANCE COMPANY</p>
@@ -86,6 +105,8 @@
       </div>
       </div>
     </div>
+    <div>&nbsp</div>
+    <div>&nbsp</div>
     <hr class =" ai_hrtag"></hr>
   </div>
 </body>

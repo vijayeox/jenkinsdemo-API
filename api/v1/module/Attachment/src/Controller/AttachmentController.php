@@ -60,7 +60,12 @@ class AttachmentController extends AbstractApiController
         $dataArray = array();
         $dataArray = $data;
         try {
-            $files = isset($_FILES['file'])?$_FILES['file']:$this->params()->fromFiles('files');
+            $files = isset($_FILES['file']) ? $_FILES['file'] : $this->params()->fromFiles('files');
+            if (!$files) {
+                return $this->getErrorResponse("File Not attached", 404, $data);
+            } else if (!$dataArray) {
+                return $this->getErrorResponse("Empty Dataset Sent", 404, $dataArray);
+            }
             if ($files['name']) {
                 $filesList = $this->attachmentService->upload($dataArray, array($files));
             } else {

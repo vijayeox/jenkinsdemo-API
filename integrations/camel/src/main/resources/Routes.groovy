@@ -1,5 +1,4 @@
-callback.URL = 'http4://localhost:8080'
-
+callback.URL = "http4://${System.getenv("HOST")}:8080"
 routes {
     route = [
         ['from':'activemq:topic:ORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/addorg"]],
@@ -36,7 +35,10 @@ routes {
                                                     "${callback.URL}/callback/chat/adduser"]],
         ['from':'activemq:topic:FILE_ADDED', 'to':["${callback.URL}/fileindexer"]],
         ['from':'activemq:topic:FILE_UPDATED', 'to':["${callback.URL}/fileindexer"]],
-        ['from':'activemq:topic:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]]
+        ['from':'activemq:topic:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]],
+        ['from':'activemq:topic:SEND_SMS', 'to':["${callback.URL}/callback/communication/sendsms"]],
+        ['from':'activemq:topic:MAKE_CALL', 'to':["${callback.URL}/callback/communication/makecall"]],
+        ['from':'activemq:topic:COMMANDS', 'to':["${callback.URL}/callback/workflow/servicetask"]]
         // ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}"]],
         // ['from':'activemq:topic:USER_DELETED', 'to':["${callback.URL}"]]
     ]

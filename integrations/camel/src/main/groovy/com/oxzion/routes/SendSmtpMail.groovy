@@ -46,7 +46,7 @@ public class SendSmtpMail extends RouteBuilder {
                             def recepientList = object.to instanceof String ? [object.to] : object.to as ArrayList
                             for (int i=0;i<recepientList.size();i++){
                                 def recepient = recepientList.get(i)
-                                if(recepientList.size()>1){
+                                if(i<recepientList.size()-1){
                                     toList += recepient+","
                                 } else {
                                     toList += recepient

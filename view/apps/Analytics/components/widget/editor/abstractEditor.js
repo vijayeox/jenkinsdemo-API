@@ -11,10 +11,13 @@ class AbstractEditor extends React.Component {
             readOnly: true,
             queries: [],
             configuration: '',
+            drillDownFilter:'',
+            drillDownWidget:'',
             expression: '',
             errors:{
                 configuration:null,
                 expression: null,
+                drillDown:{},
                 queries: []
             }
         };
@@ -38,6 +41,7 @@ class AbstractEditor extends React.Component {
                         'grouping': configuration ? (configuration.grouping ? JSON.parse(configuration.grouping) : null) : null,
                         'sort': configuration ? (configuration.sort ? JSON.parse(configuration.sort) : null) : null
                     }
+                    
                 });
             });
         }
@@ -58,10 +62,12 @@ class AbstractEditor extends React.Component {
                 queries.push({
                     'uuid':query.uuid,
                     'configuration':{
-                        'filter': configuration.filter ? JSON.stringify(configuration.filter, null, '    ') : '',
-                        'grouping': configuration.grouping ? JSON.stringify(configuration.grouping, null, '') : '',
-                        'sort': configuration.sort ? JSON.stringify(configuration.sort, null, '') : ''
-                    }
+                        'filter': configuration ? (configuration.filter ? JSON.stringify(configuration.filter, null, '    ') : '') : '',
+                        'grouping': configuration ? (configuration.grouping ? JSON.stringify(configuration.grouping, null, '') : '') : '',
+                        'sort': configuration ? (configuration.sort ? JSON.stringify(configuration.sort, null, '') : '') : ''
+                    },
+                    'value':query.uuid,
+                    
                 });
             });
         }
@@ -120,7 +126,7 @@ class AbstractEditor extends React.Component {
 
     querySelectionChanged = (evt, index) => {
         let thiz = this;
-        let value = evt.target.value;
+        let value = evt.value;
         this.setState((state) => {
             let queryObject = state.queries[index];
             queryObject.uuid = value;
@@ -327,11 +333,19 @@ class AbstractEditor extends React.Component {
     }
 
     loadData = (postLoadCallback) => {
-        let thiz = this;
-        let params = {
-            'queries':this.state.queries
+        let params = {};
+        let postUrl = '';
+        //when only single query is passed pass the uuid in url
+        if(this.state.queries && (this.state.queries.length === 1)) {
+            postUrl = 'analytics/query/' + this.state.queries[0].uuid + '?data=true';
+        }
+        else {
+            postUrl = 'analytics/query/data';
+            params['queries'] = this.state.queries;
         };
-        window.postDataRequest('analytics/query/data', params).
+
+        let thiz = this;
+        window.postDataRequest(postUrl, params).
             then(function(responseData) {
                 thiz.data = responseData.query.data;
                 if (postLoadCallback) {
@@ -351,7 +365,8 @@ class AbstractEditor extends React.Component {
 
     loadQueries = (postLoadCallback) => {
         let thiz = this;
-        window.postDataRequest('analytics/query').
+        window.postDataRequest('analytics/query?filter=' + 
+            encodeURIComponent('[{"take":500,"skip":0,"sort":[{"field":"name","dir":"asc"}]}]')).
             then(function(response) {
                 thiz.queryList = response.data;
                 thiz.forceUpdate();

@@ -3,7 +3,6 @@
 <head>
   <link href= "{$smarty.current_dir}/css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
-
 </head>
 <body onload = "agentInfo()">
  <div class = "m_div">
@@ -11,8 +10,9 @@
       <div class = "agent_info">
         <b class = "agent_info_title">Agent Information</b>
         <div class = "agent_1">
-         <p class ="info_margin" id ="nameVal"></p>
-         <p class ="add_margin" id = "addressVal"></p>
+         <p class ="info_margin1" id ="nameVal"></p>
+         <p class ="add_margin" id = "addressLineVal"></p>
+				 <p class ="add_margin" id = "addressLine2Val"></p>
          <p></p>
          <p class = "p_info">License#: {$license_number}</p>
        </div>
@@ -40,7 +40,7 @@
     <p class = "c_details">{$business_country},{$business_zip}</p>
   </div>
   <div class = "agent_info1">
-    <p class ="padi_margin"><b>Member#:</b> {$business_padi}
+    <p class ="padi_margin"><b>Member#:</b> {$padi}
     </div>
   </div>
   <div class = "spacing_div">&nbsp</div>
@@ -79,12 +79,12 @@
       </div>
       <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p></div>
       <div class="sec3">
-       <p class="value_align">{if isset($HullPremium)}
+       <p class="value_align">{if isset($HullPremium) && $HullPremium != '0.00'}
         ${$HullPremium|number_format:2:".":","}
         {else}
         N/A
       {/if}</p>
-      <p class="value_align">{if isset($DingyTenderPremium)}
+      <p class="value_align">{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
         ${$DingyTenderPremium|number_format:2:".":","}
         {else}
         N/A
@@ -95,11 +95,11 @@
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($HullPremium)}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($HullPremium) && $HullPremium != '0.00'}
         Included
         {else}
         N/A
-      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($DingyTenderPremium)}
+      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
         Included
         {else}
         N/A
@@ -115,7 +115,7 @@
         <p class="hull_title">Limit of Insurance:</p>
       </div>
       <div class="sec2"><p class="hull_title">US</p></div>
-      <div class="sec3"><p class="value_align">{if isset($TrailerPremium)}
+      <div class="sec3"><p class="value_align">{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
         ${$TrailerPremium|number_format:2:".":","}
         {else}
         N/A
@@ -125,7 +125,7 @@
       <div class="sec4">
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium)}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
         Included
         {else}
         N/A
@@ -164,13 +164,13 @@
       </div>
       <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
       <div class="sec3"><p class="value_align">{$totalLiabilityLimit}</p>
-      <p class="value_align">{if isset($CrewOnBoatPremium)}
+      <p class="value_align">{if isset($CrewOnBoatPremium) && $CrewOnBoatPremium != '0.00'}
                                 {$totalLiabilityLimit}
                              {else}
                                 NotCovered
                             {/if}
                              </p>
-      <p class="value_align">{if isset($CrewMembersinWaterPremium)}
+      <p class="value_align">{if isset($CrewMembersinWaterPremium) && $CrewMembersinWaterPremium != '0.00'}
                                 {$totalLiabilityLimit}
                              {else}
                                 NotCovered
@@ -182,11 +182,11 @@
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewOnBoatPremium)}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewOnBoatPremium) && $CrewOnBoatPremium != '0.00'}
         Included
         {else}
         N/A
-      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewMembersinWaterPremium)}
+      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewMembersinWaterPremium) && $CrewMembersinWaterPremium != '0.00'}
         Included
         {else}
         N/A
@@ -214,16 +214,22 @@
 <div>&nbsp</div>
 <hr></hr>
 <div class = "total">
-  <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$total}</span></p>
+  <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount|number_format:2:".":","}</span></p>
   <hr class="total_hr"></hr>
-  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee}</span></p>
+  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format:2:".":","}</span></p>
 </div>
+{if isset($navigation_limit_note) && $navigation_limit_note != ""}
 <hr class = "sec_title"></hr>
 <p class="nav"><b>Navigation Limits:</b></p>
 <p class="nav_title">While the Vessel is afloat, this policy covers only losses which occur within the navigation limits specified below:</p>
 <p class="nav_title2">{$navigation_limit_note}</p>
-
-<p><b>Deductibles:</b></p>
+{/if}
+{if isset($layup_period_from_date_time) && $layup_period_from_date_time != ''} 
+<hr></hr>
+<p class = "layup"><b>Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}</b></p>
+<hr></hr>
+{/if}
+<p class = "layup"><b>Deductibles:</b></p>
 <div>
   <p><span class = "sec_title">SECTION A - HULL INSURANCE:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>Hull Deductibles - 1.5% of value up to 25 years. 2.5% of value over 25 years.</span></p>
   <div class = "main_sec">
@@ -234,12 +240,12 @@
         <p class =" deduct">Personal Effects:</p>
       </div>
       <div class ="sector2">
-        <p  class="value_align">{if isset($DingyTenderPremium)}
+        <p  class="value_align">{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
         $1000.00
         {else}
         N/A
       {/if}</p>
-        <p class="value_align">{if isset($TrailerPremium)}
+        <p class="value_align">{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
         $1000.00
         {else}
         N/A

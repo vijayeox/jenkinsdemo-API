@@ -53,4 +53,58 @@ class IndexerImpl implements Indexer
             throw new Exception("Could not Delete Elastic Index", 0, $e);
         }
     }
+
+
+    public function bulk($body)
+    {
+        try {
+            $elasticService = new ElasticService($this->config);
+            $response = $elasticService->bulk($body);
+            return $response;
+        } catch (Exception $e) {
+            throw new Exception("Elastic:Could not Add Bulk Data", 0, $e);
+        }
+    }
+
+    public function bulkArray($appID,$body) {
+        $core = null;
+        if (isset($this->config['elasticsearch']['core'])) {
+            $core = $this->config['elasticsearch']['core'];
+        }
+        $elasticService = new ElasticService($this->config);
+        $index = $appID;
+        if (substr($index,-6)!="_index") {
+            $index = $index."_index";
+        }
+        $index = ($core) ? $core.'_'.$index:$index;
+        $i = 0;
+        $params = ['body' => []];
+        foreach ($body as $record) {
+            $params['body'][] = [
+                'index' => [
+                    '_index' => $index,
+                    '_id'    => $record['id']
+                ]
+            ];
+        
+            $params['body'][] = $record;
+        
+            // Every 1000 documents stop and send the bulk request
+            if ($i % 1000 == 0) {
+                $response = $elasticService->bulk($params);
+                // erase the old bulk request
+                $params = ['body' => []];
+        
+                // unset the bulk response when you are done to save memory
+                unset($response);
+            }
+            if (!empty($params['body'])) {
+                $response = $elasticService->bulk($params);
+            }
+            $i++;
+        }
+        return ;
+
+    }
+
 }

@@ -36,9 +36,13 @@ class MenuControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $query = "SELECT * from ox_app_menu where app_id = (SELECT id from ox_app where uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4')";
+        $appList = $this->executeQueryTest($query);
+        $this->assertEquals(count($appList), 5);
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'menu1');
-        $this->assertEquals($content['data'][1]['name'], 'menu2');
+        $this->assertEquals($content['data'][0]['submenu'][0]['name'], 'menu3');
+        $this->assertEquals($content['data'][1]['name'], 'menu5');
     }
 
     public function testGetListNotFound()

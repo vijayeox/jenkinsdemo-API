@@ -19,6 +19,7 @@ use Oxzion\Service\FormService;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Workflow\WorkFlowFactory;
 
+
 class WorkflowService extends AbstractService
 {
     private $id;
@@ -348,7 +349,7 @@ class WorkflowService extends AbstractService
         $params = array();
         $where = "where wf.uuid = :id and wd.latest=1";
         $params['id'] = $id;
-        if (isset($params['app_id'])) {
+        if (isset($appId)) {
             $where .= " and app.uuid = :appId";
             $params['appId'] = $appId;
         }
@@ -356,6 +357,7 @@ class WorkflowService extends AbstractService
     from ox_workflow wf inner join ox_workflow_deployment wd on wd.workflow_id = wf.id
     inner join ox_app as app on app.id = wf.app_id
     $where";
+
         $response = $this->executeQueryWithBindParameters($query, $params)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -378,6 +380,7 @@ class WorkflowService extends AbstractService
         } else {
             $workflowId = $workflowId;
         }
+
         $select = "select ox_form.name as formName,ox_form.uuid as id
     from ox_form
     left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
@@ -404,10 +407,18 @@ class WorkflowService extends AbstractService
         $field = "";
         $where = "";
         $joinQuery = "";
-        $sort = "";
+        $whereQuery = "";
+        $sort = "ORDER BY ox_file.date_created desc";
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
         $sortjoinQuery = "";
+        $appFilter = "ox_app.uuid ='" . $appId . "'";
+
+        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR ox_user_role.user_id = $userId) 
+                                OR ox_activity_instance_assignee.user_id = $userId)
+                                AND $appFilter AND ox_activity_instance.status = 'In Progress'
+                                AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
+
         if (!empty($filterParams)) {
             if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
                 $jsonParams = json_decode($filterParams['filter'], true);
@@ -438,13 +449,17 @@ class WorkflowService extends AbstractService
                 foreach ($filterData as $val) {
                     $tablePrefix = "tblf" . $prefix;
                     if (!empty($val)) {
+                        $filterOperator = $this->fileService->processFilters($val);
+                        if ($val['field'] == 'entity_name') {
+                            $whereQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                            continue;
+                        }
                         if ($subQuery != '') {
                             $subQuery .= " " . $filterlogic . " ox_file.id in ";
                         } else {
                             $subQuery = " ox_file.id in ";
                         }
                         $subQuery .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as " . $val['field'] . $tablePrefix . " on( " . $val['field'] . $tablePrefix . ".id = " . $tablePrefix . ".field_id )";
-                        $filterOperator = $this->fileService->processFilters($val);
                         $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                         $subQuery .= " WHERE ";
                         $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN CAST(" . $tablePrefix . ".field_value AS DATETIME) $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='int') THEN " . $tablePrefix . ".field_value " . (($filterOperator['integerOperation'])) . " '" . $val['value'] . "' ELSE (" . $tablePrefix . ".field_value $queryString) END )))";
@@ -460,26 +475,23 @@ class WorkflowService extends AbstractService
                 $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
             }
         }
-        $appFilter = "ox_app.uuid ='" . $appId . "'";
         $fromQuery = "FROM ox_workflow
     INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
     INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id
     INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
-    INNER JOIN ox_file on ox_file.workflow_instance_id = ox_workflow_instance.id
+    INNER JOIN ox_file on ox_file.id = ox_workflow_instance.file_id
     INNER JOIN ox_app_entity on ox_app_entity.id = ox_file.entity_id
     INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
     INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
-    LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
-    LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
-        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId AND ox_activity_instance_assignee.user_id is null)
-    OR ox_activity_instance_assignee.user_id = $userId
-    OR ox_activity_instance_assignee.group_id is null
-    OR ox_activity_instance_assignee.id is null)
-    AND $appFilter AND ox_activity_instance.status = 'In Progress'
-    AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " " . $where;
-        // if (!empty($sort)) {
-        //     $sort = " ORDER BY " . $sort;
-        // }
+    LEFT JOIN (SELECT  oxi.id,oxi.activity_instance_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_activity_instance_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_activity_instance_assignee GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee
+        UNION  
+        SELECT oaia.id,oaia.activity_instance_id,oaia.user_id,2,oaia.role_id,oaia.group_id FROM ox_activity_instance_assignee AS oaia INNER JOIN (SELECT activity_instance_id FROM ox_activity_instance_assignee GROUP BY activity_instance_id HAVING max(assignee) = 1) AS oxaia1 ON oaia.activity_instance_id = oxaia1.activity_instance_id WHERE oaia.assignee = 0 AND oaia.user_id is not NULL) as ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
+    LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id
+    LEFT JOIN ox_user_role ON ox_activity_instance_assignee.role_id = ox_user_role.role_id";
+
+        if (strlen($whereQuery) > 0) {
+            $whereQuery .= " " . $where;
+        }
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
@@ -487,10 +499,12 @@ class WorkflowService extends AbstractService
 
         $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
     ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,ox_app_entity.name as entity_name,
-    ox_activity.name as activityName,
-    CASE WHEN ox_activity_instance_assignee.user_id is not null then false
-    else true end as to_be_claimed $field $fromQuery $whereQuery $sort $pageSize $offset";
-        $this->logger->info("Executing query - $querySet");
+    ox_activity.name as activityName, ox_file.date_created,
+    CASE WHEN ox_activity_instance_assignee.assignee = 0 then 1
+    WHEN ox_activity_instance_assignee.assignee = 1 AND ox_activity_instance_assignee.user_id = $userId then 0 else 2
+    end as to_be_claimed $field $fromQuery $whereQuery $sort $pageSize $offset";
+
+        $this->logger->info("Executing Assignment listing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         $result = array();
         foreach ($resultSet as $key => $value) {
@@ -542,6 +556,14 @@ class WorkflowService extends AbstractService
         $sortTable = "tblf" . $sortCount;
         $sort = " ORDER BY ";
         foreach ($sortOptions as $key => $value) {
+            if ($value['field'] == 'entity_name') {
+                if ($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " ox_app_entity.name ";
+                $sortCount++;
+                continue;
+            }
             if ($sortCount == 0) {
                 $sort .= $value['field'] . " " . $value['dir'];
             } else {

@@ -9,7 +9,7 @@ module.exports = function(core, proc) {
     console.log(req.params);
     if (req.params.productName) {
       var filePath = path.join(
-        __dirname + "/public/register/" + req.params.productName + ".json"
+        __dirname + "/public/register/padiRegistrationConsolidation.json"
       );
       if (fs.existsSync(filePath)) {
         fs.readFile(filePath, function(err, buf) {
@@ -32,18 +32,20 @@ module.exports = function(core, proc) {
               <meta charSet="UTF-8" />
               <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
               <meta name="viewport" content="width=device-width, initial-scale=1" />
-              <link rel="stylesheet" type="text/css" href="../css/custom.css" />
+              <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
               <link rel="stylesheet" type="text/css" href="../css/formio.full.min.css" />
-              <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+              <link rel="stylesheet" type="text/css" href="../css/custom.css" />
               <script type="text/javascript">
                 var formContent = JSON.stringify(${buf});
                 var appId='${appId}';
+                var productName='${req.params.productName}';
                 var baseUrl="${core.config("api.url")}";
               </script>
             </head>
             <body>
               <div id="root">${component}</div>
               <script src="../js/country.js"></script>
+              <script src="../js/phonelist.js"></script>
               <script src="../js/jquery.min.js"></script>
               <script src="../js/formio.full.min.js"></script>
               <script src="../js/custom.js"></script>

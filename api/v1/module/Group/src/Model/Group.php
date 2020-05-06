@@ -2,14 +2,13 @@
 namespace Group\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class Group extends Entity
 {
     protected $data = array(
         'id' => null,
         'uuid' => null,
-        'name'=> '',
+        'name' => '',
         'parent_id' => null,
         'org_id' => null,
         'manager_id' => null,
@@ -18,7 +17,7 @@ class Group extends Entity
         'date_created' => null,
         'date_modified' => null,
         'created_id' => null,
-        'modified_id' => null
+        'modified_id' => null,
     );
 
     public function validate()

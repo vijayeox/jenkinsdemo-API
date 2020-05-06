@@ -11,6 +11,7 @@ import org.camunda.bpm.engine.impl.util.xml.Element
 import java.util.logging.Logger
 
 class CustomProcessEngine extends AbstractBpmnParseListener {
+  static final long serialVersionUID = -757671492884005066L
   private final Logger LOGGER = Logger.getLogger(this.getClass().getName())
      @Override
   void parseUserTask(Element userTaskElement, ScopeImpl scope, ActivityImpl activity) {

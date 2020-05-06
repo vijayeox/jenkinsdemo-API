@@ -6,7 +6,9 @@
     overflow-x:hidden;
     overflow-y:auto;
 }
-
+#widgetEditorDialog .flippy-front,#widgetEditorDialog .flippy-front{
+    height: auto;
+}
 .no-left-margin {
     margin-left:0px;
 }
@@ -80,5 +82,41 @@
     border-bottom: 1px solid #dee2e6;
 }
 /* End - styling react-bootstrap tabs. */
+.create-widget-div{
+    height: 9vh;
+}
+.disappear{
+    display:none;
+}
 
+.widget-editor-form .flippy-back{
+    box-shadow: none;
+}
 
+.drilldown-div{
+    height: 100%;
+    padding: 1em;
+}
+
+.drilldown-div .btn{
+    margin-left: 0em;
+}
+
+.action-button-box {
+    padding-left:0px;
+    padding-right:0px;
+    min-width:210px;
+}
+
+.action-button-box > button {
+    margin-left:5px;
+    margin-right:5px;
+}
+
+#aggregateRefreshBtn , #chartRefreshBtn , #tableRefreshBtn{
+    float:right;
+}
+
+.widget-action-btn{
+    height: 35px;
+}

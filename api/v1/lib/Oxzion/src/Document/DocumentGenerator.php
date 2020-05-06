@@ -10,5 +10,7 @@ interface DocumentGenerator
 
     public function mergeDocuments(array $sourceArray,$destination);
 
+    public function fillPDFForm($template,$data,$destination);
+
     // public function overlayDocument($sourcePdf,$destination,$data);
 }

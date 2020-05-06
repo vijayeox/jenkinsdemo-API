@@ -29,7 +29,7 @@
                     <tr>
                         <td>Business Income:</td>
                         {if $additionalLossofBusinessIncomePL != "false"}
-                            <td>${$lossOfBusIncome|number_format:2:".":","}</td>
+                            <td>${((float)$lossOfBusIncome)|number_format:2:".":","}</td>
                         {else}
                             <td>$0</td>
                         {/if}
@@ -44,7 +44,7 @@
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
-                        {if (int)$dspropFurniturefixturesandequip != 0}
+                        {if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>
@@ -93,81 +93,81 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == ""}
                             <td>$1,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$10,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == ""}
                             <td>$1,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$10,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == ""}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             <td>$6,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$11,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == ""}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             <td>$6,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$11,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Damage to premises rented to you:</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == ""}
                             <td>$1,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$10,000,000</td>
                         {/if}
                     </tr>
@@ -185,7 +185,7 @@
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        {if $poolLiability && (int)$poolLiability > 0}
+                        {if isset($poolLiability) && (int)$poolLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -195,7 +195,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+                        {if isset($travelAgentEOReceiptsPL) && (int)$travelAgentEOReceiptsPL > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -203,7 +203,7 @@
                     </tr>
                     <tr>
                         <td>Group Professional Liability:</td>
-                        {if $groupProfessionalLiability && (int)$groupProfessionalLiability > 0}
+                        {if isset($groupProfessionalLiability) && (int)$groupProfessionalLiability > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -211,7 +211,7 @@
                     </tr>
                     <tr>
                         <td>Group Professional Liability Aggregate:</td>
-                        {if $groupProfessionalLiability && (int)$groupProfessionalLiability > 0}
+                        {if isset($groupProfessionalLiability) && (int)$groupProfessionalLiability > 0}
                             <td>$2,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -228,7 +228,8 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is ${$PropDeductibleCredit}}.</td>
+                            Mechanical breakdown is $2500. All other perils is {if isset($PropDeductibleCredit)}${$PropDeductibleCredit}}.{else}$0.00{/if}
+                            </td>
                     </tr>
                 </tbody>
             </table>
@@ -589,7 +590,7 @@
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${if $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format:2:".":","}{else}0{/if})</p>
+                <p>(Based on estimated annual receipts of ${if isset($estimatedAnnualReceipts) &&  $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format:2:".":","}{else}0{/if})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
                 <p>Dive Center Additional Location Premium:</p>
@@ -614,14 +615,14 @@
         <!-- second section -->
         <div class="main">
             <div class="value_main">
-                <p>${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}</p>
+                <p>{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>${(float)$groupTaxAmount|number_format:2:".":","}</p>
-                <p>${(float)$groupPadiFeeAmount|number_format:2:".":","}</p>
+                <p>{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2:".":","}{else}$0.00{/if}</p>
+                <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format:2:".":","}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
-                <p>(Based on estimated annual group receipts of ${$groupReceipts})</p>
+                <p>(Based on estimated annual group receipts of {if isset($groupReceipts)}${(float)$groupReceipts|number_format:2:".":","}}.{else}$0.00{/if})</p>
                 <p>Dive Center Group Instructional Program Surplus Lines Tax:</p>
                 <p>Dive Center Group Instructional Program PADI Administration Fee:</p>
             </div>
@@ -631,7 +632,7 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-                <p>${$groupTotalAmount|number_format:2:".":","}</p>
+                <p>{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2:".":","}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>

@@ -17,6 +17,7 @@ abstract class DelegateTest extends ServiceTest
     protected $database;
     protected static $pdo = null;
     protected static $connection = null;
+    protected $appDbAdapter; // HANDLING ROLLBACK ONLY FOR APP DB LIKE IN ABSTRACT SERVICE TEST
 
     public function getConnection()
     {
@@ -35,7 +36,8 @@ abstract class DelegateTest extends ServiceTest
         $config = $this->getApplicationConfig();
         $this->migrationObject = new Migration($config, $this->appName, $this->appUuid, $this->description);
         $adapter = $this->migrationObject->getAdapter();
-        $this->setDbAdapter($adapter);
+        $this->appDbAdapter = $adapter;
+        // $this->setDbAdapter($adapter);
         $this->persistence = new Persistence($config, $this->appName, $this->appUuid);
         $this->persistence->setAdapter($adapter);
         $this->database = $this->migrationObject->getDatabase();

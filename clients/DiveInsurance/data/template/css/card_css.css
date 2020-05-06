@@ -269,3 +269,8 @@ p.break { page-break-after: always; }
 .number{
   max-width: 300px;
 }
+
+.quote_list{
+  margin:1px;
+  padding:0px;
+}

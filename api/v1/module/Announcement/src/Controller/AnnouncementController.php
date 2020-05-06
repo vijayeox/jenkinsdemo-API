@@ -43,6 +43,7 @@ class AnnouncementController extends AbstractApiController
      * <code> name : string,
      *        status : string,
      *        description : string,
+     *        link : string,
      *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *        media_type : string,
@@ -57,15 +58,18 @@ class AnnouncementController extends AbstractApiController
     public function create($data)
     {
         $params = $this->params()->fromRoute();
-        $this->log->info(__CLASS__ . "-> \nCreate announcement - " . print_r($data, true) . "Parameters - " . print_r($params, true));
+        $this->log->info("-> \nCreate announcement - " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
             $count = $this->announcementService->createAnnouncement($data, $params);
         } catch (ValidationException $e) {
+        $this->log->error("-> \nValidationException -".$e->getMessage(), $e);
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (ServiceException $e) {
+            $this->log->error("-> \nServiceException -".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         } catch (Exception $e) {
+            $this->log->error("-> \nCreate announcement -".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponseWithData($data, 201);
@@ -81,6 +85,7 @@ class AnnouncementController extends AbstractApiController
      *  string name,
      *  string status,
      *  string description,
+     *  link : string,
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
@@ -114,6 +119,7 @@ class AnnouncementController extends AbstractApiController
      *  string name,
      *  string status,
      *  string description,
+     *  string link
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
@@ -132,10 +138,13 @@ class AnnouncementController extends AbstractApiController
             $count = $this->announcementService->updateAnnouncement($id, $data, $orgId);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $this->log->error("-> \nupdateAnnouncement -".$e->getMessage(), $e);
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (ServiceException $e) {
+            $this->log->error("-> \nupdateAnnouncement - ServiceException".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         } catch (Exception $e) {
+            $this->log->error("-> \nupdateAnnouncement - Exception".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
@@ -155,6 +164,7 @@ class AnnouncementController extends AbstractApiController
         try {
             $response = $this->announcementService->deleteAnnouncement($id, $params);
         } catch (ServiceException $e) {
+            $this->log->error("-> \n deleteAnnouncement - ServiceException".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponse();
@@ -173,6 +183,7 @@ class AnnouncementController extends AbstractApiController
      *  integer org_id,
      *  string status,
      *  string description,
+     *  string link,
      *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
@@ -188,7 +199,7 @@ class AnnouncementController extends AbstractApiController
         try {
             $result = $this->announcementService->getAnnouncement($id, $params);
         } catch (AccessDeniedException $e) {
-            $this->logger->error('Error occured during get announcement for ID - ' . print_r($id, true));
+            $this->log->error('Error occured during get announcement for ID - ' . print_r($id, true));
             return $this->getErrorResponse($e->getMessage(), 403);
         }
         return $this->getSuccessResponseWithData($result);
@@ -207,8 +218,10 @@ class AnnouncementController extends AbstractApiController
         try {
             $result = $this->announcementService->getAnnouncementsList($filterParams, $params);
         } catch (AccessDeniedException $e) {
+            $this->log->error('\ngetAnnouncementsList AccessDeniedException - ' .$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 403);
         } catch (Exception $e) {
+            $this->log->error("-> \ngetAnnouncementsList - Exception".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);

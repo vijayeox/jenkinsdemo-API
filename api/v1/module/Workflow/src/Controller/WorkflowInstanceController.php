@@ -106,6 +106,47 @@ class WorkflowInstanceController extends AbstractApiController
         }
     }
 
+    public function unclaimActivityInstanceAction()
+    {
+        $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $this->log->info("Post Data- " . print_r(json_encode($data), true));
+        try {
+            $response = $this->activityInstanceService->unclaimActivityInstance($data);
+            $this->log->info("Unclaim Activity Instance Successful");
+            if ($response == 0) {
+                return $this->getErrorResponse("Entity not found", 404);
+            }
+            return $this->getSuccessResponse();
+        } 
+        catch (WorkflowException $e) {
+            $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
+            return $this->getErrorResponse($e->getMessage(), 409);
+        }
+    }
+
+    public function reclaimActivityInstanceAction()
+    {
+        $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $this->log->info("Post Data- " . print_r(json_encode($data), true));
+        try {
+            $response = $this->activityInstanceService->reclaimActivityInstance($data);
+            $this->log->info("Reclaim Activity Instance Successful");
+            if ($response == 0) {
+                return $this->getErrorResponse("Entity not found", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch (ValidationException $e) {
+            $this->log->info("Exception at reclaim Activity Instance-" . $e->getMessage());
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (WorkflowException $e) {
+            $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
+            return $this->getErrorResponse($e->getMessage(), 409);
+        }
+    }
+
+
+
     public function activityInstanceFormAction()
     {
         $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
@@ -139,5 +180,33 @@ class WorkflowInstanceController extends AbstractApiController
             return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
         return $this->getSuccessResponseWithData($result, 200);
+    }
+
+    public function getActivityLogAction(){
+        $params = $this->params()->fromRoute();
+        try{
+            $result = $this->workflowInstanceService->getActivityLog($params['fileId'], $params['appId']);
+            if ($result == 0) {
+                return $this->getErrorResponse("No Activity found for the specified file", 404, ['id' => $fileId]);
+            }
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }
+        return $this->getSuccessResponseWithData($result,200);
+    }
+
+    public function getFieldDiffAction(){
+        $params = $this->params()->fromRoute();
+        try{
+            $result = $this->activityInstanceService->getActivityChangeLog($params['activityInstanceId']);
+            if (count($result) == 0) {
+                return $this->getErrorResponse("No Activity found for the specified ID", 404, ['id' => $params['activityInstanceId']]);
+            }
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }
+        return $this->getSuccessResponseWithData($result,200);
     }
 }

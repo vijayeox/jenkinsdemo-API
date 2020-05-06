@@ -1,16 +1,15 @@
 import React from 'react';
 import $ from 'jquery';
 import { name as applicationName } from './metadata.json';
-// import DataSource from './dataSource';
-import { Query, DataSource } from './GUIComponents'
-// import Query from './query';
-import Dashboard from './dashboard';
+import { Query, DataSource, DashboardManager, WidgetManager } from './GUIComponents'
 import { slide as Menu } from 'react-burger-menu';
 
 const SECTION_DATA_SOURCE = 'DS'; //DataSource
 const SECTION_QUERY = 'QR'; //QueRy
 const SECTION_DASHBOARD = 'DB'; //DashBoard
 const SECTION_EDIT_DASHBOARD = 'EDB'; //Edit DashBoard
+const SECTION_WIDGET = 'WD'; //Edit DashBoard
+
 
 class Body extends React.Component {
   constructor(props) {
@@ -70,6 +69,7 @@ class Body extends React.Component {
 
   render() {
     let sectionContent;
+    console.log("Inside the body render");
     switch (this.state.displaySection) {
       case SECTION_DATA_SOURCE:
         sectionContent = <DataSource args={this.core} setTitle={this.setTitle} />;
@@ -78,7 +78,10 @@ class Body extends React.Component {
         sectionContent = <Query args={this.core} setTitle={this.setTitle} />;
         break;
       case SECTION_DASHBOARD:
-        sectionContent = <Dashboard args={this.core} setTitle={this.setTitle} editDashboard={this.editDashboard} />;
+        sectionContent = <DashboardManager args={this.core} proc={this.props.proc} setTitle={this.setTitle} editDashboard={this.editDashboard} />;
+        break;
+      case SECTION_WIDGET:
+        sectionContent = <WidgetManager args={this.core} setTitle={this.setTitle} editDashboard={this.editDashboard} />;
         break;
     }
 
@@ -88,13 +91,16 @@ class Body extends React.Component {
           disableAutoFocus width="20%"
           outerContainerId="page-body" pageWrapId="page-content">
           <a className="menu-item" onClick={(e) => { this.switchSection(SECTION_DATA_SOURCE, null) }}>
-            <i class="fa fa-database" aria-hidden="true"></i> Data Source
+            <i className="fa fa-database" aria-hidden="true"></i> Data Source
                 </a>
           <a className="menu-item" onClick={(e) => { this.switchSection(SECTION_QUERY, null) }}>
-            <i class="fa fa-search" aria-hidden="true"></i> Query
+            <i className="fa fa-search" aria-hidden="true"></i> Query
                 </a>
           <a className="menu-item" onClick={(e) => { this.switchSection(SECTION_DASHBOARD, null) }}>
-            <i class="fa fa-tasks" aria-hidden="true"></i> Dashboard
+            <i className="fa fa-tasks" aria-hidden="true"></i> Dashboard
+                  </a>
+          <a className="menu-item" onClick={(e) => { this.switchSection(SECTION_WIDGET, null) }}>
+            <i className="fa fa-cubes" aria-hidden="true"></i> Widget Manager
                   </a>
         </Menu>
         <div className="page-title full-width">{this.state.title}</div>

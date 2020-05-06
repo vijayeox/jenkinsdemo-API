@@ -46,12 +46,12 @@
                   </div>
                   <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p></div>
                   <div class="sec3">
-                  	<p class="value_align">{if isset($HullPremium)}
+                  	<p class="value_align">{if isset($HullPremium) && $HullPremium != '0.00'}
                               ${$HullPremium|number_format:2:".":","}
                               {else}
                               N/A
                             {/if}</p>
-                   <p class="value_align">{if isset($DingyTenderPremium)}
+                   <p class="value_align">{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
                               ${$DingyTenderPremium|number_format:2:".":","}
                               {else}
                               N/A
@@ -62,11 +62,11 @@
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                   </div>
-                   <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($HullPremium)}
+                   <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($HullPremium) && $HullPremium != '0.00'}
         Included
         {else}
         N/A
-      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($DingyTenderPremium)}
+      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
         Included
         {else}
         N/A
@@ -84,17 +84,17 @@
                           <p class="hull_title">Limit of Insurance:</p>
                       </div>
                       <div class="sec2"><p class="hull_title">US</p></div>
-                     <div class="sec3"><p class="value_align">{if isset($TrailerPremium)}
+                     <div class="sec3"><p class="value_align">{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
                             ${$TrailerPremium|number_format:2:".":","}
                             {else}
                             N/A
-                          {/if}}</p></div>
+                          {/if}</p></div>
               </div>
               <div class = "div_section1">
                       <div class="sec4">
                           <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                     </div>
-                     <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium)}
+                     <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
         Included
         {else}
         N/A
@@ -132,14 +132,14 @@
                       <p class="hull_title">Limit of Insurance - Crew in the Water:</p>
                   </div>
                   <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
-                  <div class="sec3"><p class="value_align">{$totalLiabilityLimit}</p>
-                  	<p class="value_align">{if isset($CrewOnBoatPremium)}
-                                {$totalLiabilityLimit}
+                  <div class="sec3"><p class="value_align">{$totalLiabilityLimit|number_format:2:".":","}</p>
+                  	<p class="value_align">{if isset($CrewOnBoatPremium) && $CrewOnBoatPremium != '0.00'}
+                                {$totalLiabilityLimit|number_format:2:".":","}
                              {else}
                                 NotCovered
                             {/if}</p>
-                  	<p class="value_align">{if isset($CrewMembersinWaterPremium)}
-                                {$totalLiabilityLimit}
+                  	<p class="value_align">{if isset($CrewMembersinWaterPremium) && $CrewMembersinWaterPremium != '0.00'}
+                                {$totalLiabilityLimit|number_format:2:".":","}
                              {else}
                                 NotCovered
                              {/if}</p></div>
@@ -150,18 +150,24 @@
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                   </div>
-                  <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewOnBoatPremium)}
+                  <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewOnBoatPremium) && $CrewOnBoatPremium != '0.00'}
         Included
         {else}
         N/A
-      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewMembersinWaterPremium)}
+      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewMembersinWaterPremium) && $CrewMembersinWaterPremium != '0.00'}
         Included
         {else}
         N/A
       {/if}</p></div>
     </div>
 </div>
-<p class = "sec_title"><b>SECTION C - MEDICAL PAYMENTS </b></p>
+</div>
+<div>&nbsp</div>
+<div>&nbsp</div>
+<div>&nbsp</div>
+<div style = "margin-top: 0px;">&nbsp</div>
+<hr class = "hr_secA"></hr>
+<p class = "sec_title_med"><b>SECTION C - MEDICAL PAYMENTS </b></p>
 <div class = "section_divi">
           <div class = "div_section">
                   <div class="sec9">
@@ -178,38 +184,43 @@
           </div>
     </div>
 <div>&nbsp</div>
-<div>&nbsp</div>
     <hr></hr>
     <div class = "total">
-      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$total}</span></p>
+      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount|number_format:2:".":","}</span></p>
       <hr class="total_hr"></hr>
-      <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee}</span></p>
+      <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format:2:".":","}</span></p>
     </div>
 <hr class = "sec_title"></hr>
+{if isset($navigation_limit_note) && $navigation_limit_note != ""}
 <p class="nav"><b>Navigation Limits:</b></p>
 <p class="nav_title">While the Vessel is afloat, this policy covers only losses which occur within the navigation limits specified below:</p>
 <p class="nav_title2">{$navigation_limit_note}</p>
-
-<p><b>Deductibles:</b></p>
+{/if}
+{if isset($layup_period_from_date_time) && $layup_period_from_date_time != ""}
+<hr></hr>
+<p class = "layup"><b>Layup Period is from {$layup_period_from_date_time|date_format:"%d %B %Y"} to {$layup_period_to_date_time|date_format:"%d %B %Y"}</b></p>
+<hr></hr>
+{/if}
+<p class = "layup"  ><b>Deductibles:</b></p>
 <div>
-  <p><span class = "sec_title">SECTION A - HULL INSURANCE:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>Hull Deductibles - 1.5% of value up to 25 years. 2.5% of value over 25 years.</span></p>
+  <p style = "margin:0px;"><span class = "sec_title">SECTION A - HULL INSURANCE:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>Hull Deductibles - 1.5% of value up to 25 years. 2.5% of value over 25 years.</span></p>
   <div class = "main_sec">
     <div class ="sector">
         <div class = "sector1">
-          <p>Dinghy/Tender:</p>
-          <p>Trailer:</p>
-          <p>Personal Effects:</p>
+          <p class="value_align1">Dinghy/Tender:</p>
+          <p class="value_align1">Trailer:</p>
+          <p class="value_align1">Personal Effects:</p>
         </div>
         <div class ="sector2">
           <p  class="value_align">
-                            {if isset($DingyTenderPremium)}
+                            {if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
                             $1000.00
                             {else}
                             N/A
                           {/if}
                   					</p>
           <p class="value_align">
-                  						{if isset($TrailerPremium)}
+                  						{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
                               $1000.00
                               {else}
                               N/A
@@ -220,9 +231,9 @@
     </div>
     <div class = "sector3">
       <div class = "sector4">
-         <p>SECTION B - LIABILITY INSURANCE:</p>
-          <p>&nbsp</p>
-          <p>SECTION C - MEDICAL PAYMENTS</p>
+         <p class="value_align1">SECTION B - LIABILITY INSURANCE:</p>
+          <p class="value_align1">&nbsp</p>
+          <p class="value_align1">SECTION C - MEDICAL PAYMENTS</p>
       </div>
         <div class = "sector5">
            <p class="value_align">$1,000.00</p>
@@ -233,190 +244,232 @@
   </div>
 
 </div>
-
-<p>The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92668.
+<p style = "font-size: 12px;margin-top: 10%;text-align:justify;margin-bottom: 0px;padding-bottom: 0px;">The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92668.
 The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full
 description of the terms, conditions and exclusions of the policy. This certificate does not amend, alter or extend the coverage afforded by the policy
 referenced on this certificate.
 Notice of cancelation: If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of
 premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.</p>
-<hr></hr>
 
 
-            {if $business_state == 'Alaska'}
+      {if $business_state == 'Alaska'}
+        <hr></hr>
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AK.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Alabama'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AL.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Arkansas'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AR.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Arizona'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AZ.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Colorado'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/CO.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Connecticut'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/CT.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'District of Columbia'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/DC.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Delaware'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/DE.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Florida'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/FL.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Micronesia'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/FM.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Georgia'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/GA.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Hawaii'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/HI.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Iowa'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/IA.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Idaho'}
-				<center><p class = "notice" style = "color:red;">
+				<hr></hr>
+        <center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/ID.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Illinois'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/IL.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'International'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/International.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Kansas'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/KS.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Kentucky'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/KY.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Louisiana'}
-				<center><p class = "notice" style = "color:red;">
+				<hr></hr>
+        <center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/LA.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Massachusetts'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MA.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Maryland'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MD.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Maine'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/ME.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Marshall Islands'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MH.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Michigan'}
-				<center><p class = "notice" style = "color:red;">
+				<hr></hr>
+        <center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MI.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Minnesota'}
-				<center><p class = "notice" style = "color:red;">
+				<hr></hr>
+        <center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MN.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Missouri'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MO.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Mississippi'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MS.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Montana'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MT.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'North Carolina'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NC.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'North Dakota'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/ND.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Nebraska'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NE.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'New Hampshire'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NH.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'New Jersey'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NJ.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'New Mexico'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NM.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Nevada'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NV.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'New York'}
-				<center><p class = "notice" style = "color:red;">
+				<hr></hr>
+        <center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NY.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Ohio'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/OH.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Oklahoma'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/OK.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Oregon'}
-				<center><center><p class = "notice">
+				<hr></hr>
+        <center><center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/OR.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Pennsylvania'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/PA.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Palau'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/PW.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Rhode Island'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/RI.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'South Carolina'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/SC.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'South Dakota'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/SD.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Tennessee'}
@@ -424,39 +477,46 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/TN.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Texas'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/TX.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Utah'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/UT.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Virginia'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/VA.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Virgin Islands'}
-				<center><p class = "notice" style = "color:red;">
+				<hr></hr>
+        <center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/VT.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Washington'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WA.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Wisconsin'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WI.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'West Virginias'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WV.tpl"}</b>
 				</p></center>
 			{elseif $business_state == 'Wyoming'}
-				<center><p class = "notice">
+				<hr></hr>
+        <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WY.tpl"}</b>
 				</p></center>
 			{/if}
-
   </div>
 </body>
 </html>

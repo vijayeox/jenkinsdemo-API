@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_15ktrj6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
-  <bpmn:process id="Process_005xob3" isExecutable="true">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_15ktrj6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="CancelEFR" name="EFR Cancel Policy" isExecutable="true">
     <bpmn:endEvent id="EndEvent_0wm5ke0" name="Approved">
       <bpmn:incoming>SequenceFlow_0trljpl</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="UserTask_1bmka00" name="Cancellation Approval" camunda:asyncAfter="true">
+    <bpmn:userTask id="UserTask_1bmka00" name="Cancellation Approval" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="cancelPolicyGeneric" />
@@ -22,6 +22,7 @@
               <camunda:value>{"command" : "cancelJob", "jobName" : "autoRenewalJob"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchCancelPolicyNotification"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
@@ -48,9 +49,8 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate":"CancelPolicy"}</camunda:value>
-              <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchCancelPolicyNotification"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
@@ -65,13 +65,13 @@
     <bpmn:exclusiveGateway id="ExclusiveGateway_0qojjhv" camunda:asyncAfter="true" default="SequenceFlow_16e706u">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="Groovy">def reasonforUC = execution.getVariable('reasonforUserCancellation')
+          <camunda:script scriptFormat="Groovy">def reasonforUC = execution.getVariable('reasonForUserCancellation')
 if(reasonforUC){
-	execution.setVariable("reasonforCsrCancellation",reasonforUC)
-	if(reasonforUC=='others'){
-		def othersReason = execution.getVariable('othersUser')
-	  	execution.setVariable("othersCsr",othersReason)
-	}
+  execution.setVariable("csrCancellationReason",reasonforUC)
+}
+def CancellationStatus = execution.getVariable('cancellationStatus')
+if(!CancellationStatus){
+  execution.setVariable('cancellationStatus','')
 }</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
@@ -109,7 +109,7 @@ if(reasonforUC){
     </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_005xob3">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CancelEFR">
       <bpmndi:BPMNShape id="EndEvent_0wm5ke0_di" bpmnElement="EndEvent_0wm5ke0">
         <dc:Bounds x="1152" y="192" width="36" height="36" />
         <bpmndi:BPMNLabel>

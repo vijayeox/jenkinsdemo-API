@@ -13,7 +13,9 @@ class DispatchAutoRenewalNotification extends DispatchNotification {
     public function __construct(){
         $this->template = array(
             'Individual Professional Liability' => 'COIAutoRenewalNotiMailTemplate',
-            'Emergency First Response' => 'EFR_AutoRenewal_Notification');
+            'Emergency First Response' => 'EFR_AutoRenewal_Notification',
+            'Dive Boat' => 'DiveBoat_AutoRenewal_Notification',
+            'Dive Store' => 'DiveStore_AutoRenewal_Notification');
         parent::__construct();
     }
 

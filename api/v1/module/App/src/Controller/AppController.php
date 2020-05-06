@@ -219,7 +219,7 @@ class AppController extends AbstractApiController
                 return $this->getErrorResponse("No Apps to display", 404);
             }
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
         }
         return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
@@ -254,8 +254,6 @@ class AppController extends AbstractApiController
      * @api
      * @link /app/:appId/assignments
      * @method POST
-     * ! Deprecated - This function does not have a test cases to it, not sure if we are using this api
-     * ? Need to check if this needs to be removed. We have the new getFileList api that can be used to get the list of all the assignments.
      * @return array of Apps
      */
     public function assignmentsAction()
@@ -279,9 +277,13 @@ class AppController extends AbstractApiController
      * @api
      * @link /app/appdeployyml
      * @method GET
-     * @param null </br>
-     * <code>
-     * </code>
+     * @param  $path - Enter the path of the Application to deploy.
+     * @param  $parameters(optional) - Enter the parameters option in a CSV 
+     * format to deploy and these options can be specified in any order. 
+     * It is recommended that if you are deploying for the first time,
+     * then specify the 'initialize' option first and then specify other options. 
+     * Parameters options are : 
+     * initialize, entity, workflow, form, menu, page, job
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
      * </code>
@@ -294,11 +296,25 @@ class AppController extends AbstractApiController
             try {
                 $path = $params['path'];
                 $path .= substr($path, -1) == '/' ? '' : '/';
-                $this->appService->deployApp($path);
+                if(isset($params['parameters']) && !empty($params['parameters'])){
+                    $params['parameters'] = strtolower($params['parameters']);
+                    $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
+                    $params['parameters'] = rtrim($params['parameters'],",");
+                    $params['parameters'] = ltrim($params['parameters'],",");
+                    if(strpos($params['parameters'], ',') !== false){
+                        $params = explode(",",$params['parameters']);
+                    }else{
+                        $params = array($params['parameters']);
+                    }                    
+                }
+                else{
+                    $params = null;
+                }
+                $this->appService->deployApp($path, $params);
                 return $this->getSuccessResponse(200);
             } catch (ValidationException $e) {
                 $this->log->error($e->getMessage(), $e);
-                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                $response = ['data' => $params, 'errors' => $e->getErrors()];
                 return $this->getErrorResponse("Validation Errors", 406, $response);
             } catch (ServiceException $e) {
                 $this->log->error($e->getMessage(), $e);

@@ -3,6 +3,7 @@
 <head>
 <link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="./AgentInfo.js"></script>
+<script type="text/javascript" src="./js/moment.js"></script>
 <script>
   function subst() {
       var vars = {};
@@ -16,19 +17,34 @@
               vars[temp_var[0]] = decodeURI(temp_var[1]);
           }
       }
-      // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','update_date','state_in_short'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
-              var element = document.getElementsByClassName(css_selector_classes[css_class]);
-              for (var j = 0; j < element.length; ++j) {
-                  element[j].textContent = vars[css_selector_classes[css_class]];
-              }
+            var element = document.getElementsByClassName(
+              css_selector_classes[css_class]
+            );
+            for (var j = 0; j < element.length; ++j) {
+              element[j].textContent = vars[css_selector_classes[css_class]];
+            }
+            if (css_selector_classes[css_class] == "update_date") {
+              document.getElementsByClassName(
+                "update_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+            }
+            if (css_selector_classes[css_class] == "end_date") {
+              document.getElementsByClassName("end_date")[0].textContent =
+                moment(vars[css_selector_classes[css_class]]).format(
+                  "D MMMM YYYY"
+                ) + " - 12:01:00 AM";
+            }
           }
-      }
+        }
       agentInfo();
   }
   </script>
+
 </head>
 <body onload="subst()" id = "doc_body">  
  <div class = "main_div">
@@ -46,8 +62,9 @@
       <div class ="content1">
           <b class = "caption">Agent Information</b>
           <div class = "caption1">
-            <p class ="info" id = "nameVal"></p>
-            <p class ="info" id = "addressVal"></p>
+            <p class ="endo_info" id = "nameVal"></p>
+            <p class ="endo_info2" id = "addressLineVal"></p>
+						<p class ="info" id = "addressLine2Val"></p>
            <p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
             <p class ="info" id = "phone2Val" style="margin-bottom:2px;"></p>
            </div>
@@ -56,8 +73,8 @@
           <p class = "details"><span class ="business_name"></span></p>
           <p class = "details"><span class ="business_address1"></span></p>
           <p class = "details"><span class ="business_address2"></span></p>
-          <p class = "details"><span class ="business_city"></span>,<span class ="business_state"></span></p>
-          <p class = "details"><span class ="business_country"></span>,<span class ="business_zip"></span></p>
+          <p class = "details"><span class ="business_city"></span>,<span class ="state_in_short"> - <span class ="business_zip"></span></p>
+          <p class = "details"><span class ="business_country"></span></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -66,12 +83,12 @@
           <p class = "p_margin"><b>Effective Date:</b></p>
           <p class = "p_margin"><b>Expiration Date:</b></p>
           <p class = "p_margin"><b>Policy issued by:</b></p>
-          <p class = "p_margin1"><b>Policy #:</b></p>
+          <p class = "p_margin"><b>Policy #:</b></p>
         </div>
         <div class = "certificate_data1">
           <p class = "p_margin"><span class ="certificate_no"></span></p>
-          <p class = "p_margin"><span class ="business_padi"></p>
-          <p class = "p_margin"><span class ="start_date"></p>
+          <p class = "p_margin"><span class ="padi"></p>
+          <p class = "p_margin"><span class ="update_date"></p>
           <p class = "p_margin"><span class ="end_date"></p>
           <p class = "p_margin">U.S. SPECIALTY INSURANCE COMPANY</p>
           <p class = "p_margin"><span class ="policy_id"></p>
@@ -82,9 +99,9 @@
   </div>
       <div class = "page_value">
              <p class ="page_no">Page <span class="page"></span> of <span class="topage"></span></p>
-             <hr></hr>   
-             <p>The above is required to be completed only when this endorsement is issued subsequent to the preparation of the policy</p>
-             <hr></hr>
+            <hr class = "endo_para"></hr>   
+             <center><p class = "endo_para" style = "font-size: 13px;"><b>The above is required to be completed only when this endorsement is issued subsequent to the preparation of the policy</b></p></center>
+             <hr class = "endo_para"></hr>
     </div>
 </body>
 </html>

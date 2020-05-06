@@ -1,6 +1,6 @@
 {
   "type": "application",
-  "name": "Announcements",
+  "name": "Announcement",
   "category": null,
   "icon" : "icon.svg",
   "icon_white": "icon_white.svg",
@@ -10,10 +10,10 @@
   "hidden": true,
   "internal": true,
   "title": {
-    "en_EN": "Announcements"
+    "en_EN": "Announcement"
   },
   "description": {
-    "en_EN": "Announcements"
+    "en_EN": "Announcement"
   },
   "files": [
     "main.js",

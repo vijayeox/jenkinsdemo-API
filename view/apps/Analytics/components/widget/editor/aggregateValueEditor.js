@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Swal from 'sweetalert2';
 import {Tabs, Tab, Overlay, Tooltip} from 'react-bootstrap';
-
+import Select from 'react-select'
 class AggregateValueEditor extends AbstractEditor {
     constructor(props) {
         super(props);
@@ -46,7 +46,8 @@ class AggregateValueEditor extends AbstractEditor {
         let previewElement = document.querySelector('div#widgetPreview');
         previewElement.style.height = (cardBody.offsetHeight - 40) + 'px'; //-40px for border and margin around preview area.
         try {
-            WidgetRenderer.renderAggregateValue(previewElement, jsonWidgetConfiguration, this.data);
+            let props = {}; //Props is the property list to override things like widget title, footer etc.
+            WidgetRenderer.renderAggregateValue(previewElement, jsonWidgetConfiguration, props, this.data);
         }
         catch(renderError) {
             console.error(renderError);
@@ -68,6 +69,11 @@ class AggregateValueEditor extends AbstractEditor {
             value = '' + JSON.stringify(this.data); //Append to string to convert the value to string if at all it is a number.
         }
         textArea.value = value;
+    }
+
+    refreshViews = () => {
+        //Nothing to do for now. Implement this method to refresh the widget display if there is
+        //display/view update problem when the widget selection is changed in editor.
     }
 
     isWidgetTabValid = (state, setErrorState = true) => {
@@ -217,7 +223,19 @@ class AggregateValueEditor extends AbstractEditor {
             });
         });
     }
-
+    refreshPreview(){
+        if (this.state.selectedTab === 'widget') {
+            this.refreshWidgetPreview();
+        }
+        else if(this.state.selectedTab ==='query')
+        {
+            this.refreshQueryPreview()
+        }
+        else if(this.state.selectedTab === 'expression')
+        {
+            this.expressionBlurred()
+        }
+    }
     componentDidMount() {
         let thiz = this;
         this.loadQueries(function() {
@@ -232,7 +250,8 @@ class AggregateValueEditor extends AbstractEditor {
             let i=0;
             let options = [<option value="" key={keyPrefix + '00000000-0000-0000-0000-000000000000'}>-Select query-</option>];
             thiz.queryList.map((item, index) => {
-                options.push(<option key={keyPrefix + item.uuid} value={item.uuid}>{item.name}</option>);
+                 // options.push(<option key={keyPrefix + item.uuid} value={item.uuid}>{item.name}</option>);
+                 options.push({value:item.uuid,label:item.name})
             });
             return options;
         };
@@ -248,11 +267,23 @@ class AggregateValueEditor extends AbstractEditor {
                 querySelections.push(
                     <div className="form-group row" key={'qs-00-' + i}>
                         <div className="col-7" key={'qs-01-' + i}>
-                            <select id={'query' + i} name={'query' + i} ref={'query' + i} className="form-control form-control-sm" 
+                        <Select
+                             key={'qs-02-' + i}
+                             id={'query' + i} 
+                             name={'query' + i}
+                             ref={'query' + i}
+                             onChange={(e) => { thiz.querySelectionChanged(e, i) }}
+                             isDisabled={thiz.state.readOnly}
+                             value={thiz.state.queries[i] ? getQuerySelectOptoins('qs-03-' + i).filter(
+                                option => option.value == thiz.state.queries[i]['uuid']
+                              ) : ''}
+                            options={getQuerySelectOptoins('qs-03-' + i)}
+                            />
+                            {/* <select id={'query' + i} name={'query' + i} ref={'query' + i} className="form-control form-control-sm" 
                                 onChange={(e) => {thiz.querySelectionChanged(e, i)}} disabled={thiz.state.readOnly} 
                                 value={thiz.state.queries[i] ? thiz.state.queries[i].uuid : ''} key={'qs-02-' + i}>
                                 { getQuerySelectOptoins('qs-03-' + i) }
-                            </select>
+                            </select> */}
                             <Overlay id={'query-overlay' + i} target={thiz.refs['query' + i]} show={thiz.state.errors.queries[i] != null} placement="right">
                                 {props => (
                                 <Tooltip id={'query-' + i + '-tooltip'} {...props} className="error-tooltip">
@@ -361,7 +392,7 @@ class AggregateValueEditor extends AbstractEditor {
                 <div className="form-group col">
                     <div className="card" id="previewBox">
                         <div className="card-header">
-                            Preview
+                            Preview <span id="aggregateRefreshBtn" title="Refresh" style={{cursor:"pointer"}} onClick={()=>this.refreshPreview()}><i class="fas fa-sync"></i></span>
                         </div>
                         <div className="card-body">
                             {(this.state.selectedTab === 'widget') && 

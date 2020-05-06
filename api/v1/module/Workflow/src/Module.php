@@ -10,6 +10,7 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\CommandService;
+use Oxzion\Service\ServiceTaskService;
 use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Model\WorkflowInstanceTable;
 use Zend\Db\Adapter\AdapterInterface;
@@ -73,7 +74,7 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\ServiceTaskController::class => function ($container) {
                     return new Controller\ServiceTaskController(
-                        $container->get(CommandService::class),
+                        $container->get(ServiceTaskService::class),
                         $container->get(WorkflowInstanceService::class)
                     );
                 },

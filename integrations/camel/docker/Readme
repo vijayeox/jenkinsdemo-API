@@ -16,7 +16,7 @@ $ cd ../
 To run the image container +
 ++++++++++++++++++++++++++++
 
-$ docker run --network="host" -it -v ${PWD}:/workspace/app -v ${PWD}/../../:/app camel
+$ docker run --network="host" -it --env-file .env -v ${PWD}:/workspace/app -v ${PWD}/../../:/app camel
 
 +++++++++++++++++++++++++++++++++
 To run into the container shell +

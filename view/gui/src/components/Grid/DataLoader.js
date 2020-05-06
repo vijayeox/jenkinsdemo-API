@@ -1,8 +1,7 @@
 import React from "react";
-import Notification from "./../../Notification";
-
 import { toODataString } from "@progress/kendo-data-query";
-import LoadingPanel from "./LoadingPanel";
+import moment from "moment";
+import Notification from "./../../Notification";
 
 export class DataLoader extends React.Component {
   constructor(props) {
@@ -14,24 +13,8 @@ export class DataLoader extends React.Component {
     };
     this.init = { method: "GET", accept: "application/json", headers: {} };
     this.timeout = null;
-  }
+    this.loader = this.core.make("oxzion/splash");
 
-  async getData(url) {
-    let paramSeperator = url!==undefined?url.includes("?") ? "&" : "?":"&";
-    if (typeof this.core == "undefined") {
-      let response = await fetch(url, this.init);
-      let json = await response.json();
-      let data = { data: json.value, total: json["@odata.count"] };
-      return data;
-    } else {
-      let helper = this.core.make("oxzion/restClient");
-      let route =
-        Object.keys(this.props.dataState).length === 0
-          ? url
-          : url + paramSeperator + "filter=[" + JSON.stringify(this.props.dataState) + "]";
-      let data = await helper.request("v1", "/" + route, {}, "get");
-      return data;
-    }
   }
 
   componentDidUpdate(prevProps) {
@@ -47,12 +30,110 @@ export class DataLoader extends React.Component {
           });
         } else {
           //put notification
-
           this.pending = undefined;
         }
+        this.loader.destroy()
       });
     }
   }
+
+  async getData(url) {
+    if (typeof this.core == "undefined") {
+      let response = await fetch(url, this.init);
+      let json = await response.json();
+      if(json.status == 'success'){
+        let data = { data: json.value, total: json["@odata.count"] };
+        return data;
+      } else {
+        let data = { data: [], total: 0 };
+        return data;
+      }
+    } else {
+      let helper = this.core.make("oxzion/restClient");
+      let paramSeperator =
+        url !== undefined ? (url.includes("?") ? "&" : "?") : "&";
+      if (Object.keys(this.props.dataState).length === 0) {
+        var route = url;
+      } else {
+        var filterConfig = this.props.columnConfig
+          ? this.prepareQueryFilters(this.props.dataState)
+          : this.props.dataState;
+        var route =
+          url +
+          paramSeperator +
+          "filter=[" +
+          JSON.stringify(filterConfig) +
+          "]";
+      }
+
+      let data = this.props.urlPostParams
+        ? await helper.request("v1", "/" + route, this.props.urlPostParams, "post")
+        : await helper.request("v1", "/" + route, {}, "get");
+      if (data.status == "success") {
+        return data;
+      } else {
+        return { data: [], total: 0 };
+      }
+    }
+  }
+
+  prepareQueryFilters = filterConfig => {
+    var gridConfig = JSON.parse(JSON.stringify(filterConfig));
+    if (this.props.forceDefaultFilters) {
+      try {
+        if (gridConfig.sort.length == 0 || gridConfig.sort == null) {
+          gridConfig.sort = this.props.gridDefaultFilters.sort
+            ? this.props.gridDefaultFilters.sort
+            : gridConfig.sort;
+        }
+      } catch {}
+    }
+    this.props.columnConfig.map(ColumnItem => {
+      if (ColumnItem.filterFormat && gridConfig.filter) {
+        gridConfig.filter.filters.map((filterItem1, i) => {
+          if (filterItem1.field == ColumnItem.field) {
+            var result = moment(filterItem1.value).format(
+              ColumnItem.filterFormat
+            );
+            if (filterItem1.value && result != "Invalid date") {
+              gridConfig.filter.filters[i].value = result;
+            }
+          }
+        });
+      }
+      if (ColumnItem.multiFieldFilter && gridConfig.filter) {
+        var newFilters = [];
+        gridConfig.filter.filters.map((filterItem2, i) => {
+          if (filterItem2.field == ColumnItem.field) {
+            var searchQuery = filterItem2.value.split(" ");
+            searchQuery.map(searchItem=>
+              newFilters.push({
+                field: filterItem2.field,
+                operator:filterItem2.operator,
+                value: searchItem
+              })
+            )
+            ColumnItem.multiFieldFilter.map(multiFieldItem => {
+              let newFilter = JSON.parse(JSON.stringify(filterItem2));
+              searchQuery.map(searchItem=>
+                newFilters.push({
+                  field: multiFieldItem,
+                  operator: newFilter.operator,
+                  value: searchItem
+                })
+              );
+            });
+          } else {
+            newFilters.push(filterItem2);
+          }
+        });
+        gridConfig.filter.filters = newFilters;
+        gridConfig.filter.logic = "or";
+      }
+    });
+    console.log(gridConfig);
+    return gridConfig;
+  };
 
   refresh = temp => {
     this.getData(this.state.url).then(response => {
@@ -60,6 +141,7 @@ export class DataLoader extends React.Component {
         data: response.data,
         total: response.total
       });
+      this.loader.destroy()
     });
   };
 
@@ -71,8 +153,10 @@ export class DataLoader extends React.Component {
       return;
     }
     this.pending = toODataString(this.props.dataState, this.props.dataState);
-    clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
+    // if(typeof this.timeout === 'number'){
+    //   window.clearTimeout(this.timeout);      
+    // }
+    // this.timeout = window.setTimeout(() => {
       this.getData(this.state.url).then(response => {
         this.lastSuccess = this.pending;
         this.pending = "";
@@ -81,21 +165,17 @@ export class DataLoader extends React.Component {
             data: response.data,
             total: response.total ? response.total : null
           });
+         this.loader.destroy()
         } else {
           this.requestDataIfNeeded();
         }
       });
-    }, 1000);
+    // }, 2000);
   };
 
   render() {
     this.requestDataIfNeeded();
-    return (
-      <>
-        <Notification ref={this.notif} />
-        {this.pending && <LoadingPanel />}
-      </>
-    );
+    return <>{this.pending && this.loader.showGrid()}</>;
   }
 }
 export default DataLoader;

@@ -3,9 +3,11 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\Country;
+use Oxzion\AppDelegate\UserContextTrait;
 
 class PadiVerification extends AbstractAppDelegate
 {
+    use UserContextTrait;
     public function __construct(){
         parent::__construct();
     }
@@ -13,64 +15,150 @@ class PadiVerification extends AbstractAppDelegate
     // Padi Verification is performed here
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("Padi Verification");
-        if(isset($data['padi'])){
-            $data['member_number'] = $data['padi'];
+        $this->logger->info("Padi Verification new".json_encode($data));
+        unset($data['businessPadiVerified']);
+        unset($data['padiVerified']);
+        unset($data['verified']);
+        unset($data['padi_empty']);
+        unset($data['businessPadiEmpty']);
+        unset($data['padiNotFound']);
+        unset($data['businessPadiNotFound']);
+        unset($data['padiNotFoundCsrReview']);
+        unset($data['padiNotFound']);
+        unset($data['policy_exists']);
+        unset($data['firstname']);
+        unset($data['lastname']);
+        unset($data['business_name']);
+        unset($data['initial']);
+        unset($data['padiNotApplicable']);
+        $privileges = $this->getPrivilege();
+        if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
+            $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
+            $data['initiatedByCsr'] = true;
+        }else{
+            $data['initiatedByCsr'] = false;
         }
-        if(isset($data['business_padi'])){
+
+        if(isset($data['user_exists']) && ($data['user_exists'] == 1 || $data['user_exists'] == "1")){
+            $data['padiNotApplicable'] = false;
+            $data['padi_empty'] = false;
+            $data['padiNotFound'] = false;
+            $data['businessPadiNotFound'] = false;
+            $data['verified'] = false;
+            return $data;
+        }
+        if(isset($data['padi']) && $data['padi'] != ''){
+            $data['member_number'] = $data['padi'];
+        } 
+        if(isset($data['business_padi']) && $data['business_padi'] != ''){
             $data['member_number'] = $data['business_padi'];
         }
         if(!isset($data['member_number'])){
-            return;
+            $data['businessPadiEmpty'] = true;
+            $data['padi_empty'] = true;
+            $data['padiNotFound'] = false;
+            $data['businessPadiNotFound'] = false;
+            $data['verified'] = false;
+            return $data;
         }
-        if(isset($data['padi']) && !isset($data['business_padi'])){
-            $select = "Select firstname, MI as initial, lastname  FROM padi_data WHERE member_number ='".$data['member_number']."'";
-
-        }else if(isset($data['business_padi'])){
-            $select = "Select business_name FROM padi_data WHERE member_number ='".$data['member_number']."'";
-        }
+        $select = "Select firstname, MI as initial, lastname, business_name FROM padi_data WHERE member_number ='".$data['member_number']."'";
         $result = $persistenceService->selectQuery($select);
         if($result->count() > 0){
             $response = array();
             while ($result->next()) {
                 $response[] = $result->current();
             }
-
             $returnArray = array_merge($data,$response[0]);
-            if(isset($data['padi']) && !isset($data['business_padi'])){
-               $returnArray['padiVerified'] = true;
-            }else if(isset($data['business_padi'])){
-               if(isset($response[0]['business_name'])){
-                    $returnArray['businessPadiVerified'] = true;
-               }else{
+            $returnArray['padiNotApplicable'] = false;
+            if(isset($data['product']) && ($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'|| $data['product'] == 'Dive Boat' )){
+                if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
+                    if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                        $returnArray['padiVerified'] = true;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotFound'] = false;
+                    } else {
+                        $returnArray['padiVerified'] = false;
                         $returnArray['businessPadiVerified'] = true;
-               }
-            }
-            if(isset($data['product'])){
-                if(($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (!isset($response[0]['firstname']) || $response[0]['firstname'] == '')){
+                        $returnArray['padiNotApplicable'] = true;
+                        $returnArray['padiNotFound'] = false;
+                    }
+                } else if($data['product'] == 'Dive Boat'){
+                    if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
+                        $returnArray['padiVerified'] = false;
+                        $returnArray['businessPadiVerified'] = true;
+                        $returnArray['padiNotFound'] = false;
+                    } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                        $returnArray['padiVerified'] = true;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotApplicable'] = false;
+                        $returnArray['padiNotFound'] = false;
+                    } else {
+                        $returnArray['padiVerified'] = false;
+                        $returnArray['businessPadiVerified'] = false;
+                        $returnArray['padiNotFound'] = true;
+                    }
+                } else {
+                    $returnArray['padiVerified'] = true;
+                    $returnArray['businessPadiVerified'] = false;
+                }
+            } else if(isset($data['product']) && ($data['product'] == 'Dive Store')){
+                if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
                     $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = true;
+                    $returnArray['padiNotFound'] = false;
+                } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                    $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = false;
+                    $returnArray['padiNotApplicable'] = true;
+                    $returnArray['padiNotFound'] = false;
+                } else {
+                    $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = false;
+                    $returnArray['padiNotFound'] = true;
                 }
-            }
-            if(isset($data['business_padi'])){
-                if($data['product'] == 'Dive Store' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
+            } else {
+                if(isset($response[0]['firstname']) && $response[0]['firstname'] != '' && $response[0]['firstname'] != null ){
+                    $returnArray['padiVerified'] = true;
+                    $returnArray['businessPadiVerified'] = false;
+                } else if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
+                    $returnArray['padiVerified'] = false;
+                    $returnArray['businessPadiVerified'] = true;
+                } else {
+                    $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = false;
                 }
-                if($data['product'] == 'Dive Boat' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
-                    $returnArray['businessPadiVerified'] = false;
-                }
+                $returnArray['address1'] = isset($data['address1']) ? $data['address1'] : "";
+                $returnArray['address2'] = isset($data['address2']) ? $data['address2'] : "";
+                $returnArray['city'] = isset($data['city']) ? $data['city'] : "";
+                $returnArray['state'] = isset($data['state']) ? $data['state'] : "";
+                $returnArray['zip'] = isset($data['zip']) ? $data['zip'] : "";
+                $returnArray['country_code'] = isset($data['country_code']) ? $data['country_code'] : "";
+                $returnArray['home_phone'] = isset($data['home_phone']) ? $data['home_phone'] : "";
+                $returnArray['work_phone'] = isset($data['work_phone']) ? $data['work_phone'] : "";
             }
             $returnArray['padiNotFound'] = false;
+            $returnArray['businessPadiNotFound'] = false;
             $returnArray['verified'] = true;
+            $returnArray['padi_empty'] = false;
+            $returnArray['businessPadiEmpty'] = false;
+            $returnArray['padiNotFoundCsrReview'] = false;
+            unset($returnArray['member_number']);
+            unset($privileges);
             return $returnArray;
         } else {
-            if(isset($data['padi']) && !isset($data['business_padi'])){
-                $returnArray['padiVerified'] = false;
-            }else if(isset($data['business_padi'])){
-                $returnArray['businessPadiVerified'] = false;
-            }
+            $returnArray = array();
+            $returnArray['businessPadiVerified'] = false;
+            $returnArray['padiVerified'] = false;
             $returnArray['verified'] = true;
+            $returnArray['padi_empty'] = false;
+            $returnArray['businessPadiEmpty'] = false;
             $returnArray['padiNotFound'] = true;
+            $returnArray['businessPadiNotFound'] = true;
+            $returnArray['padiNotFoundCsrReview'] = true;
+            $returnArray['padiNotApplicable'] = false;
             $data = array_merge($data,$returnArray);
+            unset($data['member_number']);
+            unset($privileges);
             return $data;
         }
     }

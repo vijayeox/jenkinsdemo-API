@@ -1,0 +1,3294 @@
+{
+	"_id": "5e6b68089e9d2ef4486c8522",
+	"type": "form",
+	"tags": [],
+	"owner": "5e147f8c6225ae0c3b3440f9",
+	"components": [{
+		"title": "Endorsement Change",
+		"theme": "primary",
+		"collapsible": false,
+		"tableView": false,
+		"key": "pageNaN",
+		"properties": {
+			"render": "page6",
+			"set_property": "{\"property\" : \"disableOptions\",\"value\":true}"
+		},
+		"type": "panel",
+		"label": "Endorsement Change",
+		"breadcrumb": "none",
+		"components": [{
+			"label": "Please select areas you want to modify",
+			"optionsLabelPosition": "right",
+			"autofocus": true,
+			"tableView": true,
+			"defaultValue": {
+				"modify_personalInformation": false,
+				"modify_coverage": false,
+				"modify_additionalInsured": false
+			},
+			"values": [{
+				"value": "modify_personalInformation",
+				"label": "Personal Information",
+				"shortcut": ""
+			}, {
+				"value": "modify_coverage",
+				"label": "Coverage",
+				"shortcut": ""
+			}, {
+				"value": "modify_additionalInsured",
+				"label": "Additional Insured",
+				"shortcut": ""
+			}],
+			"calculateServer": false,
+			"validate": {
+				"required": true,
+				"minSelectedCount": 1
+			},
+			"minSelectedCountMessage": "Select atleast one option to go next.",
+			"key": "endorsement_options",
+			"properties": {
+				"render": "page6"
+			},
+			"type": "selectboxes",
+			"input": true,
+			"lockKey": true,
+			"inputType": "checkbox"
+		}, {
+			"label": "HTML",
+			"attrs": [{
+				"attr": "style",
+				"value": "color: #a94442;font-size:1.1em;"
+			}],
+			"content": "Please Note: These options will be disabled once you click on the next button",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "html4",
+			"type": "htmlelement",
+			"input": false
+		}, {
+			"label": "product_email_id",
+			"calculateValue": "value = 'instructors@diveinsurance.com';",
+			"calculateServer": false,
+			"key": "product_email_id",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "disableOptions",
+			"customDefaultValue": "value = false;",
+			"calculateServer": false,
+			"key": "disableOptions",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "product",
+			"label": "product",
+			"type": "hidden",
+			"defaultValue": "Individual Professional Liability",
+			"lockKey": true
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "start_date",
+			"label": "start_date",
+			"type": "hidden",
+			"lockKey": true
+		}, {
+			"label": "update_date",
+			"key": "update_date",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "previous_careerCoverage",
+			"label": "previousCareerCoverage",
+			"type": "hidden",
+			"lockKey": true,
+			"calculateServer": false
+		}, {
+			"label": "Previous Scuba fit",
+			"calculateValue": "value = data.previous_scuba?data.previous_scuba:data.previousScubafit",
+			"key": "previousScubafit",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "cylinder",
+			"label": "Cylinder",
+			"type": "hidden",
+			"lockKey": true
+		}, {
+			"label": "Columns",
+			"columns": [{
+				"components": [{
+					"input": true,
+					"tableView": true,
+					"key": "instructor",
+					"label": "instructor",
+					"type": "hidden",
+					"defaultValue": "0",
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "assistantInstructor",
+					"label": "assistantInstructor",
+					"type": "hidden",
+					"defaultValue": "0",
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "divemaster",
+					"label": "divemaster",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "nonteachingSupervisoryInstructor",
+					"label": "nonteachingSupervisoryInstructor",
+					"type": "hidden",
+					"defaultValue": "0",
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "retiredInstructor",
+					"label": "retiredInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "divemasterAssistantInstructorAssistingOnly",
+					"label": "divemasterAssistantInstructorAssistingOnly",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "freediverInstructor",
+					"label": "freediverInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "internationalInstructor",
+					"label": "internationalInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "internationalAssistantInstructor",
+					"label": "internationalAssistantInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "internationalDivemaster",
+					"label": "internationalDivemaster",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "internationalNonteachingSupervisoryInstructor",
+					"label": "internationalNonteachingSupervisoryInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "internationalDivemasterAssistantInstructorAssistingOnly",
+					"label": "internationalDivemasterAssistantInstructorAssistingOnly",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "notSelected",
+					"defaultValue": "0",
+					"customDefaultValue": "value = \"0.00\"",
+					"key": "notSelected",
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}, {
+				"components": [{
+					"input": true,
+					"tableView": true,
+					"key": "equipmentLiabilityCoverage",
+					"label": "equipmentLiabilityCoverage",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "equipmentLiabilityCoverageDeclined",
+					"label": "equipmentLiabilityCoverageDeclined",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "withTecRecEndorsementForSelectionAbove",
+					"label": "withTecRecEndorsementForSelectionAbove",
+					"protected": true,
+					"persistent": false,
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "withTecRecEndorsementForSelectionAboveDeclined",
+					"defaultValue": "0",
+					"persistent": false,
+					"protected": true,
+					"customDefaultValue": "value = \"0.00\"",
+					"key": "withTecRecEndorsementForSelectionAboveDeclined",
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "scubaFitInstructor",
+					"label": "scubaFitInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0.00",
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "scubaFitInstructorDeclined",
+					"defaultValue": "0.00",
+					"customDefaultValue": "value = \"0.00\"",
+					"key": "scubaFitInstructorDeclined",
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "cylinderInspector",
+					"label": "cylinderInspector",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"calculateValue": "value = parseFloat(data['cylinderInspector'])",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "cylinderInstructor",
+					"label": "cylinderInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"calculateValue": "value = parseFloat(data['cylinderInstructor'])",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "cylinderInspectorAndInstructor",
+					"label": "cylinderInspectorAndInstructor",
+					"type": "hidden",
+					"lockKey": true,
+					"calculateValue": "value = parseFloat(data['cylinderInspectorAndInstructor'])",
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "cylinderInspectorOrInstructorDeclined",
+					"defaultValue": "0",
+					"customDefaultValue": "value = \"0.00\"",
+					"calculateValue": "value = parseFloat(data['cylinderInspectorOrInstructorDeclined'])",
+					"key": "cylinderInspectorOrInstructorDeclined",
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "excessLiabilityCoverage9000000",
+					"label": "excessLiabilityCoverage9000000",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "excessLiabilityCoverage4000000",
+					"label": "excessLiabilityCoverage4000000",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "excessLiabilityCoverage3000000",
+					"label": "excessLiabilityCoverage3000000",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "excessLiabilityCoverage2000000",
+					"label": "excessLiabilityCoverage2000000",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "0",
+					"hideOnChildrenHidden": false
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "excessLiabilityCoverage1000000",
+					"label": "excessLiabilityCoverage1000000",
+					"type": "hidden",
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "excessLiabilityCoverageDeclined",
+					"customDefaultValue": "value = \"0.00\"",
+					"key": "excessLiabilityCoverageDeclined",
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}],
+			"tableView": false,
+			"key": "columns",
+			"type": "columns",
+			"input": false,
+			"path": "columns",
+			"hideLabel": true
+		}, {
+			"label": "Excess Liability",
+			"key": "excessLiability",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "previousequipmentLiability",
+			"label": "Previous equipment Liability",
+			"type": "hidden",
+			"lockKey": true,
+			"calculateValue": "value = data['previous_equipmentLiability'];",
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "previous_excessLiability",
+			"calculateServer": false,
+			"key": "previous_excessLiability",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "previous_cylinder",
+			"calculateServer": false,
+			"key": "previous_cylinder",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"key": "panelPanel4",
+			"input": false,
+			"title": "Automatic Renewal",
+			"theme": "primary",
+			"tableView": false,
+			"components": [{
+				"key": "panelPanel4Content",
+				"label": "Content",
+				"input": false,
+				"attrs": [{
+					"value": "",
+					"attr": ""
+				}],
+				"content": "<h4><b>PADI  has made membership renewal simple.\nVicencia & Buckley is making AUTOMATIC RENEWAL for Professional Liability Insurance a reality!</b></h4>\n</br>",
+				"type": "htmlelement",
+				"hideLabel": true,
+				"tableView": false
+			}, {
+				"input": true,
+				"tableView": true,
+				"label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
+				"dataGridLabel": false,
+				"key": "automatic_renewal",
+				"defaultValue": false,
+				"type": "checkbox",
+				"lockKey": true
+			}],
+			"type": "panel",
+			"label": "Panel"
+		}],
+		"input": false,
+		"path": "pageNaN",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": false,
+			"cancel": true,
+			"next": true
+		},
+		"logic": [{
+			"name": "disablePanel",
+			"trigger": {
+				"type": "simple",
+				"simple": {
+					"show": true,
+					"when": "disableOptions",
+					"eq": "true"
+				}
+			},
+			"actions": [{
+				"name": "disable",
+				"type": "property",
+				"property": {
+					"label": "Disabled",
+					"value": "disabled",
+					"type": "boolean"
+				},
+				"state": true
+			}]
+		}]
+	}, {
+		"key": "panel",
+		"input": false,
+		"title": "Personal Information",
+		"theme": "primary",
+		"tableView": false,
+		"components": [{
+			"title": "PADI Validation",
+			"theme": "primary",
+			"collapsible": false,
+			"tableView": false,
+			"key": "panelPanel2",
+			"type": "panel",
+			"label": "Pi Validation",
+			"input": false,
+			"components": [{
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "panelColumns",
+				"columns": [{
+					"components": [],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "PADI Number",
+						"mask": false,
+						"autofocus": true,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value = data['padi']",
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter your PADI #."
+						},
+						"key": "padi",
+						"type": "number",
+						"decimalLimit": 0,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "First Name",
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"customMessage": "Please enter your first name."
+						},
+						"key": "firstname",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Initial",
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"customMessage": "Please enter your initial."
+						},
+						"key": "initial",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Last Name",
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"customMessage": "Please enter your last name."
+						},
+						"key": "lastname",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"hideLabel": true,
+				"tableView": false,
+				"key": "panelColumns2",
+				"type": "columns",
+				"input": false,
+				"path": "panelColumns2"
+			}]
+		}, {
+			"title": "Mailing Address",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "panelPanel",
+			"type": "panel",
+			"label": "Mailing Address",
+			"input": false,
+			"components": [{
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "panelPanelColumns",
+				"columns": [{
+					"components": [{
+						"label": "Country",
+						"widget": "choicesjs",
+						"tableView": true,
+						"dataSrc": "custom",
+						"data": {
+							"values": [{
+								"value": "",
+								"label": ""
+							}],
+							"custom": "values = data['countryList']"
+						},
+						"valueProperty": "country",
+						"template": "<span>{{ item.country }}</span>",
+						"selectThreshold": 0.3,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "country",
+						"type": "select",
+						"input": true,
+						"lockKey": true,
+						"source": "5d347da33e9be31e15d3b115",
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "City",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "city",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Address 1",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "address1",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "State",
+						"widget": "choicesjs",
+						"tableView": true,
+						"dataSrc": "custom",
+						"data": {
+							"values": [{}],
+							"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
+						},
+						"template": "<span>{{ item }}</span>",
+						"selectThreshold": 0.3,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "state",
+						"type": "select",
+						"refreshOn": "country",
+						"input": true,
+						"lockKey": true,
+						"clearOnRefresh": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Address 2",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"key": "address2",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Zip Code",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true,
+							"custom": "if(data['zip'] && data['zip'] != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+						},
+						"key": "zip",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true,
+				"path": "panelPanelColumns"
+			}, {
+				"title": "Physical Address",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "panelPanel3",
+				"type": "panel",
+				"label": "Physical Address",
+				"input": false,
+				"components": [{
+					"label": "Same as mailing address",
+					"tableView": true,
+					"defaultValue": "true",
+					"clearOnHide": false,
+					"calculateValue": "if(value == \"true\"){\n  value = true;\n}",
+					"calculateServer": false,
+					"key": "sameasmailingaddress",
+					"type": "checkbox",
+					"input": true,
+					"dataGridLabel": false,
+					"lockKey": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "panelPanel3Columns2",
+					"columns": [{
+						"components": [{
+							"label": "Country",
+							"widget": "choicesjs",
+							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"values": [{}],
+								"custom": "values = data['countryList']"
+							},
+							"valueProperty": "country",
+							"template": "<span>{{ item.country }}</span>",
+							"selectThreshold": 0.3,
+							"clearOnHide": false,
+							"validate": {
+								"required": true
+							},
+							"key": "physical_country",
+							"type": "select",
+							"input": true,
+							"lockKey": true,
+							"source": "5d347da33e9be31e15d3b115",
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "City",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true
+							},
+							"key": "physical_city",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"label": "Address 1",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"validate": {
+								"required": true
+							},
+							"key": "mailaddress1",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "State",
+							"widget": "choicesjs",
+							"tableView": true,
+							"dataSrc": "custom",
+							"data": {
+								"values": [{
+									"value": "",
+									"label": ""
+								}],
+								"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\").states;\n}\n}"
+							},
+							"template": "<span>{{ item }}</span>",
+							"selectThreshold": 0.3,
+							"validate": {
+								"required": true
+							},
+							"key": "physical_state",
+							"type": "select",
+							"refreshOn": "physical_country",
+							"input": true,
+							"clearOnRefresh": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"label": "Address 2",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"key": "mailaddress2",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip Code",
+							"spellcheck": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"required": true,
+								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+							},
+							"key": "physical_zip",
+							"type": "textfield",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"conditional": {
+						"show": "true",
+						"when": "sameasmailingaddress",
+						"eq": "false"
+					},
+					"customConditional": "show = (data['sameasmailingaddress'] == false)",
+					"hideLabel": true,
+					"path": "panelPanel3Columns2"
+				}]
+			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "panelPanel3Columns",
+				"columns": [{
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "panelPanel3ColumnsColumns",
+						"columns": [{
+							"components": [{
+								"label": "Country Code",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"value": "",
+										"label": ""
+									}],
+									"custom": "values = data['phoneList']"
+								},
+								"valueProperty": "dial_code",
+								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"selectThreshold": 0.3,
+								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateServer": false,
+								"key": "home_country_code",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 3,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Home or Work Phone",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"customMessage": "Please enter a valid home or work phone number"
+								},
+								"key": "home_phone_number",
+								"logic": [{
+									"name": "fieldMask",
+									"trigger": {
+										"type": "simple",
+										"simple": {
+											"show": true,
+											"when": "home_country_code",
+											"eq": "52"
+										}
+									},
+									"actions": [{
+										"name": "mask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(99) 9999-9999"
+									}]
+								}, {
+									"name": "defaultMask",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "result = (data.home_country_code != 52)"
+									},
+									"actions": [{
+										"name": "defaultMask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(999) 999-9999"
+									}]
+								}],
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "home_phone",
+								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
+								"key": "home_phone",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 9,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"path": "panelPanel3ColumnsColumns"
+					}, {
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "panelPanel3ColumnsColumns2",
+						"columns": [{
+							"components": [{
+								"label": "Country Code",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "values = data['phoneList']"
+								},
+								"valueProperty": "dial_code",
+								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"selectThreshold": 0.3,
+								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+								"calculateServer": false,
+								"key": "phone_country_code",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 3,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Mobile Phone",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please enter a valid mobile phone number"
+								},
+								"key": "phone_number",
+								"logic": [{
+									"name": "mask",
+									"trigger": {
+										"type": "simple",
+										"simple": {
+											"show": true,
+											"when": "home_country_code",
+											"eq": "52"
+										}
+									},
+									"actions": [{
+										"name": "mask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(99) 9999-9999"
+									}]
+								}, {
+									"name": "defaultMask",
+									"trigger": {
+										"type": "javascript",
+										"javascript": "result = (data.phone_country_code != 52)"
+									},
+									"actions": [{
+										"name": "defaultMask",
+										"type": "property",
+										"property": {
+											"label": "Input Mask",
+											"value": "inputMask",
+											"type": "string"
+										},
+										"text": "(999) 999-9999"
+									}]
+								}],
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "phone",
+								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
+								"key": "phone",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 9,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"path": "panelPanel3ColumnsColumns2"
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Fax",
+						"placeholder": "  ",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"errorLabel": "Please enter a valid Fax number",
+						"key": "fax",
+						"type": "phoneNumber",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Email",
+						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"validateOn": "blur",
+						"validate": {
+							"required": true,
+							"customMessage": "Please enter your email address in format: yourname@example.com"
+						},
+						"key": "email",
+						"type": "email",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true,
+				"path": "panelPanel3Columns"
+			}],
+			"lockKey": true,
+			"path": "panelPanel"
+		}],
+		"type": "panel",
+		"breadcrumb": "none",
+		"conditional": {
+			"show": "true",
+			"when": "endorsement_options",
+			"eq": "modify_personalInformation"
+		},
+		"lockKey": true,
+		"source": "5d4ee6df800c612c49e802d3",
+		"label": "Personal Information",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": false,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false
+	}, {
+		"title": "Coverage",
+		"theme": "primary",
+		"collapsible": false,
+		"tableView": false,
+		"key": "page3",
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_coverage"
+		},
+		"type": "panel",
+		"label": "Coverage",
+		"breadcrumb": "none",
+		"components": [{
+			"key": "page3Panel3",
+			"input": false,
+			"title": "Policy Period",
+			"theme": "primary",
+			"tableView": false,
+			"components": [{
+				"label": "Policy Period",
+				"spellcheck": true,
+				"disabled": true,
+				"tableView": true,
+				"persistent": false,
+				"clearOnHide": false,
+				"calculateValue": "try {\nvalue = data['start_date_range'].label\n} catch(e){\nvalue = data['start_date_range'].label\n}",
+				"calculateServer": false,
+				"errorLabel": "Please select a policy period from the list",
+				"key": "startDateRange",
+				"type": "textfield",
+				"input": true,
+				"lockKey": true
+			}, {
+				"key": "page3Panel",
+				"input": false,
+				"title": "Coverage and Options",
+				"theme": "primary",
+				"tableView": false,
+				"components": [{
+					"clearOnHide": false,
+					"key": "page3PanelWell",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page3Columns2",
+						"columns": [{
+							"components": [{
+								"label": "Career Coverage",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"value": "",
+										"label": ""
+									}],
+									"custom": "if(data['endorsementCoverage']){\n  for(var key in data['endorsementCoverage']){\nvar item = {}\nitem.label = data['endorsementCoverage'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"key": "upgradeCareerCoverage",
+								"properties": {
+									"target": "careerCoveragePrice"
+								},
+								"type": "select",
+								"refreshOn": "endorsement_options",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 8,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Career Coverage Price",
+								"placeholder": "0",
+								"prefix": "$",
+								"hideLabel": true,
+								"mask": false,
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "careerCoveragePrice",
+								"type": "number",
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"lockKey": true,
+						"path": "page3Columns2"
+					}],
+					"tableView": false,
+					"type": "well",
+					"hideLabel": true,
+					"label": "",
+					"path": "page3PanelWell"
+				}, {
+					"clearOnHide": false,
+					"key": "page3PanelWell2",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page3PanelColumns",
+						"columns": [{
+							"components": [{
+								"label": "TecRec Coverage",
+								"optionsLabelPosition": "right",
+								"inline": false,
+								"tableView": true,
+								"values": [{
+									"value": "withTecRecEndorsementForSelectionAbove",
+									"label": "With TecRec Endorsement for selection above",
+									"shortcut": ""
+								}, {
+									"value": "declined",
+									"label": "With TecRec Endorsement for selection above - Declined",
+									"shortcut": ""
+								}],
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please choose one of these options."
+								},
+								"key": "tecRecEndorsment",
+								"type": "radio",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 8,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "TecRech Price",
+								"placeholder": "0",
+								"prefix": "$",
+								"hideLabel": true,
+								"mask": false,
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"clearOnHide": false,
+								"calculateValue": "value = 0;",
+								"calculateServer": false,
+								"key": "techRecPrice",
+								"type": "number",
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"path": "page3PanelColumns"
+					}],
+					"tableView": false,
+					"type": "well",
+					"hideLabel": true,
+					"label": ""
+				}, {
+					"clearOnHide": false,
+					"key": "page3PanelWell3",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page3PanelColumns2",
+						"columns": [{
+							"components": [{
+								"label": "ScubaFit Coverage",
+								"optionsLabelPosition": "right",
+								"inline": false,
+								"tableView": true,
+								"values": [{
+									"value": "scubaFitInstructor",
+									"label": "ScubaFit Instructor",
+									"shortcut": ""
+								}, {
+									"value": "scubaFitInstructorDeclined",
+									"label": "ScubaFit Instructor - Declined",
+									"shortcut": ""
+								}],
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please choose one of these options."
+								},
+								"key": "scubaFit",
+								"properties": {
+									"target": "scubaFitPrice"
+								},
+								"conditional": {
+									"show": true,
+									"when": "previousScubafit",
+									"eq": "scubaFitInstructorDeclined"
+								},
+								"type": "radio",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Endorsement ScubaFit Coverage",
+								"attrs": [{
+									"value": "",
+									"attr": ""
+								}],
+								"content": "ScubaFit Instructor",
+								"refreshOnChange": false,
+								"tableView": false,
+								"key": "page3PanelColumns2Content",
+								"conditional": {
+									"show": true,
+									"when": "previousScubafit",
+									"eq": "scubaFitInstructor"
+								},
+								"type": "htmlelement",
+								"input": false,
+								"hideLabel": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 8,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "ScubaFit Price",
+								"placeholder": "0",
+								"prefix": "$",
+								"hideLabel": true,
+								"mask": false,
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"clearOnHide": false,
+								"calculateValue": "if(data['scubaFit'] && data[data['scubaFit']]){\nvalue = data[data['scubaFit']];\n}",
+								"calculateServer": false,
+								"key": "scubaFitPrice",
+								"type": "number",
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"path": "page3PanelColumns2"
+					}],
+					"tableView": false,
+					"type": "well",
+					"hideLabel": true,
+					"label": ""
+				}, {
+					"clearOnHide": false,
+					"key": "page3PanelWell4",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page3PanelColumns3",
+						"columns": [{
+							"components": [{
+								"label": "Cylinder Coverage",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"value": "",
+										"label": ""
+									}],
+									"custom": "if(data['endorsementCylinder']){\n  for(var key in data['endorsementCylinder']){\nvar item = {}\nitem.label = data['endorsementCylinder'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"key": "upgradecylinder",
+								"properties": {
+									"target": "cylinderPrice"
+								},
+								"type": "select",
+								"refreshOn": "endorsement_options",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 8,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Cylinder Price",
+								"placeholder": "0",
+								"prefix": "$",
+								"hideLabel": true,
+								"mask": false,
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "cylinderPrice",
+								"type": "number",
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"path": "page3PanelColumns3"
+					}],
+					"tableView": false,
+					"type": "well",
+					"hideLabel": true,
+					"label": "",
+					"path": "page3PanelWell4"
+				}, {
+					"clearOnHide": false,
+					"key": "page3PanelWell5",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page3PanelColumns4",
+						"columns": [{
+							"components": [{
+								"label": "Equipment Liability Coverage",
+								"optionsLabelPosition": "right",
+								"inline": false,
+								"tableView": true,
+								"values": [{
+									"value": "equipmentLiabilityCoverage",
+									"label": "Equipment Liability Coverage",
+									"shortcut": ""
+								}, {
+									"value": "equipmentLiabilityCoverageDeclined",
+									"label": "Equipment Liability Coverage - Declined",
+									"shortcut": ""
+								}],
+								"clearOnHide": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please choose one of these options."
+								},
+								"key": "equipment",
+								"properties": {
+									"target": "equipmentPrice"
+								},
+								"conditional": {
+									"show": true,
+									"when": "previousequipmentLiability",
+									"eq": "equipmentLiabilityCoverageDeclined"
+								},
+								"type": "radio",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Endorsement Equipment Liability ",
+								"attrs": [{
+									"value": "",
+									"attr": ""
+								}],
+								"content": "Equipment Liability Coverage",
+								"refreshOnChange": false,
+								"tableView": false,
+								"key": "page3PanelColumns4Content",
+								"conditional": {
+									"show": true,
+									"when": "previousequipmentLiability",
+									"eq": "equipmentLiabilityCoverage"
+								},
+								"type": "htmlelement",
+								"input": false,
+								"hideLabel": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 8,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Equipment Price",
+								"placeholder": "0",
+								"prefix": "$",
+								"hideLabel": true,
+								"mask": false,
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"clearOnHide": false,
+								"calculateValue": "if(data[data['equipment']] && data['equipment']){\nvalue = data[data['equipment']];\n}",
+								"calculateServer": false,
+								"key": "equipmentPrice",
+								"type": "number",
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true
+					}],
+					"tableView": false,
+					"type": "well",
+					"hideLabel": true,
+					"label": ""
+				}, {
+					"clearOnHide": false,
+					"key": "page3PanelWell7",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page3Columns",
+						"columns": [{
+							"components": [{
+								"label": "Excess Liability Coverage",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"value": "",
+										"label": ""
+									}],
+									"custom": "if(data['endorsementExcessLiability']){\n    for(var key in data['endorsementExcessLiability']){\n      var item = {}\n      item.label = data['endorsementExcessLiability'][key];\n      item.value = key;\n      values.push(item);\n    }    \n  }"
+								},
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"key": "upgradeExcessLiability",
+								"properties": {
+									"target": "excessLiabilityPrice"
+								},
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
+								"refreshOn": "endorsement_options",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 8,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Excess Liability Price",
+								"placeholder": "0",
+								"prefix": "$",
+								"hideLabel": true,
+								"mask": false,
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"clearOnHide": false,
+								"customDefaultValue": "value=0.00",
+								"calculateValue": "console.log(data.excessLiabilityPrice);\nconsole.log(55555555);\nconsole.log(data.prevExcessLiabiltyPrice);\n\nvalue = (parseFloat(data.excessLiabilityPrice) - parseFloat(data.prevExcessLiabiltyPrice));",
+								"calculateServer": false,
+								"key": "excessLiabilityPricePayable",
+								"type": "number",
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "prevExcessLiability",
+								"calculateServer": false,
+								"key": "prevExcessLiabiltyPrice",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "excessLiabilityPrice",
+								"calculateServer": false,
+								"key": "excessLiabilityPrice",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"path": "page3Columns"
+					}],
+					"tableView": false,
+					"type": "well",
+					"hideLabel": true,
+					"label": "",
+					"path": "page3PanelWell7"
+				}, {
+					"clearOnHide": false,
+					"key": "page3PanelWell6",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page3PanelColumns5",
+						"columns": [{
+							"components": [],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Columns",
+								"input": false,
+								"tableView": false,
+								"key": "page3PanelColumns5Columns",
+								"columns": [{
+									"components": [{
+										"key": "page3PanelColumns5ColumnsContent",
+										"label": "Content",
+										"input": false,
+										"tag": "h5",
+										"attrs": [{
+											"value": "text-align:right",
+											"attr": "style"
+										}],
+										"content": "Grand Total",
+										"type": "htmlelement",
+										"hideLabel": true,
+										"hideOnChildrenHidden": false,
+										"tableView": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Endorsement Total",
+										"prefix": "$",
+										"hideLabel": true,
+										"mask": false,
+										"spellcheck": true,
+										"disabled": true,
+										"tableView": true,
+										"defaultValue": "0.00",
+										"delimiter": false,
+										"requireDecimal": false,
+										"inputFormat": "plain",
+										"clearOnHide": false,
+										"calculateValue": "value = (parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0)",
+										"calculateServer": false,
+										"key": "endorsementTotal",
+										"properties": {
+											"render": "page6"
+										},
+										"type": "number",
+										"input": true,
+										"inputType": "number",
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 8,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}],
+								"type": "columns",
+								"hideLabel": true
+							}, {
+								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "HTML",
+										"tag": "h5",
+										"attrs": [{
+											"attr": "style",
+											"value": "text-align:right"
+										}],
+										"content": "Balance Amount to be paid",
+										"refreshOnChange": false,
+										"tableView": false,
+										"key": "iplEndorBalanceAmount",
+										"type": "htmlelement",
+										"input": false,
+										"hideOnChildrenHidden": false,
+										"hideLabel": true
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Balance",
+										"prefix": "$",
+										"hideLabel": true,
+										"mask": false,
+										"spellcheck": true,
+										"disabled": true,
+										"tableView": true,
+										"defaultValue": 0,
+										"delimiter": false,
+										"requireDecimal": false,
+										"inputFormat": "plain",
+										"clearOnHide": false,
+										"calculateValue": "if(parseFloat(data['amount']).toFixed(0) < parseFloat(data['endorsementTotal']).toFixed(0)){\n  value = (parseFloat(data['endorsementTotal'])).toFixed(0) - (parseFloat(data['amount'])).toFixed(0);\n} else {\n  value = 0;\n}",
+										"calculateServer": false,
+										"key": "balanceEndor",
+										"type": "number",
+										"input": true,
+										"hideOnChildrenHidden": false,
+										"inputType": "number"
+									}],
+									"width": 8,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}],
+								"tableView": false,
+								"key": "columns1",
+								"customConditional": "show = data.CSRReviewRequired;",
+								"type": "columns",
+								"input": false,
+								"path": "columns1",
+								"hideLabel": true
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true,
+						"path": "page3PanelColumns5"
+					}],
+					"tableView": false,
+					"type": "well",
+					"hideLabel": true,
+					"label": ""
+				}],
+				"type": "panel",
+				"breadcrumb": "none",
+				"conditional": {
+					"show": "true",
+					"when": "start_date"
+				},
+				"tooltip": "Please select the coverage and options from the list below",
+				"customConditional": "show = (data['start_date'] != null)",
+				"label": "Panel",
+				"path": "page3Panel",
+				"hideOnChildrenHidden": false
+			}, {
+				"title": " ",
+				"breadcrumbClickable": false,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": true,
+				"key": "documentPanel",
+				"type": "panel",
+				"label": " ",
+				"input": false,
+				"components": [{
+					"type": "documentviewer",
+					"key": "techRec_attachments1",
+					"calculateValue": "value = (data['endor_techRec_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.endor_techRec_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "TecRec Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"protected": true,
+					"persistent": false
+				}, {
+					"type": "documentviewer",
+					"key": "cylinderInspector_attachments1",
+					"calculateValue": "value = (data['endor_cylinderInspector_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.endor_cylinderInspector_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Cylinder Inspector Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"protected": true,
+					"persistent": false
+				}, {
+					"type": "documentviewer",
+					"key": "cylinderInstructor_attachments1",
+					"calculateValue": "value = (data['endor_cylinderInstructor_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.endor_cylinderInstructor_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Cylinder Instructor Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"protected": true,
+					"persistent": false
+				}, {
+					"type": "documentviewer",
+					"key": "scubaFit_attachments1",
+					"calculateValue": "value = (data['endor_scubaFit_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.endor_scubaFit_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Scuba Fit Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"protected": true,
+					"persistent": false
+				}, {
+					"type": "documentviewer",
+					"key": "attachments1",
+					"calculateValue": "value = (data['endor_attachments'])",
+					"dtype": "documentviewer",
+					"datype": "documentviewer",
+					"dattype": "documentviewer",
+					"customConditional": "show = (data.endor_attachments !='');",
+					"datatype": "documentviewer",
+					"data_type": "documentviewer",
+					"label": "Attachments",
+					"hideLabel": true,
+					"inputType": "documentviewer",
+					"input": 1,
+					"tableView": false,
+					"protected": true,
+					"persistent": false
+				}],
+				"path": "documentPanel",
+				"protected": true
+			}, {
+				"title": "TecRec Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "panel1",
+				"customConditional": "if((data.TechRec_attachments.length === 0 && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
+				"conditional": {
+					"show": true,
+					"when": "tecRecEndorsment",
+					"eq": "withTecRecEndorsementForSelectionAbove"
+				},
+				"type": "panel",
+				"label": "TecRec Attachments",
+				"input": false,
+				"components": [{
+					"label": "HTML",
+					"attrs": [{
+						"attr": "",
+						"value": ""
+					}],
+					"content": "<b>Attach proof of your Technical Certification</b>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "html",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
+					"label": "TecRec Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"clearOnHide": false,
+					"calculateValue": "if(data.endor_techRec_attachments && data.endor_techRec_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
+					"errorLabel": "Please attach proof of your Technical Certification",
+					"key": "endor_techRec_attachments",
+					"type": "file",
+					"input": true
+				}],
+				"path": "panel1"
+			}, {
+				"title": "Cylinder Inspector Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "panel3",
+				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInspector'){\n\tselected = true;\t\n}}\n}\nif((data.cylinderInspector_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInspector\") && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"type": "panel",
+				"label": "Cylinder Inspector Attachments",
+				"input": false,
+				"components": [{
+					"label": "HTML",
+					"attrs": [{
+						"attr": "",
+						"value": ""
+					}],
+					"content": "<b>Attach proof of your Cylinder Inspection Instructor Certification</b>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "html2",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
+					"label": "Cylinder Inspector Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"clearOnHide": false,
+					"calculateValue": "if(data.endor_cylinderInspector_attachments && data.endor_cylinderInspector_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
+					"key": "endor_cylinderInspector_attachments",
+					"type": "file",
+					"input": true
+				}],
+				"path": "panel3"
+			}, {
+				"title": "Cylinder Instructor Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "panel4",
+				"customConditional": "var selected = false;\nvar len = data.previous_cylinder.length;\nif(len > 1){\nfor(var i=0;i<len;i++){\nif(data.previous_cylinder[i].value === 'cylinderInstructor'){\n\tselected = true;\t\n}}}\n\nif((data.cylinderInstructor_attachments.length === 0 && data.upgradecylinder.value == \"cylinderInstructor\" ) && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false') && (!selected)){\n  show = true;\n}else{\n  show = false;\n}",
+				"type": "panel",
+				"label": "Cylinder Instructor Attachments",
+				"input": false,
+				"components": [{
+					"label": "HTML",
+					"attrs": [{
+						"attr": "",
+						"value": ""
+					}],
+					"content": "<b>Attach proof of your Cylinder Inspector Certification</b>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "html1",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
+					"label": "Cylinder Instructor Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"clearOnHide": false,
+					"calculateValue": "if(data.endor_cylinderInstructor_attachments && data.endor_cylinderInstructor_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
+					"key": "endor_cylinderInstructor_attachments",
+					"type": "file",
+					"input": true
+				}],
+				"path": "panel4"
+			}, {
+				"title": "Scuba Fit Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "panel5",
+				"customConditional": "if((data.scubaFit_attachments.length === 0 && data.scubaFit === 'scubaFitInstructor') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
+				"conditional": {
+					"show": true,
+					"when": "scubaFit",
+					"eq": "scubaFitInstructor"
+				},
+				"type": "panel",
+				"label": "Scuba Fit Attachments",
+				"input": false,
+				"components": [{
+					"label": "HTML",
+					"attrs": [{
+						"attr": "",
+						"value": ""
+					}],
+					"content": "<b>Attach proof of your Scuba Fit Certification</b>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "html3",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
+					"label": "ScubaFit Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"clearOnHide": false,
+					"calculateValue": "if(data.endor_scubaFit_attachments  && data.endor_scubaFit_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
+					"key": "endor_scubaFit_attachments",
+					"type": "file",
+					"input": true
+				}],
+				"path": "panel5"
+			}, {
+				"label": "attachmentFields",
+				"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
+				"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\",\"chequeConsentFile\"];",
+				"calculateServer": false,
+				"key": "endorAttachmentsFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
+				"title": "Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "panel2",
+				"customConditional": "if (data.CSRReviewRequired === \"\" || data.CSRReviewRequired === false || data.CSRReviewRequired == 'false'){\n show = true;\n} else {\n  show = false;\n}",
+				"type": "panel",
+				"label": "Attachments",
+				"input": false,
+				"components": [{
+					"label": "Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"multiple": true,
+					"calculateValue": "if((data.endor_attachments || data.endor_attachments !== undefined) && data.endor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
+					"validate": {
+						"multiple": true
+					},
+					"key": "endor_attachments",
+					"type": "file",
+					"input": true
+				}],
+				"path": "panel2"
+			}, {
+				"label": "csrEndorAttachmentsFieldnames",
+				"calculateValue": "value = [\"csr_attachments\"];",
+				"calculateServer": false,
+				"key": "csrEndorAttachmentsFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
+				"title": "Attachments",
+				"theme": "primary",
+				"breadcrumbClickable": false,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": false,
+					"next": true
+				},
+				"collapsible": false,
+				"tableView": false,
+				"key": "attachmentsCsrEndor",
+				"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = false;\n}\nelse{\n  show = true;\n}",
+				"type": "panel",
+				"label": "Attachments",
+				"input": false,
+				"components": [{
+					"label": "Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"multiple": true,
+					"clearOnHide": false,
+					"calculateValue": "if((data.csrEndor_attachments || data.csrEndor_attachments !== undefined) && data.csrEndor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"calculateServer": false,
+					"validate": {
+						"multiple": true
+					},
+					"key": "csr_attachments",
+					"type": "file",
+					"input": true
+				}],
+				"path": "attachmentsCsrEndor"
+			}],
+			"type": "panel",
+			"tooltip": "Select a valid policy period from the list",
+			"label": "Panel",
+			"path": "page3Panel3"
+		}, {
+			"key": "page3Panel2",
+			"input": false,
+			"title": "Footnotes",
+			"theme": "primary",
+			"tableView": false,
+			"components": [{
+				"clearOnHide": false,
+				"key": "page3Panel2Well",
+				"input": false,
+				"components": [{
+					"key": "page3Panel2Footnotes",
+					"label": "Footnotes",
+					"input": false,
+					"attrs": [{
+						"value": "",
+						"attr": ""
+					}],
+					"content": "The insurance costs include a premium, a $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax or email a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax or email a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
+					"type": "htmlelement",
+					"hideLabel": true,
+					"tableView": false
+				}],
+				"tableView": false,
+				"type": "well",
+				"hideLabel": true,
+				"label": ""
+			}],
+			"type": "panel",
+			"label": "Panel"
+		}, {
+			"key": "page3Panel4",
+			"input": false,
+			"title": "In Lieu of Signature",
+			"theme": "primary",
+			"tableView": false,
+			"components": [{
+				"label": "By checking this box",
+				"tableView": true,
+				"defaultValue": false,
+				"clearOnHide": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Please accept these declarations"
+				},
+				"errorLabel": "Please accept these declarations",
+				"key": "page3Panel4Bycheckingthisbox",
+				"logic": [{
+					"name": "disableFieldEdit",
+					"trigger": {
+						"type": "javascript",
+						"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
+					},
+					"actions": [{
+						"name": "diableField",
+						"type": "property",
+						"property": {
+							"label": "Disabled",
+							"value": "disabled",
+							"type": "boolean"
+						},
+						"state": true
+					}]
+				}],
+				"type": "checkbox",
+				"input": true,
+				"dataGridLabel": false
+			}, {
+				"label": "Content",
+				"attrs": [{
+					"value": "",
+					"attr": ""
+				}],
+				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>[Read Exclusions] </i></li>\n&nbsp;\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>\n</ol>",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page3Panel4Content",
+				"type": "htmlelement",
+				"input": false,
+				"hideLabel": true
+			}],
+			"type": "panel",
+			"label": "Panel"
+		}],
+		"input": false,
+		"path": "page3",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		}
+	}, {
+		"type": "panel",
+		"title": "Additional Insured",
+		"components": [{
+			"key": "page4PanelAdditionalInsureds",
+			"label": "AdditionalInsureds",
+			"input": false,
+			"attrs": [{
+				"value": "",
+				"attr": ""
+			}],
+			"content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
+			"type": "htmlelement",
+			"hideLabel": true,
+			"tableView": false
+		}, {
+			"clearOnHide": false,
+			"key": "page4PanelWell",
+			"input": false,
+			"components": [{
+				"label": "Please select if you would like to Update Additional Insured",
+				"optionsLabelPosition": "right",
+				"inline": false,
+				"tableView": false,
+				"defaultValue": "noAdditionalInsureds",
+				"values": [{
+					"value": "addAdditionalInsureds",
+					"label": "Update Additional Insureds",
+					"shortcut": ""
+				}, {
+					"value": "noAdditionalInsureds",
+					"label": "No Additional Insureds",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
+				"key": "AdditionalInsuredOption",
+				"type": "radio",
+				"input": true,
+				"lockKey": true
+			}],
+			"tableView": false,
+			"type": "well",
+			"hideLabel": true,
+			"label": ""
+		}, {
+			"title": "Information for each Additional Insured is required as follows",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "page4PanelPanel",
+			"conditional": {
+				"show": true,
+				"when": "AdditionalInsuredOption",
+				"eq": "addAdditionalInsureds"
+			},
+			"type": "panel",
+			"label": "Information for each Additional Insured is required as follows",
+			"input": false,
+			"components": [{
+				"label": "Additional Insured",
+				"disableAddingRemovingRows": false,
+				"reorder": false,
+				"addAnotherPosition": "bottom",
+				"defaultOpen": false,
+				"layoutFixed": false,
+				"enableRowGroups": false,
+				"hideLabel": true,
+				"tableView": true,
+				"defaultValue": [{
+					"name": "",
+					"address": "",
+					"city": "",
+					"country": "",
+					"state": {},
+					"zip": "",
+					"businessRelation": "",
+					"businessRelationOther": "",
+					"additionalInformation": ""
+				}],
+				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"minLength": 1
+				},
+				"key": "additionalInsured",
+				"type": "datagrid",
+				"input": true,
+				"components": [{
+					"clearOnHide": false,
+					"key": "page4PanelPanelWell",
+					"input": false,
+					"components": [{
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
+						"columns": [{
+							"components": [{
+								"label": "Name",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "name",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Address",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "address",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "City",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "city",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"inDataGrid": true,
+						"hideLabel": true
+					}, {
+						"label": "Columns",
+						"input": false,
+						"tableView": false,
+						"key": "additionalInsuredPanelColumns2",
+						"columns": [{
+							"components": [{
+								"label": "Country",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"value": "",
+										"label": ""
+									}],
+									"custom": "values = data['countryList'];"
+								},
+								"valueProperty": "country",
+								"template": "<span>{{ item.country }}</span>",
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please enter your country."
+								},
+								"key": "country",
+								"properties": {
+									"clear_field": "state"
+								},
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
+								"input": true,
+								"lockKey": true,
+								"source": "5d347da33e9be31e15d3b115",
+								"hideOnChildrenHidden": false
+							}],
+							"width": 3,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "State",
+								"widget": "choicesjs",
+								"tableView": true,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
+								},
+								"template": "<span>{{ item }}</span>",
+								"refreshOn": "row.country",
+								"clearOnRefresh": true,
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "state",
+								"customConditional": "show = (row.country)",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 3,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Zip Code",
+								"spellcheck": false,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true,
+									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+								},
+								"key": "zip",
+								"type": "textfield",
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 3,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Business Relation",
+								"widget": "choicesjs",
+								"tableView": false,
+								"data": {
+									"values": [{
+										"value": "diveStoreOwner",
+										"label": "Dive Store Owner"
+									}, {
+										"value": "Dive Boat Owner",
+										"label": "Dive Boat Owner"
+									}, {
+										"value": "Hotel/Resort Owner",
+										"label": "Hotel/Resort Owner"
+									}, {
+										"value": "Pool/Quarry/Lake Owner",
+										"label": "Pool/Quarry/Lake Owner"
+									}, {
+										"value": "Government Entity",
+										"label": "Government Entity"
+									}, {
+										"value": "other",
+										"label": "Other"
+									}]
+								},
+								"selectThreshold": 0.3,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "businessRelation",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Please specify ",
+								"spellcheck": true,
+								"tableView": true,
+								"clearOnHide": false,
+								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
+								"key": "businessRelationOther",
+								"conditional": {
+									"show": true,
+									"when": "businessRelation",
+									"eq": "other"
+								},
+								"type": "textfield",
+								"input": true,
+								"style": {
+									"margin-top": "4px"
+								},
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 3,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"type": "columns",
+						"hideLabel": true
+					}, {
+						"label": "Additional Information",
+						"autoExpand": false,
+						"spellcheck": true,
+						"tableView": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"key": "additionalInformation",
+						"type": "textarea",
+						"input": true
+					}],
+					"tableView": false,
+					"type": "well",
+					"inDataGrid": true,
+					"hideLabel": true,
+					"label": ""
+				}],
+				"lockKey": true
+			}]
+		}],
+		"input": false,
+		"key": "page4",
+		"theme": "primary",
+		"tableView": false,
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_additionalInsured"
+		},
+		"label": "Additional Insured",
+		"path": "page5",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false
+	}, {
+		"title": "Payment",
+		"theme": "primary",
+		"collapsible": false,
+		"tableView": true,
+		"key": "page6",
+		"properties": {
+			"payment_confirmation_page": "true"
+		},
+		"type": "panel",
+		"label": "Payment",
+		"breadcrumb": "none",
+		"components": [{
+			"input": true,
+			"tableView": true,
+			"key": "single_limit",
+			"label": "single_limit",
+			"type": "hidden",
+			"defaultValue": "$1,000,000",
+			"lockKey": true
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "annual_aggregate",
+			"label": "annual_aggregate",
+			"type": "hidden",
+			"lockKey": true,
+			"defaultValue": "$2,000,000"
+		}, {
+			"type": "document",
+			"key": "documents",
+			"dtype": "document",
+			"datype": "document",
+			"dattype": "document",
+			"datatype": "document",
+			"data_type": "document",
+			"label": "Documents",
+			"hideLabel": true,
+			"inputType": "document",
+			"input": 1,
+			"tableView": false
+		}, {
+			"label": "amount",
+			"defaultValue": "0",
+			"calculateValue": "if(data.CSRReviewRequired ===false || data.CSRReviewRequired ==='false' || data.CSRReviewRequired ===''){\n  value = (parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00).toFixed(0);\n}",
+			"calculateServer": false,
+			"key": "amount",
+			"properties": {
+				"target": "convergepay-amount"
+			},
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true
+		}, {
+			"label": "Columns",
+			"columns": [{
+				"components": [{
+					"label": "Payment Options",
+					"optionsLabelPosition": "right",
+					"inline": false,
+					"tableView": false,
+					"values": [{
+						"label": "Money Order",
+						"value": "moneyOrder",
+						"shortcut": ""
+					}, {
+						"label": "Check",
+						"value": "check",
+						"shortcut": ""
+					}, {
+						"label": "Credit Card",
+						"value": "creditCard",
+						"shortcut": ""
+					}, {
+						"label": "Other",
+						"value": "other",
+						"shortcut": ""
+					}],
+					"clearOnHide": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true
+					},
+					"key": "paymentOptions",
+					"properties": {
+						"render": "columns"
+					},
+					"type": "radio",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}, {
+				"components": [{
+					"title": "Check Details",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "checkDetails",
+					"conditional": {
+						"show": true,
+						"when": "paymentOptions",
+						"eq": "check"
+					},
+					"type": "panel",
+					"label": "Check Details",
+					"input": false,
+					"components": [{
+						"label": "Check Number",
+						"mask": false,
+						"spellcheck": true,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "chequeNumber",
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Upload Consent Form",
+						"tableView": false,
+						"storage": "base64",
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"clearOnHide": false,
+						"calculateServer": false,
+						"key": "chequeConsentFile",
+						"type": "file",
+						"input": true
+					}],
+					"hideOnChildrenHidden": false
+				}, {
+					"title": "Card Details",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "cardDetails",
+					"conditional": {
+						"show": true,
+						"when": "paymentOptions",
+						"eq": "creditCard"
+					},
+					"type": "panel",
+					"label": "Card Details",
+					"input": false,
+					"components": [{
+						"label": "Transaction ID",
+						"spellcheck": false,
+						"disabled": true,
+						"tableView": false,
+						"clearOnHide": false,
+						"calculateValue": "value = data.transaction_id",
+						"calculateServer": false,
+						"key": "transactionId",
+						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"type": "textfield",
+						"input": true
+					}, {
+						"type": "convergepay",
+						"key": "creditcardPayment",
+						"amount_field": "amount",
+						"label": "custom",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Content",
+						"attrs": [{
+							"value": "",
+							"attr": ""
+						}],
+						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "page7Content",
+						"conditional": {
+							"show": true,
+							"when": "paymentOptions",
+							"eq": "creditCard"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"hideOnChildrenHidden": false
+				}, {
+					"title": "Money Order Details",
+					"theme": "primary",
+					"collapsible": false,
+					"tableView": false,
+					"key": "moneyOrderDetai",
+					"conditional": {
+						"show": true,
+						"when": "paymentOptions",
+						"eq": "moneyOrder"
+					},
+					"type": "panel",
+					"label": "Money Order Details",
+					"input": false,
+					"hideOnChildrenHidden": false,
+					"components": [{
+						"label": "Order ID",
+						"spellcheck": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"required": true
+						},
+						"key": "orderId",
+						"type": "textfield",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}]
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}],
+			"tableView": false,
+			"key": "columns",
+			"properties": {
+				"payment_confirmation_page": "true"
+			},
+			"type": "columns",
+			"input": false,
+			"keyModified": true
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "transaction_id",
+			"label": "Transaction Id",
+			"type": "hidden",
+			"lockKey": true
+		}, {
+			"input": true,
+			"tableView": true,
+			"key": "transaction_status",
+			"label": "Transaction Status",
+			"type": "hidden",
+			"lockKey": true
+		}, {
+			"label": "Please process the payment and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "pleaseProcessThePaymentAndApprove",
+			"customConditional": "show = ((parseFloat(data.balanceEndor) > 0) &&(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ;",
+			"type": "htmlelement",
+			"input": false,
+			"hideLabel": true
+		}],
+		"input": false,
+		"path": "page6",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"customConditional": "show = false;\nif((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ) && (data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0)){\n\tshow =true;\n}"
+	}, {
+		"title": "Approval",
+		"theme": "primary",
+		"collapsible": false,
+		"tableView": false,
+		"key": "endorcsrapprovalscreen",
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"type": "panel",
+		"label": "Approval",
+		"input": false,
+		"components": [{
+			"label": "Please process the payment and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page6Pleaseprocessthepaymentandapprove",
+			"customConditional": "show = (parseFloat(data.balanceEndor) > 0);",
+			"type": "htmlelement",
+			"input": false
+		}, {
+			"label": "Notes",
+			"autoExpand": false,
+			"spellcheck": true,
+			"tableView": true,
+			"clearOnHide": false,
+			"calculateServer": false,
+			"key": "notes",
+			"type": "textarea",
+			"input": true
+		}, {
+			"title": "Approve/Reject the Application",
+			"theme": "primary",
+			"breadcrumbClickable": false,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "page77Panel",
+			"type": "panel",
+			"label": "Approve/Reject the Application",
+			"input": false,
+			"components": [{
+				"label": "Approve/Reject the Application",
+				"optionsLabelPosition": "top",
+				"inline": true,
+				"hideLabel": true,
+				"autofocus": true,
+				"tableView": true,
+				"values": [{
+					"label": "Approved",
+					"value": "accepted",
+					"shortcut": ""
+				}, {
+					"label": "Rejected",
+					"value": "rejected",
+					"shortcut": ""
+				}],
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Please Approve/Reject the Application"
+				},
+				"key": "approved",
+				"type": "radio",
+				"input": true
+			}],
+			"path": "page77Panel"
+		}, {
+			"label": "Rejection Reason",
+			"autoExpand": false,
+			"spellcheck": true,
+			"tableView": true,
+			"validate": {
+				"required": true,
+				"customMessage": "Please provide the reason for Rejecting the Policy"
+			},
+			"key": "rejectionReason",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "rejected"
+			},
+			"type": "textarea",
+			"input": true
+		}],
+		"path": "endorcsrapprovalscreen",
+		"breadcrumb": "none",
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		}
+	}, {
+		"input": true,
+		"label": "Submit",
+		"tableView": false,
+		"key": "submit",
+		"type": "button"
+	}],
+	"controller": "",
+	"revisions": "current",
+	"_vid": 96,
+	"title": "Endorsement Consolidation - IPL",
+	"display": "wizard",
+	"access": [{
+		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
+		"type": "read_all"
+	}],
+	"submissionAccess": [],
+	"settings": {},
+	"properties": {
+		"showNext": "true",
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"},{\"command\" : \"delegate\",\"delegate\":\"EndorsementRateCard\"},{\"command\" : \"delegate\",\"delegate\":\"DocumentFetchDelegate\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"showPrevious": "false"
+	},
+	"name": "endorsementConsolidationIpl",
+	"path": "endorsementconsolidationipl",
+	"project": "5ce43aa430776b2aff69301c",
+	"created": "2020-03-13T11:01:28.672Z",
+	"modified": "2020-05-04T21:29:26.342Z",
+	"machineName": "testdivehub:endorsementConsolidationIpl"
+}

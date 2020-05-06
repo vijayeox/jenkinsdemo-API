@@ -1,7 +1,5 @@
-import React from "react";
+import {React,ReactDOM,LeftMenuTemplate,FormRender} from "oxziongui";
 import { appId as application_id } from "./metadata.json";
-import LeftMenuTemplate from "OxzionGUI/LeftMenuTemplate";
-import FormRender from "OxzionGUI/components/App/FormRender";
 import "./index.scss";
 
 class Home extends React.Component {
@@ -27,7 +25,7 @@ class Home extends React.Component {
       var cache = cacheResponse.data;
       if (cache) {
         if (cache.workflow_uuid) {
-          this.setState({workflowId:cache.workflow_uuid});
+          this.setState({ workflowId: cache.workflow_uuid });
           this.getFormData(cache.workflow_uuid).then(formResponse => {
             if (formResponse.data) {
               this.setState({
@@ -131,6 +129,9 @@ class Home extends React.Component {
             appId={application_id}
           />
         ) : null}
+        <div id="floater">
+          <img src="./public/img/poweredby.png"></img>
+        </div>
       </div>
     );
   }

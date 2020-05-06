@@ -1,0 +1,373 @@
+@import "./src/variables";
+@import "./src/mixins";
+@import "./src/core";
+@import "./src/desktop";
+@import "./src/gui";
+@import "./src/animations";
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+}
+
+.osjs-root {
+  font-size: 15px;
+  background-image: url("./src/images/wallpaper.png");
+}
+
+.osjs-window[data-id="Window_DiveInsurance"] {
+  .sidenav---sidenav---_2tBP,
+  .sidenav---sidenav-subnav---1EN61 {
+    background-color: #043b6d;
+  }
+
+  .sidenav---sidenav-subnav---1EN61 > .sidenav---sidenav-subnavitem---1cD47 > .sidenav---navitem---9uL5T:hover{
+    background-color: #295883;
+  }
+  .sidenav---navitem---9uL5T {
+    color: white!important;
+  }
+  .k-button.k-primary {
+    background-color: #053b6d;
+    border-color: #053b6d;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+.PageRender .breadcrumbs-item a {
+  color: #053b6d !important;
+}
+
+.osjs-panel-item .logo-here img {
+    content: url('./src/images/logo.png');
+    width : 150px;
+    height: 44px;
+}
+
+.osjs-panel-item[data-name=logout] > div > img{
+  content: url('./src/images/logout.svg');
+}
+
+.osjs-window {
+  // @include window;
+  // background: #053b6d;
+  // padding :0px;
+
+  &[data-focused="false"] {
+    opacity: 0.5;
+  }
+
+  &[data-loading="true"] {
+    pointer-events: none;
+
+    &::after {
+      background: #053b6d;
+    }
+  }
+}
+
+.osjs-window-button {
+  position: relative;
+  min-width: 3em;
+
+  &:not(:last-child) {
+    margin-right: 0;
+  }
+
+  & > div {
+    width: 100%;
+    height: 3em;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+  }
+
+  &:hover > div {
+    -webkit-transition: all 200ms ease-in;
+    // -webkit-transform: scale(1.2);
+    -ms-transition: all 200ms ease-in;
+    // -ms-transform: scale(1.2);
+    -moz-transition: all 200ms ease-in;
+    // -moz-transform: scale(1.2);
+    transition: all 200ms ease-in;
+    // transform: scale(1.2);
+  }
+
+  &[data-action="minimize"] {
+  & > div {
+      background-position: 50% 50%;
+      background-size: 14px;
+    background-image: url("./src/images/minimize.svg");
+  }
+    &:hover{
+     transform: scale(1.2);
+    }
+  }
+  &[data-action="maximize"] {
+  & > div {
+      background-position: 50% 50%;
+      background-size: 14px;
+    background-image: url("./src/images/maximize.svg");
+  }
+    &:hover{
+     transform: scale(1.2);
+    }
+  }
+
+  &[data-action="close"] {
+    min-width: 3em;
+
+    & > div {
+      background-position: 50% 50%;
+      background-size: 14px;
+      background-image: url("./src/images/close.svg");
+    }
+
+    &:hover{
+     transform: scale(1.2);
+    }
+  }
+}
+
+.osjs-window-content {
+  background-color: #fff;
+  margin: 0;
+  height: calc(100% - #{$base-margin / 10});
+  width: 100%;
+  max-width: 100%;
+}
+
+.osjs-window-title {
+  padding: 0;
+  padding-left: 0;
+  font-size: 14px;
+}
+
+.osjs-window-icon {
+  padding: 0;
+}
+
+.osjs-gui-menu {
+  ul {
+    background-color: #333333;
+    border: 1px solid #000;
+    color: white;
+  }
+
+  li:hover > div > span {
+    background-color: $active-background;
+  }
+}
+
+.osjs-panel-item[data-name="tray"] > div > img {
+}
+
+.osjs-gui-menu-separator::after {
+  background-color: #d7d7d7;
+}
+
+.osjs-gui-button {
+  & > button {
+    // Fallback
+    background-color: #010101;
+  }
+}
+
+.osjs-gui-button > button {
+  background: #010101;
+  border: 1px solid #fff;
+  color: #ffffff;
+}
+
+.osjs-gui-tabs-header > div {
+  background-color: #333333;
+  color: white;
+}
+
+.osjs-gui-tabs-header > div.osjs__active {
+  background-color: #333333;
+}
+
+.osjs-window-title {
+  color: #fff;
+}
+
+.osjs-window-icon > div {
+  width: 3em;
+  height: 3em;
+}
+
+.osjs-panel-item[data-name="windows"] > div {
+  border: 0px solid #333;
+  background-color: transparent;
+  color: #fff;
+  border-radius: 0px;
+  border-right: 1px solid rgb(99, 97, 97);
+}
+
+.osjs-panel .osjs-panel-item--icon > img {
+  height: 2.8em;
+}
+
+.osjs-gui-menu ul > li {
+  padding: 2px;
+}
+
+.osjs-panel-item[data-name="windows"] {
+  .osjs-panel-item--clickable:hover img {
+    // -webkit-transition: all 200ms ease-in;
+    // -webkit-transform: scale(1.1);
+    // -ms-transition: all 200ms ease-in;
+    // -ms-transform: scale(1.1);
+    // -moz-transition: all 200ms ease-in;
+    // -moz-transform: scale(1.1);
+    // transition: all 200ms ease-in;
+    // transform: scale(1.1);
+  }
+
+  .osjs-panel-item--clickable:hover {
+    background: #588fa26e;
+  }
+}
+
+.osjs-panel-item--clickable:hover img {
+  // -webkit-transition: all 200ms ease-in;
+  // -webkit-transform: scale(1.1);
+  // -ms-transition: all 200ms ease-in;
+  // -ms-transform: scale(1.1);
+  // -moz-transition: all 200ms ease-in;
+  // -moz-transform: scale(1.1);
+  // transition: all 200ms ease-in;
+  // transform: scale(1.1);
+}
+
+.osjs-panel {
+  height: 3.5em;
+  min-height: 3.5em;
+  background-color: #fff;
+}
+
+.osjs-notification-title{
+  color: #053b6d;
+}
+
+.osjs-notification-message{
+  color: #053b6d;
+}
+
+.osjs-panel .osjs-panel-item--icon {
+  margin: 2px;
+}
+
+.osjs-window-header {
+  min-height: 3em;
+  height: auto;
+  align-items: center;
+}
+.osjs-window-title {
+  height: auto !important;
+  color: #fff;
+}
+
+.osjs-panel-item[data-name="windows"] > div {
+
+  font-size: 12px;
+  color: #053b6d;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 5px 10px;
+  align-self: center;
+
+  img {
+    max-height: 20px;
+  }
+}
+
+.k-dateinput-wrap {
+  input:not([type]),
+  input[type="text"]:not(.browser-default),
+  input[type="password"]:not(.browser-default),
+  input[type="email"]:not(.browser-default),
+  input[type="url"]:not(.browser-default),
+  input[type="time"]:not(.browser-default),
+  input[type="date"]:not(.browser-default),
+  input[type="datetime"]:not(.browser-default),
+  input[type="datetime-local"]:not(.browser-default),
+  input[type="tel"]:not(.browser-default),
+  input[type="number"]:not(.browser-default),
+  input[type="search"]:not(.browser-default),
+  textarea.materialize-textarea {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #9e9e9e;
+    border-radius: 0;
+    outline: none;
+    height: 3rem;
+    width: 100%;
+    font-size: 16px;
+    margin: 0 0 0px 0;
+    padding: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    -webkit-transition: border 0.3s, -webkit-box-shadow 0.3s;
+    transition: border 0.3s, -webkit-box-shadow 0.3s;
+    transition: box-shadow 0.3s, border 0.3s;
+    transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s;
+  }
+}
+
+label {
+  font-size: 14px;
+  color: #9e9e9e;
+}
+
+.k-list .k-item {
+  background-color: #053b6d !important;
+  color: white;
+}
+
+.k-datepicker {
+  margin-bottom: 8px;
+}
+.osjs-search-container {
+  // box-shadow: 0 11px 1em rgba(0, 0, 0, 0.5);
+  // background: #333333eb;
+  color: #fff;
+}
+.appmenu .app-bar .app {
+  border-bottom: 1px solid #053b6d;
+}
+.appmenu .app-bar .app .appcaption {
+  color: #053b6d;
+}
+.profile-dropdown-div:hover {
+  color: #053b6d;
+}
+.GridCustomStyle .k-pager-wrap .k-state-selected{
+  background-color: #053b6d!important;
+  color: white!important;
+}
+.form-render .bg-primary {
+    background-color: #053b6d !important;
+    color: white;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #053b6d !important;
+    border-color: #053b6d !important;
+}
+.card .card-header{
+  background-color: #053b6d !important;
+}
+
+.docViewerComponent .image-download-button{
+  background-color: #053b6d !important;
+}
+
+@import "variables.scss";
+@import "eox.scss";

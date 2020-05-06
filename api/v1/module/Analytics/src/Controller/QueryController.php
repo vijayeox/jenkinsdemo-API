@@ -8,6 +8,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
 use Exception;
+use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class QueryController extends AbstractApiController
 {
@@ -177,6 +178,49 @@ class QueryController extends AbstractApiController
         catch(Exception $e) {
             $response = ['data' => $data, 'errors' => 'Query could not be executed'];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        return $this->getSuccessResponseWithData(array('result' => $result));
+    }
+
+    /**
+     * Multiple Query API
+     * @api
+     * @link /analytics/query/data
+     * @method POST
+     * @param JSON array of uuids
+     * <code> {
+     *               "uuids" : ["list of uuids"]
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and executed querys result.
+     */
+    public function queryDataAction() {
+        $data = $this->extractPostData();
+        try {
+            $this->log->info("Query Data Action- " . print_r($data, true));
+            $result = $this->queryService->queryData($data);
+            if (!$result) {
+                return $this->getErrorResponse("Querys cannot be executed", 404);
+            }
+        }
+        catch(ValidationException $e) {
+            $this->log->error("Validation Exception- " ,$e);
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        catch(ZendDbException $e) {
+            $this->log->error("Zend DB Exception- " ,$e);
+            $response = ['data' => $data, 'errors' => 'Looks like the server encountered some problem'];
+            return $this->getErrorResponse("Internal Error", 500, $response);
+        }
+        catch(InvalidInputException $e) {
+            $this->log->error("Invalid Input Exception- " ,$e);
+            $response = ['data' => $data, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Invalid Input Errors", 404, $response);
+        }
+        catch(Exception $e) {
+            $this->log->error("Query Data Action Exception- " ,$e);
+            $response = ['data' => $data, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 404, $response);
         }
         return $this->getSuccessResponseWithData(array('result' => $result));
     }

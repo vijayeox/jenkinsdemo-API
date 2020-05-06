@@ -10,11 +10,7 @@ import { GridCell } from "@progress/kendo-react-grid";
 import DataLoader from "./components/Grid/DataLoader";
 import Swal from "sweetalert2";
 import $ from "jquery";
-import withReactContent from "sweetalert2-react-content";
-
-const MySwal = withReactContent(Swal);
-
-// import "@progress/kendo-theme-default/dist/all.css";
+import "@progress/kendo-theme-bootstrap/dist/all.css";
 
 export default class GridTemplate extends React.Component {
   constructor(props) {
@@ -35,7 +31,7 @@ export default class GridTemplate extends React.Component {
   }
 
   componentDidMount() {
-    $(document).ready(function() {
+    $(document).ready(function () {
       $(".k-textbox").attr("placeholder", "Search");
     });
   }
@@ -48,14 +44,14 @@ export default class GridTemplate extends React.Component {
     }
   }
 
-  dataStateChange = e => {
+  dataStateChange = (e) => {
     this.setState({
       ...this.state,
       dataState: e.data
     });
   };
 
-  dataRecieved = data => {
+  dataRecieved = (data) => {
     this.setState({
       gridData: data
     });
@@ -68,11 +64,11 @@ export default class GridTemplate extends React.Component {
         table.push(
           <GridColumn
             key={i}
-            width="200px"
+            width="150px"
             title={this.props.config.column[i].title}
             filterCell={this.emptyCell}
             sortable={false}
-            cell={props => (
+            cell={(props) => (
               <LogoCell {...props} myProp={this.props} url={this.baseUrl} />
             )}
           />
@@ -85,15 +81,26 @@ export default class GridTemplate extends React.Component {
             title={this.props.config.column[i].title}
             filterCell={this.emptyCell}
             sortable={false}
-            cell={props => <LogoCell2 {...props} myProp={this.props} />}
+            cell={(props) => <LogoCell2 {...props} myProp={this.props} />}
           />
         );
       } else {
+        var checkCellTemplate = undefined;
+        if (this.props.config.column[i]) {
+          if (this.props.config.column[i].cellTemplate) {
+            checkCellTemplate = this.props.config.column[i].cellTemplate;
+          }
+        }
         table.push(
           <GridColumn
             field={this.props.config.column[i].field}
             key={i}
             title={this.props.config.column[i].title}
+            cell={
+              checkCellTemplate
+                ? (item) => checkCellTemplate(item.dataItem)
+                : undefined
+            }
           />
         );
       }
@@ -117,7 +124,7 @@ export default class GridTemplate extends React.Component {
     }
   }
 
-  refreshHandler = serverResponse => {
+  refreshHandler = (serverResponse) => {
     if (serverResponse.status == "success") {
       this.notif.current.notify(
         "Success",
@@ -140,7 +147,10 @@ export default class GridTemplate extends React.Component {
 
   render() {
     return (
-      <div style={{ height: "90%", display: "flex", marginTop: "10px" }}>
+      <div
+        className="gridTemplateWrap"
+        style={{ height: "90%", display: "flex", marginTop: "10px" }}
+      >
         <Notification ref={this.notif} />
         {this.rawDataPresent()}
         <Grid
@@ -155,7 +165,7 @@ export default class GridTemplate extends React.Component {
           scrollable={"scrollable"}
           pageable={{ buttonCount: 5, pageSizes: true, info: true }}
           onDataStateChange={this.dataStateChange}
-          onRowClick={e => {
+          onRowClick={(e) => {
             this.props.permission.canEdit
               ? this.props.manageGrid.edit(e.dataItem, { diableField: false })
               : this.props.manageGrid.edit(e.dataItem, { diableField: true });
@@ -205,7 +215,6 @@ export default class GridTemplate extends React.Component {
             this.props.permission.canDelete) && (
             <GridColumn
               title="Manage"
-              width="190px"
               minResizableWidth={170}
               cell={CellWithEditing(
                 this.props.config.title,
@@ -230,7 +239,12 @@ class AddButton extends React.Component {
       <button
         onClick={this.props.args}
         className="k-button"
-        style={{ position: "absolute", top: "7px", right: "10px" }}
+        style={{
+          position: "absolute",
+          top: "3px",
+          right: "10px",
+          fontSize: "14px"
+        }}
       >
         <i className="fa fa-plus-circle" style={{ fontSize: "20px" }}></i>
 
@@ -316,9 +330,9 @@ function CellWithEditing(title, edit, remove, addUsers, permission) {
           <button
             type="button"
             className="btn manage-btn k-grid-remove-command"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
-              MySwal.fire({
+              Swal.fire({
                 title: "Are you sure?",
                 text:
                   "Do you really want to delete the record? This cannot be undone.",
@@ -331,7 +345,7 @@ function CellWithEditing(title, edit, remove, addUsers, permission) {
                 showCancelButton: true,
                 cancelButtonColor: "#3085d6",
                 target: ".Window_Admin"
-              }).then(result => {
+              }).then((result) => {
                 if (result.value) {
                   remove(this.props.dataItem);
                 }

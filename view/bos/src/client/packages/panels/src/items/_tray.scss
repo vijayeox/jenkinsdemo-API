@@ -47,10 +47,10 @@
 }*/
 
 .badge {
-color:white;
-  position: absolute;
-    right: 5px;
-    bottom: -10px;
+    color:white;
+    position: relative;
+    right: -30px;
+    bottom: -25px;
 }
 
 @media all {
@@ -83,7 +83,6 @@ color:white;
     margin-right: 5px;
     & > div {
       & > img {
-        padding: 10px;
         vertical-align: middle;
         width: 100%;
         height: auto;

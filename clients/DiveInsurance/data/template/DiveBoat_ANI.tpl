@@ -11,7 +11,7 @@
 			<div class = "ai_spacing"></div>
 			{foreach from=$list item=$additional}
 	    		<p class = "ai_list">
-	    			{$additional.name},{$additional.address},{$additional.city},{$additional.state},{$additional.zip}
+	    			{$additional.name},{$additional.address},{$additional.city},{$additional.state}&nbsp&nbsp&nbsp{$additional.zip}
 	    		</p>
     		{/foreach}
 	</div>

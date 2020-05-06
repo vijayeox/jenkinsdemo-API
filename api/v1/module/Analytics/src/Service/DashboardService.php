@@ -23,6 +23,7 @@ class DashboardService extends AbstractService
         $this->table = $table;
     }
 
+
     public function createDashboard($data)
     {
         $form = new Dashboard();
@@ -30,11 +31,32 @@ class DashboardService extends AbstractService
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['uuid'] = Uuid::uuid4()->toString();
+        $check = null;
+        try{
+            $query = 'Select id from ox_dashboard where isdefault = 1 and org_id=:org_id';
+            $queryParams = [
+                'org_id' => AuthContext::get(AuthConstants::ORG_ID)
+            ];
+            $check = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if(count($check) == 0)
+            {
+                $data['isdefault'] = 1;
+            }
+        } catch(Exception $e) {
+            throw $e;
+        }
         $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {
+            if(isset($data['isdefault']) && ($data['isdefault'] == 1)) {
+                $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
+                $queryParams = [
+                    'org_id' => AuthContext::get(AuthConstants::ORG_ID)
+                ];
+                $this->executeUpdateWithBindParameters($query, $queryParams);
+            }
             $count = $this->table->save2($form);
             if ($count == 0) {
                 $this->rollback();
@@ -66,6 +88,13 @@ class DashboardService extends AbstractService
         $form->updateValidate($data);
         $count = 0;
         try {
+            if(isset($data['isdefault']) && $data['isdefault'] == 1) {
+                $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
+                $queryParams = [
+                    'org_id' => AuthContext::get(AuthConstants::ORG_ID)
+                ];
+                $this->executeUpdateWithBindParameters($query, $queryParams);
+            }
             $count = $this->table->save2($form);
             if ($count == 0) {
                 $this->rollback();
@@ -115,7 +144,7 @@ class DashboardService extends AbstractService
 
     public function getDashboard($uuid)
     {
-        $query = 'select uuid, name, ispublic, description, dashboard_type, date_created, content, version, if(created_by=:created_by, true, false) as is_owner from ox_dashboard where org_id=:org_id and uuid=:uuid and (ispublic=true or created_by=:created_by) and isdeleted=false';
+        $query = 'select uuid, name, ispublic, description, dashboard_type, date_created, content, version, if(created_by=:created_by, true, false) as is_owner, isdeleted, filter_configuration from ox_dashboard where org_id=:org_id and uuid=:uuid and (ispublic=true or created_by=:created_by) and isdeleted=false';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -164,10 +193,10 @@ class DashboardService extends AbstractService
         $count = $resultSet->toArray()[0]['count'];
 
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ='SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdeleted from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+            $query ='SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdeleted, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         }
         else{
-            $query ='SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+            $query ='SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         }
         try {
             $resultSet = $this->executeQuerywithParams($query);

@@ -1,8 +1,6 @@
 const fs = require('fs');
 const express = require('express');
 const path = require('path');
-const React = require('react');
-const ReactDOMServer = require('react-dom/server');
 // Methods OS.js server requires
 
 require('@babel/register')({

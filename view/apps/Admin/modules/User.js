@@ -1,6 +1,5 @@
-import React from "react";
+import {React,GridTemplate} from "oxziongui";
 import { TitleBar } from "./components/titlebar";
-import {GridTemplate} from "../GUIComponents";
 import { DeleteEntry } from "./components/apiCalls";
 import DialogContainer from "./dialog/DialogContainerUser";
 
@@ -100,6 +99,10 @@ class User extends React.Component {
               {
                 title: "Name",
                 field: "name"
+              },
+              {
+                title: "Email",
+                field: "email"
               },
               {
                 title: "Designation",

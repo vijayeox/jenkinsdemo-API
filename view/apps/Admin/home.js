@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import {React,ReactDOM} from "oxziongui";
 import $ from "jquery";
 import Organization from "./modules/Organization";
 import Project from "./modules/Project";
@@ -103,7 +102,7 @@ class Home extends React.Component {
         component: Project
       },
       {
-        name: "Announcements",
+        name: "Announcement",
         api: "ANNOUNCEMENT",
         icon: "apps/Admin/131-laptop.svg",
         component: Announcement
@@ -123,7 +122,8 @@ class Home extends React.Component {
                 React.createElement(currentValue.component, {
                   args: this.core,
                   userProfile: this.userProfile,
-                  menu: this.showMenu
+                  menu: this.showMenu,
+                  name: currentValue.name
                 }),
                 document.getElementById("componentsBox")
               );

@@ -9,7 +9,8 @@ import org.camunda.bpm.engine.runtime.Incident
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class CustomServiceTaskListener implements ExecutionListener {
+class CustomServiceTaskListener implements ExecutionListener, Serializable {
+  static final long serialVersionUID = -677991492884005036L
   private static final Logger logger = LoggerFactory.getLogger(CustomServiceTaskListener.class)
 
   private static CustomServiceTaskListener instance = null
@@ -42,12 +43,13 @@ class CustomServiceTaskListener implements ExecutionListener {
   @Override
   void notify(DelegateExecution execution) throws Exception {
     Map taskDetails = [:]
-    taskDetails.activityInstanceId = execution.activityInstanceId
     taskDetails.processInstanceId = execution.processInstanceId
     taskDetails.variables = execution.getVariables()
     taskDetails.activityInstanceId = execution.getActivityInstanceId()
     taskDetails.parentInstanceId = execution.getParentActivityInstanceId()
     taskDetails.parentActivity = execution.getParentId()
+    taskDetails.activityName = execution.getCurrentActivityName()
+    taskDetails.activityId = execution.getCurrentActivityId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
       logger.info("Custom Service Task Listener -- ${taskDetails.variables.command}")
       try{
@@ -70,9 +72,10 @@ class CustomServiceTaskListener implements ExecutionListener {
           if(taskDetails.variables.return == "true" || taskDetails.variables.return == true){
             logger.info("Inside Return");
             def responseData = responseValue.data
-            responseData.putAll(responseData)
             execution.setVariables(responseData)
+            println("responseData - ${responseData}")
             logger.info("Final Response received - ${execution.getVariables()}")
+            println("Final Response received - ${execution.getVariables()}")
           }
           }else{
             ErrorHandler.handleError(execution)

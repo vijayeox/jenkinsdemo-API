@@ -1,12 +1,28 @@
+.k-list-container{
+  li.k-item{
+    font-size: small;
+  }
+}
+
 .GridCustomStyle {
   .k-grid {
-    height: inherit;
+    height: 100%;
+  }
+
+  .k-grid-header-wrap{
+    table{
+      min-width: 800px;
+    }
   }
 
   .k-grid-content {
     overflow-y: scroll;
     cursor: pointer;
     min-height: 200px;
+    table {
+      user-select: text;
+      min-width: 800px;
+    }
   }
 
   input {
@@ -78,27 +94,40 @@
     height: 25px;
   }
 
+  .k-filtercell {
+    .k-datepicker {
+      height: 35px;
+      .k-dateinput-wrap {
+        input {
+          font-size: small !important;
+          height: 34px;
+        }
+      }
+    }
+  }
+
   .k-grid-toolbar {
     .k-dropdown-button {
       float: right;
       margin-right: 5px;
     }
   }
-  .k-pager-numbers li a.k-state-selected{
-  color: #fff;
-  background-color: #275362;
-  border-color: #275362;
+  .k-pager-numbers li a.k-state-selected {
+    color: #fff;
+    background-color: #275362;
+    border-color: #275362;
   }
-  .k-pager-numbers li a{
-  color: #275362;
+  .k-pager-numbers li a {
+    color: #275362;
   }
-   .page-item.active .page-link{
+  .page-item.active .page-link {
     background-color: #275362;
     color: #fff;
     border-color: #275362;
   }
-  .k-pager-wrap .k-link, .k-pager-wrap .k-pager-nav{
-    color: #275362;
+  .k-pager-wrap .k-link,
+  .k-pager-wrap .k-pager-nav {
+    color: black;
   }
 
   .k-button {
@@ -107,11 +136,20 @@
 
   .k-header {
     font-size: small;
+    border-left-width: 1px;
+  }
+
+  .k-grid-header-wrap {
+    border-left-width: 1px;
+  }
+
+  .k-grid-pager {
+    border-width: 1px;
   }
 
   .k-grid-table {
     td {
-      font-size: small;
+      font-size: 14px;
     }
   }
 
@@ -133,5 +171,9 @@
     font-size: 1.1em;
     color: #ffffff;
     display: block;
+  }
+
+  .fa-comments-o.manageIcons{
+    font-size: 1.4em;
   }
 }

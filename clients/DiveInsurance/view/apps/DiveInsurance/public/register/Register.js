@@ -19,12 +19,16 @@ export default class Register extends React.Component {
           type="text/css"
           dangerouslySetInnerHTML={{
             __html:
-              "\n   .logo{\n    text-align: center;\n    margin:50px;\n  }\n  .logo img{\n    width:auto;\n    height: 150px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
+              "\n   .logo{\n    text-align: center;\n    margin:25px;\n    height:100px;\n  }\n  .logo > img{\n    width:auto;\n    height: 100px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
           }}
         />
         <div className="container">
           <div className="logo">
-            <img src="../img/logo.png" />
+            <img src="../img/logo.png" style={{ float: "left" }} />
+            <div className="padi" style={{ float: "right" }}>
+              <img src="../img/padi.png" />
+              <h4>PADI ENDORSED INSURANCE</h4>
+            </div>
           </div>
           <section>
             <div className="form">
@@ -49,6 +53,7 @@ export default class Register extends React.Component {
                           required
                           id="username_field"
                           name="username"
+                          title="Please enter your Username"
                           autoComplete="off"
                           placeholder="Username"
                         />
@@ -59,16 +64,17 @@ export default class Register extends React.Component {
                           type="password"
                           id="password_field"
                           name="password"
+                          title="Please enter your Password"
                           placeholder="Password"
                           required
                           autoComplete="off"
                         />
                         <label htmlFor="password_field">Password:</label>
                       </div>
-                      <button className="button button-block loginButton">
+                      <button title="Login" className="button button-block loginButton">
                         Log In
                       </button>
-                      <a className="resetPassword">Forgot your password?</a>
+                      <a title="Forgot Password?Please click here to change Password" className="resetPassword">Forgot your password?</a>
                     </div>
                   </div>
                 </div>

@@ -96,7 +96,7 @@ ox_query:
     org_id: 1
     isdeleted: 0
     version: 1
-  
+
   -
     id: 19
     uuid: '771d2819-c5ff-2326-bc40-f7a20704a748'
@@ -105,6 +105,19 @@ ox_query:
     configuration: '{"app_name":"crm","group":"owner_username,industry","field":"amount","operation":"sum"}'
     ispublic: 0
     created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+
+  -
+    id: 20
+    uuid: 'd5b79092-61f3-42ee-9bea-0d026157153f'
+    name: 'queryNonAgg'
+    datasource_id: 3
+    configuration: '{"app_name":"sampleapp","date_type":"workflow_instance_date_created","date-period":"2018-01-01/2019-12-12","list":"form_name"}'
+    ispublic: 1
+    created_by: 2
     date_created: '2019-06-27 07:25:06'
     org_id: 1
     isdeleted: 0

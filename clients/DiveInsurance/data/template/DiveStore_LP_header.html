@@ -17,7 +17,7 @@
               vars[temp_var[0]] = decodeURI(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -47,7 +47,8 @@
           <b class = "caption">Agent Information</b>
           <div class = "caption1">
            <p class ="info" id = "nameVal"></p>
-            <p class ="info" id = "addressVal"></p>
+            <p class ="info" id = "addressLineVal"></p>
+						<p class ="info" id = "addressLine2Val"></p>
             <p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
             <p class ="info" id = "phone2Val" style="margin-bottom:2px;"></p>
             <p class = "info">License#: <span class = "license_number"></span></p>
@@ -70,7 +71,7 @@
           <p class = "p_margin"><span class ="certificate_no"></span></p>
           <p class = "p_margin"><span class ="padi"></span></p>
           <p class = "p_margin"><span class ="start_date"></span></p>
-          <p class = "p_margin"><span class ="end_date"></span></p>
+          <p class = "p_margin"><span class ="end_date"></span> 12:01:00 AM</p>
         </div>
         <div>
           <hr></hr>

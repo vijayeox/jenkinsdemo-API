@@ -2,61 +2,66 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 var numeral = require('numeral');
 import WidgetGrid from './WidgetGrid';
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
-import * as am4maps from "@amcharts/amcharts4/maps";
-import am4geodata_usaAlbersLow from "@amcharts/amcharts4-geodata/usaAlbersLow";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import am4themes_kelly from "@amcharts/amcharts4/themes/animated";
+import WidgetDrillDownHelper from './WidgetDrillDownHelper';
+import * as am4core from '../amcharts/core';
+import * as am4charts from '../amcharts/charts';
+import * as am4maps from '../amcharts/maps';
+import am4geodata_usaAlbersLow from '@amcharts/amcharts4-geodata/usaAlbersLow';
+import am4themes_animated from '../amcharts/themes/animated';
+import am4themes_kelly from '../amcharts/themes/kelly';
 import WidgetTransformer from './WidgetTransformer';
 am4core.useTheme(am4themes_animated);
 
 class WidgetRenderer {
-    static render(element, widget) {
+    static render(element, widget, props) {
         let widgetTagName = element.tagName.toUpperCase();
-        switch(widget.renderer) {
+        switch (widget.renderer) {
             case 'JsAggregate':
                 if ((widgetTagName !== 'SPAN') && (widgetTagName !== 'DIV')) {
-                    console.error(`Unexpected inline aggregate value widget tag "${widgetTagName}"`);
+                    throw (`Unexpected inline aggregate value widget tag "${widgetTagName}"`);
                 }
-                return WidgetRenderer.renderAggregateValue(element, widget.configuration, widget.data);
-            break;
+                return WidgetRenderer.renderAggregateValue(element, widget.configuration, props, widget.data);
+                break;
 
             case 'amCharts':
                 if ((widgetTagName !== 'FIGURE') && (widgetTagName !== 'DIV')) {
-                    console.error(`Unexpected chart widget tag "${widgetTagName}"`);
-                    return null;
+                    throw (`Unexpected chart widget tag "${widgetTagName}"`);
                 }
                 try {
-                    return WidgetRenderer.renderAmCharts(element, widget.configuration, widget.data);
+                    return WidgetRenderer.renderAmCharts(element, widget.configuration, props, widget.data);
                 }
-                catch(e) {
+                catch (e) {
                     console.error(e);
                     return null;
                 }
-            break;
+                break;
 
             case 'JsTable':
                 if ((widgetTagName !== 'FIGURE') && (widgetTagName !== 'DIV')) {
-                    console.error(`Unexpected table widget tag "${widgetTagName}"`);
-                    return null;
+                    throw (`Unexpected table widget tag "${widgetTagName}"`);
                 }
                 try {
                     return WidgetRenderer.renderTable(element, widget.configuration, widget.data);
                 }
-                catch(e) {
+                catch (e) {
                     console.error(e);
                     return null;
                 }
-            break;
+                break;
 
+            case 'HTML':
+                    if ((widgetTagName !== 'SPAN') && (widgetTagName !== 'DIV')) {
+                        throw (`Unexpected inline aggregate value widget tag "${widgetTagName}"`);
+                    }
+                    return WidgetRenderer.renderhtml(element, widget.configuration, props, widget.data);
+                    break;
+    
             default:
-                console.error(`Unexpected widget renderer "${widget.renderer}"`);
-                return null;
+                throw (`Unexpected widget renderer "${widget.renderer}"`);
         }
     }
 
-    static renderAggregateValue(element, configuration, data) {
+    static renderAggregateValue(element, configuration, props, data) {
         let displayValue = null;
         if (configuration) {
             if (configuration.numberFormat) {
@@ -67,39 +72,68 @@ class WidgetRenderer {
             else if (configuration.dateFormat) {
                 let format = configuration.dateFormat;
                 displayValue = dayjs(data).format(format);
+            } else {
+                displayValue = data;
             }
         }
         element.innerHTML = displayValue ? displayValue : ('' + data);
         return null;
     }
 
-    static renderAmCharts(element, configuration, data) {
-        function getDataContext(dataItem, propertyList) {
-            let obj = {};
-            propertyList.forEach(function(prop, index, array) {
-                if (dataItem[prop]) {
-                    obj[prop] = dataItem[prop];
-                }
-            });
-            return obj;
+
+    static renderhtml(element, configuration, props, data) {
+        let displayValue = null;
+        if (configuration) {
+            if (configuration.numberFormat) {
+                let format = configuration.numberFormat;
+                let num = numeral(data);
+                displayValue = num.format(format);
+            }
+            else if (configuration.dateFormat) {
+                let format = configuration.dateFormat;
+                displayValue = dayjs(data).format(format);
+            } else {
+                displayValue = data;
+            }
         }
+        element.innerHTML = displayValue ? displayValue : ('' + data);
+        return null;
+    }
 
-        //function dumpProperties(obj) {
-        //    for (var prop in obj) {
-        //        console.log(prop + ' => ' + obj[prop]);
-        //    }
-        //    //Object.keys(obj).forEach(function(key,index) {
-        //    //    // key: the name of the object key
-        //    //    // index: the ordinal position of the key within the object 
-        //    //    console.log(key + ' => ' + obj[key]);
-        //    //});
-        //}
+    static overrideConfigurationProps(configuration, props) {
+        if (!configuration || !props) {
+            return configuration;
+        }
+        let widgetTitle = props['widgetTitle'];
+        if (widgetTitle && ('' !== widgetTitle)) {
+            let configTitles = configuration['titles'];
+            if (configTitles && (configTitles.length > 0)) {
+                let title = configTitles[0];
+                title['text'] = widgetTitle;
+            }
+        }
+        let widgetFooter = props['widgetFooter'];
+        if (widgetFooter && ('' !== widgetFooter)) {
+            let chContainer = configuration['chartContainer'];
+            if (chContainer) {
+                let footers = chContainer['children'];
+                if (footers && (footers.length > 0)) {
+                    let footer = footers[0];
+                    footer['text'] = widgetFooter;
+                }
+            }
+        }
+        return configuration;
+    }
 
-        var transformedConfig = WidgetTransformer.transform(configuration, data);
+    static renderAmCharts(element, configuration, props, data) {
+        let transformedConfig = WidgetTransformer.transform(configuration, data);
         configuration = transformedConfig.chartConfiguration;
         data = transformedConfig.chartData;
+        configuration = WidgetRenderer.overrideConfigurationProps(configuration, props);
 
         let series = configuration.series;
+
         //if (!Array.isArray(series)) {
         //    throw 'Chart series should be array.';
         //}
@@ -107,98 +141,66 @@ class WidgetRenderer {
         //    throw 'Chart series is empty.';
         //}
 
-        if (series) {
-            series.forEach(function(ser) {
-                switch(ser.type) {
-                    case 'ColumnSeries':
-                        if (!ser['columns']) {
-                            ser['columns'] = {};
-                        }
-                        let columns = ser['columns'];
-                        if (!columns['events']) {
-                            columns['events'] = {};
-                        }
-                        let  seriesEvts = columns['events'];
-                         seriesEvts['hit'] = function(evt) {
-                            let dataContext = getDataContext(evt.target.dataItem, [
-                                'valueX',
-                                'valueY',
-                                'dateX',
-                                'dateY',
-                                'categoryX',
-                                'categoryY',
-                                'openValueX',
-                                'openValueY',
-                                'openDateX',
-                                'openDateY',
-                                'openCategoryX',
-                                'openCategoryY'
-                            ]);
-                            console.log("Clicked column => ", dataContext);
-                        };
-                    break;
-                    case 'LineSeries':
-                        if (!ser['segments']) {
-                            ser['segments'] = {};
-                        }
-                        let segments = ser['segments'];
-                        segments['interactionsEnabled'] = true;
-                        if (!segments['events']) {
-                            segments['events'] = {};
-                        }
-                        let segmentEvts = segments['events'];
-                        segmentEvts['hit'] = function(evt) {
-                            let dataContext = evt.target.dataItem.component.tooltipDataItem.dataContext;
-                            console.log('Clicked line segment => ', dataContext);
-                        };
-    
-                        if (!ser['bullets']) {
-                            ser['bullets'] = {};
-                        }
-                        let bullets = ser['bullets'];
-                        if (!bullets['events']) {
-                            bullets['events'] = {};
-                        }
-                        let bulletEvts = bullets['events'];
-                        bulletEvts['hit'] = function(evt) {
-                            let dataContext = evt.target.dataItem.dataContext.value;
-                            console.log('Clicked bullet => ', dataContext);
-                        };
-                    break;
-                }
-            });
-        }
-
         let type = null;
         if (Array.isArray(series) && (series.length > 0)) {
             type = series[0].type;
         }
         let am4ChartType;
         if (type) {
-            switch(type) {
+            switch (type) {
                 case 'LineSeries':
                     am4ChartType = am4charts.XYChart;
-                break;
+                    break;
 
                 case 'ColumnSeries':
                     am4ChartType = am4charts.XYChart;
-                break;
+                    break;
 
                 case 'PieSeries':
                     am4ChartType = am4charts.PieChart;
-                break;
+                    break;
+
+                case 'FunnelSeries':
+                case 'PyramidSeries':
+                    am4ChartType = am4charts.SlicedChart;
+                    break;
+
+                default:
+                    throw (`Unhandled am4charts type: ${type}`);
             }
+        }
+        else {
+            let meta = configuration['oxzion-meta'];
+            let chartType = meta ? meta['type'] : null;
+            if (chartType) {
+                switch (chartType) {
+                    case 'map':
+                        am4ChartType = 'amCharts-map';
+                        break;
+
+                    default:
+                        throw (`Unhandled oxzion-meta chart type : ${chartType}`);
+                }
+            }
+            else {
+                console.error('Failed to detect chart type (specify chart type in oxzion-meta property of chart configuration JSON).', configuration);
+                throw ('Specify chart type in oxzion-meta property.');
+            }
+        }
+
+        if (WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration)) {
+            WidgetDrillDownHelper.setupAmchartsEventHandlers(series);
         }
 
         let elementTagName = element.tagName.toUpperCase();
         let canvasElement = null;
-        switch(elementTagName) {
+        switch (elementTagName) {
             case 'DIV':
                 canvasElement = element;
-            break;
+                break;
             case 'FIGURE':
                 canvasElement = element.querySelector('div.oxzion-widget-content');
-            break;
+                break;
             default:
                 throw `Unexpected chart element "${elementTagName}"`;
         }
@@ -207,33 +209,60 @@ class WidgetRenderer {
         }
 
         let chart = null;
-        if (am4ChartType) {
+        if ('amCharts-map' === am4ChartType) {
+            chart = WidgetRenderer.renderAmMap(configuration, canvasElement, data);
+        }
+        else {
             chart = am4core.createFromConfig(configuration, canvasElement, am4ChartType);
             if (chart && data) {
                 chart.data = data;
             }
         }
-        else {
-            let meta = configuration['oxzion-meta'];
-            let chartType = meta ? meta['type'] : null;
-            if (chartType) {
-                switch(chartType) {
-                    case 'map':
-                        chart = WidgetRenderer.renderAmMap(configuration, canvasElement, data);
-                    break;
-                    default:
-                        throw `Chart type "${chartType}" is not supported.`;
-                }
+
+        if (WidgetDrillDownHelper.isDrilledDown(element)) {
+            let rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
+            let buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
+            if (!buttonElement) {
+                element.insertAdjacentHTML('beforeend',
+                    '<div class="oxzion-widget-roll-up-button" title="Back">' +
+                    '<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>' +
+                    '</div>');
+                rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
+                buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
+                buttonElement.addEventListener('click', event => {
+                    let target = event.target;
+                    WidgetDrillDownHelper.rollUpClicked(
+                        WidgetDrillDownHelper.findWidgetElement(target));
+                });
             }
         }
-
+        else {
+            let rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
+            let buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
+            if (buttonElement) {
+                buttonElement.remove();
+            }
+        }
         return chart;
     }
 
     static renderAmMap(configuration, canvasElement, data) {
-        //-----------------------------------------------------------------------------------------
-        // Code is based on https://codepen.io/team/amcharts/pen/5ae84826c9e2ab4772c9ef85021835c7
-        //-----------------------------------------------------------------------------------------
+        function findWidgetElement(element) {
+            if ('MapPolygon' !== element.className) {
+                throw 'Unexpected element type.';
+            }
+            element = element.htmlContainer;
+            while (true) {
+                element = element.parentElement;
+                if (!element) {
+                    throw ('Did not find widget element when moving up the node hierarchy of map chart click event.');
+                }
+                if (element.hasAttribute(WidgetDrillDownHelper.OXZION_WIDGET_ID_ATTRIBUTE)) {
+                    return element;
+                }
+            }
+        }
+
         function processData(data, configuration) {
             let meta = configuration['oxzion-meta'];
             if (!meta) {
@@ -253,23 +282,26 @@ class WidgetRenderer {
             let newData = [];
             let min = Number.MAX_VALUE;
             let max = Number.MIN_VALUE;
-            data.forEach(function(item, index, array) {
+            data.forEach(function (item, index, array) {
                 let key = item[stateKey];
                 let value = item[valueKey];
                 newData.push({
-                    'id':country + key,
-                    'value':value
+                    'id': country + key,
+                    'value': value
                 });
                 max = Math.max(max, value);
                 min = Math.min(min, value);
             });
             return {
-                'data':newData,
-                'max':max,
-                'min':min
+                'data': newData,
+                'max': max,
+                'min': min
             }
         }
 
+        //-----------------------------------------------------------------------------------------
+        // Code is based on https://codepen.io/team/amcharts/pen/5ae84826c9e2ab4772c9ef85021835c7
+        //-----------------------------------------------------------------------------------------
         let chart = am4core.create(canvasElement, am4maps.MapChart);
         chart.geodata = am4geodata_usaAlbersLow;
         chart.projection = new am4maps.projections.Mercator();
@@ -322,7 +354,7 @@ class WidgetRenderer {
         }
 
         // Blank out internal heat legend value axis labels
-        heatLegend.valueAxis.renderer.labels.template.adapter.add("text", function(labelText) {
+        heatLegend.valueAxis.renderer.labels.template.adapter.add("text", function (labelText) {
             return "";
         });
 
@@ -341,7 +373,7 @@ class WidgetRenderer {
 
         // Show tooltips only if the state has a value
         // (A tooltip will appear if tooltipText is not empty.)
-        polygonTemplate.adapter.add("tooltipText", function(tooltipText, polygon) {
+        polygonTemplate.adapter.add("tooltipText", function (tooltipText, polygon) {
             if (isNaN(polygon.dataItem.dataContext.value)) {
                 return "";
             }
@@ -351,11 +383,17 @@ class WidgetRenderer {
         // When clicking a US State, if it has a numeric value:
         // 1. hide tooltip (use hit event handler)
         // 2. open URL if available (use url property, property binding, and adapter)
-        polygonTemplate.events.on("hit", function(event) {
+        polygonTemplate.events.on("hit", function (event) {
+            let dataContext = {
+                'code': event.target.dataItem.dataContext.id.substring(3),
+                'name': event.target.dataItem.dataContext.name
+            };
+            WidgetDrillDownHelper.drillDownClicked(findWidgetElement(event.target), dataContext);
+
             // The original logic was if this state has a numeric value,
             // but a tooltip will only show if that's the case,
             // so we can just hide it regardless.
-  
+
             // All these are ways to hide the tooltip, the actual tooltip
             // object is on the series, not the individual mapPolygons:
             // polygonSeries.tooltip.hide();
@@ -371,16 +409,16 @@ class WidgetRenderer {
         // We can use an adapter for url, reset it as needed, and override the cursor style.
 
         // This adapter will trigger on hit
-        polygonTemplate.adapter.add("url", function(url, polygon) {
+        polygonTemplate.adapter.add("url", function (url, polygon) {
             // if data isn't ready, or value isn't a number, kill the url if it has one
-            if (! polygon.dataItem || !polygon.dataItem.dataContext || isNaN(polygon.dataItem.dataContext.value)) {
+            if (!polygon.dataItem || !polygon.dataItem.dataContext || isNaN(polygon.dataItem.dataContext.value)) {
                 return "";
             }
             return url;
         });
         // When url is applied, hover cursor is changed to pointer
-        polygonSeries.events.on("datavalidated", function() {
-            polygonSeries.mapPolygons.each(function(polygon) {
+        polygonSeries.events.on("datavalidated", function () {
+            polygonSeries.mapPolygons.each(function (polygon) {
                 // Since we only set url via property binding, if it has an url
                 // already, then it definitely has the dataItem.dataContext,
                 // but maybe not a value.
@@ -419,14 +457,14 @@ class WidgetRenderer {
                 "US-TX": -99,
                 "US-FL": -81.65
             };
-            var latitude = {
+            let latitude = {
                 // polygonSeries.getPolygonById('US-ID').latitude
                 // 45.496849999999995
                 "US-ID": 43.6
             };
-            polygonSeries.events.once("datavalidated", function(){
+            polygonSeries.events.once("datavalidated", function () {
                 let imageData = [];
-                polygonSeries.mapPolygons.each(function(polygon) {
+                polygonSeries.mapPolygons.each(function (polygon) {
                     let stateData = polygon.dataItem.dataContext;
                     let stateLabelData = {
                         latitude: latitude[stateData.id] || polygon.latitude,
@@ -443,13 +481,13 @@ class WidgetRenderer {
     static renderTable(element, configuration, data) {
         let elementTagName = element.tagName.toUpperCase();
         let canvasElement = null;
-        switch(elementTagName) {
+        switch (elementTagName) {
             case 'DIV':
                 canvasElement = element;
-            break;
+                break;
             case 'FIGURE':
                 canvasElement = element.querySelector('div.oxzion-widget-content');
-            break;
+                break;
             default:
                 throw `Unexpected table element "${elementTagName}"`;
         }
@@ -457,9 +495,35 @@ class WidgetRenderer {
             throw 'Canvas element not found for drawing the table/grid.';
         }
 
-        ReactDOM.render(
-            <WidgetGrid configuration={configuration} data={data}/>, 
-            canvasElement);
+        WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration)
+        if (WidgetDrillDownHelper.isDrilledDown(element)) {
+            let rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
+            let buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
+
+            if (!buttonElement) {
+                element.insertAdjacentHTML('beforeend',
+                    '<div class="oxzion-widget-roll-up-button" title="Back">' +
+                    '<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>' +
+                    '</div>');
+                rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
+                buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
+                buttonElement.addEventListener('click', event => {
+                    ReactDOM.unmountComponentAtNode(canvasElement)
+                    let target = event.target;
+                    WidgetDrillDownHelper.rollUpClicked(
+                        WidgetDrillDownHelper.findWidgetElement(target));
+                });
+            }
+        }
+        else {
+            let rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
+            let buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
+            if (buttonElement) {
+                buttonElement.remove();
+            }
+        }
+        ReactDOM.unmountComponentAtNode(canvasElement)
+        ReactDOM.render(<WidgetGrid configuration={configuration} data={data} />, canvasElement);
     }
 }
 

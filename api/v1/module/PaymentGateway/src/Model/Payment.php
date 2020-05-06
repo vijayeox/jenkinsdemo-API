@@ -3,7 +3,6 @@
 namespace PaymentGateway\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class Payment extends Entity
 {
@@ -23,7 +22,7 @@ class Payment extends Entity
 
     public function validate()
     {
-        $dataArray = array("app_id", "payment_client","api_url");
+        $dataArray = array("app_id", "payment_client", "api_url");
         $this->validateWithParams($dataArray);
     }
 }

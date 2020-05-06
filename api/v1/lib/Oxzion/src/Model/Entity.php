@@ -1,11 +1,10 @@
 <?php
 namespace Oxzion\Model;
 
-use Oxzion\Utils\ValidationResult;
-use Oxzion\ValidationException;
+use Countable;
 use Oxzion\InputConverter;
 use Oxzion\InvalidInputException;
-use Countable;
+use Oxzion\ValidationException;
 
 abstract class Entity implements Countable
 {
@@ -36,7 +35,7 @@ abstract class Entity implements Countable
 
     public function setParseData($val)
     {
-        $this->parsedata=$val;
+        $this->parsedata = $val;
     }
 
     public function __get($key)
@@ -99,27 +98,27 @@ abstract class Entity implements Countable
         // $this->data = array_intersect_key($this->data, $data);
         foreach ($data as $key => $value) {
             if (!array_key_exists($key, $this->data)) {
-                continue;//throw new \Exception("$key field does not exist in " . __CLASS__);
+                continue; //throw new \Exception("$key field does not exist in " . __CLASS__);
             }
             $this->data[$key] = $value;
         }
     }
 
-    public function exchangeWithSpecificKey($data,$keyname,$validation = false)
+    public function exchangeWithSpecificKey($data, $keyname, $validation = false)
     {
         $errors = array();
-        foreach ($data as $key => $value){
+        foreach ($data as $key => $value) {
             if (!array_key_exists($key, $this->data)) {
                 continue;
             }
-            if($validation == true)
-            {
-                if(array_key_exists('readonly', $this->data[$key]))
+            if ($validation == true) {
+                if (array_key_exists('readonly', $this->data[$key])) {
                     $this->data[$key][$keyname] = $value;
-                else
+                } else {
                     $errors[$key] = 'readonly';
-            }
-            else {
+                }
+
+            } else {
                 $this->data[$key][$keyname] = $value;
             }
         }
@@ -150,7 +149,8 @@ abstract class Entity implements Countable
         }
     }
 
-    public function completeValidation() {
+    public function completeValidation()
+    {
         $this->typeChecker();
         $this->checkRequireFields();
     }
@@ -161,43 +161,39 @@ abstract class Entity implements Countable
         $errors = array();
         $inputConverter = new InputConverter();
         foreach ($data as $key => $value) {
-            try{
-                if($data[$key]['type']==null || $data[$key]['type']==" " || empty($data[$key]['type']))
-                {
+            try {
+                if ($data[$key]['type'] == null || $data[$key]['type'] == " " || empty($data[$key]['type'])) {
                     throw new InvalidInputException("Parameter ${key} is not Not specified.", "err.${key}.invalid");
-                }
-                else
-                {
+                } else {
                     switch ($data[$key]['type']) {
                         case 'int':
-                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::INTVAL);
+                            $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::INTVAL);
                             break;
                         case 'float':
-                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::FLOATVAL);
+                            $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::FLOATVAL);
                             break;
                         case 'datetype':
-                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::DATETYPEVAL);
+                            $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::DATETYPEVAL);
                             break;
                         case 'uuid':
-                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::UUIDVAL);
+                            $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::UUIDVAL);
                             break;
                         case 'timestamp':
-                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::TIMESTAMPVAL);
+                            $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::TIMESTAMPVAL);
                             break;
                         case 'string':
-                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::STRINGVAL);
+                            $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::STRINGVAL);
                             break;
                         case 'boolean':
-                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::BOOLEANVAL);
+                            $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::BOOLEANVAL);
                             break;
                         default:
                             throw new InvalidInputException("Parameter ${key} is not a proper value.", "err.${key}.invalid");
                             break;
                     }
                 }
-            } catch(InvalidInputException $e)
-            {
-                array_push($errors, array('message' => $e->getMessage(),'messageCode' => $e->getMessageCode()));
+            } catch (InvalidInputException $e) {
+                array_push($errors, array('message' => $e->getMessage(), 'messageCode' => $e->getMessageCode()));
             }
         }
         if (count($errors) > 0) {
@@ -212,8 +208,7 @@ abstract class Entity implements Countable
         $data = $this->data;
         $errors = $dataArray = array();
         foreach ($data as $key => $value) {
-            if($data[$key]['required'] == true && empty($data[$key]['value']))
-            {
+            if ($data[$key]['required'] == true && empty($data[$key]['value'])) {
                 $errors[$key] = 'required';
             }
         }

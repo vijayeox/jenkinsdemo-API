@@ -5,12 +5,15 @@ import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
 function QueryModal(props) {
   const [input, setInput] = useState({})
   const [errors, setErrors] = useState({})
+  const helper = props.osjsCore.make("oxzion/restClient");
+  var string_configuration = ""
 
   useEffect(() => {
     if (props.content !== undefined) {
       if (props.content.length !== 0) {
         var { name, ispublic, configuration, uuid, version } = props.content;
-        setInput({ ...input, ["queryname"]: name, ["visibility"]: ispublic, configuration, uuid, version })
+        string_configuration = JSON.stringify(configuration)
+        setInput({ ...input, ["queryname"]: name, ["visibility"]: ispublic, ["configuration"]: string_configuration, uuid, version })
       }
       else {
         setInput({ ["queryname"]: "", ["datasourcename"]: props.datasourcename, ["datasourceuuid"]: props.datasourceuuid })
@@ -20,22 +23,21 @@ function QueryModal(props) {
 
 
   function notify(response, operation) {
-    if (response.status == "success")
-      {
-        props.notification.current.notify(
+    if (response.status == "success") {
+      props.notification.current.notify(
         "Data Source " + operation,
         "Operation succesfully completed",
         "success"
       )
       setInput({})
       props.resetInput()
-        }
+    }
     else {
-      props.notification.current.notify(
-        "Error",
-        "Operation failed " + response.message,
-        "danger"
-      )
+      // props.notification.current.notify(
+      //   "Error",
+      //   "Operation failed " + response.message,
+      //   "danger"
+      // )
     }
   }
 
@@ -65,53 +67,76 @@ function QueryModal(props) {
     Footer = (<Button variant="success" onClick={() => queryOperation("Activated")}>Activate</Button>)
     DisabledFields = true
   }
-  function validateForm() {
+  else if (props.modalType === "Execute") {
+    Footer = (<Button variant="success" onClick={() => queryOperation("Executed")}>Execute</Button>)
+  }
+  else if (props.modalType === "Edit") {
+    Footer = (<Button variant="success" onClick={() => queryOperation("Edited")}>Edit</Button>)
+    var DisabledFields = false
+  }
+  async function validateForm(operation) {
     let formValid = true
     var error = errors
+    if (operation && operation === "Created" && input["queryname"]) {
+      let response = await helper.request(
+        "v1",
+        `analytics/query?show_deleted=true&filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"eq","value":"${input["queryname"]}"}]},"skip":0}]`,
+        {},
+        "get"
+      )
+      let result = response.data.data
+      if (result.length !== 0) {
+        formValid = false
+        error["queryname"] = "* Query name already exists, please choose a different one"
+      }
+
+    }
     if (!input["queryname"]) {
       formValid = false
       error["queryname"] = "* Please enter the query name"
     }
     if (!input["visibility"]) {
       formValid = false
-      error["visibility"] = "* Please enter the configuration"
+      error["visibility"] = "* Please choose the visibility"
     }
     setErrors({ ...error })
     return formValid
   }
 
-  function queryOperation(operation) {
-    let helper = props.osjsCore.make("oxzion/restClient");
-    let requestUrl = ""
-    let method = ""
-    let formData = {}
-
-    if (operation === "Created" || operation === "Activated") {
-
-      formData["name"] = input["queryname"]
-      formData["datasource_id"] = input["datasourceuuid"]
-      formData["configuration"] = props.configuration
-      formData["ispublic"] = input["visibility"]
-      if (operation === "Activated") {
-        formData["configuration"] = props.configuration
-        formData["version"] = input["version"]
-        formData["isdeleted"] = "0"
-        requestUrl = "analytics/query/" + input["uuid"]
-        method = "put"
-      }
-      else {
-        requestUrl = "analytics/query"
-        method = "filepost"
-      }
-    }
-    else if (operation === "Deleted") {
-      requestUrl = "analytics/query/" + input["uuid"] + "?version=" + input["version"]
-      method = "delete"
-    }
-
-
-    let formValid = validateForm()
+  async function queryOperation(operation) {
+    let formValid = await validateForm(operation)
     if (formValid === true) {
+      let requestUrl = ""
+      let method = ""
+      let formData = {}
+      if (operation === "Executed") {
+        props.onHide()
+        props.runQuery(props.content);
+      }
+      else if (operation === "Created" || operation === "Activated" || operation === "Edited") {
+
+
+        formData["name"] = input["queryname"]
+        formData["datasource_id"] = input["datasourceuuid"]
+        formData["configuration"] = props.configuration
+        formData["ispublic"] = input["visibility"]
+        if (operation === "Activated" || operation === "Edited") {
+          formData["configuration"] = input["configuration"]
+          formData["version"] = input["version"]
+          formData["isdeleted"] = "0"
+          requestUrl = "analytics/query/" + input["uuid"]
+          method = "put"
+        }
+        else {
+          requestUrl = "analytics/query"
+          method = "filepost"
+        }
+      }
+      else if (operation === "Deleted") {
+        requestUrl = "analytics/query/" + input["uuid"] + "?version=" + input["version"]
+        method = "delete"
+      }
+
       helper.request(
         "v1",
         requestUrl,
@@ -119,10 +144,16 @@ function QueryModal(props) {
         method
       )
         .then(response => {
-          props.refreshGrid.current.child.current.refresh()
-          notify(response, operation)
-          props.resetInput()
-          props.onHide()
+          if (response.status == "success") {
+            props.refreshGrid.current.child.current.refresh()
+            notify(response, operation)
+            props.resetInput()
+            props.hideQueryForm()
+            props.onHide()
+          }
+          else if (response.status == "error") {
+            alert("error")
+          }
         })
         .catch(err => {
           console.log(err)
@@ -132,7 +163,12 @@ function QueryModal(props) {
 
   return (
     <Modal
-      {...props}
+      show={props.show}
+      onHide={() => {
+        setInput({})
+        props.onHide()
+      }
+      }
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -148,7 +184,7 @@ function QueryModal(props) {
           <Form.Group as={Row}>
             <Form.Label column lg="3">Query Name</Form.Label>
             <Col lg="9">
-              <Form.Control type="text" name="queryname" onChange={handleChange} disabled={DisabledFields} value={input["queryname"] !== undefined ? input["queryname"] : null} />
+              <Form.Control type="text" name="queryname" onChange={handleChange} disabled={DisabledFields} value={input["queryname"] !== undefined ? input["queryname"] : ""} />
               <Form.Text className="text-muted errorMsg">
                 {errors["queryname"]}
               </Form.Text>
@@ -175,20 +211,21 @@ function QueryModal(props) {
             </Col>
           </Form.Group>
           <>
-          {props.modalType==="Save"?
-          <Form.Group as={Row}>
-            <Form.Label column lg="3">Data Source Name</Form.Label>
-            <Col lg="9">
-              <Form.Control type="text" name="datasourcename" value={props.datasourcename} disabled />
-            </Col>
-          </Form.Group>
-          :null}
-          <Form.Group as={Row}>
-            <Form.Label column lg="3">Configuration</Form.Label>
-            <Col lg="9">
-              <Form.Control as="textarea" name="configuration" value={input["configuration"] !== undefined ? JSON.stringify(input["configuration"]) : props.configuration} disabled />
-            </Col>
-          </Form.Group>
+            {props.modalType === "Save" &&
+              <Form.Group as={Row}>
+                <Form.Label column lg="3">Data Source Name</Form.Label>
+                <Col lg="9">
+                  <Form.Control type="text" name="datasourcename" value={props.datasourcename} disabled />
+                </Col>
+              </Form.Group>
+            }
+            <Form.Group as={Row}>
+              <Form.Label column lg="3">Configuration</Form.Label>
+              <Col lg="9">
+
+                <Form.Control as="textarea" name="configuration" value={input["configuration"] !== undefined ? input["configuration"] : props.configuration} onChange={handleChange} disabled={DisabledFields} />
+              </Col>
+            </Form.Group>
           </>
         </Form>
       </Modal.Body>

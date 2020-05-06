@@ -46,7 +46,27 @@ $(".tab a").on("click", function(e) {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
+  $("#username_field").keyup(function(e) {
+    if (e.keyCode === 13) {
+      loginAction();
+    }
+  });
+
+  $("#password_field").keyup(function(e) {
+    if (e.keyCode === 13) {
+      loginAction();
+    }
+  });
+
   $(".loginButton").on("click", function(e) {
+    loginAction();
+  });
+
+  $(".resetPassword").on("click", function(e) {
+    forgotPassword();
+  });
+
+  function loginAction() {
     var username = document.getElementById("username_field").value;
     var password = document.getElementById("password_field").value;
     if (username && password) {
@@ -83,16 +103,17 @@ document.addEventListener("DOMContentLoaded", function() {
       Swal.fire({
         // position: "top-end",
         icon: "warning",
-        title: "Please enter your username and password",
+        title:
+          "Please enter your " +
+          (username ? "" : "username") +
+          (!username && !password ? " and " : "") +
+          (password ? "" : "password") +
+          ".",
         showConfirmButton: false,
         timer: 2200
       });
     }
-  });
-
-  $(".resetPassword").on("click", function(e) {
-    forgotPassword();
-  });
+  }
 
   function forgotPassword() {
     Swal.fire({
@@ -157,12 +178,24 @@ document.addEventListener("DOMContentLoaded", function() {
     );
     window.location.href = window.location.origin;
   }
+
   Formio.createForm(
     document.getElementById("formio"),
-    JSON.parse(formContent),{noAlerts:true}
+    JSON.parse(formContent),
+    { noAlerts: true }
   ).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
+
+    setTimeout(function() {
+      var padiField = $("input[name='data[padi]']");
+      padiField.keyup(function(e) {
+        if (e.keyCode === 13) {
+          $("button[name='data[validatePADIButton]']").trigger("click");
+        }
+      });
+    }, 500);
+
     form.on("submit", function(submission, next) {
       submission.data.app_id = appId;
       var response = fetch(baseUrl + "register", {
@@ -190,63 +223,83 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
     });
-    form.on("callDelegate", changed => {
-      var component = form.getComponent(event.target.id);
-      if (component) {
-        var properties = component.component.properties;
-        if (properties) {
-          if (properties["delegate"]) {
-            if (properties["padiType"]) {
-              changed["padiType"] = properties["padiType"]
+
+    form.on("customEvent", function (event) {
+      console.log(event)
+      var changed = event.data;
+      if (event.type == "callDelegate") {
+        var component = form.getComponent(event.target.id);
+        if (component) {
+          var component = event.component;
+          if (properties) {
+            if (properties["delegate"]) {
+              if (properties["padiType"]) {
+                changed["padiType"] = properties["padiType"]
                 ? properties["padiType"]
                 : null;
-            }
-            $.ajax({
-              type: "POST",
-              async: false,
-              url:
+              }
+              $.ajax({
+                type: "POST",
+                async: false,
+                url:
                 baseUrl +
                 "app/" +
                 appId +
                 "/delegate/" +
                 properties["delegate"],
-              data: changed,
-              success: function(response) {
-                if (response.data) {
-                  form.submission = { data: response.data };
-                  form.triggerChange();
+                data: changed,
+                success: function(response) {
+                  if (response.data) {
+                    form.setSubmission({ data: response.data });
+                    form.triggerChange();
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
       }
-    });
-    form.on("callCommands", changed => {
-      var component = form.getComponent(event.target.id);
-      if (component) {
-        var properties = component.component.properties;
-        if (properties) {
-          if (properties["commands"]) {
-            $.ajax({
-              type: "POST",
-              async: false,
-              url:
+      if (event.type == "callCommands") {
+        var component = event.component;
+        if (component) {
+          var properties = component.properties;
+          if (properties) {
+            if (properties["commands"]) {
+              $.ajax({
+                type: "POST",
+                async: false,
+                url:
                 baseUrl +
                 "app/" +
                 appId +
                 "/commands?" +
                 $.param(JSON.parse(properties["commands"])),
-              data: changed,
-              success: function(response) {
-                if (response.data) {
-                  form.submission = { data: response.data };
-                  form.triggerChange();
+                data: changed,
+                success: function(response) {
+                  if (response.data) {
+                    console.log(response.data);
+                    form.setSubmission({ data: response.data }).then(response2 => {
+                      console.log(form.submission);
+                    });
+                    console.log(form.submission)
+                    // form.triggerChange();
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
+      }
+      if(event.type == 'resetPADI'){
+        setTimeout(function() {
+          var padiField = $("input[name='data[padi]']");
+          padiField.keyup(function(e) {
+            if (e.keyCode === 13) {
+              $("button[name='data[validatePADIButton]']").trigger("click");
+            }
+          });
+        }, 500);
+        form.triggerChange();
       }
     });
     form.on("change", changed => {
@@ -273,6 +326,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
               }
             });
+          }
+          if(properties["clear_field"]){
+            var targetComponent = form.getComponent(properties["clear_field"]);
+            if (targetComponent) {
+              targetComponent.setValue("");
+            } 
           }
         }
       }

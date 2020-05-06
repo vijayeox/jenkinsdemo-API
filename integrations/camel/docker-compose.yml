@@ -1,20 +1,25 @@
-# "#" this is a comment
-#This is a docker-compose file to start Camel service 
-
-#specifying version according to docker engine release version.
-#refer to https://docs.docker.com/compose/compose-file/
-version: "3.5"
-
-#making sevices
+version: '3.5'
 services:
-        camel:
-                build:
-                        context: ./docker
-                        dockerfile: Dockerfile
-
-                network_mode: "host"
-                volumes:
-                          - ".:/workspace/app"
-                          - "../../:/app"
-                labels:
-                        com.oxapp.description: "Apache Activemq/Camel"
+    camel:
+        build:
+            context: ./docker
+            args:
+                HOST: ${HOST}
+                DB_USERNAME: ${DB_USERNAME}
+                DB_PASSWORD: ${DB_PASSWORD}
+                DB_HOST: ${DB_HOST}
+                QUARTZ_DB: ${QUARTZ_DB}
+                API_DB : ${API_DB}
+                ELASTIC_CLUSTER : ${ELASTIC_CLUSTER}
+        network_mode: "host"    
+        ports:
+            - "8161:8161"
+            - "8085:8085"
+            - "61616:61616"
+            - "5672:5672"
+            - "61613:61613"
+            - "1883:1883"
+            - "61614:61614"
+        volumes:
+            - ./:/workspace/app
+            - ../../:/app      

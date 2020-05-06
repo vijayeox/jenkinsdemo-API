@@ -228,6 +228,8 @@ class Persistence extends AbstractService
         if (!empty($data['ref_clause'])) {
             $expAndOperator = array("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
             array_push($parsedArray[$queryStatement][$key]['ref_clause'], $expAndOperator);
+            if (count($tableArrayList) > 2)
+                $tableArrayList = array(current($tableArrayList), end($tableArrayList));
             $arrayKeys = array_keys($tableArrayList);
             $lastElementInTableList = end($arrayKeys);
             foreach ($tableArrayList as $fromkey => $tableList) {
@@ -289,7 +291,7 @@ class Persistence extends AbstractService
                 }else{
                     array_push($parsedArray['WHERE'], $expAndOperator);
                 }
-                $exp_const = array("expr_type" => "const", "base_expr" => "0 )", "sub_tree" => "");
+                $exp_const = array("expr_type" => "const", "base_expr" => " 0 )", "sub_tree" => "");
                 $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
                 $exp_colref = array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
                     array( "delim" => "", "parts" => array("0" => "ox_app_org_id") )

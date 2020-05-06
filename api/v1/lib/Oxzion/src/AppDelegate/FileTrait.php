@@ -1,15 +1,14 @@
 <?php
 namespace Oxzion\AppDelegate;
 
-use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Service\FileService;
 use Logger;
 
 trait FileTrait
 {
     protected $logger;
-    protected $fileService;
-    protected $appId;
+    private $fileService;
+    private $appId;
     
     public function __construct(){
         $this->logger = Logger::getLogger(__CLASS__);
@@ -36,5 +35,10 @@ trait FileTrait
     protected function saveFile($params,$fileId){
         $this->logger->info("SAVE FILE");
         return $this->fileService->updateFile($params,$fileId);
+    }
+
+    protected function getWorkflowInstanceByFileId($fileId){
+        $this->logger->info("GET FILE BY WORKFLOW INSTANCE ID");
+        return $this->fileService->getWorkflowInstanceByFileId($fileId);
     }
 }

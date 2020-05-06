@@ -6,19 +6,17 @@ use Elasticsearch\ClientBuilder;
 use Oxzion\Service\ElasticService;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\Analytics;
-use Oxzion\Analytics\AnalyticsPostProcessing;
-use Logger;
+use Oxzion\Analytics\AnalyticsAbstract;
 
-class AnalyticsEngineImpl implements AnalyticsEngine {
-	private $config;
+
+class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
+
 	private $hasGroup;
-    public function __construct($config) {
-        $this->config = $config;
-        $this->logger = Logger::getLogger(get_class($this));
+    public function __construct($config,$appDBAdapter,$appConfig) {
+		parent::__construct($config,$appDBAdapter,$appConfig);
     }
 
-    public function runQuery($app_name,$entity_name,$parameters)
+    public function getData($app_name,$entity_name,$parameters)
     {
         $this->logger->debug('Run query parameters:');
         $this->logger->debug(
@@ -35,6 +33,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
 			$finalResult['meta'] = $query;
 			$finalResult['meta']['type'] = $result['type'];
+			$finalResult['meta']['query'] = $result['query'];
 			if ($result['type']=='group') {
 				$finalResult['data'] = $this->flattenResult($result['data'],$query);
 			} else {
@@ -50,9 +49,6 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 					$finalResult['meta']['displaylist'] = $query['displaylist'];
 				}
 			}
-			if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
-				$finalResult['data'] = AnalyticsPostProcessing::postProcess($finalResult['data'],$parameters);
-			}
 			return $finalResult;
 			
         } catch (Exception $e) {
@@ -64,10 +60,15 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
     private function formatQuery($parameters) {
 		$range=null;
 		$field = null;
+		$dateperiod = null;
 		$filter =array();
+		$inline_filter = array();
 		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
-		if (!empty($parameters['date-period'])) {
-			$period = explode('/', $parameters['date-period']);
+		if (!empty($parameters['date-period'])) $dateperiod = $parameters['date-period'];
+		if (!empty($parameters['date_period'])) $dateperiod =  $parameters['date_period'];
+
+		if ($dateperiod) {
+			$period = explode('/', $dateperiod);
 			$startdate = date('Y-m-d', strtotime($period[0]));
 			$enddate =  date('Y-m-d', strtotime($period[1]));
 		} else {
@@ -135,10 +136,15 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		if (isset($parameters['filter'])) {
 			$filter[] = $parameters['filter'];
 		}
+		if (isset($parameters['inline_filter'])) {
+			foreach($parameters['inline_filter'] as $inlineArry) {
+				array_unshift($filter, $inlineArry);
+			}
+		}
 		$this->hasGroup = (empty($group)) ? 0 : 1;
 		if (!empty($group)) $group = array_map('strtolower', $group);
 
-		$returnarray = array('filter' => $filter, 'group' => $group, 'range' => $range, 'aggregates' => $aggregates);
+		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'range' => $range, 'aggregates' => $aggregates);
 		if (isset($parameters['pagesize'])) {
 			$returnarray['pagesize'] = $parameters['pagesize'];
 		}

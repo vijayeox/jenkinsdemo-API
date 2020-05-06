@@ -54,8 +54,8 @@ class RoutesLoader extends RouteBuilder{
         context.start()
     }
 
-    
-    def loadRoutes(){
+    //flag is added for test : Junit
+    def loadRoutes(String flag = null){
         String routeLocation = System.getProperty('ROUTE_CONFIG')
         println "routeLocation - ${routeLocation}"
         URL url
@@ -64,16 +64,15 @@ class RoutesLoader extends RouteBuilder{
             File routeFile = new File(routeLocation)
             println "file - ${routeFile}"
             println "routeFileExists - ${routeFile.exists()}"
+            println "absolutePath - ${routeFile.absolutePath}"
             if(routeFile.exists()){
-                url = new URL("file:///${routeFile.absolutePath}")
+                url = new URL("file:${routeFile.absolutePath}")
             }
+        }else{
+            //load the routes from Externalise route file
+            url = RoutesLoader.class.classLoader.getResource("Routes.groovy")
         }
         println "url - ${url}"
-        if(!url){
-            url = RoutesLoader.class.classLoader.getResource("Routes.groovy")
-            
-        }
-        println url
         return new ConfigSlurper().parse(url)
 
     }

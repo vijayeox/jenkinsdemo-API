@@ -13,7 +13,7 @@ class FollowUp extends DispatchNotification
             'Individual Professional Liability' => 'IPL_Renewal_Reminder',
             'Dive Boat' => 'DB_Renewal_Reminder',
             'Dive Store' => 'DS_Renewal_Reminder',
-            'EFR' => 'EFR_Renewal_Reminder',
+            'Emergency First Response' => 'EFR_Renewal_Reminder',
         );
 
         parent::__construct();
@@ -34,11 +34,12 @@ class FollowUp extends DispatchNotification
                     $val['template'] = $this->template[$val['product']];
                     $val['orgUuid'] = $data['orgId'];
                     $val['orgId'] = $data['orgId'];
-                    $template = $val['template'];
+                    //$template = $val['template'];
                     $val['to'] = $val['email'];
                     $val['subject'] = "Renewal Notification";
-                    $val['url'] = $this->baseUrl. '?app=DiveInsurance&params={"type":"Form","pipeline":{"commands":[{"command":"file","workflowInstanceId":"'.$val['workflowInstanceId'].'"},{"command":"delegate","delegate":"RenewalRateCard"},{"command":"startform","workflow_id":"'.$data['workflowId'].'"}]}}';
-                    $response[] = $this->dispatch($val, $template, $mailOptions);
+                   
+                    $val['url'] = $this->baseUrl. '?app=DiveInsurance&params={"name":"","detail":[{"type":"Form","url":"pipeline","urlPostParams":{"workflowInstanceId":"'.$val['workflowInstanceId'].'","workflow_id":"'.$data['workflowId'].'","commands":[{"command":"file"},{"command":"delegate","delegate":"RenewalRateCard"},{"command":"startform"}]}}]}';
+                    $response[] = $this->dispatch($val);
                 }
             }
         }

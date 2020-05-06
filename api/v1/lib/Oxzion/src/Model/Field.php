@@ -8,11 +8,13 @@ class Field extends Entity
 {
     protected $data = array(
         'id'=>0,
-        'app_id'=>0,
+        'app_id'=>null,
         'name'=>null,
         'text'=>null,
-        'entity_id'=>0,
+        'entity_id'=>null,
         'data_type'=>null,
+        'type' => null,
+        'parent_id' => null, 
         'options'=>null,
         'template'=>null,
         'constraints'=>null,

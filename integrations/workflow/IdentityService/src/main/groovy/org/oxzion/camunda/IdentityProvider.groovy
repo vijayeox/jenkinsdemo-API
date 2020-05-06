@@ -17,14 +17,14 @@ import java.sql.ResultSet
 import java.sql.Statement
 
 class IdentityProvider implements ReadOnlyIdentityProvider  {
-    def BASE_DB_URL = System.getenv('BASE_DB_URL')
+    def API_DB_URL = System.getenv('API_DB_URL')
     def DB_DRIVER = System.getenv('DB_DRIVER')
     def DB_USERNAME = System.getenv('DB_USERNAME')
     def DB_PASSWORD = System.getenv('DB_PASSWORD')
 
     @Override
     org.camunda.bpm.engine.identity.User findUserById(String userId) {Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
+        Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String statement = 'select username,firstname,lastname,email,password from ox_user where username="'+userId+'"'
         ResultSet rs = st.executeQuery(statement)
@@ -59,7 +59,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
 
     List<Group> findGroupByQueryCriteria(GroupQueryImpl query) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
+        Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String statement = "select id,name,status from ox_group"
         String orderByPart = ""
@@ -116,7 +116,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     @Override
     org.camunda.bpm.engine.identity.Group findGroupById(String groupId) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
+        Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String statement = "select id,name,status from ox_group"
         ResultSet rs = st.executeQuery(statement)
@@ -138,7 +138,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     }
     List<User> findUserByQueryCriteria(UserQueryImpl query) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
+        Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         try {
             String statement = "select username,firstname,lastname,email,password from ox_user"
@@ -186,7 +186,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     }
     List<Tenant> findTenantByQueryCriteria(TenantQueryImpl query) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
+        Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String orderByPart = "ORDER BY ox_organization.id"
         if(query.orderByTenantId())
@@ -213,7 +213,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     @Override
     org.camunda.bpm.engine.identity.Tenant findTenantById(String tenantId) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
+        Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String statement = "select id,name from ox_organization where id = '"+tenantId+"'"
         ResultSet rs = st.executeQuery(statement)

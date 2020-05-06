@@ -49,13 +49,19 @@ You can also run composer from the image. The container environment is named
 ```bash
 $ docker-compose run zf composer install
 ```
+To create tables in oxzionapi database, run migration script
+```bash
+For Linux
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./migrations migrate
+For Windows
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./migrations migrate
 
 To run tests using the mysql database running on your machine run the following command
 ```bash
 For Linux
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./phpunit
+$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf ./phpunit
 For Windows
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./phpunit
+$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf ./phpunit
 ```
 To run Documentation Generator on your machine run the following command
 This will create the Documentation in a new folder "Doc" which will have an index.html file which contains the list of subpages across the features

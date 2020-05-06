@@ -1,33 +1,30 @@
 <?php
 namespace Callback\Service;
 
-    use Oxzion\Auth\AuthConstants;
-    use Oxzion\Auth\AuthContext;
-    use Oxzion\Service\AbstractService;
-    use Oxzion\Service\UserService;
-    use Oxzion\ValidationException;
-    use Oxzion\Utils\RestClient;
-    use Contact\Service\ContactService;
+use Contact\Service\ContactService;
+use Exception;
+use Oxzion\ServiceException;
+use Oxzion\Service\AbstractService;
+use Oxzion\Service\UserService;
 
-    use Exception;
+class CRMService extends AbstractService
+{
+    protected $dbAdapter;
+    protected $contactService;
+    protected $userService;
 
-    class CRMService extends AbstractService
+    public function __construct($config, ContactService $contactService, UserService $userService)
     {
-        protected $dbAdapter;
-        protected $contactService;
-        protected $userService;
-
-        public function __construct($config, ContactService $contactService, UserService $userService)
-        {
-            parent::__construct($config, null);
-            $this->contactService = $contactService;
-            $this->userService = $userService;
-        }
-        public function addContact($data)
-        {
-            $params = array();
-            $params['first_name'] = isset($data['firstName']) ? $data['firstName'] : null;
-            $params['last_name'] = isset($data['lastName']) ? $data['lastName'] : null;
+        parent::__construct($config, null);
+        $this->contactService = $contactService;
+        $this->userService = $userService;
+    }
+    public function addContact($data)
+    {
+        $params = array();
+        $params['first_name'] = isset($data['firstName']) ? $data['firstName'] : null;
+        $params['last_name'] = isset($data['lastName']) ? $data['lastName'] : null;
+        try {
             if (isset($data['phones']) && !empty($data['phones'])) {
                 $params['phone_1'] = $data['phones'][0];
             }
@@ -47,16 +44,15 @@ namespace Callback\Service;
             $params['owner_id'] = isset($owner['id']) ? $owner['id'] : null;
             $params['created_id'] = isset($owner['id']) ? $owner['id'] : null;
             $params['uuid'] = $assignedTo['uuid'];
-            try {
-                $result = $this->contactService->createContact($params);
-            } catch (Exception $e) {
-                $this->logger->error($e->getMessage(), $e);
-                return 0;
-            }
+            $result = $this->contactService->createContact($params);
             if ($result) {
-                return array('body'=>$params);
+                return array('body' => $params);
             } else {
                 return 0;
             }
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw new ServiceException("Could not add contact to the CRM", "could.not.add.contact.to.CRM");
         }
     }
+}

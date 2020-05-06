@@ -2,21 +2,16 @@
 namespace Callback;
 
 use Callback\Controller\CalendarCallbackController;
-use Oxzion\Test\ControllerTest;
-use Oxzion\Db\ModelTable;
-use PHPUnit\DbUnit\TestCaseTrait;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use PHPUnit\Framework\TestResult;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 use Mockery;
+use Oxzion\Test\ControllerTest;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
 class CalendarCallbackControllerTest extends ControllerTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
-        $ics_file = dirname(__FILE__)."/../files/invite.ics";
+        $ics_file = dirname(__FILE__) . "/../files/invite.ics";
         $_FILES = array(
             'attachment' => array(
                 'tmp_name' => $ics_file,
@@ -24,7 +19,7 @@ class CalendarCallbackControllerTest extends ControllerTest
                 'type' => 'text/calendar',
                 'size' => 1395,
                 'error' => 0,
-            )
+            ),
         );
         parent::setUp();
     }
@@ -42,34 +37,36 @@ class CalendarCallbackControllerTest extends ControllerTest
         $calendarService->setEmailService($mockEmailService);
         return $mockEmailService;
     }
-     private function getMockEmailClientForCalendarService()
+
+    private function getMockEmailClientForCalendarService()
     {
         $calendarService = $this->getApplicationServiceLocator()->get(Service\CalendarService::class);
         $mockEmailClient = Mockery::mock('Oxzion\Email\EmailClient');
         $calendarService->setEmailClient($mockEmailClient);
         return $mockEmailClient;
     }
+    
     public function testSendMail()
     {
-        $data = ['to' => 'bharatg@myvamla.com','from' => 'bharatg@myvamla.com','subject'=>'test case for email','body'=>'test body for email'];
+        $data = ['to' => 'bharatg@myvamla.com', 'from' => 'bharatg@myvamla.com', 'subject' => 'test case for email', 'body' => 'test body for email'];
         $headers = array(
-                'to' => $data['to'],
-                'from' => $data['from'],
-                'subject' => $data['subject'],
-            );
-        $body=$data['body'];
+            'to' => $data['to'],
+            'from' => $data['from'],
+            'subject' => $data['subject'],
+        );
+        $body = $data['body'];
         $mockemailService = $this->getMockEmailServiceForCalendarService();
         $smtpConfig = array('host' => 'box3053.bluehost.com',
-                        'password' => 'password',
-                        'port' => '465',
-                        'username' => 'bharatg@myvamla.com',
-                        'secure' => 'ssl');
+            'password' => 'password',
+            'port' => '465',
+            'username' => 'bharatg@myvamla.com',
+            'secure' => 'ssl');
         $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'], true)->once()->andReturn($smtpConfig);
 
         $mockemailClient = $this->getMockEmailClientForCalendarService();
         $mockemailClient->expects('buildAndSendMessage')->withAnyArgs()->once()->andReturn(null);
         $this->dispatch('/callback/calendar/sendmail', 'POST', $data);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('calendarsendmailcallback');
@@ -77,25 +74,25 @@ class CalendarCallbackControllerTest extends ControllerTest
 
     public function testSendMailwithoutAttachment()
     {
-        $data = ['to' => 'bharatg@myvamla.com','from' => 'bharatg@myvamla.com','subject'=>'test case for email','body'=>'test body for email'];
+        $data = ['to' => 'bharatg@myvamla.com', 'from' => 'bharatg@myvamla.com', 'subject' => 'test case for email', 'body' => 'test body for email'];
         $headers = array(
-                'to' => $data['to'],
-                'from' => $data['from'],
-                'subject' => $data['subject'],
-            );
-        $body=$data['body'];
+            'to' => $data['to'],
+            'from' => $data['from'],
+            'subject' => $data['subject'],
+        );
+        $body = $data['body'];
 
         $mockemailService = $this->getMockEmailServiceForCalendarService();
         $smtpConfig = array('host' => 'box3053.bluehost.com',
-                        'username' => 'bharatg@myvamla.com',
-                        'password' => 'password',
-                        'port' => '465',
-                        'secure' => 'ssl');
+            'username' => 'bharatg@myvamla.com',
+            'password' => 'password',
+            'port' => '465',
+            'secure' => 'ssl');
         $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'], true)->once()->andReturn($smtpConfig);
         $mockemailClient = $this->getMockEmailClientForCalendarService();
         $mockemailClient->expects('buildAndSendMessage')->withAnyArgs()->once()->andReturn(null);
         $this->dispatch('/callback/calendar/sendmail', 'POST', $data);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('calendarsendmailcallback');
@@ -103,24 +100,24 @@ class CalendarCallbackControllerTest extends ControllerTest
 
     public function testSendMailFail()
     {
-        $data = ['from' => 'bharatg@myvamla.com','subject'=>'test case for email','body'=>'test body for email'];
+        $data = ['from' => 'bharatg@myvamla.com', 'subject' => 'test case for email', 'body' => 'test body for email'];
         $headers = array(
-                'from' => $data['from'],
-                'subject' => $data['subject'],
-            );
-        $body=$data['body'];
+            'from' => $data['from'],
+            'subject' => $data['subject'],
+        );
+        $body = $data['body'];
 
         $mockemailService = $this->getMockEmailServiceForCalendarService();
         $smtpConfig = array('host' => 'box3053.bluehost.com',
-                        'password' => 'password',
-                        'port' => '465',
-                        'secure' => 'ssl');
+            'password' => 'password',
+            'port' => '465',
+            'secure' => 'ssl');
         $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'], true)->once()->andReturn($smtpConfig);
 
         $mockemailClient = Mockery::mock('Oxzion\Email\EmailClient');
         $mockemailClient->expects('buildAndSendMessage')->with($data['body'], array(), $headers, $smtpDetails)->once()->andReturn(null);
         $this->dispatch('/callback/calendar/sendmail', 'POST', $data);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->assertEquals($content['message'], 'Mail Send Failed');
         $this->setDefaultAsserts();

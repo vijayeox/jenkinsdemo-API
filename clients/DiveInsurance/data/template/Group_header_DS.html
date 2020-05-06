@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link href= "./css/template_css.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="./AgentInfo.js"></script> 
+<script type="text/javascript" src="./js/moment.js"></script>
+
+<script>
+  function subst() {
+      var vars = {};
+      var data = {};
+      var split = {};
+
+      var query_strings_from_url = document.location.search.substring(1).split('&');
+      for (var query_string in query_strings_from_url) {
+          if (query_strings_from_url.hasOwnProperty(query_string)) {
+              var temp_var = query_strings_from_url[query_string].split('=', 2);
+              vars[temp_var[0]] = decodeURI(temp_var[1]);
+          }
+      }
+      // document.getElementById("test").textContent = query_strings_from_url;
+     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','padi','end_date','group_policy_id','address1','address2','combinedSingleLimit','annualAggregate','state_in_short','padi'];
+      for (var css_class in css_selector_classes) {
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+            var element = document.getElementsByClassName(
+              css_selector_classes[css_class]
+            );
+            for (var j = 0; j < element.length; ++j) {
+              element[j].textContent = vars[css_selector_classes[css_class]];
+            }
+            if (css_selector_classes[css_class] == "start_date") {
+              document.getElementsByClassName(
+                "start_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+            }
+            if (css_selector_classes[css_class] == "end_date") {
+              document.getElementsByClassName("end_date")[0].textContent =
+                moment(vars[css_selector_classes[css_class]]).format(
+                  "D MMMM YYYY"
+                ) + " - 12:01:00 AM";
+            }
+          }
+        }
+      agentInfo();
+  }
+  </script>
+</head>
+<body onload="subst()">  
+ <div class = "main_group">
+
+    <div id = "test"></div>
+            <hr class="line1"></hr>
+          <div class="spacer"></div>
+          <hr class="line2"></hr>
+
+          <center><div class="grp_title1"><b>GROUP PROFESSIONAL CERTIFICATE OF INSURANCE</b></div></center>
+         <div class="title2">
+            <div class = "claims_title">
+               <p class ="grp_claims"><b>CLAIMS MADE FORM</b></p>
+            </div>
+            <div class = "page_value">
+               <p class ="page_no">Page <span class="page"></span> of <span class="topage"></span></p>
+            </div>
+          </div>
+          <hr class="line1"></hr>
+          <div class="spacer"></div>
+          <hr class="line2"></hr>
+
+    <div class = "gcontent">
+      <div class ="content1">
+          <b class = "grp_caption">Agent information</b>
+          <div class = "grp_caption1">
+            <p class ="grp_info1" id="nameVal"></p>
+            <p class ="grp_info2" id ="addressLineVal"></p>
+						<p class ="info" id = "addressLine2Val"></p>
+            <p class ="grp_info"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
+            <p class ="grp_info" id ="phone2Val"></p>
+            <p class = "grp_info">License#: <span class = "license_number"></span></p>
+          </div>
+          <b class = "grp_caption2">Named Insured and Mailing Address:</b>
+          <p class = "grp_details"><span class ="business_name"></p>
+          <p class = "grp_details"><span class ="address1"></span></p>
+          <p class = "grp_details"><span class ="address2"></span></p>
+          <p class = "grp_details"><span class ="city"></span>,<span class ="state_in_short"></span> - <span class ="zip"></span></p>
+          <p class = "grp_details"><span class ="country"></span></p>
+      </div>
+      <div class ="content2">
+        <div class = "certificate_data">
+          <p class = "grpp_margin"><b>Certificate #:</b></p>
+          <p class = "grpp_margin"><b>Member #:</b></p>
+          <p class = "grpp_margin"><b>Effective Date:</b></p>
+          <p class = "grpp_margin"><b>Expiration Date:</b></p>
+        </div>
+        <div class = "certificate_data1">
+          <p class = "grpp_margin"><span class ="group_certificate_no"></span></p>
+          <p class = "grpp_margin"><span class ="padi"></span></p>
+          <p class = "grpp_margin"><span class ="start_date"></span></p>
+          <p class = "grpp_margin"><span class ="end_date"></span></p>
+        </div>
+        <div>
+          <hr></hr>
+          <p class = "grpp_margin">Policy issued by Tokio Marine Specialty Insurance
+Company</p>
+          <p class = "grpp_margin">Policy #: <span class ="group_policy_id"></span></p>
+        </div>
+      </div>
+      </div>
+    </div>
+    <hr class="grp_hr_value"></hr>
+      <div class="gi_type">
+        <hr class="ghr_value"></hr>
+          <div class="gi_type1">
+            <div class = "in-type">
+               <b class = "ins_type">Type of Insurance</b>
+               <div class = "ins_data" style="margin-top: 10px;">
+                 <p class = "grpins_font"><b>COMBINED SINGLE LIMIT:</b></p>
+                 <p class = "grpins_font"><b class = "space">ANNUAL AGGREGATE:</b></p>
+               </div>
+            </div>
+            <div class = "gin-type1"> 
+                <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
+                  <p class = "grpins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p>
+                  <p class = "grpins_font">$2,000,000</p>
+            </div>
+          </div>
+          <div class="gi_type2">
+           &nbsp
+          </div>
+        </div>
+      <hr class="ghrtag_efr"></hr>
+      <center><p class = "gpolicy_notice1">Retro Date: <span class ="start_date"></span>, or the first day     of uninterrupted coverage,whichever is earlier (refer to section VI of the         policy). However, in the event of a claim which invokes a Retroactive Date prior      to <span class ="start_date"></span>, the Certificate Holder must submit proof of uninterrupted       insurance coverage dating prior to the date that the alleged negligent act, error, or omission occurred.
+    </p></center>
+    <hr class = "hr_efr"></hr>
+  </div>
+</body>
+</html>

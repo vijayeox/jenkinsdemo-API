@@ -37,9 +37,44 @@ class ArrayUtils
         return false;
     }
 
+    public static function multiFieldSearch($array, array $fieldValues)
+    {
+        foreach ($array as $key => $item) {
+            $found = 0;
+            foreach ($fieldValues as $field => $value) {
+                if ($item[$field] === $value) {
+                    $found++;                    
+                }
+            }
+            if($found == count($fieldValues)){
+                return $item;
+            }
+
+        }
+        return false;
+    }
+
     public static function isJson($string)
     {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    public static function isKeyDefined($arr = array(),...$params)
+	{
+		foreach ($params as $key => $value) {
+			if(!isset($arr[$value]) || empty($arr[$value])) {
+				return false;
+			} 
+		}
+    	return true; 
+	}
+
+    public static function convertListToMap($list, $key,$value){
+        $map =array();
+        foreach ($list as $index => $item) {
+            $map[$item[$key]]=  $item[$value];
+        }
+        return $map;
     }
 }

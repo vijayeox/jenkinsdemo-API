@@ -606,6 +606,22 @@ return [
                     ],
                 ],
             ],
+            'getFileDocuments' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/document/:document',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\DocumentController::class,
+                        'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'file_document_get' => [
                 'type' => Segment::class,
                 'options' => [
@@ -652,6 +668,91 @@ return [
                         'controller' => Controller\CommandController::class,
                         'method' => 'POST',
                         'action' => 'executeCommands',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'scheduleJob' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/scheduleJob',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'POST',
+                        'action' => 'scheduleJob',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'getJobsList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/getJobsList',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'GET',
+                        'action' => 'getJobsList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'getJob' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/getJob/:jobId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'GET',
+                        'action' => 'getJobDetails',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'cancelJob' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cancelJob',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'POST',
+                        'action' => 'cancelJob',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'cancelJobId' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cancelJobId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\JobController::class,
+                        'method' => 'POST',
+                        'action' => 'cancelJobId',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

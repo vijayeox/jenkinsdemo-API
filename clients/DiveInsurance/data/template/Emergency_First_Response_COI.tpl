@@ -12,7 +12,8 @@
 					<b class = "caption">Agent Information</b>
 					<div class = "caption1">
 						<p class ="info" id = "nameVal"></p>
-						<p class ="info" id = "addressVal"></p>
+						<p class ="info" id = "addressLineVal"></p>
+						<p class ="info" id = "addressLine2Val"></p>
 						<p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
 						<p class ="info" id = "phone2Val" style="margin-bottom:2px;"></p>
 						<p class = "info">License#: {$license_number}</p>
@@ -21,8 +22,8 @@
 					<p class = "details">{$firstname},{$initial},{$lastname}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state}</p>
-					<p class = "details">{$country},{$zip}</p>
+					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
 				<div class = "certificate_data">
@@ -34,9 +35,8 @@
 				<div class = "certificate_data1">
 					<p class = "p_margin">{$certificate_no}</p>
 					<p class = "p_margin">{$padi}</p>
-					<p class = "p_margin">{$start_date}</p>
-					<p class = "p_margin">{$end_date}</p>
-					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
+					<p class = "p_margin">{$start_date|date_format:"%d %B %Y"}</p>
+					<p class = "p_margin">{$end_date|date_format:"%d %B %Y"}&nbsp12:01:00 AM</p>      
 				</div>
 				<hr></hr>
 				<p class = "policy">Policy issued by &nbsp{$carrier}</p>
@@ -44,9 +44,9 @@
 				<hr></hr>
 				<p class = "efr_title"><b>Named Insured</b></p>
 					<p class ="efr_bold"><b>EFR</b></p>
-					<p class ="efr_title2">Emergency First Response Corporation</p>
-					<p class ="efr_title2">{$address1},{$address2}</p>
-					<p class ="efr_title2">{$city},{$state},{$country},{$zip}</p>
+					<p class ="efr_title2"><b>Emergency First Response Corporation</b></p>
+					<p class ="efr_title2">30151 Tomas Street</p>
+					<p class ="efr_title2">Rancho Santa Margarita, CA 92688</p>
 			</div>
 		</div>
 		<div class="spacing_efr">&nbsp</div>
@@ -60,9 +60,9 @@
 			           <p class = "ins_font"><b class = "space">ANNUAL AGGREGATE:</b></p>
 		       	   </div>
 	        	</div>
-	        	<div class = "in-type1"> 
+	        	<div class = "in-type1" style="width: 60%"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
-			            <p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per accident)</p>
+			            <p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurence)</p>
 			            <p class = "ins_font">$2,000,000</p>						
 		        </div>
 	     	</div>

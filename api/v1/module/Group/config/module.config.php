@@ -8,88 +8,88 @@ return [
     'router' => [
         'routes' => [
             'groups' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/[organization/:orgId/]group[/:groupId]',
+                    'route' => '/[organization/:orgId/]group[/:groupId]',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_GROUP_WRITE',
-                            'post'=> 'MANAGE_GROUP_WRITE',
-                            'delete'=> 'MANAGE_GROUP_WRITE',
-                            'get'=> 'MANAGE_GROUP_READ',
+                            'put' => 'MANAGE_GROUP_WRITE',
+                            'post' => 'MANAGE_GROUP_WRITE',
+                            'delete' => 'MANAGE_GROUP_WRITE',
+                            'get' => 'MANAGE_GROUP_READ',
                         ],
                     ],
                 ],
             ],
             'groupsUser' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/group/user/:userId',
+                    'route' => '/group/user/:userId',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'GET',
                         'action' => 'getGroupsforUser',
                         'access' => [
-                            'getGroupsforUser'=>'MANAGE_GROUP_WRITE'
-                       ],
-                   ],
-               ],
-           ],
-           'getusers' => [
-                'type'    => Segment::class,
+                            'getGroupsforUser' => 'MANAGE_GROUP_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'getusers' => [
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/[organization/:orgId/]group/:groupId/users',
+                    'route' => '/[organization/:orgId/]group/:groupId/users',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'GET',
                         'action' => 'getuserlist',
                         'access' => [
-                            'getuserlist'=>'MANAGE_GROUP_WRITE'
-                       ],
-                   ],
-               ],
-           ],
-           'saveusers' => [
-                'type'    => Segment::class,
+                            'getuserlist' => 'MANAGE_GROUP_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'saveusers' => [
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/[organization/:orgId/]group/:groupId/save',
+                    'route' => '/[organization/:orgId/]group/:groupId/save',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'POST',
                         'action' => 'saveUser',
                         'access' => [
-                            'saveUser'=>'MANAGE_GROUP_WRITE'
-                       ],
-                   ],
-               ],
-           ],
-           'groupsList' => [
+                            'saveUser' => 'MANAGE_GROUP_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'groupsList' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/[organization/:orgId/]groups/list',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'POST',
-                        'action' => 'groupsList'
+                        'action' => 'groupsList',
                     ],
                 ],
             ],
-           'groupLogo' => [
+            'groupLogo' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/group/:orgId/logo/:groupId',
                     'defaults' => [
-                        'controller' => Controller\GroupLogoController::class
+                        'controller' => Controller\GroupLogoController::class,
                     ],
                 ],
             ],
-       ],
-   ],
-   'view_manager' => [
-            // We need to set this up so that we're allowed to return JSON
-            // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
-   ],
+        ],
+    ],
+    'view_manager' => [
+        // We need to set this up so that we're allowed to return JSON
+        // responses from our controller.
+        'strategies' => ['ViewJsonStrategy'],
+    ],
 ];

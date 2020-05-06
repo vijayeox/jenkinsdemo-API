@@ -51,9 +51,12 @@ class PageContentService extends AbstractService
                     $resultArray['content'] = file_get_contents($filePath);
                 }
             }
-            if($resultArray['type'] == 'List' || $resultArray['type'] == 'Form' || $resultArray['type'] == 'DocumentViewer'){ 
+            if(
+                $resultArray['type'] == 'List' || $resultArray['type'] == 'Form' ||
+                $resultArray['type'] == 'Search' || $resultArray['type'] == 'DocumentViewer'
+            ) {
                 $resultArray['content'] = json_decode($resultArray['content']);
-            }else{
+            } else {
                 $resultArray['content'] = $resultArray['content'];
             }  
             $result[] = $resultArray;
@@ -192,12 +195,13 @@ class PageContentService extends AbstractService
             $resultSet= $this->executeQuerywithBindParameters($queryString,$selectQuery)->toArray();
             // $resultSet = new ResultSet();
             // $resultSet->initialize($result);
-            // $resultSet = $resultSet->toArray();
-            if (isset($resultSet[0])) {
-                return $resultSet[0];
-            } else {
-                return array();
-            }
+            // // $resultSet = $resultSet->toArray();
+            // if (isset($resultSet[0])) {
+            //     $resultSet[0]["hello"]= "awdawd";
+            //     return $resultSet[0];
+            // } else {
+            //     return array();
+            // }
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
             throw $e;

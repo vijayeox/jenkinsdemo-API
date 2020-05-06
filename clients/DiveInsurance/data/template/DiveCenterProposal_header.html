@@ -23,7 +23,7 @@
             var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date',
                 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages', 'start_date', 'license_number',
                 'firstname', 'lastname', 'city', 'state', 'country', 'zip', 'certificate_no', 'padi',
-                'end_date', 'policy_id', 'address1', 'address2', 'membernumber', 'dsbidba'
+                'end_date', 'policy_id', 'address1', 'address2', 'membernumber', 'dba'
             ];
             for (var css_class in css_selector_classes) {
                 if (css_selector_classes.hasOwnProperty(css_class)) {
@@ -61,13 +61,15 @@
                 <b class="caption">Agent Information</b>
                 <div class="caption1">
                     <p class="info" id="nameVal"></p>
-                    <p class="info" id="addressVal"></p>
+                    <p class="info" id="addressLineVal"></p>
+						<p class ="info" id = "addressLine2Val"></p>
                     <p class="info" id="phone2Val" style="margin-bottom:2px;"></p>
                     <p class="info">License#: <span class="license_number"></span></p>
                 </div>
                 <b class="caption2">Insured's Name and Mailing Address:</b>
                 <p class="details"><span class="firstname"></span>&nbsp<span class="lastname"></span></p>
-                <p class="details">DBA:&nbsp<span class="dsbidba"></span></p>
+                <p class="details">DBA:&nbsp<span class="dba"></span></p>
+                <p class="details">Entity Type:&nbsp<span class="entity_type"></span></p>
                 <p class="details"><span class="address1"></span></p>
                 <p class="details">
                     <span class="city"></span>,
@@ -79,16 +81,16 @@
                 <b class="p_margin">Agent Contact Information</b>
                 <div class="caption1"></div>
                 <p class="info">
-                    <span class="phone1Val"></span>
-                    FAX: <span class="faxVal"></span>
+                    <span id="phone1Val"></span>&nbsp
+                    FAX: <span id="faxVal"></span>
                 </p>
-                <p class="info phone2Val"></p>
+                <p class="info" id="phone2Val"></p>
                 <p class="info producerwebsite"></p>
                 <p class="info db-mail"></p>
                 <p class="info">Policy period: <span class="start_date"></span> thru
                     <span class="end_date"></span> 12:01:00 AM
                 </p>
-                <b class="p_margin">Members#: <span class="p_margin normal padi"></span></b>
+                <b class="p_margin">Member #: <span class="p_margin normal padi"></span></b>
                 <hr>
             </div>
         </div>

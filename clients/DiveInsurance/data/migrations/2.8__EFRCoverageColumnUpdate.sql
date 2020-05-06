@@ -1,0 +1,4 @@
+UPDATE `premium_rate_card` SET `coverage` = 'Liability Coverage($5,000,000)' WHERE `product` = 'Emergency First Response' and `key` = 'liabilityCoverage5000000' and `is_upgrade` = 1;
+UPDATE `premium_rate_card` SET `coverage` = 'Liability Coverage($4,000,000)' WHERE `product` = 'Emergency First Response' and `key` = 'liabilityCoverage4000000' and `is_upgrade` = 1;
+UPDATE `premium_rate_card` SET `coverage` = 'Liability Coverage($2,000,000)' WHERE `product` = 'Emergency First Response' and `key` = 'liabilityCoverage2000000' and `is_upgrade` = 1;
+UPDATE `premium_rate_card` SET `coverage` = 'Liability Coverage($1,000,000)' WHERE `product` = 'Emergency First Response' and `key` = 'liabilityCoverage1000000' and `is_upgrade` = 1;

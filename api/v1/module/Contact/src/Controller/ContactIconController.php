@@ -1,25 +1,22 @@
 <?php
 namespace Contact\Controller;
 
-use Zend\Log\Logger;
-use Oxzion\Controller\AbstractApiController;
-use Zend\Db\Adapter\AdapterInterface;
-use Exception;
-use Zend\InputFilter\Input;
-use Oxzion\Utils\FileUtils;
-use Oxzion\Controller\AbstractApiControllerHelper;
-use Oxzion\Service\UserService;
 use Contact\Service\ContactService;
+use Exception;
+use Oxzion\Controller\AbstractApiControllerHelper;
+use Oxzion\Utils\FileUtils;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Log\Logger;
 
 class ContactIconController extends AbstractApiControllerHelper
 {
     /**
-    * @var ProfilepictureService Instance of Projectpicture Service
-    */
+     * @var ProfilepictureService Instance of Projectpicture Service
+     */
     private $contactService;
     /**
-    * @ignore __construct
-    */
+     * @ignore __construct
+     */
     public function __construct(ContactService $contactService, Logger $log, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('contactId');
@@ -27,26 +24,26 @@ class ContactIconController extends AbstractApiControllerHelper
     }
 
     /**
-    * GET Profile API
-    * @api
-    * @link /user/profile[/:profileId]
-    * @method GET
-    * @param $profileId ID of user
-    * @return profile picture
-    */
+     * GET Profile API
+     * @api
+     * @link /user/profile[/:profileId]
+     * @method GET
+     * @param $profileId ID of user
+     * @return profile picture
+     */
     public function getIconAction()
     {
         $params = $this->params()->fromRoute();
         $ownerid = $params['ownerId'];
         $contactid = $params['contactId'];
-        $logo = $contactid.".png";
+        $logo = $contactid . ".png";
         $file = $this->contactService->getContactIconPath($ownerid);
-        $iconUrl = $file.$logo;
+        $iconUrl = $file . $logo;
         if (!FileUtils::fileExists($iconUrl)) {
             $file = $this->contactService->getContactIconPath(null);
-            $iconUrl = $file."profile.png";
+            $iconUrl = $file . "profile.png";
         }
-                
+
         if (!headers_sent()) {
             header('Content-Type: image/png');
             header("Content-Transfer-Encoding: Binary");

@@ -22,11 +22,11 @@ class DispatchNewPolicy extends DispatchDocument {
             'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','slWording','blanket_document','additionalInsured_document','scuba_fit_document','cylinder_document','equipment_liability_document']),
             'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
             'Dive Store' => array('docs' => ['liability_policy_document','property_policy_document','property_coi_document','liability_coi_document','cover_letter']),
-            'Emergency First Response' => array('docs' => ['policy_document','coi_document']));
+            'Emergency First Response' => array('docs' => ['policy_document','coi_document','additionalInsured_document']));
         $this->required = array(
             'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','blanket_document']),
             'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
-            'Dive Store' => array('docs' => ['liability_policy_document','property_policy_document','property_coi_document','liability_coi_document','cover_letter']),
+            'Dive Store' => array('docs' => ['Dive_Store_Liability_Policy.pdf','Dive_Store_Property_Policy.pdf','DiveStore_Property_COI','DiveStore_Liability_COI','cover_letter']),
             'Emergency First Response' => array('docs' => ['policy_document','coi_document']));
         parent::__construct();
     }
@@ -48,8 +48,12 @@ class DispatchNewPolicy extends DispatchDocument {
         if(count($this->required[$data['product']]['docs']) == count($document)){
             foreach($this->document[$data['product']]['docs'] as $file){
                 if(array_key_exists($file,$data['documents'])){
-
-                    $file = $this->destination.$data['documents'][$file];
+                    if(is_array($data['documents'][$file])){
+                            $doc = $data['documents'][$file][0];
+                    }else{
+                            $doc = $data['documents'][$file];
+                    }
+                    $file = $this->destination.$doc;
                     if(file_exists($file)){
                          array_push($fileData, $file);         
                     }else{
@@ -58,8 +62,6 @@ class DispatchNewPolicy extends DispatchDocument {
                     }
                 }
             }
-
-
             if(count($errorFile) > 0){
                 $error = json_encode($errorFile);
                 $this->logger->error("Documents Not Found".$error);
@@ -74,8 +76,5 @@ class DispatchNewPolicy extends DispatchDocument {
         $response = $this->dispatch($data);
         return $response;
     }
-
-
-
 }
 ?>

@@ -109,12 +109,12 @@ body {
   text-transform: uppercase;
 }
 .certificate_data {
-  width: 45%;
+  width: 40%;
   float: left;
   display: inline-block;
 }
 .certificate_data1 {
-  width: 55%;
+  width: 60%;
   float: left;
   margin-bottom: 10px;
   display: inline-block;
@@ -337,6 +337,33 @@ body {
   padding: 0px;
   letter-spacing: 1px;
 }
+
+
+
+.info_ni{
+  width: 70%;
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  padding: 0px;
+  letter-spacing: 1px;
+}
+.info_ni1 {
+  width: 33%;
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  padding: 0px;
+  letter-spacing: 1px;
+}
+
+
 .hrtag_efr {
   margin-top: 10%;
   margin-bottom: 0px;
@@ -365,10 +392,23 @@ body {
 }
 
 /*Group*/
+.grp_title1{
+  font-size: 15px;
+  margin: 0px;
+}
+.grp_claims{
+  position: relative;
+  top: 10px;
+  left: 55%;
+  margin-top: 1px;
+  font-size: 15px;
+}
+
+
 .p_border {
   border: 1px solid;
   margin-bottom: 0px;
-  font-size: 13px;
+  font-size: 10px;
 }
 .ghr_value {
   margin-top: 25%;
@@ -378,12 +418,13 @@ body {
   margin-bottom: 2%;
 }
 .gpolicy_notice1 {
-  font-size: 12px;
+  font-size: 10px;
   margin-bottom: 0px;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 0px;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 .ghrtag_efr {
   margin-bottom: 0px;
@@ -414,7 +455,7 @@ body {
   text-transform: uppercase;
 }
 .grp_add {
-  font-size: 15px;
+  font-size: 12px;
   margin-top: 1px;
   margin-bottom: 1px;
 }
@@ -540,4 +581,100 @@ td, th {
 }
 .policy_notice_div{
   clear: both;
+}
+
+
+.grp_caption{
+  margin-left: 20px;
+  font-size: 13px;
+}
+.grp_caption2 {
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 13px;
+}
+.grpp_margin {
+  margin-top: 0px;
+  margin-bottom: 5px;
+  font-size:13px;
+}
+
+.grp_info1 {
+  width: 100%;
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 12px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  padding: 0px;
+  letter-spacing: 1px;
+}
+.grp_info2 {
+  width: 45%;
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 12px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  padding: 0px;
+  letter-spacing: 1px;
+}
+
+.grp_info {
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 12px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  padding: 0px;
+  letter-spacing: 1px;
+}
+
+.grp_caption1 {
+  margin-bottom: 10px;
+}
+
+.grp_details {
+  margin-left: 20px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 12px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  padding: 0px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.grpp_margin {
+  margin-top: 0px;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.grpins_font {
+  font-size: 12px;
+  margin-top: 2px;
+  margin-bottom: 1px;
+}
+.grppolicy_notice {
+  margin-top: 1px;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.grpai_list {
+  margin-left: 5px;
+  text-transform: uppercase;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  letter-spacing: 1px;
+  font-size: 12px;
+}
+
+.grp_endoUpgrade{
+  font-size:12px;
+  padding: 0px;
+  margin:0px;
 }

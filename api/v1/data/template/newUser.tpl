@@ -4,7 +4,7 @@
             </div>
             <div style='line-height: 24px'>Dear {$firstname}, </br/>
                 EOX Vantage has created a new ID for you, <br/>Details are below: <br/>
-                URL: <a href='{$baseurl}' >Click here to Login! </a> <br/>
+                URL: <a href='{$baseurl}' >Click here to Login </a> <br/>
                 UserName: {$username} <br/>
                 Password: {$password} <br/>
             </div>

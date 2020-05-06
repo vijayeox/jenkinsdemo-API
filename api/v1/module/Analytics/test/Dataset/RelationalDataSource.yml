@@ -1,0 +1,23 @@
+ox_datasource:
+-
+    id: 4
+    uuid: 'cccbebce-df33-4266-bbd6-d8da5571b10a'
+    name: 'reporting engine'
+    type: 'MySQL'
+    configuration: '{"data": {"user": "root","password": "EOX!Vantage","serveraddress": "localhost","port": "9200", "core":"core", "type":"type", "scheme":"http"}}'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+-
+    id: 5
+    uuid: 'dddbebce-df33-4266-bbd6-d8da5571b10a'
+    name: 'reporting engine'
+    type: 'Postgres'
+    configuration: '{"data": {"user": "root","password": "EOX!Vantage","serveraddress": "localhost","port": "9200", "core":"core", "type":"type", "scheme":"http"}}'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1

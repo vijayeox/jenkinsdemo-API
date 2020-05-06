@@ -1,18 +1,11 @@
 <?php
 namespace Oxzion\Service;
 
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Oxzion\ValidationException;
-use Oxzion\Service\AbstractService;
+use Exception;
 use Oxzion\Model\Address;
 use Oxzion\Model\AddressTable;
-use Oxzion\Messaging\MessageProducer;
-use Oxzion\Security\SecurityManager;
-use Oxzion\AccessDeniedException;
 use Oxzion\ServiceException;
-use Exception;
-
+use Oxzion\Service\AbstractService;
 
 class AddressService extends AbstractService
 {
@@ -28,30 +21,32 @@ class AddressService extends AbstractService
         $this->modelClass = new Address();
     }
 
-    public function addAddress($data){
+    public function addAddress($data)
+    {
+        $this->logger->info("Create new Address for the Organization - " . print_r($data, true));
         $form = new Address($data);
         $form->validate();
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                throw new ServiceException("Failed to add the address","failed.add.address");
+                throw new ServiceException("Failed to add the address", "failed.add.address");
             }
             $this->commit();
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
-        }        
-        return $this->table->getLastInsertValue();   
+        }
+        return $this->table->getLastInsertValue();
     }
 
-    public function updateAddress($id,$data){
+    public function updateAddress($id, $data)
+    {
         $obj = $this->table->get($id, array());
         if (is_null($obj)) {
-            throw new ServiceException("Address not found","address.not.found");
+            throw new ServiceException("Address not found", "address.not.found");
         }
         $org = $obj->toArray();
         $form = new Address();
@@ -62,10 +57,20 @@ class AddressService extends AbstractService
         try {
             $count = $this->table->save($form);
             $this->commit();
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public function getOrganizationAddress($uuid)
+    {
+        $select = "SELECT oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.id,oa.zip
+                    from ox_organization as og join ox_address 
+                    as oa on og.address_id = oa.id  where og.uuid = :orgId";
+        $params = array("orgId"=> $uuid);
+        $this->logger->info("Executing Query $select with params - ".print_r($params, true));
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        return count($result) > 0 ? $result[0] : array() ;
     }
 
 }

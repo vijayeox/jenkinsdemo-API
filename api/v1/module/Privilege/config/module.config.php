@@ -23,23 +23,23 @@ return [
                 ],
             ],
             'getAppId' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/privilege/getappid',
+                    'route' => '/privilege/getappid',
                     'defaults' => [
                         'controller' => Controller\PrivilegeController::class,
                         'method' => 'GET',
                         'action' => 'getAppId',
                         'access' => [
-                            'getAppId'=>'MANAGE_PRIVILEGE_WRITE'
+                            'getAppId' => 'MANAGE_PRIVILEGE_WRITE',
                         ],
                     ],
                 ],
             ],
             'getmasterprivilege' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/organization[/:orgId]/masterprivilege[/:roleId]',
+                    'route' => '/organization[/:orgId]/masterprivilege[/:roleId]',
                     'defaults' => [
                         'controller' => Controller\PrivilegeController::class,
                         'action' => 'getMasterPrivilege',
@@ -54,10 +54,10 @@ return [
                         'controller' => Controller\PrivilegeController::class,
                         'action' => 'getUserPrivileges',
                         'method' => 'get',
-//                        'access'=>[
-//                            // SET ACCESS CONTROL
-//                            'getUserPrivileges'=> 'MANAGE_PRIVILEGE_READ',
-//                        ],
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            // 'getUserPrivileges' => 'MANAGE_PRIVILEGE_READ',
+                        ],
                     ],
                 ],
             ],
@@ -66,6 +66,6 @@ return [
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

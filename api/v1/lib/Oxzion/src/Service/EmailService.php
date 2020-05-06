@@ -6,6 +6,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Encryption\TwoWayEncryption;
 use Oxzion\Model\Email;
 use Oxzion\Model\EmailTable;
+use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use TheSeer\Tokenizer\Exception;
 
@@ -21,46 +22,46 @@ class EmailService extends AbstractService
 
     public function createOrUpdateEmailAccount(&$data)
     {
-        $form = new Email();
-        $userId = $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['email'] = isset($data['email']) ? $data['email'] : null;
-        if ($data['email']) {
-            $queryString = "select id,email from email_setting_user";
-            $where = "where userid = " . $userId;
-            $order = "order by id";
-            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-            if ($resultSet) {
-                $emailList = array_column($resultSet->toArray(), 'email', 'id');
-                foreach ($emailList as $key => $value) {
-                    if ($data['email'] == $value) {
-                        $id = $key;
-                        $obj = $this->table->get($id, array());
-                        if (is_null($obj)) {
-                            return 0;
-                        }
-                        $data = array_merge($obj->toArray(), $data);
-                        $data['id'] = $id;
-                        $data['userid'] = $userId;
-                        if ($data['password']) {
-                            $data['password'] = TwoWayEncryption::encrypt($data['password']);
-                        }
-                        $form->exchangeArray($data);
-                        $form->validate();
-                        $count = 0;
-                        try {
+        try {
+            $form = new Email();
+            $userId = $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['email'] = isset($data['email']) ? $data['email'] : null;
+            if ($data['email']) {
+                $queryString = "select id,email from email_setting_user";
+                $where = "where userid = " . $userId;
+                $order = "order by id";
+                $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+                if ($resultSet) {
+                    $emailList = array_column($resultSet->toArray(), 'email', 'id');
+                    foreach ($emailList as $key => $value) {
+                        if ($data['email'] == $value) {
+                            $id = $key;
+                            $obj = $this->table->get($id, array());
+                            if (is_null($obj)) {
+                                return 0;
+                            }
+                            $data = array_merge($obj->toArray(), $data);
+                            $data['id'] = $id;
+                            $data['userid'] = $userId;
+                            if ($data['password']) {
+                                $data['password'] = TwoWayEncryption::encrypt($data['password']);
+                            }
+                            $form->exchangeArray($data);
+                            $form->validate();
+                            $count = 0;
                             $count = $this->table->save($form);
                             if ($count == 0) {
                                 $this->rollback();
                                 return 0;
                             }
-                        } catch (Exception $e) {
-                            $this->rollback();
-                            throw $e;
+                            return $count;
                         }
-                        return $count;
                     }
                 }
             }
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
         if (isset($data['password'])) {
             $data['password'] = TwoWayEncryption::encrypt($data['password']);
@@ -74,7 +75,7 @@ class EmailService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Could not create email account", 'could.not.create');
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
@@ -153,62 +154,70 @@ class EmailService extends AbstractService
 
     public function emailDefault($id)
     {
-        $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select email from ox_user";
-        $where = "where id = " . $userId;
-        $resultSet = $this->executeQuerywithParams($queryString, $where)->toArray();
-        $email = array_column($resultSet, 'email');
-        $queryString = "select * from email_setting_user";
-        $where = "where userid = " . $userId;
-        $order = "order by id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
-        $storeData = array();
-        $obj = $this->table->get($id, array());
-        if (is_null($obj)) {
-            return 0;
-        } else {
-            $obj = $obj->toArray();
-        }
-        foreach ($resultSet as $key => $value) {
-            if ($value['email'] == $email[0]) {
-                $obj['isdefault'] = 1;
-                $storeData[] = $obj;
+        try {
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+            $queryString = "select email from ox_user";
+            $where = "where id = " . $userId;
+            $resultSet = $this->executeQuerywithParams($queryString, $where)->toArray();
+            $email = array_column($resultSet, 'email');
+            $queryString = "select * from email_setting_user";
+            $where = "where userid = " . $userId;
+            $order = "order by id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
+            $storeData = array();
+            $obj = $this->table->get($id, array());
+            if (is_null($obj)) {
+                return 0;
+            } else {
+                $obj = $obj->toArray();
             }
-        }
-        if ($storeData) {
-            $query = $this->multiInsertOrUpdate('email_setting_user', $storeData, array());
-        } else {
-            return 0;
-        }
+            foreach ($resultSet as $key => $value) {
+                if ($value['email'] == $email[0]) {
+                    $obj['isdefault'] = 1;
+                    $storeData[] = $obj;
+                }
+            }
+            if ($storeData) {
+                $query = $this->multiInsertOrUpdate('email_setting_user', $storeData, array());
+            } else {
+                throw new ServiceException("Could not update the domain", 'could.not.update');
+            }
 
-        $queryString = "select id,userid,email,host,isdefault from email_setting_user";
-        $where = "where email_setting_user.userid = " . $userId;
-        $order = "order by email_setting_user.id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            $queryString = "select id,userid,email,host,isdefault from email_setting_user";
+            $where = "where email_setting_user.userid = " . $userId;
+            $order = "order by email_setting_user.id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+        } catch (Exception $e) {
+            throw $e;
+        }
         return $resultSet->toArray();
     }
 
     public function deleteEmail($email)
     {
         $id = 0;
-        if ($email) {
-            $userId = AuthContext::get(AuthConstants::USER_ID);
-            $queryString = "select id,email from email_setting_user";
-            $where = "where userid = " . $userId;
-            $order = "order by id";
-            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-            if ($resultSet) {
-                $emailList = array_column($resultSet->toArray(), 'email', 'id');
-                foreach ($emailList as $key => $value) {
-                    if ($email == $value) {
-                        $id = $key;
+        try {
+            if ($email) {
+                $userId = AuthContext::get(AuthConstants::USER_ID);
+                $queryString = "select id, email from email_setting_user";
+                $where = "where userid = " . $userId;
+                $order = "order by id";
+                $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+                if ($resultSet) {
+                    $emailList = array_column($resultSet->toArray(), 'email', 'id');
+                    foreach ($emailList as $key => $value) {
+                        if ($email == $value) {
+                            $id = $key;
+                        }
                     }
                 }
+                if ($id) {
+                    $response = $this->deleteEmailAccount($id);
+                    return array($response);
+                }
             }
-            if ($id) {
-                $response = $this->deleteEmailAccount($id);
-                return array($response);
-            }
+        } catch (Exception $e) {
+            throw $e;
         }
         return 0;
     }
@@ -230,31 +239,35 @@ class EmailService extends AbstractService
     public function updateEmail($email, $data)
     {
         $id = 0;
-        if ($email) {
-            $userId = AuthContext::get(AuthConstants::USER_ID);
-            $queryString = "select id,email from email_setting_user";
-            $where = "where userid = " . $userId;
-            $order = "order by id";
-            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-            if ($resultSet) {
-                $emailList = array_column($resultSet->toArray(), 'email', 'id');
-                foreach ($emailList as $key => $value) {
-                    if ($email == $value) {
-                        $id = $key;
+        try {
+            if ($email) {
+                $userId = AuthContext::get(AuthConstants::USER_ID);
+                $queryString = "select id,email from email_setting_user";
+                $where = "where userid = " . $userId;
+                $order = "order by id";
+                $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+                if ($resultSet) {
+                    $emailList = array_column($resultSet->toArray(), 'email', 'id');
+                    foreach ($emailList as $key => $value) {
+                        if ($email == $value) {
+                            $id = $key;
+                        }
                     }
                 }
-            }
-            if (isset($data['email'])) {
-                $data['host'] = substr($data['email'], strpos($data['email'], "@") + 1);
-            }
+                if (isset($data['email'])) {
+                    $data['host'] = substr($data['email'], strpos($data['email'], "@") + 1);
+                }
 
-            if ($id) {
-                $response = $this->updateEmailAccount($id, $data);
-                return array($response);
-            } else {
-                $data['password'] = null;
-                return $data;
+                if ($id) {
+                    $response = $this->updateEmailAccount($id, $data);
+                    return array($response);
+                } else {
+                    $data['password'] = null;
+                    return $data;
+                }
             }
+        } catch (Exception $e) {
+            throw $e;
         }
         return 0;
     }
@@ -279,7 +292,7 @@ class EmailService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Could not update the email account", 'could.not.update');
             }
         } catch (Exception $e) {
             $this->rollback();

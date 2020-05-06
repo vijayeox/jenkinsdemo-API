@@ -42,19 +42,19 @@
 					<p></p>
 					<p class = "sec_title2">                        
 						{if $additionalLossofBusinessIncomePL != "false"}
-                            ${$lossOfBusIncome|number_format:2:".":","}
+                            ${((float)$lossOfBusIncome)|number_format:2:".":","}
                         {else}
                             $0
                         {/if}</p>
 					<p class = "sec_title2">
-						{if $dspropownbuilding != "no"}
+						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
                             ${$dspropreplacementvalue|number_format:2:".":","}
                         {else}
                             $0
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if (int)$dspropFurniturefixturesandequip != 0}
+						{if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>

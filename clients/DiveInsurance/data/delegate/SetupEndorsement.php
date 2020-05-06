@@ -2,29 +2,52 @@
 
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
+use Oxzion\AppDelegate\UserContextTrait;
 
 class SetupEndorsement extends AbstractAppDelegate
 {
+    use UserContextTrait;
     public function __construct(){
         parent::__construct();
     }
 
-    public function execute(array $data,Persistence $persistenceService)
-    {
+    public function execute(array $data,Persistence $persistenceService) {
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
+        $privileges = $this->getPrivilege();
+        if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
+            $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true && ($data['CSRReviewRequired'] == true || $data['CSRReviewRequired'] === 'true')){
+            return $data;
+        }
+        if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
+            $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
+            $data['initiatedByCsr'] = true;
+        }else{
+            $data['initiatedByCsr'] = false;
+        }
         $rates = $this->getRates($data,$persistenceService);
         $data = array_merge($data,$rates);
-        $data['careerCoverage']= isset($data['careerCoverage']) ? $data['careerCoverage']: $data['liabilityCoverageName'];
-
-        if(isset($data['endorsement_options'])){
-           foreach($data['endorsement_options'] as $key=>$value){
-               $data['endorsement_options'][$key] = false;
-           }
-           $data['endorsementCoverage'] = array();
-           $data['endorsementCylinder'] = array();
-           $data['endorsementExcessLiability'] = array();
+        $data['policyStatus'] = "Pending Approval";
+        if(isset($data['liabilityCoverageName'])){
+            $data['careerCoverage'] = $data['liabilityCoverageName'];
         }
-        
+        if(isset($data['approved'])){
+            unset($data['approved']);
+        }
+        if(isset($data['disableOptions'])){
+            unset($data['disableOptions']);
+        }
+        if(isset($data['endorsement_options'])){
+         foreach($data['endorsement_options'] as $key=>$value) {
+            if(isset($data['endorsement_options'][$key])) {
+                unset($data['endorsement_options'][$key]);
+            }
+        }
+        $data['endorsementCoverage'] = array();
+        $data['endorsementCylinder'] = array();
+        $data['endorsementExcessLiability'] = array();
+        } else {
+            $data['endorsement_options'] = array();
+        }
         if(isset($data['careerCoverage'])){
             $data['careerCoveragePrice'] = 0;
         }
@@ -39,9 +62,8 @@ class SetupEndorsement extends AbstractAppDelegate
             $data['equipmentPrice'] = 0;
             $data['previous_equipmentLiability'] = $data['equipment'];
         }
-
         if(isset($data['excessLiability']) && isset($data[$data['excessLiability']])){
-            $data['excessLiabilityPrice'] = 0;
+            $data['prevExcessLiabiltyPrice'] = $data['excessLiabilityPrice'];
         }
         $data['update_date'] = date("Y-m-d");
         if(isset($data['start_date_range'])){
@@ -52,6 +74,8 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             $data['startDateRange'] = $startDateRange['label'];
         }
+        $this->logger->info("SETUP ENDOR".print_r($data,true));
+        unset($privileges);
         return $data;
     }
     protected function getRates($data,$persistenceService){
@@ -79,7 +103,6 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             unset($rate);
         }
-
         $stateTaxData = [];
         while ($stateTaxResult->next()) {
             $rate = $stateTaxResult->current();
@@ -97,6 +120,24 @@ class SetupEndorsement extends AbstractAppDelegate
         }
         if(isset($stateTaxData)){
             $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
+        }
+        if(isset($data['paymentOptions'])){
+            unset($data['paymentOptions']);
+        }
+        if(isset($data['chequeNumber'])){
+            unset($data['chequeNumber']);
+        }
+        if(isset($data['chequeConsentFile'])){
+            unset($data['chequeConsentFile']);
+        }
+        if(isset($data['orderId'])){
+            unset($data['orderId']);
+        }
+        if(isset($data['transactionId'])){
+            unset($data['transactionId']);
+        }
+        if(isset($data['approved'])){
+            unset($data['approved']);
         }
         if(isset($premiumRateCardDetails)){
             return $premiumRateCardDetails;

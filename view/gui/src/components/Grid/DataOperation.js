@@ -2,12 +2,20 @@ import React from "react";
 import { toODataString } from "@progress/kendo-data-query";
 import { process } from "@progress/kendo-data-query";
 
-import LoadingPanel from "./LoadingPanel";
-
 export class DataOperation extends React.Component {
   constructor(props) {
     super(props);
-    this.timeout = null;
+    this.core = this.props.args;
+    this.loader = this.core.make("oxzion/splash");
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.gridData !== this.props.gridData) {
+      this.props.onDataRecieved.call(
+        undefined,
+        process(this.props.gridData, this.props.dataState)
+      );      
+    }
   }
 
   requestDataIfNeeded = () => {
@@ -18,24 +26,22 @@ export class DataOperation extends React.Component {
       return;
     }
     this.pending = toODataString(this.props.dataState, this.props.dataState);
-    clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
-      this.lastSuccess = this.pending;
-      this.pending = "";
-      if (toODataString(this.props.dataState) === this.lastSuccess) {
-        this.props.onDataRecieved.call(
-          undefined,
-          process(this.props.gridData, this.props.dataState)
-        );
-      } else {
-        this.requestDataIfNeeded();
-      }
-    }, 500);
+    this.lastSuccess = this.pending;
+    this.pending = "";
+    if (toODataString(this.props.dataState) === this.lastSuccess) {
+      this.props.onDataRecieved.call(
+        undefined,
+        process(this.props.gridData, this.props.dataState)
+      );
+    } else {
+      this.requestDataIfNeeded();
+    }
+    this.loader.destroy();
   };
 
   render() {
     this.requestDataIfNeeded();
-    return this.pending && <LoadingPanel />;
+    return <>{this.pending && this.loader.showGrid()}</>;
   }
 }
 export default DataOperation;

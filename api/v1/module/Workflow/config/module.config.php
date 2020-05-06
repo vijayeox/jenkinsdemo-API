@@ -123,6 +123,55 @@ return [
                     ],
                 ],
             ],
+            'unclaimActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/unclaim',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'unclaimActivityInstance',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'reclaimActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/reclaim',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'reclaimActivityInstance',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            
+            'activitylog' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/activitylog',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'getActivityLog',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
+            'fielddiff' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/activity/:activityInstanceId',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'getFieldDiff',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
             'activityInstanceForm' => [
                 'type' => Segment::class,
                 'options' => [

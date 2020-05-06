@@ -4,13 +4,13 @@ import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
 import DashboardEditor from "../../../../apps/Analytics/dashboardEditor"
 import '../../public/css/dashboardEditor.scss'
 function DashboardEditorModal(props) {
-
     const [input, setInput] = useState({})
     const allowedOperation = {
         ACTIVATE: "Activated",
         CREATE: "Created",
         EDIT: "Edited",
-        DELETE: "Deleted"
+        DELETE: "Deleted",
+        DEFAULT:"SetDefault"
     }
     useEffect(() => {
         if (props.content !== undefined) {
@@ -61,6 +61,13 @@ function DashboardEditorModal(props) {
                 operation === "Activated" ? formData["isdeleted"] = "0" : null
                 method = "put"
             }
+            else if (operation === allowedOperation.DEFAULT){
+                formData["uuid"] = props.content.uuid
+                formData["version"] = props.content.version;
+                requestUrl = "analytics/dashboard/" + props.content.uuid;
+                formData["isdefault"]="1"
+                method = "put"
+            }
             else {
                 requestUrl = "analytics/dashboard";
                 method = "filepost"
@@ -78,9 +85,10 @@ function DashboardEditorModal(props) {
             method
         )
             .then(response => {
-                props.refreshGrid.current.child.current.refresh()
                 notify(response, operation)
                 props.onHide()
+                props.refreshDashboard()
+                operation === allowedOperation.DELETE?props.deleteDashboard():null
             })
             .catch(err => {
                 console.log(err)
@@ -118,6 +126,10 @@ function DashboardEditorModal(props) {
         Footer = (<Button variant="primary" onClick={() => dashboardOperation(allowedOperation.CREATE)}>Create</Button>)
         DisabledFields = false
     }
+    else if (props.modalType === "SetDefault") {
+        Footer = (<Button variant="primary" onClick={() => dashboardOperation(allowedOperation.DEFAULT)}>Set as Default Dashboard</Button>)
+        DisabledFields = true
+    }
     else if (props.modalType === "Activate") {
         Footer = (<Button variant="success" onClick={() => dashboardOperation(allowedOperation.ACTIVATE)}>Activate</Button>)
         DisabledFields = true
@@ -125,7 +137,8 @@ function DashboardEditorModal(props) {
 
     return (
         <Modal
-            {...props}
+            onHide={()=>props.onHide()}
+            show={props.show}
             size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -142,13 +155,13 @@ function DashboardEditorModal(props) {
                     <Form.Group as={Row}>
                         <Form.Label column lg="3">Name</Form.Label>
                         <Col lg="9">
-                            <Form.Control type="text" name="name" value={input["name"]} onChange={handleChange} disabled={DisabledFields} />
+                            <Form.Control type="text" name="name" value={input["name"]?input["name"]:""} onChange={handleChange} disabled={DisabledFields} />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Form.Label column lg="3">Description</Form.Label>
                         <Col lg="9">
-                            <Form.Control type="text" name="description" value={input["description"]} onChange={handleChange} disabled={DisabledFields} />
+                            <Form.Control type="text" name="description" value={input["description"]?input["description"]:""} onChange={handleChange} disabled={DisabledFields} />
                         </Col>
                     </Form.Group>
                     

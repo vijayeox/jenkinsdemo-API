@@ -6,13 +6,15 @@ use Oxzion\Db\Persistence\Persistence;
 trait UserContextTrait
 {
 	private $userId;
-	private $uysername;
+	private $username;
 	private $orgId;
+    private $privilege;
 
-    public function setUserContext($userId, $username, $orgId){
+    public function setUserContext($userId, $username, $orgId,$privilege){
     	$this->username = $username;
     	$this->userId = $userId;
     	$this->orgId = $orgId;
+        $this->privilege = $privilege;
     }
     public function getUserId(){
     	return $this->userId;
@@ -23,4 +25,8 @@ trait UserContextTrait
     public function getOrgId(){
     	return $this->orgId;
     }
+    public function getPrivilege(){
+        return $this->privilege;
+    }
+
 }

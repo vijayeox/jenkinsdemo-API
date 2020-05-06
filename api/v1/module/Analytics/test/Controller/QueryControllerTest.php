@@ -85,7 +85,7 @@ class QueryControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => "query5", 'datasource_id' => 'd08d06ce-0cae-47e7-9c4f-a6716128a303', 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
-        $this->assertEquals(15, $this->getConnection()->getRowCount('ox_query'));
+        $this->assertEquals(16, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -96,14 +96,14 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['datasource_id'], $data['datasource_id']);
         $this->assertEquals($content['data']['configuration'], $data['configuration']);
-        $this->assertEquals(16, $this->getConnection()->getRowCount('ox_query'));
+        $this->assertEquals(17, $this->getConnection()->getRowCount('ox_query'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => "query5", 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
-        $this->assertEquals(15, $this->getConnection()->getRowCount('ox_query'));
+        $this->assertEquals(16, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -237,12 +237,12 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 15);
+        $this->assertEquals(count($content['data']['data']), 16);
         $this->assertEquals($content['data']['data'][6]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
         $this->assertEquals($content['data']['data'][6]['name'], 'query1');
         $this->assertEquals($content['data']['data'][7]['datasource_id'], 3);
         $this->assertEquals($content['data']['data'][7]['name'], 'query2');
-        $this->assertEquals($content['data']['total'],15);
+        $this->assertEquals($content['data']['total'],16);
     }
 
     public function testGetListWithDeleted()
@@ -253,13 +253,13 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 15);
+        $this->assertEquals(count($content['data']['data']), 16);
         $this->assertEquals($content['data']['data'][6]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
         $this->assertEquals($content['data']['data'][6]['name'], 'query1');
         $this->assertEquals($content['data']['data'][6]['isdeleted'], 0);
-        $this->assertEquals($content['data']['data'][7]['datasource_id'], 3);
+        $this->assertEquals($content['data']['data'][7]['datasource_uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
         $this->assertEquals($content['data']['data'][7]['name'], 'query2');
-        $this->assertEquals($content['data']['total'],15);
+        $this->assertEquals($content['data']['total'],16);
     }
 
     public function testGetListWithSort()
@@ -270,12 +270,12 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 15);
-        $this->assertEquals($content['data']['data'][5]['uuid'], '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1');
-        $this->assertEquals($content['data']['data'][5]['name'], 'query3');
-        $this->assertEquals($content['data']['data'][6]['ispublic'], 1);
-        $this->assertEquals($content['data']['data'][6]['name'], 'query2');
-        $this->assertEquals($content['data']['total'],15);
+        $this->assertEquals(count($content['data']['data']), 16);
+        $this->assertEquals($content['data']['data'][5]['uuid'], '5f1d2819-c5ff-4426-bc40-f7a20704a748');
+        $this->assertEquals($content['data']['data'][5]['name'], 'query4');
+        $this->assertEquals($content['data']['data'][6]['ispublic'], 0);
+        $this->assertEquals($content['data']['data'][6]['name'], 'query3');
+        $this->assertEquals($content['data']['total'],16);
     }
 
      public function testGetListSortWithPageSize()
@@ -290,7 +290,7 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][2]['uuid'], '6f1d2819-c5ff-2326-bc40-f7a20704a748');
         $this->assertEquals($content['data']['data'][2]['name'], 'hub 3');
         $this->assertEquals($content['data']['data'][2]['is_owner'], 'true');
-        $this->assertEquals($content['data']['total'],15);
+        $this->assertEquals($content['data']['total'],16);
     }
 
     public function testGetListwithQueryParameters()
@@ -305,6 +305,118 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][0]['uuid'], '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1');
         $this->assertEquals($content['data']['data'][0]['name'], 'query3');
         $this->assertEquals($content['data']['total'],1);
+    }
+
+    public function testQueryData()
+    {
+        if (enableElastic!=0) {
+            $this->setElasticData();
+        } else {
+            $input1 = json_decode('{"index":"'.$this->index_pre.'sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}',true);
+            $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true);
+            $input = json_decode('{"index":"'.$this->index_pre.'sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field6"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field6"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}',true);
+            $output = json_decode('{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":45}},{"key":"cfield5text","doc_count":1,"value":{"value":70}}]}}}',true);
+            $mock =  Mockery::mock('overload:Elasticsearch\ClientBuilder');
+            $mock->shouldReceive('create')
+            ->andReturn(0);
+            $mock->shouldReceive('search')
+            ->with($input1)
+            ->andReturn($output1);
+            $mock->shouldReceive('search')
+            ->with($input)
+            ->andReturn($output);
+        }
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuids' => array('8f1d2819-c5ff-4426-bc40-f7a20704a738','5f1d2819-c5ff-4426-bc40-f7a20704a748')];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/query/data', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['result'][0]['field3'], 'cfield3text');
+        $this->assertEquals($content['data']['result'][1]['field3'], 'cfield5text');
+        $this->assertEquals($content['data']['result'][1]['field5'], 40);
+    }
+
+    public function testQueryDataWithIncorrectUuids()
+    {
+        if (enableElastic!=0) {
+            $this->setElasticData();
+        } else {
+            $input1 = json_decode('{"index":"'.$this->index_pre.'sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}',true);
+            $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true);
+            $this->setMockData($input1,$output1);
+        }
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuids' => array('8f1d2819-c5ff-4426-bc40-f7a20704a738','abc')];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/query/data', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['data']['errors'], 'uuid entered is incorrect - abc');
+    }
+
+    public function testQueryDataWithAggregateFollowedByNonAggregate()
+    {
+        if (enableElastic!=0) {
+            $this->setElasticData();
+        } else {
+            $input1 = json_decode('{"index":"'.$this->index_pre.'sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}',true);
+            $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true);
+            $input2 = json_decode('{"index":"core_sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"range":{"workflow_instance_date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["form_name"],"explain":true},"_source":["form_name"],"from":0,"size":10000}',true);
+            $output2 = json_decode('{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":2,"hits":[{"_shard":"[core_sampleapp_index][0]","_node":"pWx1rFYMTh29mVYvAj_Rbw","_index":"core_sampleapp_index","_type":"_doc","_id":"8","_score":2,"_source":{"form_name":"Test Form 2"},"_explanation":{"value":2,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=workflow_instance_date_created])","details":[]}]}},{"_shard":"[core_sampleapp_index][0]","_node":"pWx1rFYMTh29mVYvAj_Rbw","_index":"core_sampleapp_index","_type":"_doc","_id":"9","_score":2,"_source":{"form_name":"Test Form 3"},"_explanation":{"value":2,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=workflow_instance_date_created])","details":[]}]}},{"_shard":"[core_sampleapp_index][0]","_node":"pWx1rFYMTh29mVYvAj_Rbw","_index":"core_sampleapp_index","_type":"_doc","_id":"10","_score":2,"_source":{"form_name":"Test Form 4"},"_explanation":{"value":2,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=workflow_instance_date_created])","details":[]}]}}]}}',true);
+            $mock =  Mockery::mock('overload:Elasticsearch\ClientBuilder');
+            $mock->shouldReceive('create')
+            ->andReturn(0);
+            $mock->shouldReceive('search')
+            ->with($input1)
+            ->andReturn($output1);
+            $mock->shouldReceive('search')
+            ->with($input2)
+            ->andReturn($output2);
+        }
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuids' => array('8f1d2819-c5ff-4426-bc40-f7a20704a738','d5b79092-61f3-42ee-9bea-0d026157153f')];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/query/data', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['data']['errors'], 'Aggregate query type cannot be followed by a non-aggregate query type');
+    }
+
+    public function testQueryDataWithNonAggregateFollowedByAggregate()
+    {
+        if (enableElastic!=0) {
+            $this->setElasticData();
+        } else {
+            $input1 = json_decode('{"index":"'.$this->index_pre.'sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}',true);
+            $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true);
+            $input2 = json_decode('{"index":"core_sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"range":{"workflow_instance_date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["form_name"],"explain":true},"_source":["form_name"],"from":0,"size":10000}',true);
+            $output2 = json_decode('{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":2,"hits":[{"_shard":"[core_sampleapp_index][0]","_node":"pWx1rFYMTh29mVYvAj_Rbw","_index":"core_sampleapp_index","_type":"_doc","_id":"8","_score":2,"_source":{"form_name":"Test Form 2"},"_explanation":{"value":2,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=workflow_instance_date_created])","details":[]}]}},{"_shard":"[core_sampleapp_index][0]","_node":"pWx1rFYMTh29mVYvAj_Rbw","_index":"core_sampleapp_index","_type":"_doc","_id":"9","_score":2,"_source":{"form_name":"Test Form 3"},"_explanation":{"value":2,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=workflow_instance_date_created])","details":[]}]}},{"_shard":"[core_sampleapp_index][0]","_node":"pWx1rFYMTh29mVYvAj_Rbw","_index":"core_sampleapp_index","_type":"_doc","_id":"10","_score":2,"_source":{"form_name":"Test Form 4"},"_explanation":{"value":2,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=workflow_instance_date_created])","details":[]}]}}]}}',true);
+            $mock =  Mockery::mock('overload:Elasticsearch\ClientBuilder');
+            $mock->shouldReceive('create')
+            ->andReturn(0);
+            $mock->shouldReceive('search')
+            ->with($input1)
+            ->andReturn($output1);
+            $mock->shouldReceive('search')
+            ->with($input2)
+            ->andReturn($output2);
+        }
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuids' => array('d5b79092-61f3-42ee-9bea-0d026157153f','8f1d2819-c5ff-4426-bc40-f7a20704a738')];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/query/data', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['data']['errors'], 'Non-aggregate query type cannot be followed by a aggregate query type');
     }
 
 }

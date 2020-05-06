@@ -1,0 +1,398 @@
+ox_app:
+  - id: 99
+    name: "ox_client_app"
+    uuid: "8765765"
+    category: "OTHERS"
+    date_created: "2019-06-26 00:00:00"
+    type: 2
+    status: 1
+    created_by: 1
+ox_app_entity:
+  - id: 1
+    name: "entity1"
+    app_id: 99
+    date_created: "2019-06-26 00:00:00"
+    uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
+ox_field:
+  - id: 1
+    name: "fax"
+    text: "Fax"
+    app_id: 99
+    data_type: "numeric"
+    type: "integer"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 2
+    entity_id: 1
+  - id: 2
+    name: "age"
+    text: "Age"
+    app_id: 99
+    type: "integer"
+    data_type: "numeric"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 1
+    entity_id: 1
+  - id: 3
+    name: "expiry_date"
+    app_id: 99
+    data_type: "date"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 1
+    entity_id: 1
+  - id: 4
+    name: "padi_number"
+    app_id: 99
+    data_type: "integer"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 4
+    entity_id: 1
+  - id: 5
+    name: "policy_document"
+    app_id: 99
+    data_type: "document"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 5
+    entity_id: 1
+  - id: 6
+    name: "coi_number"
+    app_id: 99
+    data_type: "document"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 6
+    entity_id: 1
+  - id: 7
+    name: "product"
+    text: "Product"
+    app_id: 99
+    data_type: "text"
+    type: "textfield"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 7
+    entity_id: 1
+  - id: 8
+    name: "firstname"
+    text: "First Name"
+    app_id: 99
+    data_type: "text"
+    type: "textfield"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 8
+    entity_id: 1
+  - id: 9
+    name: "additionalInsured"
+    text: "Additional Insured"
+    app_id: 99
+    data_type: "grid"
+    type: "datagrid"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 9
+    entity_id: 1
+  - id: 10
+    name: "firstname"
+    text: "First Name"
+    app_id: 99
+    data_type: "text"
+    type: "textfield"
+    template: '{"persistent" : "true"}'
+    required: 1
+    parent_id: 9
+    sequence: 10
+    entity_id: 1
+  - id: 11
+    name: "city"
+    text: "City"
+    app_id: 99
+    data_type: "text"
+    type: "textfield"
+    template: '{"persistent" : "true"}'
+    required: 1
+    parent_id: 9
+    sequence: 11
+    entity_id: 1
+  - id: 12
+    name: "sameasmailingaddress"
+    text: "Same as mailing address"
+    app_id: 99
+    data_type: "boolean"
+    type: "checkbox"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 12
+    parent_id: 9
+    entity_id: 1
+  - id: 13
+    name: "section1Agreement"
+    text: "I Agree"
+    app_id: 99
+    data_type: "boolean"
+    type: "checkbox"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 13
+    entity_id: 1
+  - id: 14
+    name: "careerCoverage"
+    text: "Career Coverage"
+    app_id: 99
+    data_type: "text"
+    type: "radio"
+    template: '{"label":"Career Coverage","optionsLabelPosition":"right","inline":false,"tableView":false,"values":[{"value":"instructor","label":"Instructor","shortcut":""},{"value":"assistantInstructor","label":"Assistant Instructor","shortcut":""},{"value":"divemaster","label":"Divemaster","shortcut":""},{"value":"nonteachingSupervisoryInstructor","label":"Nonteaching\/Supervisory Instructor (4)","shortcut":""},{"value":"retiredInstructor","label":"Retired Instructor (4)","shortcut":""},{"value":"divemasterAssistantInstructorAssistingOnly","label":"Divemaster\/Assistant Instructor Assisting Only (2)","shortcut":""},{"value":"freediveInstructor","label":"Freedive Instructor","shortcut":""},{"value":"internationalInstructor","label":"International Instructor (3)","shortcut":""},{"value":"internationalAssistantInstructor","label":"International Assistant Instructor (3)","shortcut":""},{"value":"internationalDivemaster","label":"International Divemaster (3)","shortcut":""},{"value":"internationalNonteachingSupervisoryInstructor","label":"International Nonteaching\/Supervisory Instructor (3)(4)","shortcut":""},{"value":"internationalDivemasterAssistantInstructorAssistingOnly","label":"International Divemaster\/Assistant Instructor Assisting Only (2)(3)","shortcut":""}],"dataType":"auto","clearOnHide":false,"validate":{"required":true,"customMessage":"Please choose one of these options."},"key":"careerCoverage","properties":{"target":"careerCoveragePrice"},"type":"radio","input":true,"lockKey":true,"labelWidth":30,"labelMargin":3,"hideOnChildrenHidden":false,"persistent" : "true"}'
+    required: 1
+    sequence: 14
+    entity_id: 1
+  - id: 15
+    name: "endorsement_options"
+    text: "Please select areas you want to modify"
+    app_id: 99
+    data_type: "list"
+    type: "selectboxes"
+    template: '{"label":"Please select areas you want to modify","optionsLabelPosition":"right","autofocus":true,"tableView":true,"defaultValue":{"modify_personalInformation":false,"modify_coverage":false,"modify_additionalInsured":false},"values":[{"value":"modify_personalInformation","label":"Personal Information","shortcut":""},{"value":"modify_coverage","label":"Coverage","shortcut":""},{"value":"modify_additionalInsured","label":"Additional Insured","shortcut":""}],"calculateServer":false,"validate":{"required":true,"minSelectedCount":1},"minSelectedCountMessage":"Select atleast one option to go next.","key":"endorsement_options","properties":{"render":"page6"},"type":"selectboxes","input":true,"lockKey":true,"inputType":"checkbox","persistent" : "true"}'
+    required: 1
+    sequence: 15
+    entity_id: 1
+ox_form:
+  - id: 1
+    app_id: 99
+    name: "Task"
+    description: "Form Description"
+    entity_id: 1
+    created_by: 1
+    date_created: "2019-03-05 09:57:08"
+  - id: 2
+    app_id: 99
+    name: "Test Form 2"
+    description: "Form Description"
+    entity_id: 1
+    created_by: 1
+    date_created: "2019-03-05 09:57:08"
+ox_form_field:
+  - id: 1
+    form_id: 1
+    field_id: 1
+  - id: 2
+    form_id: 1
+    field_id: 2
+  - id: 3
+    form_id: 1
+    field_id: 7
+  - id: 4
+    form_id: 1
+    field_id: 8
+  - id: 5
+    form_id: 1
+    field_id: 9
+  - id: 6
+    form_id: 1
+    field_id: 10
+  - id: 7
+    form_id: 1
+    field_id: 11
+  - id: 8
+    form_id: 1
+    field_id: 12
+  - id: 9
+    form_id: 1
+    field_id: 13
+  - id: 10
+    form_id: 1
+    field_id: 14
+  - id: 15
+    form_id: 1
+    field_id: 15
+ox_workflow:
+  - id: 1
+    app_id: 99
+    name: "Test Workflow 1"
+    process_id: "Process_1dx3jli"
+    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"
+    entity_id: 1
+ox_workflow_deployment:
+  - id: 1
+    workflow_id: 1
+    process_definition_id: "Process_1dx3jli:931b7c8b-fef7-11e9-89d4-0294414e067f"
+    form_id: 1
+    latest: 1
+    created_by: 1
+ox_activity:
+  - id: 1
+    app_id: 99
+    workflow_deployment_id: 1
+    task_id: 1
+    name: "Task"
+  - id: 2
+    app_id: 99
+    workflow_deployment_id: 1
+    task_id: 1
+    name: "Temp Task"
+ox_activity_form:
+  - id: 1
+    activity_id: 1
+    form_id: 1
+ox_file:
+  - id: 11
+    org_id: 1
+    data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
+    date_created: "2019-06-25 00:00:00"
+    entity_id: 1
+    is_active: 1
+    form_id: 1
+  - id: 12
+    org_id: 1
+    data: "New File Data"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+    date_created: "2019-06-28 00:00:00"
+    entity_id: 1
+    is_active: 1
+    form_id: 1
+  - id: 13
+    org_id: 1
+    data: '{"firstname":"Nehal","product" : "Individual Professional Liability","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
+    date_created: "2019-06-26 00:00:00"
+    entity_id: 1
+    is_active: 1
+    form_id: 1
+  - id: 14
+    org_id: 1
+    data: "New File Data - Latest Completed"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
+    date_created: "2019-06-26 10:00:00"
+    entity_id: 1
+    is_active: 1
+    form_id: 1
+ox_workflow_instance:
+  - id: 1
+    workflow_deployment_id: 1
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    file_id: 11
+    start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+  - id: 2
+    workflow_deployment_id: 1
+    process_instance_id: 2
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    file_id: 12
+    start_data: "New File Data"
+  - id: 3
+    workflow_deployment_id: 1
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
+    app_id: 99
+    org_id: 1
+    status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    file_id: 13
+    start_data: '{"firstname":"Nehal","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha S","city":"","age" : ""}]}'
+    completion_data: '{"firstname":"Nehal","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
+  - id: 4
+    workflow_deployment_id: 1
+    process_instance_id: 1
+    app_id: 99
+    org_id: 1
+    status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    file_id: 0
+    start_data: ""
+ox_file_attribute:
+  - id: 1
+    file_id: 11
+    org_id: 1
+    field_value: 1
+    field_id: 1
+  - id: 2
+    file_id: 11
+    org_id: 1
+    field_value: "2019-10-01"
+    field_id: 3
+  - id: 3
+    file_id: 12
+    org_id: 1
+    field_value: 2
+    field_id: 1
+  - id: 4
+    file_id: 13
+    org_id: 1
+    field_value: "2020-01-01"
+    field_id: 3
+  - id: 5
+    file_id: 13
+    org_id: 1
+    field_value: 2
+    field_id: 1
+  - id: 6
+    file_id: 14
+    org_id: 1
+    field_value: "2030-06-20"
+    field_id: 3
+  - id: 7
+    file_id: 14
+    org_id: 1
+    field_value: 4
+    field_id: 1
+  - id: 8
+    file_id: 11
+    org_id: 1
+    field_value: 1
+    field_id: 2
+  - id: 9
+    file_id: 12
+    org_id: 1
+    field_value: 8
+    field_id: 2
+  - id: 10
+    file_id: 11
+    org_id: 1
+    field_value: 47
+    field_id: 5
+  - id: 11
+    file_id: 11
+    org_id: 1
+    field_value: 6
+    field_id: 6
+ox_activity_instance:
+  - id: 1
+    activity_id: 1
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0778"
+    workflow_instance_id: 1
+    start_data: '{"careerCoverage": "instructor","firstname":"Sadhitha","product":"","fax" : "","section1Agreement": "true","additionalInsured": [{"firstname":"Shwetha","city":"","age" : "","sameasmailingaddress" :"false"}]}'
+    completion_data: '{"endorsement_options": {"modify_personalInformation":true,"modify_coverage":false,"modify_additionalInsured":false},"careerCoverage": "divemaster","firstname":"Sadhitha","product":"P","fax" : "","section1Agreement": "true","additionalInsured": [{"firstname":"SHASHI","city":"City","age" : "","sameasmailingaddress":"false"}]}'
+    status: "Completed"
+    start_date: "2019-06-26 00:00:00"
+    org_id: 1
+    modified_by: 1
+  - id: 2
+    activity_id: 2
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0772"
+    workflow_instance_id: 2
+    status: "Completed"
+    start_date: "2019-06-26 01:00:00"
+    org_id: 1
+    modified_by: 1
+  - id: 3
+    activity_id: 1
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0722"
+    workflow_instance_id: 4
+    status: "In Progress"
+    start_date: "2019-06-26 02:00:00"
+    org_id: 1
+    modified_by: 1

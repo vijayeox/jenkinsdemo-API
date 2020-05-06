@@ -15,7 +15,7 @@ ox_datasource:
     uuid: 'cb1bebce-df33-4266-bbd6-d8da5571b10a'
     name: 'reporting engine'
     type: 'Elastic'
-    configuration: '{"data": {"user": "elastic","password": "changeme","serveraddress": "localhost","port": "9200", "core":"oxzion", "type":"type", "scheme":"http"}}'
+    configuration: '{"data": {"user": "elastic","password": "changeme","serveraddress": "localhost","port": "9200", "core":"core", "type":"type", "scheme":"http"}}'
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1

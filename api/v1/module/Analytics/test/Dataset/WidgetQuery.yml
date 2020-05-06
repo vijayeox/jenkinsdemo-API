@@ -39,3 +39,23 @@ ox_widget_query:
     ox_widget_id: 15
     sequence: 2
     configuration: "Sample"
+  -
+    ox_query_id: 12
+    ox_widget_id: 16
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 12
+    ox_widget_id: 16
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 12
+    ox_widget_id: 17
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 12
+    ox_widget_id: 17
+    sequence: 2
+    configuration: "Sample"

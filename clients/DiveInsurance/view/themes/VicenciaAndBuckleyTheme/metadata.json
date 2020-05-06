@@ -1,0 +1,16 @@
+{
+  "type": "theme",
+  "name": "VicenciaAndBuckleyTheme",
+  "internal": true,
+  "category": null,
+  "title": {
+    "en_EN": "VicenciaAndBuckleyTheme"
+  },
+  "description": {
+    "en_EN": "VicenciaAndBuckleyTheme"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}

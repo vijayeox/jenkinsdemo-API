@@ -2,17 +2,14 @@
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
-            <div>{$store_name} {$store_number}</div> <br/>
             <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/>
-                <p>In order to expedite your June 30, 2019 Dive Store/Resort renewal proposal, please complete the attached Renewal Application.  If you have more than one store number or location, please complete a Renewal Application for each location.  Please be sure to answer all of the questions and answer N/A if a question is not applicable.   Your proposal may be delayed if it is not complete. </p><br/>
-                
-                <p>Please complete section #3 for your Group Professional Liability Policy.</p><br/>
+                <p>Your PADI-Endorsed insurance will expire at 12:01 AM on June 30. Please apply online at <a href = '{$url}' rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>www.diveinsurance.com</u></a> or contact us at 1.800.223.9998 or 1.714.739.3177 for a new application.</p><br/>
 
-                <p>If you have a pool on premise, please complete the attached PADI Pool Supplemental.</p></br>
+                <p>If you were on automatic renewal and you are receiving this email, we were unable to obtain an authorization for your credit card.</p><br/>
 
-                <p>A formal proposal will be emailed to you after all required information is received.</p>
+                <p>If you have recently submitted an application, and have confirmation it was received by us, it is currently being processed and you may disregard this email.</p></br>
 
-                <p>Thank you for your prompt attention to this matter, and please call me if you need any assistance.</p>
+                <p>Thank you for your support of the PADI-Endorsed Professional Liability Insurance Program.</p>
 			 <br/>
 
             </div>

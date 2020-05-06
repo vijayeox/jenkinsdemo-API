@@ -1,20 +1,13 @@
 <?php
 namespace Callback;
 
-use Oxzion\Test\ControllerTest;
-use Oxzion\Db\ModelTable;
-use PHPUnit\DbUnit\TestCaseTrait;
-use PHPUnit\DbUnit\DataSet\DefaultDataSet;
-use PHPUnit\Framework\TestResult;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 use Callback\Controller\OXCallbackController;
-use Oxzion\Service\TemplateService;
-use Mockery;
+use Oxzion\Test\ControllerTest;
+use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class OXCallbackControllerTest extends ControllerTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         parent::setUp();
@@ -33,13 +26,13 @@ class OXCallbackControllerTest extends ControllerTest
 
     public function testCreatedUser()
     {
-        $data = array('email'=>'bharat@goku.com','firstname'=>'bharat','username'=>'bharat','password'=>'password','orgid' => '53012471-2863-4949-afb1-e69b0891c98a');
+        $data = array('email' => 'bharat@goku.com', 'firstname' => 'bharat', 'username' => 'bharat', 'password' => 'password', 'orgid' => '53012471-2863-4949-afb1-e69b0891c98a');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/ox/createuser', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('user_added_mail');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
     protected function setDefaultAsserts()

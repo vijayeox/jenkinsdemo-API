@@ -1,0 +1,60 @@
+version: '3.5'
+services:
+    zf:
+        build: 
+            context: ./api/v1/docker
+            args:
+                HOST: ${HOST}
+                DB_USERNAME: ${DB_USERNAME}
+                DB_PASSWORD: ${DB_PASSWORD}
+                DB_HOST: ${DB_HOST}
+                API_DB : ${API_DB}
+                TEST_API_DB : ${TEST_API_DB}
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/app
+            - /tmp:/tmp
+    wf:
+        build: 
+            context: ./integrations/workflow
+            args:
+                DB_USERNAME: ${DB_USERNAME}
+                DB_PASSWORD: ${DB_PASSWORD}
+                DB_HOST: ${DB_HOST}
+                CAMUNDA_DB: ${CAMUNDA_DB}
+                API_DB : ${API_DB}
+        network_mode: "host"    
+        ports:
+            - "8090:8090"
+    camel:
+        build:
+            context: ./integrations/camel/docker
+            args:
+                HOST: ${HOST}
+                DB_USERNAME: ${DB_USERNAME}
+                DB_PASSWORD: ${DB_PASSWORD}
+                DB_HOST: ${DB_HOST}
+                QUARTZ_DB: ${QUARTZ_DB}
+                API_DB : ${API_DB}
+                ELASTIC_CLUSTER : ${ELASTIC_CLUSTER}
+        network_mode: "host"    
+        ports:
+            - "8161:8161"
+            - "8085:8085"
+            - "61616:61616"
+            - "5672:5672"
+            - "61613:61613"
+            - "1883:1883"
+            - "61614:61614"
+        volumes:
+            - ./integrations/camel:/workspace/app
+            - ./:/app         
+    vw:
+        build: 
+            context: ./view/docker  
+        network_mode: "host"    
+        ports:
+            - "8081:8081" 
+        volumes:
+            - ./:/app               

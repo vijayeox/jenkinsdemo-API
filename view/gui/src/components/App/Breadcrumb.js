@@ -29,17 +29,23 @@ class Breadcrumb extends React.Component {
   }
 
   stepDownPage = () => {
-    let data = this.state.breadcrumbConfig.slice();
-    data.length = 1;
-    this.setState({
-      breadcrumbConfig: data
-    });
-    if(data[0]){
-      let ev = new CustomEvent("updatePageView", {
-        detail: data[0].content,
-        bubbles: true
+    if (this.state.breadcrumbConfig.length == 1) {
+      this.props.homePage();
+    } else {
+      let data = this.state.breadcrumbConfig.slice();
+      data.length = 1;
+      this.setState({
+        breadcrumbConfig: data
       });
-      document.getElementsByClassName(this.appId+"_breadcrumbParent")[0].dispatchEvent(ev);
+      if (data[0]) {
+        let ev = new CustomEvent("updatePageView", {
+          detail: data[0].content,
+          bubbles: true
+        });
+        document
+          .getElementsByClassName(this.appId + "_breadcrumbParent")[0]
+          .dispatchEvent(ev);
+      }
     }
   };
 
@@ -80,7 +86,6 @@ class Breadcrumb extends React.Component {
         ? content.push(
             <span className="breadcrumbs-item" key={index}>
               {index == "0" ? null : (
-                // "/"
                 <i
                   className="fa fa-chevron-right"
                   style={{

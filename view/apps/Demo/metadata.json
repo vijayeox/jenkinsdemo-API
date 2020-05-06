@@ -1,0 +1,18 @@
+{
+  "type": "application",
+  "name": "Demo",
+  "category": null,
+  "server": "server.js",
+  "icon": "icon.png",
+  "icon_white": "icon_white.png",
+  "title": {
+    "en_EN": "Insurance Distribution Network"
+  },
+  "description": {
+    "en_EN": "Insurance Distribution Network"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}

@@ -1,0 +1,91 @@
+ox_widget_query:
+  -
+    ox_query_id: 111
+    ox_widget_id: 111
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 112
+    ox_widget_id: 112
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 111
+    ox_widget_id: 112
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 111
+    ox_widget_id: 113
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 112
+    ox_widget_id: 113
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 114
+    ox_widget_id: 114
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 115
+    ox_widget_id: 114
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 114
+    ox_widget_id: 115
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 115
+    ox_widget_id: 115
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 116
+    ox_widget_id: 116
+    sequence: 1
+    configuration: "Sample"    
+  -
+    ox_query_id: 117
+    ox_widget_id: 116
+    sequence: 1
+    configuration: "Sample"        
+  -
+    ox_query_id: 117
+    ox_widget_id: 117
+    sequence: 1
+    configuration: '{"field":"budget_amount"}'
+  -
+    ox_query_id: 116
+    ox_widget_id: 118
+    sequence: 1
+    configuration: "Sample"    
+  -
+    ox_query_id: 117
+    ox_widget_id: 118
+    sequence: 1
+    configuration: '{"filter":["industry","==","Software"]}'
+  -
+    ox_query_id: 118
+    ox_widget_id: 119
+    sequence: 1
+    configuration: ''
+  -
+    ox_query_id: 119
+    ox_widget_id: 120
+    sequence: 1
+    configuration: '{"filter":null,"sort":null,"group":null}'
+  -
+    ox_query_id: 114
+    ox_widget_id: 121
+    sequence: 2
+    configuration: ''
+  -
+    ox_query_id: 115
+    ox_widget_id: 121
+    sequence: 1
+    configuration: ''

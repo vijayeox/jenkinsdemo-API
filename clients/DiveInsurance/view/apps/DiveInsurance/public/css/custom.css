@@ -9,21 +9,24 @@ html {
 }
 
 body {
-  background: #c1bdba;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Lato Sans", sans-serif;
 }
 
 a {
   text-decoration: none;
-  color: #275362;
+  color: #053b6d;
   transition: 0.5s ease;
 }
 a:hover {
-  color: #275362;
+  color: #053b6d;
 }
-
+.btn-default:hover {
+    color: #053b6d;
+    background-color: #ffffff;
+    border-color: #275262;
+}
 .form {
-  padding: 40px;
+  padding: 40px 40px 35px 40px;
   margin: 40px auto;
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
@@ -53,11 +56,11 @@ a:hover {
   transition: 0.5s ease;
 }
 .tab-group li a:hover {
-  background: #275362;
+  background: #053b6d;
   color: #ffffff;
 }
 .tab-group .active a {
-  background: #275362;
+  background: #053b6d;
   color: #ffffff;
 }
 
@@ -67,7 +70,7 @@ a:hover {
 
 h1 {
   text-align: center;
-  color: #ffffff;
+  color:#333;
   font-weight: 300;
   margin: 0 0 40px;
 }
@@ -87,7 +90,7 @@ h1 {
 
 */ label .req {
   margin: 2px;
-  color: #275362;
+  color: #053b6d;
 }
 
 label.active {
@@ -127,7 +130,7 @@ textarea {
 input:focus,
 textarea:focus {
   outline: 0;
-  border-color: #275362;
+  border-color: #053b6d;
 }
 
 textarea {
@@ -153,7 +156,10 @@ textarea {
 .top-row > div:last-child {
   margin: 0;
 }
-
+.bg-primary {
+    background-color: #053b6d !important;
+    color: white;
+}
 .button {
   -webkit-appearance: none;
   width: 100%;
@@ -164,7 +170,7 @@ textarea {
   padding: 15px 40px;
   margin-top: 20px;
   margin-bottom: 15px;
-  background-color: #275362;
+  background-color: #053b6d;
   color: #fff;
   font-size: 17px;
   margin-left: auto;
@@ -178,7 +184,7 @@ textarea {
 }
 .button:hover,
 .button:focus {
-  background: #275362;
+  background: #053b6d;
 }
 
 .hideBorders > td {
@@ -203,20 +209,20 @@ textarea {
 }
 .btn-success:hover {
   color: #fff;
-  background-color: #275362 !important;
-  border-color: #275362 !important;
+  background-color: #053b6d !important;
+  border-color: #053b6d !important;
 }
 .panel-primary > .panel-heading {
   color: #fff;
-  background-color: #275362 !important;
-  border-color: #275362 !important;
+  background-color: #053b6d !important;
+  border-color: #053b6d !important;
 }
 .panel-primary {
   border-color: #275262 !important;
 }
 .btn-primary {
-  background-color: #275362 !important;
-  border-color: #275362 !important;
+  background-color: #053b6d !important;
+  border-color: #053b6d !important;
 }
 
 label {
@@ -240,7 +246,7 @@ label {
   -webkit-appearance: none;
 }
 input:focus {
-  border-bottom: solid 1px #275362;
+  border-bottom: solid 1px #053b6d;
   outline: 0;
   box-shadow: 0 2px 6px -8px rgba(182, 157, 230, 0.45);
 }
@@ -344,7 +350,24 @@ input:focus {
 
 .formio-component-submit .submit-fail::after {
   top: 2px;
-  right: 6px;
+}
+
+.control-label--hidden{
+  right: 8px;
+  top: 4px;
+}
+
+.alert .control-label--hidden{
+  right: 25px;
+  top: 18px;
+}
+
+.formio-component-select .control-label--hidden.field-required{
+  right: 45px;
+}
+
+.formio-component-select.alert .control-label--hidden.field-required{
+  right: 65px;
 }
 
 #wrongPassword {
@@ -362,4 +385,24 @@ input:focus {
 
 .resetPassword {
   cursor: pointer;
+}
+.btn-default {
+    color: #fff;
+    background-color: #053b6d;
+    border-color: #053b6d;
+}
+.padi{
+  float:right;
+  text-align: center;
+  width: auto;
+  height: 80px;
+}
+.padi img{
+  height:inherit;
+}
+.padi h4{
+  font-weight: bold;
+}
+.formio-errors.invalid-feedback{
+  display:block;
 }

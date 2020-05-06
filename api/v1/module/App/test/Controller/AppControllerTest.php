@@ -19,6 +19,11 @@ class AppControllerTest extends ControllerTest
         parent::setUp();
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
@@ -36,6 +41,14 @@ class AppControllerTest extends ControllerTest
         return $mockProcessManager;
     }
 
+    private function getMockRestClientForScheduleService()
+    {
+        $taskService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\JobService::class);
+        $mockRestClient = Mockery::mock('Oxzion\Utils\RestClient');
+        $taskService->setRestClient($mockRestClient);
+        return $mockRestClient;
+    }
+
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('App');
@@ -51,6 +64,24 @@ class AppControllerTest extends ControllerTest
         $statement = Migration::createAdapter($this->getApplicationConfig(), $database)->query($query);
         $result = $statement->execute();
     }
+
+    public function testGetListOfAssignments()
+    {
+        $this->initAuthToken($this->adminUser);
+        $product = 'Individual Professional Liability';
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments?filter=[{"filter":{"filters":[{"field":"product","operator":"eq","value":"' . $product . '"}]},"skip":0,"take":10}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class);
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('assignments');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['product'], $product);
+        $this->assertEquals($content['total'], 1);
+    }
+
 
     public function testGetList()
     {
@@ -216,6 +247,10 @@ class AppControllerTest extends ControllerTest
             $mockBosUtils = Mockery::mock('alias:\Oxzion\Utils\ExecUtils');
             $mockBosUtils->expects('randomPassword')->withAnyArgs()->once()->andReturn('12345678');
             $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
+        }
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         $data = ['path' => __DIR__ . '/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -447,6 +482,10 @@ class AppControllerTest extends ControllerTest
         $config = $this->getApplicationConfig();
         copy(__DIR__ . '/../sampleapp/application10.yml', __DIR__ . '/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
         $data = ['path' => __DIR__ . '/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -539,6 +578,10 @@ class AppControllerTest extends ControllerTest
         copy(__DIR__ . '/../sampleapp/application4.yml', __DIR__ . '/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../sampleapp/'];
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -580,6 +623,10 @@ class AppControllerTest extends ControllerTest
         copy(__DIR__ . '/../sampleapp/application6.yml', __DIR__ . '/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../sampleapp/'];
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -625,6 +672,10 @@ class AppControllerTest extends ControllerTest
         copy(__DIR__ . '/../sampleapp/application6.yml', __DIR__ . '/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../sampleapp/'];
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -674,6 +725,10 @@ class AppControllerTest extends ControllerTest
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
         $data = ['path' => __DIR__ . '/../sampleapp/'];
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -785,22 +840,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testGetListOfAssignments()
-    {
-        $this->initAuthToken($this->adminUser);
-        $workflowName = 'Test Workflow 1';
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments?filter=[{"filter":{"filters":[{"field":"workflow_name","operator":"eq","value":"' . $workflowName . '"}]},"sort":[{"field":"workflow_name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class);
-        $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('assignments');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['workflow_name'], $workflowName);
-        $this->assertEquals($content['total'], 1);
-    }
 
     public function testGetListOfAssignmentsWithoutFiltersValues()
     {

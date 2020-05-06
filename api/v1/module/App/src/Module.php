@@ -9,12 +9,14 @@ use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\FieldTable;
 use Oxzion\Model\FileTable;
 use Oxzion\Model\FormTable;
+use Oxzion\Model\JobTable;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Service\CommandService;
 use Oxzion\Service\ErrorLogService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\FormService;
+use Oxzion\Service\JobService;
 use Oxzion\Service\RoleService;
 use Oxzion\Service\UserCacheService;
 use Oxzion\Service\UserService;
@@ -49,7 +51,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\AppService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class), $container->get(\Oxzion\Service\OrganizationService::class), $container->get(Service\EntityService::class), $container->get(\Oxzion\Service\PrivilegeService::class), $container->get(\Oxzion\Service\RoleService::class), $container->get(\App\Service\MenuItemService::class), $container->get(\App\Service\PageService::class));
+                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class), $container->get(\Oxzion\Service\JobService::class), $container->get(\Oxzion\Service\OrganizationService::class), $container->get(Service\EntityService::class), $container->get(\Oxzion\Service\PrivilegeService::class), $container->get(\Oxzion\Service\RoleService::class), $container->get(\App\Service\MenuItemService::class), $container->get(\App\Service\PageService::class));
                 },
                 Model\AppTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AppTableGateway::class);
@@ -173,6 +175,13 @@ class Module implements ConfigProviderInterface
                     return new Controller\FormController(
                         $container->get(FormTable::class),
                         $container->get(FormService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\JobController::class => function ($container) {
+                    return new Controller\JobController(
+                        $container->get(JobTable::class),
+                        $container->get(JobService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

@@ -308,7 +308,8 @@ class Module
                 },
                 Analytics\AnalyticsEngine::class => function ($container) {
                     $config = $container->get('config');
-                    return new Analytics\Elastic\AnalyticsEngineImpl($config);
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Elastic\AnalyticsEngineImpl($config,$dbAdapter,$config);
                 },
                 Search\SearchEngine::class => function ($container) {
                     $config = $container->get('config');
@@ -346,7 +347,9 @@ class Module
                         $container->get(Document\DocumentBuilder::class),
                         $container->get(Service\TemplateService::class),
                         $container->get(Messaging\MessageProducer::class),
-                        $container->get(Service\FileService::class)
+                        $container->get(Service\FileService::class),
+                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get(Service\ActivityInstanceService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {
@@ -458,7 +461,27 @@ class Module
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\ActivityInstanceTable::class),
-                        $container->get(Workflow\WorkflowFactory::class)
+                        $container->get(Workflow\WorkflowFactory::class),
+                        $container->get(Service\FileService::class)
+                    );
+                },
+                 Model\JobTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\JobTableGateway::class);
+                    return new Model\JobTable($tableGateway);
+                },
+                Model\JobTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Job());
+                    return new TableGateway('ox_job', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\JobService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\JobService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Model\JobTable::class)
                     );
                 },
                 Service\CommandService::class => function ($container) {
@@ -468,10 +491,30 @@ class Module
                         $container->get(Service\TemplateService::class),
                         $container->get(AppDelegate\AppDelegateService::class),
                         $container->get(Service\FileService::class),
+                        $container->get(Service\JobService::class),
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(Service\WorkflowService::class),
                         $container->get(Service\UserService::class));
+                },
+                Model\ServiceTaskInstanceTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\ServiceTaskInstanceTableGateway::class);
+                    return new Model\ServiceTaskInstanceTable($tableGateway);
+                },
+                Model\ServiceTaskInstanceTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\ServiceTaskInstance());
+                    return new TableGateway('ox_service_task_instance', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\ServiceTaskService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ServiceTaskService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\ServiceTaskInstanceTable::class),
+                        $container->get(Service\CommandService::class)
+                    );
                 },
             ],
         ];

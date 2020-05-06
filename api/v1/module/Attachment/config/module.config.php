@@ -18,7 +18,7 @@ return [
                             'put' => ['MANAGE_ATTACHMENT_WRITE', 'MANAGE_ANNOUNCEMENT_WRITE'],
                             'post' => ['MANAGE_ATTACHMENT_WRITE', 'MANAGE_ANNOUNCEMENT_WRITE'],
                             'delete' => ['MANAGE_ATTACHMENT_WRITE', 'MANAGE_ANNOUNCEMENT_WRITE'],
-                            'get' => ['MANAGE_ATTACHMENT_READ', 'MANAGE_ANNOUNCEMENT_READ']
+                            'get' => ['MANAGE_ATTACHMENT_READ', 'MANAGE_ANNOUNCEMENT_READ'],
                         ],
                     ],
                 ],
@@ -28,6 +28,6 @@ return [
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

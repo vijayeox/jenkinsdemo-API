@@ -4,12 +4,14 @@ namespace Oxzion\Service;
 use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
-use Oxzion\Service\AbstractService;
-use PaymentGateway\Model\Payment;
-use PaymentGateway\Model\PaymentTransaction;
-use PaymentGateway\Model\PaymentTable;
-use PaymentGateway\Model\PaymentTransactionTable;
 use Oxzion\ServiceException;
+use Oxzion\Service\AbstractService;
+use Oxzion\ValidationException;
+use PaymentGateway\Model\Payment;
+use PaymentGateway\Model\PaymentTable;
+use PaymentGateway\Model\PaymentTransaction;
+use PaymentGateway\Model\PaymentTransactionTable;
+
 // use Oxzion\Utils\RestClient;
 
 class PaymentService extends AbstractService
@@ -18,13 +20,14 @@ class PaymentService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, PaymentTable $table,PaymentTransactionTable $transactionTable)
+    public function __construct($config, $dbAdapter, PaymentTable $table, PaymentTransactionTable $transactionTable)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->transactionTable = $transactionTable;
         $this->paymentGatewayType = $this->config['paymentGatewayType'];
     }
+
     /**
      * Create Payment Service
      * @param array $data Array of elements as shown</br>
@@ -39,10 +42,10 @@ class PaymentService extends AbstractService
      * </code>
      * @return integer 0|$id of Payment Created
      */
-    public function createPayment(&$data,$appId)
-    {  
+    public function createPayment(&$data, $appId)
+    {
         $form = new Payment();
-        $data['app_id'] = $this->getIdFromUuid('ox_app',$appId);
+        $data['app_id'] = $this->getIdFromUuid('ox_app', $appId);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['created_date'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
@@ -53,18 +56,19 @@ class PaymentService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Payment Could not be created", 'could.not.create');
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        } catch (Exception $e) { 
+        } catch (Exception $e) {
             $this->rollback();
-            $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage() . "-" . $e->getTraceAsString());
             throw $e;
         }
         return $count;
     }
+
     /**
      * Update Payment
      * @method PUT
@@ -86,12 +90,12 @@ class PaymentService extends AbstractService
      * </code>
      * @return array Returns the Created Payment.
      */
-    public function updatePayment($id, &$data,$appUuid)
+    public function updatePayment($id, &$data, $appUuid)
     {
-        $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
+        $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         $obj = $this->table->get($id, array());
         if (is_null($obj)) {
-            return 0;
+            throw new ValidationException("Could not find the payment ID to update", 'could.not.find.payment');
         }
         $originalArray = $obj->toArray();
         $form = new Payment();
@@ -105,113 +109,117 @@ class PaymentService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Payment Could not be updated", 'could.not.update');
             }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage() . "-" . $e->getTraceAsString());
             throw $e;
         }
         return $id;
     }
+
     /**
      * Delete Payment
      * @param integer $id ID of Payment to Delete
      * @return int 0=>Failure | $id;
      */
-    public function deletePayment($id,$appUuid)
+    public function deletePayment($id, $appUuid)
     {
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->delete($id, ['app_id' => $this->getIdFromUuid('ox_app',$appUuid)]);
+            $count = $this->table->delete($id, ['app_id' => $this->getIdFromUuid('ox_app', $appUuid)]);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Payment Could not be deleted", 'could.not.delete');
             }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage() . "-" . $e->getTraceAsString());
             throw $e;
         }
         return $count;
     }
 
-    public function initiatePaymentProcess($appUuid,&$data)
+    public function initiatePaymentProcess($appUuid, &$data)
     {
-        $paymentInfo = $this->getPaymentInfoBasedOnGatewayType($appUuid);
-        if(count($paymentInfo)>0){
-            try {
+        try {
+            $paymentInfo = $this->getPaymentInfoBasedOnGatewayType($appUuid);
+            if (count($paymentInfo) > 0) {
                 $data['config'] = $paymentInfo;
                 $paymentEngine = $this->getPaymentEngine($paymentInfo);
                 $initiatePaymentResult = $paymentEngine->initiatePaymentProcess($data);
                 $transaction['token'] = $initiatePaymentResult;
                 $transaction['data'] = json_encode($data);
-                $transactionDetails = $this->createTransactionRecord($paymentInfo['id'],$transaction);
+                $transactionDetails = $this->createTransactionRecord($paymentInfo['id'], $transaction);
                 $data['transaction'] = $transactionDetails;
                 $data['token'] = $initiatePaymentResult;
                 return $data;
-            } catch (ServiceException $e){
-                $this->logger->error("Payment Initialization has Failed ".$e->getMessage());
-                throw new ServiceException("Payment Initialization has Failed, ".$e->getMessage(), 1);
-            }catch (Exception $e){
-                $this->logger->error("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!");
-                throw (new ServiceException("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!", 1));
+            } else {
+                $this->logger->error("Payment Gateway for App - " . $appUuid . " missing!");
+                throw (new ServiceException("Payment Gateway for App - " . $appUuid . " missing!", 1));
             }
-        } else {
-            $this->logger->error("Payment Gateway for App - ".$appUuid." missing!");
-            throw (new ServiceException("Payment Gateway for App - ".$appUuid." missing!", 1));
+        } catch (ServiceException $e) {
+            $this->logger->error("Payment Initialization has Failed " . $e->getMessage());
+            throw new ServiceException("Payment Initialization has Failed, " . $e->getMessage(), 1);
+        } catch (Exception $e) {
+            $this->logger->error("Payment Initialization has Failed " . $paymentInfo['payment_client'] . " missing!");
+            throw (new ServiceException("Payment Initialization has Failed " . $paymentInfo['payment_client'] . " missing!", 1));
         }
     }
-    private function getPaymentEngine($paymentInfo){
+
+    private function getPaymentEngine($paymentInfo)
+    {
         try {
-            $className = "Oxzion\Payment\\".$paymentInfo['payment_client']."\PaymentEngineImpl";
-            if(class_exists($className)){
+            $className = "Oxzion\Payment\\" . $paymentInfo['payment_client'] . "\PaymentEngineImpl";
+            if (class_exists($className)) {
                 return (new $className($paymentInfo));
             } else {
-                throw (new ServiceException("Payment Gateway has not been implement ".$paymentInfo['payment_client']." missing!", 1));
+                throw (new ServiceException("Payment Gateway has not been implement " . $paymentInfo['payment_client'] . " missing!", 1));
             }
-        } catch (Exception $e){
-            $this->logger->error("Payment Gateway has not been implement ".$paymentInfo['payment_client']." missing!");
-            throw (new ServiceException("Payment Gateway has not been implement ".$paymentInfo['payment_client']." missing!", 1));
+        } catch (Exception $e) {
+            $this->logger->error("Payment Gateway has not been implement " . $paymentInfo['payment_client'] . " missing!");
+            throw (new ServiceException("Payment Gateway has not been implement " . $paymentInfo['payment_client'] . " missing!", 1));
         }
     }
 
     public function getPaymentDetails($appId)
     {
-        try{
+        try {
             $select = "SELECT * FROM `ox_payment` WHERE app_id =:appId";
-            $selectParams = array("appId" => $this->getIdFromUuid('ox_app',$appId));
-            $result = $this->executeQuerywithBindParameters($select,$selectParams)->toArray();
+            $selectParams = array("appId" => $this->getIdFromUuid('ox_app', $appId));
+            $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
             return $result;
-        }catch(Exception $e){
-            $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage() . "-" . $e->getTraceAsString());
             throw $e;
         }
     }
 
     protected function getPaymentInfoBasedOnGatewayType($appUuid)
     {
-        $orgId= AuthContext::get(AuthConstants::ORG_ID);
-        try{
-            $select = "SELECT ox_payment.* FROM `ox_payment` 
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        try {
+            $select = "SELECT ox_payment.* FROM `ox_payment`
                     INNER JOIN ox_app on ox_app.id = ox_payment.app_id WHERE ox_app.uuid =:appUuid AND ox_payment.server_instance_name =:serverInstanceName AND ox_payment.org_id= :orgId";
-            $selectParams = array("appUuid" => $appUuid,"serverInstanceName" => $this->paymentGatewayType,"orgId"=>$orgId);
-            $gateWay = $this->executeQuerywithBindParameters($select,$selectParams)->toArray();
-            if(count($gateWay)){
+            $selectParams = array("appUuid" => $appUuid, "serverInstanceName" => $this->paymentGatewayType, "orgId" => $orgId);
+            $gateWay = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+            if (count($gateWay)) {
                 return $gateWay[0];
             } else {
                 return $gateWay;
             }
-        }catch(Exception $e){
-            $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage() . "-" . $e->getTraceAsString());
             throw $e;
         }
     }
-    private function createTransactionRecord($paymentId,&$data)
-    {  
+
+    private function createTransactionRecord($paymentId, &$data)
+    {
         $form = new PaymentTransaction();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -231,18 +239,19 @@ class PaymentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage() . "-" . $e->getTraceAsString());
             throw $e;
         }
         return $data;
     }
-    public function processPayment($appUuid,$id,&$data)
+
+    public function processPayment($appUuid, $id, &$data)
     {
-        $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
+        $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         $paymentInfo = $this->getPaymentInfoBasedOnGatewayType($appUuid);
         $select = "SELECT * FROM `ox_payment_transaction` WHERE id =:id";
-        $result = $this->executeQuerywithBindParameters($select,array("id" => $id))->toArray();
-        if(count($result)>0){
+        $result = $this->executeQuerywithBindParameters($select, array("id" => $id))->toArray();
+        if (count($result) > 0) {
             try {
                 $paymentEngine = $this->getPaymentEngine($paymentInfo);
                 $transactionDetails = $paymentEngine->handleTransaction($data);
@@ -263,17 +272,17 @@ class PaymentService extends AbstractService
                     $id = $this->transactionTable->getLastInsertValue();
                     $data['id'] = $id;
                     $this->commit();
-                } catch (Exception $e) { 
+                } catch (Exception $e) {
                     $this->rollback();
-                    $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
+                    $this->logger->error($e->getMessage() . "-" . $e->getTraceAsString());
                     throw $e;
                 }
-            } catch(ServiceException $e) {
-                $this->logger->error("Payment Gateway has not been implement ".$e->getMessage());
+            } catch (ServiceException $e) {
+                $this->logger->error("Payment Gateway has not been implement " . $e->getMessage());
                 throw (new ServiceException($e->getMessage(), 1));
-            }catch (Exception $e){
-                $this->logger->error("Payment Gateway has not been implement ".$paymentInfo['payment_client']." missing!");
-                throw (new ServiceException("Payment Gateway has not been implement ".$paymentInfo['payment_client']." missing!", 1));
+            } catch (Exception $e) {
+                $this->logger->error("Payment Gateway has not been implement " . $paymentInfo['payment_client'] . " missing!");
+                throw (new ServiceException("Payment Gateway has not been implement " . $paymentInfo['payment_client'] . " missing!", 1));
             }
             return $formdata;
         } else {

@@ -18,7 +18,9 @@ class Dashboard extends Entity
         'org_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
         'isdeleted' => array('type' => parent::BOOLEANVAL, 'value' => false, 'readonly' => FALSE, 'required' => FALSE),
         'content' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
-        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE)
+        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE),
+        'isdefault' => array('type' => parent::BOOLEANVAL, 'value' => 0, 'readonly' => FALSE, 'required' => FALSE),
+        'filter_configuration' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE)
     );
 
     public function validate()

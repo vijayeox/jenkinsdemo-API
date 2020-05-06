@@ -69,10 +69,6 @@ class FormService extends AbstractService
         $this->beginTransaction();
         try {
             $count = $this->table->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                throw new ServiceException("Form Save failed", "form.save.failed");
-            }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $generateFields = $this->generateFields($template['fields'], $appId, $id,$template['form']['entity_id']);
@@ -222,31 +218,7 @@ class FormService extends AbstractService
         $fieldsCreated = array();
         $fieldIdArray = array();
         foreach ($fieldsList as $field) {
-            //Add only new fields
-            $foundField =  ArrayUtils::multiDimensionalSearch($existingFields,'name',$field['name']);
-            if(!$foundField){
-                $oxField = new Field();
-                $field['app_id'] = $appId;
-                $field['entity_id'] = $entityId;
-                $oxField->exchangeArray($field);
-                $oxFieldProps = array();
-                $fieldData = $oxField->toArray();
-                $fieldData['entity_id'] = $entityId;
-                try {
-                    $fieldResult = $this->fieldService->saveField($appId, $fieldData);
-                    $fieldIdArray[] = $fieldData['id'];
-                    $fieldsCreated[] = $fieldData;
-                    $createFormFieldEntry = $this->createFormFieldEntry($formId, $fieldData['id']);
-                } catch (Exception $e) {
-                    foreach ($fieldIdArray as $fieldId) {
-                        $id = $this->fieldService->deleteField($appId,$fieldId);
-                        return 0;
-                    }
-                }
-                unset($fieldData);
-            } else {
-                $createFormFieldEntry = $this->createFormFieldEntry($formId, $foundField['id']);
-            }
+            $this->saveField($existingFields,$field,$fieldsCreated,$fieldIdArray,$appId,$formId,$entityId);
         }
         $existingFormFieldsQuery = "select ox_field.* from ox_field INNER JOIN ox_form_field ON ox_form_field.field_id=ox_field.id where ox_form_field.form_id=".$formId.";";
         $existingFormFields = $this->executeQuerywithParams($existingFormFieldsQuery);
@@ -262,10 +234,15 @@ class FormService extends AbstractService
     }
     private function createFormFieldEntry($formId, $fieldId)
     {
+        $select = "SELECT * FROM `ox_form_field` WHERE form_id=:formId AND field_id=:fieldId";
+        $insertParams = array("formId" => $formId,"fieldId" =>$fieldId);
+        $result = $this->executeQueryWithBindParameters($select,$insertParams)->toArray();
+        if(count($result) > 0){
+            return;
+        }
         $this->beginTransaction();
         try {
             $insert = "INSERT INTO `ox_form_field` (`form_id`,`field_id`) VALUES (:formId,:fieldId)";
-            $insertParams = array("formId" => $formId,"fieldId" =>$fieldId);
             $resultSet = $this->executeQueryWithBindParameters($insert,$insertParams);
             $this->commit();
         } catch (Exception $e) {
@@ -273,5 +250,44 @@ class FormService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
+    }
+
+    private function saveField(&$existingFields,&$field,&$fieldsCreated,&$fieldIdArray,$appId,$formId,$entityId){
+            if(isset($field['parent'])){
+                $parentField =  ArrayUtils::multiDimensionalSearch($existingFields,'name',$field['parent']['name']);
+                $this->logger->info("PARENT FIELD----".json_encode($parentField));
+                if(!$parentField){
+                    $this->saveField($existingFields,$field['parent'],$fieldsCreated,$fieldIdArray,$appId,$formId,$entityId);
+                    $parentField = $field['parent'];
+                }
+                $field['parent_id'] = $parentField['id'];
+                unset($field['parent']);
+                $foundField = ArrayUtils::multiFieldSearch($existingFields,array('name' => $field['name'],'parent_id' => $field['parent_id']));
+            }else{
+               $foundField =  ArrayUtils::multiDimensionalSearch($existingFields,'name',$field['name']); 
+            }            
+            $field['app_id'] = $appId;
+            $field['entity_id'] = $entityId;
+            $oxField = new Field();
+            if($foundField){
+                $oxField->exchangeArray($foundField);
+            }
+            $oxField->exchangeArray($field);
+            $fieldData = $oxField->toArray();
+            try {
+                $fieldResult = $this->fieldService->saveField($appId, $fieldData);
+                $fieldIdArray[] = $fieldData['id'];
+                $fieldsCreated[] = $fieldData;
+                if(!$foundField){
+                    $existingFields[] = $fieldData;
+                    $field['id'] = $fieldData['id'];
+                }
+                $createFormFieldEntry = $this->createFormFieldEntry($formId, $fieldData['id']);
+            } catch (Exception $e) {
+                foreach ($fieldIdArray as $fieldId) {
+                    $id = $this->fieldService->deleteField($appId,$fieldId);
+                    return 0;
+                }
+            }            
     }
 }

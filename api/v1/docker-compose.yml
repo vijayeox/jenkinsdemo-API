@@ -4,8 +4,13 @@ services:
         build: 
             context: ./docker
             dockerfile: Dockerfile
-        environment:
-            XDEBUG_CONFIG: remote_host=localhost remote_port=9000 remote_enable=1
+            args:
+                HOST: ${HOST}
+                DB_USERNAME: ${DB_USERNAME}
+                DB_PASSWORD: ${DB_PASSWORD}
+                DB_HOST: ${DB_HOST}
+                API_DB : ${API_DB}
+                TEST_API_DB : ${TEST_API_DB}
         ports:
             - "8080:80"
         volumes:

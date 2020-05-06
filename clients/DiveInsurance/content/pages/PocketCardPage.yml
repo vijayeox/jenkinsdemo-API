@@ -1,0 +1,38 @@
+name: 'Pocket Card'
+description: 'Lets CSR generate Pocket Cards'
+content:
+    -
+        type: List
+        content:
+            route: 'pipeline/commands/[{"command" : "delegate", "delegate":"PocketCardMenu"}]'
+            filterable: true
+            resizable: true
+            actions:
+                -
+                    name: 'View Pocket Card'
+                    icon: 'fa fa-envelope-open'
+                    rule: '''{{jobStatus}}'' == ''Completed'''
+                    details:
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+            operations:
+                title: 'Pocket Card'
+                actions:
+                    -
+                        name: 'Generate Pocket Card'
+                        rule: true
+                        details:
+                            -
+                                type: Form
+                                form_id: e2ed4200-9131-4671-b0e0-de3e27c3f611
+            columnConfig:
+                -
+                    title: 'Filters Used'
+                    field: generationType
+                -
+                    title: Product
+                    field: pocketCardProductType
+                -
+                    title: Status
+                    field: jobStatus

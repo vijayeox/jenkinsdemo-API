@@ -33,6 +33,7 @@
   const trayOptions = {};
   let chatCount = 0;
   let tray = null;
+  var i, finalposition = {}, finalDimension = {};
 
   const resetBadge = () => {
     if(trayOptions.count > 0){
@@ -153,14 +154,22 @@
       });
       let trayInitialized = false;
             
+      let session = core.make('osjs/settings').get('osjs/session');
+      let sessions = Object.entries(session);
+      for (i = 0; i < sessions.length; i++) {
+        if (Object.keys(session[i].windows).length && session[i].name == "Chat"){
+          finalposition = session[i].windows[0].position;
+          finalDimension = session[i].windows[0].dimension;
+        }
+      }
       // Create  a new Window instance
       const createProcWindow = () => {
         let win = proc.createWindow({
           id: 'ChatWindow',
           icon: proc.resource(proc.metadata.icon_white),
           title: metadata.title.en_EN,
-          dimension: {width: 400, height: 500},
-          position: {left: 200, top: 400},
+          dimension: finalDimension ? finalDimension : {width: 400, height: 500},
+          position: finalposition ? finalposition : {left: 200, top: 400},
           attributes : {
             visibility: 'restricted',
             closeable: false
@@ -223,6 +232,7 @@
             trayInitialized = true;
             trayOptions.title = "Chat";
             trayOptions.icon = proc.resource(metadata.icon_white);
+            trayOptions.pos = 2;
             trayOptions.onclick = () => {
                       console.log(proc);
                       win.raise();

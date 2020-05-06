@@ -5,12 +5,13 @@
 namespace PaymentGateway\Controller;
 
 use Oxzion\Controller\AbstractApiController;
+use Oxzion\ServiceException;
+use Oxzion\Service\PaymentService;
 use Oxzion\ValidationException;
 use PaymentGateway\Model\Payment;
 use PaymentGateway\Model\PaymentTable;
-use Oxzion\Service\PaymentService;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ServiceException;
+use Exception;
 
 class PaymentGatewayController extends AbstractApiController
 {
@@ -43,16 +44,14 @@ class PaymentGatewayController extends AbstractApiController
      * @return array Returns a JSON Response with Status Code and Created Payment.
      */
     public function create($data)
-    { 
+    {
         try {
             $appId = $this->params()->fromRoute()['appId'];
-            $count = $this->paymentService->createPayment($data,$appId);
+            $this->log->info(__CLASS__ . "-> Create Payment Data - " . json_encode($data, true));
+            $count = $this->paymentService->createPayment($data, $appId);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -60,8 +59,9 @@ class PaymentGatewayController extends AbstractApiController
     public function update($id, $data)
     {
         $appId = $this->params()->fromRoute()['appId'];
+        $this->log->info(__CLASS__ . "-> Update Payment Data - " . json_encode($data, true) . " For - " . json_encode($id, true));
         try {
-            $count = $this->paymentService->updatePayment($id, $data,$appId);
+            $count = $this->paymentService->updatePayment($id, $data, $appId);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -71,6 +71,7 @@ class PaymentGatewayController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
+
     /**
      * Delete Payment API
      * @api
@@ -81,8 +82,9 @@ class PaymentGatewayController extends AbstractApiController
      */
     public function delete($id)
     {
+        $this->log->info(__CLASS__ . "-> Delete Payment - " . json_encode($id, true));
         $appUuid = $this->params()->fromRoute()['appId'];
-        $response = $this->paymentService->deletePayment($id,$appUuid);
+        $response = $this->paymentService->deletePayment($id, $appUuid);
         if ($response == 0) {
             return $this->getErrorResponse("Payment not found", 404, ['id' => $id]);
         }
@@ -101,27 +103,29 @@ class PaymentGatewayController extends AbstractApiController
 
     // Initiate Payment Process
     public function initiatePaymentProcessAction()
-    { 
+    {
         $appId = $this->params()->fromRoute()['appId'];
         $data = $this->extractPostData();
         try {
-            $response = $this->paymentService->initiatePaymentProcess($appId,$data);
+            $response = $this->paymentService->initiatePaymentProcess($appId, $data);
             if (empty($response)) {
                 return $this->getErrorResponse("Payment Initialization Failed", 404, ['id' => $appId]);
             }
             $response = $response;
-        } catch(Exception $e){
+        } catch (Exception $e) {
             return $this->getErrorResponse($e->getMessage(), 400, ['id' => $appId]);
-        } catch(ServiceException $e){
+        } catch (ServiceException $e) {
             return $this->getErrorResponse($e->getMessage(), 400, ['id' => $appId]);
         }
         return $this->getSuccessResponseWithData($response, 201);
     }
-    public function updateTransactionStatusAction(){
+
+    public function updateTransactionStatusAction()
+    {
         $appId = $this->params()->fromRoute()['appId'];
         $transactionId = $this->params()->fromRoute()['transactionId'];
         $data = $this->extractPostData();
-        $response = $this->paymentService->processPayment($appId,$transactionId,$data);
+        $response = $this->paymentService->processPayment($appId, $transactionId, $data);
         if (empty($response)) {
             return $this->getErrorResponse("Transaction Details Failed", 404, ['id' => $appId]);
         }
