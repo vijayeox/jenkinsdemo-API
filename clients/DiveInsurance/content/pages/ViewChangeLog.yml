@@ -23,9 +23,9 @@ content:
                             useRowData: true
                         -
                             type: List
-                            groupable: true
                             content: 
                                 route: delegate/ChangeLogDelegate
+                                groupable: true
                                 columnConfig:
                                     -
                                         title: Parent Field Name
