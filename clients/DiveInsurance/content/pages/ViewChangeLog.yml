@@ -5,30 +5,27 @@ content:
         type: List
         content:
             route: 'file/{{uuid}}/activitylog'
-            filterable: true
             resizable: true
-            sortable: 
-                allowUnsort: true
-                mode: single
-            pageable:
-                buttonCount: 3
-                pageSizes:
-                    - 10
-                    - 20
-                    - 50
-                info: true
             actions:
                 -
                     name: 'View Changes'
                     details:
                         -
                             type: HTMLViewer
-                            content: '<h4>Workflow: {data.workflowName} - Activity:{data.activityName} - Performed By: {data.activityModifiedBy} - on: {data.activitySubmittedDate}</h4>'
+                            content: ' <div>
+                                        <h5>Workflow: {data.workflowName}</h5>
+                                        <h5>
+                                        Activity: {data.activityName}
+                                        Performed By: {data.activityModifiedBy} on
+                                        {moment(data.activitySubmittedDate).format("Do MMMM YYYY")}
+                                        </h5>
+                                    </div>'
                             useRowData: true
                         -
                             type: List
                             content: 
                                 route: delegate/ChangeLogDelegate
+                                groupable: true
                                 columnConfig:
                                     -
                                         title: Parent Field Name

@@ -20,7 +20,6 @@ class Slider extends React.Component {
     this.refreshTimer = this.refreshTimer.bind(this);
     this.goToPrevSlide = this.goToPrevSlide.bind(this);
     this.goToNextSlide = this.goToNextSlide.bind(this);
-    
     document
       .querySelector('div[data-id="annoucementsWindow"]')
       .addEventListener("updateAnnouncements", this.refreshAnc, false);
