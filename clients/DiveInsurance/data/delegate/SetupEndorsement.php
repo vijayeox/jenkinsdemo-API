@@ -98,6 +98,7 @@ class SetupEndorsement extends AbstractAppDelegate
                 $data['endorsementCylinder'] = $endorsementCylinder;
             }
             if(isset($policy['previous_excessLiability'])){
+                $endorsementExcessLiability = array();
                 $fromClause = "";
                 $phWhereClause = "";
                 if(isset($privileges['MANAGE_MY_POLICY_READ']) && $privileges['MANAGE_MY_POLICY_READ'] == true && isset($policy['previous_excessLiability'])){
