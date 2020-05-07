@@ -42,11 +42,6 @@
 				<p class = "policy">Policy issued by &nbsp{$carrier}</p>
 				<p class = "policy2">Policy #: {$policy_id}</p>
 				<hr></hr>
-				<p class = "efr_title"><b>Named Insured</b></p>
-					<p class ="efr_bold"><b>EFR</b></p>
-					<p class ="efr_title2"><b>Emergency First Response Corporation</b></p>
-					<p class ="efr_title2">30151 Tomas Street</p>
-					<p class ="efr_title2">Rancho Santa Margarita, CA 92688</p>
 			</div>
 		</div>
 		<div class="spacing_efr">&nbsp</div>
