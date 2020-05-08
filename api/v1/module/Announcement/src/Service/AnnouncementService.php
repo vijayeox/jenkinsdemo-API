@@ -455,7 +455,7 @@ class AnnouncementService extends AbstractService
         $where = "";
         $pageSize = 20;
         $offset = 0;
-        $sort = "name";
+        $sort = "created_date";
         $cntQuery = "SELECT count(id) FROM `ox_announcement`";
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
