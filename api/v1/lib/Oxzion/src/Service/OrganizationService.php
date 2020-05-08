@@ -705,7 +705,7 @@ class OrganizationService extends AbstractService
             return 0;
         }
 
-        $where .= strlen($where) > 0 ? " AND oxa.org_id =" . $orgId . " and oxa.end_date >= curdate() and oxa.status = 1" : " WHERE oxa.org_id =" . $orgId . " and oxa.end_date >= curdate() and oxa.status = 1";
+        $where .= strlen($where) > 0 ? " AND oxa.org_id =" . $orgId . " and oxa.status = 1" : " WHERE oxa.org_id =" . $orgId . " and oxa.status = 1";
 
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;

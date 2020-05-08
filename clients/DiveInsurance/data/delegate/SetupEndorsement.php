@@ -14,7 +14,7 @@ class SetupEndorsement extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService) {
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
-        if($data['initiatedByUser'] == false){
+        if($data['initiatedByUser'] == false || $data['initiatedByUser'] == 'false'){
             $endorsementCoverage = array();
             $policy =  array();
             $update_date =  date("Y-m-d");
@@ -48,7 +48,7 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             if(isset($policy['previous_careerCoverage'])){
                 $endorsementCoverages = array();
-                $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_careerCoverage']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['careerCoverage']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Query".$select);
                 $result = $persistenceService->selectQuery($select);
                 while ($result->next()) {
@@ -63,6 +63,7 @@ class SetupEndorsement extends AbstractAppDelegate
                             $policy['previous_careerCoverageLabel'] = $rate['coverage'];
                             $endorsementCoverages[$rate['key']] = $rate['coverage'];
                             $premiumRateCardDetails[$rate['key']] = 0;
+                            $data['careerCoveragePrice'] = 0;
                         } else {
                             $endorsementCoverages[$rate['key']] = $rate['coverage'];
                         }
@@ -72,7 +73,7 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             if(isset($policy['previous_cylinder'])){
                 $endorsementCylinder = array();
-                $selectCylinder = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_cylinder']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                $selectCylinder = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['cylinder']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Cylinder Query ".$selectCylinder);
                 $resultCylinder = $persistenceService->selectQuery($selectCylinder);
                 while ($resultCylinder->next()) {
@@ -87,6 +88,7 @@ class SetupEndorsement extends AbstractAppDelegate
                             $policy['previous_cylinderLabel'] = $rate['coverage'];
                             $endorsementCylinder[$rate['key']] = $rate['coverage'];
                             $premiumRateCardDetails[$rate['key']] = 0;
+                            $data['cylinderPrice'] = 0;
                         } else {
                             $endorsementCylinder[$rate['key']] = $rate['coverage'];
                         }
@@ -96,6 +98,7 @@ class SetupEndorsement extends AbstractAppDelegate
                 $data['endorsementCylinder'] = $endorsementCylinder;
             }
             if(isset($policy['previous_excessLiability'])){
+                $endorsementExcessLiability = array();
                 $fromClause = "";
                 $phWhereClause = "";
                 if(isset($privileges['MANAGE_MY_POLICY_READ']) && $privileges['MANAGE_MY_POLICY_READ'] == true && isset($policy['previous_excessLiability'])){
@@ -117,6 +120,7 @@ class SetupEndorsement extends AbstractAppDelegate
                             $policy['previous_excessLiabilityLabel'] = $rate['coverage'];
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
                             $premiumRateCardDetails[$rate['key']] = 0;
+                            $data['excessLiabilityPrice'] = 0;
                         } else {
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
                         }
@@ -137,6 +141,7 @@ class SetupEndorsement extends AbstractAppDelegate
                     if(isset($rate['key'])){
                         if(isset($rate['total'])){
                             $premiumRateCardDetails[$rate['key']] = $rate['total'];
+                            $data['equipmentPrice'] = 0;
                         } else {
                             $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                         }
@@ -163,9 +168,6 @@ class SetupEndorsement extends AbstractAppDelegate
                     unset($rate);
                 }
             }
-            if(isset($premiumRateCardDetails)){
-                $returnArray = array_merge($data,$premiumRateCardDetails);
-            }
             array_push($data['previous_policy_data'],$policy);
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
             if(isset($data['paymentOptions'])){
@@ -186,9 +188,19 @@ class SetupEndorsement extends AbstractAppDelegate
             if(isset($data['approved'])){
                 unset($data['approved']);
             }
+            if(isset($data['endorsement_options'])){
+                unset($data['endorsement_options']);
+            }
+            if(isset($data['disableOptions'])){
+                unset($data['disableOptions']);
+            }
+            if(isset($premiumRateCardDetails)){
+                $returnArray = array_merge($data,$premiumRateCardDetails);
+            }
+            return $returnArray;
         }
-        $this->logger->info("SETUP ENDOR".print_r($data,true));
         unset($privileges);
+        $this->logger->info("SETUP ENDOR".print_r($data,true));
         return $data;
     }
 protected function getRates($data,$persistenceService){
@@ -251,6 +263,9 @@ protected function getRates($data,$persistenceService){
     }
     if(isset($data['approved'])){
         unset($data['approved']);
+    }
+    if(isset($data['endorsement_options'])){
+        unset($data['endorsement_options']);
     }
     if(isset($premiumRateCardDetails)){
         return $premiumRateCardDetails;
