@@ -2,12 +2,10 @@
 
 namespace Analytics\Controller;
 
-use Zend\Log\Logger;
 use Analytics\Model\Widget;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
-use Exception;
 
 class WidgetController extends AbstractApiController
 {
@@ -45,8 +43,7 @@ class WidgetController extends AbstractApiController
                 $data['newWidgetUuid'] = $result;
                 return $this->getSuccessResponseWithData($data, 201);
             }
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse('Validation Errors', 404, $response);
         }
@@ -66,13 +63,11 @@ class WidgetController extends AbstractApiController
     {
         try {
             $count = $this->widgetService->updateWidget($uuid, $data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
+        } catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         if ($count == 0) {
             return $this->getErrorResponse("Widget not found for uuid - $uuid", 404);
@@ -80,14 +75,14 @@ class WidgetController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function delete($uuid) {
+    public function delete($uuid)
+    {
         $params = $this->params()->fromQuery();
-        if(isset($params['version'])){
+        if (isset($params['version'])) {
             try {
                 $response = $this->widgetService->deleteWidget($uuid, $params['version']);
-            }
-            catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
+            } catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
                 return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
@@ -120,9 +115,8 @@ class WidgetController extends AbstractApiController
         $params = $this->params()->fromQuery();
         if ($uuid == 'byName') {
             $result = $this->widgetService->getWidgetByName($params['name']);
-        }
-        else {
-            $result = $this->widgetService->getWidget($uuid,$params);
+        } else {
+            $result = $this->widgetService->getWidget($uuid, $params);
         }
         if ($result == 0) {
             return $this->getErrorResponse("Widget not found", 404, ['uuid' => $uuid]);
@@ -170,7 +164,7 @@ class WidgetController extends AbstractApiController
     public function copyWidgetAction()
     {
         try {
-            $data=$this->extractPostData();
+            $data = $this->extractPostData();
             $params = array_merge($data, $this->params()->fromRoute());
             $result = $this->widgetService->copyWidget($params);
             $strResult = "${result}";
@@ -178,8 +172,7 @@ class WidgetController extends AbstractApiController
                 $data['newWidgetUuid'] = $result;
                 return $this->getSuccessResponseWithData($data, 201);
             }
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse('Validation Errors', 404, $response);
         }
@@ -190,4 +183,3 @@ class WidgetController extends AbstractApiController
         return $this->getErrorResponse('Failed to copy the entity', 404, array('uuid' => $params['widgetUuid']));
     }
 }
-

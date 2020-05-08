@@ -201,23 +201,19 @@ class QueryController extends AbstractApiController
             if (!$result) {
                 return $this->getErrorResponse("Querys cannot be executed", 404);
             }
-        }
-        catch(ValidationException $e) {
+        } catch(ValidationException $e) {
             $this->log->error("Validation Exception- " ,$e);
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch(ZendDbException $e) {
+        } catch(ZendDbException $e) {
             $this->log->error("Zend DB Exception- " ,$e);
             $response = ['data' => $data, 'errors' => 'Looks like the server encountered some problem'];
             return $this->getErrorResponse("Internal Error", 500, $response);
-        }
-        catch(InvalidInputException $e) {
+        } catch(InvalidInputException $e) {
             $this->log->error("Invalid Input Exception- " ,$e);
             $response = ['data' => $data, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Invalid Input Errors", 404, $response);
-        }
-        catch(Exception $e) {
+        } catch(Exception $e) {
             $this->log->error("Query Data Action Exception- " ,$e);
             $response = ['data' => $data, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Errors", 404, $response);
