@@ -312,6 +312,14 @@ class FileService extends AbstractService
             if (count($result) > 0) {
                 $result[0]['data'] = json_decode($result[0]['data'], true);
                 $result[0]['data']['fileId'] = $result[0]['fileId'];
+                foreach ($result[0]['data'] as $key => $value) {
+                    if(is_string($value)){
+                        $tempValue = json_decode($value,true);
+                        if(isset($tempValue)){
+                            $result[0]['data'][$key] = $tempValue;
+                        }
+                    }
+                }
                 $result[0]['data'] = json_encode($result[0]['data']);
                 return $result[0];
             }
@@ -705,13 +713,18 @@ class FileService extends AbstractService
 
     private function parseDocumentData(&$parseArray,$DocumentItem)
     {
+        if(empty($DocumentItem)){
+            return;
+        }
         $fileType = explode(".", $DocumentItem);
         $fileName = explode("/", $DocumentItem);
-        array_push($parseArray, 
-            array('file' => $DocumentItem, 
-              'type'=> 'file/' . $fileType[1],
-              'originalName'=> end($fileName)
-            ));
+        if(isset($fileType[1])){
+            array_push($parseArray, 
+                array('file' => $DocumentItem, 
+                  'type'=> 'file/' . $fileType[1],
+                  'originalName'=> end($fileName)
+                ));
+        }
     }
 
     public function getFieldType($value, $prefix)
