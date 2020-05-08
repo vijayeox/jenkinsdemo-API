@@ -1,7 +1,5 @@
-import React from "react";
 import { appId as application_id } from "./metadata.json";
-import LeftMenuTemplate from "OxzionGUI/LeftMenuTemplate";
-import FormRender from "OxzionGUI/components/App/FormRender";
+import {React,ReactDOM,LeftMenuTemplate} from "oxziongui";
 import "./index.scss";
 
 class Home extends React.Component {
@@ -17,7 +15,6 @@ class Home extends React.Component {
   render() {
     return (
       <div style={{ height: "inherit" }}>
-        
           <LeftMenuTemplate
             core={this.core}
             params={this.params}
