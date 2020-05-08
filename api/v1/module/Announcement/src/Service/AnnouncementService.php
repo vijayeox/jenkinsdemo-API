@@ -474,18 +474,18 @@ class AnnouncementService extends AbstractService
         if($params['type'] == 'ANNOUNCEMENT')
         {
             if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
-                $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'" : " WHERE org_id =" . $orgId . " AND end_date >= curdate() AND type ='ANNOUNCEMENT'";
+                $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND start_date <= curdate() AND end_date >= curdate() AND type ='ANNOUNCEMENT'" : " WHERE org_id =" . $orgId . " AND start_date <= curdate() AND end_date >= curdate() AND type ='ANNOUNCEMENT'";
             }
             else{
-                $where .= strlen($where) > 0 ? " AND end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)" : " WHERE end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)";
+                $where .= strlen($where) > 0 ? " AND start_date <= curdate() AND end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)" : " WHERE start_date <= curdate() AND end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)";
             }
         }
         else {
             if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
-                $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND end_date >= curdate() AND type ='HOMESCREEN'" : " WHERE org_id =" . $orgId . " AND end_date >= curdate() AND type ='HOMESCREEN'";
+                $where .= strlen($where) > 0 ? " AND org_id =" . $orgId . " AND start_date <= curdate() AND end_date >= curdate() AND type ='HOMESCREEN'" : " WHERE org_id =" . $orgId . " AND start_date <= curdate() AND end_date >= curdate() AND type ='HOMESCREEN'";
             }
             else {
-                $where .= strlen($where) > 0 ? " AND end_date >= curdate() AND type ='HOMESCREEN' AND org_id IN (".$orgId.",null)" : " WHERE end_date >= curdate() AND type ='HOMESCREEN' AND org_id IN (".$orgId.",null)";
+                $where .= strlen($where) > 0 ? " AND start_date <= curdate() AND end_date >= curdate() AND type ='HOMESCREEN' AND org_id IN (".$orgId.",null)" : " WHERE start_date <= curdate() AND end_date >= curdate() AND type ='HOMESCREEN' AND org_id IN (".$orgId.",null)";
             }
         }
         $sort = " ORDER BY " . $sort;
