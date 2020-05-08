@@ -162,6 +162,7 @@ class DashboardService extends AbstractService
     public function getDashboardList($params = null)
     {
         $paginateOptions = FilterUtils::paginateLikeKendo($params);
+        // print_r($params);exit;
         $where = $paginateOptions['where'];
         if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
             $dashboardConditions = '(d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
@@ -170,7 +171,12 @@ class DashboardService extends AbstractService
         }
         $where .= empty($where) ? "WHERE ${dashboardConditions}" : " AND ${dashboardConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY d.' . $paginateOptions['sort']) : '';
-        $limit = ' ';
+        if($paginateOptions['pageSize'] != 0) {
+            $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+        } else{
+            $limit = " ";
+        }
+
 
         $countQuery = "SELECT COUNT(id) as 'count' FROM ox_dashboard d ${where}";
         try {
@@ -188,6 +194,7 @@ class DashboardService extends AbstractService
         } else {
             $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         }
+        // echo $query;exit;
         try {
             $resultSet = $this->executeQuerywithParams($query);
         } catch (ZendDbException $e) {
