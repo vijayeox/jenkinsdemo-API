@@ -219,6 +219,27 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         array_push($data['previousCoverage'], $upgrades);
                     }
                     $temp['previousCoverage'] = json_encode($data['previousCoverage']);
+                    if(isset($data['previousScubaFit'])){
+                        $data['previousScubaFit'] = is_array($data['previousScubaFit']) ? $data['previousScubaFit'] : json_decode($data['previousScubaFit'],true);
+                    }else{  
+                        $data['previousScubaFit'] = array();
+                    }
+                    if($policy['previous_scubaFit'] != $data['scubaFit']){
+                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"scubaFit" => $result[$data['scubaFit']]);
+                        array_push($data['previousScubaFit'], $upgrades);
+                    }
+                    $temp['previousScubaFit'] = json_encode($data['previousScubaFit']);
+
+                    if(isset($data['previousTecRec'])){
+                        $data['previousTecRec'] = is_array($data['previousTecRec']) ? $data['previousTecRec'] : json_decode($data['previousTecRec'],true);
+                    }else{  
+                        $data['previousTecRec'] = array();
+                    }
+                    if($policy['previous_tecRecEndorsment'] != $data['tecRecEndorsment']){
+                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"tecRecEndorsment" => $result[$data['tecRecEndorsment']]);
+                        array_push($data['previousTecRec'], $upgrades);
+                    }
+                    $temp['previousTecRec'] = json_encode($data['previousTecRec']);
 
                     if(isset($data['previousCylinder'])){
                         $data['previousCylinder'] = is_array($data['previousCylinder']) ? $data['previousCylinder'] : json_decode($data['previousCylinder'],true);

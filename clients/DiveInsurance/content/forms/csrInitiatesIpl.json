@@ -2098,6 +2098,28 @@
 							"tableView": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "single_limit",
+							"defaultValue": "$1,000,000",
+							"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
+							"calculateServer": false,
+							"key": "single_limit",
+							"type": "hidden",
+							"input": true,
+							"tableView": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "annual_aggregate",
+							"defaultValue": "$2,000,000",
+							"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+							"calculateServer": false,
+							"key": "annual_aggregate",
+							"type": "hidden",
+							"input": true,
+							"tableView": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -2685,6 +2707,14 @@
 				"label": "Attachments",
 				"input": false,
 				"components": [{
+					"label": "attachmentFields",
+					"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\",\"chequeConsentFile\"];",
+					"calculateServer": false,
+					"key": "attachmentsFieldnames",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
@@ -2709,14 +2739,6 @@
 					"input": true
 				}],
 				"path": "page3PanelPanel"
-			}, {
-				"label": "attachmentFields",
-				"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\",\"chequeConsentFile\"];",
-				"calculateServer": false,
-				"key": "attachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"label": "csrAttachmentsFieldnames",
 				"calculateValue": "value = [\"csr_attachments\"];",
@@ -3931,22 +3953,6 @@
 			"breadcrumb": "none",
 			"label": "Panel"
 		}, {
-			"input": true,
-			"tableView": true,
-			"key": "single_limit",
-			"label": "single_limit",
-			"type": "hidden",
-			"lockKey": true,
-			"defaultValue": "$1,000,000"
-		}, {
-			"input": true,
-			"tableView": true,
-			"key": "annual_aggregate",
-			"label": "annual_aggregate",
-			"type": "hidden",
-			"lockKey": true,
-			"defaultValue": "$2,000,000"
-		}, {
 			"type": "document",
 			"key": "documents",
 			"dtype": "document",
@@ -4342,7 +4348,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 280,
+	"_vid": 281,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4363,6 +4369,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-07T12:10:45.300Z",
+	"modified": "2020-05-09T23:12:03.685Z",
 	"machineName": "testdivehub:csrInitiates"
 }

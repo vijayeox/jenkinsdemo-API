@@ -25,6 +25,9 @@ class SetupEndorsement extends AbstractAppDelegate
             }else{
                 $policy['update_date'] = $data['update_date'] = $update_date;
             }
+            if(isset($data['liabilityCoverage'])){
+                $data['excessLiability'] = $data['liabilityCoverage'];
+            }
             $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
             if(isset($data['careerCoverage'])){
                 $policy['previous_careerCoverage'] = $data['careerCoverage'];
@@ -102,6 +105,7 @@ class SetupEndorsement extends AbstractAppDelegate
                 $endorsementExcessLiability = array();
                 $fromClause = "";
                 $phWhereClause = "";
+                $endorsementExcessLiability = array();
                 if(isset($privileges['MANAGE_MY_POLICY_READ']) && $privileges['MANAGE_MY_POLICY_READ'] == true && isset($policy['previous_excessLiability'])){
                     $fromClause = ",(select distinct previous_key from premium_rate_card where `key` =  '".$policy['previous_excessLiability']."' and is_upgrade=0  and product = '".$data['product']."' ) pkc";
                     $phWhereClause = " and CAST(rc.previous_key as UNSIGNED)>= CAST(pkc.previous_key as UNSIGNED)";
@@ -121,7 +125,7 @@ class SetupEndorsement extends AbstractAppDelegate
                             $policy['previous_excessLiabilityLabel'] = $rate['coverage'];
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
                             $premiumRateCardDetails[$rate['key']] = 0;
-                            $premiumRateCardDetails[$data['excessLiabilityPrice']] = 0;
+                            $data['excessLiabilityPrice'] = 0;
                         } else {
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
                         }
@@ -249,27 +253,6 @@ protected function getRates($data,$persistenceService){
     }
     if(isset($stateTaxData)){
         $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
-    }
-    if(isset($data['paymentOptions'])){
-        unset($data['paymentOptions']);
-    }
-    if(isset($data['chequeNumber'])){
-        unset($data['chequeNumber']);
-    }
-    if(isset($data['chequeConsentFile'])){
-        unset($data['chequeConsentFile']);
-    }
-    if(isset($data['orderId'])){
-        unset($data['orderId']);
-    }
-    if(isset($data['transactionId'])){
-        unset($data['transactionId']);
-    }
-    if(isset($data['approved'])){
-        unset($data['approved']);
-    }
-    if(isset($data['endorsement_options'])){
-        unset($data['endorsement_options']);
     }
     if(isset($premiumRateCardDetails)){
         return $premiumRateCardDetails;

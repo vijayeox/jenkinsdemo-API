@@ -1720,6 +1720,28 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
+							}, {
+								"label": "single_limit",
+								"defaultValue": "$1,000,000",
+								"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
+								"calculateServer": false,
+								"key": "single_limit",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "annual_aggregate",
+								"defaultValue": "$2,000,000",
+								"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+								"calculateServer": false,
+								"key": "annual_aggregate",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -1917,6 +1939,7 @@
 					"type": "documentviewer",
 					"key": "techRec_attachments1",
 					"calculateValue": "value = (data['endor_techRec_attachments'])",
+					"redrawOn": "endor_techRec_attachments",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
@@ -1934,6 +1957,7 @@
 					"type": "documentviewer",
 					"key": "cylinderInspector_attachments1",
 					"calculateValue": "value = (data['endor_cylinderInspector_attachments'])",
+					"redrawOn": "endor_cylinderInspector_attachments",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
@@ -1951,6 +1975,7 @@
 					"type": "documentviewer",
 					"key": "cylinderInstructor_attachments1",
 					"calculateValue": "value = (data['endor_cylinderInstructor_attachments'])",
+					"redrawOn": "endor_cylinderInstructor_attachments",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
@@ -1968,6 +1993,7 @@
 					"type": "documentviewer",
 					"key": "scubaFit_attachments1",
 					"calculateValue": "value = (data['endor_scubaFit_attachments'])",
+					"redrawOn": "endor_scubaFit_attachments",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
@@ -1988,6 +2014,7 @@
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
+					"redrawOn": "endor_attachments",
 					"customConditional": "show = (data.endor_attachments !='');",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
@@ -2810,22 +2837,6 @@
 		"label": "Payment",
 		"breadcrumb": "none",
 		"components": [{
-			"input": true,
-			"tableView": true,
-			"key": "single_limit",
-			"label": "single_limit",
-			"type": "hidden",
-			"defaultValue": "$1,000,000",
-			"lockKey": true
-		}, {
-			"input": true,
-			"tableView": true,
-			"key": "annual_aggregate",
-			"label": "annual_aggregate",
-			"type": "hidden",
-			"lockKey": true,
-			"defaultValue": "$2,000,000"
-		}, {
 			"type": "document",
 			"key": "documents",
 			"dtype": "document",
@@ -3187,7 +3198,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 107,
+	"_vid": 109,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3206,6 +3217,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-06T21:02:33.867Z",
+	"modified": "2020-05-09T23:12:29.912Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

@@ -51,8 +51,10 @@
 			{assign var=previousPolicyData value=$previous_policy_data|json_decode:true}
 				{if isset($previousPolicyData) && !empty($previousPolicyData) && (count($previousPolicyData) > 0)}
 				{assign var=careerCov value=$previousPolicyData[0].previous_careerCoverageLabel}
+				{assign var=previous_scubaFit value=$previousPolicyData[0].previous_scubaFit}
 										{else}
 				{assign var=careerCov value=$careerCoverageVal}
+				{assign var=previous_scubaFit value=""}
 				{/if}
 		{/if}
 		<div>
@@ -73,11 +75,11 @@
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">COMBINED SINGLE LIMIT:</COMBINED></th>
-								<td><p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p></td>
+								<td><p class = "ins_font">${single_limit}&nbsp&nbsp&nbsp(per occurrence)</p></td>
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">ANNUAL AGGREGATE:</b></th>
-								<td><p class = "ins_font">$2,000,000</p></td>
+								<td><p class = "ins_font">${$annual_aggregate}</p></td>
 							</tr>
 						</table>
 				</div>
@@ -134,16 +136,25 @@
                         </p>
             		{/foreach}
             	{/if}
+				{if !empty($previousScubaFit)}
+				{assign var=list value=$previousScubaFit|json_decode:true}
 						{if isset($scubaFit) && !empty($scubaFit)}
-						{if $scubaFit != "scubaFitInstructorDeclined" && $scubaFit != $previous_scuba}
-							<p class = "policy_status">ScubaFit Coverage: {$scubaFitVal} as of {$policyData.update_date|date_format:"%m/%d/%Y"}</p>tecRecVal
+            		{foreach from=$list item=$upgradeData}
+						{if $scubaFit != "scubaFitInstructorDeclined"}
+							<p class = "policy_status">ScubaFit Coverage: {$upgradeData.scubaFit} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
 						{/if}
+            		{/foreach}
 						{/if}
-
-						{if isset($tecRecVal) && !empty($tecRecVal)}
-							{if $tecRecVal != "declined"}
-								<p class = "policy_status">TecRec Coverage: {$tecRecVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+            	{/if}
+				{if !empty($previousTecRec)}
+				{assign var=list value=$previousTecRec|json_decode:true}
+						{if isset($tecRecEndorsment) && !empty($tecRecEndorsment)}
+            		{foreach from=$list item=$upgradeData}
+							{if $previous_tecRecEndorsment != "declined"}
+								<p class = "policy_status">TecRec Coverage: {$tecRecEndorsment} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
 							{/if}
+            		{/foreach}
+						{/if}
 						{/if}
 
 						{if !empty($previousCylinder)}
