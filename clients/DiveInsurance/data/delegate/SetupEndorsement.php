@@ -12,6 +12,7 @@ class SetupEndorsement extends AbstractAppDelegate
     }
 
     public function execute(array $data,Persistence $persistenceService) {
+        $privileges = $this->getPrivilege();
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
         if($data['initiatedByUser'] == false || $data['initiatedByUser'] == 'false'){
@@ -120,7 +121,7 @@ class SetupEndorsement extends AbstractAppDelegate
                             $policy['previous_excessLiabilityLabel'] = $rate['coverage'];
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
                             $premiumRateCardDetails[$rate['key']] = 0;
-                            $data['excessLiabilityPrice'] = 0;
+                            $premiumRateCardDetails[$data['excessLiabilityPrice']] = 0;
                         } else {
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
                         }
@@ -135,6 +136,7 @@ class SetupEndorsement extends AbstractAppDelegate
                 $resultEquipment= $persistenceService->selectQuery($selectEquipment);
                 if($resultEquipment->count() == 0){
                     $premiumRateCardDetails[$data['equipment']] = 0;
+                    $data['equipmentPrice'] = 0;
                 }
                 while ($resultEquipment->next()) {
                     $rate = $resultEquipment->current();
@@ -149,18 +151,20 @@ class SetupEndorsement extends AbstractAppDelegate
                     unset($rate);
                 }
             }
-            if(isset($selectScubafit)){
-                $selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+            if(isset($policy['previous_scubaFit'])){
+                $selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Scuba fit Query".$selectScubafit);
                 $resultScubafit = $persistenceService->selectQuery($selectScubafit);
                 if($resultScubafit->count() == 0){
                     $premiumRateCardDetails[$data['scubaFit']] = 0;
+                    $data['scubaFitPrice'] = 0;
                 }
                 while ($resultScubafit->next()) {
                     $rate = $resultScubafit->current();
                     if(isset($rate['key'])){
                         if(isset($rate['total'])){
                             $premiumRateCardDetails[$rate['key']] = $rate['total'];
+                            $data['scubaFitPrice'] = 0; 
                         } else {
                             $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                         }
