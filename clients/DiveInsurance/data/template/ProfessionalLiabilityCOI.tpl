@@ -75,7 +75,7 @@
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">COMBINED SINGLE LIMIT:</COMBINED></th>
-								<td><p class = "ins_font">${single_limit}&nbsp&nbsp&nbsp(per occurrence)</p></td>
+								<td><p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p></td>
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">ANNUAL AGGREGATE:</b></th>
