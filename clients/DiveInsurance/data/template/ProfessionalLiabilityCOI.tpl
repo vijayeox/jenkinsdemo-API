@@ -150,7 +150,7 @@
 				{assign var=list value=$previousTecRec|json_decode:true}
 						{if isset($tecRecEndorsment) && !empty($tecRecEndorsment)}
             		{foreach from=$list item=$upgradeData}
-							{if $previous_tecRecEndorsment != "declined"}
+							{if $previous_tecRecEndorsment != "TecRec Endorsement - Declined"}
 								<p class = "policy_status">TecRec Coverage: {$tecRecEndorsment} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
 							{/if}
             		{/foreach}

@@ -1,0 +1,4 @@
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'TecRec Endorsement','withTecRecEndorsementForSelectionAbove', '2019-07-01', '2020-06-30',0);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'TecRec Endorsement - Declined','tecRecDeclined', '2019-07-01', '2020-06-30',0);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'TecRec Endorsement','withTecRecEndorsementForSelectionAbove', '2020-07-01', '2021-06-30',0);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'TecRec Endorsement - Declined','tecRecDeclined', '2020-07-01', '2021-06-30',0);

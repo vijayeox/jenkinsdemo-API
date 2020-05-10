@@ -1345,7 +1345,7 @@
 									"label": "With TecRec Endorsement for selection above",
 									"shortcut": ""
 								}, {
-									"value": "declined",
+									"value": "tecRecDeclined",
 									"label": "With TecRec Endorsement for selection above - Declined",
 									"shortcut": ""
 								}],
@@ -3198,7 +3198,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 109,
+	"_vid": 110,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3217,6 +3217,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-09T23:12:29.912Z",
+	"modified": "2020-05-10T21:21:30.039Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

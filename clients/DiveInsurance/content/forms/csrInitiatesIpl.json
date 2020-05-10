@@ -1558,11 +1558,11 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "withTecRecEndorsementForSelectionAbove",
+								"value": "withTecRecEndorsementForSelectionAbove5",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
-								"value": "declined",
+								"value": "tecRecDeclined",
 								"label": "With TecRec Endorsement for selection above - Declined",
 								"shortcut": ""
 							}],
@@ -1622,14 +1622,14 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "withTecRecEndorsementForSelectionAboveDeclined",
+							"label": "tecRecDeclined",
 							"defaultValue": "0",
 							"persistent": false,
 							"protected": true,
 							"customDefaultValue": "value = \"0.00\"",
 							"calculateValue": "value = 0;",
 							"calculateServer": false,
-							"key": "withTecRecEndorsementForSelectionAboveDeclined",
+							"key": "tecRecDeclined",
 							"type": "hidden",
 							"input": true,
 							"tableView": true,
@@ -4348,7 +4348,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 281,
+	"_vid": 282,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4369,6 +4369,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-09T23:12:03.685Z",
+	"modified": "2020-05-10T21:22:26.634Z",
 	"machineName": "testdivehub:csrInitiates"
 }
