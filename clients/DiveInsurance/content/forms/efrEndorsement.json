@@ -1045,7 +1045,7 @@
 					}, {
 						"label": "single_limit",
 						"defaultValue": "$1,000,000",
-						"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
+						"calculateValue": "var singleLimit = 0\nif(data.excessLiability == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
 						"calculateServer": false,
 						"key": "single_limit",
 						"type": "hidden",
@@ -2055,7 +2055,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 115,
+	"_vid": 116,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2076,7 +2076,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-09T23:15:52.865Z",
+	"modified": "2020-05-11T07:17:48.240Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
