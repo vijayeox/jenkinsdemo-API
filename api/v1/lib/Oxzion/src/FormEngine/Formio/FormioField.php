@@ -28,15 +28,13 @@ class FormioField
         }
         switch ($this->data['type']) {
             case 'day':
-                foreach ($field['fields'] as $key => $value) {
-                 if (isset($value['required']) == 1) {
+                if ((isset($field['fields']['day']['required']) == 1)|| (isset($field['fields']['month']['required']) == 1) || (isset($field['fields']['year']['required']) == 1)) {
                     $this->data['required'] = 1;
-                 }
-                 if (isset($value['hide']) && (($value['hide'] == 1) || ($value['hide'] == true) || ($value['hide'] == 'true'))) {
-                     $this->data['data_type'] = 'text';
-                 }else{
+                }
+                if ((isset($field['fields']['day']['hide']) && (($field['fields']['day']['hide']) || ($field['fields']['day']['hide'] == true) || ($field['fields']['day']['hide'] == 'true'))) || (isset($field['fields']['month']['hide']) && (($field['fields']['month']['hide'] == 1) || ($field['fields']['month']['hide'] == true) || ($field['fields']['month']['hide'] == 'true'))) || (isset($field['fields']['year']['hide']) && (($field['fields']['year']['hide'] == 1) || ($field['fields']['year']['hide'] == true) || ($field['fields']['year']['hide'] == 'true'))) ) {
+                    $this->data['data_type'] = 'text';
+                }else{
                     $this->data['data_type'] = 'date';
-                 }
                 }
                 break;
             case 'select':
