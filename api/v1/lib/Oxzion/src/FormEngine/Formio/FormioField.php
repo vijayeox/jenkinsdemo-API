@@ -28,8 +28,7 @@ class FormioField
         }
         switch ($this->data['type']) {
             case 'select':
-                $template = json_decode($this->data['template'],true);
-                $this->data['data_type'] = isset($template['multiple'])? 'list':'text';
+                $this->data['data_type'] = isset($field['multiple'])? 'list':'text';
                 break;
             case 'checkbox':
                 $this->data['data_type'] = 'boolean';

@@ -168,7 +168,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
                     array_push($coverageList,$data['careerCoverage']);
-                  if($data['product'] == "Individual Professional Liability"){   
+                  if($data['product'] == "Individual Professional Liability"){  
+          
                         if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
                             $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
                             array_push($coverageList,$data['scubaFit']);
@@ -181,31 +182,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
                         }
 
-                        if(isset($data['upgradeCareerCoverage'])){
-                            if(!is_array($data['upgradeCareerCoverage'])){  
-                                $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);    
-                                $data['upgradeCareerCoverage'] = $coverageOnCsrReview;  
-                            }
-                            $temp['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];    
-                            array_push($coverageList,$temp['upgradeCareerCoverageVal']);
-                        }
-                        if(isset($data['upgradecylinder'])){
-                            if(!is_array($data['upgradecylinder'])){    
-                                $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
-                                $data['upgradecylinder'] = $cylinderOnCsrReview;
-                            }
-                            $data['cylinder'] = $data['upgradecylinder']['value'];
-                            $temp['cylinderPriceVal'] = $data['upgradecylinder']['label'];
-                        $this->logger->info("DOCUMENT cylinder3".print_r($temp['cylinderPriceVal'],true));
-                        }
-                        if(isset($data['upgradeExcessLiability'])){                         
-                         if(!is_array($data['upgradeExcessLiability'])){ 
-                            $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
-                            $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;
-                        }
-                            $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
-                            $temp['upgradeExcessLiabilityVal'] = $data['upgradeExcessLiability']['label'];
-                            $this->logger->info("UPGRADE EXCESS -".print_r($temp['upgradeExcessLiabilityVal'],true));
+                        if(isset($data['excessLiability'])){
+                            array_push($coverageList,$data['excessLiability']);
                         }
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
@@ -220,15 +198,73 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
                             $temp['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
-                        if(isset($result[$data['excessLiability']]) && !isset($temp['upgradeExcessLiabilityVal'])){
-                            $temp['upgradeExcessLiabilityVal'] = $result[$data['excessLiability']];
+                         if(isset($result[$data['excessLiability']])){
+                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
                         }
                     }
-                    $this->logger->info("DOCUMENT blanketForm11111111");
-                    if( isset($temp['upgradeCareerCoverageVal']) && isset($result[$temp['upgradeCareerCoverageVal']])){
-                        $data['upgradeCareerCoverageVal'] = $result[$temp['upgradeCareerCoverageVal']];
-                    }
                     $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
+                    if(!empty($previous_data)) {
+                    $policy =array();
+                    $upgrades = array();
+                    $policy =  $previous_data[$length - 1];
+
+                    if(isset($data['previousCoverage'])){
+                        $data['previousCoverage'] = is_array($data['previousCoverage']) ? $data['previousCoverage'] : json_decode($data['previousCoverage'],true);
+                    }else{  
+                        $data['previousCoverage'] = array();
+                    }
+
+                    if($policy['previous_careerCoverage'] != $data['careerCoverage']){
+                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"careerCoverage" => $result[$data['careerCoverage']]);
+                        array_push($data['previousCoverage'], $upgrades);
+                    }
+                    $temp['previousCoverage'] = json_encode($data['previousCoverage']);
+                    if(isset($data['previousScubaFit'])){
+                        $data['previousScubaFit'] = is_array($data['previousScubaFit']) ? $data['previousScubaFit'] : json_decode($data['previousScubaFit'],true);
+                    }else{  
+                        $data['previousScubaFit'] = array();
+                    }
+                    if($policy['previous_scubaFit'] != $data['scubaFit']){
+                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"scubaFit" => $result[$data['scubaFit']]);
+                        array_push($data['previousScubaFit'], $upgrades);
+                    }
+                    $temp['previousScubaFit'] = json_encode($data['previousScubaFit']);
+
+                    if(isset($data['previousTecRec'])){
+                        $data['previousTecRec'] = is_array($data['previousTecRec']) ? $data['previousTecRec'] : json_decode($data['previousTecRec'],true);
+                    }else{  
+                        $data['previousTecRec'] = array();
+                    }
+                    if($policy['previous_tecRecEndorsment'] != $data['tecRecEndorsment']){
+                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"tecRecEndorsment" => $result[$data['tecRecEndorsment']]);
+                        array_push($data['previousTecRec'], $upgrades);
+                    }
+                    $temp['previousTecRec'] = json_encode($data['previousTecRec']);
+
+                    if(isset($data['previousCylinder'])){
+                        $data['previousCylinder'] = is_array($data['previousCylinder']) ? $data['previousCylinder'] : json_decode($data['previousCylinder'],true);
+                    }else{  
+                        $data['previousCylinder'] = array();
+                    }
+
+                    if($policy['previous_cylinder'] != $data['cylinder']){
+                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"cylinderLabel" => $result[$data['cylinder']]);
+                        array_push($data['previousCylinder'], $upgrades);
+                    }
+                    $temp['previousCylinder'] = json_encode($data['previousCylinder']);
+
+                    if(isset($data['previousExcess'])){
+                        $data['previousExcess'] = is_array($data['previousExcess']) ? $data['previousExcess'] : json_decode($data['previousExcess'],true);
+                    }else{  
+                        $data['previousExcess'] = array();
+                    }
+
+                    if($policy['previous_excessLiability'] != $data['excessLiability']){
+                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"excessLiabilityLabel" => $result[$data['excessLiability']]);
+                        array_push($data['previousExcess'], $upgrades);
+                    }
+                    $temp['previousExcess'] = json_encode($data['previousExcess']);
+                  }
                 }
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){

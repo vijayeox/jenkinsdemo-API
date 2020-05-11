@@ -1309,11 +1309,12 @@
 							"label": "Liability Coverage ($1,000,000)",
 							"shortcut": ""
 						}],
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please choose one of these options."
 						},
-						"key": "liabilityCoverageName",
+						"key": "liabilityCoverage",
 						"properties": {
 							"target": "coverageAmount"
 						},
@@ -1380,11 +1381,25 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "single_limit",
+						"defaultValue": "$1,000,000",
+						"calculateValue": "var singleLimit = 0\nif(data.excessLiability == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
+						"calculateServer": false,
+						"key": "single_limit",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "notSelected",
-						"label": "notSelected",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annual_aggregate",
+						"defaultValue": "$2,000,000",
+						"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+						"calculateServer": false,
+						"key": "annual_aggregate",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -3093,7 +3108,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 483,
+	"_vid": 486,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3177,7 +3192,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-02T20:13:05.970Z",
+	"modified": "2020-05-11T07:17:11.773Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

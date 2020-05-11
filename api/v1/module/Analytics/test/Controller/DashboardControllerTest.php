@@ -274,10 +274,26 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals($content['total'],3);
     }
 
+     public function testGetListSortWithPageSizeWithNoLimit()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/dashboard?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":0}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals($content['data'][0]['uuid'], 'a59f865e-efba-472e-91f2-2ae2d8a16d36');
+        $this->assertEquals($content['data'][0]['name'], 'Dashboard1');
+        $this->assertEquals($content['data'][0]['is_owner'], true);
+       $this->assertEquals($content['total'],3);
+    }
+
+
      public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":10}]', 'GET');
+        $this->dispatch('/analytics/dashboard?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":20}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);

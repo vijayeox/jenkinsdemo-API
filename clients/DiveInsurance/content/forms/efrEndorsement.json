@@ -69,6 +69,22 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "initiatedByCsr",
+			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && (!data.CSRReviewRequired || data.CSRReviewRequired == false)){\n  value = true\n} else {\n  value = false\n}",
+			"calculateServer": false,
+			"key": "initiatedByCsr",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "previousPolicyLength",
+			"calculateValue": "value = data['previous_policy_data'].length - 1;",
+			"calculateServer": false,
+			"key": "previousPolicyLength",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "product",
 			"defaultValue": "Emergency First Response",
 			"key": "product",
@@ -978,20 +994,20 @@
 								"value": "",
 								"label": ""
 							}],
-							"custom": "// if(data['endorsementCoverage']){\n//   for(var key in data['endorsementCoverage']){\n// var item = {}\n// item.label = data['endorsementCoverage'][key];\n// item.value = key;\n// values.push(item);\n// }\n// }\nif (data.endorsementCoverage) {\n  Object.keys(data.endorsementCoverage).map(key => {\n    values.push({\n      label: data.endorsementCoverage[key],\n      value: key\n    });\n  });\n}\nconsole.log(values);"
+							"custom": "// if(data['endorsementCoverage']){\n//   for(var key in data['endorsementCoverage']){\n// var item = {}\n// item.label = data['endorsementCoverage'][key];\n// item.value = key;\n// values.push(item);\n// }\n// }\nif (data.endorsementExcessLiability) {\n  Object.keys(data.endorsementExcessLiability).map(key => {\n    values.push({\n      label: data.endorsementExcessLiability[key],\n      value: key\n    });\n  });\n}\nconsole.log(values);"
 						},
+						"valueProperty": "value",
 						"refreshOn": "endorsement_options",
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"calculateServer": false,
-						"validateOn": "blur",
 						"validate": {
 							"required": true,
 							"customMessage": "Please select a Coverage"
 						},
-						"key": "upgradeCareerCoverage",
+						"key": "liabilityCoverage",
 						"properties": {
-							"target": "careerCoveragePrice"
+							"target": "coverageAmount"
 						},
 						"type": "select",
 						"indexeddb": {
@@ -1019,11 +1035,33 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
-						"key": "careerCoveragePrice",
+						"key": "coverageAmount",
 						"customConditional": "show = false;",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "single_limit",
+						"defaultValue": "$1,000,000",
+						"calculateValue": "var singleLimit = 0\nif(data.excessLiability == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
+						"calculateServer": false,
+						"key": "single_limit",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annual_aggregate",
+						"defaultValue": "$2,000,000",
+						"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+						"calculateServer": false,
+						"key": "annual_aggregate",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -1084,7 +1122,7 @@
 								"delimiter": true,
 								"requireDecimal": false,
 								"inputFormat": "plain",
-								"calculateValue": "value = parseFloat((data['careerCoveragePrice'])||0);",
+								"calculateValue": "value = parseFloat((data['excessLiabilityPrice'])||0);",
 								"calculateServer": false,
 								"key": "endorAmount",
 								"type": "number",
@@ -2017,7 +2055,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 111,
+	"_vid": 116,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2027,7 +2065,7 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"},{\"command\" : \"delegate\",\"delegate\":\"EndorsementRateCard\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]",
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]",
 		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
 		"showCancel": "true",
 		"clickable": "false",
@@ -2038,7 +2076,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-02T20:22:27.109Z",
+	"modified": "2020-05-11T07:17:48.240Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

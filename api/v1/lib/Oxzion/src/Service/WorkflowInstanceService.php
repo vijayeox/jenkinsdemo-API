@@ -476,7 +476,7 @@ class WorkflowInstanceService extends AbstractService
         return $result;
     }
 
-    public function getActivityLog($fileId,$appId){
+    public function getActivityLog($fileId,$appId,$filterParams=null){
         $selectQuery = "(SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName,oai.start_date, owi.date_created as workflowInstanceCreatedDate,owi.date_modified as workflowInstanceSubmissionDate,owi.created_by,ouu.name as ModifiedBy,ou.name as activityModifiedBy,owi.modified_by,oa.name as activityName, oai.submitted_date as activitySubmittedDate,oai.modified_by,oai.activity_instance_id as activityInstanceId from ox_workflow_instance owi 
         inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id 
         inner join ox_workflow ow on ow.id = owd.workflow_id
