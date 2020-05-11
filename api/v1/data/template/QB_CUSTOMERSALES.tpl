@@ -85,16 +85,7 @@
 		   {looprows data=$value}
 		{/if}
 	{/foreach}
-{/function}<table style = "border-spacing: 0; width: 100%; font-size: 22px;">
-	<tr><th style = 'text-align:center;'>SALES BY CUSTOMER SUMMARY</th></tr>
-</table>
-<table style = "border-spacing: 0; width: 100%; font-size: 20px;">
-	<tr>
-		{if isset($Header['StartPeriod']) && !empty($Header['StartPeriod'])}<th style = "text-align: center;">{$Header['StartPeriod']|date_format:"%B %e, %Y"} - {$Header['EndPeriod']|date_format:"%B %e, %Y"}</th>{/if}
-	</tr>
-</table>
-<br>
-<div style = 'border-width:5px;border-bottom-style:double;'>
+{/function}<div style = 'border-width:5px;border-bottom-style:double;'>
 <table style = "border-spacing: 0; width: 100%; padding 8px;">
 	<thead>
 		<tr>

@@ -85,15 +85,7 @@
 		   {looprows data=$value}
 		{/if}
 	{/foreach}
-{/function}<table style = "border-spacing: 0; width: 100%; font-size: 28px; text-align: left;"><tr><th>Report Name : {$Header['ReportName']}</th></tr></table>
-<table style = "border-spacing: 0; width: 100%; font-size: 26px;">
-	<tr>{if isset($Header['StartPeriod']) && !empty($Header['StartPeriod'])}<th style = "text-align: left;">Period : {$Header['StartPeriod']} to {$Header['EndPeriod']}</th>{/if}
-		{if isset ($Header['ReportBasis']) && !empty($Header['ReportBasis'])}<th style = "text-align: center;">Payment Type : {$Header['ReportBasis']}</th>{/if}
-		{if isset ($Header['Currency']) && !empty($Header['Currency'])}<th style = "text-align: right;">Currency : {$Header['Currency']}</th>{/if}
-	</tr>
-</table>
-<hr>
-<div style = 'border-width:5px;border-bottom-style:double;'>
+{/function}<div style = 'border-width:5px;border-bottom-style:double;'>
 <table style = "border-spacing: 0; width: 100%; padding 8px;">
 	<thead>
 		<tr>{foreach name=outer item=column from=$data["Columns"]}
