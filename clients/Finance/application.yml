@@ -1,0 +1,89 @@
+app:
+    -
+        name: Finance
+        uuid: 9925f93b-eb0e-4003-ad6b-0be4c6c80364
+        description: Finance
+        category: Dashboards
+        type: 2
+        autostart: 'false'
+org:
+    -
+        name: 'EOX Vantage1'
+        uuid: 53012471-2863-4949-afb1-e69b0891c98a
+        email: helpdesk@vantageagora.com
+        address1: '23611 Chagrin Blvd, Ste 320, Beachwood, Ohio 44122'
+        address2: ''
+        city: Beachwood
+        state: OH
+        zip: 44122
+        contact:
+            username: supportadmin
+            firstname: Support
+            lastname: Admin
+            email: helpdesk@vantageagora.com
+            phone: ''
+        preferences:
+            currency: USD
+            timezone: America/New_York
+            dateformat: mm/dd/yy
+        country: 'United States'
+privilege:
+    -
+        name: MANAGE_FINANCE
+        permission: 15
+role:
+    -
+        name: 'Fiancial Specialist'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_FINANCE
+                permission: 15
+        uuid: 11560dc4-dfb8-4e48-a7f7-bfa4054c88c6
+pages:
+    -
+        page_name: SummaryOI.yml
+        uuid: 43f5be3a-37a7-4360-ac55-a1287bab4baf
+    -
+        page_name: ProfitAndLoss.yml
+        uuid: 94be852e-86cc-4c93-b321-9f4b46641cc5
+    -
+        page_name: BalanceSheet.yml
+        uuid: a5d8970e-a009-416e-8509-df3f1f42a6c7
+    -
+        page_name: AgedReceivables.yml
+        uuid: d2c3a908-465b-4468-8ba7-d51eadd93e6a
+    -
+        page_name: CustomerSales.yml
+        uuid: 0899cfdf-c844-4e3a-83b0-ac7518c299da
+menu:
+    -
+        name: Summary
+        icon: 'fa fa-dollar'
+        privilege: MANAGE_FINANCE_WRITE
+        page_uuid: 43f5be3a-37a7-4360-ac55-a1287bab4baf
+        uuid: 76343563-735a-4e04-8f2c-19117b9da107
+    -
+        name: 'Profit And Loss'
+        icon: 'fa fa-money'
+        privilege: MANAGE_FINANCE_WRITE
+        page_uuid: 94be852e-86cc-4c93-b321-9f4b46641cc5
+        uuid: 22cdc3b1-c0ab-4c2c-a7b8-829e148167b2
+    -
+        name: 'Balance Sheet'
+        icon: 'fa fa-balance-scale'
+        privilege: MANAGE_FINANCE_WRITE
+        page_uuid: a5d8970e-a009-416e-8509-df3f1f42a6c7
+        uuid: d83169fd-e469-410f-9137-6e8011102ce0
+    -
+        name: 'Aged Receivables'
+        icon: 'fa fa-money'
+        privilege: MANAGE_FINANCE_WRITE
+        page_uuid: d2c3a908-465b-4468-8ba7-d51eadd93e6a
+        uuid: 34ee14e3-45d7-4bf2-8d0d-eb60e425d37d
+    -
+        name: 'Customer Sales'
+        icon: 'fa fa-money'
+        privilege: MANAGE_FINANCE_WRITE
+        page_uuid: 0899cfdf-c844-4e3a-83b0-ac7518c299da
+        uuid: c9c6898c-207d-4077-9338-aede2b50eb14
