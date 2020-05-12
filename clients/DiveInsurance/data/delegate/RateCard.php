@@ -14,10 +14,9 @@ class Ratecard extends AbstractAppDelegate
     {  
         $this->logger->info("Executing Rate Card -STart".print_r($data,true));
         $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
-        $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
         $this->logger->info("Rate Card query -> $select");
-        $stateTaxResult = $persistenceService->selectQuery($selectTax);
+       
         while ($result->next()) {
             $rate = $result->current();
             if(isset($rate['key'])){
@@ -38,12 +37,6 @@ class Ratecard extends AbstractAppDelegate
             unset($rate);
         }
 
-        $stateTaxData = [];
-        while ($stateTaxResult->next()) {
-            $rate = $stateTaxResult->current();
-            array_push($stateTaxData, $rate);
-        }
-
         foreach ($data as $key => $value) {
             if(is_string($value))
             {
@@ -53,9 +46,11 @@ class Ratecard extends AbstractAppDelegate
                 }
             }
         }
-        if(isset($stateTaxData)){
-            $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
+
+        if($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store'){
+            $premiumRateCardDetails['stateTaxData'] = $this->getStateTaxData($data,$persistenceService);
         }
+            
         if(isset($data["quote_due_date"]) || isset($data['quoteRequirement'])){
             $data['quote_due_date'] = '';
             $data['quoteInfo'] = "";
@@ -70,5 +65,23 @@ class Ratecard extends AbstractAppDelegate
         } else {
             return $data;
         }
+    }
+
+
+    private function getStateTaxData($data,$persistenceService){
+        $year = date('Y');
+        if($data['product'] == 'Dive Boat'){
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE coverage = 'group' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."' and `year` = ".$year;
+        }else if($data['product'] == 'Dive Store'){
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."' and `year` = ".$year;
+        }
+        $stateTaxResult = $persistenceService->selectQuery($selectTax);
+
+        $stateTaxData = [];
+        while ($stateTaxResult->next()) {
+            $rate = $stateTaxResult->current();
+            array_push($stateTaxData, $rate);
+        }
+        return $stateTaxData;
     }
 }
