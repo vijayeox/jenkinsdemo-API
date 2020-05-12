@@ -55,7 +55,8 @@
 					"input": false,
 					"hideLabel": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"persistent": true
 				}],
 				"width": 4,
 				"offset": 0,
@@ -71,6 +72,23 @@
 			"input": false,
 			"lockKey": true
 		}, {
+			"legend": "Field Set component",
+			"tableView": false,
+			"key": "fieldset",
+			"type": "fieldset",
+			"label": "",
+			"input": false,
+			"persistent": true,
+			"components": []
+		}, {
+			"html": "<p><strong>Hiiiii Content component</strong></p>",
+			"label": "Content Component",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "contentComponent",
+			"type": "content",
+			"input": false
+		}, {
 			"title": "Personal Information",
 			"theme": "primary",
 			"breadcrumbClickable": true,
@@ -82,34 +100,29 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "panelPanel4",
-			"customConditional": "if (\n  ((data.CSRReviewRequired === true || data.CSRReviewRequired == \"true\") &&\n    data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) ||\n  ((data.verified === true || data.verified == \"true\") &&\n    (data.policy_exists === false ||\n      data.policy_exists == \"false\" ||\n      data.policy_exists === \"\") &&\n    data[\"businessPadiVerified\"] !== true &&\n      data[\"businessPadiVerified\"] !== \"true\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
-			"conditional": {
-				"show": true,
-				"when": "padiVerified",
-				"eq": "true"
-			},
 			"type": "panel",
 			"label": "Personal Information",
 			"input": false,
 			"components": [{
 				"label": "PADI Number",
+				"prefix": "$",
 				"mask": false,
 				"autofocus": true,
 				"spellcheck": true,
 				"tableView": false,
-				"delimiter": false,
-				"requireDecimal": false,
+				"delimiter": true,
+				"requireDecimal": true,
 				"inputFormat": "plain",
 				"clearOnHide": false,
 				"calculateServer": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Padi Number is not Valid!",
-					"min": 0
+					"min": 1,
+					"max": 10
 				},
 				"key": "padi",
 				"type": "number",
-				"decimalLimit": 0,
+				"decimalLimit": 2,
 				"input": true,
 				"inputType": "number",
 				"lockKey": true,
@@ -150,7 +163,8 @@
 				"event": "callPipeline",
 				"input": true,
 				"lockKey": true,
-				"hideOnChildrenHidden": false
+				"hideOnChildrenHidden": false,
+				"persistent": true
 			}, {
 				"key": "panelColumnsContent4",
 				"label": "Content",
@@ -165,6 +179,155 @@
 				"customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==true||data['policy_exists']=='true') )",
 				"hideOnChildrenHidden": false,
 				"tableView": false
+			}, {
+				"label": "Date / Time",
+				"tableView": false,
+				"datePicker": {
+					"minDate": "moment().subtract(10,'days')",
+					"maxDate": "moment().add(10,'days')",
+					"disable": "2020-02-21",
+					"disableWeekends": true,
+					"disableWeekdays": false
+				},
+				"calculateServer": false,
+				"key": "dateTime",
+				"type": "datetime",
+				"input": true,
+				"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+				"widget": {
+					"type": "calendar",
+					"displayInTimezone": "viewer",
+					"language": "en",
+					"useLocaleSettings": false,
+					"allowInput": true,
+					"mode": "single",
+					"enableTime": true,
+					"noCalendar": false,
+					"format": "yyyy-MM-dd hh:mm a",
+					"hourIncrement": 1,
+					"minuteIncrement": 1,
+					"time_24hr": false,
+					"minDate": "moment().subtract(10,'days')",
+					"disabledDates": "2020-02-21",
+					"disableWeekends": true,
+					"disableWeekdays": false,
+					"maxDate": "moment().add(10,'days')"
+				}
+			}, {
+				"label": "Date / Time Without Time",
+				"format": "yyyy-MM-dd",
+				"tableView": false,
+				"datePicker": {
+					"disableWeekends": false,
+					"disableWeekdays": false
+				},
+				"enableTime": false,
+				"calculateServer": false,
+				"key": "dateTime1",
+				"type": "datetime",
+				"input": true,
+				"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+				"widget": {
+					"type": "calendar",
+					"displayInTimezone": "viewer",
+					"language": "en",
+					"useLocaleSettings": false,
+					"allowInput": true,
+					"mode": "single",
+					"enableTime": false,
+					"noCalendar": false,
+					"format": "yyyy-MM-dd",
+					"hourIncrement": 1,
+					"minuteIncrement": 1,
+					"time_24hr": false,
+					"minDate": null,
+					"disableWeekends": false,
+					"disableWeekdays": false,
+					"maxDate": null
+				}
+			}, {
+				"label": "Day",
+				"hideInputLabels": false,
+				"inputsLabelPosition": "top",
+				"useLocaleSettings": false,
+				"tableView": false,
+				"fields": {
+					"day": {
+						"placeholder": "Day",
+						"hide": false,
+						"required": true
+					},
+					"month": {
+						"type": "number",
+						"placeholder": "Month",
+						"hide": false,
+						"required": true
+					},
+					"year": {
+						"placeholder": "Year",
+						"hide": false,
+						"minYear": 1900
+					}
+				},
+				"defaultValue": "00/00/0000",
+				"calculateServer": false,
+				"maxDate": "moment().add(10,'days')",
+				"key": "day",
+				"type": "day",
+				"input": true,
+				"minYear": 1900
+			}, {
+				"label": "Day without day",
+				"hideInputLabels": false,
+				"inputsLabelPosition": "top",
+				"useLocaleSettings": false,
+				"tableView": false,
+				"fields": {
+					"day": {
+						"hide": true
+					},
+					"month": {
+						"hide": false
+					},
+					"year": {
+						"hide": false
+					}
+				},
+				"calculateServer": false,
+				"key": "dayWithoutDay",
+				"type": "day",
+				"input": true,
+				"defaultValue": "00/00/0000"
+			}, {
+				"label": "Day without Day and month",
+				"hideInputLabels": false,
+				"inputsLabelPosition": "top",
+				"useLocaleSettings": false,
+				"tableView": false,
+				"fields": {
+					"day": {
+						"hide": true
+					},
+					"month": {
+						"hide": true
+					},
+					"year": {
+						"hide": false
+					}
+				},
+				"calculateServer": false,
+				"key": "dayWithoutDayAndMonth",
+				"type": "day",
+				"input": true,
+				"defaultValue": "00/00/0000"
+			}, {
+				"label": "Time",
+				"tableView": true,
+				"calculateServer": false,
+				"key": "time",
+				"type": "time",
+				"input": true,
+				"inputMask": "99:99"
 			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
@@ -187,29 +350,44 @@
 					"key": "panelPanelColumns",
 					"columns": [{
 						"components": [{
-							"label": "Country",
+							"label": "Waters to be navigated",
 							"widget": "choicesjs",
 							"tableView": true,
-							"dataSrc": "custom",
+							"multiple": true,
 							"data": {
 								"values": [{
-									"value": "",
-									"label": ""
-								}],
-								"custom": "values = data['countryList'];"
+									"value": "caribbean",
+									"label": "Caribbean"
+								}, {
+									"value": "uSEastCoast",
+									"label": "U.S. East Coast"
+								}, {
+									"value": "uSGulfCoast",
+									"label": "U.S. Gulf Coast"
+								}, {
+									"value": "uSWestCoast",
+									"label": "U.S. West Coast"
+								}, {
+									"value": "greatLakes",
+									"label": "Great Lakes"
+								}, {
+									"value": "hawaii",
+									"label": "Hawaii"
+								}, {
+									"value": "others",
+									"label": "Others"
+								}]
 							},
-							"valueProperty": "country",
-							"template": "<span>{{ item.country }}</span>",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"multiple": true
 							},
-							"key": "country",
+							"key": "waters_to_be_navigated",
 							"type": "select",
 							"input": true,
 							"lockKey": true,
-							"source": "5d347da33e9be31e15d3b115",
 							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
@@ -223,9 +401,13 @@
 							"spellcheck": true,
 							"tableView": true,
 							"persistent": false,
+							"case": "uppercase",
 							"calculateServer": false,
 							"validate": {
-								"required": true
+								"required": true,
+								"customMessage": "Address 1 is Required",
+								"minLength": 1,
+								"minWords": 2
 							},
 							"key": "mailaddress1",
 							"type": "textfield",
@@ -241,9 +423,11 @@
 					}, {
 						"components": [{
 							"label": "Same as mailing address",
+							"disabled": true,
 							"tableView": true,
 							"defaultValue": "true",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"key": "sameasmailingaddress",
 							"type": "checkbox",
 							"input": true,
@@ -273,6 +457,10 @@
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
 						"spellcheck": true,
 						"tableView": true,
+						"calculateServer": false,
+						"kickbox": {
+							"enabled": true
+						},
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter your email address in format: yourname@example.com"
@@ -309,8 +497,10 @@
 					"components": [{
 						"label": "Fax",
 						"placeholder": " ",
+						"allowMultipleMasks": true,
 						"spellcheck": true,
 						"tableView": true,
+						"case": "lowercase",
 						"calculateServer": false,
 						"validate": {
 							"customMessage": "Please enter a valid Fax number"
@@ -319,7 +509,14 @@
 						"type": "phoneNumber",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"inputMasks": [{
+							"label": "kerala",
+							"mask": "33-3333-3333"
+						}, {
+							"label": "karnataka",
+							"mask": "333-333-3333"
+						}]
 					}],
 					"width": 6,
 					"offset": 0,
@@ -366,7 +563,7 @@
 			"components": [{
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
+				"calculateServer": false,
 				"key": "start_date",
 				"properties": {
 					"data_type": "Date"
@@ -393,7 +590,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "coverageOptions",
-			"customConditional": "show = data['start_date_range'].value ? true : false;",
+			"customConditional": "show = true ;",
 			"type": "panel",
 			"label": "Coverage and Options",
 			"input": false,
@@ -504,8 +701,7 @@
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
-					"tableView": false,
-					"protected": true
+					"tableView": false
 				}],
 				"path": "techrecPanel"
 			}, {
@@ -520,7 +716,6 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "page3PanelPanel",
-				"customConditional": "if ((data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = true;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Attachments",
 				"input": false,
@@ -559,6 +754,8 @@
 				"input": true
 			}, {
 				"label": "Password",
+				"showWordCount": true,
+				"showCharCount": true,
 				"spellcheck": true,
 				"tableView": false,
 				"calculateServer": false,
@@ -578,6 +775,10 @@
 					"label": "Select Boxes",
 					"optionsLabelPosition": "right",
 					"tableView": false,
+					"defaultValue": {
+						"first": false,
+						"second": false
+					},
 					"values": [{
 						"label": "First",
 						"value": "first",
@@ -588,13 +789,13 @@
 						"shortcut": ""
 					}],
 					"calculateServer": false,
+					"validate": {
+						"minSelectedCount": 1
+					},
 					"key": "selectBoxes1",
 					"type": "selectboxes",
 					"input": true,
-					"inputType": "checkbox",
-					"defaultValue": {
-						"": false
-					}
+					"inputType": "checkbox"
 				}, {
 					"label": "Tags",
 					"tableView": false,
@@ -603,6 +804,85 @@
 					"type": "tags",
 					"input": true
 				}]
+			}, {
+				"label": "Table component",
+				"cellAlignment": "left",
+				"tableView": false,
+				"key": "tableComponent",
+				"type": "table",
+				"input": false,
+				"rows": [
+					[{
+						"components": [{
+							"label": "Tabs",
+							"components": [{
+								"label": "Tab 1",
+								"key": "tab1",
+								"components": [{
+									"label": "Text Area",
+									"autoExpand": false,
+									"spellcheck": true,
+									"tableView": true,
+									"calculateServer": false,
+									"key": "textArea",
+									"type": "textarea",
+									"input": true
+								}]
+							}],
+							"tableView": false,
+							"key": "tabs",
+							"type": "tabs",
+							"input": false,
+							"persistent": true
+						}]
+					}, {
+						"components": []
+					}, {
+						"components": []
+					}],
+					[{
+						"components": [{
+							"label": "Select",
+							"widget": "choicesjs",
+							"tableView": true,
+							"data": {
+								"values": [{
+									"label": "Yes",
+									"value": "yes"
+								}, {
+									"label": "No",
+									"value": "no"
+								}]
+							},
+							"selectThreshold": 0.3,
+							"calculateServer": false,
+							"key": "select1",
+							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
+							"input": true
+						}]
+					}, {
+						"components": []
+					}, {
+						"components": []
+					}],
+					[{
+						"components": []
+					}, {
+						"components": []
+					}, {
+						"components": []
+					}]
+				]
+			}, {
+				"label": "Form",
+				"tableView": true,
+				"form": "5d3afa5ccc5f75b982967721",
+				"key": "form",
+				"type": "form",
+				"input": true
 			}, {
 				"label": "Edit Grid",
 				"disableAddingRemovingRows": false,
@@ -613,6 +893,21 @@
 				"type": "editgrid",
 				"input": true,
 				"components": [{
+					"label": "Data Map",
+					"tableView": false,
+					"calculateServer": false,
+					"key": "dataMap",
+					"type": "datamap",
+					"input": true,
+					"valueComponent": {
+						"type": "textfield",
+						"key": "key",
+						"label": "Value",
+						"input": true,
+						"hideLabel": true,
+						"tableView": true
+					}
+				}, {
 					"label": "Currency",
 					"mask": false,
 					"spellcheck": true,
@@ -1107,7 +1402,11 @@
 		"type": "read_all"
 	}],
 	"submissionAccess": [],
-	"settings": {},
+	"settings": {
+		"recaptcha": {
+			"isEnabled": false
+		}
+	},
 	"properties": {
 		"showCancel": "false",
 		"showNext": "true",
@@ -1120,6 +1419,6 @@
 	"path": "formwithallpossiblefields",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-04-25T09:38:31.802Z",
-	"modified": "2020-04-25T15:19:00.862Z",
+	"modified": "2020-05-11T12:04:09.569Z",
 	"machineName": "testdivehub:formWithAllPossibleFields"
 }

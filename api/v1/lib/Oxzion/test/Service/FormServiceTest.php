@@ -44,7 +44,7 @@ class FormServiceTest extends AbstractServiceTest
     }
 
     public function testCreateForm() {
-        $data = ['name' => 'Form creation', 'app_id' => 1, 'entity_id' => 1, 'template' =>file_get_contents(dirname(__FILE__)."/Dataset/Form.json")];
+        $data = ['name' => 'Form creation', 'app_id' => 100, 'entity_id' => 1, 'template' =>file_get_contents(dirname(__FILE__)."/Dataset/Form.json")];
         $appUuid = '0e4f00d4-86e2-11ea-bc55-0242ac130003';
         $result = 0;
         try{
@@ -56,15 +56,15 @@ class FormServiceTest extends AbstractServiceTest
         $sqlQuery = "SELECT * FROM ox_form";
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(1,count($sqlQueryResult));
-        $sqlQuery = "SELECT * FROM ox_field";
+        $sqlQuery = "SELECT name,data_type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(27,count($sqlQueryResult));
+        $this->assertEquals(39,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where parent_id IN (SELECT id from ox_field where type='datagrid')";
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(9,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where parent_id IN (SELECT id from ox_field where type='editgrid')";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(2,count($sqlQueryResult));
+        $this->assertEquals(3,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where type='survey'";
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(1,count($sqlQueryResult));
@@ -76,16 +76,19 @@ class FormServiceTest extends AbstractServiceTest
         $this->assertEquals(1,count($sqlQueryResult));
         $sqlQuery = "SELECT distinct type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(18,count($sqlQueryResult));
-        $sqlQuery = "SELECT * FROM ox_field where required = 1";
+        $this->assertEquals(25,count($sqlQueryResult));
+        $sqlQuery = "SELECT distinct data_type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(14,count($sqlQueryResult));
+        $this->assertEquals(12,count($sqlQueryResult));
+        $sqlQuery = "SELECT name,data_type FROM ox_field where required = 1";
+        $sqlQueryResult = $this->runQuery($sqlQuery);
+        $this->assertEquals(15,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where type = 'select'";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(4,count($sqlQueryResult));
+        $this->assertEquals(5,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_form_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(27,count($sqlQueryResult));
+        $this->assertEquals(39,count($sqlQueryResult));
 
 
     }

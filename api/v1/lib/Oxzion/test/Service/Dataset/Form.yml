@@ -1,9 +1,16 @@
 ox_app:
-  - id: 1
+  - id: 100
     name: "APP FOR TESTING"
     uuid: "0e4f00d4-86e2-11ea-bc55-0242ac130003"
     category: "OTHERS"
     date_created: "2019-06-26 00:00:00"
     type: 2
     status: 1
+    created_by: 1
+ox_app_entity:
+  - id: 1
+    name: "entity1"
+    app_id: 100
+    date_created: "2019-06-26 00:00:00"
+    uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1

@@ -1,0 +1,7 @@
+name: 'Customer Sales'
+description: 'Customer Sales'
+content:
+    -
+        type: Dashboard
+        content:
+            uuid: c9c6898c-207d-4077-9338-aede2b50eb14

@@ -1,0 +1,7 @@
+name: 'Profit And Loss'
+description: Profit And Loss'
+content:
+    -
+        type: Dashboard
+        content:
+            uuid: 22cdc3b1-c0ab-4c2c-a7b8-829e148167b2
