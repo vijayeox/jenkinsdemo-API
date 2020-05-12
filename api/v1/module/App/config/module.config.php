@@ -208,6 +208,21 @@ return [
                     ],
                 ],
             ],
+            'delegateCommand' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/command/delegate/:delegate',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'delegate' => '[A-Za-z0-9]*',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'delegateCommand',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
             'appworkflow' => [
                 'type' => Segment::class,
                 'options' => [
