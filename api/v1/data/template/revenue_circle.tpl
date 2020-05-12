@@ -1,4 +1,4 @@
-<div>
+<div class="oxzion-widget-content">
 {$result=$data}
 {$resultratio=$result/$target}
 {$curve=2*3.14*60*$resultratio}
