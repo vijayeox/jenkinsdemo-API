@@ -6,7 +6,9 @@
                 <p>{$firstname} {$lastname}<br/>
                 {$address1}<br/>
 				{$address2}<br/>
-				{$city},{$state},{$zip}<br/></p>
+				{$city},{$state},{$zip}<br/>
+				{$country}
+				</p>
 				<br/>
 				<p>This mail is to inform you that your policy has been reinstated.</p><br/>
 				

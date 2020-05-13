@@ -19,7 +19,7 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$firstname},{$initial},{$lastname}</p>
+					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
@@ -57,8 +57,8 @@
 	        	</div>
 	        	<div class = "in-type1" style="width: 60%"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
-			            <p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurence)</p>
-			            <p class = "ins_font">${$annual_aggregate}</p>						
+			            <p class = "ins_font">${$single_limit|number_format}&nbsp&nbsp&nbsp(per occurence)</p>
+			            <p class = "ins_font">${$annual_aggregate|number_format}</p>						
 		        </div>
 	     	</div>
 	     	<div class="i_type2_efr">

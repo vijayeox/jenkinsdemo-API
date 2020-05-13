@@ -47,12 +47,12 @@
                   <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p></div>
                   <div class="sec3">
                   	<p class="value_align">{if isset($HullPremium) && $HullPremium != '0.00'}
-                              ${$HullPremium|number_format:2:".":","}
+                              ${$HullPremium|number_format}
                               {else}
                               N/A
                             {/if}</p>
                    <p class="value_align">{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
-                              ${$DingyTenderPremium|number_format:2:".":","}
+                              ${$DingyTenderPremium|number_format}
                               {else}
                               N/A
                             {/if}</p></div>
@@ -85,7 +85,7 @@
                       </div>
                       <div class="sec2"><p class="hull_title">US</p></div>
                      <div class="sec3"><p class="value_align">{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
-                            ${$TrailerPremium|number_format:2:".":","}
+                            ${$TrailerPremium|number_format}
                             {else}
                             N/A
                           {/if}</p></div>
@@ -132,14 +132,14 @@
                       <p class="hull_title">Limit of Insurance - Crew in the Water:</p>
                   </div>
                   <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
-                  <div class="sec3"><p class="value_align">{$totalLiabilityLimit|number_format:2:".":","}</p>
+                  <div class="sec3"><p class="value_align">{$totalLiabilityLimit|number_format}</p>
                   	<p class="value_align">{if isset($CrewOnBoatPremium) && $CrewOnBoatPremium != '0.00'}
-                                {$totalLiabilityLimit|number_format:2:".":","}
+                                {$totalLiabilityLimit|number_format}
                              {else}
                                 NotCovered
                             {/if}</p>
                   	<p class="value_align">{if isset($CrewMembersinWaterPremium) && $CrewMembersinWaterPremium != '0.00'}
-                                {$totalLiabilityLimit|number_format:2:".":","}
+                                {$totalLiabilityLimit|number_format}
                              {else}
                                 NotCovered
                              {/if}</p></div>
@@ -186,9 +186,9 @@
 <div>&nbsp</div>
     <hr></hr>
     <div class = "total">
-      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount|number_format:2:".":","}</span></p>
+      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount|number_format}</span></p>
       <hr class="total_hr"></hr>
-      <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format:2:".":","}</span></p>
+      <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format}</span></p>
     </div>
 <hr class = "sec_title"></hr>
 {if isset($navigation_limit_note) && $navigation_limit_note != ""}

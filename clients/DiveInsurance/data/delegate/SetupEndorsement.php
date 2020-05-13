@@ -15,7 +15,7 @@ class SetupEndorsement extends AbstractAppDelegate
         $privileges = $this->getPrivilege();
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
-        if($data['initiatedByUser'] == false || $data['initiatedByUser'] == 'false'){
+        if(!$data['initiatedByUser'] && $data['initiatedByUser'] != 'false'){
             $endorsementCoverage = array();
             $policy =  array();
             $update_date =  date("Y-m-d");
@@ -205,6 +205,7 @@ class SetupEndorsement extends AbstractAppDelegate
             if(isset($premiumRateCardDetails)){
                 $returnArray = array_merge($data,$premiumRateCardDetails);
             }
+            $returnArray['initiatedByUser'] = true;
             return $returnArray;
         }
         unset($privileges);
