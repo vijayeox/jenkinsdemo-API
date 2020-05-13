@@ -37,18 +37,18 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						${$dspropTotal|number_format:2:".":","}
+						${$dspropTotal|number_format}
 					</p>
 					<p></p>
 					<p class = "sec_title2">                        
 						{if $additionalLossofBusinessIncomePL != "false"}
-                            ${((float)$lossOfBusIncome)|number_format:2:".":","}
+                            ${$lossOfBusIncome|number_format}
                         {else}
                             $0
                         {/if}</p>
 					<p class = "sec_title2">
 						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
-                            ${$dspropreplacementvalue|number_format:2:".":","}
+                            ${$dspropreplacementvalue|number_format}
                         {else}
                             $0
                         {/if}

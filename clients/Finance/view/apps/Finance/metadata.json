@@ -1,0 +1,17 @@
+{
+	"type":"application",
+	"name":"Finance",
+	"appId":"9925f93b-eb0e-4003-ad6b-0be4c6c80364",
+	"category":null,
+	"autostart":true,
+	"defaultAppforOrgs":false,
+	"icon": "icon.png",
+	"icon_white": "icon_white.png",
+	"title": {
+		"en_EN": "Finance"
+	},
+	"description": {
+		"en_EN": "Finance"
+	},
+	"files":["main.js","main.css"]
+}

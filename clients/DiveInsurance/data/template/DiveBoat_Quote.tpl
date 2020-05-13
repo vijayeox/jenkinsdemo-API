@@ -24,7 +24,7 @@
        <p class ="p_info" id = "phone2Val"></p>
        <p class ="p_info">www.diveinsurance.com</p>
        <p class ="p_info">diveboat@diveinsurance.com</p>
-       <p class ="p_info">Policy period from {$start_date} to {$end_date}</p>
+       <p class ="p_info">Policy period: {$start_date} thru {$end_date}</p>
      </div>
    </div>
  </div>
@@ -80,12 +80,12 @@
       <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p></div>
       <div class="sec3">
        <p class="value_align">{if isset($HullPremium) && $HullPremium != '0.00'}
-        ${$HullPremium|number_format:2:".":","}
+        ${$HullPremium|number_format}
         {else}
         N/A
       {/if}</p>
       <p class="value_align">{if isset($DingyTenderPremium) && $DingyTenderPremium != '0.00'}
-        ${$DingyTenderPremium|number_format:2:".":","}
+        ${$DingyTenderPremium|number_format}
         {else}
         N/A
       {/if}</p></div>
@@ -116,7 +116,7 @@
       </div>
       <div class="sec2"><p class="hull_title">US</p></div>
       <div class="sec3"><p class="value_align">{if isset($TrailerPremium) && $TrailerPremium != '0.00'}
-        ${$TrailerPremium|number_format:2:".":","}
+        ${$TrailerPremium|number_format}
         {else}
         N/A
       {/if}</p></div>
@@ -214,9 +214,9 @@
 <div>&nbsp</div>
 <hr></hr>
 <div class = "total">
-  <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount|number_format:2:".":","}</span></p>
+  <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$amount|number_format}</span></p>
   <hr class="total_hr"></hr>
-  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format:2:".":","}</span></p>
+  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee|number_format}</span></p>
 </div>
 {if isset($navigation_limit_note) && $navigation_limit_note != ""}
 <hr class = "sec_title"></hr>

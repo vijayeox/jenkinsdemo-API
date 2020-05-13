@@ -44,7 +44,7 @@ class FilterUtils
                 $filterArray = json_decode($params['filter'],true);
                 if(count($filterArray) > 0 || sizeof($filterArray) > 0){
                     if(isset($filterArray[0]['take']))
-                        $pageSize = $filterArray[0]['take'];
+                        $pageSize = ($filterArray[0]['take'] == 0) ? null : $filterArray[0]['take'];
                     if(isset($filterArray[0]['skip']))
                         $offset = $filterArray[0]['skip'];
                     if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){

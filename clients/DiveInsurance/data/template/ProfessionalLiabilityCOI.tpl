@@ -19,7 +19,7 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname},{$firstname}{if isset($initial)},{$initial}{/if}</p>
+					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
@@ -75,11 +75,11 @@
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">COMBINED SINGLE LIMIT:</COMBINED></th>
-								<td><p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p></td>
+								<td><p class = "ins_font">${$single_limit|number_format}&nbsp&nbsp&nbsp(per occurrence)</p></td>
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">ANNUAL AGGREGATE:</b></th>
-								<td><p class = "ins_font">${$annual_aggregate}</p></td>
+								<td><p class = "ins_font">${$annual_aggregate|number_format}</p></td>
 							</tr>
 						</table>
 				</div>

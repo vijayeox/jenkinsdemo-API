@@ -50,7 +50,6 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                     $this->logger->info("endorAttachmentsFieldnames Data: ".print_r($data['endorAttachmentsFieldnames'],true));
                     $this->getAttchments($data,$attachmentsFieldnames);
                 }
-
                    if((isset($data['csrAttachmentsFieldnames']))){
                     if(!isset($data['fileId'])) {
                         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
@@ -61,6 +60,17 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                     $this->logger->info("csrAttachmentsFieldnames Data: ".print_r($data['csrAttachmentsFieldnames'],true));
                     $this->getAttchments($data,$attachmentsFieldnames);
                 }
+            if (isset($data['attachmentsFieldnames'])) {
+                $data['attachmentsFieldnames'] = is_string($data['attachmentsFieldnames']) ? json_decode($data['attachmentsFieldnames'],true) : $data['attachmentsFieldnames'];
+                if (!isset($data['fileId'])) {
+                    $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+                } else {
+                    $data['uuid'] = $data['fileId'];
+                }
+                $attachmentsFieldnames = $data['attachmentsFieldnames'];
+                $this->logger->info("attachmentsFieldnames: ".print_r($data['attachmentsFieldnames'],true));
+                $this->getAttchments($data,$attachmentsFieldnames);
+            }
 
          } 
         }else{

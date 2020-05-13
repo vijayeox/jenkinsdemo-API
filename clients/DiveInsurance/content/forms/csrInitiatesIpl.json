@@ -1558,7 +1558,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "withTecRecEndorsementForSelectionAbove5",
+								"value": "withTecRecEndorsementForSelectionAbove",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
@@ -2503,6 +2503,7 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
+					"multiple": true,
 					"calculateValue": "if(data.techRec_attachments && data.techRec_attachments.length===0){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"allowCalculateOverride": true,
@@ -2514,8 +2515,7 @@
 					"errorLabel": "Technical Certification Documents",
 					"key": "TechRec_attachments",
 					"type": "file",
-					"input": true,
-					"multiple": true
+					"input": true
 				}],
 				"path": "techRecAttachment"
 			}, {
@@ -2691,6 +2691,14 @@
 				}],
 				"path": "scubaFitAttachments"
 			}, {
+				"label": "attachmentFields",
+				"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\",\"chequeConsentFile\"];",
+				"calculateServer": false,
+				"key": "attachmentsFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"title": "Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": true,
@@ -2707,14 +2715,6 @@
 				"label": "Attachments",
 				"input": false,
 				"components": [{
-					"label": "attachmentFields",
-					"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\",\"chequeConsentFile\"];",
-					"calculateServer": false,
-					"key": "attachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false
-				}, {
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
@@ -4348,7 +4348,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 282,
+	"_vid": 284,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4369,6 +4369,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-10T21:22:26.634Z",
+	"modified": "2020-05-12T12:01:22.138Z",
 	"machineName": "testdivehub:csrInitiates"
 }

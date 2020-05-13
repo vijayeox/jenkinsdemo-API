@@ -9,10 +9,25 @@ function agentInfo(){
 	"website" : "www.diveinsurance.com"
 	};
 	document.getElementById('nameVal').innerHTML= data.name; 
-	document.getElementById('addressLineVal').innerHTML= data.address;
-	document.getElementById('addressLine2Val').innerHTML= data.address2;
+	document.getElementById('addressLineVal').innerHTML= HTMLEncode(data.address);
+	document.getElementById('addressLine2Val').innerHTML= HTMLEncode(data.address2);
 	document.getElementById('phone1Val').innerHTML= data.phone1;
 	document.getElementById('phone2Val').innerHTML= data.phone2;
     document.getElementById('faxVal').innerHTML= data.fax; 
     document.getElementById('producerwebsite').innerHTML= data.website; 
+}
+
+function HTMLEncode(str) {
+    var i = str.length,
+        aRet = [];
+
+    while (i--) {
+        var iC = str[i].charCodeAt();
+        if (iC < 65 || iC > 127 || (iC>90 && iC<97)) {
+            aRet[i] = '&#'+iC+';';
+        } else {
+            aRet[i] = str[i];
+        }
+    }
+    return aRet.join('');
 }

@@ -133,7 +133,8 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\AppTable::class),
                         $container->get(Service\AppService::class),
                         $container->get(AdapterInterface::class),
-                        $container->get(WorkflowService::class)
+                        $container->get(WorkflowService::class),
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class)
                     );
                 },
                 Controller\AppRegisterController::class => function ($container) {
@@ -144,6 +145,12 @@ class Module implements ConfigProviderInterface
                     );
                 },
                 Controller\AppDelegateController::class => function ($container) {
+                    return new Controller\AppDelegateController(
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
+                        $container->get(UserService::class)
+                    );
+                },
+                Controller\DelegateCommandController::class => function ($container) {
                     return new Controller\AppDelegateController(
                         $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
                         $container->get(UserService::class)
