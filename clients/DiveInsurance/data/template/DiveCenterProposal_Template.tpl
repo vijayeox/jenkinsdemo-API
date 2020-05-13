@@ -20,7 +20,7 @@
                     </tr>
                     <tr>
                         <td>Contents Limit:</td>
-                        <td>${$dspropTotal|number_format:2:".":","}</td>
+                        <td>${$dspropTotal|number_format}</td>
                     </tr>
                     <tr>
                         <td id="space_left">(Sign limited to : $25,000)</td>
@@ -29,7 +29,7 @@
                     <tr>
                         <td>Business Income:</td>
                         {if $additionalLossofBusinessIncomePL != "false"}
-                            <td>${((float)$lossOfBusIncome)|number_format:2:".":","}</td>
+                            <td>${((float)$lossOfBusIncome)|number_format}</td>
                         {else}
                             <td>$0</td>
                         {/if}
@@ -37,7 +37,7 @@
                     <tr>
                         <td>Building Coverage:</td>
                         {if $dspropownbuilding != "no"}
-                            <td>${$dspropreplacementvalue|number_format:2:".":","}</td>
+                            <td>${$dspropreplacementvalue|number_format}</td>
                         {else}
                             <td>$0</td>
                         {/if}
@@ -581,16 +581,16 @@
 
         <div class="main" style="margin-top: 10%;">
             <div class="value_main">
-                <p>${$liabilityProRataPremium|number_format:2:".":","}</p>
+                <p>${$liabilityProRataPremium|number_format}</p>
                 <p>&nbsp;</p>
-                <p>${$propertyProRataPremium|number_format:2:".":","}</p>
-                <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format:2:".":","}</p>
-                <p>${(float)$AddILocPremium|number_format:2:".":","}</p>
-                <p>${(float)$padiFee|number_format:2:".":","}</p>
+                <p>${$propertyProRataPremium|number_format}</p>
+                <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format}</p>
+                <p>${(float)$AddILocPremium|number_format}</p>
+                <p>${(float)$padiFee|number_format}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${if isset($estimatedAnnualReceipts) &&  $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format:2:".":","}{else}0{/if})</p>
+                <p>(Based on estimated annual receipts of ${if isset($estimatedAnnualReceipts) &&  $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format}{else}0{/if})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
                 <p>Dive Center Additional Location Premium:</p>
@@ -602,7 +602,7 @@
         <div class="clearfix"></div>
         <div class="total_main">
             <div class="value_main">
-                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFee)|number_format:2:".":","}</p>
+                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFee)|number_format}</p>
             </div>
             <div class="sub_main">
                 <p>Total Store Premium:</p>
@@ -615,14 +615,14 @@
         <!-- second section -->
         <div class="main">
             <div class="value_main">
-                <p>{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}{else}$0.00{/if}</p>
+                <p>{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2:".":","}{else}$0.00{/if}</p>
-                <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format:2:".":","}{else}$0.00{/if}</p>
+                <p>{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format}{else}$0.00{/if}</p>
+                <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
-                <p>(Based on estimated annual group receipts of {if isset($groupReceipts)}${(float)$groupReceipts|number_format:2:".":","}}.{else}$0.00{/if})</p>
+                <p>(Based on estimated annual group receipts of {if isset($groupReceipts)}${(float)$groupReceipts|number_format}}.{else}$0.00{/if})</p>
                 <p>Dive Center Group Instructional Program Surplus Lines Tax:</p>
                 <p>Dive Center Group Instructional Program PADI Administration Fee:</p>
             </div>
@@ -632,7 +632,7 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-                <p>{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2:".":","}{else}$0.00{/if}</p>
+                <p>{if isset($groupTotalAmount)}${$groupTotalAmount|number_format}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>
@@ -642,7 +642,7 @@
         <p class="hrtag" style="margin-top: 2px;"></p>
         <div class="total_main">
             <div class="value_main">
-                <p>${$totalAmount|number_format:2:".":","}</p>
+                <p>${$totalAmount|number_format}</p>
             </div>
             <div class="sub_main">
                 <p>Amount due in full:</p>

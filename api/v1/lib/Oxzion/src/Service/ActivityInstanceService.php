@@ -74,6 +74,14 @@ class ActivityInstanceService extends AbstractService
 
             $activityform = $activityInstance[0];
             $data = json_decode($activityform['data'], true);
+            foreach ($data as $key => $value) {
+                if(is_string($value)){
+                    $tempValue = json_decode($value,true);
+                    if(isset($tempValue)){
+                        $data[$key] = $tempValue;
+                    }
+                }
+            }
             $data['fileId'] = $activityform['uuid'];
             unset($activityform['uuid']);
             $activityform['data'] = json_encode($data);

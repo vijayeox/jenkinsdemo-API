@@ -37,7 +37,7 @@
                     <tr><td>Policy #: PPK1992907</td></tr>
                     <tr>
                         <td>Contents Limit:</td>
-                        <td>${$additionalLocationData.additionalLocationPropertyTotal|number_format:2:".":","}</td>
+                        <td>${$additionalLocationData.additionalLocationPropertyTotal|number_format}</td>
                     </tr>
                     <tr>
                         <td id="space_left">(Sign limited to : $25,000)</td>
@@ -46,7 +46,7 @@
                     <tr>
                         <td>Business Income:</td>
                         {if $additionalLocationData.ALLossofBusIncomeCheckBox != "false"}
-                            <td>${$additionalLocationData.ALLossofBusIncome|number_format:2:".":","}</td>
+                            <td>${$additionalLocationData.ALLossofBusIncome|number_format}</td>
                         {else}
                             <td>$0</td>
                         {/if}
@@ -54,7 +54,7 @@
                     <tr>
                         <td>Building Coverage:</td>
                         {if isset($additionalLocationData.additionalLocationDoYouOwntheBuilding) && $additionalLocationData.additionalLocationDoYouOwntheBuilding != "no"}
-                            <td>${$additionalLocationData.ALBuildingReplacementValue|number_format:2:".":","}</td>
+                            <td>${$additionalLocationData.ALBuildingReplacementValue|number_format}</td>
                         {else}
                             <td>Not Included</td>
                         {/if}

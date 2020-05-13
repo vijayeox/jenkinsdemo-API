@@ -97,7 +97,7 @@
                     <tr>
                         <td>Contents Limit:</td>
                         <td>{if isset($dspropTotal)}
-                            ${$dspropTotal|number_format:2:".":","}
+                            ${$dspropTotal|number_format}
                             {else}
                             Not Included
                             {/if}
@@ -110,7 +110,7 @@
                     <tr>
                         <td>Business Income:</td>
                         {if $additionalLossofBusinessIncomePL != "false"}
-                            <td>${$lossOfBusIncome|number_format:2:".":","}</td>
+                            <td>${$lossOfBusIncome|number_format}</td>
                         {else}
                             <td>$0</td>
                         {/if}
@@ -118,7 +118,7 @@
                     <tr>
                         <td>Building Coverage:</td>
                         {if $dspropownbuilding != "no"}
-                            <td>${$dspropreplacementvalue|number_format:2:".":","}</td>
+                            <td>${$dspropreplacementvalue|number_format}</td>
                         {else}
                             <td>Not Included</td>
                         {/if}
