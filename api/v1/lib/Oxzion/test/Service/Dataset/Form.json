@@ -323,6 +323,7 @@
 			}, {
 				"label": "Time",
 				"tableView": true,
+				"dataFormat": "HH:mm",
 				"calculateServer": false,
 				"key": "time",
 				"type": "time",
@@ -517,6 +518,16 @@
 							"label": "karnataka",
 							"mask": "333-333-3333"
 						}]
+					}, {
+						"label": "Phone Number",
+						"inputMask": "999-999-9999",
+						"spellcheck": true,
+						"tableView": true,
+						"calculateServer": false,
+						"key": "phoneNumber",
+						"type": "phoneNumber",
+						"input": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -701,7 +712,8 @@
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
-					"tableView": false
+					"tableView": false,
+					"protected": true
 				}],
 				"path": "techrecPanel"
 			}, {
@@ -1419,6 +1431,6 @@
 	"path": "formwithallpossiblefields",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-04-25T09:38:31.802Z",
-	"modified": "2020-05-11T12:04:09.569Z",
+	"modified": "2020-05-13T10:15:03.314Z",
 	"machineName": "testdivehub:formWithAllPossibleFields"
 }
