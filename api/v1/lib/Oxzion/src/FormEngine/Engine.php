@@ -3,5 +3,5 @@ namespace Oxzion\FormEngine;
 
 interface Engine
 {
-    public function parseForm($form);
+    public function parseForm($form, $fieldReference, &$errors);
 }
