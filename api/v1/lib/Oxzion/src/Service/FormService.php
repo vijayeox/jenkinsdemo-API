@@ -48,7 +48,6 @@ class FormService extends AbstractService
             throw new Exception("Invalid AppId $appUuid passed");
         }
         $template['form']['app_id'] = $appId;
-        $template['form']['name'] = $data['name'];
         $template['form']['uuid'] = $data['uuid'];
         $template['form']['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
