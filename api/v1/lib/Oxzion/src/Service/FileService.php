@@ -875,7 +875,7 @@ class FileService extends AbstractService
         $resultData = array();
         $gridResult = array();
         foreach ($resultSet as $key => $value) {
-            if($value['data_type'] == 'grid' || $value['data_type'] == 'survey'){
+            if($value['data_type'] == 'json'){
                 continue;
             }
             $initialparentData = null;

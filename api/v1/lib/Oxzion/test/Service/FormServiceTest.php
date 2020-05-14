@@ -14,6 +14,9 @@ use Zend\Db\Adapter\Exception\InvalidQueryException;
 use \Exception;
 use Zend\Db\ResultSet\ResultSet;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
+use Oxzion\Document\Parser\Spreadsheet\SpreadsheetParserImpl;
+use Oxzion\Document\Parser\Spreadsheet\SpreadsheetFilter;
+use Oxzion\Document\Parser\Form\FormRowMapper;
 
 class FormServiceTest extends AbstractServiceTest
 {
@@ -44,21 +47,22 @@ class FormServiceTest extends AbstractServiceTest
     }
 
     public function testCreateForm() {
+        
+        $this->performCreateTest();
+
+    }
+    private function performCreateTest($fieldReference = null){
         $data = ['name' => 'Form creation', 'app_id' => 100, 'entity_id' => 1, 'template' =>file_get_contents(dirname(__FILE__)."/Dataset/Form.json")];
         $appUuid = '0e4f00d4-86e2-11ea-bc55-0242ac130003';
         $result = 0;
-        try{
-            $result = $this->formService->createForm($appUuid,$data);
-        }catch(ValidationException $e){
-            print_r($e->getErrors());
-        }
+        $result = $this->formService->createForm($appUuid,$data, $fieldReference);
         $this->assertEquals(1, $result);
         $sqlQuery = "SELECT * FROM ox_form";
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(1,count($sqlQueryResult));
         $sqlQuery = "SELECT name,data_type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(39,count($sqlQueryResult));
+        $this->assertEquals(38,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where parent_id IN (SELECT id from ox_field where type='datagrid')";
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(9,count($sqlQueryResult));
@@ -76,10 +80,10 @@ class FormServiceTest extends AbstractServiceTest
         $this->assertEquals(1,count($sqlQueryResult));
         $sqlQuery = "SELECT distinct type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(25,count($sqlQueryResult));
+        $this->assertEquals(23,count($sqlQueryResult));
         $sqlQuery = "SELECT distinct data_type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(12,count($sqlQueryResult));
+        $this->assertEquals(9,count($sqlQueryResult));
         $sqlQuery = "SELECT name,data_type FROM ox_field where required = 1";
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(15,count($sqlQueryResult));
@@ -88,9 +92,19 @@ class FormServiceTest extends AbstractServiceTest
         $this->assertEquals(5,count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_form_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(39,count($sqlQueryResult));
-
-
+        $this->assertEquals(38,count($sqlQueryResult));
+    }
+    public function testCreateFormWithValidation() {
+        $parser = new SpreadsheetParserImpl();
+        $parser->init(__DIR__."/Dataset/FieldValidationSample.xlsx");
+        $sheetNames = $parser->getSheetNames();
+        $rowMapper = new FormRowMapper();
+        $filter = new SpreadsheetFilter();
+        $filter->setRows(2);
+        $fieldReference = $parser->parseDocument(array('rowMapper' => $rowMapper,
+                                                   'filter' => $filter));
+        $fieldReference = $fieldReference[$sheetNames[0]];
+        $this->performCreateTest($fieldReference);
     }
 
 }

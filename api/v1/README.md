@@ -52,24 +52,24 @@ $ docker-compose run zf composer install
 To create tables in oxzionapi database, run migration script
 ```bash
 For Linux
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./migrations migrate
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf --env-file .env ./migrations migrate
 For Windows
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./migrations migrate
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf --env-file .env  ./migrations migrate
 
 To run tests using the mysql database running on your machine run the following command
 ```bash
 For Linux
-$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf ./phpunit
+$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf --env-file .env ./phpunit
 For Windows
-$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf ./phpunit
+$ docker run --network="host" -it --env-file .env -v ${PWD}/../..:/app v1_zf --env-file .env ./phpunit
 ```
 To run Documentation Generator on your machine run the following command
 This will create the Documentation in a new folder "Doc" which will have an index.html file which contains the list of subpages across the features
 ```bash
 For Linux
-$ docker run --network="host" -it -v $(pwd)/../..:/app v1_zf phpdoc
+$ docker run --network="host" -it -v $(pwd)/../..:/app --env-file .env v1_zf phpdoc
 For Windows
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf phpdoc
+$ docker run --network="host" -it -v ${PWD}/../..:/app --env-file .env v1_zf phpdoc
 ```
 To run php code Fixer use the following command
 This will auto indent and pretify php code
@@ -86,9 +86,9 @@ $ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf vendor/bin/php-cs-f
 To connect to the container shell you can run the following command
 ```bash
 For Linux
-$ docker run --network="host" -it -v $(pwd)/../..:/app v1_zf bash
+$ docker run --network="host" -it -v $(pwd)/../..:/app --env-file .env v1_zf bash
 For Windows
-$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf bash
+$ docker run --network="host" -it -v ${PWD}/../..:/app --env-file .env v1_zf bash
 ```
 
 ## Web server setup
