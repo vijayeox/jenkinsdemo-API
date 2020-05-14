@@ -21,7 +21,6 @@ org:
             firstname: Support
             lastname: Admin
             email: helpdesk@vantageagora.com
-            phone: '{}'
         preferences:
             currency: USD
             timezone: America/New_York
