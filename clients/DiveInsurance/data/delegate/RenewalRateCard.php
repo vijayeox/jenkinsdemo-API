@@ -13,7 +13,7 @@ class RenewalRateCard extends RateCard
     {
         parent::__construct();
         $this->unsetVariables = array('Individual Professional Liability' => array('workflowInstanceId','policy_id','certificate_no','documents','autoRenewalJob'),'Emergency First Response' => array('workflowInstanceId','policy_id','certificate_no','documents','autoRenewalJob'),'Dive Boat' => array('workflowInstanceId','policy_id','certificate_no','documents','autoRenewalJob'),'Dive Store' => array('workflowInstanceId','policy_id','certificate_no','documents','autoRenewalJob'));
-        $this->coverages = array('Individual Professional Liability' => array('careerCoveragePrice'=>'careerCoverage','scubaFitPrice'=>'scubaFit','equipmentPrice'=>'equipment','cylinderPrice'=>'cylinder','excessLiabilityPrice'=>'excessLiability'),'Emergency First Response' => array('coverageAmount'=>'liabilityCoverageName'));
+        $this->coverages = array('Individual Professional Liability' => array('careerCoveragePrice'=>'careerCoverage','scubaFitPrice'=>'scubaFit','equipmentPrice'=>'equipment','cylinderPrice'=>'cylinder','excessLiabilityPrice'=>'excessLiability'),'Emergency First Response' => array('coverageAmount'=>'liabilityCoverage'));
     }
 
     public function execute(array $data, Persistence $persistenceService)
