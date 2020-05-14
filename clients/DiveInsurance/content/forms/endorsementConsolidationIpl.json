@@ -925,9 +925,6 @@
 				"columns": [{
 					"components": [{
 						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "panelPanel3ColumnsColumns",
 						"columns": [{
 							"components": [{
 								"label": "Country Code",
@@ -935,22 +932,16 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{
-										"value": "",
-										"label": ""
-									}],
+									"values": [{}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
+								"dataType": "auto",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
-								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
-								"calculateServer": false,
+								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "home_country_code",
 								"type": "select",
-								"indexeddb": {
-									"filter": {}
-								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -964,10 +955,9 @@
 								"label": "Home or Work Phone",
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"customMessage": "Please enter a valid Home or Work Phone number"
 								},
 								"key": "home_phone_number",
 								"logic": [{
@@ -1025,14 +1015,14 @@
 							"pull": 0,
 							"size": "md"
 						}],
+						"tableView": false,
+						"key": "columns3",
 						"type": "columns",
-						"hideLabel": true,
-						"path": "panelPanel3ColumnsColumns"
+						"input": false,
+						"path": "columns3",
+						"hideLabel": true
 					}, {
 						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "panelPanel3ColumnsColumns2",
 						"columns": [{
 							"components": [{
 								"label": "Country Code",
@@ -1050,14 +1040,9 @@
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
-								"calculateServer": false,
 								"key": "phone_country_code",
 								"type": "select",
-								"indexeddb": {
-									"filter": {}
-								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 3,
@@ -1070,15 +1055,14 @@
 								"label": "Mobile Phone",
 								"spellcheck": true,
 								"tableView": true,
-								"clearOnHide": false,
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number"
 								},
 								"key": "phone_number",
 								"logic": [{
-									"name": "mask",
+									"name": "fieldMask",
 									"trigger": {
 										"type": "simple",
 										"simple": {
@@ -1118,7 +1102,7 @@
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
-								"label": "phone",
+								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
 								"key": "phone",
 								"type": "hidden",
@@ -1132,9 +1116,12 @@
 							"pull": 0,
 							"size": "md"
 						}],
+						"tableView": false,
+						"key": "columns4",
 						"type": "columns",
-						"hideLabel": true,
-						"path": "panelPanel3ColumnsColumns2"
+						"input": false,
+						"path": "columns4",
+						"hideLabel": true
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1144,12 +1131,14 @@
 				}, {
 					"components": [{
 						"label": "Fax",
-						"placeholder": "  ",
+						"placeholder": " ",
 						"spellcheck": true,
 						"tableView": true,
-						"clearOnHide": false,
 						"calculateServer": false,
-						"errorLabel": "Please enter a valid Fax number",
+						"validate": {
+							"customMessage": "Please enter a valid Fax number"
+						},
+						"errorLabel": "Fax",
 						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
@@ -1158,16 +1147,32 @@
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
-						"spellcheck": true,
+						"spellcheck": false,
 						"disabled": true,
-						"tableView": true,
-						"clearOnHide": false,
-						"validateOn": "blur",
+						"tableView": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter your email address in format: yourname@example.com"
 						},
 						"key": "email",
+						"logic": [{
+							"name": "DiableFieldEdit",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "if (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") {\n    result = true;\n  } else {\n    result = false;\n  }"
+							},
+							"actions": [{
+								"name": "DisableFieldEdit",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
 						"type": "email",
 						"input": true,
 						"lockKey": true,
@@ -1292,11 +1297,12 @@
 								"label": "Career Coverage Price",
 								"placeholder": "0",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
-								"spellcheck": true,
+								"spellcheck": false,
 								"disabled": true,
-								"tableView": true,
+								"tableView": false,
 								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
@@ -1304,6 +1310,7 @@
 								"calculateServer": false,
 								"key": "careerCoveragePrice",
 								"type": "number",
+								"labelWidth": 30,
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
@@ -1371,6 +1378,7 @@
 								"label": "TecRech Price",
 								"placeholder": "0",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
@@ -1452,6 +1460,7 @@
 								"label": "ScubaFit Price",
 								"placeholder": "0",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
@@ -1533,6 +1542,7 @@
 								"label": "Cylinder Price",
 								"placeholder": "0",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
@@ -1614,6 +1624,7 @@
 								"label": "Equipment Price",
 								"placeholder": "0",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
@@ -1694,6 +1705,7 @@
 								"label": "Excess Liability Price",
 								"placeholder": "0",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
@@ -1805,6 +1817,7 @@
 									"components": [{
 										"label": "Endorsement Total",
 										"prefix": "$",
+										"customClass": "textRight",
 										"hideLabel": true,
 										"mask": false,
 										"spellcheck": true,
@@ -1863,6 +1876,7 @@
 									"components": [{
 										"label": "Balance",
 										"prefix": "$",
+										"customClass": "textRight",
 										"hideLabel": true,
 										"mask": false,
 										"spellcheck": true,
@@ -2058,7 +2072,7 @@
 					"input": false,
 					"hideLabel": true
 				}, {
-					"label": "TecRec Attachments",
+					"label": "Proof of Technical Certification",
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "base64",
@@ -2069,13 +2083,16 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
+					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if(data.endor_techRec_attachments && data.endor_techRec_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
+					"calculateValue": "if(component){\n  component.setPristine(true);\n}",
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please attach proof of your Technical Certification",
+						"multiple": true
 					},
-					"errorLabel": "Please attach proof of your Technical Certification",
+					"errorLabel": "Proof of Technical Certification",
 					"key": "endor_techRec_attachments",
 					"type": "file",
 					"input": true
@@ -2103,7 +2120,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attach proof of your Cylinder Inspection Instructor Certification</b>",
+					"content": "<b>Attach proof of your Cylinder Inspector Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html2",
@@ -2122,12 +2139,15 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
+					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if(data.endor_cylinderInspector_attachments && data.endor_cylinderInspector_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please attach proof of your Cylinder Inspector",
+						"multiple": true
 					},
+					"errorLabel": "Proof of your Cylinder Inspector",
 					"key": "endor_cylinderInspector_attachments",
 					"type": "file",
 					"input": true
@@ -2155,7 +2175,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attach proof of your Cylinder Inspector Certification</b>",
+					"content": "<b>Attach proof of your Cylinder Instructor Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html1",
@@ -2174,12 +2194,15 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
+					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if(data.endor_cylinderInstructor_attachments && data.endor_cylinderInstructor_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please attach proof of your Cylinder Instructor",
+						"multiple": true
 					},
+					"errorLabel": "Cylinder Instructor Attachments",
 					"key": "endor_cylinderInstructor_attachments",
 					"type": "file",
 					"input": true
@@ -2226,12 +2249,15 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
+					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if(data.endor_scubaFit_attachments  && data.endor_scubaFit_attachments.length === 0 ){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please attach proof of your ScubaFit Certification",
+						"multiple": true
 					},
+					"errorLabel": "ScubaFit Certification",
 					"key": "endor_scubaFit_attachments",
 					"type": "file",
 					"input": true
@@ -2276,7 +2302,6 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if((data.endor_attachments || data.endor_attachments !== undefined) && data.endor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
 					"calculateServer": false,
 					"validate": {
 						"multiple": true
@@ -3189,7 +3214,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 118,
+	"_vid": 126,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3208,6 +3233,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-13T05:45:59.937Z",
+	"modified": "2020-05-14T22:13:01.658Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
