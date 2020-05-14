@@ -126,8 +126,8 @@
 		</div>
 		<div class = "second_content">
 			{if isset($update_date)}
-				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if isset($previousPolicyData) && !empty($previousPolicyData)}
+				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if !empty($previousCoverage)}
 				{assign var=list value=$previousCoverage|json_decode:true}
             		{foreach from=$list item=$upgradeData}
@@ -150,7 +150,7 @@
 				{assign var=list value=$previousTecRec|json_decode:true}
 						{if isset($tecRecEndorsment) && !empty($tecRecEndorsment)}
             		{foreach from=$list item=$upgradeData}
-							{if $previous_tecRecEndorsment != "TecRec Endorsement - Declined"}
+							{if $upgradeData.previous_tecRecEndorsment != "TecRec Endorsement - Declined"}
 								<p class = "policy_status">TecRec Coverage: {$tecRecEndorsment} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
 							{/if}
             		{/foreach}
