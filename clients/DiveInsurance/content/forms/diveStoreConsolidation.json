@@ -1502,12 +1502,13 @@
 						"label": "start_date",
 						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\nvalue = moment(data.policyPeriod).format(\"YYYY-MM-DD\");\n}",
 						"calculateServer": false,
-						"key": "start_date1",
+						"key": "start_date",
 						"type": "hidden",
 						"input": true,
 						"tableView": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"keyModified": true
 					}],
 					"width": 5,
 					"offset": 0,
@@ -10986,7 +10987,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 115,
+	"_vid": 116,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11003,6 +11004,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-05-12T18:05:42.793Z",
+	"modified": "2020-05-13T06:59:36.586Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
