@@ -1208,11 +1208,11 @@
 			"columns": [{
 				"components": [{
 					"label": "Policy Start Date",
+					"displayInTimezone": "utc",
 					"allowInput": false,
 					"format": "MM-dd-yyyy",
 					"tableView": false,
 					"datePicker": {
-						"minDate": "moment().format('YYYY MM DD')",
 						"disableWeekends": false,
 						"disableWeekdays": false,
 						"datepickerMode": "day"
@@ -1222,21 +1222,20 @@
 						"showMeridian": false
 					},
 					"clearOnHide": false,
+					"calculateValue": "if(data.policyPeriod){\n  if(!(moment(data.policyPeriod).format('MM-DD-YYYY') >= moment().format('MM-DD-YYYY'))){\n    value = moment();\n  }\n}",
 					"calculateServer": false,
+					"allowCalculateOverride": true,
 					"validate": {
-						"required": true
+						"required": true,
+						"custom": "if(data.policyPeriod){\n    valid = (moment(data.policyPeriod).format('MM-DD-YYYY') >= moment().format('MM-DD-YYYY')) ? true : \"Policy Period should not be less than today's date \"+moment().format('MM-DD-YYYY');\n}"
 					},
 					"key": "policyPeriod",
-					"properties": {
-						"delegate": "RateCard",
-						"target": "excess_liability_coverage"
-					},
 					"type": "datetime",
 					"input": true,
 					"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 					"widget": {
 						"type": "calendar",
-						"displayInTimezone": "viewer",
+						"displayInTimezone": "utc",
 						"language": "en",
 						"useLocaleSettings": false,
 						"allowInput": false,
@@ -1247,7 +1246,7 @@
 						"hourIncrement": 1,
 						"minuteIncrement": 1,
 						"time_24hr": true,
-						"minDate": "moment().format('YYYY MM DD')",
+						"minDate": null,
 						"disableWeekends": false,
 						"disableWeekdays": false,
 						"maxDate": null
@@ -8232,7 +8231,6 @@
 						"hideLabel": true,
 						"tableView": true,
 						"datePicker": {
-							"minDate": "moment().format('YYYY MM DD')",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"datepickerMode": "day"
@@ -8245,7 +8243,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Quote Due Date is required"
+							"custom": "if(data.quote_due_date){\n  valid = (moment(data.quote_due_date).format('MM-DD-YYYY') >= moment().format('MM-DD-YYYY')) ? true : \"Quote Due date should not be less than today's date \"+moment().format('MM-DD-YYYY');\n}"
 						},
 						"key": "quote_due_date",
 						"type": "datetime",
@@ -8266,7 +8264,7 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": "moment().format('YYYY MM DD')",
+							"minDate": null,
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"maxDate": null
@@ -8569,7 +8567,7 @@
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
-		"label": "Q",
+		"label": "Quote & Approval",
 		"path": "page5Panel",
 		"breadcrumbClickable": true,
 		"buttonSettings": {
@@ -8578,11 +8576,14 @@
 			"next": true
 		},
 		"collapsible": false,
-		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"EndorsementUpdateData\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]"
+		}
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 493,
+	"_vid": 521,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8600,6 +8601,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-05-04T11:21:16.581Z",
+	"modified": "2020-05-14T11:41:50.114Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
