@@ -127,6 +127,7 @@
 		<div class = "second_content">
 			{if isset($update_date)}
 				{if isset($previousPolicyData) && !empty($previousPolicyData)}
+				{if isset($upgradeData) && !empty($upgradeData)}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if !empty($previousCoverage)}
 				{assign var=list value=$previousCoverage|json_decode:true}
@@ -173,6 +174,7 @@
                         </p>
             		{/foreach}
             	{/if}
+				{/if}
 				{/if}
 
 			{/if}

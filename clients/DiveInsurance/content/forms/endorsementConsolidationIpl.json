@@ -1716,7 +1716,7 @@
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"customDefaultValue": "value=0.00",
-								"calculateValue": "console.log(data.excessLiabilityPrice);\nconsole.log(55555555);\nvar prevPolicy = data.previousPolicyLength;\nconsole.log(prevPolicy)\nconsole.log(data['previous_policy_data'])\nif(prevPolicy >= 0){\n  var previousPolicyData = data.previous_policy_data;\n  var currentPolicy = previousPolicyData[prevPolicy]\nvalue = (parseFloat(data.excessLiabilityPrice) - parseFloat(currentPolicy.prevExcessLiabiltyPrice));\n}",
+								"calculateValue": "if(prevPolicy >= 0){\n  var previousPolicyData = data.previous_policy_data;\n  var currentPolicy = previousPolicyData[prevPolicy]\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(currentPolicy.prevExcessLiabiltyPrice))\nvalue = difference.toFixed(0);\n}",
 								"calculateServer": false,
 								"key": "excessLiabilityPricePayable",
 								"type": "number",
@@ -1828,7 +1828,7 @@
 										"requireDecimal": false,
 										"inputFormat": "plain",
 										"clearOnHide": false,
-										"calculateValue": "value = (parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0)",
+										"calculateValue": "var total = (parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0);\nif(total > 0){\n  value = total;\n} else {\n  total =0;\n}",
 										"calculateServer": false,
 										"key": "endorsementTotal",
 										"properties": {
@@ -2110,7 +2110,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel3",
-				"customConditional": "if(data.cylinderInspector_attachments.length == 0 && data.cylinder == \"cylinderInspector\"){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "if(data.cylinderInspector_attachments.length == 0 && (data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2165,7 +2165,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "if(data.cylinder == \"cylinderInstructor\"){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "if(data.cylinderInstructor_attachments.length > 0 && (data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Instructor Attachments",
 				"input": false,
@@ -3214,7 +3214,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 126,
+	"_vid": 128,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3233,6 +3233,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-14T22:13:01.658Z",
+	"modified": "2020-05-15T08:25:49.013Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

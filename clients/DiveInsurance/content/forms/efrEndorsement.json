@@ -1100,7 +1100,7 @@
 						},
 						"key": "liabilityCoverage",
 						"properties": {
-							"target": "coverageAmount"
+							"target": "excessLiabilityPrice"
 						},
 						"type": "select",
 						"indexeddb": {
@@ -1127,13 +1127,22 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData.length >= 0){\n  var policyLength = previousPolicyData.length -1;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var amount =0;\n  if(data.excessLiabilityPrice === 0){\n    amount = data.coverageAmount\n  } else {\n    amount = data.excessLiabilityPrice\n  }\n  var difference = (parseFloat(amount) - parseFloat(data[liabilityPrice]))\n  console.log(difference);\nvalue = difference.toFixed(0);\n}",
 						"calculateServer": false,
-						"key": "coverageAmount",
+						"key": "excessLiabilityPricePayable",
 						"customConditional": "show = false;",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "excessLiabilityPrice",
+						"calculateServer": false,
+						"key": "excessLiabilityPrice",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "single_limit",
@@ -1215,7 +1224,7 @@
 								"delimiter": true,
 								"requireDecimal": false,
 								"inputFormat": "plain",
-								"calculateValue": "value = parseFloat((data['excessLiabilityPrice'])||0);",
+								"calculateValue": "value = parseFloat((data['excessLiabilityPricePayable'])||0);",
 								"calculateServer": false,
 								"key": "endorAmount",
 								"type": "number",
@@ -2148,7 +2157,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 121,
+	"_vid": 130,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2169,7 +2178,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-14T22:13:53.730Z",
+	"modified": "2020-05-15T10:03:39.111Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

@@ -1373,19 +1373,20 @@
 							}],
 							"dataType": "auto",
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please choose one of these options."
+								"customMessage": "Please select an option"
 							},
 							"key": "careerCoverage",
 							"properties": {
 								"target": "careerCoveragePrice"
 							},
 							"type": "radio",
-							"input": true,
-							"lockKey": true,
 							"labelWidth": 30,
 							"labelMargin": 3,
+							"input": true,
+							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 8,
@@ -1566,7 +1567,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "withTecRecEndorsementForSelectionAbove",
+								"value": "withTecRecEndorsementForSelectionAbove5",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
@@ -1578,7 +1579,7 @@
 							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please choose one of these options."
+								"customMessage": "Please select an option"
 							},
 							"key": "tecRecEndorsment",
 							"type": "radio",
@@ -1674,7 +1675,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "scubaFitInstructor",
+								"value": "scubaFitInstructor6",
 								"label": "ScubaFit Instructor (6)",
 								"shortcut": ""
 							}, {
@@ -1682,9 +1683,10 @@
 								"label": "ScubaFit Instructor - Declined",
 								"shortcut": ""
 							}],
+							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please choose one of these options."
+								"customMessage": "Please select an option"
 							},
 							"key": "scubaFit",
 							"properties": {
@@ -1772,7 +1774,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "cylinderInspector",
+								"value": "cylinderInspector6",
 								"label": "Cylinder Inspector (6)",
 								"shortcut": ""
 							}, {
@@ -1788,9 +1790,10 @@
 								"label": "Cylinder Inspector Or Instructor - Declined",
 								"shortcut": ""
 							}],
+							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please choose one of these options."
+								"customMessage": "Please select an option"
 							},
 							"key": "cylinder",
 							"properties": {
@@ -1903,9 +1906,10 @@
 								"label": "Equipment Liability Coverage - Declined",
 								"shortcut": ""
 							}],
+							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please choose one of these options."
+								"customMessage": "Please select an option"
 							},
 							"key": "equipment",
 							"properties": {
@@ -2017,9 +2021,10 @@
 								"value": "excessLiabilityCoverageDeclined",
 								"shortcut": ""
 							}],
+							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please choose one of these options."
+								"customMessage": "Please select an option"
 							},
 							"key": "excessLiability",
 							"properties": {
@@ -2365,6 +2370,13 @@
 				"hideLabel": true,
 				"label": ""
 			}, {
+				"label": "documentFields",
+				"calculateValue": "value = [\"attachments1\" ,\"scubaFit_attachments1\" , \"cylinderInstructor_attachments1\" , \"cylinderInspector_attachments1\" , \"techRec_attachments1\"];",
+				"key": "documentFieldnames",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"title": "  User Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": false,
@@ -2381,20 +2393,13 @@
 				"label": "  ",
 				"input": false,
 				"components": [{
-					"label": "documentFields",
-					"calculateValue": "value = [\"attachments1\" ,\"scubaFit_attachments1\" , \"cylinderInstructor_attachments1\" , \"cylinderInspector_attachments1\" , \"techRec_attachments1\"];",
-					"key": "documentFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false
-				}, {
 					"type": "documentviewer",
 					"key": "techRec_attachments1",
 					"calculateValue": "value = (data['TechRec_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.TechRec_attachments !='');",
+					"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.TechRec_attachments && data.TechRec_attachments != \"\" && data.TechRec_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "TecRec Attachments",
@@ -2409,7 +2414,7 @@
 					"key": "cylinderInspector_attachments1",
 					"calculateValue": "value = (data['cylinderInspector_attachments'])",
 					"dtype": "documentviewer",
-					"customConditional": "show = (data.cylinderInspector_attachments !='');",
+					"customConditional": "if(data.cylinder === 'cylinderInspector' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments != \"\" && data.cylinderInspector_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
@@ -2435,7 +2440,7 @@
 					"inputType": "documentviewer",
 					"input": 1,
 					"tableView": false,
-					"customConditional": "show = (data.cylinderInstructor_attachments !='');",
+					"customConditional": "if(data.cylinder === 'cylinderInstructor' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments != \"\" && data.cylinderInstructor_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
 					"protected": true,
 					"persistent": false
 				}, {
@@ -2444,7 +2449,7 @@
 					"calculateValue": "value = (data['scubaFit_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
-					"customConditional": "show = (data.scubaFit_attachments !='');",
+					"customConditional": "if(data.scubaFit === 'scubaFitInstructor' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments != \"\" && data.scubaFit_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
@@ -2460,7 +2465,7 @@
 					"key": "attachments1",
 					"calculateValue": "value = (data['attachments'])",
 					"dtype": "documentviewer",
-					"customConditional": "show = (data.attachments !='');",
+					"customConditional": "if(data.attachments && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.attachments && data.attachments != \"\" && data.attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
@@ -2487,11 +2492,6 @@
 				"tableView": false,
 				"key": "techRecAttachment",
 				"customConditional": "if (data.privileges){\n  show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr == true))) ? true: false;\n}\nelse{\n  show = false;\n}",
-				"conditional": {
-					"show": true,
-					"when": "tecRecEndorsment",
-					"eq": "withTecRecEndorsementForSelectionAbove"
-				},
 				"type": "panel",
 				"label": "TecRec Attachments",
 				"input": false,
@@ -2546,12 +2546,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "cylinderInspectorAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.cylinder === 'cylinderInspector' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true))) ? true: false;\n}\nelse{\n  show = false;\n}",
-				"conditional": {
-					"show": true,
-					"when": "cylinder",
-					"eq": "cylinderInspector"
-				},
+				"customConditional": "if (data.privileges){\n  show = ((data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\") && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true))) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2605,12 +2600,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "cylinderInstructorAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.cylinder === 'cylinderInstructor' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true)))? true: false;\n}\nelse{\n  show = false;\n}",
-				"conditional": {
-					"show": true,
-					"when": "cylinder",
-					"eq": "cylinderInstructor"
-				},
+				"customConditional": "if (data.privileges){\n  show = ((data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" ) && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true)))? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Instructor Attachments",
 				"input": false,
@@ -2638,9 +2628,12 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
+					"multiple": true,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please attach Proof of Cylinder Instructor Inspection",
+						"multiple": true
 					},
 					"key": "cylinderInstructor_attachments",
 					"type": "file",
@@ -2660,11 +2653,6 @@
 				"tableView": false,
 				"key": "scubaFitAttachments",
 				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor' && ((data.privileges['MANAGE_MY_POLICY_WRITE'] !== null && data.privileges['MANAGE_MY_POLICY_WRITE']) || (data.initiatedByCsr === true))) ? true: false;\n}\nelse{\n  show = false;\n}",
-				"conditional": {
-					"show": true,
-					"when": "scubaFit",
-					"eq": "scubaFitInstructor"
-				},
 				"type": "panel",
 				"label": "Scuba Fit Attachments",
 				"input": false,
@@ -3581,8 +3569,10 @@
 				"clearOnHide": false,
 				"calculateServer": false,
 				"validate": {
-					"required": true
+					"required": true,
+					"customMessage": "Please choose an option"
 				},
+				"errorLabel": "Additional Insured",
 				"key": "AdditionalInsuredOption",
 				"type": "radio",
 				"input": true,
@@ -4098,10 +4088,6 @@
 							"tableView": false,
 							"storage": "base64",
 							"webcam": false,
-							"fileTypes": [{
-								"label": "",
-								"value": ""
-							}],
 							"clearOnHide": false,
 							"calculateServer": false,
 							"key": "chequeConsentFile",
@@ -4295,8 +4281,10 @@
 				"calculateServer": false,
 				"validate": {
 					"required": true,
+					"customMessage": "Please check if the PADI Member is Valid",
 					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n  data.padiNotFound = false;\n} else {\n  data.padiVerified = false;\n  data.padiNotFound = true;\n}"
 				},
+				"errorLabel": "PADI Verification",
 				"key": "padiVerifiedCSRCheck",
 				"type": "checkbox",
 				"input": true,
@@ -4373,7 +4361,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 286,
+	"_vid": 291,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4394,6 +4382,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-14T22:17:40.698Z",
+	"modified": "2020-05-15T22:09:20.826Z",
 	"machineName": "testdivehub:csrInitiates"
 }
