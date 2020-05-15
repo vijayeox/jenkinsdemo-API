@@ -52,7 +52,10 @@ class PageContentService extends AbstractService
                 }
             }
             if(isset($resultArray['content'])){
-                $resultArray['content'] = json_decode($resultArray['content']);
+                $content = json_decode($resultArray['content']);
+                if($content){
+                    $resultArray['content'] = $content;
+                }
             }
             $result[] = $resultArray;
         }
