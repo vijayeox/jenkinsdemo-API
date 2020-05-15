@@ -84,6 +84,7 @@ api()
         echo -e "${GREEN}Migrations Complete!${RESET}"
         echo -e "${GREEN}Starting Apache${RESET}"
         service apache2 start
+        service php7.2-fpm reload
     fi    
 }
 camel()

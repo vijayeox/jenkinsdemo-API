@@ -159,7 +159,7 @@
 						"label": "start_date",
 						"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
 						"calculateServer": false,
-						"key": "start_date1",
+						"key": "start_date",
 						"type": "hidden",
 						"input": true,
 						"tableView": true,
@@ -11486,7 +11486,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 123,
+	"_vid": 124,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11503,6 +11503,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-05-12T18:04:47.092Z",
+	"modified": "2020-05-13T07:00:21.844Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

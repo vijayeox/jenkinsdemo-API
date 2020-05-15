@@ -179,28 +179,28 @@ class SetupEndorsement extends AbstractAppDelegate
             array_push($data['previous_policy_data'],$policy);
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
             if(isset($data['paymentOptions'])){
-                unset($data['paymentOptions']);
+                $data['paymentOptions'] = "";
             }
             if(isset($data['chequeNumber'])){
-                unset($data['chequeNumber']);
+                $data['chequeNumber'] = "";
             }
             if(isset($data['chequeConsentFile'])){
-                unset($data['chequeConsentFile']);
+                $data['chequeConsentFile'] = "";
             }
             if(isset($data['orderId'])){
-                unset($data['orderId']);
+                $data['orderId'] = "";
             }
             if(isset($data['transactionId'])){
-                unset($data['transactionId']);
+                $data['transactionId'] = "";
             }
             if(isset($data['approved'])){
-                unset($data['approved']);
+                $data['approved'] = "";
             }
             if(isset($data['endorsement_options'])){
-                unset($data['endorsement_options']);
+                $data['endorsement_options'] = "";
             }
             if(isset($data['disableOptions'])){
-                unset($data['disableOptions']);
+                $data['disableOptions'] = "";
             }
             if(isset($premiumRateCardDetails)){
                 $returnArray = array_merge($data,$premiumRateCardDetails);

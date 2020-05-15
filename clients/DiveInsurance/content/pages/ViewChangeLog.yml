@@ -26,6 +26,43 @@ content:
                             content: 
                                 route: delegate/ChangeLogDelegate
                                 groupable: true
+                                exportToPDF:
+                                    titleTemplate: '<div style={{ position: "absolute", top: "10px" }}>
+                                            <div style={{ padding: "10px" }}>
+                                            <p>Workflow: {data.workflowName}</p>
+                                            <p>
+                                                Activity: {data.activityName}
+                                                Performed By {data.activityModifiedBy} on
+                                                {moment(data.activitySubmittedDate).format("Do MMMM YYYY,  h:mm a")}
+                                            </p>
+                                            </div>
+                                        </div>'
+                                    JSXtemplate: '<div style={{fontSize:"12px",position: "absolute",bottom: "15px",
+                                        right:"25px"}}>Page {pageData.pageNum} of {pageData.totalPages}</div>'
+                                    defaultFilters: '{"sort":[{"field":"text","dir":"asc"}]}'
+                                    columnConfig:
+                                        -
+                                            title: Field Name
+                                            field: text
+                                        -
+                                            title: Initial Value
+                                            field: initialValue
+                                        -
+                                            title: Submitted Value
+                                            field: submittedValue
+                                    margin:
+                                        top: 3cm
+                                        left: 1cm
+                                        right: 1cm
+                                        bottom: 1cm
+                                    fileNameTemplate: '"ChangeLog_" + new Date().getFullYear()'
+                                    author: "Vicencia Buckley"
+                                    producer: "Vicencia Buckley"
+                                    landscape: false
+                                    paperSize: "A4"
+                                    repeatHeaders: true
+                                    subject: "Log of data modified"
+                                    title: "Activity Log"
                                 columnConfig:
                                     -
                                         title: Parent Field Name

@@ -978,8 +978,9 @@
 								"label": "Home or Work Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"customMessage": "Please enter a valid Home or Work Phone number"
 								},
 								"key": "home_phone_number",
 								"logic": [{
@@ -1077,9 +1078,10 @@
 								"label": "Mobile Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number"
 								},
 								"key": "phone_number",
 								"logic": [{
@@ -1155,7 +1157,11 @@
 						"placeholder": " ",
 						"spellcheck": true,
 						"tableView": true,
-						"errorLabel": "Please enter a valid Fax number",
+						"calculateServer": false,
+						"validate": {
+							"customMessage": "Please enter a valid Fax number"
+						},
+						"errorLabel": "Fax",
 						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
@@ -1164,8 +1170,9 @@
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
-						"spellcheck": true,
-						"tableView": true,
+						"spellcheck": false,
+						"tableView": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter your email address in format: yourname@example.com"
@@ -1389,14 +1396,15 @@
 					}, {
 						"components": [{
 							"label": "Career Coverage Price",
-							"placeholder": "0.00",
+							"placeholder": "0",
 							"prefix": "$",
+							"customClass": "textRight",
 							"hideLabel": true,
 							"mask": false,
-							"spellcheck": true,
+							"spellcheck": false,
 							"disabled": true,
 							"tableView": false,
-							"defaultValue": "0.00",
+							"defaultValue": "0",
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
@@ -1586,8 +1594,9 @@
 					}, {
 						"components": [{
 							"label": "TecRech Price",
-							"placeholder": "0.00",
+							"placeholder": "0",
 							"prefix": "$",
+							"customClass": "textRight",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
@@ -1612,7 +1621,7 @@
 							"defaultValue": "0",
 							"persistent": false,
 							"protected": true,
-							"customDefaultValue": "value = \"0.00\"",
+							"customDefaultValue": "value = \"0\"",
 							"calculateValue": "value = 0;",
 							"calculateServer": false,
 							"key": "withTecRecEndorsementForSelectionAbove",
@@ -1626,7 +1635,7 @@
 							"defaultValue": "0",
 							"persistent": false,
 							"protected": true,
-							"customDefaultValue": "value = \"0.00\"",
+							"customDefaultValue": "value = \"0\"",
 							"calculateValue": "value = 0;",
 							"calculateServer": false,
 							"key": "tecRecDeclined",
@@ -1694,14 +1703,15 @@
 					}, {
 						"components": [{
 							"label": "ScubaFit Price",
-							"placeholder": "0.00",
+							"placeholder": "0",
 							"prefix": "$",
+							"customClass": "textRight",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0.00",
+							"defaultValue": "0.",
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
@@ -1724,8 +1734,8 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "scubaFitInstructorDeclined",
-							"defaultValue": "0.00",
-							"customDefaultValue": "value = \"0.00\"",
+							"defaultValue": "0",
+							"customDefaultValue": "value = \"0\"",
 							"key": "scubaFitInstructorDeclined",
 							"type": "hidden",
 							"input": true,
@@ -1799,14 +1809,15 @@
 					}, {
 						"components": [{
 							"label": "Cylinder Price",
-							"placeholder": "0.00",
+							"placeholder": "0",
 							"prefix": "$",
+							"customClass": "textRight",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0.00",
+							"defaultValue": "0",
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
@@ -1846,8 +1857,8 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "cylinderInspectorOrInstructorDeclined",
-							"defaultValue": "0.00",
-							"customDefaultValue": "value = \"0.00\"",
+							"defaultValue": "0",
+							"customDefaultValue": "value = \"0\"",
 							"key": "cylinderInspectorOrInstructorDeclined",
 							"type": "hidden",
 							"input": true,
@@ -1913,14 +1924,15 @@
 					}, {
 						"components": [{
 							"label": "Equipment Price",
-							"placeholder": "0.00",
+							"placeholder": "0",
 							"prefix": "$",
+							"customClass": "textRight",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": "0.00",
+							"defaultValue": "0",
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
@@ -1944,7 +1956,7 @@
 						}, {
 							"label": "equipmentLiabilityCoverageDeclined",
 							"defaultValue": "0",
-							"customDefaultValue": "value = \"0.00\"",
+							"customDefaultValue": "value = \"0\"",
 							"key": "equipmentLiabilityCoverageDeclined",
 							"type": "hidden",
 							"input": true,
@@ -2025,14 +2037,15 @@
 					}, {
 						"components": [{
 							"label": "Excess Liability",
-							"placeholder": "0.00",
+							"placeholder": "0",
 							"prefix": "$",
+							"customClass": "textRight",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": false,
 							"disabled": true,
 							"tableView": false,
-							"defaultValue": "0.00",
+							"defaultValue": "0",
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
@@ -2091,7 +2104,7 @@
 						}, {
 							"label": "excessLiabilityCoverageDeclined",
 							"defaultValue": "0",
-							"customDefaultValue": "value = \"0.00\"",
+							"customDefaultValue": "value = \"0\"",
 							"key": "excessLiabilityCoverageDeclined",
 							"type": "hidden",
 							"input": true,
@@ -2176,14 +2189,15 @@
 							}, {
 								"components": [{
 									"label": "Total Price",
-									"placeholder": "0.00",
+									"placeholder": "0",
 									"prefix": "$",
+									"customClass": "textRight",
 									"hideLabel": true,
 									"mask": false,
 									"spellcheck": true,
 									"disabled": true,
 									"tableView": true,
-									"defaultValue": "0.00",
+									"defaultValue": "0",
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
@@ -2235,6 +2249,7 @@
 								"components": [{
 									"label": "Balance",
 									"prefix": "$",
+									"customClass": "textRight",
 									"hideLabel": true,
 									"mask": false,
 									"spellcheck": true,
@@ -2294,6 +2309,7 @@
 								"components": [{
 									"label": "Balance",
 									"prefix": "$",
+									"customClass": "textRight",
 									"hideLabel": true,
 									"mask": false,
 									"spellcheck": true,
@@ -2563,12 +2579,13 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
+					"multiple": true,
 					"clearOnHide": false,
-					"calculateValue": "if(data.cylinderInspector_attachments && data.cylinderInspector_attachments.length === 0){\n  component.multiple = false;\n  instance.redraw();\n} else {\n  component.multiple = true;\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please attach proof of Cylinder Inspector Certification"
+						"customMessage": "Please attach proof of Cylinder Inspector Certification",
+						"multiple": true
 					},
 					"errorLabel": "Cylinder Inspector Certification",
 					"key": "cylinderInspector_attachments",
@@ -2621,11 +2638,9 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"calculateValue": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length === 0 ){\n  component.multiple = false\n  instance.redraw();\n} else {\n  component.multiple = true\n  instance.redraw();\n}",
 					"calculateServer": false,
 					"validate": {
-						"required": true,
-						"multiple": true
+						"required": true
 					},
 					"key": "cylinderInstructor_attachments",
 					"type": "file",
@@ -2677,7 +2692,7 @@
 					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
-					"calculateValue": "if(data.scubaFit_attachments  && data.scubaFit_attachments.length === 0 ){\n  component.multiple = false\n  instance.redraw();\n} else {\n  component.multiple = true\n  instance.redraw();\n}",
+					"multiple": true,
 					"calculateServer": false,
 					"validate": {
 						"required": true,
@@ -2727,7 +2742,6 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"calculateValue": "if((data.attachments || data.attachments !== undefined) && data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
 					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please attach any attachments",
@@ -2775,7 +2789,6 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"calculateValue": "if((data.csr_attachments || data.csr_attachments !== undefined) && data.csr_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
 					"calculateServer": false,
 					"validate": {
 						"multiple": true
@@ -3103,7 +3116,7 @@
 					"lockKey": true,
 					"tableView": false
 				}, {
-					"label": "Data Grid",
+					"label": "Incidents",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
 					"addAnother": "Add More",
@@ -3113,6 +3126,18 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"nameofpersoninjured": "",
+						"date_of_incident": "",
+						"locationofincident": "",
+						"reportcanbeobtained": "",
+						"briefSummary": "",
+						"page4Panel2ColumnsIncidentreportfiled": "",
+						"page4Panel2Columns2Fatality": "",
+						"page4Panel2Columns2SeriousInjury": "",
+						"page4Panel2ColumnsInTraining": ""
+					}],
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -4348,7 +4373,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 284,
+	"_vid": 286,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4369,6 +4394,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-12T12:01:22.138Z",
+	"modified": "2020-05-14T22:17:40.698Z",
 	"machineName": "testdivehub:csrInitiates"
 }

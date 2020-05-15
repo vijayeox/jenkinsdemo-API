@@ -651,14 +651,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             } else {
                 $data['policyStatus'] = "In Force";
                 if(isset($data['endorsement_options'])){
-                    unset($data['endorsement_options']);
+                    $data['endorsement_options'] = "";
                 }
             }
             if(isset($data['initiatedByUser'])){
-                unset($data['initiatedByUser']);
+                $data['initiatedByUser'] = "";
             }
             if(isset($data['initiatedByCsr'])){
-                unset($data['initiatedByCsr']);
+                $data['initiatedByCsr'] = "";
             }
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
@@ -666,7 +666,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['update_date'] = $updateDate;
             }
             if(isset($data['disableOptions'])){
-                unset($data['disableOptions']);
+                $data['disableOptions'] = "";
             }
             if(isset($data['documents1'])){
                 $data['documents1'] = "";
