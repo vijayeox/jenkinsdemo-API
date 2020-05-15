@@ -964,19 +964,24 @@ class FileService extends AbstractService
             }
             $initialData = "";
             $processed =0;
-            foreach ($selectValues as $key => $value) {
-                if($value == 1){
-                    if($processed == 0){
-                       $radioFields = ArrayUtils::convertListToMap($radioFields['values'],'value','label');
-                        $processed = 1;
-                    }
-                    if(isset($radioFields[$key])){
+            if(isset($selectValues) && is_string($selectValues)){
+                $selectValues = json_decode($selectValues,true);
+            }
+            if(isset($selectValues) && is_array($selectValues)){
+                foreach ($selectValues as $key => $value) {
+                    if($value == 1){
+                        if($processed == 0){
+                         $radioFields = ArrayUtils::convertListToMap($radioFields['values'],'value','label');
+                         $processed = 1;
+                     }
+                     if(isset($radioFields[$key])){
                         if($initialData !=""){
                             $initialData = $initialData . ",";
                         }
                         $initialData .= $radioFields[$key];
                     }
                 }
+            }
             }
         }
         
