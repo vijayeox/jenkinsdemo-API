@@ -160,7 +160,7 @@ class MenuItemService extends AbstractService
                 if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '') {
                     $menuItem['parent_id'] = $this->getUuidFromId('ox_app_menu',$menuItem['parent_id']);
                     $parentKey = array_search($menuItem['parent_id'], array_column($menuArray, 'uuid'));
-                    if(!empty($parentKey)){
+                    if(is_numeric($parentKey)){
                       $menuArray[$parentKey]['submenu'][] = $menuItem;
                     }
                     array_pop($menuArray);
