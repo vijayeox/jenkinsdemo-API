@@ -33,7 +33,9 @@ class ProcessEndorsementAttachments extends AbstractAppDelegate
         if(is_string($attachment)){
             $attachment = json_decode($attachment,true);
         }
-        $destinationAttachment = $data[$destAttach];
+        if(isset($data[$destAttach])){
+            $destinationAttachment = $data[$destAttach];
+        }
         if(!isset($destinationAttachment)){
             $destinationAttachment = array();
         }else if(is_string($destinationAttachment)){

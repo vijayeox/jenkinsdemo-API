@@ -3,25 +3,27 @@
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
-            <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/><br/>
-                <p>{$firstname} {$lastname}<br/>
-                {$address1}<br/>
-				{$address2}<br/>
-				{$city},{$state},{$zip}<br/></p>
+            <div style='line-height: 24px'>Dear {$lastname},{$firstname} {if isset($initial)},{$initial}{/if} <br/><br/>
+                 <p>{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}<br/>
+					{$address1}<br/>
+					{$address2}<br/>
+					{$city},{$state_in_short} - {$zip}<br/>
+					{$country}<br/>
+</p>
 
-
-				<p>Coverage Level: {$careerCoverageVal}</p><br/>
-				<p>Equipment Liability: {if $equipment == "equipmentLiabilityCoverage"}
+				Coverage Level: {$careerCoverageVal}<br/><br/>
+				Equipment Liability: {if $equipment == "equipmentLiabilityCoverage"}
 											Selected
 									 {else} 
 									  		Not Selected
-									 {/if}</p><br/>
+									 {/if}<br/>
 				Excess Liability: {if $excessLiability  == "excessLiabilityCoverage9000000" || $excessLiability  == "excessLiabilityCoverage4000000" || $excessLiability  == "excessLiabilityCoverage3000000" || $excessLiability  == "excessLiabilityCoverage2000000" || $excessLiability  == "excessLiabilityCoverage1000000"}
 											Selected
 								  {else} 
 									  		Not Selected
-							      {/if}</p>
+							      {/if}
 
+				<br/><br/>
 				<br/>
 				<p>It's that time of the year to think about insurance. Fortunately, you are currently signed up for automatic renewal under the PADI Endorsed Professional Liability Program.</p><br/>
 

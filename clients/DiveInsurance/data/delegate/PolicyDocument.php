@@ -168,7 +168,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
                     array_push($coverageList,$data['careerCoverage']);
-                  if($data['product'] == "Individual Professional Liability"){  
+                  if($data['product'] == "Individual Professional Liability"){
           
                         if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
                             $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
