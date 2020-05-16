@@ -185,6 +185,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($data['excessLiability'])){
                             array_push($coverageList,$data['excessLiability']);
                         }
+                        if(isset($data['tecRecEndorsment'])){
+                            array_push($coverageList,$data['tecRecEndorsment']);
+                        }
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
                     $result = json_decode($result,true);
@@ -198,8 +201,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
                             $temp['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
-                         if(isset($result[$data['excessLiability']])){
+                        if(isset($result[$data['excessLiability']])){
                             $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
+                        }
+                        if(isset($result[$data['tecRecEndorsment']])){
+                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
                         }
                     }
                     $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
@@ -240,10 +246,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         array_push($data['previousTecRec'], $upgrades);
                     }
                     $temp['previousTecRec'] = json_encode($data['previousTecRec']);
-
                     if(isset($data['previousCylinder'])){
                         $data['previousCylinder'] = is_array($data['previousCylinder']) ? $data['previousCylinder'] : json_decode($data['previousCylinder'],true);
-                    }else{  
+                    }else{
                         $data['previousCylinder'] = array();
                     }
 
@@ -295,6 +300,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $NewData[0]['city'] = $data['city'];
                     $NewData[0]['state'] = $data['state'];
                     $NewData[0]['zip'] = $data['zip'];
+                    $NewData[0]['country'] = $data['country'];
                     $NewData[0]['product'] = $data['product'];
                     $NewData[0]['product_email_id'] = $data['product_email_id'];
                     $NewData[0]['entity_name'] = 'Pocket Card Job';
@@ -1006,6 +1012,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $response[$i]['city'] = $data['city'];
                 $response[$i]['state'] = $data['state'];
                 $response[$i]['zip'] = $data['zip'];
+                $response[$i]['country'] = $data['country'];
                 $response[$i]['business_name'] = $data['business_name'];
                 $i += 1;
             }

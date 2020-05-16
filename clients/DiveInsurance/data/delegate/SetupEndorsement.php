@@ -155,6 +155,10 @@ class SetupEndorsement extends AbstractAppDelegate
                     unset($rate);
                 }
             }
+            if(isset($policy['previous_tecRecEndorsment'])){
+                $premiumRateCardDetails['withTecRecEndorsementForSelectionAbove'] = 0;
+                $premiumRateCardDetails['tecRecDeclined'] = 0;
+            }
             if(isset($policy['previous_scubaFit'])){
                 $selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Scuba fit Query".$selectScubafit);
@@ -202,6 +206,21 @@ class SetupEndorsement extends AbstractAppDelegate
             if(isset($data['disableOptions'])){
                 $data['disableOptions'] = "";
             }
+            if(isset($data['endor_cylinderInstructor_attachments'])){
+                $data['endor_cylinderInstructor_attachments']=array();
+            }
+            if(isset($data['endor_cylinderInspector_attachments'])){
+                $data['endor_cylinderInspector_attachments']=array();
+            }
+            if(isset($data['endor_techRec_attachments'])){
+                $data['endor_techRec_attachments']=array();
+            }
+            if(isset($data['endor_scubaFit_attachments'])){
+                $data['endor_scubaFit_attachments']=array();
+            }
+            if(isset($data['endor_attachments'])){
+                $data['endor_attachments']=array();
+            }
             if(isset($premiumRateCardDetails)){
                 $returnArray = array_merge($data,$premiumRateCardDetails);
             }
@@ -212,53 +231,53 @@ class SetupEndorsement extends AbstractAppDelegate
         $this->logger->info("SETUP ENDOR".print_r($data,true));
         return $data;
     }
-protected function getRates($data,$persistenceService){
-    $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
-    $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
-    $result = $persistenceService->selectQuery($select);
-    $this->logger->info("Rate Card query -> $select");
-    $stateTaxResult = $persistenceService->selectQuery($selectTax);
-    while ($result->next()) {
-        $rate = $result->current();
-        if(isset($rate['key'])){
-            if(isset($rate['total'])){
-                $premiumRateCardDetails[$rate['key']] = $rate['total'];
-            } else {
-                if(isset($rate['tax'])){
-                    $total = $rate['tax'] + $rate['premium'];
-                    if(isset($rate['padi_fee'])){
-                        $total = $rate['padi_fee'] + $total;
-                    }
-                    $premiumRateCardDetails[$rate['key']] = $total;
+    protected function getRates($data,$persistenceService){
+        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
+        $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
+        $result = $persistenceService->selectQuery($select);
+        $this->logger->info("Rate Card query -> $select");
+        $stateTaxResult = $persistenceService->selectQuery($selectTax);
+        while ($result->next()) {
+            $rate = $result->current();
+            if(isset($rate['key'])){
+                if(isset($rate['total'])){
+                    $premiumRateCardDetails[$rate['key']] = $rate['total'];
                 } else {
-                    $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                    if(isset($rate['tax'])){
+                        $total = $rate['tax'] + $rate['premium'];
+                        if(isset($rate['padi_fee'])){
+                            $total = $rate['padi_fee'] + $total;
+                        }
+                        $premiumRateCardDetails[$rate['key']] = $total;
+                    } else {
+                        $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                    }
+                }
+            }
+            unset($rate);
+        }
+        $stateTaxData = [];
+        while ($stateTaxResult->next()) {
+            $rate = $stateTaxResult->current();
+            array_push($stateTaxData, $rate);
+        }
+
+        foreach ($data as $key => $value) {
+            if(is_string($value))
+            {
+                $result = json_decode($value);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $data[$key] = $result;
                 }
             }
         }
-        unset($rate);
-    }
-    $stateTaxData = [];
-    while ($stateTaxResult->next()) {
-        $rate = $stateTaxResult->current();
-        array_push($stateTaxData, $rate);
-    }
-
-    foreach ($data as $key => $value) {
-        if(is_string($value))
-        {
-            $result = json_decode($value);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $data[$key] = $result;
-            }
+        if(isset($stateTaxData)){
+            $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
+        }
+        if(isset($premiumRateCardDetails)){
+            return $premiumRateCardDetails;
+        } else {
+            return $data;
         }
     }
-    if(isset($stateTaxData)){
-        $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
-    }
-    if(isset($premiumRateCardDetails)){
-        return $premiumRateCardDetails;
-    } else {
-        return $data;
-    }
-}
 }

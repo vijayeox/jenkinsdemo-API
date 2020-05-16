@@ -39,6 +39,10 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 $attachmentsFieldnames = $data['csrAttachmentsFieldnames'];
                 $this->getAttachmentsData($data,$attachmentsFieldnames);
             }
+            if (isset($data['attachmentsFieldnames'])) {
+                    $attachmentsFieldnames = $data['attachmentsFieldnames'];
+                    $this->getAttachmentsData($data,$attachmentsFieldnames);
+            }
         }
      } else{
         if (isset($data['attachmentsFieldnames'])) {

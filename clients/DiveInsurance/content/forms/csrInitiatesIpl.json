@@ -1567,7 +1567,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "withTecRecEndorsementForSelectionAbove5",
+								"value": "withTecRecEndorsementForSelectionAbove",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
@@ -1675,7 +1675,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "scubaFitInstructor6",
+								"value": "scubaFitInstructor",
 								"label": "ScubaFit Instructor (6)",
 								"shortcut": ""
 							}, {
@@ -1774,7 +1774,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "cylinderInspector6",
+								"value": "cylinderInspector",
 								"label": "Cylinder Inspector (6)",
 								"shortcut": ""
 							}, {
@@ -4361,7 +4361,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 291,
+	"_vid": 292,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4382,6 +4382,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-15T22:09:20.826Z",
+	"modified": "2020-05-16T10:17:21.984Z",
 	"machineName": "testdivehub:csrInitiates"
 }
