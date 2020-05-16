@@ -60,6 +60,9 @@ class CancelPolicy extends PolicyDocument
             $temp = $Canceldate;
             $data['ReinstatePolicyPeriod'] = $temp->add(new DateInterval("P45D"))->format("Y-m-d");
         }
+        if(isset($data['state'])){
+            $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+        }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
         $this->logger->info('the  destination consists of : '.print_r($dest, true));        

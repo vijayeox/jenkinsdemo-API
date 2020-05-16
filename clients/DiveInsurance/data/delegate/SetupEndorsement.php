@@ -189,7 +189,7 @@ class SetupEndorsement extends AbstractAppDelegate
                 $data['chequeNumber'] = "";
             }
             if(isset($data['chequeConsentFile'])){
-                $data['chequeConsentFile'] = "";
+                $data['chequeConsentFile'] = array();
             }
             if(isset($data['orderId'])){
                 $data['orderId'] = "";

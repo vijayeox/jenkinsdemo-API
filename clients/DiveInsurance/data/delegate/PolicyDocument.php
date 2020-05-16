@@ -167,7 +167,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['liabilityCoverage'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
-                  if($data['product'] == "Individual Professional Liability"){
+                    if($data['product'] == "Individual Professional Liability"){
                         array_push($coverageList,$data['careerCoverage']);
                         if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
                             $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
@@ -195,44 +195,40 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
                     $result = json_decode($result,true);
-                    if($data['product'] == "Individual Professional Liability"){
-                        if(isset($result[$data['scubaFit']])){
-                            $temp['scubaFitVal'] = $result[$data['scubaFit']];
-                        }
-                        if(isset($result[$data['tecRecEndorsment']])){
-                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
-                        }
-                        if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
-                            $temp['cylinderPriceVal'] = $result[$data['cylinder']];
-                        }
-                        if(isset($result[$data['excessLiability']])){
-                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
-                        }
-                        if(isset($result[$data['tecRecEndorsment']])){
-                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
-                        }
-                        $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
-                    }
-                    if($data['product'] == "Emergency First Response"){
-                        if(isset($result[$data['liabilityCoverage']])){
-                            $temp['LiabilityVal'] = $result[$data['liabilityCoverage']];
-                        }
-                    }
                     if(!empty($previous_data)) {
-                    $policy =array();
-                    $upgrades = array();
-                    $policy =  $previous_data[$length - 1];
-                    if($data['product'] == "Individual Professional Liability"){
-                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCoverage','previous_careerCoverage','careerCoverage');
-                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousScubaFit','previous_scubaFit','scubaFit');
-                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousTecRec','previous_tecRecEndorsment','tecRecEndorsment');
-                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCylinder','previous_cylinder','cylinder');
-                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousExcess','previous_excessLiability','excessLiability');
+                        $policy =array();
+                        $upgrades = array();
+                        $policy =  $previous_data[$length - 1];
+                        if($data['product'] == "Individual Professional Liability"){
+                            if(isset($result[$data['scubaFit']])){
+                                $temp['scubaFitVal'] = $result[$data['scubaFit']];
+                            }
+                            if(isset($result[$data['tecRecEndorsment']])){
+                                $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
+                            }
+                            if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
+                                $temp['cylinderPriceVal'] = $result[$data['cylinder']];
+                            }
+                            if(isset($result[$data['excessLiability']])){
+                                $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
+                            }
+                            if(isset($result[$data['tecRecEndorsment']])){
+                                $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
+                            }
+                            $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCoverage','previous_careerCoverage','careerCoverage');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousScubaFit','previous_scubaFit','scubaFit');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousTecRec','previous_tecRecEndorsment','tecRecEndorsment');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCylinder','previous_cylinder','cylinder');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousExcess','previous_excessLiability','excessLiability');
+                        }
+                        if($data['product'] == "Emergency First Response"){
+                            if(isset($result[$data['liabilityCoverage']])){
+                                $temp['LiabilityVal'] = $result[$data['liabilityCoverage']];
+                            }
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousLiabilityCoverage','previous_excessLiability','liabilityCoverage');
+                        }
                     }
-                    if($data['product'] == "Emergency First Response"){
-                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousLiabilityCoverage','previous_excessLiability','liabilityCoverage');
-                    }
-                  }
                 }
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
@@ -950,7 +946,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     }
 
 
-    private function getStateInShort($state,$persistenceService){
+    protected function getStateInShort($state,$persistenceService){
         $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$state."'";
         $resultSet = $persistenceService->selectQuery($selectQuery);
         if($resultSet->count() == 0){

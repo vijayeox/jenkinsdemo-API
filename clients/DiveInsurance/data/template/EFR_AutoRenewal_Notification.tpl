@@ -4,7 +4,7 @@
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
             <div style='line-height: 24px'>Dear {$lastname},{$firstname} {if isset($initial)},{$initial}{/if}, <br/><br/>
-                {$lastname},{$firstname} {if isset($initial)},{$initial}{/if}<br/>
+                 <p>{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}<br/>
                     {$address1}<br/>
                     {$address2}<br/>
                     {$city},{$state_in_short} - {$zip}<br/>

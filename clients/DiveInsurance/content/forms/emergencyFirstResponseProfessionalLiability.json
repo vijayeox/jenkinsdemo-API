@@ -1668,7 +1668,7 @@
 			}, {
 				"label": "attachmentFields",
 				"customDefaultValue": "value = [\"attachments\"];",
-				"calculateValue": "value = [\"attachments\", \"chequeConsentForm\"];",
+				"calculateValue": "value = [\"attachments\", \"chequeConsentFile\"];",
 				"calculateServer": false,
 				"key": "attachmentsFieldnames",
 				"type": "hidden",
@@ -2867,7 +2867,7 @@
 							}],
 							"clearOnHide": false,
 							"calculateServer": false,
-							"key": "chequeConsentForm",
+							"key": "chequeConsentFile",
 							"type": "file",
 							"input": true
 						}],
@@ -3126,7 +3126,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 488,
+	"_vid": 489,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3210,7 +3210,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-14T22:16:37.611Z",
+	"modified": "2020-05-16T21:26:26.232Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
