@@ -25,12 +25,29 @@ class PadiVerification extends AbstractAppDelegate
         unset($data['businessPadiNotFound']);
         unset($data['padiNotFoundCsrReview']);
         unset($data['padiNotFound']);
-        unset($data['policy_exists']);
+        // unset($data['policy_exists']);
         unset($data['firstname']);
         unset($data['lastname']);
         unset($data['business_name']);
         unset($data['initial']);
+        unset($data['address1']);
+        unset($data['address2']);
+        unset($data['city']);
+        unset($data['state']);
+        unset($data['zip']);
+        unset($data['country']);
+        $data['sameasmailingaddress'] = true;
+        unset($data['mailaddress1']);
+        unset($data['mailaddress2']);
+        unset($data['physical_city']);
+        unset($data['physical_state']);
+        unset($data['physical_zip']);
+        unset($data['physical_country']);
+        unset($data['home_phone_number']);
+        unset($data['phone_number']);
         unset($data['padiNotApplicable']);
+        unset($data['fax']);
+        unset($data['email']);
         $privileges = $this->getPrivilege();
         if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
             $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
