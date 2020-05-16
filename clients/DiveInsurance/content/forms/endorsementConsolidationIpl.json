@@ -66,6 +66,27 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
+			"label": "endorsementCoverage",
+			"calculateServer": false,
+			"key": "endorsementCoverage",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "endorsementCylinder",
+			"calculateServer": false,
+			"key": "endorsementCylinder",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "endorsementExcessLiability",
+			"calculateServer": false,
+			"key": "endorsementExcessLiability",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "product_email_id",
 			"calculateValue": "value = 'instructors@diveinsurance.com';",
 			"calculateServer": false,
@@ -100,7 +121,7 @@
 			"lockKey": true
 		}, {
 			"label": "previousPolicyLength",
-			"calculateValue": "value = data['previous_policy_data'].length - 1;",
+			"calculateValue": "if(data['previous_policy_data']){\n  value = data['previous_policy_data'].length - 1;\n}",
 			"calculateServer": false,
 			"key": "previousPolicyLength",
 			"type": "hidden",
@@ -1520,6 +1541,10 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please select the Cylinder Coverage"
+								},
 								"key": "cylinder",
 								"properties": {
 									"target": "cylinderPrice"
@@ -1683,6 +1708,10 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true,
+									"customMessage": "Please select the Excess Liability"
+								},
 								"key": "excessLiability",
 								"properties": {
 									"target": "excessLiabilityPrice"
@@ -1716,7 +1745,7 @@
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"customDefaultValue": "value=0.00",
-								"calculateValue": "if(prevPolicy >= 0){\n  var previousPolicyData = data.previous_policy_data;\n  var currentPolicy = previousPolicyData[prevPolicy]\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(currentPolicy.prevExcessLiabiltyPrice))\nvalue = difference.toFixed(0);\n}",
+								"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var policyLength = previousPolicyData.length -1;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
 								"calculateServer": false,
 								"key": "excessLiabilityPricePayable",
 								"type": "number",
@@ -1946,17 +1975,18 @@
 				"collapsible": false,
 				"tableView": true,
 				"key": "documentPanel",
+				"customConditional": "if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  show =false;\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}",
 				"type": "panel",
 				"label": " ",
 				"input": false,
 				"components": [{
 					"type": "documentviewer",
 					"key": "techRec_attachments1",
-					"calculateValue": "value = (data['TechRec_attachments'])",
+					"calculateValue": "try{ value = JSON.parse(data.TechRec_attachments)} catch(e){value = data.TechRec_attachments}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.TechRec_attachments && data.TechRec_attachments !='' && data.TechRec_attachments != '[]');",
+					"customConditional": "if(data.TechRec_attachments && data.TechRec_attachments.length > 0 && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove'){show = true;} else {show =false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "TecRec Attachments",
@@ -1969,11 +1999,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInspector_attachments1",
-					"calculateValue": "value = (data['cylinderInspector_attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.cylinderInspector_attachments)\n} catch(e){\n  value = data.cylinderInspector_attachments\n}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.cylinderInspector_attachments && data.cylinderInspector_attachments !='');",
+					"customConditional": "if(data.cylinderInspector_attachments && data.cylinderInspector_attachments.length > 0 && (data.cylinder == 'cylinderInspector' || data.cylinder == 'cylinderInspectorAndInstructor')){show = true;}else{show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Cylinder Inspector Attachments",
@@ -1986,11 +2016,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInstructor_attachments1",
-					"calculateValue": "value = (data['cylinderInstructor_attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.cylinderInstructor_attachments)\n} catch(e){\n  value = data.cylinderInstructor_attachments\n}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !='');",
+					"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length > 0 && (data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')){show = true;} else {show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Cylinder Instructor Attachments",
@@ -2003,11 +2033,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "scubaFit_attachments1",
-					"calculateValue": "value = (data['scubaFit_attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.scubaFit_attachments)\n} catch(e){\n  value = data.scubaFit_attachments\n}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.scubaFit_attachments && data.scubaFit_attachments !='');",
+					"customConditional": "if(data.scubaFit_attachments && data.scubaFit_attachments.length >0 && data.scubaFit == 'scubaFitInstructor'){show=true;} else {show = false}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Scuba Fit Attachments",
@@ -2020,11 +2050,11 @@
 				}, {
 					"type": "documentviewer",
 					"key": "attachments1",
-					"calculateValue": "value = (data['attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.attachments)\n} catch(e){\n  value = data.attachments\n}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "show = (data.attachments && data.attachments !='');",
+					"customConditional": "if(data.attachments && data.attachments.length > 0){show = true;} else {show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Attachments",
@@ -2049,12 +2079,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel1",
-				"customConditional": "if((data.TechRec_attachments.length === 0 && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove') && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n}else{\n  show = false;\n}",
-				"conditional": {
-					"show": true,
-					"when": "tecRecEndorsment",
-					"eq": "withTecRecEndorsementForSelectionAbove"
-				},
+				"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove'){\n  if(data.TechRec_attachments == undefined){\n    show = true;\n  } else {\n    show = false;\n  }\n  if(data.TechRec_attachments && data.TechRec_attachments.length === 0){\n    show = true;\n  } else {\n    show = false;\n  }\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "TecRec Attachments",
 				"input": false,
@@ -2077,15 +2102,9 @@
 					"tableView": true,
 					"storage": "base64",
 					"webcam": true,
-					"fileTypes": [{
-						"label": "",
-						"value": ""
-					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"clearOnHide": false,
-					"calculateValue": "if(component){\n  component.setPristine(true);\n}",
 					"calculateServer": false,
 					"validate": {
 						"required": true,
@@ -2165,7 +2184,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "if(data.cylinderInstructor_attachments.length > 0 && (data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length == 0 && (data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Instructor Attachments",
 				"input": false,
@@ -2220,7 +2239,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel5",
-				"customConditional": "if(data.scubaFit_attachments && data.scubaFit_attachments.length ==0 && data.scubaFit === 'scubaFitInstructor'){\n  show = true;\n}else{\n  show = false;\n}",
+				"customConditional": "if(data.scubaFit === 'scubaFitInstructor'){\n  if((data.scubaFit_attachments && data.scubaFit_attachments.length ==0)){\n    show = true;\n  } else {\n    show = false;\n  }\n  if(data.scubaFit_attachments == undefined){\n    show = true\n  } else {\n    show = false;\n  }\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Scuba Fit Attachments",
 				"input": false,
@@ -3214,7 +3233,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 128,
+	"_vid": 150,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3233,6 +3252,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-15T08:25:49.013Z",
+	"modified": "2020-05-16T18:56:55.991Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

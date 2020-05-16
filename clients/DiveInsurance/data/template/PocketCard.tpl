@@ -19,7 +19,7 @@
 					{if isset($individual.address2) && !empty($individual.address2)}
 						{$individual.address2}<br>
 					{/if}
-					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip} </b></p>
+					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip},<br>{$individual.country} </b></p>
 				{/if}
 			</div>
 			<div class = "insure">

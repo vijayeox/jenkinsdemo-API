@@ -41,12 +41,14 @@ class ProcessEndorsementAttachments extends AbstractAppDelegate
         }else if(is_string($destinationAttachment)){
             $destinationAttachment = json_decode($destinationAttachment,true);
         }
-        foreach ($attachment as $key => $value) {
-            $this->logger->info("Inside the loop ----".print_r($value,true));
-                    $destinationAttachment[] = $value;
-            $this->logger->info("Inside the loop destinationAttachment----".print_r($destinationAttachment,true));
+        if(is_array($attachment) && !empty($attachment)){
+            foreach ($attachment as $key => $value) {
+                $this->logger->info("Inside the loop ----".print_r($value,true));
+                $destinationAttachment[] = $value;
+                $this->logger->info("Inside the loop destinationAttachment----".print_r($destinationAttachment,true));
+            }
         }
-        $data[$srcAttach] = "";
+        $data[$srcAttach] = array();
         $data[$destAttach] = $destinationAttachment;
         $this->logger->info("DATA PROCESS ATTACHMENT----".print_r($data,true));
     }
