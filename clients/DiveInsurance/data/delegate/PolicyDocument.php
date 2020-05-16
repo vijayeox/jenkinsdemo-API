@@ -946,7 +946,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     }
 
 
-    private function getStateInShort($state,$persistenceService){
+    protected function getStateInShort($state,$persistenceService){
         $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$state."'";
         $resultSet = $persistenceService->selectQuery($selectQuery);
         if($resultSet->count() == 0){
