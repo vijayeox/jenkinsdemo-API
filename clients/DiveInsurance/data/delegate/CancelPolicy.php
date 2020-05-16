@@ -2,6 +2,7 @@
 
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\ArtifactUtils;
+use Oxzion\Utils\FileUtils;
 require_once __DIR__."/PolicyDocument.php";
 
 
@@ -49,9 +50,6 @@ class CancelPolicy extends PolicyDocument
         $data['CancelDate'] = isset($data['CancelDate']) ? $data['CancelDate']: $Canceldate->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";
         $data['confirmReinstatePolicy'] = '';
-        if(isset($data['reinstateAmount'])){
-            $data['reinstateAmount'] = '';
-        }
         if($data['reasonforCsrCancellation'] == 'nonPaymentOfPremium'){
             $this->logger->info("Processing nonPaymentOfPremium");
             $temp = $Canceldate;
@@ -62,8 +60,17 @@ class CancelPolicy extends PolicyDocument
             $temp = $Canceldate;
             $data['ReinstatePolicyPeriod'] = $temp->add(new DateInterval("P45D"))->format("Y-m-d");
         }
-        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));
+        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
+        $this->logger->info('the  destination consists of : '.print_r($dest, true));        
+        if(file_exists($dest['absolutePath'].'Cancellation_Approval.pdf')){
+            $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
+            if( count($workflowInstUuid) > 0 && (isset($workflowInstUuid[0]['process_instance_id']))){
+                $dest['absolutePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
+                $dest['relativePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
+                FileUtils::createDirectory($dest['absolutePath']);
+            }
+        }
         $this->logger->info("execute generate documents");
         $data['documents'] = array("cancel_doc" => $this->generateDocuments($data, $dest, $options, 'template', 'header', 'footer'));
         return $data;
