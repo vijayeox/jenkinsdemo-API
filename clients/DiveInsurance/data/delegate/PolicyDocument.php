@@ -164,12 +164,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
-                if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
+                if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['liabilityCoverage'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
-                    array_push($coverageList,$data['careerCoverage']);
                   if($data['product'] == "Individual Professional Liability"){
-          
+                        array_push($coverageList,$data['careerCoverage']);
                         if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
                             $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
                             array_push($coverageList,$data['scubaFit']);
@@ -187,6 +186,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                         if(isset($data['tecRecEndorsment'])){
                             array_push($coverageList,$data['tecRecEndorsment']);
+                        }
+                    }
+                    if($data['product'] == "Emergency First Response"){
+                        if(isset($data['liabilityCoverage'])){
+                            array_push($coverageList,$data['liabilityCoverage']);
                         }
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
@@ -207,68 +211,27 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['tecRecEndorsment']])){
                             $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
                         }
+                        $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
                     }
-                    $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
+                    if($data['product'] == "Emergency First Response"){
+                        if(isset($result[$data['liabilityCoverage']])){
+                            $temp['LiabilityVal'] = $result[$data['liabilityCoverage']];
+                        }
+                    }
                     if(!empty($previous_data)) {
                     $policy =array();
                     $upgrades = array();
                     $policy =  $previous_data[$length - 1];
-
-                    if(isset($data['previousCoverage'])){
-                        $data['previousCoverage'] = is_array($data['previousCoverage']) ? $data['previousCoverage'] : json_decode($data['previousCoverage'],true);
-                    }else{  
-                        $data['previousCoverage'] = array();
+                    if($data['product'] == "Individual Professional Liability"){
+                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCoverage','previous_careerCoverage','careerCoverage');
+                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousScubaFit','previous_scubaFit','scubaFit');
+                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousTecRec','previous_tecRecEndorsment','tecRecEndorsment');
+                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCylinder','previous_cylinder','cylinder');
+                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousExcess','previous_excessLiability','excessLiability');
                     }
-
-                    if($policy['previous_careerCoverage'] != $data['careerCoverage']){
-                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"careerCoverage" => $result[$data['careerCoverage']]);
-                        array_push($data['previousCoverage'], $upgrades);
+                    if($data['product'] == "Emergency First Response"){
+                        $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousLiabilityCoverage','previous_excessLiability','liabilityCoverage');
                     }
-                    $temp['previousCoverage'] = json_encode($data['previousCoverage']);
-                    if(isset($data['previousScubaFit'])){
-                        $data['previousScubaFit'] = is_array($data['previousScubaFit']) ? $data['previousScubaFit'] : json_decode($data['previousScubaFit'],true);
-                    }else{  
-                        $data['previousScubaFit'] = array();
-                    }
-                    if($policy['previous_scubaFit'] != $data['scubaFit']){
-                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"scubaFit" => $result[$data['scubaFit']]);
-                        array_push($data['previousScubaFit'], $upgrades);
-                    }
-                    $temp['previousScubaFit'] = json_encode($data['previousScubaFit']);
-
-                    if(isset($data['previousTecRec'])){
-                        $data['previousTecRec'] = is_array($data['previousTecRec']) ? $data['previousTecRec'] : json_decode($data['previousTecRec'],true);
-                    }else{  
-                        $data['previousTecRec'] = array();
-                    }
-                    if($policy['previous_tecRecEndorsment'] != $data['tecRecEndorsment']){
-                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"tecRecEndorsment" => $result[$data['tecRecEndorsment']]);
-                        array_push($data['previousTecRec'], $upgrades);
-                    }
-                    $temp['previousTecRec'] = json_encode($data['previousTecRec']);
-                    if(isset($data['previousCylinder'])){
-                        $data['previousCylinder'] = is_array($data['previousCylinder']) ? $data['previousCylinder'] : json_decode($data['previousCylinder'],true);
-                    }else{
-                        $data['previousCylinder'] = array();
-                    }
-
-                    if($policy['previous_cylinder'] != $data['cylinder']){
-                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"cylinderLabel" => $result[$data['cylinder']]);
-                        array_push($data['previousCylinder'], $upgrades);
-                    }
-                    $temp['previousCylinder'] = json_encode($data['previousCylinder']);
-
-                    if(isset($data['previousExcess'])){
-                        $data['previousExcess'] = is_array($data['previousExcess']) ? $data['previousExcess'] : json_decode($data['previousExcess'],true);
-                    }else{  
-                        $data['previousExcess'] = array();
-                    }
-
-                    if($policy['previous_excessLiability'] != $data['excessLiability']){
-                        $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"excessLiabilityLabel" => $result[$data['excessLiability']]);
-                        array_push($data['previousExcess'], $upgrades);
-                    }
-                    $temp['previousExcess'] = json_encode($data['previousExcess']);
                   }
                 }
 
@@ -682,6 +645,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
+        }
+
+        protected function setPreviousCoverages(&$data,&$temp,&$policy,&$upgrades,$coverages,$previousCoverageKeyStore,$previousCoverageKey,$coverageName){
+            if(isset($data[$previousCoverageKeyStore])){
+                $data[$previousCoverageKeyStore] = is_array($data[$previousCoverageKeyStore]) ? $data[$previousCoverageKeyStore] : json_decode($data[$previousCoverageKeyStore],true);
+            }else{  
+                $data[$previousCoverageKeyStore] = array();
+            }
+
+            if($policy[$previousCoverageKey] != $data[$coverageName]){
+                $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),$coverageName => $coverages[$data[$coverageName]]);
+                array_push($data[$previousCoverageKeyStore], $upgrades);
+            }
+            $temp[$previousCoverageKeyStore] = json_encode($data[$previousCoverageKeyStore]);
         }
 
         protected function setPolicyInfo(&$data,$persistenceService,$endorsementOptions = null)
