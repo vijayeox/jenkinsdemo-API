@@ -1,5 +1,5 @@
-name: 'Customer Sales'
-description: 'Customer Sales'
+name: 'Invoice List'
+description: 'Monthly Invoices'
 content:
     -
         type: Dashboard

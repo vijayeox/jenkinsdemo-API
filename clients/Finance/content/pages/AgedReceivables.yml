@@ -1,5 +1,5 @@
-name: 'Aged Receivables'
-description: 'Aged Receivables'
+name: 'Accounts Receivables'
+description: 'Accounts Receivables'
 content:
     -
         type: Dashboard
