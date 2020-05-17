@@ -11,8 +11,8 @@ org:
         name: 'EOX Vantage1'
         uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
         email: helpdesk@vantageagora.com
-        address1: '23611 Chagrin Blvd, Ste 320, Beachwood, Ohio 44122'
-        address2: ''
+        address1: '23611 Chagrin Blvd'
+        address2: 'Ste 320, Beachwood, Ohio 44122'
         city: Beachwood
         state: OH
         zip: 44122
@@ -21,7 +21,6 @@ org:
             firstname: Support
             lastname: Admin
             email: helpdesk@vantageagora.com
-            phone: ''
         preferences:
             currency: USD
             timezone: America/New_York
