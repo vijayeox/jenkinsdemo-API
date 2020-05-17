@@ -197,7 +197,7 @@ content:
                         listItems:
                             - 'In Force'
                             - 'Cancelled'
-                            - 'Rejected'
+                            - 'Expired'
                         placeholder: 'Select Status'
                 -
                     title: 'Policy Start Date'
