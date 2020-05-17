@@ -2388,9 +2388,9 @@
 				"collapsible": false,
 				"tableView": true,
 				"key": "techrecPanel",
-				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n  if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
-				"label": "  ",
+				"label": "  User Attachments",
 				"input": false,
 				"components": [{
 					"type": "documentviewer",
@@ -2399,7 +2399,7 @@
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.TechRec_attachments && data.TechRec_attachments != \"\" && data.TechRec_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
+					"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && data.TechRec_attachments.length > 0){\n   show = true;\n } else {\n show = false; \n}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "TecRec Attachments",
@@ -2414,7 +2414,7 @@
 					"key": "cylinderInspector_attachments1",
 					"calculateValue": "value = (data['cylinderInspector_attachments'])",
 					"dtype": "documentviewer",
-					"customConditional": "if(data.cylinder === 'cylinderInspector' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments != \"\" && data.cylinderInspector_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
+					"customConditional": "if(data.cylinder === 'cylinderInspector'&& data.cylinderInspector_attachments.length > 0){\n  show = true;\n  else {\n show = false; \n}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
@@ -2440,7 +2440,7 @@
 					"inputType": "documentviewer",
 					"input": 1,
 					"tableView": false,
-					"customConditional": "if(data.cylinder === 'cylinderInstructor' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments != \"\" && data.cylinderInstructor_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
+					"customConditional": "if(data.cylinder === 'cylinderInstructor' && data.cylinderInstructor_attachments.length > 0){\n show = true;\n} else {\n show = false; \n}",
 					"protected": true,
 					"persistent": false
 				}, {
@@ -2449,7 +2449,7 @@
 					"calculateValue": "value = (data['scubaFit_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
-					"customConditional": "if(data.scubaFit === 'scubaFitInstructor' && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments != \"\" && data.scubaFit_attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
+					"customConditional": "if(data.scubaFit === 'scubaFitInstructor' && data.scubaFit_attachments.length > 0){show = true;\n  } else {\n show = false; \n}",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
@@ -2465,7 +2465,7 @@
 					"key": "attachments1",
 					"calculateValue": "value = (data['attachments'])",
 					"dtype": "documentviewer",
-					"customConditional": "if(data.attachments && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  }\n  if(typeof data.tecRecEndorsment == \"string\" && data.attachments && data.attachments != \"\" && data.attachments != \"[]\"){\n    show = true;\n  }\n} else {\n show = false; \n}",
+					"customConditional": "if(data.attachments && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n    show = true;\n }\n} else {\n show = false; \n}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
@@ -2998,8 +2998,10 @@
 					"tableView": false
 				}, {
 					"label": "I Agree",
+					"autofocus": true,
 					"tableView": false,
 					"defaultValue": "false",
+					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please let us know if any incidents have occured in the past!",
 						"custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)"
@@ -3529,7 +3531,7 @@
 		"breadcrumbClickable": false,
 		"buttonSettings": {
 			"previous": true,
-			"cancel": false,
+			"cancel": true,
 			"next": true
 		}
 	}, {
@@ -4361,7 +4363,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 292,
+	"_vid": 295,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4382,6 +4384,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-16T10:17:21.984Z",
+	"modified": "2020-05-17T07:30:49.842Z",
 	"machineName": "testdivehub:csrInitiates"
 }
