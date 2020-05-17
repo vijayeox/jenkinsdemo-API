@@ -162,7 +162,7 @@
 				{assign var=listcylinder value=$previousCylinder|json_decode:true}
             		{foreach from=$listcylinder item=$upgradeCylinderData}
                         <p class = "policy_status">
-                            Cylinder Coverage :  {$upgradeCylinderData.cylinderLabel} as of {$upgradeCylinderData.update_date}
+                            Cylinder Coverage :  {$upgradeCylinderData.cylinder} as of {$upgradeCylinderData.update_date}
                         </p>
             		{/foreach}
             	{/if}
@@ -170,7 +170,7 @@
 				{assign var=listLiability value=$previousExcess|json_decode:true}
             		{foreach from=$listLiability item=$upgradeLiabilityData}
                         <p class = "policy_status">
-                            Excess Liability Coverage :  {$upgradeLiabilityData.excessLiabilityLabel} as of {$upgradeLiabilityData.update_date}
+                            Excess Liability Coverage :  {$upgradeLiabilityData.excessLiability} as of {$upgradeLiabilityData.update_date}
                         </p>
             		{/foreach}
             	{/if}
