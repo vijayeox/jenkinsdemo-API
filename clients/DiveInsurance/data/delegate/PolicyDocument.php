@@ -104,7 +104,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
-                'aiheader' => 'EFR_AI_header.html',
+                'aiheader' => 'EFR_AI_header',
                 'aifooter' => 'EFR_AI_footer.html')
         );
 
