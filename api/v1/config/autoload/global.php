@@ -70,6 +70,7 @@ return [
         'authToken' => ''
     ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
+    'ENTITY_FOLDER'=>__DIR__.'/../../data/entity/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
     'PAGE_FOLDER'=>__DIR__.'/../../data/pages/',
     'applicationUrl' => 'http://localhost:8081',
