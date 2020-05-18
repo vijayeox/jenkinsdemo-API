@@ -16,6 +16,7 @@ use Oxzion\Utils\ArrayUtils;
 class FileService extends AbstractService
 {
     protected $fieldService;
+    protected $fieldDetails;
     /**
      * @ignore __construct
      */
@@ -27,6 +28,7 @@ class FileService extends AbstractService
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;
         $this->fieldService = $fieldService;
+        $this->fieldDetails=[];
         // $emailService = new EmailService($config, $dbAdapter, Oxzion\Model\Email);
     }
 
@@ -383,9 +385,13 @@ class FileService extends AbstractService
                 $keyValueFields[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
                 $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
                 $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $keyValueFields[$i]['field_value'] = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
+                $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
                 $keyValueFields[$i]['field_id'] = $field['id'];
                 $keyValueFields[$i]['file_id'] = $fileId;
+                $keyValueFields[$i]['field_value']=$fieldvalue;
+                $valueColumn = $this->getValueColumn($field);
+                $keyValueFields[$i][$valueColumn]=$fieldvalue;
+                $keyValueFields[$i]['field_value_type']=$valueColumn;
                 $i++;
             }
         }
@@ -431,10 +437,11 @@ class FileService extends AbstractService
             if (!empty($fieldList)) {
                 foreach ($fieldList as $key => $val) {
                     $tablePrefix = "tblf" . $prefix;
-                    $fieldId = $this->getFieldDetails($key, $data['entity_id']);
+                    $fieldDetails = $this->getFieldDetails($key, $data['entity_id']);
+                    $valueColumn = $this->getValueColumn($fieldDetails);
                     if (!empty($val) && !empty($fieldId)) {
                         $joinQuery .= "left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
-                        $whereQuery .= $tablePrefix . ".field_id =" . $fieldId['id'] . " and " . $tablePrefix . ".field_value ='" . $val . "' and ";
+                        $whereQuery .= $tablePrefix . ".field_id =" . $fieldDetails['id'] . " and " . $tablePrefix . ".".$valueColumn." ='" . $val . "' and ";
                     }
                     $prefix += 1;
                 }
@@ -447,9 +454,24 @@ class FileService extends AbstractService
         return $returnQuery = array("joinQuery" => $joinQuery, "whereQuery" => $whereQuery);
     }
 
+    public function getValueColumn($field) {
+        $type = $field['data_type'];
+        if ($type=='number' || $type=='Date') {
+            $valueColumn = 'field_value_'.strtolower($type);
+        } elseif ($type=='textarea' || $type=='form') {
+            $valueColumn='field_value';
+        } else {
+            $valueColumn= 'field_value_text';
+        }
+        return $valueColumn;
+    }
+
     public function getFieldDetails($fieldName, $entityId = null)
     {
         try {
+            if (isset($this->fieldDetails[$fieldName])) {
+                return $this->fieldDetails[$fieldName];
+            }
             if ($entityId) {
                 $entityWhere = "entity_id = " . $entityId . "";
             } else {
@@ -465,6 +487,7 @@ class FileService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
+        $this->fieldDetails[$fieldName]=$dataSet[0];
         return $dataSet[0];
     }
 
@@ -563,7 +586,7 @@ class FileService extends AbstractService
             if (!empty($filterParams)) {
                 if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
                     $jsonParams = json_decode($filterParams['filter'], true);
-                    if (isset($filterParamsArray['filter'])) {
+                    if (isset($filterParamsArray['filter'])) {   // This is not correct. Please check
                         $filterParamsArray[0] = $jsonParams;
                     } else {
                         $filterParamsArray = $jsonParams;
@@ -595,7 +618,8 @@ class FileService extends AbstractService
                             $filterOperator = $this->processFilters($val);
                             $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             $subQuery .= " WHERE ";
-                            $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN CAST(" . $tablePrefix . ".field_value AS DATETIME) $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='int') THEN " . $tablePrefix . ".field_value " . (($filterOperator['integerOperation'])) . " '" . $val['value'] . "' ELSE (" . $tablePrefix . ".field_value $queryString) END )))";
+                            //Need to replace this too if performance still sluggish
+                            $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN " . $tablePrefix . ".field_value_date $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='int') THEN " . $tablePrefix . ".field_value_number " . (($filterOperator['integerOperation'])) . " '" . $val['value'] . "' ELSE (" . $tablePrefix . ".field_value_text $queryString) END )))";
                         }
                         $prefix += 1;
                     }
@@ -610,6 +634,8 @@ class FileService extends AbstractService
 
                     foreach ($filterParamsArray[0]['sort'] as $key => $value) {
                         $fieldName = $value['field'];
+                        $fieldDetails = $this->getFieldDetails($fieldName,$entityId);  //We need the EntityId 
+                        $valueColumn = $this->getValueColumn($fieldDetails);
                         if ($sortCount == 0) {
                             $sort .= $fieldName . " " . $value['dir'];
                         } else {
@@ -618,7 +644,7 @@ class FileService extends AbstractService
                         if($fieldName == 'date_created'){
                             $field .= ", of.date_created";
                         }else{
-                            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $fieldName;
+                            $field .= " , (select " . $sortTable . ".".$valueColumn." from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $fieldName;
                         }
                         $sortCount += 1;
                     }
