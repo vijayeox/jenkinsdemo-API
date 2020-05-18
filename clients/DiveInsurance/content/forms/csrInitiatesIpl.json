@@ -382,7 +382,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "initiatedByCsr",
-						"customDefaultValue": "if((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = true;\n} else {\n  value =false;\n}",
+						"customDefaultValue": "if((data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = true;\n} else {\n  value =false;\n}",
 						"calculateServer": false,
 						"key": "initiatedByCsr",
 						"type": "hidden",
@@ -4378,7 +4378,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 302,
+	"_vid": 303,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4399,6 +4399,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-18T10:04:21.743Z",
+	"modified": "2020-05-18T14:00:41.401Z",
 	"machineName": "testdivehub:csrInitiates"
 }
