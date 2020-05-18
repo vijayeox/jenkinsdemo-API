@@ -18,6 +18,7 @@ class Project extends Entity
         'date_created' => 0,
         'date_modified' => 0,
         'isdeleted' => 0,
+        'parent_id' => null
     );
 
     public function validate()
