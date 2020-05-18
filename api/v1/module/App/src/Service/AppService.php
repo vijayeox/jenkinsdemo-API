@@ -21,6 +21,9 @@ use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\ValidationException;
 use Symfony\Component\Yaml\Yaml;
+use Oxzion\Document\Parser\Spreadsheet\SpreadsheetParserImpl;
+use Oxzion\Document\Parser\Spreadsheet\SpreadsheetFilter;
+use Oxzion\Document\Parser\Form\FormRowMapper;
 
 class AppService extends AbstractService
 {
@@ -35,6 +38,7 @@ class AppService extends AbstractService
     private $menuItemService;
     private $pageService;
     private $jobService;
+    private $appDeployOptions;
 
     /**
      * @ignore __construct
@@ -53,6 +57,7 @@ class AppService extends AbstractService
         $this->menuItemService = $menuItemService;
         $this->pageService = $pageService;
         $this->jobService = $jobService;
+        $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job");
     }
 
     /**
@@ -196,10 +201,12 @@ class AppService extends AbstractService
         try {
             $ymlData = $this->loadAppDescriptor($path);
             if(!isset($params)){
-                $params = array("initialize", "entity", "workflow", "form", "page", "menu", "job");
+                $params = $this->appDeployOptions;
             }
-            foreach ($params as $key => $value) {
-                $value = trim($value," ");
+            foreach ($this->appDeployOptions as $key => $value) {
+                if(!in_array($value, $params)){
+                    continue;
+                }
                 switch ($value) {
                     case 'initialize':  $this->processApp($ymlData, $path);
                                         $this->createOrg($ymlData);
@@ -207,7 +214,6 @@ class AppService extends AbstractService
                                         $this->createRole($ymlData);
                                         $this->performMigration($ymlData, $path);
                                         $this->setupAppView($ymlData, $path);
-                                        $this->processSymlinks($ymlData, $path);
                                         break;
                     case 'entity': $this->processEntity($ymlData);
                         break;
@@ -354,6 +360,7 @@ class AppService extends AbstractService
     {
         if (isset($yamlData['form'])) {
             $appUuid = $yamlData['app'][0]['uuid'];
+            $entityReferences = $this->getEntityFieldReferences($yamlData, $path);
             foreach ($yamlData['form'] as &$form) {
                 $form['uuid'] = isset($form['uuid']) ? $form['uuid'] : UuidUtil::uuid();
                 $data = $form;
@@ -366,13 +373,45 @@ class AppService extends AbstractService
                 if (isset($data['template_file'])) {
                     $data['template'] = file_get_contents($path . 'content/forms/' . $data['template_file']);
                 }
-                $count = $this->formService->updateForm($appUuid, $data['uuid'], $data);
+                $fieldReference = NULL;
+                if($entityReferences && isset($entityReferences[$data['entity']])){
+                    $fieldReference = $this->getFieldReference($entityReferences[$data['entity']]);
+                }
+
+                $count = $this->formService->updateForm($appUuid, $data['uuid'], $data, $fieldReference);
                 if ($count == 0) {
-                    $this->formService->createForm($appUuid, $data);
+                    $this->formService->createForm($appUuid, $data, $fieldReference);
                 }
                 $form['uuid'] = isset($form['uuid']) ? $form['uuid'] : $data['uuid'];
             }
         }
+    }
+    private function getFieldReference($path){
+        $parser = new SpreadsheetParserImpl();
+        $parser->init($path);
+        $sheetNames = $parser->getSheetNames();
+        $rowMapper = new FormRowMapper();
+        $filter = new SpreadsheetFilter();
+        $filter->setRows(2);
+        $fieldReference = $parser->parseDocument(array('rowMapper' => $rowMapper,
+                                                       'filter' => $filter));
+        
+        $fieldReference = $fieldReference[$sheetNames[0]];
+        return $fieldReference;
+    }
+    private function getEntityFieldReferences($yamlData, $path){
+        $entityReferences = array();
+        if(isset($yamlData['entity']) && !empty($yamlData['entity'])){
+            foreach ($yamlData['entity'] as $entity) {
+                if(isset($entity['fieldReference'])){
+                    $fileRefPath = $path . 'content/entity/'.$entity['fieldReference'];
+                    if (FileUtils::fileExists($fileRefPath)) {
+                        $entityReferences[$entity['name']] = $fileRefPath;
+                    }
+                }
+            }
+        }
+        return count($entityReferences) > 0 ? $entityReferences : NULL;
     }
 
     public function setupAppView($yamlData, $path)
@@ -510,7 +549,14 @@ class AppService extends AbstractService
         if (file_exists($formsTarget)) {
             $this->setupLink($formsTarget, $formlink);
         }
-
+        $formlink = $this->config['ENTITY_FOLDER'] . $appId;
+        $formsTarget = $path . "content/entity";
+        if (is_link($formlink)) {
+            FileUtils::unlink($formlink);
+        }
+        if (file_exists($formsTarget)) {
+            $this->setupLink($formsTarget, $formlink);
+        }
         $guilink = $this->config['GUI_FOLDER'] . $appId;
         $guiTarget = $path . "view/gui";
         if (is_link($guilink)) {
@@ -969,13 +1015,15 @@ class AppService extends AbstractService
                     $entity['id'] = $entityRec['id'];
                     $entity['uuid'] = $entityRec['uuid'];
                 }
-                foreach ($entity['field'] as $field) {
-                    $result = $this->fieldService->getFieldByName($entity['uuid'], $field['name']);
-                    if ($result == 0) {
-                        $field['entity_id'] = $entity['id'];
-                        $this->fieldService->saveField($appId, $field);
-                    } else {
-                        $this->fieldService->updateField($result['uuid'], $field);
+                if(isset($entity['field'])){
+                    foreach ($entity['field'] as $field) {
+                        $result = $this->fieldService->getFieldByName($entity['uuid'], $field['name']);
+                        if ($result == 0) {
+                            $field['entity_id'] = $entity['id'];
+                            $this->fieldService->saveField($appId, $field);
+                        } else {
+                            $this->fieldService->updateField($result['uuid'], $field);
+                        }
                     }
                 }
                 if (isset($entity['child']) && $entity['child']) {

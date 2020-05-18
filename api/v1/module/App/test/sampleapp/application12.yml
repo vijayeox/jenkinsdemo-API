@@ -1,0 +1,36 @@
+app:
+    -
+        name: MyApp
+        uuid: d77ea120-b028-479b-8c6e-60476b6a4456
+        description: 'App for Testing'
+        category: EXAMPLE_CATEGORY
+        type: 2
+        autostart: true
+org:
+    -
+        name: 'The Companyy'
+        uuid: f0033dc0-126b-40ba-89e0-d3061bdeda4c
+        email: testcomp@gmail.com
+        address1: 'Street Address1'
+        address2: 'Street Address 2'
+        city: 'Bengaluru'
+        state: Karnataka
+        zip: 560009
+        country: 'India'
+        contact:
+            username: testcomp.gmail.com
+            firstname: Admin
+            lastname: User
+            email: testcomp@gmail.com
+        preferences: '{}'
+entity:
+    -
+        name: 'Reference Entity'
+        fieldReference: 'FieldValidationSample.xlsx'
+form:
+    -
+        name: 'For Field Verification'
+        uuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
+        description: 'Page for verify various Form Fields'
+        template_file: 'Form.json'
+        entity: 'Reference Entity'
