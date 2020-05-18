@@ -1398,7 +1398,8 @@
 					}, {
 						"label": "single_limit",
 						"defaultValue": "$1,000,000",
-						"calculateValue": "var singleLimit = 0\nif(data.excessLiability == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
+						"redrawOn": "liabilityCoverage",
+						"calculateValue": "var singleLimit = 0\nif(data.liabilityCoverage == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
 						"calculateServer": false,
 						"key": "single_limit",
 						"type": "hidden",
@@ -3134,7 +3135,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 490,
+	"_vid": 492,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3218,7 +3219,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-18T08:07:14.888Z",
+	"modified": "2020-05-18T19:53:10.141Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
