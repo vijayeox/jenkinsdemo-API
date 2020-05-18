@@ -10,7 +10,7 @@
 	<p><b>Name & Address</b></p>
 	    	{foreach from=$list item=$additional}
 	    		<p class = "ai_list">
-	    			&nbsp&nbsp&nbsp{$additional.name} - {$additional.address},{$additional.city},{$additional.state},{$additional.country}
+	    			&nbsp&nbsp&nbsp{$additional.name} - {$additional.address},{$additional.city},{$additional.state} - {$additional.zip},{$additional.country}
 	    		</p>
     		{/foreach}
 	</div>

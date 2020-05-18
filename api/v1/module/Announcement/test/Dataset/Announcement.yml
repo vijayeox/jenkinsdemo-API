@@ -6,9 +6,11 @@ ox_announcement:
     description: "Test Announcement"
     org_id: 1
     created_date: "2019-06-26 00:00:00"
+    start_date: "1996-12-26 00:00:00"
     end_date: "2025-12-26 00:00:00"
     created_id: 1
     status: 1
+    type: "ANNOUNCEMENT"
   -
     id: 2
     uuid: e66157ee-47de-4ed5-a78e-8a9195033f7a
@@ -16,38 +18,89 @@ ox_announcement:
     description: "Announcemnt Test"
     org_id: 1
     created_date: "2019-06-26 00:00:00"
+    start_date: "1996-12-26 00:00:00"
     end_date: "2025-12-26 00:00:00"
     created_id: 1
     status: 1
     media: 'test'
+    type: "ANNOUNCEMENT"
   -
     id: 3
     uuid: e66157ee-47de-4ed5-a78e-8a9195033abc
     name: "Announcement 3"
     org_id: 1
     created_date: "2019-06-26 00:00:00"
+    start_date: "1996-12-26 00:00:00"
     end_date: "2025-12-26 00:00:00"
     created_id: 1
     status: 0
+    type: "ANNOUNCEMENT"
   -
     id: 4
     uuid: e66157ee-47de-4ed5-a78e-8a9195033efg
     name: "Announcement 4"
     org_id: 2
     created_date: "2019-06-26 00:00:00"
+    start_date: "1996-12-26 00:00:00"
     end_date: "2025-12-26 00:00:00"
     created_id: 1
     status: 1
+    type: "ANNOUNCEMENT"
   -
     id: 5
     uuid: e66157ee-47de-4ed5-a78e-8a9195033bdg
     name: "Announcement 5"
     org_id: 1
     created_date: "2019-06-26 00:00:00"
+    start_date: "1996-12-26 00:00:00"
     end_date: "2019-06-26 00:00:00"
     created_id: 1
     status: 1
-
+    type: "ANNOUNCEMENT"
+  -
+    id: 6
+    uuid: 70d53bec-6e2d-4128-933b-96caa3d88e2a
+    name: "Announcement 6"
+    org_id: 1
+    created_date: "2019-06-26 00:00:00"
+    start_date: "1996-12-26 00:00:00"
+    end_date: "2020-06-26 00:00:00"
+    created_id: 1
+    status: 1
+    type: "HOMESCREEN"
+  -
+    id: 7
+    uuid: 36c8980d-48c2-45fc-b5bc-4407c80f6d71
+    name: "Announcement 7"
+    org_id: 1
+    created_date: "2019-06-26 00:00:00"
+    start_date: "1996-12-26 00:00:00"
+    end_date: "2020-06-26 00:00:00"
+    created_id: 1
+    status: 1
+    type: "HOMESCREEN"
+  -
+    id: 8
+    uuid: f825f46c-ab93-433d-84f8-cfbc118c38a1
+    name: "Announcement 8"
+    org_id: 1
+    created_date: "2019-06-26 00:00:00"
+    start_date: "2030-12-26 00:00:00"
+    end_date: "2020-06-26 00:00:00"
+    created_id: 1
+    status: 1
+    type: "HOMESCREEN"
+  -
+    id: 9
+    uuid: 7ba66332-5f48-4c8a-b0ee-6ebfffda06d7
+    name: "Announcement 9"
+    org_id: 1
+    created_date: "2019-06-26 00:00:00"
+    start_date: "2019-12-26 00:00:00"
+    end_date: "1996-06-26 00:00:00"
+    created_id: 1
+    status: 1
+    type: "HOMESCREEN"
 ox_announcement_group_mapper:
   -
     id: 1

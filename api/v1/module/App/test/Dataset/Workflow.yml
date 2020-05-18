@@ -256,7 +256,7 @@ ox_app_menu:
     uuid: "7b5b3790-df8c-11e9-8a34-2a2ae2dbcce4"
     name: "menu3"
     app_id: 99
-    parent_id: "7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4"
+    parent_id: 1
     icon: "icon3"
     sequence: 3
     date_created: "2019-06-26 00:00:00"

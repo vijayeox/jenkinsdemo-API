@@ -91,12 +91,30 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         if(isset($data['userAgreement'])){
             $data['userAgreement'] = '';
         }
+        if(isset($data['state'])){
+            $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+        }
         $temp = $data;
         $temp['template'] = $this->template[$data['product']];
         $temp['subject'] = 'Your Policy has been Reinstated!';
         $response = $this->dispatch($temp);
         $this->logger->info("Dispatch reinstate policy returning data --- ".json_encode($data));
         return $data;
+    }
+    protected function getStateInShort($state,$persistenceService){
+        $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$state."'";
+        $resultSet = $persistenceService->selectQuery($selectQuery);
+        if($resultSet->count() == 0){
+            return $state;
+        }else{
+            while ($resultSet->next()) {
+                $stateDetails[] = $resultSet->current();
+            }       
+            if(isset($stateDetails) && count($stateDetails)>0){
+                 $state = $stateDetails[0]['state_in_short'];
+            } 
+        }
+        return $state;
     }
 }
 ?>

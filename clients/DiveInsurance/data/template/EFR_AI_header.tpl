@@ -104,18 +104,12 @@
             <p class="info" id="phone2Val" style="margin-bottom:2px;"></p>
             <p class="info">License#: <span class="license_number"></span></p>
           </div>
-          <b class="caption2">Named Insured and Mailing Address:</b>
-          <p class="details">
-            <span class="firstname"></span>&nbsp<span class="lastname"></span>
-          </p>
-          <p class="details"><span class="address1"></span></p>
-          <p class="details"><span class="address2"></span></p>
-          <p class="details">
-            <span class="city"></span>,<span class="state"></span> -&nbsp<span class="zip"></span>
-          </p>
-          <p class="details">
-            <span class="country"></span>
-          </p>
+          <b class = "caption2">Insured's Name and Mailing Address:</b>
+          <p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
+          <p class = "details">{$address1}</p>
+          <p class = "details">{$address2}</p>
+          <p class = "details">{$city},{$state_in_short} - {$zip}</p>
+          <p class = "details">{$country}</p>
         </div>
         <div class="content2">
           <div class="certificate_data">

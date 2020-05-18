@@ -28,122 +28,27 @@ class EndorsementRatecard extends AbstractAppDelegate
         if($dateDifference == 1){
             $data['update_date'] = $data['start_date'];
         }
-        if(isset($data['liabilityCoverageName'])){
-            $data['careerCoverage'] = $data['liabilityCoverageName'];
+        if(isset($data['liabilityCoverage'])){
+            $data['excessLiability'] = $data['liabilityCoverage'];
         }
-        if(isset($data['upgradeCareerCoverage']) && (!empty($data['upgradeCareerCoverage']))){
-            $this->logger->info("STEP 1");
-            if(!isset($data['previous_careerCoverage']) || !is_array($data['previous_careerCoverage'])){
-                $this->logger->info("STEP 2");
-                $data['previous_careerCoverage'] = array();
-            }
-            if(!is_array($data['upgradeCareerCoverage'])){
-                $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);
-                $data['upgradeCareerCoverage'] = $coverageOnCsrReview;
-            }
-            $this->logger->info("Checking----------".json_encode($data));
-            if($data['CSRReviewRequired'] == "" || $data['CSRReviewRequired'] == false || $data['CSRReviewRequired'] ==='false'){
-                if(count($data['previous_careerCoverage'])>0){
-                    $careerCoverages = array_column($data['previous_careerCoverage'], 'value');
-                    $careerCoverageExists = array_search($data['upgradeCareerCoverage']['value'], $careerCoverages);
-                    if(!$careerCoverageExists){
-                        $data['previous_careerCoverage'][] = array('value' => $data['upgradeCareerCoverage']['value'],'label' =>$data['upgradeCareerCoverage']['label'],'update_date' => $data['update_date']);
-                    }
-                }
-                $endorsementCoverages[$data['upgradeCareerCoverage']['value']] = $data['upgradeCareerCoverage']['label'];
-                $premiumRateCardDetails[$data['upgradeCareerCoverage']['value']] = 0.00;
-                $previousKey = $data['upgradeCareerCoverage']['value'];
-
-            }else{
-                $count = count($data['previous_careerCoverage']);
-                $previousKey = $data['previous_careerCoverage'][$count - 1]['value'];            
-            }
-        } else {
-            $previousKey = $data['careerCoverage'];
-            $premiumRateCardDetails[$data['careerCoverage']] = 0.00;
-        }
+        $previousKey = $data['careerCoverage'];
+        $premiumRateCardDetails[$data['careerCoverage']] = 0.00;
         
         if($data['product'] == 'Individual Professional Liability'){
             $data['previous_scuba'] = isset($data['scubaFit'])? $data['scubaFit']: '';
             $data['previous_equipmentLiability'] = isset($data['equipment'])?$data['equipment'] :'' ;
-            if(isset($data['upgradeExcessLiability']) && (!empty($data['upgradeExcessLiability']))){
-                $this->logger->info("STEP 1");
-                if(!isset($data['previous_excessLiability']) || !is_array($data['previous_excessLiability'])){
-                    $this->logger->info("STEP 2");
-                    $data['previous_excessLiability'] = array();
-                }
-                if(!is_array($data['upgradeExcessLiability'])){
-                    $coverageOnCsrReview = json_decode($data['upgradeExcessLiability'],true);
-                    $data['upgradeExcessLiability'] = $coverageOnCsrReview;
-                }
-                $this->logger->info("Checking11----------".json_encode($data));
-                if($data['CSRReviewRequired'] == "" || $data['CSRReviewRequired'] == false || $data['CSRReviewRequired'] ==='false'){
-                    if(count($data['previous_excessLiability'])>0){
-                        $excessLiabilitys = array_column($data['previous_excessLiability'], 'value');
-                        $excessLiabilitysExists = array_search($data['upgradeExcessLiability']['value'], $excessLiabilitys);
-                        if(!$excessLiabilitysExists){
-                            $data['previous_excessLiability'][] = array('value' => $data['upgradeExcessLiability']['value'],'label' =>$data['upgradeExcessLiability']['label'],'update_date' => $data['update_date']);
-                        }
-                    }
-                    $endorsementExcessLiability[$data['upgradeExcessLiability']['value']] = $data['upgradeExcessLiability']['label'];
-                    $premiumRateCardDetails[$data['upgradeExcessLiability']['value']] = 0.00;
-                    $previousKeyExcessLiability = $data['upgradeExcessLiability']['value'];
-                }else{
-                    $count = count($data['previous_excessLiability']);
-                    if($count > 0){
-                        $previousKeyExcessLiability = $data['previous_excessLiability'][$count - 1]['value'];     
-                    } else{
-                        $previousKeyExcessLiability = $data['excessLiability'];
-                    }    
-                    $premiumRateCardDetails[$previousKeyExcessLiability] = 0.00;  
-                }
-            }else {
-                $previousKeyExcessLiability = $data['excessLiability'];
-                $premiumRateCardDetails[$data['excessLiability']] = 0.00;
-            }
-            if(isset($data['upgradecylinder']) && (!empty($data['upgradecylinder']))){
-                if(!isset($data['previous_cylinder']) || !is_array($data['previous_cylinder'])){
-                    $this->logger->info("STEP 2");
-                    $data['previous_cylinder'] = array();
-                }
-                if(!is_array($data['upgradecylinder'])){
-                    $coverageOnCsrReview = json_decode($data['upgradecylinder'],true);
-                    $data['upgradecylinder'] = $coverageOnCsrReview;
-                }
-                $this->logger->info("Checking----------".json_encode($data));
-                if($data['CSRReviewRequired'] == "" || $data['CSRReviewRequired'] == false || $data['CSRReviewRequired'] ==='false'){
-                    if(count($data['previous_cylinder'])>0){
-                        $calendars = array_column($data['previous_cylinder'], 'value');
-                        $calendarsExists = array_search($data['upgradecylinder']['value'], $calendars);
-                        if(!$calendarsExists){
-                            $data['previous_cylinder'][] = array('value' => $data['upgradecylinder']['value'],'label' =>$data['upgradecylinder']['label'],'update_date' => $data['update_date']);
-                        }
-                    }
-                    $premiumRateCardDetails[$data['upgradecylinder']['value']] = 0.00;
-                    $previousKeyCylinder = $data['upgradecylinder']['value'];
-
-                }else{
-                    $count = count($data['previous_cylinder']);
-                    if($count > 0){
-                        $previousKeyCylinder = $data['previous_cylinder'][$count - 1]['value'];     
-                    }     else{
-                        $previousKeyCylinder = $data['cylinder'];
-                    }    
-                    
-                        $premiumRateCardDetails[$previousKeyCylinder] = 0.00;  
-                }
-            }else {
-                $previousKeyCylinder = $data['cylinder'];
-                $premiumRateCardDetails[$data['cylinder']] = 0.00;
-            }
+            $previousKeyExcessLiability = $data['excessLiability'];
+            $premiumRateCardDetails[$data['excessLiability']] = 0.00;
+            $previousKeyCylinder = $data['cylinder'];
+            $premiumRateCardDetails[$data['cylinder']] = 0.00;
             $selectCylinder = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$previousKeyCylinder."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
             $this->logger->info("Executing Endorsement Rate Card Cylinder Query ".$selectCylinder);
             $resultCylinder = $persistenceService->selectQuery($selectCylinder);
             while ($resultCylinder->next()) {
                 $rate = $resultCylinder->current();
                 if(isset($rate['key'])){
-                    if((!isset($data['upgradecylinder']) || empty($data['upgradecylinder']))&& $rate['key'] == $previousKeyCylinder){
-                        $data['upgradecylinder'] = array('value'=>$previousKeyCylinder,'label'=>$rate['coverage']);
+                    if((!isset($data['cylinder']) || empty($data['cylinder']))&& $rate['key'] == $previousKeyCylinder){
+                        $data['cylinder'] = array('value'=>$previousKeyCylinder,'label'=>$rate['coverage']);
                         if(isset($data['previous_cylinder'])){
                             if(is_string($data['previous_cylinder'])){
                                 $data['previous_cylinder'] = array();
@@ -172,9 +77,9 @@ class EndorsementRatecard extends AbstractAppDelegate
             while ($resultExcessLiability->next()) {
                 $rate = $resultExcessLiability->current();
                 if(isset($rate['key'])){
-                    if((!isset($data['upgradeExcessLiability']) || empty($data['upgradeExcessLiability'])) 
+                    if((!isset($data['excessLiability']) || empty($data['excessLiability'])) 
                         && $rate['key'] == $previousKeyExcessLiability){
-                        $data['upgradeExcessLiability'] = array('value'=>$previousKeyExcessLiability,'label'=>$rate['coverage']);
+                        $data['excessLiability'] = array('value'=>$previousKeyExcessLiability,'label'=>$rate['coverage']);
                     if(isset($data['previous_excessLiability'])){
                         if(is_string($data['previous_excessLiability'])){
                             $data['previous_excessLiability'] = array();
@@ -232,9 +137,9 @@ class EndorsementRatecard extends AbstractAppDelegate
         while ($result->next()) {
             $rate = $result->current();
             if(isset($rate['key'])){
-                if((!isset($data['upgradeCareerCoverage']) || empty($data['upgradeCareerCoverage'])) 
+                if((!isset($data['careerCoverage']) || empty($data['careerCoverage'])) 
                     && $rate['key'] == $previousKey){
-                    $data['upgradeCareerCoverage'] = array('value'=>$previousKey,'label'=>$rate['coverage']);
+                    $data['careerCoverage'] = array('value'=>$previousKey,'label'=>$rate['coverage']);
                 if(isset($data['previous_careerCoverage'])){
                     if(is_string($data['previous_careerCoverage'])){
                         $data['previous_careerCoverage'] = array();
@@ -264,6 +169,30 @@ class EndorsementRatecard extends AbstractAppDelegate
             $data['endorsementCoverage'] = $endorsementCoverages;
             $data['endorsementExcessLiability'] = $endorsementExcessLiability;
             $data['endorsementCylinder'] = $endorsementCylinder;
+            if(isset($data['paymentOptions'])){
+                $data['paymentOptions'] = "";
+            }
+            if(isset($data['chequeNumber'])){
+                $data['chequeNumber'] = "";
+            }
+            if(isset($data['chequeConsentFile'])){
+                $data['chequeConsentFile'] = "";
+            }
+            if(isset($data['orderId'])){
+                $data['orderId'] = "";
+            }
+            if(isset($data['transactionId'])){
+                $data['transactionId'] = "";
+            }
+            if(isset($data['approved'])){
+                $data['approved'] = "";
+            }
+            if(isset($data['endorsement_options'])){
+                $data['endorsement_options'] = "";
+            }
+            if(isset($data['disableOptions'])){
+                $data['disableOptions'] = "";
+            }
             $this->logger->info("Data before merge".print_r($data,true)); 
             $this->logger->info("Premium rate card details".print_r($premiumRateCardDetails,true)); 
             $returnArray = array_merge($data,$premiumRateCardDetails);

@@ -6,7 +6,7 @@
 	"autostart":true,
 	"defaultAppforOrgs":false,
 	"icon": "icon.png",
-	"icon_white": "icon_white.png",
+	"icon_white": "icon-white.png",
 	"title": {
 		"en_EN": "Finance"
 	},

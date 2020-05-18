@@ -1,4 +1,8 @@
-callback.URL = "http4://${System.getenv("HOST")}:8080"
+if(System.getenv("HOST")){
+    callback.URL = "http4://${System.getenv("HOST")}:8080"
+} else {
+    callback.URL = "http4://localhost:8080"
+}
 routes {
     route = [
         ['from':'activemq:topic:ORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/addorg"]],

@@ -23,12 +23,7 @@ class EFRToIPLUpgrade extends PolicyCheck
                                          (!empty($fileData['endorAmount']) ? $fileData['endorAmount'] : 0.00);
             $new_data['product'] = "Individual Professional Liability";
             $new_data['disableUserInfoEdit'] = true;
-            if (isset($fileData['upgradeCareerCoverage'])) {
-                $parseData = get_object_vars(json_decode($fileData['upgradeCareerCoverage']));
-                $new_data['excessLiability'] = (str_replace("liabilityCoverage", "excessLiabilityCoverage", $parseData['value']));
-            } else {
-                $new_data['excessLiability'] = (str_replace("liabilityCoverage", "excessLiabilityCoverage", $fileData['liabilityCoverageName']));
-            }
+            $new_data['excessLiability'] = (str_replace("liabilityCoverage", "excessLiabilityCoverage", $fileData['excessLiability']));
             $new_data['padi']= isset($fileData['padi']) ? $fileData['padi'] : NULL ;
             $new_data['padiNotFound']= isset($fileData['padiNotFound']) ? $fileData['padiNotFound'] : NULL ;
             $new_data['padiNotFoundCsrReview']= isset($fileData['padiNotFoundCsrReview']) ? $fileData['padiNotFoundCsrReview'] : NULL ;

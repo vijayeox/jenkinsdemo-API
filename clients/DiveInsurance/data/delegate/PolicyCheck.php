@@ -26,8 +26,7 @@ class PolicyCheck extends FileDelegate
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['product']);
         $policyList = $this->getFileList($params,$filterParams);
         if(count($policyList['data']) > 0){
-            $return['policy_exists'] = true;
-            return $return;
+            $data['policy_exists'] = true;
         } else {
             $data['policy_exists'] = false;
         }

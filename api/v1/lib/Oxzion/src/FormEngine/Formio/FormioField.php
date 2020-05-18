@@ -43,6 +43,7 @@ class FormioField
                                           "selectboxes" => "maxSelectedCount",
                                           "datagrid" => "maxLength",
                                           "year" => "maxYear"),
+                          'DECIMAL_PLACES' => 'decimalLimit',
                           "PATTERN" => "pattern",
                           "FORMAT" => array("datetime" => "format",
                                             "time" => "format",
@@ -168,8 +169,7 @@ class FormioField
         }else if(isset($fieldReference[$field['name']])) {
             $fieldRef = $fieldReference[$field['name']];
         }else{
-            print_r($field);
-            $this->error[] = "Unexpected Field : ".$field['text']."(".$field['name'].")";
+            $this->error[] = "Field ".$field['name']." Unexpected";
             return; 
         }
         $name = $field['name'];
@@ -247,13 +247,13 @@ class FormioField
                     continue;
                 }else if($field['type'] == 'select'){
                     if(!isset($fieldObj['data']['values']) ){
-                        $this->error[] = "No options provcided for $name, expected ".count($items);
+                        $this->error[] = "Field $name - No options provcided expected ".count($items);
                         continue;
                     }
                     $dataValues = $fieldObj['data']['values'];
                 }else if($field['type'] == 'radio' || $field['type'] == 'selectboxes' || $field['type'] == 'survey'){
                     if(!isset($fieldObj['values']) ){
-                        $this->error[] = "No options provcided for $name, expected ".count($items);
+                        $this->error[] = "Field $name - No options provcided expected ".count($items);
                         continue;
                     }
                     $dataValues = $fieldObj['values'];
@@ -290,10 +290,7 @@ class FormioField
                     if($fieldObj['type'] == 'datagrid'){
                         continue;
                     }
-                    // print("Processing Default for $fieldProp\n");
-                    // print_r($fieldObj);
                     $items = $fieldRef['ITEMS'];
-                    //print_r($items);
                     foreach ($fieldObj[$fieldProp] as $key => $value) {
                         $this->validateFieldProperty($name, $items[$key], $fieldObj[$fieldProp], 'DEFAULT', $key);
                     }
@@ -309,14 +306,7 @@ class FormioField
     private function validateFieldProperty($fieldName, $fieldRef, $field, $refKey, $fieldKey){
         $fieldProp = $this->checkPropertyValue($field, $fieldKey);
         $reference = $this->checkPropertyValue($fieldRef, $refKey);
-        // if($fieldName == 'additionalInsured' && $refKey == 'MIN'){
-        //     print_r($field);
-        //     print_r($fieldRef);
-        //     print_r($fieldKey."\n");
-        //     print_r($refKey."\n");
-        //     print_r($fieldProp."\n");
-        //     print_r($reference."\n");
-        // }
+        
         if($reference != $fieldProp){
 
             $this->error[] = $this->getErrorMessage($fieldKey, $fieldName, $reference, $fieldProp);

@@ -68,6 +68,9 @@ class AnnouncementController extends AbstractApiController
         } catch (ServiceException $e) {
             $this->log->error("-> \nServiceException -".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
+        } catch (AccessDeniedException $e) {
+            $this->log->error("-> \nServiceException -".$e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 401);
         } catch (Exception $e) {
             $this->log->error("-> \nCreate announcement -".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);

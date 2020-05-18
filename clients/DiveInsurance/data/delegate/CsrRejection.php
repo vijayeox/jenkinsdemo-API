@@ -24,8 +24,27 @@ class CsrRejection extends DispatchNotification {
         $this->logger->info("Rejection Policy Notification");
         $data['template'] = $this->template[$data['product']];
         $data['subject'] = 'Rejection of Policy';
+        if(isset($data['state'])){
+            $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+        }
         $response = $this->dispatch($data);
         return $response;
+    }
+
+    protected function getStateInShort($state,$persistenceService){
+        $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$state."'";
+        $resultSet = $persistenceService->selectQuery($selectQuery);
+        if($resultSet->count() == 0){
+            return $state;
+        }else{
+            while ($resultSet->next()) {
+                $stateDetails[] = $resultSet->current();
+            }       
+            if(isset($stateDetails) && count($stateDetails)>0){
+                 $state = $stateDetails[0]['state_in_short'];
+            } 
+        }
+        return $state;
     }
 }
 ?>

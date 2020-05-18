@@ -44,7 +44,7 @@
 				<hr></hr>
 			</div>
 		</div>
-		<div class="spacing_efr">&nbsp</div>
+		<div class="spacing">&nbsp</div>
 		<hr class="hrtag"></hr>
     	<div class="i_type">
       		<div class="i_type1">
@@ -61,9 +61,9 @@
 			            <p class = "ins_font">${$annual_aggregate|number_format}</p>						
 		        </div>
 	     	</div>
-	     	<div class="i_type2_efr">
+	     	<!-- <div class="i_type2_efr">
 		       &nbsp
-     		</div>
+     		</div> -->
     	</div>
 		<br/>
     	
@@ -73,10 +73,15 @@
 		</p></center>
 		<hr class = "spacing1"></hr>
 		<div class = "second_content">
-			{if isset($update)}
+				{assign var=list value=$previousLiabilityCoverage|json_decode:true}
+				{if !empty($previousLiabilityCoverage)}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
-				<p class = "policy_status">Status of Insured : {$endrosement_status} as of {$update_date}</p>
-			{/if}
+            		{foreach from=$list item=$upgradeData}
+                        <p class = "policy_status">
+                            Status of Insured:  {$upgradeData.liabilityCoverage} as of {$upgradeData.update_date}
+                        </p>
+            		{/foreach}
+            	{/if}
 			<hr class = "hr_efr"></hr>
 			<p class = "policy_notice">
 				The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688. The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description of the terms, conditions and exclusions of the policy. This certificate does not amend, alter or extend the coverage afforded by the policy referenced on this certificate.
@@ -296,6 +301,10 @@
 			{elseif $state == 'Wyoming'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/EFR/WY.tpl"}</b>
+				</p></center>
+			{else}
+				<center><p class = "notice">
+					<b>{include file = "{$smarty.current_dir}/EFR/International.tpl"}</b>
 				</p></center>
 			{/if}
 		</div>

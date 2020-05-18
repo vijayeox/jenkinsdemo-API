@@ -3,10 +3,11 @@
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
             <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/><br/>
-                <p>{$firstname} {$lastname}<br/>
-                {$address1}<br/>
-				{$address2}<br/>
-				{$city},{$state},{$zip}<br/></p>
+                 <p>{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}<br/>
+					{$address1}<br/>
+					{$address2}<br/>
+					{$city},{$state_in_short} - {$zip}<br/>
+					{$country}<br/></p>
 				<br/>
 				<p>This mail is regarding the rejection of your policy. Your policy is rejected because of the following reason:<br/>{$rejectionReason}</p><br/>
 				

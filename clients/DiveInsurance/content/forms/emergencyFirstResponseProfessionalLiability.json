@@ -959,8 +959,9 @@
 								"label": "Home or Work Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"customMessage": "Please enter a valid Home or Work Phone number"
 								},
 								"key": "home_phone_number",
 								"logic": [{
@@ -1058,9 +1059,10 @@
 								"label": "Mobile Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number"
 								},
 								"key": "phone_number",
 								"logic": [{
@@ -1136,7 +1138,11 @@
 						"placeholder": " ",
 						"spellcheck": true,
 						"tableView": true,
-						"errorLabel": "Please enter a valid Fax number",
+						"calculateServer": false,
+						"validate": {
+							"customMessage": "Please enter a valid Fax number"
+						},
+						"errorLabel": "Fax",
 						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
@@ -1662,7 +1668,7 @@
 			}, {
 				"label": "attachmentFields",
 				"customDefaultValue": "value = [\"attachments\"];",
-				"calculateValue": "value = [\"attachments\", \"chequeConsentForm\"];",
+				"calculateValue": "value = [\"attachments\", \"chequeConsentFile\"];",
 				"calculateServer": false,
 				"key": "attachmentsFieldnames",
 				"type": "hidden",
@@ -1932,7 +1938,7 @@
 					"lockKey": true,
 					"tableView": false
 				}, {
-					"label": "Data Grid",
+					"label": "Incidents",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
 					"addAnother": "Add More",
@@ -1942,6 +1948,18 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"nameofpersoninjured": "",
+						"date_of_incident": "",
+						"locationofincident": "",
+						"reportcanbeobtained": "",
+						"briefSummary": "",
+						"page4Panel2ColumnsIncidentreportfiled": "",
+						"page4Panel2Columns2Fatality": "",
+						"page4Panel2Columns2SeriousInjury": "",
+						"page4Panel2ColumnsInTraining": ""
+					}],
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -2849,7 +2867,7 @@
 							}],
 							"clearOnHide": false,
 							"calculateServer": false,
-							"key": "chequeConsentForm",
+							"key": "chequeConsentFile",
 							"type": "file",
 							"input": true
 						}],
@@ -3108,7 +3126,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 486,
+	"_vid": 489,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3192,7 +3210,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-11T07:17:11.773Z",
+	"modified": "2020-05-16T21:26:26.232Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
