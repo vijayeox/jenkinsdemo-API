@@ -614,7 +614,7 @@ class FileService extends AbstractService
                             } else {
                                 $subQuery = " of.id in ";
                             }
-                            $subQuery .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as " . $val['field'] . $tablePrefix . " on( " . $val['field'] . $tablePrefix . ".id = " . $tablePrefix . ".field_id )";
+                            $subQuery .= " (select ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as " . $val['field'] . $tablePrefix . " on( " . $val['field'] . $tablePrefix . ".id = " . $tablePrefix . ".field_id )";
                             $filterOperator = $this->processFilters($val);
                             $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             $subQuery .= " WHERE ";
@@ -655,7 +655,7 @@ class FileService extends AbstractService
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $countQuery = "select DISTINCT count(of.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
+                $countQuery = "select count(of.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
