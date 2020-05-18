@@ -43,6 +43,7 @@ class FormioField
                                           "selectboxes" => "maxSelectedCount",
                                           "datagrid" => "maxLength",
                                           "year" => "maxYear"),
+                          'DECIMAL_PLACES' => 'decimalLimit',
                           "PATTERN" => "pattern",
                           "FORMAT" => array("datetime" => "format",
                                             "time" => "format",
