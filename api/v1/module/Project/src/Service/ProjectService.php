@@ -141,6 +141,16 @@ class ProjectService extends AbstractService
             }
             $sql = $this->getSqlObject();
             $form = new Project();
+            $parent_uuid = null;
+            if(isset($data['parent_id']))
+            {
+                $parentId = $this->getIdFromUuid('ox_project', $data['parent_id']);
+                $parent_uuid = $data['parent_id'];
+                $data['parent_id'] = $parentId;
+                if($parentId == 0){
+                    throw new ServiceException("Project parent is invalid", "project.parent.invalid");
+                }
+            }
             //Additional fields that are needed for the create
             $data['uuid'] = "p" . UuidUtil::uuid();
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -174,7 +184,7 @@ class ProjectService extends AbstractService
         $insert->values($insert_data);
         $result = $this->executeUpdate($insert);
         if (isset($data['name'])) {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'manager_login' => $data['manager_login'])), 'PROJECT_ADDED');
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'parent_identifier' => $parent_uuid, 'manager_login' => $data['manager_login'])), 'PROJECT_ADDED');
         }
         return $count;
     }
@@ -187,6 +197,15 @@ class ProjectService extends AbstractService
                 throw new AccessDeniedException("You do not have permissions to edit the project");
             } else {
                 $data['org_id'] = $this->getIdFromUuid('ox_organization', $orgId);
+            }
+        }
+        $parent_uuid = null;
+        if (isset($data['parent_id'])){
+            $parentId = $this->getIdFromUuid('ox_project', $data['parent_id']);
+            $parent_uuid = $data['parent_id'];
+            $data['parent_id'] = $parentId;
+            if($parentId == 0){
+                throw new ServiceException("Project parent is invalid", "project.parent.invalid");
             }
         }
         $obj = $this->table->getByUuid($id, array());
@@ -229,9 +248,9 @@ class ProjectService extends AbstractService
             throw $e;
         }
         if (isset($data['manager_login'])) {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'manager_login' => $data['manager_login'])), 'PROJECT_UPDATED');
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'],'parent_identifier' => $parent_uuid, 'manager_login' => $data['manager_login'])), 'PROJECT_UPDATED');
         } else {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'])), 'PROJECT_UPDATED');
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'],'parent_identifier' => $parent_uuid)), 'PROJECT_UPDATED');
         }
         return $count;
     }
@@ -249,6 +268,14 @@ class ProjectService extends AbstractService
         }
         $form = new Project();
         $data = $obj->toArray();
+        if (!isset($data['parent_id']) || !empty($data['parent_id'])){
+            $select = "SELECT id from ox_project where parent_id = '" . $data['parent_id'] . "'";
+            $result = $this->executeQueryWithParams($select)->toArray();
+            if(!$result){
+                if(!(isset($params['force_flag']) && ($params['force_flag'] == true || $params['force_flag'] == "true")))
+                    throw new ServiceException("Project has subprojects", "project.not.found");
+            }
+        }
         $data['uuid'] = $params['projectUuid'];
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
@@ -262,6 +289,11 @@ class ProjectService extends AbstractService
             if ($count == 0) {
                 $this->rollback();
                 throw new ServiceException("Failed to Delete", "failed.project.delete");
+                $update = $this->getSqlObject()
+                    ->update('ox_project')
+                    ->set(['isdeleted' => 1])
+                    ->where(['parent_id' => $data['id']]);
+                $result = $this->executeQuery($update);
             }
         } catch (Exception $e) {
             $this->rollback();
