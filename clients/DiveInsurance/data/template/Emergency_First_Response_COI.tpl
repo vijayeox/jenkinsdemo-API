@@ -73,7 +73,7 @@
 		</p></center>
 		<hr class = "spacing1"></hr>
 		<div class = "second_content">
-			{if isset($previousLiabilityCoverage) }{
+			{if isset($previousLiabilityCoverage) }
 				{assign var=list value=$previousLiabilityCoverage|json_decode:true}
 				{if !empty($previousLiabilityCoverage)}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
