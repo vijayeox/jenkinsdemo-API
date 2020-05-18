@@ -257,17 +257,17 @@ class SpreadsheetParserTest extends TestCase{
         $this->assertEquals(3, count($data[$sheetNames[0]]['programmingLanguages']['FIELDS']));
         $this->assertEquals(2, count($data[$sheetNames[0]]['programmingLanguages']['FIELDS']['proficiency']['ITEMS']));
         $this->assertEquals(3, count($data[$sheetNames[0]]['dayAsDate']['ITEMS'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['day'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['month'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['year'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['day'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['month'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['year'])); 
         $this->assertEquals(3, count($data[$sheetNames[0]]['monthYear']['ITEMS'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['monthYear']['ITEMS']['day'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['monthYear']['ITEMS']['month'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['monthYear']['ITEMS']['year'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['day'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['month'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['year'])); 
         $this->assertEquals(3, count($data[$sheetNames[0]]['year']['ITEMS'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['year']['ITEMS']['day'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['year']['ITEMS']['month'])); 
-        $this->assertEquals(10, count($data[$sheetNames[0]]['year']['ITEMS']['year'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['day'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['month'])); 
+        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['year'])); 
         $this->assertEquals(2, count($data[$sheetNames[0]]['boat_usage_survey']['ITEMS']));       
         $this->assertEquals(2, count($data[$sheetNames[0]]['boat_usage_survey']['FIELDS']));       
     }

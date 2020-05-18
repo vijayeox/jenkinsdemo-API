@@ -104,7 +104,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
-                'aiheader' => 'EFR_AI_header.html',
+                'aiheader' => 'EFR_AI_header',
                 'aifooter' => 'EFR_AI_footer.html')
         );
 
@@ -215,7 +215,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                     if($data['product'] == "Emergency First Response"){
                         if(isset($result[$data['liabilityCoverage']])){
-                            $temp['LiabilityVal'] = $result[$data['liabilityCoverage']];
+                            $temp['liabilityVal'] = $result[$data['liabilityCoverage']];
                         }
                     }
                     if(!empty($previous_data)) {

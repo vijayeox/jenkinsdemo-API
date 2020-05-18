@@ -20,6 +20,12 @@ class SetupEndorsement extends AbstractAppDelegate
             $policy =  array();
             $update_date =  date("Y-m-d");
             $start_date = date($data['start_date']);
+            if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
+                $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
+                $data['initiatedByCsr'] = true;
+            }else{
+                $data['initiatedByCsr'] = false;
+            }
             if($start_date  > $update_date){
                 $policy['update_date'] = $data['update_date'] = $data['start_date'];
             }else{

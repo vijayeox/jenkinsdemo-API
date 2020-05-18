@@ -15,10 +15,6 @@ return [
                         'controller' => Controller\CommentController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_COMMENT_WRITE',
-                            'post'=> 'MANAGE_COMMENT_WRITE',
-                            'delete'=> 'MANAGE_COMMENT_WRITE',
-                            'get'=> 'MANAGE_COMMENT_READ',
                         ],
                     ],
                 ],
@@ -32,7 +28,6 @@ return [
                         'method' => 'GET',
                         'action' => 'getChildList',
                         'access' => [
-                            'getChildList'=>'MANAGE_PROJECT_WRITE'
                         ],
                     ],
                 ],
@@ -45,10 +40,6 @@ return [
                         'controller' => Controller\SubscriberController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_COMMENT_WRITE',
-                            'post'=> 'MANAGE_COMMENT_WRITE',
-                            'delete'=> 'MANAGE_COMMENT_WRITE',
-                            'get'=> 'MANAGE_COMMENT_READ',
                         ],
                     ],
                 ],

@@ -32,7 +32,7 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
-       "icon.png"
+       "icon.png","icon-white.png"
     ]),
     new MiniCssExtractPlugin({
       filename: "[name].css",

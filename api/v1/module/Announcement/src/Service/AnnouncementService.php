@@ -65,9 +65,7 @@ class AnnouncementService extends AbstractService
                 $data['org_id'] = $this->getIdFromUuid('ox_organization', $params['orgId']);
             }
         } else{
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
                 $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-            }
         }
 
         if(isset($data['type'])) {
@@ -297,10 +295,8 @@ class AnnouncementService extends AbstractService
             } else {
                 $params['orgId'] = $this->getIdFromUuid('ox_organization', $params['orgId']);
             }
-        } else{
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
-                $orgId = AuthContext::get(AuthConstants::ORG_ID);
-            }
+        } else {
+                $params['orgId'] = AuthContext::get(AuthConstants::ORG_ID);
         }
         $obj = $this->table->getByUuid($uuid, array());
         $this->beginTransaction();

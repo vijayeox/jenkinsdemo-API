@@ -499,6 +499,7 @@ class FileService extends AbstractService
 
                 }
             }
+            $workflowJoin = "";
             if (isset($params['workflowId'])) {
 
                 // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
@@ -512,6 +513,7 @@ class FileService extends AbstractService
                 } else {
                     $appFilter .= " AND ow.id = :workflowId";
                     $queryParams['workflowId'] = $workflowId;
+                    $workflowJoin = "left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id left join ox_workflow as ow on ow.id = wd.workflow_id";
                 }
             }
             if (isset($params['gtCreatedDate'])) {
@@ -549,9 +551,7 @@ class FileService extends AbstractService
                 $userWhere = "";
             }
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
-            $fromQuery .= "left join (select wii.* from ox_workflow_instance as wii inner join (select file_id, max(date_created) as date_created from ox_workflow_instance group by file_id) as wid on wii.file_id = wid.file_id and wii.date_created = wid.date_created) as wi on of.id = wi.file_id
-            left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id
-            left join ox_workflow as ow on ow.id = wd.workflow_id";
+            $fromQuery .= "left join (select wii.* from ox_workflow_instance as wii inner join (select file_id, max(date_created) as date_created from ox_workflow_instance group by file_id) as wid on wii.file_id = wid.file_id and wii.date_created = wid.date_created) as wi on of.id = wi.file_id $workflowJoin";
             $prefix = 1;
             $whereQuery = "";
             $joinQuery = "";
@@ -659,11 +659,11 @@ class FileService extends AbstractService
 
     public function getFileDocumentList($params)
     {
-        $selectQuery = 'select ox_field.text, ox_file_attribute.* from ox_file
+        $selectQuery = 'select distinct ox_field.text, ox_file_attribute.* from ox_file
         inner join ox_file_attribute on ox_file_attribute.file_id = ox_file.id
         inner join ox_field on ox_field.id = ox_file_attribute.field_id
         inner join ox_app on ox_field.app_id = ox_app.id
-        where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.data_type in (:dataType1 , :dataType2)
+        where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.type in (:dataType1 , :dataType2)
         and ox_file.uuid=:fileUuid';
         $selectQueryParams = array('organization' => AuthContext::get(AuthConstants::ORG_ID),
             'appUuid' => $params['appId'],
@@ -685,7 +685,6 @@ class FileService extends AbstractService
                     }
                 }
             }
-
             foreach ($documentsArray as $key=>$docItem) {
                 if(isset($docItem) && !isset($docItem[0]['file']) ){
                      $parseDocData = array();

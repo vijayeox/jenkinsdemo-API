@@ -24,7 +24,7 @@
 				"personalInformation": false
 			},
 			"values": [{
-				"value": "personalInformation",
+				"value": "modify_personalInformation",
 				"label": "Personal Information",
 				"shortcut": ""
 			}, {
@@ -72,12 +72,13 @@
 			"tableView": false
 		}, {
 			"label": "initiatedByCsr",
-			"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && (!data.CSRReviewRequired || data.CSRReviewRequired == false)){\n  value = true\n} else {\n  value = false\n}",
+			"customDefaultValue": "if((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = \"true\";\n} else {\n  value =\"false\";\n}",
 			"calculateServer": false,
 			"key": "initiatedByCsr",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"hideOnChildrenHidden": false
 		}, {
 			"label": "previousPolicyLength",
 			"calculateValue": "value = data['previous_policy_data'].length - 1;",
@@ -1328,9 +1329,9 @@
 				"collapsible": false,
 				"tableView": true,
 				"key": "techrecPanel",
-				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  if(data.attachments && data.attachments.length > 0 && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    show = true;\n  } else {\n    if(data.attachments && data.attachments.length > 0){\n      show = true;\n    } else{\n      show = false;\n    }\n  }\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
-				"label": "Attachments",
+				"label": "Policy Holder Attachments",
 				"input": false,
 				"components": [{
 					"type": "documentviewer",
@@ -2160,7 +2161,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 135,
+	"_vid": 143,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2181,7 +2182,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-16T20:25:44.345Z",
+	"modified": "2020-05-18T09:20:18.940Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

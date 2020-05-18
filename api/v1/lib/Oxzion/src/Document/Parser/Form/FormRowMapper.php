@@ -18,6 +18,7 @@ class FormRowMapper extends BaseRowMapper{
                           "REQUIRED",
                           "MIN",
                           "MAX",
+                          'DECIMAL_PLACES',
                           "PATTERN",
                           "FORMAT",
                           "ERROR_MSG",

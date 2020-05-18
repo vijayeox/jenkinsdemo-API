@@ -1075,7 +1075,7 @@
 								}, {
 									"name": "Change Error Label Based on Store",
 									"type": "mergeComponentSchema",
-									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid Work phone number\""
+									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid Work Phone number\""
 								}]
 							}, {
 								"name": "Set Label Name based on Product",
@@ -1097,9 +1097,9 @@
 									},
 									"text": "Home or Work Phone"
 								}, {
-									"name": "Change Error Message to work or home phone",
+									"name": "Change Error Message to Work or Home phone",
 									"type": "mergeComponentSchema",
-									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid home or work phone number\""
+									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid Home or Work Phone number\""
 								}]
 							}],
 							"type": "textfield",
@@ -1287,7 +1287,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 86,
+	"_vid": 88,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1301,6 +1301,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-05-16T22:24:34.796Z",
+	"modified": "2020-05-17T17:49:34.350Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

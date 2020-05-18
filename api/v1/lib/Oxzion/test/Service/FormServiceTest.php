@@ -102,9 +102,15 @@ class FormServiceTest extends AbstractServiceTest
         $filter = new SpreadsheetFilter();
         $filter->setRows(2);
         $fieldReference = $parser->parseDocument(array('rowMapper' => $rowMapper,
-                                                   'filter' => $filter));
+                                                       'filter' => $filter));
+        
         $fieldReference = $fieldReference[$sheetNames[0]];
-        $this->performCreateTest($fieldReference);
+        try{
+            $this->performCreateTest($fieldReference);
+        }catch(ValidationException $e){
+            print_r($e->getErrors());
+            $this->assertEquals(0,1);       
+        }
     }
 
 }
