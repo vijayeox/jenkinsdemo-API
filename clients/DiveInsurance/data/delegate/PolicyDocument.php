@@ -215,7 +215,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                     if($data['product'] == "Emergency First Response"){
                         if(isset($result[$data['liabilityCoverage']])){
-                            $temp['LiabilityVal'] = $result[$data['liabilityCoverage']];
+                            $temp['liabilityVal'] = $result[$data['liabilityCoverage']];
                         }
                     }
                     if(!empty($previous_data)) {

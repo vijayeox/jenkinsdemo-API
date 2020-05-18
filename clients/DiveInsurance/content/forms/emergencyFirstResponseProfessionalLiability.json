@@ -398,6 +398,15 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "initiatedByCsr",
+						"customDefaultValue": "if((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = true;\n} else {\n  value =false;\n}",
+						"calculateServer": false,
+						"key": "initiatedByCsr",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -1595,19 +1604,11 @@
 			"collapsible": false,
 			"tableView": true,
 			"key": "techrecPanel",
-			"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (data.privileges){\n  if(data.attachments.length > 0){\n    show = true;\n  }\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
-			"label": "  ",
+			"label": "  User Attachments",
 			"input": false,
 			"components": [{
-				"label": "documentFields",
-				"calculateValue": "value = [\"attachments1\"];",
-				"calculateServer": false,
-				"key": "documentFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}, {
 				"type": "documentviewer",
 				"key": "attachments1",
 				"calculateValue": "value = (data['attachments'])",
@@ -1626,6 +1627,14 @@
 				"persistent": false
 			}],
 			"path": "techrecPanel"
+		}, {
+			"label": "documentFields",
+			"calculateValue": "value = [\"attachments1\"];",
+			"calculateServer": false,
+			"key": "documentFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"title": "Attachments",
 			"theme": "primary",
@@ -1655,7 +1664,6 @@
 				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 				"fileMaxSize": "10MB",
 				"multiple": true,
-				"calculateValue": "if((data.attachments || data.attachments !== undefined) && data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
 				"calculateServer": false,
 				"validate": {
 					"customMessage": "Please attach any attachments",
@@ -1665,17 +1673,17 @@
 				"key": "attachments",
 				"type": "file",
 				"input": true
-			}, {
-				"label": "attachmentFields",
-				"customDefaultValue": "value = [\"attachments\"];",
-				"calculateValue": "value = [\"attachments\", \"chequeConsentFile\"];",
-				"calculateServer": false,
-				"key": "attachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}],
 			"path": "page3PanelPanel"
+		}, {
+			"label": "attachmentFields",
+			"customDefaultValue": "value = [\"attachments\"];",
+			"calculateValue": "value = [\"attachments\", \"chequeConsentFile\"];",
+			"calculateServer": false,
+			"key": "attachmentsFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"title": "Attachments",
 			"theme": "primary",
@@ -3126,7 +3134,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 489,
+	"_vid": 490,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3210,7 +3218,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-16T21:26:26.232Z",
+	"modified": "2020-05-18T08:07:14.888Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
