@@ -93,6 +93,13 @@ content:
                 -
                     title: Policy Status
                     field: policyStatus
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Pending Approval'
+                            - 'Rejected'
+                            - 'Expired'
+                        placeholder: 'Select Status'
                 -
                     title: Product
                     field: entity_name
@@ -116,3 +123,41 @@ content:
                     cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
                     filter: date
                     filterFormat: MM-DD-YYYY
+            filterOperators:
+                text:
+                    - 
+                        text: grid.filterStartsWithOperator
+                        operator: startswith
+                    -
+                        text: grid.filterContainsOperator
+                        operator: contains
+                    - 
+                        text: grid.filterEqOperator
+                        operator: eq
+                    - 
+                        text: grid.filterNotEqOperator
+                        operator: neq
+                    - 
+                        text: grid.filterEndsWithOperator
+                        operator: endswith
+                date:
+                    - 
+                        text: grid.filterEqOperator
+                        operator: eq
+                    - 
+                        text: grid.filterNotEqOperator
+                        operator: neq
+                    - 
+                        text: grid.filterAfterOperator
+                        operator: gt
+                    - 
+                        text: grid.filterBeforeOperator
+                        operator: lt
+                    - 
+                        text: grid.filterAfterOrEqualOperator
+                        operator: gte
+                    - 
+                        text: grid.filterBeforeOrEqualOperator
+                        operator: lte
+            filterLogic: and
+            passColumnConfig: true

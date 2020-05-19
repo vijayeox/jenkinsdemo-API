@@ -32,7 +32,7 @@ class TaskCallbackController extends AbstractApiControllerHelper
             $params['projectdata'] = ($params['projectname']) ? ($params['projectname']) : "No Project to ADD";
             $params['manager_login'] = isset($params['manager_login']) ? $params['manager_login'] : null;
             $this->log->info(TaskCallbackController::class . ":Project Data- " . $params['projectdata']);
-            $response = $this->taskService->addProjectToTask($params['projectname'], $params['description'], $params['uuid'], $params['manager_login']);
+            $response = $this->taskService->addProjectToTask($params['projectname'], $params['description'], $params['uuid'], $params['parent_identifier'], $params['manager_login']);
             // print_r($response);exit;
             if ($response) {
                 $this->log->info(TaskCallbackController::class . ":Added project to task");
@@ -71,9 +71,9 @@ class TaskCallbackController extends AbstractApiControllerHelper
         try {
             $params['projectdata'] = isset($params['new_projectname']) ? ($params['new_projectname']) : "No Project to Update";
             if (isset($params['manager_login'])) {
-                $response = $this->taskService->updateProjectInTask($params['new_projectname'], $params['description'], $params['uuid'], $params['manager_login']);
+                $response = $this->taskService->updateProjectInTask($params['new_projectname'], $params['description'], $params['uuid'], $params['parent_identifier'] ,$params['manager_login']);
             } else {
-                $response = $this->taskService->updateProjectInTask($params['new_projectname'], $params['description'], $params['uuid']);
+                $response = $this->taskService->updateProjectInTask($params['new_projectname'], $params['description'], $params['uuid'], $params['parent_identifier']);
             }
             if ($response) {
                 $this->log->info(TaskCallbackController::class . ":Project Updated Successfully");

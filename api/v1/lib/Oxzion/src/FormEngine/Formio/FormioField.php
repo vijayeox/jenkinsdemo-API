@@ -135,7 +135,7 @@ class FormioField
         if(isset($field['persistent']) && ($field['persistent']==false || $field['persistent']==0  || $field['persistent']=='')){
             $this->data = null;
         }
-        if($fieldReference && $this->data){
+        if($fieldReference && $this->data && !empty($fieldReference)) {
             $this->validateField($this->data, $fieldReference);
         }
     }

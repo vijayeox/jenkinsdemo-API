@@ -73,6 +73,7 @@
 		</p></center>
 		<hr class = "spacing1"></hr>
 		<div class = "second_content">
+			{if isset($previousLiabilityCoverage) }
 				{assign var=list value=$previousLiabilityCoverage|json_decode:true}
 				{if !empty($previousLiabilityCoverage)}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
@@ -81,6 +82,7 @@
                             Status of Insured:  {$upgradeData.liabilityCoverage} as of {$upgradeData.update_date}
                         </p>
             		{/foreach}
+            	{/if}
             	{/if}
 			<hr class = "hr_efr"></hr>
 			<p class = "policy_notice">

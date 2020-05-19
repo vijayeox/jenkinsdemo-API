@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Global Configuration Override
  *
@@ -10,18 +11,17 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = 'localhost';
-$db = 'oxzionapi';
-$username = 'user';
+$host = '192.168.1.6';
+$db = 'oxzion_api_test';
+$username = 'rakshith';
 $password = 'password';
 
-if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
-    $host = 'localhost';
-    $db = "oxzionapi_test";
-    $username = "user";
-    $password = "password";
+if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
+    $host = '192.168.1.6';
+    $db = 'oxzion_api_test';
+    $username = 'rakshith';
+    $password = 'password';
 }
 
 return [
@@ -34,42 +34,43 @@ return [
         'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;',
     ],
     'elasticsearch' => [
-        'serveraddress'=>'localhost',
-        'port'=>'9200',
-        'scheme'=>'http',
-        'core'=>'core',
-        'type'=>'type',
-        'user'=>'user',
-        'password'=>'password'
+        'serveraddress' => 'localhost',
+        'port' => '9200',
+        'scheme' => 'http',
+        'core' => 'core',
+        'type' => 'type',
+        'user' => 'user',
+        'password' => 'password',
     ],
     'amqp' => [
-        'host' => 'tcp://localhost:61613'
+        'host' => 'tcp://localhost:61613',
     ],
     'workflow' => [
-        'engineUrl' => 'http://localhost:8090/engine-rest/engine/default/'
+        'engineUrl' => 'http://localhost:8090/engine-rest/engine/default/',
     ],
     'chat' => [
         'chatServerUrl' => 'http://localhost:8065/',
-        'authToken' => ''
+        'authToken' => '',
     ],
     'crm' => [
         'crmServerUrl' => 'http://localhost:8075/crm/public/',
-        'authToken' => ''
+        'authToken' => '',
     ],
     'task' => [
         'taskServerUrl' => 'http://localhost:3000/api/v3/',
         'username' => 'apikey',
-        'authToken' => ''
+        'authToken' => '',
     ],
     'calendar' => [
         'calendarServerUrl' => 'http://localhost:8075/calendar',
-        'authToken' => ''
+        'authToken' => '',
     ],
     'job' => [
         'jobUrl' => 'http://localhost:8085/',
-        'authToken' => ''
+        'authToken' => '',
     ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
+    'ENTITY_FOLDER'=>__DIR__.'/../../data/entity/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
     'PAGE_FOLDER'=>__DIR__.'/../../data/pages/',
     'applicationUrl' => 'http://localhost:8081',
@@ -91,5 +92,5 @@ return [
     'jwtAlgo' => 'HS512',
     'authRequiredText' => 'Authentication Required',
     'refreshTokenPeriod' => '7',
-    'paymentGatewayType'=>'DEMO'
+    'paymentGatewayType' => 'DEMO',
 ];
