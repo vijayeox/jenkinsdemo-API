@@ -130,6 +130,7 @@ class Persistence extends AbstractService
         } catch (Exception $e) {
             return 0;
         }
+
         return $queryExecute = $this->generateSQLFromArray($parsedArray);
     }
 
@@ -306,14 +307,15 @@ class Persistence extends AbstractService
             }  
             if(empty($tableArrayList)){
                 $processed = 0;
+
                 foreach ($data as $key => $updateArray) {
+                    $tableAliasName = null;
                     if ($updateArray['expr_type'] === 'table') {
-                        $tableAliasName = null;
                         if ($updateArray['alias']) {    
                             $tableAliasName = $updateArray['alias']['name'];
                         }
                         $tableName = $updateArray['table'];
-                        $tableArrayList[] = $tableName;
+                        $tableArrayList[] = $tableAliasName  ? $tableAliasName : $tableName;
                         $parsedArray = $this->additionOfOrgIdColumn($parsedArray,$tableName,$tableAliasName);
                     }else if ($updateArray['expr_type'] === 'subquery') {
                         $parsedArray[$operator][$key]['sub_tree'] = $this->processParsedArrayForOrgID($updateArray['sub_tree'],'FROM');
