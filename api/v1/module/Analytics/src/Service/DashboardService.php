@@ -194,6 +194,7 @@ class DashboardService extends AbstractService
         } else {
             $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         }
+        // echo $query;exit;
         try {
             $resultSet = $this->executeQuerywithParams($query);
         } catch (ZendDbException $e) {
