@@ -44,7 +44,7 @@ spring:
 smtp:
   host: ${HOST}
   port: 25
-  username: root
+  username: rakshith
   password: password
   from:
     email: support@eoxvantage.com
