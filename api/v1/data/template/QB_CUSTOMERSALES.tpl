@@ -89,25 +89,6 @@
 {/foreach}
 {/function}<div class="oxzion-widget-content" style='border-width:5px;border-bottom-style:double;'>
     <table style="border-spacing: 0; width: 100%; padding 8px;">
-        <thead>
-            <tr>
-                {foreach name=outer item=column from=$data["Columns"]}
-                {foreach key=key item=item from=$column}
-                {if $key == 0}
-                <th style="padding: 8px 0px 8px 0px; font-size: 18px;">
-                    <hr>{$item['ColTitle']}&nbsp;
-                    <hr>
-                </th>
-                {elseif $key ==1}
-                <th style="text-align:right; padding: 8px 0px 8px 0px; font-size: 18px;">
-                    <hr>{$item['ColTitle']}
-                    <hr>
-                </th>
-                {/if}
-                {/foreach}
-                {/foreach}
-            </tr>
-        </thead>
         <tbody>
             {createrows data=$data['Rows']}
         </tbody>
