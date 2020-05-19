@@ -80,11 +80,6 @@ class MenuItemService extends AbstractService
         $changedArray = array_merge($obj->toArray(), $data);
         $MenuItem = new MenuItem();
         $MenuItem->exchangeArray($changedArray);
-        // if(isset($file['page_id'])){
-        //     if(UuidUtil::isValidUuid($file['page_id'])){
-        //         $data['page_id'] = $this->getIdFromUuid('ox_app_page',$file['page_id']);
-        //     }
-        // }
         $pageId = $this->getIdFromUuid('ox_app_page', $file['page_id']);
         if($pageId != 0){
             $data['page_id'] = $pageId;
@@ -145,6 +140,7 @@ class MenuItemService extends AbstractService
             $menuList = $resultSet->toArray();
             $menuArray = array();
             $i = 0;
+
             foreach ($menuList as $key => $menuItem) {
                 if(isset($menuItem['privilege_name']) && $menuItem['privilege_name']!=""){
                     $privilegeList = json_decode($menuItem['privilege_name'],true);
@@ -157,13 +153,13 @@ class MenuItemService extends AbstractService
                     }
                 }
 
-                if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '') {
+                if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '' && $menuItem['parent_id'] != 0) {
                     $menuItem['parent_id'] = $this->getUuidFromId('ox_app_menu',$menuItem['parent_id']);
                     $parentKey = array_search($menuItem['parent_id'], array_column($menuArray, 'uuid'));
                     if(is_numeric($parentKey)){
                       $menuArray[$parentKey]['submenu'][] = $menuItem;
+                      array_pop($menuArray);
                     }
-                    array_pop($menuArray);
                 }
             }
         }else{
