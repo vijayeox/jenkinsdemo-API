@@ -50,7 +50,7 @@ class ImportController extends AbstractApiController
         $files = $this->params()->fromFiles();
         try {
             if (!isset($files)) {
-                return $this->getSuccessResponseWithData(array("filename" => ''), 400);
+                return $this->getSuccessResponseWithData(array("filename" => ''), 201);
             } else {
                 $data = $this->ImportService->upload($data, $files);
             }

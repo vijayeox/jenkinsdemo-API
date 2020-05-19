@@ -774,17 +774,6 @@ return [
                     ],
                 ],
             ],
-            'doclist' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/b',
-                    'defaults' => [
-                        'controller' => Controller\DocumentController::class,
-                        'action' => 'convertdocument',
-                        'method' => 'GET',
-                    ],
-                ],
-            ],
         ],
     ],
     'view_manager' => [

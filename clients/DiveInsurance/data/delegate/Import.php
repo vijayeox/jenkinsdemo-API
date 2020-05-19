@@ -2,15 +2,14 @@
 
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
-use Oxzion\DelegateException;
 use Oxzion\Utils\FileUtils;
+use Oxzion\DelegateException;
 
 class Import extends AbstractAppDelegate
 {
     private $persistenceService;
 
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
     }
 
@@ -20,8 +19,8 @@ class Import extends AbstractAppDelegate
         try
         {
             $datavalidate = $this->checkArrayEmpty($data);
-            if ($datavalidate === "0") {
-                return array("status" => "Error", "data" => $data);
+            if($datavalidate === "0") {
+                return Array("status" => "Error", "data"=>$data);
             }
             $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name'], $data["host"], $data["user_id"], $data["password"]);
 
@@ -35,6 +34,7 @@ class Import extends AbstractAppDelegate
         return $data;
     }
 
+
     public function generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName)
     {
         $fileFolder = dirname(__dir__) . "/import/data/";
@@ -43,7 +43,7 @@ class Import extends AbstractAppDelegate
         $dataSet = array_diff(scandir($fileFolder), array(".", ".."));
         $filePath = $fileFolder . $fileName;
         if (!file_exists($filePath)) {
-            throw new DelegateException("File Doesnot exists in the path" . $filePath, "file.not.exists");
+            throw new DelegateException("File Doesnot exists in the path".$filePath,"file.not.exists");
         }
 
         $f_pointer = fopen($filePath, "r");
@@ -58,7 +58,7 @@ class Import extends AbstractAppDelegate
         if (is_dir($archivePath)) {
             FileUtils::copy($filePath, $fileName, $archivePath);
         } else {
-            throw new DelegateException("Directory doesnot exists -- " . $archivePath, "directory.not.exists");
+            throw new DelegateException("Directory doesnot exists -- ".$archivePath,"directory.not.exists");
         }
         return 1;
     }
@@ -69,7 +69,7 @@ class Import extends AbstractAppDelegate
         foreach ($data as $val) {
             $val = trim($val);
             $val = $val == '' ? "NULL" : "'" . $val . "'";
-            $this->param .= $val . ", ";
+            $this->param .= $val.", ";
         }
         $this->param = rtrim($this->param, ", ");
         $queryString = "call " . $storedProcedureName . "(" . $this->param . ")";
@@ -92,9 +92,9 @@ class Import extends AbstractAppDelegate
         $f_pointer = fopen($filePath, "r");
         // echo $filePath . $fileName;exit;
         $ftp_server = $host;
-        try {
-            $ftp_conn = ftp_ssl_connect($ftp_server);
-        } catch (Exception $e) {
+        try{
+            $ftp_conn = ftp_ssl_connect($ftp_server);  
+        } catch (Exception $e){
             throw new Exception("Could not connect to $ftp_server", 1);
         }
         $login = ftp_login($ftp_conn, $userId, $password);
@@ -103,40 +103,40 @@ class Import extends AbstractAppDelegate
         ftp_pasv($ftp_conn, true);
         ftp_chdir($ftp_conn, "/");
 
+
         try {
             if ($login) {
                 //echo "<br>logged in successfully!";
                 $contents = ftp_nlist($ftp_conn, ".");
-                if (!empty($contents)) {
+                if(!empty($contents)) {
                     foreach ($contents as $value) {
                         if ($fileName === $value) {
-                            // $result = ftp_fget($ftp_conn, $f_pointer, $value, FTP_BINARY);
+                    // $result = ftp_fget($ftp_conn, $f_pointer, $value, FTP_BINARY);
                             if (ftp_get($ftp_conn, $filePath . $fileName, $value, FTP_BINARY)) {
                                 //echo "Successfully written to $fileName \n";
                             } else {
-                                throw new \Exception("Import Aborted, please make sure your file is in the correct format - " . $fileName);
+                                throw new \Exception("Import Aborted, please make sure your file is in the correct format - ".$fileName);
                                 // return $fileName;
                             }
                         }
                     }
                 } else {
-                    throw new DelegateException("There are no files in the folder", "file.not.found");
+                    throw new DelegateException("There are no files in the folder","file.not.found");
                 }
             } else {
-                throw new DelegateException("Can't login to remote server.", "login.failed");
+                throw new DelegateException("Can't login to remote server.","login.failed");
             }
             if (!ftp_close($ftp_conn)) {
-                throw new DelegateException("Can't login to remote server.", "login.failed");
+                throw new DelegateException("Can't login to remote server.","login.failed");   
             }
-        } catch (Exception $e) {
+        } catch(Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return 1;
     }
 
-    public function checkArrayEmpty($array = array())
-    {
+    function checkArrayEmpty($array = array()) {
         foreach ($array as $element) {
             if (empty($element)) {
                 return "0";
