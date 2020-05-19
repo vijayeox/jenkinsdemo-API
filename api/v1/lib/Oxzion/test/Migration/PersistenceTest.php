@@ -65,7 +65,7 @@ class PersistenceTest extends ServiceTest
     public function testInsertQuery()
     {
         $config = $this->getApplicationConfig();
-
+        AuthContext::put(AuthConstants::ORG_ID, 1);
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
         $insertData = array(
@@ -97,6 +97,7 @@ class PersistenceTest extends ServiceTest
     public function testInsertQueryWithJoinSelect()
     {
         $config = $this->getApplicationConfig();
+        AuthContext::put(AuthConstants::ORG_ID, 1);
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
         $insertData = array(
@@ -203,6 +204,7 @@ class PersistenceTest extends ServiceTest
     public function testUpdateQueryWithJoin()
     {
         $config = $this->getApplicationConfig();
+        AuthContext::put(AuthConstants::ORG_ID, 1);
         $query = "UPDATE ox_timesheet AS b
             INNER JOIN ox_timesheet_client AS g ON b.client_id = g.id
             SET b.name = 'Updated Task', b.Description = 'New Task'

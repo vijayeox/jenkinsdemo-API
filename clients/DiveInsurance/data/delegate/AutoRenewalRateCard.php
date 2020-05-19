@@ -40,9 +40,20 @@ class AutoRenewalRateCard extends RateCard{
 
         $this->logger->info("PRESENT RATE card".print_r($data,true));
         if($data['product'] == 'Individual Professional Liability'){
-            $this->IPLRates($data);
+            $coverageList = array();
+            array_push($coverageList,$data['careerCoverage']);
+            array_push($coverageList,$data['scubaFit']);
+            array_push($coverageList,$data['cylinder']);
+            array_push($coverageList,$data['excessLiability']);
+            $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
+            $result = json_decode($result,true);
+            $this->IPLRates($data,$result);
         } else if($data['product'] == 'Emergency First Response'){
-            $this->EFRRates($data);
+            $coverageList = array();
+            array_push($coverageList,$data['liabilityCoverage']);
+            $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
+            $result = json_decode($result,true);
+            $this->EFRRates($data,$result);
         }else if($data['product'] == 'Dive Boat'){
             $this->DiveBoatRates($data);
         }else if($data['product'] == 'Dive Store'){
@@ -53,36 +64,48 @@ class AutoRenewalRateCard extends RateCard{
         return $data;
     }
 
-    private function IPLRates(&$data){
+    private function IPLRates(&$data,$coverages){
         $this->logger->info("IPL RATES");
-        if(isset($data['upgradeExcessLiability'])){
-            $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
-            unset($data['upgradeExcessLiability']);
-        }
-        if(isset($data['upgradeCareerCoverage'])){
-            $data['careerCoverage'] = $data['upgradeCareerCoverage']['value'];
-            unset($data['upgradeCareerCoverage']);
-        }
-        if(isset($data['upgradecylinder'])){
-            $data['cylinder'] = $data['upgradecylinder']['value'];
-            unset($data['upgradecylinder']);
-        }
         $data['careerCoveragePrice'] = $data[$data['careerCoverage']];
         $data['scubaFitPrice'] = $data[$data['scubaFit']];
         $data['equipmentPrice'] = $data[$data['equipment']];
         $data['cylinderPrice'] = $data[$data['cylinder']];
         $data['excessLiabilityPrice'] = $data[$data['excessLiability']];
+        if(isset($coverages[$data['careerCoverage']]) && !isset($data['careerCoverageVal'])){
+            $data['careerCoverageVal'] = $coverages[$data['careerCoverage']];
+        }
+        if(isset($coverages[$data['scubaFit']]) && !isset($data['scubaFitVal'])){
+            $data['scubaFitVal'] = $coverages[$data['scubaFit']];
+        }
+        if(isset($coverages[$data['tecRecEndorsment']]) && !isset($data['tecRecVal'])){
+            $data['tecRecVal'] = $coverages[$data['tecRecEndorsment']];
+        }
+        if(isset($coverages[$data['cylinder']]) && !isset($data['cylinderPriceVal'])){
+            $data['cylinderPriceVal'] = $coverages[$data['cylinder']];
+        }
+        if(isset($coverages[$data['excessLiability']])&& !isset($data['excessLiabilityVal'])){
+            $data['excessLiabilityVal'] = $coverages[$data['excessLiability']];
+        }
         $data['amount'] = (float)$data['careerCoveragePrice']+ (float)$data['scubaFitPrice']+ (float)$data['equipmentPrice'] +  (float)$data['cylinderPrice'] +(float)$data['excessLiabilityPrice'];
     }
-
-    private function EFRRates(&$data){
-        $this->logger->info("EFR RATES");
-        if(isset($data['upgradeCareerCoverage'])){
-            $data['liabilityCoverageName'] = $data['upgradeCareerCoverage']['value'];
-            unset($data['upgradeCareerCoverage']);
+    private function getCoverageName($data,$product,$persistenceService){
+        $selectQuery = "SELECT group_concat(distinct concat('\"',`key`,'\":\"',coverage,'\"')) as name FROM premium_rate_card WHERE `key` in ('".implode("','", $data) . "')  AND product = '".$product."'";
+        $resultQuery = $persistenceService->selectQuery($selectQuery);
+        while ($resultQuery->next()) {
+            $coverageName[] = $resultQuery->current();
         }
-        $data['CoverageAmount'] = $data[$data['liabilityCoverageName']];
-        $data['amount'] = (float)$data['CoverageAmount'];
+        if($resultQuery->count()!=0){
+            return '{'.$coverageName[0]['name'].'}';
+        }
+    }
+
+    private function EFRRates(&$data,$coverages){
+        $this->logger->info("EFR RATES");
+        if(isset($coverages[$data['liabilityCoverage']])){
+            $data['LiabilityVal'] = $coverages[$data['liabilityCoverage']];
+        }
+        $data['coverageAmount'] = $data[$data['liabilityCoverage']];
+        $data['amount'] = (float)$data['coverageAmount'];
     }
 
     private function DiveBoatRates(&$data){

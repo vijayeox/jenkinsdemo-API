@@ -51,14 +51,12 @@ class PageContentService extends AbstractService
                     $resultArray['content'] = file_get_contents($filePath);
                 }
             }
-            if(
-                $resultArray['type'] == 'List' || $resultArray['type'] == 'Form' ||
-                $resultArray['type'] == 'Search' || $resultArray['type'] == 'DocumentViewer'
-            ) {
-                $resultArray['content'] = json_decode($resultArray['content']);
-            } else {
-                $resultArray['content'] = $resultArray['content'];
-            }  
+            if(isset($resultArray['content'])){
+                $content = json_decode($resultArray['content']);
+                if($content){
+                    $resultArray['content'] = $content;
+                }
+            }
             $result[] = $resultArray;
         }
         $content = array('content' => $result); 

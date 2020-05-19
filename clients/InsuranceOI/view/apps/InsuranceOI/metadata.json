@@ -3,15 +3,16 @@
 	"name":"InsuranceOI",
 	"appId":"f726fded-0764-4f4e-945e-689586baf74b",
 	"category":null,
-	"autostart":true,
+	"autostart":false,
+    "singleton":true,
 	"defaultAppforOrgs":false,
 	"icon": "icon.png",
 	"icon_white": "icon_white.png",
 	"title": {
-		"en_EN": "Insurance Operational Intelligence"
+		"en_EN": "Insurance"
 	},
 	"description": {
-		"en_EN": "Insurance OI Application"
+		"en_EN": "Insurance"
 	},
 	"files":["main.js","main.css"]
 }

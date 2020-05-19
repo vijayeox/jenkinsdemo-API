@@ -11,6 +11,7 @@ use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\AppDelegate\AppDelegateService;
 
 class AppController extends AbstractApiController
 {
@@ -22,12 +23,13 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, WorkflowService $workflowService)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, WorkflowService $workflowService,AppDelegateService $appDelegateService)
     {
         parent::__construct($table, App::class);
         $this->setIdentifierName('appId');
         $this->appService = $appService;
         $this->workflowService = $workflowService;
+        $this->appDelegateService = $appDelegateService;
         $this->log = $this->getLogger();
     }
     public function setParams($params)
@@ -327,5 +329,28 @@ class AppController extends AbstractApiController
             $this->log->error("Path not provided");
             return $this->getErrorResponse("Invalid parameters", 400);
         }
+    }
+
+
+    public function delegateCommandAction()
+    {
+        $data = $this->extractPostData();
+        $appId = $this->params()->fromRoute()['appId'];
+        $delegate = $this->params()->fromRoute()['delegate'];
+        $data = array_merge($data, $this->params()->fromQuery());
+        $this->log->info(__CLASS__ . "-> \n Execute Delegate Start - " . print_r($data, true));
+        try {
+            $response = $this->appDelegateService->execute($appId, $delegate, $data);
+            if ($response == 1) {
+                return $this->getErrorResponse("Delegate not found", 404);
+            } elseif ($response == 2) {
+                return $this->getErrorResponse("Error while executing the delegate", 400);
+            }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }
+        $this->log->info(__CLASS__ . "-> \n End of Delegate");
+        return $this->getSuccessResponseWithData($response, 200);
     }
 }

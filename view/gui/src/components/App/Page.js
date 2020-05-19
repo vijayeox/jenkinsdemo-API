@@ -392,23 +392,17 @@ class Page extends React.Component {
             key={i}
             osjsCore={this.core}
             data={dataString}
+            parentData={this.state.currentRow}
             urlPostParams={item.urlPostParams}
             gridDefaultFilters={
               itemContent.defaultFilters
                 ? JSON.parse(this.replaceParams(itemContent.defaultFilters))
                 : undefined
             }
-            forceDefaultFilters={itemContent.forceDefaultFilters}
             gridOperations={itemContent.operations}
             gridToolbar={itemContent.toolbarTemplate}
-            filterable={itemContent.filterable}
-            groupable={itemContent.groupable}
-            reorderable={itemContent.reorderable}
-            resizable={itemContent.resizable}
-            pageable={itemContent.pageable}
-            sortable={itemContent.sortable}
             columnConfig={columnConfig}
-            expandable={itemContent.expandable}
+            {...itemContent}
           />
         );
       } else if (item.type == "Search") {

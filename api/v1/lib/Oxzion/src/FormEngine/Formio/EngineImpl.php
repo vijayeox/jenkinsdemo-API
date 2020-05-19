@@ -18,7 +18,7 @@ class EngineImpl implements Engine
         $this->logger = Logger::getLogger(__CLASS__);
     }
 
-    public function parseForm($form)
+    public function parseForm($form, $fieldReference, &$errors)
     {
         $template = json_decode($form, true);
         if (isset($template)) {
@@ -30,7 +30,7 @@ class EngineImpl implements Engine
             $oxFieldArray = array();
             if ($fieldList) {
                 foreach ($fieldList as $field) {
-                    $generatedField = $this->generateField($field);
+                    $generatedField = $this->generateField($field, $fieldReference, $errors);
                     if(isset($generatedField)){
                         $oxFieldArray[] = $generatedField;
                     }
@@ -101,9 +101,14 @@ class EngineImpl implements Engine
         }
         return $itemlist;
     }
-    protected function generateField($field)
+    protected function generateField($field, $fieldReference, &$errors)
     {
-        $field = new FormioField($field);
+        $field = new FormioField($field, $fieldReference);
+        if($error = $field->getError()){
+            foreach ($error as $value) {
+                $errors[] = $value;
+            }
+        }
         return $field->toArray();
     }
 }

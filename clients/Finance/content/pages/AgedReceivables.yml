@@ -1,0 +1,7 @@
+name: 'Accounts Receivables'
+description: 'Accounts Receivables'
+content:
+    -
+        type: Dashboard
+        content:
+            uuid: 34ee14e3-45d7-4bf2-8d0d-eb60e425d37d

@@ -3,9 +3,10 @@ namespace Oxzion\Utils;
 
 class FileUtils
 {
-    public function checkDirectoryIfExists($directory)
-    {
+    public static function getFileExtension($file){
+        return pathinfo($file, PATHINFO_EXTENSION);
     }
+
     public static function createDirectory($directory)
     {
         // Check whether the directory already exists, and if not,

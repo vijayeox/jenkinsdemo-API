@@ -11,6 +11,7 @@ import am4themes_animated from '../amcharts/themes/animated';
 // import am4themes_kelly from '../amcharts/themes/kelly';
 import WidgetTransformer from './WidgetTransformer';
 am4core.useTheme(am4themes_animated);
+am4core.options.commercialLicense = true;
 
 class WidgetRenderer {
     static render(element, widget, props) {
@@ -128,6 +129,7 @@ class WidgetRenderer {
     }
 
     static renderAmCharts(element, configuration, props, data) {
+        let isDrillDownChart=false
         let transformedConfig = WidgetTransformer.transform(configuration, data);
         configuration = transformedConfig.chartConfiguration;
         data = transformedConfig.chartData;
@@ -191,6 +193,7 @@ class WidgetRenderer {
 
         if (WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration)) {
             WidgetDrillDownHelper.setupAmchartsEventHandlers(series);
+            isDrillDownChart=true;
         }
 
         let elementTagName = element.tagName.toUpperCase();
@@ -207,22 +210,35 @@ class WidgetRenderer {
         }
         if (!canvasElement) {
             throw 'Canvas element not found for drawing the chart.';
-        }
+        } 
 
         let chart = null;
         if ('amCharts-map' === am4ChartType) {
             chart = WidgetRenderer.renderAmMap(configuration, canvasElement, data);
+            if(isDrillDownChart){
+                canvasElement.insertAdjacentHTML('beforeend',
+                '<div class="oxzion-widget-drilldown-icon" title="Drilldown Chart">' +
+                '<i class="fas fa-angle-double-down fa-lg"></i>' +
+                '</div>');
+            }
         }
         else {
             chart = am4core.createFromConfig(configuration, canvasElement, am4ChartType);
             if (chart && data) {
                 chart.data = data;
             }
+            if(isDrillDownChart){
+                canvasElement.insertAdjacentHTML('beforeend',
+                '<div class="oxzion-widget-drilldown-icon" title="Drilldown Chart">' +
+                '<i class="fas fa-angle-double-down fa-lg"></i>' +
+                '</div>');
+            }
         }
 
         if (WidgetDrillDownHelper.isDrilledDown(element)) {
             let rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
             let buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
+            element.cursorOverStyle = am4core.MouseCursorStyle.pointer;
             if (!buttonElement) {
                 element.insertAdjacentHTML('beforeend',
                     '<div class="oxzion-widget-roll-up-button" title="Back">' +
@@ -243,6 +259,7 @@ class WidgetRenderer {
             if (buttonElement) {
                 buttonElement.remove();
             }
+            
         }
         return chart;
     }

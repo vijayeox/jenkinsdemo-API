@@ -1,0 +1,7 @@
+name: 'Summary'
+description: 'Summary Information'
+content:
+    -
+        type: Dashboard
+        content:
+            uuid: 76343563-735a-4e04-8f2c-19117b9da107

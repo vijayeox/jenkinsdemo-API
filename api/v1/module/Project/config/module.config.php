@@ -10,7 +10,7 @@ return [
             'project' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]project[/:projectUuid]',
+                    'route' => '/[organization/:orgId/]project[/:projectUuid][/:force_flag]',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'access' => [

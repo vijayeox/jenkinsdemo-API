@@ -30,22 +30,13 @@ class FormService extends AbstractService
         $this->fieldService = $fieldService;
     }
 
-    public function createForm($appUuid, &$data)
+    public function createForm($appUuid, &$data, $fieldReference = null)
     {
         $this->logger->info("EXECUTING CREATE FORM ");
         $form = new Form();
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
-        if(isset($data['template']) && is_array($data['template'])){
-            $data['template'] = json_encode($data['template']);
-        }else{
-            if(isset($data['template'])&&is_string($data['template'])){
-                $data['template'] = $data['template'];
-            } else {
-                throw new ServiceException("Template not provided", 'template.required');
-            }
-        }
-        $template = $this->formEngine->parseForm($data['template']);
-        if (!is_array($template)) {
+        $template = $this->parseForm($data, $fieldReference);
+        if($template == 0){
             return 0;
         }
         if(isset($data['entity_id'])){
@@ -57,7 +48,6 @@ class FormService extends AbstractService
             throw new Exception("Invalid AppId $appUuid passed");
         }
         $template['form']['app_id'] = $appId;
-        // $data['name'] = $template['form']['name'];
         $template['form']['uuid'] = $data['uuid'];
         $template['form']['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -82,15 +72,15 @@ class FormService extends AbstractService
         }
         return $count;
     }
-    public function updateForm($appUuid, $formUuid, &$data)
+    public function updateForm($appUuid, $formUuid, &$data, $fieldReference = null)
     {
         $this->logger->info("EXECUTING UPDATE FORM");
         $obj = $this->table->getByUuid($formUuid);
         if (is_null($obj)) {
             return 0;
         }
-        $template = $this->formEngine->parseForm($data['template']);
-        if (!is_array($template)) {
+        $template = $this->parseForm($data, $fieldReference);
+        if($template == 0){
             return 0;
         }
         $form = new Form();
@@ -206,7 +196,31 @@ class FormService extends AbstractService
         return $response[0];
     }
     
-     private function generateFields($fieldsList, $appId, $formId,$entityId)
+    private function parseForm(&$data, $fieldReference){
+        if(isset($data['template']) && is_array($data['template'])){
+            $data['template'] = json_encode($data['template']);
+        }else{
+            if(isset($data['template'])&&is_string($data['template'])){
+                $data['template'] = $data['template'];
+            } else {
+                throw new ServiceException("Template not provided", 'template.required');
+            }
+        }
+        $errors = array();
+        $template = $this->formEngine->parseForm($data['template'], $fieldReference, $errors);
+        if (!is_array($template)) {
+            return 0;
+        }
+        if(count($errors) > 0){
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        }
+
+        return $template;
+    }
+
+    private function generateFields($fieldsList, $appId, $formId,$entityId)
     {
         try {
             $existingFieldsQuery = "select ox_field.* from ox_field where ox_field.entity_id=".$entityId.";";

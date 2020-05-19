@@ -33,7 +33,6 @@ ox_field:
     data_type: "numeric"
     template: '{"persistent" : "true"}'
     required: 1
-    parent_id: 9
     sequence: 1
     entity_id: 1
   - id: 3

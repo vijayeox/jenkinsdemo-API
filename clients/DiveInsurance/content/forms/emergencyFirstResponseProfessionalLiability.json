@@ -398,6 +398,15 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "initiatedByCsr",
+						"customDefaultValue": "if((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = true;\n} else {\n  value =false;\n}",
+						"calculateServer": false,
+						"key": "initiatedByCsr",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -959,8 +968,9 @@
 								"label": "Home or Work Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"customMessage": "Please enter a valid Home or Work Phone number"
 								},
 								"key": "home_phone_number",
 								"logic": [{
@@ -1058,9 +1068,10 @@
 								"label": "Mobile Phone",
 								"spellcheck": true,
 								"tableView": true,
+								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number"
 								},
 								"key": "phone_number",
 								"logic": [{
@@ -1136,7 +1147,11 @@
 						"placeholder": " ",
 						"spellcheck": true,
 						"tableView": true,
-						"errorLabel": "Please enter a valid Fax number",
+						"calculateServer": false,
+						"validate": {
+							"customMessage": "Please enter a valid Fax number"
+						},
+						"errorLabel": "Fax",
 						"key": "fax",
 						"type": "phoneNumber",
 						"input": true,
@@ -1309,11 +1324,12 @@
 							"label": "Liability Coverage ($1,000,000)",
 							"shortcut": ""
 						}],
+						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please choose one of these options."
 						},
-						"key": "liabilityCoverageName",
+						"key": "liabilityCoverage",
 						"properties": {
 							"target": "coverageAmount"
 						},
@@ -1380,11 +1396,26 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "single_limit",
+						"defaultValue": "$1,000,000",
+						"redrawOn": "liabilityCoverage",
+						"calculateValue": "var singleLimit = 0\nif(data.liabilityCoverage == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
+						"calculateServer": false,
+						"key": "single_limit",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "notSelected",
-						"label": "notSelected",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annual_aggregate",
+						"defaultValue": "$2,000,000",
+						"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+						"calculateServer": false,
+						"key": "annual_aggregate",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -1574,19 +1605,11 @@
 			"collapsible": false,
 			"tableView": true,
 			"key": "techrecPanel",
-			"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (data.privileges){\n  if(data.attachments.length > 0){\n    show = true;\n  }\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
-			"label": "  ",
+			"label": "  User Attachments",
 			"input": false,
 			"components": [{
-				"label": "documentFields",
-				"calculateValue": "value = [\"attachments1\"];",
-				"calculateServer": false,
-				"key": "documentFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}, {
 				"type": "documentviewer",
 				"key": "attachments1",
 				"calculateValue": "value = (data['attachments'])",
@@ -1605,6 +1628,14 @@
 				"persistent": false
 			}],
 			"path": "techrecPanel"
+		}, {
+			"label": "documentFields",
+			"calculateValue": "value = [\"attachments1\"];",
+			"calculateServer": false,
+			"key": "documentFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"title": "Attachments",
 			"theme": "primary",
@@ -1634,7 +1665,6 @@
 				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 				"fileMaxSize": "10MB",
 				"multiple": true,
-				"calculateValue": "if((data.attachments || data.attachments !== undefined) && data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
 				"calculateServer": false,
 				"validate": {
 					"customMessage": "Please attach any attachments",
@@ -1644,17 +1674,17 @@
 				"key": "attachments",
 				"type": "file",
 				"input": true
-			}, {
-				"label": "attachmentFields",
-				"customDefaultValue": "value = [\"attachments\"];",
-				"calculateValue": "value = [\"attachments\", \"chequeConsentForm\"];",
-				"calculateServer": false,
-				"key": "attachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}],
 			"path": "page3PanelPanel"
+		}, {
+			"label": "attachmentFields",
+			"customDefaultValue": "value = [\"attachments\"];",
+			"calculateValue": "value = [\"attachments\", \"chequeConsentFile\"];",
+			"calculateServer": false,
+			"key": "attachmentsFieldnames",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"title": "Attachments",
 			"theme": "primary",
@@ -1917,7 +1947,7 @@
 					"lockKey": true,
 					"tableView": false
 				}, {
-					"label": "Data Grid",
+					"label": "Incidents",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
 					"addAnother": "Add More",
@@ -1927,6 +1957,18 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"nameofpersoninjured": "",
+						"date_of_incident": "",
+						"locationofincident": "",
+						"reportcanbeobtained": "",
+						"briefSummary": "",
+						"page4Panel2ColumnsIncidentreportfiled": "",
+						"page4Panel2Columns2Fatality": "",
+						"page4Panel2Columns2SeriousInjury": "",
+						"page4Panel2ColumnsInTraining": ""
+					}],
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -2834,7 +2876,7 @@
 							}],
 							"clearOnHide": false,
 							"calculateServer": false,
-							"key": "chequeConsentForm",
+							"key": "chequeConsentFile",
 							"type": "file",
 							"input": true
 						}],
@@ -3093,7 +3135,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 483,
+	"_vid": 492,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3177,7 +3219,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-02T20:13:05.970Z",
+	"modified": "2020-05-18T19:53:10.141Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

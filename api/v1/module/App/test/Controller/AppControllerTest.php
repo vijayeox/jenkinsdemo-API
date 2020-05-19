@@ -329,6 +329,9 @@ class AppControllerTest extends ControllerTest
                 $this->assertNotEmpty($wf['process_id']);
             }
         }
+        $this->clean($path, $yaml, $appName, $YmlappUuid);   
+    }
+    private function clean($path, $yaml, $appName, $YmlappUuid){
         unlink(__DIR__ . '/../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
@@ -344,7 +347,76 @@ class AppControllerTest extends ControllerTest
             FileUtils::deleteDirectoryContents($deleteconfig);
         }
     }
+    public function testDeplayAppWithFieldValidation(){
+        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        if (is_dir($directoryName)) {
+            FileUtils::deleteDirectoryContents($directoryName);
+        }
+        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        if (is_dir($directoryName)) {
+            FileUtils::deleteDirectoryContents($directoryName);
+        }
+        copy(__DIR__ . '/../sampleapp/application12.yml', __DIR__ . '/../sampleapp/application.yml');
+        $config = $this->getApplicationConfig();
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $filename = "application.yml";
+        $path = __DIR__ . '/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path . $filename));
+        $appName = $yaml['app'][0]['name'];
+        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $query = "SELECT name, uuid from ox_app where name = '" . $appName . "'";
+        $appdata = $this->executeQueryTest($query);
+        $this->assertEquals($appdata[0]['name'], $appName);
+        $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
+        $this->assertEquals($content['status'], 'success');
+        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $query = "SELECT uuid from ox_app where name = '" . $appName . "'";
+        $appUuid = $this->executeQueryTest($query);
+        $appUuidCount = count($appUuid[0]);
+        $appUuid = $appUuid[0]['uuid'];
+        $query = "SELECT id from ox_app where uuid = '" . $appUuid . "'";
+        $appId = $this->executeQueryTest($query);
+        $appId = $appId[0]['id'];
+        $query = "SELECT count(id) as count FROM ox_form WHERE app_id = " . $appId;
+        $form = $this->executeQueryTest($query);
+        $this->assertEquals($form[0]['count'], 1);
+        $this->clean($path, $yaml, $appName, $YmlappUuid);
+    }
 
+    public function testDeplayAppWithFieldValidationErrors(){
+        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        if (is_dir($directoryName)) {
+            FileUtils::deleteDirectoryContents($directoryName);
+        }
+        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        if (is_dir($directoryName)) {
+            FileUtils::deleteDirectoryContents($directoryName);
+        }
+        copy(__DIR__ . '/../sampleapp/application13.yml', __DIR__ . '/../sampleapp/application.yml');
+        $config = $this->getApplicationConfig();
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(406);
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals('Validation Errors', $content['message']);
+        $errors = $content['data']['errors'];
+        $this->assertEquals(2, count($errors));
+        $this->assertEquals("Field padi - Value of property 'decimalLimit' is '2' expected ''", $errors[0]);
+        $this->assertEquals("Field dateTime Unexpected", $errors[1]);
+        $filename = "application.yml";
+        $path = __DIR__ . '/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path . $filename));
+        $appName = $yaml['app'][0]['name'];
+        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $this->clean($path, $yaml, $appName, $YmlappUuid);
+        
+    }
     private function unlinkFolders($appUuid, $appName, $orgUuid = null)
     {
         $config = $this->getApplicationConfig();

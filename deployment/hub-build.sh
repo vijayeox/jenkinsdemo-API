@@ -23,23 +23,24 @@ RESET="\e[0m"
 #help function to print help message
 buildhelp()
 {
-    echo -e "1.  all             -${YELLOW}For packaging everything.${RESET}"
-    echo -e "2.  api             -${YELLOW}For packaging API.${RESET}"
-    echo -e "3.  view            -${YELLOW}For packaging UI/View.${RESET}"
-    echo -e "4.  workflow        -${YELLOW}For packaging workflow.${RESET}"
-    echo -e "5.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-    echo -e "6.  diveinsurance   -${YELLOW}For packaging diveinsurance app.${RESET}"
-    echo -e "7.  task            -${YELLOW}For packaging task app.${RESET}"
-    echo -e "8.  bridgemed       -${YELLOW}For packaging bridgemed app.${RESET}"
-    echo -e "9.  integrations    -${YELLOW}For packaging all integrations.${RESET}"
-    echo -e "10. --help or -h    -${YELLOW}For help.${RESET}"
-    echo -e "11. list            -${YELLOW}For list of options.${RESET}"
-    echo -e "12. deploy          -${YELLOW}For deploying to production${RESET}"
-    echo -e "13. clean           -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "14. setup           -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "15. package         -${YELLOW}For packaging existing build${RESET}"
-    echo -e "16.  insurancemanagement   -${YELLOW}For packaging insurancemanagement app.${RESET}"
-    echo -e "17.  insuranceoi   -${YELLOW}For packaging insuranceoi app.${RESET}"
+    echo -e "1.  all                   -${YELLOW}For packaging everything.${RESET}"
+    echo -e "2.  api                   -${YELLOW}For packaging API.${RESET}"
+    echo -e "3.  view                  -${YELLOW}For packaging UI/View.${RESET}"
+    echo -e "4.  workflow              -${YELLOW}For packaging workflow.${RESET}"
+    echo -e "5.  camel                 -${YELLOW}For packaging Apache Camel.${RESET}"
+    echo -e "6.  diveinsurance         -${YELLOW}For packaging diveinsurance app.${RESET}"
+    echo -e "7.  task                  -${YELLOW}For packaging task app.${RESET}"
+    echo -e "8.  bridgemed             -${YELLOW}For packaging bridgemed app.${RESET}"
+    echo -e "9.  integrations          -${YELLOW}For packaging all integrations.${RESET}"
+    echo -e "10. --help or -h          -${YELLOW}For help.${RESET}"
+    echo -e "11. list                  -${YELLOW}For list of options.${RESET}"
+    echo -e "12. deploy                -${YELLOW}For deploying to production${RESET}"
+    echo -e "13. clean                 -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "14. setup                 -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "15. package               -${YELLOW}For packaging existing build${RESET}"
+    echo -e "16. insurancemanagement   -${YELLOW}For packaging insurancemanagement app.${RESET}"
+    echo -e "17. insuranceoi           -${YELLOW}For packaging insuranceoi app.${RESET}"
+    echo -e "18. finance               -${YELLOW}For packaging Finance app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -181,6 +182,16 @@ insuranceoi()
     echo -e "${YELLOW}Copying clients InsuranceOI Completed.${RESET}"
 
 }
+finance()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Finance to build folder.${RESET}"
+    rsync -rl clients/Finance/ ./build/clients/Finance/
+    echo -e "${YELLOW}Copying clients Finance Completed.${RESET}"
+
+}
 insurancemanagement()
 {
     cd ${OXHOME}
@@ -258,6 +269,12 @@ do
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 insuranceoi
+                package
+                break;;
+        finance)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                finance
                 package
                 break;;
         task)

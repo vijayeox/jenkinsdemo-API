@@ -3,10 +3,10 @@
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
             <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/><br/>
-                <p>{$firstname} {$lastname}<br/>
+                <p>{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}<br/>
                 {$address1}<br/>
 				{$address2}<br/>
-				{$city},{$state},{$zip}<br/></p>
+				{$city},{$state_in_short} - {$zip}<br/>{$country}</p>
 				<br/>
 				<p>The cancellation of your policy is 'Approved'.</p><br/>
 				<p>Relevant information is in the attached document.</p><br/>

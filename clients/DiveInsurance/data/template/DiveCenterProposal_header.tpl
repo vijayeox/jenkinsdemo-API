@@ -6,7 +6,6 @@
     <link href="./css/divestemplate_css.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script> -->
     <script type="text/javascript" src="./AgentInfo.js"></script>
-
     <script>
         function subst() {
             var vars = {};
@@ -45,7 +44,6 @@
         <div class="spacer"></div>
         <hr class="line2">
         </hr>
-
         <center>
             <div class="title1"><b>DIVE CENTER PROPOSAL</div>
             <div class="title2">SUMMARY OF COVERAGES</b></div>
@@ -59,34 +57,29 @@
         <div class="content">
             <div class="content1">
                 <b class="caption">Agent Information</b>
-                <div class="caption1">
-                    <p class="info" id="nameVal"></p>
-                    <p class="info" id="addressLineVal"></p>
-						<p class ="info" id = "addressLine2Val"></p>
-                    <p class="info" id="phone2Val" style="margin-bottom:2px;"></p>
-                    <p class="info">License#: <span class="license_number"></span></p>
+                <div class = "caption1">
+                    <p class ="info" id = "nameVal"></p>
+                    <p class ="info" id = "addressLineVal"></p>
+                    <p class ="info" id = "addressLine2Val"></p>
+                    <p class = "info">License#: {$license_number}</p>
                 </div>
-                <b class="caption2">Insured's Name and Mailing Address:</b>
-                <p class="details"><span class="firstname"></span>&nbsp<span class="lastname"></span></p>
-                <p class="details">DBA:&nbsp<span class="dba"></span></p>
-                <p class="details">Entity Type:&nbsp<span class="entity_type"></span></p>
-                <p class="details"><span class="address1"></span></p>
-                <p class="details">
-                    <span class="city"></span>,
-                    <span class="state"></span>,
-                    <span class="zip"></span>
-                </p>
+                    <b class = "caption2">Insured's Name and Mailing Address:</b>
+                    <p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
+                    <p class = "details">{$address1}</p>
+                    <p class = "details">{$address2}</p>
+                    <p class = "details">{$city},{$state_in_short} - {$zip}</p>
+                    <p class = "details">{$country}</p>
             </div>
             <div class="content2">
                 <b class="p_margin">Agent Contact Information</b>
                 <div class="caption1"></div>
                 <p class="info">
-                    <span id="phone1Val"></span>&nbsp
+                    <span id="phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                     FAX: <span id="faxVal"></span>
                 </p>
                 <p class="info" id="phone2Val"></p>
-                <p class="info producerwebsite"></p>
-                <p class="info db-mail"></p>
+                <p class="info">www.diveinsurance.com</p>
+                <p class="info">diveboat@diveinsurance.com</p>
                 <p class="info">Policy period: <span class="start_date"></span> thru
                     <span class="end_date"></span> 12:01:00 AM
                 </p>
@@ -106,11 +99,11 @@
                     {$address2}, {$city}, {$state},
                     {$zip}</span></p> -->
             <p style="margin-top: 5px;" class="info">Store Location:
-                <span class="address1 uppercase"></span>,
-                <span class="address2 uppercase"></span>,
-                <span class="city uppercase"></span>,
-                <span class="state uppercase"></span>,
-                <span class="zip uppercase"></span>
+                <span class="uppercase">{$address1}</span>,
+                <span class="uppercase">{$address2}</span>,
+                <span class="uppercase">{$city}</span>,
+                <span class="uppercase">{$state}</span>,
+                <span class="uppercase">{$zip}</span>
             </p>
         </b>
     </center>

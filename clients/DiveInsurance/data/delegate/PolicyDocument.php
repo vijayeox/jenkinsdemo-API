@@ -164,11 +164,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
-                if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
+                if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['liabilityCoverage'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
-                    array_push($coverageList,$data['careerCoverage']);
-                  if($data['product'] == "Individual Professional Liability"){   
+                    if($data['product'] == "Individual Professional Liability"){
+                        array_push($coverageList,$data['careerCoverage']);
                         if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
                             $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
                             array_push($coverageList,$data['scubaFit']);
@@ -179,6 +179,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                         if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
                             $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
+                        }
+
+                        if(isset($data['excessLiability'])){
+                            array_push($coverageList,$data['excessLiability']);
+                        }
+                        if(isset($data['tecRecEndorsment'])){
+                            array_push($coverageList,$data['tecRecEndorsment']);
+                        }
+                    }
+                    if($data['product'] == "Emergency First Response"){
+                        if(isset($data['liabilityCoverage'])){
+                            array_push($coverageList,$data['liabilityCoverage']);
                         }
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
@@ -193,12 +205,34 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
                             $temp['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
-                        if(isset($result[$data['excessLiability']]) && !isset($temp['upgradeExcessLiabilityVal'])){
-                            $temp['upgradeExcessLiabilityVal'] = $result[$data['excessLiability']];
+                        if(isset($result[$data['excessLiability']])){
+                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
+                        }
+                        if(isset($result[$data['tecRecEndorsment']])){
+                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
+                        }
+                        $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
+                    }
+                    if($data['product'] == "Emergency First Response"){
+                        if(isset($result[$data['liabilityCoverage']])){
+                            $temp['liabilityVal'] = $result[$data['liabilityCoverage']];
                         }
                     }
-                    $this->logger->info("DOCUMENT blanketForm11111111");
-                    $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
+                    if(!empty($previous_data)) {
+                        $policy =array();
+                        $upgrades = array();
+                        $policy =  $previous_data[$length - 1];
+                        if($data['product'] == "Individual Professional Liability"){
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCoverage','previous_careerCoverage','careerCoverage');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousScubaFit','previous_scubaFit','scubaFit');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousTecRec','previous_tecRecEndorsment','tecRecEndorsment');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCylinder','previous_cylinder','cylinder');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousExcess','previous_excessLiability','excessLiability');
+                        }
+                        if($data['product'] == "Emergency First Response"){
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousLiabilityCoverage','previous_excessLiability','liabilityCoverage');
+                        }
+                    }
                 }
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
@@ -229,6 +263,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $NewData[0]['city'] = $data['city'];
                     $NewData[0]['state'] = $data['state'];
                     $NewData[0]['zip'] = $data['zip'];
+                    $NewData[0]['country'] = $data['country'];
                     $NewData[0]['product'] = $data['product'];
                     $NewData[0]['product_email_id'] = $data['product_email_id'];
                     $NewData[0]['entity_name'] = 'Pocket Card Job';
@@ -585,14 +620,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             } else {
                 $data['policyStatus'] = "In Force";
                 if(isset($data['endorsement_options'])){
-                    unset($data['endorsement_options']);
+                    $data['endorsement_options'] = "";
                 }
             }
             if(isset($data['initiatedByUser'])){
-                unset($data['initiatedByUser']);
+                $data['initiatedByUser'] = "";
             }
             if(isset($data['initiatedByCsr'])){
-                unset($data['initiatedByCsr']);
+                $data['initiatedByCsr'] = "";
             }
             $data['start_date'] = $startDate;
             $data['end_date'] = $endDate;
@@ -600,7 +635,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['update_date'] = $updateDate;
             }
             if(isset($data['disableOptions'])){
-                unset($data['disableOptions']);
+                $data['disableOptions'] = "";
             }
             if(isset($data['documents1'])){
                 $data['documents1'] = "";
@@ -610,6 +645,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
+        }
+
+        protected function setPreviousCoverages(&$data,&$temp,&$policy,&$upgrades,$coverages,$previousCoverageKeyStore,$previousCoverageKey,$coverageName){
+            if(isset($data[$previousCoverageKeyStore])){
+                $data[$previousCoverageKeyStore] = is_array($data[$previousCoverageKeyStore]) ? $data[$previousCoverageKeyStore] : json_decode($data[$previousCoverageKeyStore],true);
+            }else{  
+                $data[$previousCoverageKeyStore] = array();
+            }
+
+            if($policy[$previousCoverageKey] != $data[$coverageName]){
+                $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),$coverageName => $coverages[$data[$coverageName]]);
+                array_push($data[$previousCoverageKeyStore], $upgrades);
+            }
+            $temp[$previousCoverageKeyStore] = json_encode($data[$previousCoverageKeyStore]);
         }
 
         protected function setPolicyInfo(&$data,$persistenceService,$endorsementOptions = null)
@@ -901,7 +950,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     }
 
 
-    private function getStateInShort($state,$persistenceService){
+    protected function getStateInShort($state,$persistenceService){
         $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$state."'";
         $resultSet = $persistenceService->selectQuery($selectQuery);
         if($resultSet->count() == 0){
@@ -940,6 +989,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $response[$i]['city'] = $data['city'];
                 $response[$i]['state'] = $data['state'];
                 $response[$i]['zip'] = $data['zip'];
+                $response[$i]['country'] = $data['country'];
                 $response[$i]['business_name'] = $data['business_name'];
                 $i += 1;
             }

@@ -1,6 +1,6 @@
 app:
     -
-        name: InsuranceOI
+        name: Insurance
         uuid: f726fded-0764-4f4e-945e-689586baf74b
         description: 'Insurance OI Application'
         category: Dashboards
@@ -59,11 +59,11 @@ pages:
         uuid: 68e1c30c-9bfd-456a-a99b-da4fc80b9186
 menu:
     -
-        name: Production
-        icon: 'fa fa-home'
+        name: Agent
+        icon: 'fa fa-book'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page_uuid: 356ab802-2de7-4b5b-a76e-97a863e1332b
-        uuid: d02ffb8f-a3ae-476a-a85f-198dd73359ac
+        page_uuid: 68e1c30c-9bfd-456a-a99b-da4fc80b9186
+        uuid: e9d94c64-358e-4174-8748-aef23623c2d6
     -
         name: Underwriter
         icon: 'fa fa-book'
@@ -71,8 +71,8 @@ menu:
         page_uuid: 1dee3f2e-9952-4390-9d42-904d28b9f91f
         uuid: 234e4f1b-1e44-40f3-a944-3a9b89d855a5
     -
-        name: Agent
-        icon: 'fa fa-book'
+        name: Production
+        icon: 'fa fa-home'
         privilege: MANAGE_MANAGERVIEW_WRITE
-        page_uuid: 68e1c30c-9bfd-456a-a99b-da4fc80b9186
-        uuid: 775f784d-0f25-4fab-85ef-c8b0a0832339
+        page_uuid: 356ab802-2de7-4b5b-a76e-97a863e1332b
+        uuid: d02ffb8f-a3ae-476a-a85f-198dd73359ac

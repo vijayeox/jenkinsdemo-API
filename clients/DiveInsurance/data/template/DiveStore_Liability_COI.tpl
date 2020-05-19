@@ -108,7 +108,12 @@
                             $10,000,000
                         {/if}
 					</p>
-					<p class = "sec_title2">$5,000</p>
+					<p class = "sec_title2">
+					{if isset($medicalPayment) && ($medicalPayment == "true"||$medicalPayment == true)}
+                            <td>$5000</td>
+                        {else}
+                            <td>$0</td>{/if}
+                        </p>
 					<p class = "sec_title2">                        
                         {if $nonOwnedAutoLiabilityPL == "no"}
                             <td>Not Included</td>

@@ -29,8 +29,8 @@ class MenuItemService extends AbstractService
         if(isset($data['parent_id'])){
             $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
         }
-        if(isset($data['page_id'])){
-            $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_id']);
+        if(isset($data['page_uuid'])){
+            $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_uuid']);
         }
         if (!isset($data['id'])) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -70,7 +70,9 @@ class MenuItemService extends AbstractService
         }
         $data['id'] = $this->getIdFromUuid('ox_app_menu',$menuUuid);
         if(isset($data['parent_id'])){
-            $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+            if(UuidUtil::isValidUuid($data['parent_id'])){
+                $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+            }
         }
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
@@ -138,6 +140,7 @@ class MenuItemService extends AbstractService
             $menuList = $resultSet->toArray();
             $menuArray = array();
             $i = 0;
+
             foreach ($menuList as $key => $menuItem) {
                 if(isset($menuItem['privilege_name']) && $menuItem['privilege_name']!=""){
                     $privilegeList = json_decode($menuItem['privilege_name'],true);
@@ -149,11 +152,14 @@ class MenuItemService extends AbstractService
                         array_push($menuArray,$menuItem);
                     }
                 }
-                if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '') {
+
+                if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '' && $menuItem['parent_id'] != 0) {
                     $menuItem['parent_id'] = $this->getUuidFromId('ox_app_menu',$menuItem['parent_id']);
                     $parentKey = array_search($menuItem['parent_id'], array_column($menuArray, 'uuid'));
-                    $menuArray[$parentKey]['submenu'][] = $menuItem;
-                    array_pop($menuArray);
+                    if(is_numeric($parentKey)){
+                      $menuArray[$parentKey]['submenu'][] = $menuItem;
+                      array_pop($menuArray);
+                    }
                 }
             }
         }else{

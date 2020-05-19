@@ -32,12 +32,12 @@ class CommentService extends AbstractService
         $this->table = $table;
     }
 
-    public function createComment(&$data, $fileid)
+    public function createComment(&$data, $fileId)
     {
         $form = new Comment();
         //Additional fields that are needed for the create
         $data['text'] = isset($data['text']) ? $data['text'] : null;
-        $data['file_id'] = $fileid;
+        $data['file_id'] = $this->getIdFromUuid('ox_file', $fileId);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -119,13 +119,13 @@ class CommentService extends AbstractService
         return $count;
     }
 
-    public function getComments()
+    public function getComments($fileId)
     {
-        $queryString = "select * from ox_comment";
-        $where = "where ox_comment.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_comment.isdeleted!=1";
-        $order = "order by ox_comment.id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();
+        $query = "select text,ou.name as name,ou.icon as icon,ou.uuid as userId,ox_comment.date_created as time from ox_comment inner join ox_user ou on ou.id = ox_comment.created_by where ox_comment.org_id = :orgId AND ox_comment.file_id = :fileId order by ox_comment.id desc";
+        $fileId = $this->getIdFromUuid('ox_file', $fileId);
+        $queryParams = array("orgId"=>AuthContext::get(AuthConstants::ORG_ID),"fileId"=>$fileId);
+        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        return $resultSet;
     }
 
     public function getchildren($id)

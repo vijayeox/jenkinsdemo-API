@@ -637,9 +637,10 @@ class OrganizationService extends AbstractService
         $where = "";
         $sort = "oxp.name";
 
-        $select = "SELECT oxp.uuid,oxp.name,oxp.description,oxu.uuid as manager_id, oxo.uuid as org_id";
+        $select = "SELECT oxp.uuid,oxp.name,oxp.description,subpro.name as subproject_name,subpro.uuid as subproject_uuid, oxu.uuid as manager_id, oxo.uuid as org_id";
         $from = "FROM `ox_project` as oxp
     LEFT JOIN ox_user as oxu on oxu.id = oxp.manager_id
+    LEFT JOIN ox_project as subpro on oxp.id = subpro.parent_id
     LEFT JOIN ox_organization as oxo on oxp.org_id = oxo.id";
 
         $cntQuery = "SELECT count(oxp.uuid) " . $from;
@@ -657,7 +658,7 @@ class OrganizationService extends AbstractService
         if (!$orgId) {
             return 0;
         }
-        $where .= strlen($where) > 0 ? " AND oxp.org_id =" . $orgId . " and oxp.isdeleted != 1" : " WHERE oxp.org_id =" . $orgId . " and oxp.isdeleted != 1";
+        $where .= strlen($where) > 0 ? " AND oxp.org_id =" . $orgId . " and oxp.isdeleted != 1" : " WHERE oxp.org_id =" . $orgId . " and oxp.isdeleted != 1 and oxp.parent_id IS NULL";
 
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
