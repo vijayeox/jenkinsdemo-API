@@ -427,8 +427,9 @@ class AppService extends AbstractService
         if (FileUtils::fileExists($appName) && FileUtils::fileExists($metadataPath)) {
             return;
         }
-        $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps/view/apps/eoxapps';
-        FileUtils::copyDir($eoxapp, $appName);
+        $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
+        FileUtils::copyDir($eoxapp, $path);
+        FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app'][0]['name']);
         $jsonData = json_decode(file_get_contents($metadataPath), true);
         $jsonData['name'] = $yamlData['app'][0]['name'];
         $jsonData['appId'] = $yamlData['app'][0]['uuid'];

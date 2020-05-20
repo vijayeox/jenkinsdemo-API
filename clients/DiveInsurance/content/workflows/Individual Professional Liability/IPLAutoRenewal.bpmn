@@ -17,34 +17,34 @@
           <camunda:inputParameter name="fileId_fieldName">previous_fileId</camunda:inputParameter>
         </camunda:inputOutput>
         <camunda:executionListener event="end">
-          <camunda:script scriptFormat="groovy">def variables = execution.getVariables();       if(variables.containsKey("process_reminder")){
-                if(variables.process_reminder == "true" || variables.process_reminder == true){
-                 execution.setVariable("process_reminder",true); 
-                }else{
-                    execution.setVariable("process_reminder",false); 
-                }
-              }else{
-                 execution.setVariable("process_reminder",false); 
-              }
-def variables = execution.getVariables();       if(variables.containsKey("send_reminder")){
-                if(variables.send_reminder == "true" || variables.send_reminder == true){
-                 execution.setVariable("send_reminder",true); 
-                }else{
-                    execution.setVariable("send_reminder",false); 
-                }
-              }else{
-                 execution.setVariable("send_reminder",false); 
-              }
-
-def value = execution.getVariables();       if(value.containsKey("automatic_renewal")){
-                if(value.automatic_renewal == "true" || value.automatic_renewal == true){
-                 execution.setVariable("automatic_renewal",true); 
-                }else{
-                    execution.setVariable("automatic_renewal",false); 
-                }
-              }else{
-                 execution.setVariable("automatic_renewal",false); 
-              }</camunda:script>
+          <camunda:script scriptFormat="groovy">def variables = execution.getVariables();       
+if(variables.containsKey("process_reminder")){
+  if(variables.process_reminder == "true" || variables.process_reminder == true){
+    execution.setVariable("process_reminder",true); 
+  } else {
+    execution.setVariable("process_reminder",false); 
+  }
+} else {
+  execution.setVariable("process_reminder",false); 
+}
+if(variables.containsKey("send_reminder")){
+  if(variables.send_reminder == "true" || variables.send_reminder == true){
+    execution.setVariable("send_reminder",true); 
+  }else{
+    execution.setVariable("send_reminder",false); 
+  }
+}else{
+  execution.setVariable("send_reminder",false); 
+}
+if(variables.containsKey("automatic_renewal")){
+  if(variables.automatic_renewal == "true" || variables.automatic_renewal == true){
+    execution.setVariable("automatic_renewal",true); 
+  }else{
+    execution.setVariable("automatic_renewal",false); 
+  }
+}else{
+  execution.setVariable("automatic_renewal",false); 
+}</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1xtw30t</bpmn:incoming>
