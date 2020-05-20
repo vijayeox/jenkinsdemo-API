@@ -122,3 +122,8 @@ for deploy app api to work make sure you give following permission
 mkdir /opt/oxzion/eoxapps
 chmod 777 -R /opt/oxzion/eoxapps
 
+chown oxzion:oxzion /opt/oxzion/camunda/ -R
+
+create api symlinks like file_docs etc.
+
+sudo apt install jq
