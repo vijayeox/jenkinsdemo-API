@@ -1,7 +1,6 @@
 import osjs from "osjs";
 import { name as applicationName, icon_white } from "./metadata.json";
-import React from "react";
-import ReactDOM from "react-dom";
+import {React,ReactDOM} from "oxziongui";
 import Home from "./home";
 
 // Our launcher
@@ -23,8 +22,7 @@ const register = (core, args, options, metadata) => {
       position: { left: 700, top: 200 }
     })
     .on("destroy", () => proc.destroy())
-    .render($content => ReactDOM.render(<Home args={core} params={args} />, $content));
-
+    .render($content => ReactDOM.render(<Home args={core} params={args} proc={proc} />, $content));
   return proc;
 };
 
