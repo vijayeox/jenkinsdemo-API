@@ -208,7 +208,7 @@ class FileService extends AbstractService
             $count = $this->table->save($file);
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
-                $query = "Delete from ox_file_attribute where file_id = :fileId";
+                $query = "delete from ox_file_attribute where file_id = :fileId";
                 $queryWhere = array("fileId" => $id);
                 $result = $this->executeQueryWithBindParameters($query, $queryWhere);
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields);
@@ -619,7 +619,7 @@ class FileService extends AbstractService
                             $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             $subQuery .= " WHERE ";
                             //Need to replace this too if performance still sluggish
-                            $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN " . $tablePrefix . ".field_value_date $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='int') THEN " . $tablePrefix . ".field_value_number " . (($filterOperator['integerOperation'])) . " '" . $val['value'] . "' ELSE (" . $tablePrefix . ".field_value_text $queryString) END )))";
+                            $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN " . $tablePrefix . ".field_value_date $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='numeric') THEN " . $tablePrefix . ".field_value_numeric $queryString ELSE (" . $tablePrefix . ".field_value_text $queryString) END )))";
                         }
                         $prefix += 1;
                     }
@@ -628,26 +628,28 @@ class FileService extends AbstractService
                     }
                 }
                 if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
-                    $sortCount = 0;
-                    $sortTable = "tblf" . $sortCount;
-                    $sort = " ORDER BY ";
+                    //TODO Sort Fixes
+                    // $sortCount = 0;
+                    // $sortTable = "tblf" . $sortCount;
+                    // $sort = " ORDER BY ";
 
-                    foreach ($filterParamsArray[0]['sort'] as $key => $value) {
-                        $fieldName = $value['field'];
-                        $fieldDetails = $this->getFieldDetails($fieldName,$entityId);  //We need the EntityId 
-                        $valueColumn = $this->getValueColumn($fieldDetails);
-                        if ($sortCount == 0) {
-                            $sort .= $fieldName . " " . $value['dir'];
-                        } else {
-                            $sort .= "," . $fieldName . " " . $value['dir'];
-                        }
-                        if($fieldName == 'date_created'){
-                            $field .= ", of.date_created";
-                        }else{
-                            $field .= " , (select " . $sortTable . ".".$valueColumn." from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $fieldName;
-                        }
-                        $sortCount += 1;
-                    }
+                    // foreach ($filterParamsArray[0]['sort'] as $key => $value) {
+                    //     $fieldName = $value['field'];
+                    //     // $fieldDetails = $this->getFieldDetails($fieldName,$entityId);  //We need the EntityId 
+                    //     // $valueColumn = $this->getValueColumn($fieldDetails);
+                    //     if ($sortCount == 0) {
+                    //         $sort .= $fieldName . " " . $value['dir'];
+                    //     } else {
+                    //         $sort .= "," . $fieldName . " " . $value['dir'];
+                    //     }
+                    //     if($fieldName == 'date_created'){
+                    //         $field .= ", of.date_created";
+                    //     }else{
+                    //         $field .= " , (select " . $sortTable . ".".$valueColumn." from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id) inner join ox_app_entity as ".$value['field']."_entity on(".$value['field']."_entity.id = " . $sortTable . ".entity_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $fieldName;
+                    //     }
+                    //     $sortCount += 1;
+                    // }
+                    // print_r($field);exit;
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
@@ -655,13 +657,14 @@ class FileService extends AbstractService
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $countQuery = "select count(of.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
-                $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
-                $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
-                $select = "SELECT DISTINCT of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+                $countQuery = "SELECT FOUND_ROWS();";
+                // print_r($countQuery);exit;
+                $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
+                $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 if ($resultSet) {
                     $i = 0;
                     foreach ($resultSet as $file) {
@@ -674,7 +677,7 @@ class FileService extends AbstractService
                         $i++;
                     }
                 }
-                return array('data' => $resultSet, 'total' => $countResultSet[0]['count']);
+                return array('data' => $resultSet, 'total' => $countResultSet[0]['FOUND_ROWS()']);
             } catch (Exception $e) {
                 throw new ServiceException($e->getMessage(), "app.mysql.error");
             }
@@ -822,7 +825,6 @@ class FileService extends AbstractService
             $operatorp1 = '%';
             $operatorp2 = '%';
             $operation = ' like ';
-            $integerOperation = "=";
         }
 
         return $returnData = array(

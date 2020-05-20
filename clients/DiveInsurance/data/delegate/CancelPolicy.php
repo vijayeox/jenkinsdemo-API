@@ -46,6 +46,7 @@ class CancelPolicy extends PolicyDocument
         $value = json_decode($data['reasonforCsrCancellation'], true);
         $data['reasonforCsrCancellation'] = $value['value'];
         $data['reinstateDocuments'] = $data['documents'];
+        $data['reasonforRejection'] = isset($data['reasonforRejection']):$data['reasonforRejection']:"Not Specified";
         $Canceldate = isset($Canceldate) ? $Canceldate : date_create();
         $data['CancelDate'] = isset($data['CancelDate']) ? $data['CancelDate']: $Canceldate->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";

@@ -19,18 +19,13 @@ if (mode === "production") {
 module.exports = {
   mode,
   devtool: "source-map",
-  resolve: {
-    alias: {
-      react: path.resolve(__dirname, "./node_modules", "react"),
-      OxzionGUI: path.resolve(__dirname, "../../../../../view/gui/src/")
-    }
-  },
   entry: [
     path.resolve(__dirname, "index.js"),
     path.resolve(__dirname, "index.scss")
   ],
   externals: {
-    osjs: "OSjs"
+    osjs: "OSjs",
+    oxziongui: "oxziongui"
   },
   optimization: {
     minimize
@@ -39,7 +34,9 @@ module.exports = {
     new CopyWebpackPlugin([
        {from:'public/css',to:'css'},
        {from:'public/js',to:'js'},
-       {from:'public/img',to:'img'}
+       {from:'public/img',to:'img'},
+       "icon.png",
+       "icon_white.png"
     ]),
     new MiniCssExtractPlugin({
       filename: "[name].css",

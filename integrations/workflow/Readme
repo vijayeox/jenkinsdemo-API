@@ -1,5 +1,7 @@
 Build all the child projects first
 
+Update integrations/workflow/ProcessEngine/src/main/resources/application.properties file with the ip address of your local machine
+
 $ docker build -t workflow_build docker_build
 
 $ sudo docker run --network="host" -it -v ${PWD}:/camunda --entrypoint=bash workflow_build
