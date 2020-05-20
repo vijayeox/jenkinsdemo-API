@@ -94,3 +94,5 @@
         </tbody>
     </table>
 </div>
+<p>&nbsp</p>
+<p id="datetimebasis" style="text-align: center;"><span>{$Header['ReportBasis']}</span>&nbsp basis<span>&nbsp&nbsp&nbsp{$Header['Time']|date_format:"%A, %B %e %Y ,%T - %Z"}</span></p>
