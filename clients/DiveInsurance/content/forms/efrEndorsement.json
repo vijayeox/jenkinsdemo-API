@@ -1329,7 +1329,7 @@
 				"collapsible": false,
 				"tableView": true,
 				"key": "techrecPanel",
-				"customConditional": "if (data.privileges){\n  if(data.attachments && data.attachments.length > 0 && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    show = true;\n  } else {\n    if(data.attachments && data.attachments.length > 0){\n      show = true;\n    } else{\n      show = false;\n    }\n  }\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n    if(data.attachments && data.attachments.length > 0){\n      show = true;\n    } else{\n      show = false;\n    }\n} else {\n  show = false;\n}",
 				"type": "panel",
 				"label": "Policy Holder Attachments",
 				"input": false,
@@ -2161,7 +2161,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 143,
+	"_vid": 144,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2182,7 +2182,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-18T09:20:18.940Z",
+	"modified": "2020-05-20T08:13:44.614Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

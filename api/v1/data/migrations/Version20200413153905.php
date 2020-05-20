@@ -27,7 +27,7 @@ final class Version20200413153905 extends AbstractMigration
             print_r("expression\n");
             print_r($e->getTraceAsString());exit;
           }
-              $this->addSql("DELETE ofa FROM ox_file_attribute ofa JOIN ox_file of ON of.id=ofa.file_id WHERE of.latest=0");
+              $this->addSql("DELETE ofa FROM ox_file_attribute ofa JOIN ox_file `of` ON of.id=ofa.file_id WHERE of.latest=0");
     }
 
     protected function migrateData(){

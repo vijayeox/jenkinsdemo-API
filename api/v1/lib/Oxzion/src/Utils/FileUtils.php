@@ -94,7 +94,6 @@ class FileUtils
 
     public static function renameFile($source, $destination)
     {
-        self::createDirectory(str_replace(basename($destination), "", $destination));
         return rename($source, $destination);
     }
 

@@ -5,6 +5,6 @@ return array(
         'dbname'   => $db,
         'user'     => $username,
         'password' => $password,
-        'host'     => $dbhost,
+        'host'     => $host,
         'driver'   => 'pdo_mysql',
 );

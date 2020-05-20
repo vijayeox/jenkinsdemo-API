@@ -51,27 +51,27 @@ class RenewalRateCard extends RateCard
             $data['form_data']['start_date_range'] = $date_range;
         }
 
-        $filterParams = array();
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
-        $policyList = $this->getFileList(null,$filterParams);
-        if(count($policyList['data']) > 0){
-            $policy_exists = true;
-        } else {
-            $policy_exists = false;
-        }
+        // $filterParams = array();
+        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
+        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
+        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
+        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
+        // $policyList = $this->getFileList(null,$filterParams);
+        // if(count($policyList['data']) > 0){
+        //     $policy_exists = true;
+        // } else {
+        //     $policy_exists = false;
+        // }
 
-        if($policy_exists == true){
-            if(isset($data['form_data']['policyPeriod'])){
-                throw new ServiceException("Renewal Process has already been initiated for this PADI Number for the Policy Period(".$data['form_data']['policyPeriod']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
-            } else {
-                if(isset($data['form_data']['start_date'])){
-                    throw new ServiceException("Renewal Process has already been initiated for this PADI Number for the Policy Period(".$data['form_data']['start_date']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
-                }
-            }
-        }
+        // if($policy_exists == true){
+        //     if(isset($data['form_data']['policyPeriod'])){
+        //         throw new ServiceException("Renewal Process has already been initiated for this PADI Number for the Policy Period(".$data['form_data']['policyPeriod']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
+        //     } else {
+        //         if(isset($data['form_data']['start_date'])){
+        //             throw new ServiceException("Renewal Process has already been initiated for this PADI Number for the Policy Period(".$data['form_data']['start_date']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
+        //         }
+        //     }
+        // }
 
         
         //END DATE PERIOD SELECTION

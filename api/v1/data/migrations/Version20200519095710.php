@@ -20,9 +20,9 @@ final class Version20200519095710 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        // $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_type ENUM('TEXT','DATE','NUMERIC','BOOLEAN','OTHER') NOT NULL");
-        // $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_text VARCHAR(16000)");
-        // $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa INNER JOIN ox_field of2 on of2.id = ofa.field_id Where of2.data_type = 'text') AS M on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_text = M.field_value, ox_file_attribute.field_value_type = 'TEXT'");
+        $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_type ENUM('TEXT','DATE','NUMERIC','BOOLEAN','OTHER') NOT NULL");
+        $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_text VARCHAR(16000)");
+        $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa INNER JOIN ox_field of2 on of2.id = ofa.field_id Where (of2.data_type = 'text' or of2.data_type = 'document' or of2.data_type = 'file' or of2.data_type = 'json' or of2.data_type = 'list')) AS M on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_text = M.field_value, ox_file_attribute.field_value_type = 'TEXT'");
         $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_numeric FLOAT");
         $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa INNER JOIN ox_field of2 on of2.id = ofa.field_id Where of2.data_type = 'numeric') AS M on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_numeric = M.field_value, ox_file_attribute.field_value_type = 'NUMERIC'");
         $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_boolean TINYINT(1)");
@@ -38,6 +38,7 @@ final class Version20200519095710 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE ox_file_attribute DROP COLUMN field_value_numeric,DROP COLUMN field_value_text,DROP COLUMN field_value_boolean,DROP COLUMN field_value_date,DROP COLUMN field_value_type");
         $this->addSql("ALTER TABLE ox_file_attribute DROP INDEX numeric_value_index,DROP INDEX text_value_index,DROP INDEX boolean_value_index,DROP INDEX date_value_index");
         $this->addSql("ALTER TABLE ox_file_attribute DROP COLUMN field_value_numeric,DROP COLUMN field_value_text,DROP COLUMN field_value_boolean,DROP COLUMN field_value_date,DROP COLUMN field_value_type");
     }

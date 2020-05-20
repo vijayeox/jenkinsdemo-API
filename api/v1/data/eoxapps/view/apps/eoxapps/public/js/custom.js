@@ -1,6 +1,6 @@
 $(".form")
   .find("input, textarea")
-  .on("keyup blur focus", function (e) {
+  .on("keyup blur focus", function(e) {
     var $this = $(this),
       label = $this.prev("label");
 
@@ -25,7 +25,7 @@ $(".form")
     }
   });
 
-$(".tab a").on("click", function (e) {
+$(".tab a").on("click", function(e) {
   e.preventDefault();
 
   $(this)
@@ -45,29 +45,122 @@ $(".tab a").on("click", function (e) {
   $(target).fadeIn(600);
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  $(".loginButton").on("click", function (e) {
-    var username = document.getElementsByClassName("userNameField")[0].value;
-    var password = document.getElementsByClassName("passwordField")[0].value;
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    let response = fetch(baseUrl + "auth", {
-      body: formData,
-      method: "POST",
-      mode: "cors"
-    }).then(response => {
-      return response.json();
-    });
-    response.then(res => {
-      if (res.status == "success") {
-        autoLogin(res.data);
+document.addEventListener("DOMContentLoaded", function() {
+  $("#username_field").keyup(function(e) {
+    if (e.keyCode === 13) {
+      loginAction();
+    }
+  });
+
+  $("#password_field").keyup(function(e) {
+    if (e.keyCode === 13) {
+      loginAction();
+    }
+  });
+
+  $(".loginButton").on("click", function(e) {
+    loginAction();
+  });
+
+  $(".resetPassword").on("click", function(e) {
+    forgotPassword();
+  });
+
+  function loginAction() {
+    var username = document.getElementById("username_field").value;
+    var password = document.getElementById("password_field").value;
+    if (username && password) {
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("password", password);
+      let response = fetch(baseUrl + "auth", {
+        body: formData,
+        method: "POST",
+        mode: "cors"
+      }).then(response => {
+        return response.json();
+      });
+      response.then(res => {
+        if (res.status == "success") {
+          autoLogin(res.data);
+        } else {
+          Swal.fire({
+            title: "Login Failed",
+            html:
+              '<div style="font-size: 17px">The username and/or password is incorrect!  <br /> Please try again.</div>',
+            icon: "error",
+            confirmButtonText: "Forgot Password ?",
+            showCancelButton: true
+          }).then(result => {
+            if (result.value == true) {
+              forgotPassword();
+            }
+          });
+          // document.getElementById("wrongPassword").style.display = "block";
+        }
+      });
+    } else {
+      Swal.fire({
+        // position: "top-end",
+        icon: "warning",
+        title:
+          "Please enter your " +
+          (username ? "" : "username") +
+          (!username && !password ? " and " : "") +
+          (password ? "" : "password") +
+          ".",
+        showConfirmButton: false,
+        timer: 2200
+      });
+    }
+  }
+
+  function forgotPassword() {
+    Swal.fire({
+      title: "Please enter your username",
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "off"
+      },
+      inputValidator: value => {
+        if (!value) {
+          return "Please enter your username!";
+        }
+      },
+      confirmButtonText: "Confirm",
+      showCancelButton: true,
+      showLoaderOnConfirm: true,
+      preConfirm: login => {
+        let formData = new FormData();
+        formData.append("username", login);
+        return fetch(baseUrl + "user/me/forgotpassword", {
+          method: "post",
+          body: formData
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.statusText);
+            }
+            return response.json();
+          })
+          .catch(error => {
+            Swal.showValidationMessage(`Request failed: Username not found.`);
+          });
+      }
+    }).then(result => {
+      if (result.value.status == "success") {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Verification Mail has been sent",
+          showConfirmButton: false,
+          timer: 2100
+        });
       } else {
-        document.getElementById("wrongPassword").style.display = "block";
-        document.getElementById("wrongPassword").style.color = "red";
+        Swal.showValidationMessage(`Request failed: Username not found.`);
       }
     });
-  });
+  }
 
   function autoLogin(data) {
     localStorage.clear();
@@ -88,8 +181,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Formio.createForm(
     document.getElementById("formio"),
-    JSON.parse(formContent)
-  ).then(function (form) {
+    JSON.parse(formContent),
+    { noAlerts: true }
+  ).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
     // Triggered when they click the submit button.
@@ -103,11 +197,21 @@ document.addEventListener("DOMContentLoaded", function () {
         method: "POST",
         mode: "cors"
       }).then(response => {
-        form.emit("submitDone", submission);
         return response.json();
       });
       response.then(res => {
-        autoLogin(res.data);
+        if (res.status == "success") {
+          form.emit("submitDone", submission);
+          setTimeout(() => {
+            autoLogin(res.data);
+          }, 500);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Submission Failed",
+            text: res.message
+          }).then(form.emit("error", submission));
+        }
       });
     });
     form.on("callDelegate", changed => {
@@ -141,6 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (changed && changed.changed) {
         var component = changed.changed.component;
         var properties = component.properties;
+        console.log(changed);
         if (properties) {
           if (properties["delegate"]) {
             $.ajax({
@@ -153,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "/delegate/" +
                 properties["delegate"],
               data: changed.data,
-              success: function (response) {
+              success: function(response) {
                 if (response.data) {
                   form.submission = { data: response.data };
                   form.triggerChange();
@@ -161,8 +266,14 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             });
           }
+          if(properties["clear_field"]){
+            var targetComponent = form.getComponent(properties["clear_field"]);
+            if (targetComponent) {
+              targetComponent.setValue("");
+            } 
+          }
         }
       }
-    })
+    });
   });
 });
