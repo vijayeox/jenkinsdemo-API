@@ -1,7 +1,5 @@
-import React from "react";
+import {React,ReactDOM,LeftMenuTemplate,FormRender} from "oxziongui";
 import { appId as application_id } from "./metadata.json";
-import LeftMenuTemplate from "OxzionGUI/LeftMenuTemplate";
-import FormRender from "OxzionGUI/components/App/FormRender";
 import "./index.scss";
 
 class Home extends React.Component {
@@ -10,12 +8,14 @@ class Home extends React.Component {
     this.core = this.props.args;
     this.helper = this.core.make("oxzion/restClient");
     this.params = this.props.params;
+    this.proc = this.props.proc;
     this.state = {
       cacheID: undefined,
       formContent: undefined,
       cachePage: undefined,
       formID: undefined,
       cacheData: undefined,
+      workflowId: undefined,
       showMenuPage: undefined
     };
   }
@@ -25,6 +25,7 @@ class Home extends React.Component {
       var cache = cacheResponse.data;
       if (cache) {
         if (cache.workflow_uuid) {
+          this.setState({ workflowId: cache.workflow_uuid });
           this.getFormData(cache.workflow_uuid).then(formResponse => {
             if (formResponse.data) {
               this.setState({
@@ -106,7 +107,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div style={{ height: "inherit" }}>
+      <div style={{ height: "inherit", overflow: "auto" }}>
         {this.state.formContent ? (
           <div className="formContent">
             <FormRender
@@ -114,6 +115,7 @@ class Home extends React.Component {
               core={this.core}
               page={this.state.cachePage}
               appId={application_id}
+              workflowId={this.state.workflowId}
               formId={this.state.formID}
               content={this.state.formContent}
               data={this.state.cacheData}
@@ -123,9 +125,13 @@ class Home extends React.Component {
           <LeftMenuTemplate
             core={this.core}
             params={this.params}
+            proc={this.proc}
             appId={application_id}
           />
         ) : null}
+        <div id="floater">
+          <img src="./public/img/poweredby.png"></img>
+        </div>
       </div>
     );
   }
