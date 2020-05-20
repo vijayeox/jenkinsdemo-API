@@ -21,6 +21,9 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI implements Analyt
     $finalResult['meta']=$parameters;
     $qbService = new QuickBooksService($this->config);
     $dateperiod = null;
+    if (!empty($parameters['filter']) || !empty($parameters['inline_filter'])) {
+      $parameters = $this->parseFilter($parameters);
+    } 
     if (!empty($parameters['date-period'])) $dateperiod = $parameters['date-period'];
     if (!empty($parameters['date_period'])) $dateperiod =  $parameters['date_period'];
 
@@ -53,6 +56,24 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI implements Analyt
     $update->table('ox_datasource')->set(['configuration' => $jsonString])->where(['id' => $dsid]);
     $statement = $sql->prepareStatementForSqlObject($update);
     $result = $statement->execute();
+  }
+
+
+  public function parseFilter($parameters){
+    if (isset($parameters['filter'])) {
+        $filter = $parameters['filter'];
+    }
+   if (isset($parameters['inline_filter'])) {
+        $filter = $parameters['inline_filter'];
+    }
+    if (isset($filter[0][0][0])){
+      if ($filter[0][0][0]=='date_period' || $filter[0][0][0]=='date-period') {
+        $startdate=Date('Y-m-d',strtotime($filter[0][0][2]));
+        $enddate=Date('Y-m-d',strtotime($filter[0][2][2]));
+        $parameters['date_period']=$startdate.'/'.$enddate;
+      }  
+    }
+    return $parameters;
   }
 }
 ?>
