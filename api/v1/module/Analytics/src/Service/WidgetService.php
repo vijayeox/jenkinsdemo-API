@@ -180,12 +180,12 @@ class WidgetService extends AbstractService
         }
 
         try {
-            $query = 'DELETE FROM ox_widget_query WHERE ox_widget_id=(SELECT id FROM ox_widget WHERE uuid=:uuid)';
+            $query = 'DELETE FROM ox_widget_query WHERE ox_widget_id = (SELECT id FROM ox_widget WHERE uuid = :uuid)';
             $queryParams = [
                 'uuid' => $uuid,
             ];
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
-            if (1 != $result->count()) {
+            if ($result->count() == 0) {
                 $this->logger->error('Unexpected result from ox_widget_query cleaning statement. Transaction rolled back.', $result);
                 $this->logger->error('Query and parameters are:');
                 $this->logger->error($query);
