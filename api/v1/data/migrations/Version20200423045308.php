@@ -34,8 +34,8 @@ final class Version20200423045308 extends AbstractMigration
         $this->addSql("ALTER TABLE ox_workflow_instance ADD COLUMN `completion_data` longtext NULL AFTER `start_data`");
         $this->addSql("UPDATE ox_workflow_instance SET start_data = file_data");
         $this->addSql("ALTER TABLE ox_workflow_instance DROP COLUMN `file_data`");
-        $this->addSql("UPDATE ox_activity_instance as oai join ox_workflow_instance as owi on owi.id = oai.workflow_instance_id join ox_file as of on of.id = owi.file_id SET oai.completion_data=of.data,oai.modified_by = of.modified_by,oai.submitted_date = of.date_modified");
-        $this->addSql("UPDATE ox_workflow_instance as owi join ox_file as of on of.id = owi.file_id SET owi.completion_data=of.data,owi.date_modified = of.date_modified");
+        $this->addSql("UPDATE ox_activity_instance as oai join ox_workflow_instance as owi on owi.id = oai.workflow_instance_id join ox_file as `of` on of.id = owi.file_id SET oai.completion_data=of.data,oai.modified_by = of.modified_by,oai.submitted_date = of.date_modified");
+        $this->addSql("UPDATE ox_workflow_instance as owi join ox_file as `of` on of.id = owi.file_id SET owi.completion_data=of.data,owi.date_modified = of.date_modified");
         $this->addSql("ALTER TABLE ox_field ADD COLUMN `type` VARCHAR(32) AFTER `data_type`");
         $this->addSql("ALTER TABLE ox_field ADD COLUMN `parent_id` INT(32) AFTER `type`");
         $this->addSql("UPDATE ox_field SET type = data_type");
