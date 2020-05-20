@@ -144,7 +144,7 @@
 						{if isset($scubaFit) && !empty($scubaFit)}
             		{foreach from=$list item=$upgradeData}
 						{if $scubaFit != "scubaFitInstructorDeclined"}
-							<p class = "policy_status">ScubaFit Coverage: {$upgradeData.scubaFit} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
+							<p class = "policy_status">ScubaFit Instructor: Added to this certificate as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
 						{/if}
             		{/foreach}
 						{/if}
