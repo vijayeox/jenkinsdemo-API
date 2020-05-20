@@ -456,7 +456,7 @@ class FileService extends AbstractService
 
     public function getValueColumn($field) {
         $type = $field['data_type'];
-        if ($type=='number' || $type=='Date') {
+        if ($type=='numeric' || $type=='Date') {
             $valueColumn = 'field_value_'.strtolower($type);
         } elseif ($type=='textarea' || $type=='form') {
             $valueColumn='field_value';
@@ -504,14 +504,10 @@ class FileService extends AbstractService
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
         if (count($result) > 0) {
             $queryParams = array();
-            $appFilter = "oa.id = :appId";
             $queryParams['appId'] = $appId;
             $statusFilter = "";
             $createdFilter = "";
             $entityFilter = "";
-            if (isset($params['workflowStatus'])) {
-                $statusFilter = " AND wi.status = '" . $params['workflowStatus'] . "'";
-            }
             if (isset($params['entityName'])) {
                 $entityFilter = " AND en.name = :entityName";
                 $queryParams['entityName'] = $params['entityName'];
@@ -523,6 +519,7 @@ class FileService extends AbstractService
                 }
             }
             $workflowJoin = "";
+            $workflowFilter = "";
             if (isset($params['workflowId'])) {
 
                 // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
@@ -534,7 +531,7 @@ class FileService extends AbstractService
                 if (!$workflowId) {
                     throw new ServiceException("Workflow Does not Exist", "app.forworkflownot.found");
                 } else {
-                    $appFilter .= " AND ow.id = :workflowId";
+                    $workflowFilter = " AND ow.id = :workflowId";
                     $queryParams['workflowId'] = $workflowId;
                     $workflowJoin = "left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id left join ox_workflow as ow on ow.id = wd.workflow_id";
                 }
@@ -552,10 +549,10 @@ class FileService extends AbstractService
                  till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
                 $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
             }
-            $where = " $appFilter $statusFilter $entityFilter $createdFilter";
-            $fromQuery = " from ox_file as of
-            inner join ox_app_entity as en on en.id = of.entity_id
-            inner join ox_app as oa on (oa.id = en.app_id)";
+            $where = " $workflowFilter $statusFilter $entityFilter $createdFilter";
+            $fromQuery = " from ox_file as `of`
+            inner join ox_app_entity as en on en.id = `of`.entity_id
+            inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
             if (isset($params['userId'])) {
                 if ($params['userId'] == 'me') {
                     $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -566,15 +563,20 @@ class FileService extends AbstractService
                     }
                 }
                 $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=oa.id
-                INNER JOIN ox_file_attribute ofa on ofa.file_id = of.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
+                INNER JOIN ox_file_attribute ofa on ofa.file_id = `of`.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
                 $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
                 $queryParams['orgId'] = $orgId;
             } else {
                 $userWhere = "";
             }
+            if (isset($params['workflowStatus'])) {
+                $wfStatusFilter = " AND wi.status = '" . $params['workflowStatus'] . "'";
+            } else {
+                $wfStatusFilter = "";
+            }
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
-            $fromQuery .= "left join (select wii.* from ox_workflow_instance as wii inner join (select file_id, max(date_created) as date_created from ox_workflow_instance group by file_id) as wid on wii.file_id = wid.file_id and wii.date_created = wid.date_created) as wi on of.id = wi.file_id $workflowJoin";
+            $fromQuery .= "left join ox_workflow_instance as wi on `of`.last_workflow_instance_id = wi.id $wfStatusFilter $workflowJoin";
             $prefix = 1;
             $whereQuery = "";
             $joinQuery = "";
@@ -609,47 +611,33 @@ class FileService extends AbstractService
                     foreach ($filterData as $val) {
                         $tablePrefix = "tblf" . $prefix;
                         if (!empty($val)) {
-                            if ($subQuery != '') {
-                                $subQuery .= " " . $filterlogic . " of.id in ";
-                            } else {
-                                $subQuery = " of.id in ";
-                            }
-                            $subQuery .= " (select ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as " . $val['field'] . $tablePrefix . " on( " . $val['field'] . $tablePrefix . ".id = " . $tablePrefix . ".field_id )";
+                            $fromQuery .= " inner join ox_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
                             $filterOperator = $this->processFilters($val);
                             $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
-                            $subQuery .= " WHERE ";
-                            //Need to replace this too if performance still sluggish
-                            $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN " . $tablePrefix . ".field_value_date $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='numeric') THEN " . $tablePrefix . ".field_value_numeric $queryString ELSE (" . $tablePrefix . ".field_value_text $queryString) END )))";
+                            $whereQuery .= "(CASE WHEN (" .$tablePrefix . ".field_value_type='DATE') THEN " . $tablePrefix . ".field_value_date $queryString WHEN (" .$tablePrefix . ".field_value_type='NUMERIC') THEN " . $tablePrefix . ".field_value_numeric $queryString WHEN (" .$tablePrefix . ".field_value_type='BOOLEAN') THEN " . $tablePrefix . ".field_value_boolean $queryString ELSE (" . $tablePrefix . ".field_value_text $queryString) END ) $filterlogic";
                         }
                         $prefix += 1;
                     }
-                    if ($subQuery != "") {
-                        $whereQuery = " AND (" . $subQuery . ")";
-                    }
+                    $whereQuery = rtrim($whereQuery, $filterlogic);
                 }
                 if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
                     //TODO Sort Fixes
-                    // $sortCount = 0;
-                    // $sortTable = "tblf" . $sortCount;
-                    // $sort = " ORDER BY ";
+                    $sortCount = 0;
+                    $sortTable = "tblf" . $sortCount;
+                    $sort = " ORDER BY ";
 
-                    // foreach ($filterParamsArray[0]['sort'] as $key => $value) {
-                    //     $fieldName = $value['field'];
-                    //     // $fieldDetails = $this->getFieldDetails($fieldName,$entityId);  //We need the EntityId 
-                    //     // $valueColumn = $this->getValueColumn($fieldDetails);
-                    //     if ($sortCount == 0) {
-                    //         $sort .= $fieldName . " " . $value['dir'];
-                    //     } else {
-                    //         $sort .= "," . $fieldName . " " . $value['dir'];
-                    //     }
-                    //     if($fieldName == 'date_created'){
-                    //         $field .= ", of.date_created";
-                    //     }else{
-                    //         $field .= " , (select " . $sortTable . ".".$valueColumn." from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id) inner join ox_app_entity as ".$value['field']."_entity on(".$value['field']."_entity.id = " . $sortTable . ".entity_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $fieldName;
-                    //     }
-                    //     $sortCount += 1;
-                    // }
-                    // print_r($field);exit;
+                    foreach ($filterParamsArray[0]['sort'] as $key => $value) {
+                        $tablePrefix = "sorttblf".$prefix;
+                        $fieldName = $value['field'];
+                        if($fieldName == 'date_created'){
+                            $sort .= "`of`.date_created ".$value['dir'].",";
+                        }else{
+                            $fromQuery .= " inner join ox_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$fieldName.$tablePrefix." on(".$fieldName.$tablePrefix.".id = ".$tablePrefix.".field_id and ". $fieldName.$tablePrefix.".name='".$fieldName."')";
+                            $sort .= "CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean ELSE (".$tablePrefix.".field_value_text) END ".$value['dir'].",";
+                        }
+                        $sortCount += 1;
+                    }
+                    $sort = rtrim($sort, ",");
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
@@ -658,11 +646,10 @@ class FileService extends AbstractService
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
-                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
+                // print_r($select);exit;
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-                $countQuery = "SELECT FOUND_ROWS();";
-                // print_r($countQuery);exit;
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 if ($resultSet) {
