@@ -25,8 +25,7 @@
                 }
               }else{
                  execution.setVariable("process_reminder",false); 
-              }
-def variables = execution.getVariables();       if(variables.containsKey("send_reminder")){
+              }    if(variables.containsKey("send_reminder")){
                 if(variables.send_reminder == "true" || variables.send_reminder == true){
                  execution.setVariable("send_reminder",true); 
                 }else{
