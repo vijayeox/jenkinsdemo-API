@@ -57,7 +57,7 @@ pages:
         uuid: d2c3a908-465b-4468-8ba7-d51eadd93e6a
 menu:
     -
-        name: 'Summary'
+        name: Summary
         icon: 'fa fa-home'
         privilege: MANAGE_FINANCE_WRITE
         page_uuid: 43f5be3a-37a7-4360-ac55-a1287bab4baf

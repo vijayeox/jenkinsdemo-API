@@ -1,4 +1,4 @@
-import {React} from "oxziongui";
+import React from 'react'
 const isPresent = value => value !== null && value !== undefined;
 
 export default function withValueField(DropDownComponent) {

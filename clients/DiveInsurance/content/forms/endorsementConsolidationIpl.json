@@ -1761,28 +1761,6 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
-							}, {
-								"label": "single_limit",
-								"defaultValue": "$1,000,000",
-								"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
-								"calculateServer": false,
-								"key": "single_limit",
-								"type": "hidden",
-								"input": true,
-								"tableView": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "annual_aggregate",
-								"defaultValue": "$2,000,000",
-								"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
-								"calculateServer": false,
-								"key": "annual_aggregate",
-								"type": "hidden",
-								"input": true,
-								"tableView": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -2887,7 +2865,7 @@
 		}, {
 			"label": "amount",
 			"defaultValue": "0",
-			"calculateValue": "if(data.CSRReviewRequired ===false || data.CSRReviewRequired ==='false' || data.CSRReviewRequired ===''){\n  value = (parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00).toFixed(0);\n}",
+			"calculateValue": "if(data.CSRReviewRequired ===false || data.CSRReviewRequired ==='false' || data.CSRReviewRequired ===''){\n  value = (parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00).toFixed(0);\n}\nif(data.balanceEndor > 0){\n  value = parseFloat(data.balanceEndor).toFixed(0)\n}",
 			"calculateServer": false,
 			"key": "amount",
 			"properties": {
@@ -2965,13 +2943,22 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
 						"key": "chequeNumber",
 						"type": "number",
 						"input": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "HTML",
+						"attrs": [{
+							"attr": "",
+							"value": ""
+						}],
+						"content": "Please Submit the Consent form found <a href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "html5",
+						"type": "htmlelement",
+						"input": false
 					}, {
 						"label": "Upload Consent Form",
 						"tableView": false,
@@ -3233,7 +3220,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 155,
+	"_vid": 158,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3252,6 +3239,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-18T10:35:53.302Z",
+	"modified": "2020-05-21T22:54:24.004Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
