@@ -218,21 +218,22 @@ class WorkflowInstanceService extends AbstractService
         try {
             $params = $this->cleanData($params);
             $fileData = $params;
-            $this->beginTransaction();
             if (isset($workflowInstance['parent_workflow_instance_id'])) {
                 $fileDataResult = $this->fileService->getFileByWorkflowInstanceId($workflowInstance['parent_workflow_instance_id'], false);
                 $oldFileData = json_decode($fileDataResult['data'], true);
                 $fileData = array_merge($oldFileData, $fileData);
-                // $fileData['parent_id'] = $fileDataResult['id']; // Check during ENDOR
+                $fileData['last_workflow_instance_id'] = $workflowInstance['id'];
                 $file = $this->fileService->updateFile($fileData,$fileDataResult['fileId']);
                 if(!isset($fileData['uuid'])){
                     $fileData['uuid'] = $fileDataResult['fileId'];
                 }
                 $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
             }else{
+                $fileData['last_workflow_instance_id'] = $workflowInstance['id'];
                 $file = $this->fileService->createFile($fileData);
             }
-            $this->logger->info("File created -" . $file);
+            $this->beginTransaction();
+            $this->logger->info("File created -" . json_encode($fileData));
             $params['fileId'] = $fileData['uuid'];
             $params['workflow_instance_id'] = $workflowInstance['id'];
             $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
