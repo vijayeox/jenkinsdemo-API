@@ -398,6 +398,12 @@ class FileService extends AbstractService
                             $keyValueFields[$i]['field_value_type'] = 'NUMERIC';
                             break;
                         case 'boolean':
+                            if($fieldvalue == true || $fieldvalue == "true") {
+                                $fieldvalue = 1;
+                            }
+                            if($fieldvalue == false || $fieldvalue == "false") {
+                                $fieldvalue = 0;
+                            }
                             $keyValueFields[$i]['field_value_boolean'] = $fieldvalue;
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
