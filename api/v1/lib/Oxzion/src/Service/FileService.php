@@ -391,9 +391,9 @@ class FileService extends AbstractService
                 if(isset($field['data_type'])){
                     switch ($field['data_type']) {
                         case 'numeric':
-                            $keyValueFields[$i]['field_value_numeric'] = $fieldvalue;
                             $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields[$i]['field_value_numeric'] = $fieldvalue;
                             $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_type'] = 'NUMERIC';
                             break;
@@ -405,34 +405,30 @@ class FileService extends AbstractService
                                 $fieldvalue = 0;
                             }
                             $keyValueFields[$i]['field_value_boolean'] = $fieldvalue;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_type'] = 'BOOLEAN';
                             break;
                         case 'date':
                         case 'datetime':
+                            $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = $fieldvalue;
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_type'] = 'DATE';
                             break;
                         case 'text':
-                        case 'document':
-                        case 'file':
-                        case 'json':
-                        case 'list':
-                            $keyValueFields[$i]['field_value_text'] = $fieldvalue;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields[$i]['field_value_numeric'] = NULL;
+                            $keyValueFields[$i]['field_value_text'] = $fieldvalue;
                             $keyValueFields[$i]['field_value_type'] = 'TEXT';
                             break;
                         default:
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_type'] = 'OTHER';
                             break;
