@@ -1274,9 +1274,10 @@
 				"label": "start_date",
 				"defaultValue": "null",
 				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
+				"calculateServer": false,
 				"key": "start_date",
 				"properties": {
-					"data_type": "Date"
+					"data_type": " Date"
 				},
 				"type": "hidden",
 				"input": true,
@@ -4093,13 +4094,22 @@
 							"inputFormat": "plain",
 							"clearOnHide": false,
 							"calculateServer": false,
-							"validate": {
-								"required": true
-							},
 							"key": "chequeNumber",
 							"type": "number",
 							"input": true,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "Please Submit the Consent form found <a href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html5",
+							"type": "htmlelement",
+							"input": false
 						}, {
 							"label": "Upload Consent Form",
 							"tableView": false,
@@ -4188,9 +4198,6 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"calculateServer": false,
-							"validate": {
-								"required": true
-							},
 							"key": "orderId",
 							"type": "textfield",
 							"input": true,
@@ -4259,21 +4266,10 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
-			"label": "Notes",
-			"autoExpand": false,
-			"autofocus": true,
-			"spellcheck": true,
-			"tableView": true,
-			"clearOnHide": false,
-			"calculateServer": false,
-			"key": "notes",
-			"type": "textarea",
-			"input": true
-		}, {
 			"label": "aw",
 			"tableView": false,
 			"key": "aw",
-			"customConditional": "show =\n  (data.padiNotFound == true || data.padiNotFound == \"true\") &&\n  (data.verified == true || data.verified == \"true\") &&\n  (data.privileges.MANAGE_POLICY_APPROVAL_WRITE == \"true\" ||\n    data.privileges.MANAGE_POLICY_APPROVAL_WRITE === true) &&\n  (data.policy_exists !== \"true\" || data.policy_exists !== true);",
+			"customConditional": "show =(data.padiNotFound == true || data.padiNotFound == \"true\")?true:false;",
 			"type": "well",
 			"input": false,
 			"components": [{
@@ -4331,13 +4327,14 @@
 				"tableView": true,
 				"values": [{
 					"label": "Approved",
-					"value": "accepted",
+					"value": "approved",
 					"shortcut": ""
 				}, {
 					"label": "Rejected",
 					"value": "rejected",
 					"shortcut": ""
 				}],
+				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please Approve/Reject the Application"
@@ -4378,7 +4375,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 303,
+	"_vid": 306,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4399,6 +4396,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-18T14:00:41.401Z",
+	"modified": "2020-05-21T22:55:19.489Z",
 	"machineName": "testdivehub:csrInitiates"
 }
