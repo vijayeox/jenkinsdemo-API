@@ -1,4 +1,7 @@
-import {React,KendoReactDateInputs,Moment} from "oxziongui";
+import React from 'react'
+import * as KendoReactDateInputs from "@progress/kendo-react-dateinputs";
+import * as Moment from "moment";
+
 
 export default class DateComponent extends React.Component {
   constructor(props) {

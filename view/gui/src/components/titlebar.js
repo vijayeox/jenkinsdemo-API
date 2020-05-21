@@ -1,4 +1,5 @@
-import {React,KendoReactButtons} from "oxziongui";
+import React from 'react'
+import * as KendoReactButtons from "@progress/kendo-react-buttons";
 import { DropDown } from "./index.js";
 
 export class TitleBar extends React.Component {

@@ -11,6 +11,7 @@ cd ../
 SERVER=${2}
 #pass third parameter as the path to the identity file(pem/ppk) in your local system.
 PEM=${3}
+VIEWENTRYPOINT=${4}
 OXHOME=${PWD}
 RED="\e[91m"
 GREEN="\e[92m"
@@ -195,7 +196,7 @@ view()
     echo -e "${YELLOW}Build UI/view${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/view/* ./
-    docker run -t -v ${PWD}/..:/app view ./view/dockerbuild.sh
+    docker run -t -v ${PWD}/..:/app view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
     cd ..
     #copy contents of view to build
@@ -217,7 +218,7 @@ workflow()
     mkdir -p build/integrations/workflow
     cd ${OXHOME}/integrations/workflow
     echo -e "${YELLOW}Building workflow....${RESET}"
-    docker run -it -v ${PWD}:/camunda --entrypoint ./dockerbuild.sh workflow_build
+    docker run -t -v ${PWD}:/camunda --entrypoint ./dockerbuild.sh workflow_build
     echo -e "${YELLOW}Building workflow completed....${RESET}"
     echo -e "${YELLOW}Copying workflow to build folder....${RESET}"
     cp ${OXHOME}/integrations/workflow/IdentityService/build/libs/identity_plugin-1.0.jar ${OXHOME}/build/integrations/workflow 
