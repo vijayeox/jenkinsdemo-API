@@ -139,6 +139,43 @@
                         </p>
             		{/foreach}
             	{/if}
+
+				{if !empty($previousTecRec)}
+				{assign var=list value=$previousTecRec|json_decode:true}
+						{if isset($tecRecEndorsment) && !empty($tecRecEndorsment)}
+            		{foreach from=$list item=$upgradeData}
+								<p class = "policy_status">TecRec Coverage: {$upgradeData.tecRecEndorsment} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
+            		{/foreach}
+						{/if}
+						{/if}
+            	{if !empty($previousExcess)}
+				{assign var=listLiability value=$previousExcess|json_decode:true}
+            		{foreach from=$listLiability item=$upgradeLiabilityData}
+                        <p class = "policy_status">
+							{if $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($1,000,000)'}
+                            	Liability Limits :  $2,000,000 Combined and $3,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
+							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($2,000,000)'}
+							Liability Limits :  $3,000,000 Combined and $4,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
+							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($3,000,000)'}
+							Liability Limits :  $4,000,000 Combined and $5,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
+							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($4,000,000)'}
+							Liability Limits :  $5,000,000 Combined and $6,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
+							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($9,000,000)'}
+							Liability Limits :  $10,000,000 Combined and $11,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
+                            {/if}
+                        </p>
+            		{/foreach}
+            	{/if}
+				{if !empty($previousEquipment)}
+				{assign var=list value=$previousEquipment|json_decode:true}
+						{if isset($equipment) && !empty($equipment)}
+            		{foreach from=$list item=$upgradeData}
+						{if $equipment != "equipmentLiabilityCoverage"}
+							<p class = "policy_status">Equipment Liability: Added to this certificate as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
+						{/if}
+            		{/foreach}
+						{/if}
+            	{/if}
 				{if !empty($previousScubaFit)}
 				{assign var=list value=$previousScubaFit|json_decode:true}
 						{if isset($scubaFit) && !empty($scubaFit)}
@@ -149,28 +186,12 @@
             		{/foreach}
 						{/if}
             	{/if}
-				{if !empty($previousTecRec)}
-				{assign var=list value=$previousTecRec|json_decode:true}
-						{if isset($tecRecEndorsment) && !empty($tecRecEndorsment)}
-            		{foreach from=$list item=$upgradeData}
-								<p class = "policy_status">TecRec Coverage: {$upgradeData.tecRecEndorsment} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
-            		{/foreach}
-						{/if}
-						{/if}
 
 						{if !empty($previousCylinder)}
 				{assign var=listcylinder value=$previousCylinder|json_decode:true}
             		{foreach from=$listcylinder item=$upgradeCylinderData}
                         <p class = "policy_status">
                             Cylinder Coverage :  {$upgradeCylinderData.cylinder} as of {$upgradeCylinderData.update_date}
-                        </p>
-            		{/foreach}
-            	{/if}
-            				{if !empty($previousExcess)}
-				{assign var=listLiability value=$previousExcess|json_decode:true}
-            		{foreach from=$listLiability item=$upgradeLiabilityData}
-                        <p class = "policy_status">
-                            Excess Liability Coverage :  {$upgradeLiabilityData.excessLiability} as of {$upgradeLiabilityData.update_date}
                         </p>
             		{/foreach}
             	{/if}

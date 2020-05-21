@@ -51,14 +51,35 @@
         		<div class = "in-type" style="width: 40%">
 		           <b class = "ins_type">Type of Insurance</b>
 		           <div class = "ins_data" style="margin-top: 10px;">
+			           <p class = "ins_font"><b>COVERAGE:</b></p>
 			           <p class = "ins_font"><b>COMBINED SINGLE LIMIT:</b></p>
 			           <p class = "ins_font"><b class = "space">ANNUAL AGGREGATE:</b></p>
 		       	   </div>
 	        	</div>
+
+		{if isset($previous_policy_data) && !empty($previous_policy_data)}
+			{assign var=previousPolicyData value=$previous_policy_data|json_decode:true}
+				{if isset($previousPolicyData) && !empty($previousPolicyData) && (count($previousPolicyData) > 0)}
+				{assign var=liability value=$previousPolicyData[0].previous_excessLiability}
+				{assign var="liability" value=$liability|replace:'liabilityCoverage':''}
+		        {math assign="annualA" equation='x+y' x=$liability y=1000000} 
+										{else}
+				{assign var=liability value=$liabilityCoverage}
+				{$liability|replace:'liabilityCoverage':''}
+		        {math assign="annualA" equation='x+y' x=$liability y=1000000} 
+				{/if}
+				{else}
+				{assign var=liability value=$liabilityCoverage}
+				{assign var="liability" value=$liability|replace:'liabilityCoverage':''}
+		        {math assign="annualA" equation='x+y' x=$liability y=1000000} 
+		{/if}
 	        	<div class = "in-type1" style="width: 60%"> 
-		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
-			            <p class = "ins_font">${$single_limit|number_format}&nbsp&nbsp&nbsp(per occurence)</p>
-			            <p class = "ins_font">${$annual_aggregate|number_format}</p>						
+		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claim s Made Form</p>
+		            	{math assign="sl" equation='x/y' x=$liability y=1000000} 
+		            	{math assign="aa" equation='x/y' x=$annualA y=1000000} 
+			            <p class = "ins_font">Insured's Status EFR Instructor ({$sl}M/{$aa}M)</p>
+			            <p class = "ins_font">${$liability|number_format}&nbsp&nbsp&nbsp(per occurence)</p>
+			            <p class = "ins_font">${$annualA|number_format}</p>						
 		        </div>
 	     	</div>
 	     	<!-- <div class="i_type2_efr">
@@ -79,7 +100,17 @@
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
             		{foreach from=$list item=$upgradeData}
                         <p class = "policy_status">
-                            Status of Insured:  {$upgradeData.liabilityCoverage} as of {$upgradeData.update_date}
+							{if $upgradeData.liabilityCoverage == 'Liability Coverage($1,000,000)'}
+                            	Liability Limits :  $1,000,000 Combined and $2,000,000 Annual Aggregate as of {$upgradeData.update_date}
+							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($2,000,000)'}
+							Liability Limits :  $2,000,000 Combined and $3,000,000 Annual Aggregate as of {$upgradeData.update_date}
+							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($3,000,000)'}
+							Liability Limits :  $3,000,000 Combined and $4,000,000 Annual Aggregate as of {$upgradeData.update_date}
+							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($4,000,000)'}
+							Liability Limits :  $4,000,000 Combined and $5,000,000 Annual Aggregate as of {$upgradeData.update_date}
+							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($5,000,000)'}
+							Liability Limits :  $5,000,000 Combined and $6,000,000 Annual Aggregate as of {$upgradeData.update_date}
+                            {/if}
                         </p>
             		{/foreach}
             	{/if}
