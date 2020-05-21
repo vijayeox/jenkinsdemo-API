@@ -429,7 +429,7 @@ class AppService extends AbstractService
         }
         $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
         FileUtils::copyDir($eoxapp, $path);
-        rename($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app'][0]['name']);
+        FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app'][0]['name']);
         $jsonData = json_decode(file_get_contents($metadataPath), true);
         $jsonData['name'] = $yamlData['app'][0]['name'];
         $jsonData['appId'] = $yamlData['app'][0]['uuid'];

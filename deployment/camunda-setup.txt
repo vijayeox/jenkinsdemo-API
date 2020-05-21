@@ -66,11 +66,13 @@ Below is the difference of the default server.xml and working copy of server.xml
 #add the below Environment variable in /opt/oxzion/camunda/bin/catalina.sh right above "# OS specific support.  $var _must_ be set to either true or false" comment
 
 JAVA_OPTS="-Xmx768m -XX:MaxMetaspaceSize=256m"
-export API_DB_URL=jdbc:mysql://localhost:3306/oxzionapi 
+export BASE_DB_URL=jdbc:mysql://localhost:3306/oxzionapi 
+export API_DB_URL=jdbc:mysql://localhost:3306/oxzionapi
 export DB_USERNAME=apiuser 
 export DB_PASSWORD=Apipasswd321! 
 export DB_DRIVER=com.mysql.jdbc.Driver
 JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
 
 #create camunda service
 
@@ -122,3 +124,11 @@ for deploy app api to work make sure you give following permission
 mkdir /opt/oxzion/eoxapps
 chmod 777 -R /opt/oxzion/eoxapps
 
+chown oxzion:oxzion /opt/oxzion/camunda/ -R
+
+create api symlinks like file_docs etc.
+
+sudo apt install jq
+
+cd /var/lib/oxzion/api/
+mkdir forms delegate file_docs import

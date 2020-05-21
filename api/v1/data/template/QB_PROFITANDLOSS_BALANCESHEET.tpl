@@ -1,10 +1,9 @@
 {$Header=$data["Header"]}
 {function looprows level=0}
-{if $level==0}
+{$TAFlag = 0}
 {$indenttext=""}
-{/if}
-{for $i=0 to $level}
-{$indenttext=$indenttext|cat:'&nbsp;'}
+{for $i=1 to $level}
+    {$indenttext=$indenttext|cat:'&nbsp;&nbsp;&nbsp;&nbsp;'}
 {/for}
 {foreach key=key item=value from=$data}
 {if isset($value['type']) }
@@ -13,7 +12,7 @@
 {$type=''}
 {/if}
 {if $type eq 'Section'}
-{looprows data=$value level=$level+1}
+{looprows data=$value level=$level}
 {else}
 {if $type eq 'Data'}
 {$trflag = 0}
@@ -56,10 +55,10 @@
     {if !empty($v2['value'])}
     {if $k2 == 0}
     <td style="padding: 8px 0px 8px 0px;">
-        <hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$indenttext}{$v2['value']}</b></td>
+        <hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>{$indenttext}{$v2['value']}</b>{if $v2['value'] == 'TOTAL ASSETS'}<div style = 'border-width:5px;border-bottom-style:double;margin-top:5px;'></div>{$TAFlag = 1}{/if}</td>
     {elseif $k2 == 1}
     <td style="text-align:right;padding: 8px 0px 8px 0px;">
-        <hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>$&nbsp;{$v2['value']|number_format:2:".":","}</b></td>
+        <hr style="height:1px;border-width:0;color:gray;background-color:gray"><b>$&nbsp;{$v2['value']|number_format:2:".":","}</b>{if $TAFlag == 1}<div style = 'border-width:5px;border-bottom-style:double;margin-top:5px;'></div>{$TAFlag = 0}{/if}</td>
     {/if}
     {/if}
     {/foreach}
@@ -92,18 +91,6 @@
 {/foreach}
 {/function}<div class="oxzion-widget-content" style='border-width:5px;border-bottom-style:double;'>
     <table style="border-spacing: 0; width: 100%; padding 8px;">
-        <thead>
-            <tr>{foreach name=outer item=column from=$data["Columns"]}
-                {foreach key=key item=item from=$column}
-                {if $key == 0}
-                <th>{$item['ColTitle']}</th>
-                {elseif $key ==1}
-                <th style="text-align:right; padding: 8px 0px 8px 0px; font-size: 18px;">{$item['ColTitle']}</th>
-                {/if}
-                {/foreach}
-                {/foreach}
-            </tr>
-        </thead>
         <tbody>{createrows data=$data['Rows']}</tbody>
     </table>
 </div>

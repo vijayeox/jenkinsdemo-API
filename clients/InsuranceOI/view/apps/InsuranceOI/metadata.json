@@ -9,10 +9,10 @@
 	"icon": "icon.png",
 	"icon_white": "icon_white.png",
 	"title": {
-		"en_EN": "Insurance Operational Intelligence"
+		"en_EN": "Insurance"
 	},
 	"description": {
-		"en_EN": "Insurance OI Application"
+		"en_EN": "Insurance"
 	},
 	"files":["main.js","main.css"]
 }
