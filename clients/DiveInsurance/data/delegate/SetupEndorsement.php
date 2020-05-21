@@ -235,7 +235,7 @@ class SetupEndorsement extends AbstractAppDelegate
             $returnArray['initiatedByUser'] = true;
             return $returnArray;
         } else {
-            $selectExcessLiability = "select rc.* from premium_rate_card WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' order by CAST(rc.previous_key as UNSIGNED) DESC";
+            $selectExcessLiability = "select rc.* from premium_rate_card rc WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' order by CAST(rc.previous_key as UNSIGNED) DESC";
             $this->logger->info("Executing Endorsement Rate Card ExcessLiability Query ".$selectExcessLiability);
             $resultExcessLiability = $persistenceService->selectQuery($selectExcessLiability);
             while ($resultExcessLiability->next()) {
