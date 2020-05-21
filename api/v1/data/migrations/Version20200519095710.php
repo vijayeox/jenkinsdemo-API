@@ -21,12 +21,16 @@ final class Version20200519095710 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_type ENUM('TEXT','DATE','NUMERIC','BOOLEAN','OTHER') NOT NULL");
-        $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_text VARCHAR(16000)");
+        $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_text VARCHAR(1024)");
         $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa INNER JOIN ox_field of2 on of2.id = ofa.field_id Where (of2.data_type = 'text' or of2.data_type = 'document' or of2.data_type = 'file' or of2.data_type = 'json' or of2.data_type = 'list')) AS M on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_text = M.field_value, ox_file_attribute.field_value_type = 'TEXT'");
         $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_numeric FLOAT");
         $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa INNER JOIN ox_field of2 on of2.id = ofa.field_id Where of2.data_type = 'numeric') AS M on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_numeric = M.field_value, ox_file_attribute.field_value_type = 'NUMERIC'");
         $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_boolean TINYINT(1)");
-        $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa INNER JOIN ox_field of2 on of2.id = ofa.field_id Where of2.data_type = 'boolean') AS M on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_boolean = M.field_value, ox_file_attribute.field_value_type = 'BOOLEAN'");
+        $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa 
+                        INNER JOIN ox_field of2 on of2.id = ofa.field_id Where of2.data_type = 'boolean') AS M 
+                        on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_boolean = case when M.field_value='true' 
+                        then 1 when M.field_value='false' then 0 else M.field_value End,
+                        ox_file_attribute.field_value_type = 'BOOLEAN'");
         $this->addSql("ALTER TABLE ox_file_attribute ADD COLUMN field_value_date DATETIME");
         $this->addSql("UPDATE ox_file_attribute inner join (Select ofa.id as id,ofa.field_value from ox_file_attribute ofa INNER JOIN ox_field of2 on of2.id = ofa.field_id Where of2.data_type = 'date' OR of2.data_type = 'datetime') AS M on M.id = ox_file_attribute.id SET ox_file_attribute.field_value_date = M.field_value, ox_file_attribute.field_value_type = 'DATE'");
         $this->addSql("ALTER TABLE ox_file_attribute ADD INDEX `numeric_value_index` (`field_value_numeric`)");

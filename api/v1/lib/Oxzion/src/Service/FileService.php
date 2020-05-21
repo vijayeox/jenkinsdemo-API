@@ -642,14 +642,17 @@ class FileService extends AbstractService
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             }
-            $where .= " " . $whereQuery . "";
+            $where .= " " . $whereQuery . " $userWhere";
+            $where = trim($where) != "" ? "WHERE $where" : "";
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
-                $select = "SELECT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as 
+                            workflowInstanceId, en.name as entity_name $fromQuery 
+                            $where $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
-                // print_r($select);exit;
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+                $countQuery = "SELECT FOUND_ROWS();";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 if ($resultSet) {
@@ -658,7 +661,17 @@ class FileService extends AbstractService
                         if ($file['data']) {
                             $content = json_decode($file['data'], true);
                             if ($content) {
-                                $resultSet[$i] = array_merge($file, $content);
+                                if (isset($filterParams['columns'])) {
+                                    $filterParams['columns'] = json_decode($filterParams['columns']);
+                                    foreach ($filterParams['columns'] as $column){
+                                        $file[$column] = $content[$column];
+                                    }                                    
+                                    if(isset($file["data"])){
+                                        unset($file["data"]);
+                                    }
+                                } else{
+                                    $resultSet[$i] = array_merge($file, $content);
+                                }
                             }
                         }
                         $i++;
