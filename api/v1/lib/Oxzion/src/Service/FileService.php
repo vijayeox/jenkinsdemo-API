@@ -696,6 +696,9 @@ class FileService extends AbstractService
                 $countQuery = "SELECT FOUND_ROWS();";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
+                if (isset($filterParams['columns'])) {
+                    $filterParams['columns'] = json_decode($filterParams['columns'],true);
+                }
                 if ($resultSet) {
                     $i = 0;
                     foreach ($resultSet as $file) {
@@ -703,7 +706,6 @@ class FileService extends AbstractService
                             $content = json_decode($file['data'], true);
                             if ($content) {
                                 if (isset($filterParams['columns'])) {
-                                    $filterParams['columns'] = json_decode($filterParams['columns'],true);
                                     foreach ($filterParams['columns'] as $column){
                                         $file[$column] = $content[$column];
                                     }                                    
