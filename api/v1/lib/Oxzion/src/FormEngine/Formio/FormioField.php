@@ -102,8 +102,11 @@ class FormioField
                 break;
             case 'selectboxes':
             case 'tags':
-            $this->data['data_type'] = 'list';
-            break;
+                $this->data['data_type'] = 'list';
+                break;
+            case 'textarea':
+                $this->data['data_type'] = 'longtext';
+                break;
             case 'datagrid':
             case 'editgrid':
             case 'survey':
