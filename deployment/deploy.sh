@@ -431,8 +431,12 @@ insuranceoi()
         npm run build
         npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chown oxzion:oxzion -R /opt/oxzion/view
         chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/InsuranceOI/
+        rm -rf /opt/oxzion/view/apps/InsuranceOI/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
@@ -520,8 +524,12 @@ finance()
         npm run build
         npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chown oxzion:oxzion -R /opt/oxzion/view
         chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/Finance/
+        rm -rf /opt/oxzion/view/apps/Finance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
