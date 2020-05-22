@@ -5,7 +5,6 @@ content:
         type: List
         content:
             route: assignments
-            defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
             filterable: true
             resizable: true
             sortable: true
@@ -87,10 +86,20 @@ content:
                     field: padi
                 -
                     title: Name
-                    field: name
+                    field: firstname
+                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    multiFieldFilter:
+                        - lastname
                 -
                     title: Policy Status
                     field: policyStatus
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Pending Approval'
+                            - 'Rejected'
+                            - 'Expired'
+                        placeholder: 'Select Status'
                 -
                     title: Product
                     field: entity_name
@@ -152,8 +161,3 @@ content:
                         operator: lte
             filterLogic: and
             searchOnEnter: true
-            passColumnConfig: 
-                -
-                    firstname
-                -
-                    lastname
