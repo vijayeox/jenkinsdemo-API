@@ -1,4 +1,4 @@
-import {React} from "oxziongui";
+import React from 'react'
 export default class SaveCancel extends React.Component {
   render() {
     return (

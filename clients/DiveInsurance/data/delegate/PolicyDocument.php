@@ -187,6 +187,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($data['tecRecEndorsment'])){
                             array_push($coverageList,$data['tecRecEndorsment']);
                         }
+                        if(isset($data['equipment'])){
+                            array_push($coverageList,$data['equipment']);
+                        }
                     }
                     if($data['product'] == "Emergency First Response"){
                         if(isset($data['liabilityCoverage'])){
@@ -211,6 +214,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($result[$data['tecRecEndorsment']])){
                             $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
                         }
+                        if(isset($result[$data['equipment']])){
+                            $temp['equipmentVal'] = $result[$data['equipment']];
+                        }
                         $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
                     }
                     if($data['product'] == "Emergency First Response"){
@@ -227,6 +233,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousScubaFit','previous_scubaFit','scubaFit');
                             $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousTecRec','previous_tecRecEndorsment','tecRecEndorsment');
                             $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCylinder','previous_cylinder','cylinder');
+                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousEquipment','previous_equipment','equipment');
                             $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousExcess','previous_excessLiability','excessLiability');
                         }
                         if($data['product'] == "Emergency First Response"){

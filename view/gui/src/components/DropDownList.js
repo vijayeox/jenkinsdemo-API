@@ -1,5 +1,6 @@
-import {React,KendoReactDropDowns,KendoDataQuery} from "oxziongui";
-import { GetDataSearch } from "../components/apiCalls";
+import React from 'react'
+import * as KendoReactDropDowns from "@progress/kendo-react-dropdowns";
+import * as KendoDataQuery from "@progress/kendo-data-query";
 import withValueField from "./filterForStaticDropdown";
 const DropDownListWithValueField = withValueField(KendoReactDropDowns.DropDownList);
 
@@ -43,22 +44,6 @@ export default class DropDown extends React.Component {
       });
     }
   }
-
-  getMainList = (query, size) => {
-    GetDataSearch(this.props.mainList, query, size).then((response) => {
-      var tempUsers = [];
-      for (var i = 0; i <= response.data.length - 1; i++) {
-        var userName = response.data[i].name;
-        var userid = response.data[i].uuid;
-        tempUsers.push({ id: userid, name: userName });
-      }
-      this.setState({
-        mainList: tempUsers
-      });
-      let loader = this.core.make("oxzion/splash");
-      loader.destroy();
-    });
-  };
 
   filterChangeAPI = (e) => {
     clearTimeout(this.timeout);

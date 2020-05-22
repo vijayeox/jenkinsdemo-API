@@ -43,8 +43,14 @@ class ActivityInstanceService extends AbstractService
     }
     public function getActivityInstanceForm($data)
     {
-        $selectQuery = "SELECT oxa.* from ox_activity_instance_assignee as oxa join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id Left JOIN ox_user_group as oug on oxa.group_id = oug.group_id WHERE oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND (oxa.user_id =:userId OR oug.avatar_id =:userId)";
+        $selectQuery = "SELECT oxa.* from ox_activity_instance_assignee as oxa 
+                        join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id 
+                        LEFT JOIN ox_user_group as oug on oxa.group_id = oug.group_id 
+                        LEFT JOIN ox_user_role as our on oxa.role_id = our.role_id
+                        WHERE oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND 
+                        (oxa.user_id =:userId OR oug.avatar_id =:userId OR our.user_id = :userId)";
         $queryParams = array("activityInstanceId" => $data['activityInstanceId'], 'userId' => AuthContext::get(AuthConstants::USER_ID));
+        $this->logger->info("Executing query - ". $selectQuery . " with params - " . json_encode($queryParams));
         $result = $this->executeQuerywithBindParameters($selectQuery, $queryParams)->toArray();
         if (isset($result[0])) {
             $activityQuery = "SELECT ox_workflow_instance.process_instance_id as workflow_instance_id,
