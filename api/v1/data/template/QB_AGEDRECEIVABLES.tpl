@@ -115,4 +115,4 @@
     </table>
 </div>
 <p>&nbsp</p>
-<p id="datetimebasis" style="text-align: center;"><span>{$Header['Time']|date_format:"%A, %B %e %Y ,%T - %Z"}</span></p>
+<p id="datetimebasis" style="text-align: center;"><span>{$Header['Time']|date_format:"%A, %B %e, %Y  %T - %Z"}</span></p>
