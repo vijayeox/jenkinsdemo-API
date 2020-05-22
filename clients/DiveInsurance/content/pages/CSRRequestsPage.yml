@@ -5,6 +5,7 @@ content:
         type: List
         content:
             route: assignments
+            defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
             filterable: true
             resizable: true
             sortable: true
@@ -86,20 +87,10 @@ content:
                     field: padi
                 -
                     title: Name
-                    field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
-                    multiFieldFilter:
-                        - lastname
+                    field: name
                 -
                     title: Policy Status
                     field: policyStatus
-                    filterCell:
-                        type: dropdown
-                        listItems:
-                            - 'Pending Approval'
-                            - 'Rejected'
-                            - 'Expired'
-                        placeholder: 'Select Status'
                 -
                     title: Product
                     field: entity_name
@@ -160,4 +151,9 @@ content:
                         text: grid.filterBeforeOrEqualOperator
                         operator: lte
             filterLogic: and
-            passColumnConfig: true
+            searchOnEnter: true
+            passColumnConfig: 
+                -
+                    firstname
+                -
+                    lastname

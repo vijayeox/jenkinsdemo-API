@@ -5,7 +5,7 @@ content:
         type: List
         content:
             route: 'pipeline/commands/[{"command" : "delegate", "delegate":"PocketCardMenu"}]'
-            filterable: true
+            filterable: false
             resizable: true
             actions:
                 -
@@ -33,6 +33,14 @@ content:
                 -
                     title: Product
                     field: pocketCardProductType
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Individual Professional Liability'
+                            - 'Dive Boat'
+                            - 'Dive Store'
+                            - 'Emergency First Response'
+                        placeholder: 'Select Product'
                 -
                     title: Status
                     field: jobStatus
