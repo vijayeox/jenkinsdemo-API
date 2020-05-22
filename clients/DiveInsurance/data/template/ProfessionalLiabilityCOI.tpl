@@ -152,15 +152,15 @@
 				{assign var=listLiability value=$previousExcess|json_decode:true}
             		{foreach from=$listLiability item=$upgradeLiabilityData}
                         <p class = "policy_status">
-							{if $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($1,000,000)'}
+							{if $upgradeLiabilityData.excessLiability == '1M Excess'}
                             	Liability Limits :  $2,000,000 Combined and $3,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($2,000,000)'}
+							{elseif $upgradeLiabilityData.excessLiability == '2M Excess'}
 							Liability Limits :  $3,000,000 Combined and $4,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($3,000,000)'}
+							{elseif $upgradeLiabilityData.excessLiability == '3M Excess'}
 							Liability Limits :  $4,000,000 Combined and $5,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($4,000,000)'}
+							{elseif $upgradeLiabilityData.excessLiability == '4M Excess'}
 							Liability Limits :  $5,000,000 Combined and $6,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == 'Excess Liability Coverage ($9,000,000)'}
+							{elseif $upgradeLiabilityData.excessLiability == '9M Excess'}
 							Liability Limits :  $10,000,000 Combined and $11,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
                             {/if}
                         </p>
