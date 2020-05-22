@@ -692,11 +692,8 @@ class FileService extends AbstractService
             $where = trim($where) != "" ? "WHERE $where" : "";
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
                 $select = "SELECT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery $where $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
-                // print_r($queryParams);
-                // print_r($select);exit;
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 $countQuery = "SELECT FOUND_ROWS();";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
