@@ -626,6 +626,14 @@
 				"type": "columns",
 				"input": false
 			}, {
+				"label": "name",
+				"calculateValue": "value = data.firstname + \" \" + data.lastname",
+				"calculateServer": false,
+				"key": "name1",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
 				"breadcrumbClickable": false,
@@ -3062,7 +3070,7 @@
 				"calculateServer": false,
 				"validate": {
 					"required": true,
-					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n  data.padiNotFound = false;\n} else {\n  data.padiVerified = false;\n  data.padiNotFound = true;\n}"
+					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n} else {\n  data.padiVerified = false;\n}"
 				},
 				"key": "padiVerifiedCSRCheck",
 				"type": "checkbox",
@@ -3140,7 +3148,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 494,
+	"_vid": 496,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3224,7 +3232,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-21T22:56:19.498Z",
+	"modified": "2020-05-22T16:15:04.501Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

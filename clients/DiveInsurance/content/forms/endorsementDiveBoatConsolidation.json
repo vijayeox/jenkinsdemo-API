@@ -377,6 +377,14 @@
 				"hideLabel": true,
 				"path": "panelPanel4Columns2"
 			}, {
+				"label": "name",
+				"calculateValue": "value = data.firstname + \" \" + data.lastname",
+				"calculateServer": false,
+				"key": "name1",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
 				"breadcrumbClickable": true,
@@ -9352,7 +9360,7 @@
 						"tableView": false,
 						"values": [{
 							"label": "Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX",
-							"value": "Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX",
+							"value": "marineSurveyCompletedWithinThePast12MonthsVesselsFive5YearsOrOlderAreRequiredToProvideCurrentConditionAndValuationSurveyWithConfirmationThatAllRecommendationsAreCompletedXxx",
 							"shortcut": ""
 						}, {
 							"value": "Completed Boat Insurance Renewal Questionnaire.",
@@ -9399,7 +9407,19 @@
 						"type": "selectboxes",
 						"input": true,
 						"inputType": "checkbox",
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"defaultValue": {
+							"marineSurveyCompletedWithinThePast12MonthsVesselsFive5YearsOrOlderAreRequiredToProvideCurrentConditionAndValuationSurveyWithConfirmationThatAllRecommendationsAreCompletedXxx": false,
+							"Completed Boat Insurance Renewal Questionnaire.": false,
+							"In Water coverage supplemental application – ONLY if purchasing in water coverage for passengers or crew.": false,
+							"Copy of Captain’s License (front & back) for XXX": false,
+							"Hurricane Questionnaire.": false,
+							"Signed Crew Exclusions.": false,
+							"Signed Finance Agreement with down payment if not paying in full.": false,
+							"Certificate of Inspection.": false,
+							"Signed Proposal": false,
+							"Other": false
+						}
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -9634,7 +9654,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 213,
+	"_vid": 214,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9652,6 +9672,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-05-04T10:10:51.572Z",
+	"modified": "2020-05-22T16:11:24.053Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

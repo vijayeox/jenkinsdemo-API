@@ -6,6 +6,7 @@ content:
         content:
             route: 'file/user/me'
             filterable: false
+            sortable: false
             defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"},{"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
             resizable: true
             pageable:

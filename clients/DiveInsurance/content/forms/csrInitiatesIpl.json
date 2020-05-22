@@ -644,6 +644,14 @@
 				"type": "columns",
 				"input": false
 			}, {
+				"label": "name",
+				"calculateValue": "value = data.firstname + \" \" + data.lastname",
+				"calculateServer": false,
+				"key": "name1",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
 				"breadcrumbClickable": false,
@@ -992,43 +1000,6 @@
 									"customMessage": "Please enter a valid Home or Work Phone number"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
 								"type": "textfield",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -1093,43 +1064,6 @@
 									"customMessage": "Please enter a valid Mobile Phone number"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
 								"type": "textfield",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -4104,7 +4038,7 @@
 								"attr": "",
 								"value": ""
 							}],
-							"content": "Please Submit the Consent form found <a href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
+							"content": "Please Submit the Consent form found <a target=\"_blank\" href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html5",
@@ -4295,7 +4229,7 @@
 				"validate": {
 					"required": true,
 					"customMessage": "Please check if the PADI Member is Valid",
-					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n  data.padiNotFound = false;\n} else {\n  data.padiVerified = false;\n  data.padiNotFound = true;\n}"
+					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n} else {\n  data.padiVerified = false;\n}"
 				},
 				"errorLabel": "PADI Verification",
 				"key": "padiVerifiedCSRCheck",
@@ -4375,7 +4309,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 306,
+	"_vid": 311,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4396,6 +4330,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-21T22:55:19.489Z",
+	"modified": "2020-05-22T16:14:04.135Z",
 	"machineName": "testdivehub:csrInitiates"
 }

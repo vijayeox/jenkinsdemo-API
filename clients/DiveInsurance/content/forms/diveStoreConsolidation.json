@@ -583,6 +583,14 @@
 				"type": "columns",
 				"input": false
 			}, {
+				"label": "name",
+				"calculateValue": "value = data.firstname + \" \" + data.lastname",
+				"calculateServer": false,
+				"key": "name1",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"title": "Additional Business Information",
 				"theme": "primary",
 				"collapsible": false,
@@ -10987,7 +10995,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 116,
+	"_vid": 117,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11004,6 +11012,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-05-13T06:59:36.586Z",
+	"modified": "2020-05-22T16:08:10.641Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

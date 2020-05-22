@@ -186,10 +186,7 @@ content:
                     field: padi
                 -
                     title: Name
-                    field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
-                    multiFieldFilter:
-                        - lastname
+                    field: name
                 -
                     title: Product
                     field: product
@@ -261,5 +258,9 @@ content:
                         text: grid.filterBeforeOrEqualOperator
                         operator: lte
             filterLogic: and
-            passColumnConfig: true
+            passColumnConfig: 
+                -
+                    firstname
+                -
+                    lastname
             searchOnEnter: true
