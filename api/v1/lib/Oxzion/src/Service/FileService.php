@@ -605,9 +605,8 @@ class FileService extends AbstractService
                 }
                 $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=oa.id
                 INNER JOIN ox_file_attribute ofa on ofa.file_id = `of`.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
-                $whereQuery = " owufi.user_id = :userId and owufi.org_id = :orgId AND ";
+                $whereQuery = " owufi.user_id = :userId AND ";
                 $queryParams['userId'] = $userId;
-                $queryParams['orgId'] = $orgId;
             } else {
                 $whereQuery = "";
             }
@@ -692,7 +691,7 @@ class FileService extends AbstractService
             $where = trim($where) != "" ? "WHERE $where" : "";
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $select = "SELECT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery $where $sort $pageSize $offset";
+                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery $where $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 $countQuery = "SELECT FOUND_ROWS();";
