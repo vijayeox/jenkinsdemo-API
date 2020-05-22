@@ -1,4 +1,0 @@
-SQL Database migration files. The file name should have the following format
-[version#]__[description].sql
-e.g., 1.01__InitialSchema.sql
-
