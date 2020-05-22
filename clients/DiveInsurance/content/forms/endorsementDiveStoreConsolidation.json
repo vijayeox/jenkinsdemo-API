@@ -592,6 +592,14 @@
 				"type": "columns",
 				"input": false
 			}, {
+				"label": "name",
+				"calculateValue": "value = data.firstname + \" \" + data.lastname",
+				"calculateServer": false,
+				"key": "name1",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"title": "Additional Business Information",
 				"theme": "primary",
 				"collapsible": false,
@@ -11486,7 +11494,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 124,
+	"_vid": 125,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11503,6 +11511,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-05-13T07:00:21.844Z",
+	"modified": "2020-05-22T16:08:59.433Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
