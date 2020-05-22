@@ -16,7 +16,8 @@ class File extends Entity
         'date_modified' => null,
         'entity_id'=>null,
         'assoc_id'=>null,
-        'is_active'=>1
+        'is_active'=>1,
+        'last_workflow_instance_id'=>null
     );
     protected $attributes = array();
 

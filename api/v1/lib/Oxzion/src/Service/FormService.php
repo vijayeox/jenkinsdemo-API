@@ -274,9 +274,13 @@ class FormService extends AbstractService
                     $this->saveField($existingFields,$field['parent'],$fieldsCreated,$fieldIdArray,$appId,$formId,$entityId);
                     $parentField = $field['parent'];
                 }
-                $field['parent_id'] = $parentField['id'];
+                if(isset($parentField['id'])){
+                    $field['parent_id'] = $parentField['id'];
+                }
                 unset($field['parent']);
-                $foundField = ArrayUtils::multiFieldSearch($existingFields,array('name' => $field['name'],'parent_id' => $field['parent_id']));
+                if(isset($field['parent_id'])){
+                    $foundField = ArrayUtils::multiFieldSearch($existingFields,array('name' => $field['name'],'parent_id' => $field['parent_id']));
+                }
             }else{
                $foundField =  ArrayUtils::multiDimensionalSearch($existingFields,'name',$field['name']); 
             }            

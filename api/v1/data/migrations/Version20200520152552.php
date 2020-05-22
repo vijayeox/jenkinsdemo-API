@@ -32,6 +32,7 @@ final class Version20200520152552 extends AbstractMigration
                                 inner join (select file_id, max(date_created) as date_created from ox_workflow_instance group by file_id) as wid on wii.file_id = wid.file_id and wii.date_created = wid.date_created) as wi on wi.file_id = ox_file.id
                                 SET ox_file.last_workflow_instance_id = wi.id");
         $this->addSql("ALTER TABLE ox_file_attribute ADD INDEX `type_value_index` (`field_value_type`)");
+        $this->addSql("ALTER TABLE ox_field MODIFY COLUMN `name` VARCHAR(1024)");
         $this->addSql("ALTER TABLE ox_field ADD INDEX `name_index` (`name`)");
         $this->addSql("ALTER TABLE ox_workflow_instance ADD INDEX `status_index` (`status`)");
 
