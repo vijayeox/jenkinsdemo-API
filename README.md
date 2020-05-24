@@ -238,6 +238,6 @@ $ docker-compose run zf /bin/bash
 	`cp .env.example to .env in all the iframe apps under `view/apps` to your host.`
 	- $ cp view/bos/src/server/local.js.example view/bos/src/server/local.js
 	- update view/bos/src/server/local.js to your host environment
-	- $ cp view/bos/src/osjs-server.env.example view/bos/src/osjs-server.env and update the SERVER parameter to your host ip. 
+	- $ cp view/bos/src/osjs-server/.env.example view/bos/src/osjs-server/.env and update the SERVER parameter to your host ip. 
 	- $ cp view/bos/src/client/local.js.example view/bos/src/client/local.js
 	- update the wrapper url parameter to host ip in view/bos/src/client/local.js
