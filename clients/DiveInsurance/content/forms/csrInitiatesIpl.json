@@ -647,7 +647,7 @@
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
 				"calculateServer": false,
-				"key": "name1",
+				"key": "name",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -4309,7 +4309,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 311,
+	"_vid": 312,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4330,6 +4330,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-22T16:14:04.135Z",
+	"modified": "2020-05-22T17:37:25.062Z",
 	"machineName": "testdivehub:csrInitiates"
 }
