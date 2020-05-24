@@ -380,7 +380,7 @@
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
 				"calculateServer": false,
-				"key": "name1",
+				"key": "name",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -9654,7 +9654,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 214,
+	"_vid": 215,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9672,6 +9672,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-05-22T16:11:24.053Z",
+	"modified": "2020-05-22T22:38:05.279Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

@@ -637,7 +637,7 @@
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
 				"calculateServer": false,
-				"key": "name1",
+				"key": "name",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -3141,7 +3141,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 164,
+	"_vid": 165,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3160,6 +3160,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-22T16:11:59.691Z",
+	"modified": "2020-05-22T22:42:11.096Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

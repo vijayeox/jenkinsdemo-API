@@ -586,7 +586,7 @@
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
 				"calculateServer": false,
-				"key": "name1",
+				"key": "name",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -1511,6 +1511,9 @@
 						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\nvalue = moment(data.policyPeriod).format(\"YYYY-MM-DD\");\n}",
 						"calculateServer": false,
 						"key": "start_date",
+						"properties": {
+							"data_type": "Date"
+						},
 						"type": "hidden",
 						"input": true,
 						"tableView": true,
@@ -10995,7 +10998,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 117,
+	"_vid": 119,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11012,6 +11015,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-05-22T16:08:10.641Z",
+	"modified": "2020-05-22T22:50:24.357Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

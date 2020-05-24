@@ -595,7 +595,7 @@
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
 				"calculateServer": false,
-				"key": "name1",
+				"key": "name",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -11494,7 +11494,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 125,
+	"_vid": 126,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11511,6 +11511,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-05-22T16:08:59.433Z",
+	"modified": "2020-05-22T22:47:59.496Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

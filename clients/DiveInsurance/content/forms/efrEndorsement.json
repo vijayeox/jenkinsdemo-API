@@ -440,7 +440,7 @@
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
 				"calculateServer": false,
-				"key": "name1",
+				"key": "name",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -2144,7 +2144,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 148,
+	"_vid": 149,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2165,7 +2165,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-22T16:05:41.715Z",
+	"modified": "2020-05-22T22:41:44.723Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
