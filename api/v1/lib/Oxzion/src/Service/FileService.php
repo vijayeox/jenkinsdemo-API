@@ -708,7 +708,7 @@ class FileService extends AbstractService
                             if ($content) {
                                 if (isset($filterParams['columns'])) {
                                     foreach ($filterParams['columns'] as $column){
-                                        $file[$column] = $content[$column];
+                                        isset($content[$column]) ? $file[$column] = $content[$column] : null;
                                     }                                    
                                     if(isset($file["data"])){
                                         unset($file["data"]);
