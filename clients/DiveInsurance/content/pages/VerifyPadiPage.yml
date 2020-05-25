@@ -2,5 +2,5 @@ name: 'Verify PADI details'
 description: 'Lets CSR to input and check PADI Data'
 content:
     -
-        formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
         type: Form
+        form_id: d2ed4200-9131-4671-b0e0-de3e27c3f610

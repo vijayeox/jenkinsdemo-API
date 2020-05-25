@@ -75,8 +75,8 @@ class PageContentService extends AbstractService
                 if($value['type'] == 'List' || $value['type'] == 'Search'){
                     $value['content'] = json_encode($value['content']);
                 }
-                if($value['type'] == 'Form' && isset($value['formUuid'])){
-                    $value['form_id'] = $this->getIdFromUuid('ox_form', $value['formUuid']);
+                if($value['type'] == 'Form' && isset($value['form_id'])){
+                    $value['form_id'] = $this->getIdFromUuid('ox_form', $value['form_id']);
                 }
                 unset($value['id']);
                 if (!isset($value['id'])) {
