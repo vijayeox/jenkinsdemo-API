@@ -139,6 +139,7 @@ content:
                 - name
                 - product
                 - phone
+            filterOperator : startswith
             placeholder: 'Search using Name or PADI or Product or Phone'
             operations:
                 title: 'Create Policy'
