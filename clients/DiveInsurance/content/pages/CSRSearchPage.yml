@@ -136,7 +136,7 @@ content:
                     icon: 'fa fa-repeat'
             filterColumns:
                 - padi
-                - firstname
+                - name
                 - product
                 - phone
             placeholder: 'Search using Name or PADI or Product or Phone'
@@ -177,10 +177,7 @@ content:
                     field: padi
                 -
                     title: Name
-                    field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
-                    multiFieldFilter:
-                        - lastname
+                    field: name
                 -
                     title: Product
                     field: entity_name
