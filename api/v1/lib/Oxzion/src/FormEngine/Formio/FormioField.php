@@ -66,11 +66,7 @@ class FormioField
             $this->data['parent'] = $parent->toArray();
         }
         $this->data['type'] = isset($field['type']) ? $field['type'] : $field['inputType'];
-        if(isset($field['properties']) && count($field['properties'])){
-            if(isset($field['properties']['data_type'])){
-                $this->data['data_type'] = strtolower($field['properties']['data_type']);
-            }
-        }
+
         switch ($this->data['type']) {
             case 'day':
                 $props = $this->getDayProps($field);
@@ -119,6 +115,13 @@ class FormioField
                 }
                 break;
         }
+
+        if(isset($field['properties']) && count($field['properties'])){
+            if(isset($field['properties']['data_type'])){
+                $this->data['data_type'] = strtolower($field['properties']['data_type']);
+            }
+        }
+
         $this->data['template'] = json_encode($field);
         if (isset($field['data'])) {
             $this->data['options'] = json_encode($field['data']);
