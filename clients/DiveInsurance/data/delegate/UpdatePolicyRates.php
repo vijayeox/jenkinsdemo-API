@@ -18,23 +18,6 @@ class UpdatePolicyRates extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {  
 
-
-        //PARAMETER
-
-//         {
-//     "year": 2019,
-//     "product": "Individual Professional Liability - Upgrade",
-//     "start_date": "2019-09-01",
-//     "end_date": "2019-09-30",
-//     "premium": 600.00,
-//     "tax": 40.00,
-//     "padi_fee": 12.0,
-//     "coverage": "Instructor",
-//     "previous_coverage": "Dive Master"
-// }
-
-
-        
         if(AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')){
              if($data['product'] == 'Individual Professional Liability - New Policy'){
                 $is_upgrade = 0;
