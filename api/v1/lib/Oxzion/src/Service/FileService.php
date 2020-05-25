@@ -689,6 +689,7 @@ class FileService extends AbstractService
                 $where .= " " . $whereQuery ;
             }
             $where = trim($where) != "" ? "WHERE $where" : "";
+            $where = rtrim($where, " AND ");
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
                 $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery $where $sort $pageSize $offset";
