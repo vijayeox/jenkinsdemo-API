@@ -35,6 +35,12 @@ class SetupEndorsement extends AbstractAppDelegate
                 $data['excessLiability'] = $data['liabilityCoverage'];
             }
             $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
+            if(isset($data['single_limit'])){
+                $policy['prevSingleLimit'] = $data['single_limit'];
+            }
+            if(isset($data['annual_aggregate'])){
+                $policy['prevAnnualAggregate'] = $data['annual_aggregate'];
+            }
             if(isset($data['careerCoverage'])){
                 $policy['previous_careerCoverage'] = $data['careerCoverage'];
             }
@@ -154,9 +160,11 @@ class SetupEndorsement extends AbstractAppDelegate
                     $rate = $resultEquipment->current();
                     if(isset($rate['key'])){
                         if(isset($rate['total'])){
+                           
                             $premiumRateCardDetails[$rate['key']] = $rate['total'];
                             $data['equipmentPrice'] = 0;
                         } else {
+                            
                             $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                         }
                     }
@@ -171,6 +179,7 @@ class SetupEndorsement extends AbstractAppDelegate
                 $selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Scuba fit Query".$selectScubafit);
                 $resultScubafit = $persistenceService->selectQuery($selectScubafit);
+
                 if($resultScubafit->count() == 0){
                     $premiumRateCardDetails[$data['scubaFit']] = 0;
                     $data['scubaFitPrice'] = 0;
