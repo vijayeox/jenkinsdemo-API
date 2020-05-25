@@ -125,6 +125,7 @@ class SetupEndorsement extends AbstractAppDelegate
                 } else {
                     $selectExcessLiability = "select rc.* from premium_rate_card rc premium_rate_card  WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' order by CAST(rc.previous_key as UNSIGNED) DESC";
                 }
+
                 $this->logger->info("Executing Endorsement Rate Card ExcessLiability Query ".$selectExcessLiability);
                 $resultExcessLiability = $persistenceService->selectQuery($selectExcessLiability);
                 while ($resultExcessLiability->next()) {
@@ -259,15 +260,14 @@ class SetupEndorsement extends AbstractAppDelegate
         }
         unset($privileges);
         $this->logger->info("SETUP ENDOR".print_r($data,true));
-        $this->getRates($data,$persistenceService);
         return $data;
     }
     protected function getRates($data,$persistenceService){
         $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['update_date']."' AND is_upgrade = 0 AND end_date >= '".$data['update_date']."'";
-        // $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
+        $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
         $this->logger->info("Rate Card query -> $select");
-        // $stateTaxResult = $persistenceService->selectQuery($selectTax);
+        $stateTaxResult = $persistenceService->selectQuery($selectTax);
         while ($result->next()) {
             $rate = $result->current();
             if(isset($rate['key'])){
@@ -287,11 +287,11 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             unset($rate);
         }
-        // $stateTaxData = [];
-        // while ($stateTaxResult->next()) {
-        //     $rate = $stateTaxResult->current();
-        //     array_push($stateTaxData, $rate);
-        // }
+        $stateTaxData = [];
+        while ($stateTaxResult->next()) {
+            $rate = $stateTaxResult->current();
+            array_push($stateTaxData, $rate);
+        }
 
         foreach ($data as $key => $value) {
             if(is_string($value))
@@ -302,9 +302,9 @@ class SetupEndorsement extends AbstractAppDelegate
                 }
             }
         }
-        // if(isset($stateTaxData)){
-        //     $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
-        // }
+        if(isset($stateTaxData)){
+            $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
+        }
         if(isset($premiumRateCardDetails)){
             return $premiumRateCardDetails;
         } else {
