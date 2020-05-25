@@ -88,3 +88,11 @@ form:
         description: 'Page General Info'
         template_file: generalInformation.json
         entity: Workbook
+    -
+        name: 'Consolidated Form'
+        uuid: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7
+        description: 'Consolidated Wiz'
+        template_file: consolidatedWizard.json
+        entity: Workbook
+
+        
