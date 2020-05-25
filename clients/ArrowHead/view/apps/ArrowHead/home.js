@@ -3,8 +3,6 @@ import React, { useContext } from 'react'
 import { appId as application_id } from "./metadata.json";
 import "./index.scss";
 class Home extends React.Component { 
-  static contextType = UserConsumer
-  
   constructor(props) {
     super(props);
     this.core = this.props.args;

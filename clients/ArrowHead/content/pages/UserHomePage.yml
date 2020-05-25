@@ -1,4 +1,4 @@
-name: 'My Policies'
+name: 'My Workbooks'
 description: 'Shows a list of users policies'
 content:
     -
@@ -16,7 +16,7 @@ content:
                 info: true
             actions:
                 -
-                    name: 'View Policy'
+                    name: 'View'
                     rule: '''{{policyStatus}}'' == ''Completed'''
                     icon: 'fa fa-envelope-open'
                     details:
@@ -36,12 +36,12 @@ content:
                             url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
                     icon: 'fa fa-pencil'
-            toolbarTemplate: '<h4>List of all policies</h4>'
+            toolbarTemplate: '<h5>List of workbooks generated</h5>'
             operations:
-                title: 'Create Workbook'
+                title: 'Create New Workbook'
                 actions:
                     -
-                        name: Workbook
+                        name: Create New Workbook
                         rule: "true"
                         details:
                             -
@@ -49,13 +49,11 @@ content:
                                 form_id: a8f015fa-2dcb-4806-8ec0-ca5847c1c471
             columnConfig:
                 -
-                    title: Name
-                    field: entity_name
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}</td>'
+                    title: Applicant Name
+                    field: applicant_name
                 -
-                    title: 'Policy Status'
-                    field: policyStatus
+                    title: 'Policy Effective Date'
+                    field: effectiveDate
                 -
-                    title: 'Policy Effective Period'
-                    cell: '<td>{item.start_date}&nbsp;-&nbsp;{item.end_date}</td>'
-                    field: start_date
+                    title: 'Producer'
+                    field: producer_name
