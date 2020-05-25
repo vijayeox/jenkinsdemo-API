@@ -713,6 +713,7 @@ class FileService extends AbstractService
                                     if(isset($file["data"])){
                                         unset($file["data"]);
                                     }
+                                    $resultSet[$i] = ($file);
                                 } else{
                                     $resultSet[$i] = array_merge($file, $content);
                                 }
