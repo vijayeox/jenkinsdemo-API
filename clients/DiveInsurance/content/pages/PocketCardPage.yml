@@ -4,9 +4,14 @@ content:
     -
         type: List
         content:
-            route: 'pipeline/commands/[{"command" : "delegate", "delegate":"PocketCardMenu"}]'
+            route: 'pipeline'
             filterable: false
             resizable: true
+            urlPostParams:
+               commands: 
+                    -
+                        command: delegate
+                        delegate: PocketCardMenu
             actions:
                 -
                     name: 'View Pocket Card'
