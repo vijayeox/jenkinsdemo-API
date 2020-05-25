@@ -18,7 +18,7 @@ abstract class AbstractDocumentAppDelegate implements DocumentAppDelegate
 	public function setDocumentBuilder(DocumentBuilder $documentBuilder){
 		$this->documentBuilder = $documentBuilder;
 	}
-    public function setTemplatePath($destination){
+    public function setDocumentPath($destination){
     	$this->destination = $destination;
     }
 }
