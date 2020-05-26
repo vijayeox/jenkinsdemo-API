@@ -49,7 +49,7 @@ api()
     else    
         #making the directory where api will be copied.
         #moving to temp directory and copying required
-        echo -e "${YELLOW}Stoping Apache${RESET}"
+        echo -e "${YELLOW}Stopping Apache${RESET}"
         service apache2 stop
         cd ${TEMP}
         rsync -rl api/v1/data/uploads/ /var/www/api/data/uploads/
@@ -96,9 +96,9 @@ camel()
         echo -e "${RED}CAMEL was not packaged so skipping it\n${RESET}"
     else
         #making the directory where api will be copied.
-        echo -e "${GREEN}Stoping Camel service${RESET}"
+        echo -e "${GREEN}Stopping Camel service${RESET}"
         systemctl stop camel
-        echo -e "${YELLOW}Stoped!${RESET}"
+        echo -e "${YELLOW}Stopped!${RESET}"
         #moving to temp directory and copying required
         cd ${TEMP}
         rsync -rl --delete integrations/camel/ /opt/oxzion/camel/
@@ -140,9 +140,9 @@ mattermost()
     	cp /opt/oxzion/mattermost/config/config.json ${TEMP}/integrations/mattermost/config/config.json
     	cp /opt/oxzion/mattermost/config/config.json /home/ubuntu/env/integrations/mattermost/mattermost-server/config/config.json
     	echo -e "${GREEN}Backing up current configurations completed${RESET}"
-        echo -e "${GREEN}Stoping Mattermost service${RESET}"
+        echo -e "${GREEN}Stopping Mattermost service${RESET}"
         systemctl stop mattermost
-        echo -e "${YELLOW}Stoped!${RESET}"
+        echo -e "${YELLOW}Stopped!${RESET}"
         cd ${TEMP}
         rm -Rf integrations/mattermost/logs
         rm -Rf integrations/mattermost/data
@@ -166,7 +166,7 @@ orocrm()
         echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
         cd ${TEMP}
-        echo -e "${YELLOW}Stoping apache and supervisor service${RESET}"
+        echo -e "${YELLOW}Stopping apache and supervisor service${RESET}"
         service apache2 stop
         systemctl stop supervisor
         mkdir -p /var/www/crm
@@ -183,7 +183,7 @@ orocrm()
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
         if [ -d "/var/www/crm/var" ] || [ ! -L "/var/www/crm/var" ] ;
         then
-            echo -e "${YELLOW}Stoping cron service${RESET}"
+            echo -e "${YELLOW}Stopping cron service${RESET}"
             service cron stop
             if [ -d "/var/www/crm/var" ] ;
             then
@@ -246,9 +246,9 @@ view()
     then
         echo -e "${RED}VIEW was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
-        echo -e "${YELLOW}Stoped!${RESET}"
+        echo -e "${YELLOW}Stopped!${RESET}"
         cd ${TEMP}
         rsync -rl view/vfs/ /opt/oxzion/view/vfs/
         rm -Rf view/vfs
@@ -321,7 +321,7 @@ helpapp()
     then
         echo -e "${RED}HelpApp was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${YELLOW}Stoping Apache...${RESET}"
+        echo -e "${YELLOW}Stopping Apache...${RESET}"
         sudo service apache2 stop
         echo -e "${YELLOW}Copying HelpApp...${RESET}"
         rsync -rl --delete ${TEMP}/integrations/help/ /var/www/help/
@@ -357,7 +357,7 @@ diveinsurance()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
@@ -387,7 +387,7 @@ insurancemanagement()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
@@ -416,7 +416,7 @@ insuranceoi()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
@@ -450,7 +450,7 @@ task()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
@@ -479,7 +479,7 @@ bridgemed()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
@@ -508,7 +508,7 @@ finance()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
@@ -542,7 +542,7 @@ transportation()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
-        echo -e "${GREEN}Stoping view service${RESET}"
+        echo -e "${GREEN}Stopping view service${RESET}"
         systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
