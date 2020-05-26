@@ -41,6 +41,7 @@ buildhelp()
     echo -e "16. insurancemanagement   -${YELLOW}For packaging insurancemanagement app.${RESET}"
     echo -e "17. insuranceoi           -${YELLOW}For packaging insuranceoi app.${RESET}"
     echo -e "18. finance               -${YELLOW}For packaging Finance app.${RESET}"
+    echo -e "19. transportation        -${YELLOW}For packaging Transportation app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -222,6 +223,16 @@ bridgemed()
     echo -e "${YELLOW}Copying clients BridgeMed Completed.${RESET}"
 
 }
+transportation()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients BridgeMed to build folder.${RESET}"
+    rsync -rl clients/Transportation/ ./build/clients/Transportation/
+    echo -e "${YELLOW}Copying clients BridgeMed Completed.${RESET}"
+
+}
 integrations()
 {
     camel
@@ -287,6 +298,12 @@ do
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 bridgemed
+                package
+                break;;
+        transportation)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                transportation
                 package
                 break;;
         camel)
