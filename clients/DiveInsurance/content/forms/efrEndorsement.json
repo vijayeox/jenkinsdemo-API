@@ -1156,6 +1156,29 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "single_limit",
+						"defaultValue": "1000000",
+						"redrawOn": "liabilityCoverage",
+						"calculateValue": "var singleLimit = 0\nif(data.liabilityCoverage == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
+						"calculateServer": false,
+						"key": "single_limit",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annual_aggregate",
+						"defaultValue": "2000000",
+						"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+						"calculateServer": false,
+						"key": "annual_aggregate",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2144,7 +2167,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 149,
+	"_vid": 150,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2165,7 +2188,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-22T22:41:44.723Z",
+	"modified": "2020-05-26T09:33:40.156Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

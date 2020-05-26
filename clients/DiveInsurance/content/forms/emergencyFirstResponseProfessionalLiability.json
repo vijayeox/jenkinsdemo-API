@@ -1405,7 +1405,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "single_limit",
-						"defaultValue": "$1,000,000",
+						"defaultValue": "1000000",
 						"redrawOn": "liabilityCoverage",
 						"calculateValue": "var singleLimit = 0\nif(data.liabilityCoverage == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
 						"calculateServer": false,
@@ -1417,7 +1417,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "annual_aggregate",
-						"defaultValue": "$2,000,000",
+						"defaultValue": "2000000",
 						"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
 						"calculateServer": false,
 						"key": "annual_aggregate",
@@ -3148,7 +3148,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 497,
+	"_vid": 498,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3232,7 +3232,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-22T22:41:10.882Z",
+	"modified": "2020-05-26T09:33:32.631Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
