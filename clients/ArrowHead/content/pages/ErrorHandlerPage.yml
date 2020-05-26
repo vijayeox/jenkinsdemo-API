@@ -1,0 +1,42 @@
+name: Errors
+description: 'Shows errors which occured in workflow'
+content:
+    -
+        type: List
+        content:
+            route: errorlog
+            filterable: true
+            resizable: true
+            sortable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: Retry
+                    rule: 'true'
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'errorlog/{{id}}/retry'
+            columnConfig:
+                -
+                    title: Id
+                    field: id
+                -
+                    title: 'Type of Error'
+                    field: error_type
+                -
+                    title: Data
+                    field: payload
+                -
+                    title: 'Date Created'
+                    field: date_created
+                -
+                    title: Parameters
+                    field: params

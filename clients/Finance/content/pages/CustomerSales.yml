@@ -1,5 +1,5 @@
-name: 'Invoice List'
-description: 'Monthly Invoices'
+name: 'Invoices'
+description: 'Invoices'
 content:
     -
         type: Dashboard

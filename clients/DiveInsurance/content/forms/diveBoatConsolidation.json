@@ -182,6 +182,15 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "isRenewalFlow",
+						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
+						"calculateServer": false,
+						"key": "isRenewalFlow",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -274,7 +283,7 @@
 						"customClass": "alignCenter",
 						"tableView": false,
 						"key": "changePadi",
-						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\")&&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = false;\n} else if(((data.padiVerified === true || data.padiVerified == 'true')  || (data.businessPadiVerified === true || data.businessPadiVerified == 'true')) &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n} else {\n    show = false;\n}",
+						"customConditional": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}else if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\")&&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = false;\n} else if(((data.padiVerified === true || data.padiVerified == 'true')  || (data.businessPadiVerified === true || data.businessPadiVerified == 'true')) &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n}else {\n    show = false;\n}",
 						"logic": [{
 							"name": "Event Handler",
 							"trigger": {
@@ -301,7 +310,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}",
+						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
@@ -316,29 +325,11 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "PadiNotFoundCSRMessage",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));",
+						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
 						"hideLabel": true
-					}, {
-						"label": "PADI Verified",
-						"tableView": false,
-						"defaultValue": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true,
-							"customMessage": "Please verify the PADI before proceeding."
-						},
-						"key": "padiVerifiedCSRCheck",
-						"properties": {
-							"negate": "padiVerified"
-						},
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));",
-						"type": "checkbox",
-						"input": true,
-						"hideOnChildrenHidden": false,
-						"dataGridLabel": false
 					}, {
 						"label": "Content",
 						"attrs": [{
@@ -594,6 +585,14 @@
 				"key": "panelColumns2",
 				"type": "columns",
 				"input": false
+			}, {
+				"label": "name",
+				"calculateValue": "value = data.firstname + \" \" + data.lastname",
+				"calculateServer": false,
+				"key": "name",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
@@ -1187,7 +1186,7 @@
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
-		"nextPage": "if(data['padiVerified'] ===true ||data['businessPadiVerified']===true){\n\tnext = 'panel2'\n} else {\n\tif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) && data['padiVerifiedCSRCheck'] ===true){\n\t\tnext = 'panel2';\n\t} else {\n\t\tif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && !(data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t\tnext = 'panel2';\n\t} else {\n\tnext = 'panel';\n\t}\n\t}\n}",
+		"nextPage": "if(data['padiVerified'] ===true ||data['businessPadiVerified']===true){\n\tnext = 'panel2'\n} else {if(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t\tnext = 'panel2';\n\t} else {\n\t\tif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && !(data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t\tnext = 'panel2';\n\t} else {\n\tnext = 'panel';\n\t}\n\t}\n}",
 		"label": "Personal Information",
 		"breadcrumbClickable": true,
 		"buttonSettings": {
@@ -1208,7 +1207,6 @@
 			"columns": [{
 				"components": [{
 					"label": "Policy Start Date",
-					"displayInTimezone": "utc",
 					"allowInput": false,
 					"format": "MM-dd-yyyy",
 					"tableView": false,
@@ -1222,7 +1220,7 @@
 						"showMeridian": false
 					},
 					"clearOnHide": false,
-					"calculateValue": "if(data.policyPeriod){\n  if(!(moment(data.policyPeriod).format('MM-DD-YYYY') >= moment().format('MM-DD-YYYY'))){\n    value = moment();\n  }\n}",
+					"calculateValue": "if(data.policyPeriod){\n  if(!(moment(data.policyPeriod).format('MM-DD-YYYY') >= moment().format('MM-DD-YYYY'))){\n    value = moment().format('YYYY-MM-DD HH:mm:ss');\n  }else{\n    value = moment(data.policyPeriod).format('YYYY-MM-DD HH:mm:ss');\n  }\n}",
 					"calculateServer": false,
 					"allowCalculateOverride": true,
 					"validate": {
@@ -1235,7 +1233,7 @@
 					"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 					"widget": {
 						"type": "calendar",
-						"displayInTimezone": "utc",
+						"displayInTimezone": "viewer",
 						"language": "en",
 						"useLocaleSettings": false,
 						"allowInput": false,
@@ -1273,7 +1271,11 @@
 				}, {
 					"label": "start_date",
 					"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
+					"calculateServer": false,
 					"key": "start_date",
+					"properties": {
+						"data_type": "Date"
+					},
 					"type": "hidden",
 					"input": true,
 					"tableView": true,
@@ -1285,6 +1287,9 @@
 					"calculateValue": "if(data.start_date && data.start_date !== \"\"){\n  var today = moment(data['start_date']); \n  var month = today.month();\n  var year = today.year();\n  if(month > 5){\n    value = (year + 1) + \"-07-22\";\n  }else{\n    value = (year)+ \"-07-22\";\n  }\n}else{\n  value = \"\";\n}",
 					"calculateServer": false,
 					"key": "end_date",
+					"properties": {
+						"data_type": "Date"
+					},
 					"type": "hidden",
 					"input": true,
 					"tableView": true,
@@ -4881,7 +4886,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[data[\"groupCoverageSelect\"]])).toFixed(0);",
+						"calculateValue": "value = (parseFloat(data[data[\"groupCoverageSelect\"]]) || 0).toFixed(0);",
 						"calculateServer": false,
 						"key": "groupCoverage",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
@@ -7297,15 +7302,15 @@
 					"requireDecimal": true,
 					"inputFormat": "plain",
 					"redrawOn": "data",
-					"calculateValue": "value = (parseFloat(data['ProRataDays'])/365)",
+					"calculateValue": "value = ((parseFloat(data['ProRataDays'])/365) || 0);",
 					"calculateServer": false,
 					"key": "ProRataFactor",
 					"type": "number",
+					"decimalLimit": 3,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"hideOnChildrenHidden": false,
-					"decimalLimit": 3
+					"hideOnChildrenHidden": false
 				}, {
 					"key": "page5PanelColumnsContent2",
 					"label": "Content",
@@ -8023,11 +8028,15 @@
 					"lockKey": true,
 					"hideOnChildrenHidden": false
 				}, {
+					"label": "stateTaxData",
+					"calculateServer": false,
+					"key": "stateTaxData",
+					"properties": {
+						"data_type": "list"
+					},
+					"type": "hidden",
 					"input": true,
 					"tableView": true,
-					"key": "stateTaxData",
-					"label": "stateTaxData",
-					"type": "hidden",
 					"lockKey": true,
 					"hideOnChildrenHidden": false
 				}, {
@@ -8513,6 +8522,24 @@
 				"key": "page5Panel2Well",
 				"input": false,
 				"components": [{
+					"label": "PADI Verified",
+					"tableView": false,
+					"defaultValue": false,
+					"calculateServer": false,
+					"validate": {
+						"required": true,
+						"customMessage": "Please verify the PADI before proceeding."
+					},
+					"key": "padiVerifiedCSRCheck",
+					"properties": {
+						"negate": "padiVerified"
+					},
+					"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+					"type": "checkbox",
+					"input": true,
+					"hideOnChildrenHidden": false,
+					"dataGridLabel": false
+				}, {
 					"label": "Approve/Reject",
 					"optionsLabelPosition": "right",
 					"inline": true,
@@ -8583,7 +8610,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 521,
+	"_vid": 549,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8601,6 +8628,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-05-14T11:41:50.114Z",
+	"modified": "2020-05-25T06:28:31.596Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

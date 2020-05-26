@@ -42,6 +42,8 @@ class YearList extends AbstractAppDelegate
             $selectQuery  = "SELECT DISTINCT year from premium_rate_card WHERE product = '".$product."' AND is_upgrade = ".$is_upgrade;
         }else if($data['type'] == 'stateTax'){
             $selectQuery  = "SELECT DISTINCT year from state_tax WHERE coverage = '".$data['coverage']."'";
+        }else if($data['type'] == 'carrierpolicy'){
+            $selectQuery  = "SELECT DISTINCT year from carrier_policy";
         }
         
         $result = $persistenceService->selectQuery($selectQuery);

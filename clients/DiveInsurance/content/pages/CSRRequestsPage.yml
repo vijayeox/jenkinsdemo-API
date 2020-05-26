@@ -86,10 +86,7 @@ content:
                     field: padi
                 -
                     title: Name
-                    field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
-                    multiFieldFilter:
-                        - lastname
+                    field: name
                 -
                     title: Policy Status
                     field: policyStatus
@@ -160,4 +157,7 @@ content:
                         text: grid.filterBeforeOrEqualOperator
                         operator: lte
             filterLogic: and
-            passColumnConfig: true
+            searchOnEnter: true
+            passColumnConfig : 
+                -
+                    name

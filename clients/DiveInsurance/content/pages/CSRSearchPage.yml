@@ -136,9 +136,10 @@ content:
                     icon: 'fa fa-repeat'
             filterColumns:
                 - padi
-                - firstname
+                - name
                 - product
                 - phone
+            filterOperator : startswith
             placeholder: 'Search using Name or PADI or Product or Phone'
             operations:
                 title: 'Create Policy'
@@ -177,10 +178,7 @@ content:
                     field: padi
                 -
                     title: Name
-                    field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
-                    multiFieldFilter:
-                        - lastname
+                    field: name
                 -
                     title: Product
                     field: entity_name
@@ -195,3 +193,6 @@ content:
                     title: 'Policy End Date'
                     field: end_date
                     cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
+            passColumnConfig : 
+                -
+                    name

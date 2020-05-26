@@ -11,7 +11,7 @@ class IndividualLiabilityImpl extends AbstractDocumentAppDelegate {
     public function setDocumentBuilder($builder){
         $this->builder = $builder;
     }
-    public function setTemplatePath($destination)
+    public function setDocumentPath($destination)
     {
         $this->destination = $destination;
     }
