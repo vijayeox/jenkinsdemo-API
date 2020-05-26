@@ -534,6 +534,40 @@ finance()
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
+transportation()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/Finance" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./Transportation /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building Transportation app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Transportation'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/Transportation/
+        rm -rf /opt/oxzion/view/apps/Transportation/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
 #calling functions accordingly
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
@@ -554,5 +588,6 @@ bridgemed
 finance
 workflow
 helpapp
+transportation
 #edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"
