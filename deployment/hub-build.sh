@@ -228,9 +228,9 @@ transportation()
     cd ${OXHOME}
     echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
     mkdir -p build/clients
-    echo -e "${YELLOW}Copying clients BridgeMed to build folder.${RESET}"
+    echo -e "${YELLOW}Copying clients Transportation to build folder.${RESET}"
     rsync -rl clients/Transportation/ ./build/clients/Transportation/
-    echo -e "${YELLOW}Copying clients BridgeMed Completed.${RESET}"
+    echo -e "${YELLOW}Copying clients Transportation Completed.${RESET}"
 
 }
 integrations()
