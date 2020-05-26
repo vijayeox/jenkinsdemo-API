@@ -538,7 +538,7 @@ transportation()
 {
     cd ${TEMP}
     echo -e "${YELLOW}Copying EOX apps...${RESET}"
-    if [ ! -d "./clients/Finance" ] ;
+    if [ ! -d "./clients/Transportation" ] ;
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
