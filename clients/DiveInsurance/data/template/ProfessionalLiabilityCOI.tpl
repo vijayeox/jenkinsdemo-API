@@ -197,7 +197,7 @@
 
 
 	                    {if isset($upgradeData.cylinderCoverageName)}
-							< <p class = "policy_status">
+							<p class = "policy_status">
 	                            Cylinder Coverage :  {$upgradeData.cylinderCoverageName} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}
 	                        </p>
 	                    {/if}

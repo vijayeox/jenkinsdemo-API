@@ -249,10 +249,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(is_string($data['previous_policy_data'])){
                                 $data['previous_policy_data'] = json_decode($data['previous_policy_data'],true);
                         }
-
-                        if($data['product'] == "Individual Professional Liability"){
-                            $upgrade = array();
- 
+            
+                        if($data['product'] == "Individual Professional Liability"){ 
                             $this->processUpgradeCoverages($data,$policy,$result,'previous_careerCoverage','careerCoverageName','careerCoverage',array());
 
                             $this->processUpgradeCoverages($data,$policy,$result,'previous_scubaFit','scubaCoverageName','scubaFit',array());
