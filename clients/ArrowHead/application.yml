@@ -35,11 +35,14 @@ privilege:
         permission: 3
 role:
     -
-        name: Dealer
+        name: Agent
         default: true
         privileges:
             -
-                privilege_name: MANAGE_MY_POLICY
+                privilege_name: MANAGE_POLICY_APPLICATION
+                permission: 3
+            -
+                privilege_name: MANAGE_APPLICATION_EXPORT
                 permission: 3
         uuid: 77a1d830-c016-4849-802e-a80117c43c2a
     -
@@ -51,7 +54,7 @@ role:
         uuid: 55a79619-5d7e-432a-9913-ec044906db03
 entity:
     -
-        name: Workbook
+        name: Dealer Policy
         field:
             -
                 name: status
@@ -74,7 +77,7 @@ menu:
         icon: 'fa fa-home'
         page_uuid: dce7df02-7a3b-4468-bed8-edffd8216822
         uuid: 2ba0936d-94d1-4b68-9da2-ccc60faaefe0
-        privilege: MANAGE_MY_POLICY_READ
+        privilege: MANAGE_POLICY_APPLICATION_READ
     -
         name: 'Manage Workbooks'
         icon: 'fa fa-book'
