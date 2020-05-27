@@ -1291,28 +1291,31 @@
 						"columns": [{
 							"components": [{
 								"label": "TecRec Coverage",
-								"optionsLabelPosition": "right",
-								"inline": false,
+								"widget": "choicesjs",
 								"tableView": true,
-								"values": [{
-									"value": "withTecRecEndorsementForSelectionAbove",
-									"label": "With TecRec Endorsement for selection above",
-									"shortcut": ""
-								}, {
-									"value": "tecRecDeclined",
-									"label": "With TecRec Endorsement for selection above - Declined",
-									"shortcut": ""
-								}],
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['endorsementTecRec']){\n  for(var key in data['endorsementTecRec']){\nvar item = {}\nitem.label = data['endorsementTecRec'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"calculateServer": false,
 								"validate": {
-									"required": true,
-									"customMessage": "Please choose one of these options."
+									"required": true
 								},
 								"key": "tecRecEndorsment",
-								"type": "radio",
+								"properties": {
+									"target": "techRecPrice"
+								},
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
@@ -1370,31 +1373,31 @@
 						"columns": [{
 							"components": [{
 								"label": "ScubaFit Coverage",
-								"optionsLabelPosition": "right",
-								"inline": false,
+								"widget": "choicesjs",
 								"tableView": true,
-								"values": [{
-									"value": "scubaFitInstructor",
-									"label": "ScubaFit Instructor",
-									"shortcut": ""
-								}, {
-									"value": "scubaFitInstructorDeclined",
-									"label": "ScubaFit Instructor - Declined",
-									"shortcut": ""
-								}],
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['endorsementScubaFit']){\n  for(var key in data['endorsementScubaFit']){\nvar item = {}\nitem.label = data['endorsementScubaFit'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"calculateServer": false,
 								"validate": {
-									"required": true,
-									"customMessage": "Please choose one of these options."
+									"required": true
 								},
 								"key": "scubaFit",
 								"properties": {
 									"target": "scubaFitPrice"
 								},
-								"type": "radio",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
@@ -1538,31 +1541,31 @@
 						"columns": [{
 							"components": [{
 								"label": "Equipment Liability Coverage",
-								"optionsLabelPosition": "right",
-								"inline": false,
+								"widget": "choicesjs",
 								"tableView": true,
-								"values": [{
-									"value": "equipmentLiabilityCoverage",
-									"label": "Equipment Liability Coverage",
-									"shortcut": ""
-								}, {
-									"value": "equipmentLiabilityCoverageDeclined",
-									"label": "Equipment Liability Coverage - Declined",
-									"shortcut": ""
-								}],
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['endorsementEquipment']){\n  for(var key in data['endorsementEquipment']){\nvar item = {}\nitem.label = data['endorsementEquipment'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"calculateServer": false,
 								"validate": {
-									"required": true,
-									"customMessage": "Please choose one of these options."
+									"required": true
 								},
 								"key": "equipment",
 								"properties": {
 									"target": "equipmentPrice"
 								},
-								"type": "radio",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
@@ -3155,7 +3158,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 168,
+	"_vid": 178,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3174,6 +3177,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-26T07:09:21.823Z",
+	"modified": "2020-05-27T08:10:28.707Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

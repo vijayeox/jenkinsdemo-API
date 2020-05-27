@@ -204,7 +204,7 @@
 
 	                    {if isset($upgradeData.tecRecCoverageName)}
 							<p class = "policy_status">
-	                            Status of Insured:  {$upgradeData.tecRecCoverageName} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}
+	                            TecRec Coverage:  Added to this certificate as of  {$upgradeData.update_date|date_format:"%m/%d/%Y"}
 	                        </p>
 	                    {/if}
 					{/foreach}
