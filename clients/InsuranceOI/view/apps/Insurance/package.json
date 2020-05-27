@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "@fortawesome/fontawesome-pro": "^5.13.0",
     "choices.js": "^7.0.0",
     "copy-webpack-plugin": "^5.0.4",
     "express": "^4.17.1",
