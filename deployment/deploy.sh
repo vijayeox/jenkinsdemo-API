@@ -253,7 +253,8 @@ view()
         rsync -rl view/vfs/ /opt/oxzion/view/vfs/
         rm -Rf view/vfs
         unlink /opt/oxzion/view/vfs
-        rsync -rl view/ /opt/oxzion/view/
+        find -L /opt/oxzion/view/apps/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/apps/  \;
+        rsync -rl --delete view/ /opt/oxzion/view/
         ln -nfs /var/lib/oxzion/vfs /opt/oxzion/view/vfs
         chown oxzion:oxzion -R /opt/oxzion/view/vfs
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
