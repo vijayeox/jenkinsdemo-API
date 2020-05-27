@@ -8,7 +8,7 @@ const register = (core, args, options, metadata) => {
   // Create a new Application instance
   const proc = core.make("osjs/application", { args, options, metadata });
   proc.createWindow({
-      id: "FinanceApp",
+      id: "Window_Finance",
       title: metadata.title.en_EN,
       icon: proc.resource(icon_white),
       dimension: {
