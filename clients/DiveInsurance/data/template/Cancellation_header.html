@@ -3,6 +3,7 @@
 <head>
   <link href= "./css/template_css.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="./AgentInfo.js"></script> 
+  <script type="text/javascript" src="./js/moment.js"></script>
   <script>
     function subst() {
       var vars = {};
@@ -18,13 +19,28 @@
       }
       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2','single_limit','annual_aggregate'];
       for (var css_class in css_selector_classes) {
-        if (css_selector_classes.hasOwnProperty(css_class)) {
-          var element = document.getElementsByClassName(css_selector_classes[css_class]);
-          for (var j = 0; j < element.length; ++j) {
-            element[j].textContent = vars[css_selector_classes[css_class]];
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+            var element = document.getElementsByClassName(
+              css_selector_classes[css_class]
+            );
+            for (var j = 0; j < element.length; ++j) {
+              element[j].textContent = vars[css_selector_classes[css_class]];
+            }
+            if (css_selector_classes[css_class] == "start_date") {
+              document.getElementsByClassName(
+                "start_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+            }
+            if (css_selector_classes[css_class] == "end_date") {
+              document.getElementsByClassName("end_date")[0].textContent =
+                moment(vars[css_selector_classes[css_class]]).format(
+                  "D MMMM YYYY"
+                ) + " - 12:01:00 AM";
+            }
           }
         }
-      }
       agentInfo();
     }
   </script>
