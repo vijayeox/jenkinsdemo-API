@@ -87,6 +87,27 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "endorsementTecRec",
+			"calculateServer": false,
+			"key": "endorsementTecRec",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "endorsementScubaFit",
+			"calculateServer": false,
+			"key": "endorsementScubaFit",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "endorsementEquipment",
+			"calculateServer": false,
+			"key": "endorsementEquipment",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "product_email_id",
 			"calculateValue": "value = 'instructors@diveinsurance.com';",
 			"calculateServer": false,
@@ -1782,11 +1803,12 @@
 										"disabled": true,
 										"tableView": true,
 										"defaultValue": "0.00",
-										"delimiter": false,
+										"delimiter": true,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"redrawOn": "data",
 										"clearOnHide": false,
-										"calculateValue": "var total = (parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0);\nif(total > 0){\n  value = total;\n} else {\n  total =0;\n}",
+										"calculateValue": "var total = ((parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0));\nif(total > 0){\n  value = total;\n} else {\n  value = 0;\n}",
 										"calculateServer": false,
 										"key": "endorsementTotal",
 										"properties": {
@@ -1844,8 +1866,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"redrawOn": "data",
 										"clearOnHide": false,
-										"calculateValue": "if(parseFloat(data['amount']).toFixed(0) < parseFloat(data['endorsementTotal']).toFixed(0)){\n  value = (parseFloat(data['endorsementTotal'])).toFixed(0) - (parseFloat(data['amount'])).toFixed(0);\n} else {\n  value = 0;\n}",
+										"calculateValue": "if(data.csrGrandTotal && parseFloat(data.csrGrandTotal) != 0){\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}else{\n  value = 0;\n}",
 										"calculateServer": false,
 										"key": "balanceEndor",
 										"type": "number",
@@ -1866,6 +1889,24 @@
 								"input": false,
 								"path": "columns1",
 								"hideLabel": true
+							}, {
+								"label": "userGrandTotal",
+								"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
+								"calculateServer": false,
+								"key": "userGrandTotal",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "csrGrandTotal",
+								"calculateValue": "if(data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
+								"calculateServer": false,
+								"key": "csrGrandTotal",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
 							"offset": 0,
@@ -2816,7 +2857,7 @@
 		}, {
 			"label": "amount",
 			"defaultValue": "0",
-			"calculateValue": "if(!(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = (parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00).toFixed(0);\n} else {\n  value = 0;\n}",
+			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) > 0){\n    value = data.balanceEndor;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.endorsementTotal) || 0).toFixed(0);\n}",
 			"calculateServer": false,
 			"key": "amount",
 			"properties": {
@@ -3158,7 +3199,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 178,
+	"_vid": 204,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3177,6 +3218,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-27T08:10:28.707Z",
+	"modified": "2020-05-27T13:53:36.993Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

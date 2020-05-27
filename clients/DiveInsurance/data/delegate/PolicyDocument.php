@@ -638,6 +638,16 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['endorsementExcessLiability'])){
                     $data['endorsementExcessLiability'] = array();
                 }
+                if(isset($data['endorsementTecRec'])){
+                    $data['endorsementTecRec'] = array();
+                }
+                if(isset($data['endorsementScubaFit'])){
+                    $data['endorsementScubaFit'] = array();
+                }
+                if(isset($data['endorsementEquipment'])){
+                    $data['endorsementEquipment'] = array();
+                }
+                
                 if($this->type != 'endorsementQuote'){
                     if(is_string($data['endorsement_options'])){
                     $data['endorsement_options'] = json_decode($data['endorsement_options'],true);
