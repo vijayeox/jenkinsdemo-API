@@ -69,7 +69,7 @@ menu:
         page_uuid: a5d8970e-a009-416e-8509-df3f1f42a6c7
         uuid: d83169fd-e469-410f-9137-6e8011102ce0
     -
-        name: 'Profit and Loss'
+        name: 'Profit And Loss'
         icon: 'fal fa-usd-circle'
         privilege: MANAGE_FINANCE_WRITE
         page_uuid: 94be852e-86cc-4c93-b321-9f4b46641cc5
