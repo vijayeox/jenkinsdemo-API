@@ -1074,7 +1074,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData.length >= 0){\n  var policyLength = 0;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var amount =0;\n  if(data[currentPolicy.previous_excessLiability] === 0){\n    amount = data.coverageAmount\n  } else {\n    amount = data[currentPolicy.previous_excessLiability] \n  }\n  var difference = parseFloat(data[data['liabilityCoverage']]) - parseFloat(amount);\n  console.log(difference);\nvalue = difference.toFixed(0);\n}",
+						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
 						"calculateServer": false,
 						"key": "excessLiabilityPricePayable",
 						"customConditional": "show = false;",
@@ -1215,26 +1215,27 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"label": "Current Total",
-								"placeholder": "0",
+								"label": "Balance",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": true,
+								"defaultValue": 0,
+								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
+								"redrawOn": "data",
 								"clearOnHide": false,
-								"calculateValue": "var temp = (parseFloat(data['endorAmount']) - parseFloat(data['endorAmountPayable'])) ;\nif(parseInt(temp) < 0){\n  value = 0;\n} else {\n  value = temp ? temp : 0 ;\n}",
+								"calculateValue": "if(data.csrGrandTotal && parseFloat(data.csrGrandTotal) != 0){\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}else{\n  value = 0;\n}",
 								"calculateServer": false,
 								"key": "balanceEndor",
 								"type": "number",
 								"input": true,
-								"inputType": "number",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "number"
 							}],
 							"width": 8,
 							"offset": 0,
@@ -1245,9 +1246,27 @@
 						"hideLabel": true,
 						"tableView": false,
 						"key": "pageNaNPanelColumns2Columns1",
-						"customConditional": "show = data.privileges.MANAGE_POLICY_APPROVAL_WRITE && (parseInt(data.balanceEndor) !== 0);",
+						"customConditional": "show = data.CSRReviewRequired;",
 						"type": "columns",
 						"input": false
+					}, {
+						"label": "userGrandTotal",
+						"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.endorAmount;\n}",
+						"calculateServer": false,
+						"key": "userGrandTotal",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "csrGrandTotal",
+						"calculateValue": "if(data.CSRReviewRequired){\n  value = data.endorAmount;\n}",
+						"calculateServer": false,
+						"key": "csrGrandTotal",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 9,
 					"offset": 0,
@@ -1783,7 +1802,7 @@
 		},
 		"components": [{
 			"label": "amountPayable",
-			"calculateValue": "value = parseFloat(data['endorAmount']);",
+			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) > 0){\n    value = data.balanceEndor;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.endorsementTotal) || 0).toFixed(0);\n}",
 			"calculateServer": false,
 			"key": "endorAmountPayable",
 			"type": "hidden",
@@ -2102,7 +2121,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 152,
+	"_vid": 157,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2123,7 +2142,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-28T05:58:40.474Z",
+	"modified": "2020-05-28T10:22:09.328Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

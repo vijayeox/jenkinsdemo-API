@@ -138,7 +138,6 @@ class SetupEndorsement extends AbstractAppDelegate
                         if($rate['key'] == $policy['previous_excessLiability']){
                             $policy['previous_excessLiabilityLabel'] = $rate['coverage'];
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
-                            $premiumRateCardDetails[$rate['key']] = 0;
                             $data['excessLiabilityPrice'] = $rate['total'];
                         } else {
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
