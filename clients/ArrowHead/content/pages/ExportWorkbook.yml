@@ -1,10 +1,10 @@
-name: 'My Workbooks'
-description: 'Shows a list of users policies'
+name: 'Export Workbooks'
+description: 'Allows agents to export workbooks'
 content:
     -
         type: List
         content:
-            route: 'file/user/me'
+            route: 'file'
             filterable: true
             resizable: true
             pageable:
@@ -27,33 +27,7 @@ content:
                         -
                             type: DocumentViewer
                             url: 'file/{{uuid}}/document'
-                -
-                    name: Edit
-                    rule: 'true'
-                    details:
-                        -
-                            type: Form
-                            url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
-                            workflowInstanceId: '{{workflowInstanceId}}'
-                    icon: 'fa fa-pencil'
-            toolbarTemplate: '<h5>List of workbooks generated</h5>'
-            operations:
-                title: 'Create New Workbook'
-                actions:
-                    -
-                        name: General Information
-                        rule: "true"
-                        details:
-                            -
-                                type: Form
-                                form_id: a8f015fa-2dcb-4806-8ec0-ca5847c1c471
-                    -
-                        name: Consolidated Workbook
-                        rule: "true"
-                        details:
-                            -
-                                type: Form
-                                form_id: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7           
+            toolbarTemplate: '<h5>List of completed workbooks</h5>'
             columnConfig:
                 -
                     title: Applicant Name
