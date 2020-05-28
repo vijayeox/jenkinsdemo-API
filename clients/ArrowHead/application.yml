@@ -25,13 +25,10 @@ org:
         preferences: '{}'
 privilege:
     -
-        name: MANAGE_POLICY_APPROVAL
+        name: MANAGE_POLICY_APPLICATION
         permission: 3
     -
-        name: MANAGE_MY_POLICY
-        permission: 3
-    -
-        name: MANAGE_ADMIN
+        name: MANAGE_APPLICATION_EXPORT
         permission: 3
 role:
     -
@@ -45,16 +42,9 @@ role:
                 privilege_name: MANAGE_APPLICATION_EXPORT
                 permission: 3
         uuid: 77a1d830-c016-4849-802e-a80117c43c2a
-    -
-        name: Admin
-        privileges:
-            -
-                privilege_name: MANAGE_POLICY_APPROVAL
-                permission: 3
-        uuid: 55a79619-5d7e-432a-9913-ec044906db03
 entity:
     -
-        name: Dealer Policy
+        name: 'Dealer Policy'
         field:
             -
                 name: status
@@ -66,11 +56,11 @@ entity:
                 data_type: document
 pages:
     -
-        page_name: UserHomePage.yml
+        page_name: AgentHomePage.yml
         uuid: dce7df02-7a3b-4468-bed8-edffd8216822
     -
-        page_name: Manageworkbooks.yml
-        uuid: 4dfdb763-772c-4ed5-8e0d-324262f7bb86
+        page_name: ExportWorkbook.yml
+        uuid: 219b3a85-7901-4360-9a73-09ed6a659a1d
 menu:
     -
         name: Home
@@ -79,11 +69,11 @@ menu:
         uuid: 2ba0936d-94d1-4b68-9da2-ccc60faaefe0
         privilege: MANAGE_POLICY_APPLICATION_READ
     -
-        name: 'Manage Workbooks'
+        name: 'Export Workbooks'
         icon: 'fa fa-book'
-        page_uuid: 4dfdb763-772c-4ed5-8e0d-324262f7bb86
-        uuid: fcbca321-4c39-4dd2-97bf-45b734bbabde
-        privilege: MANAGE_POLICY_APPROVAL_READ
+        page_uuid: 219b3a85-7901-4360-9a73-09ed6a659a1d
+        uuid: 6d768db0-6e99-4480-819f-8f3522b99b5d
+        privilege: MANAGE_APPLICATION_EXPORT_READ
 form:
     -
         name: 'General Information'
@@ -97,5 +87,3 @@ form:
         description: 'Consolidated Wiz'
         template_file: consolidatedWizard.json
         entity: Workbook
-
-        
