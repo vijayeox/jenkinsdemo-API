@@ -1218,52 +1218,18 @@
 						}, {
 							"components": [{
 								"label": "Work Phone",
-								"spellcheck": false,
+								"mask": false,
+								"spellcheck": true,
 								"tableView": false,
-								"clearOnHide": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid work phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1320,52 +1286,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"spellcheck": false,
+								"mask": false,
+								"spellcheck": true,
 								"tableView": false,
-								"clearOnHide": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -11494,7 +11428,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 126,
+	"_vid": 127,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11511,6 +11445,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-05-22T22:47:59.496Z",
+	"modified": "2020-05-28T06:19:36.882Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

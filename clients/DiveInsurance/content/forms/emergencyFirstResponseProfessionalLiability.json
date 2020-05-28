@@ -974,51 +974,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid Home or Work Phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1074,52 +1041,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -3148,7 +3083,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 498,
+	"_vid": 499,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3232,7 +3167,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-26T09:33:32.631Z",
+	"modified": "2020-05-28T05:58:12.609Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

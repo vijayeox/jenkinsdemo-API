@@ -789,51 +789,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid Home or Work Phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -889,52 +856,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1139,7 +1074,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData.length >= 0){\n  var policyLength = previousPolicyData.length -1;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var amount =0;\n  if(data.excessLiabilityPrice === 0){\n    amount = data.coverageAmount\n  } else {\n    amount = data.excessLiabilityPrice\n  }\n  var difference = (parseFloat(amount) - parseFloat(data[liabilityPrice]))\n  console.log(difference);\nvalue = difference.toFixed(0);\n}",
+						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData.length >= 0){\n  var policyLength = 0;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var amount =0;\n  if(data[currentPolicy.previous_excessLiability] === 0){\n    amount = data.coverageAmount\n  } else {\n    amount = data[currentPolicy.previous_excessLiability] \n  }\n  var difference = parseFloat(data[data['liabilityCoverage']]) - parseFloat(amount);\n  console.log(difference);\nvalue = difference.toFixed(0);\n}",
 						"calculateServer": false,
 						"key": "excessLiabilityPricePayable",
 						"customConditional": "show = false;",
@@ -2167,7 +2102,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 150,
+	"_vid": 152,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2188,7 +2123,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-26T09:33:40.156Z",
+	"modified": "2020-05-28T05:58:40.474Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

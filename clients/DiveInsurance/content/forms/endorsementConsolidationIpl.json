@@ -995,14 +995,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid Home or Work Phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1058,15 +1062,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -3199,7 +3208,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 204,
+	"_vid": 205,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3218,6 +3227,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-27T13:53:36.993Z",
+	"modified": "2020-05-28T05:56:19.386Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

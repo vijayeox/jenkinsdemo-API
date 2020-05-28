@@ -965,52 +965,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"placeholder": "     ",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1067,53 +1033,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"placeholder": "   ",
-								"spellcheck": false,
+								"mask": false,
+								"spellcheck": true,
 								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1765,19 +1698,21 @@
 							}, {
 								"components": [{
 									"label": "Work Phone",
-									"placeholder": "  ",
+									"mask": false,
 									"spellcheck": true,
-									"tableView": true,
-									"clearOnHide": false,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
 									"calculateServer": false,
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter a valid phone number"
+										"customMessage": "Please enter a valid phone number",
+										"custom": "if(data.buisness_work_number){\n  valid = (data.buisness_work_number.toString().length > 15) ? 'Please enter a valid phone number' : true; \n}"
 									},
 									"key": "buisness_work_number",
-									"type": "phoneNumber",
+									"type": "number",
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "business_work_phone",
@@ -8610,7 +8545,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 549,
+	"_vid": 551,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8628,6 +8563,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-05-25T06:28:31.596Z",
+	"modified": "2020-05-28T06:10:38.863Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
