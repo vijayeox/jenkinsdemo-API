@@ -8,7 +8,7 @@ content:
             filterable: false
             defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
             resizable: true
-            sortable: true
+            sortable: false
             pageable:
                 buttonCount: 3
                 pageSizes:

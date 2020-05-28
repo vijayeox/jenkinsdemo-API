@@ -619,6 +619,14 @@
 			"type": "columns",
 			"input": false
 		}, {
+			"label": "name",
+			"calculateValue": "value = data.firstname + \" \"+ data.lastname",
+			"calculateServer": false,
+			"key": "name",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Legal Business Name",
 			"hidden": true,
 			"spellcheck": false,
@@ -1026,42 +1034,6 @@
 							},
 							"key": "home_phone_number",
 							"logic": [{
-								"name": "fieldMask",
-								"trigger": {
-									"type": "simple",
-									"simple": {
-										"show": true,
-										"when": "home_country_code",
-										"eq": "52"
-									}
-								},
-								"actions": [{
-									"name": "mask",
-									"type": "property",
-									"property": {
-										"label": "Input Mask",
-										"value": "inputMask",
-										"type": "string"
-									},
-									"text": "(99) 9999-9999"
-								}]
-							}, {
-								"name": "defaultMask",
-								"trigger": {
-									"type": "javascript",
-									"javascript": "result = (data.home_country_code != 52)"
-								},
-								"actions": [{
-									"name": "defaultMask",
-									"type": "property",
-									"property": {
-										"label": "Input Mask",
-										"value": "inputMask",
-										"type": "string"
-									},
-									"text": "(999) 999-9999"
-								}]
-							}, {
 								"name": "Change Field Name based on Store",
 								"trigger": {
 									"type": "simple",
@@ -1180,43 +1152,6 @@
 								"customMessage": "Please enter a valid Mobile Phone number"
 							},
 							"key": "phone_number",
-							"logic": [{
-								"name": "fieldMask",
-								"trigger": {
-									"type": "simple",
-									"simple": {
-										"show": true,
-										"when": "home_country_code",
-										"eq": "52"
-									}
-								},
-								"actions": [{
-									"name": "mask",
-									"type": "property",
-									"property": {
-										"label": "Input Mask",
-										"value": "inputMask",
-										"type": "string"
-									},
-									"text": "(99) 9999-9999"
-								}]
-							}, {
-								"name": "defaultMask",
-								"trigger": {
-									"type": "javascript",
-									"javascript": "result = (data.phone_country_code != 52)"
-								},
-								"actions": [{
-									"name": "defaultMask",
-									"type": "property",
-									"property": {
-										"label": "Input Mask",
-										"value": "inputMask",
-										"type": "string"
-									},
-									"text": "(999) 999-9999"
-								}]
-							}],
 							"type": "textfield",
 							"input": true,
 							"hideOnChildrenHidden": false
@@ -1300,7 +1235,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 89,
+	"_vid": 91,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1314,6 +1249,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-05-21T20:42:36.257Z",
+	"modified": "2020-05-22T22:40:33.990Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

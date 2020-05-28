@@ -1,0 +1,18 @@
+{
+	"type":"application",
+	"name":"Transportation",
+	"appId":"103c128a-1553-498b-8f37-cd3e16c56857",
+	"category":null,
+	"autostart":false,
+    "singleton":true,
+	"defaultAppforOrgs":false,
+	"icon": "icon.png",
+	"icon_white": "icon-white.png",
+	"title": {
+		"en_EN": "Transportation"
+	},
+	"description": {
+		"en_EN": "Transportation"
+	},
+	"files":["main.js","main.css"]
+}

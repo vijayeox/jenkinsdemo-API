@@ -121,6 +121,24 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $startDate = $data['start_date'];
             $endDate = $data['end_date'];
 
+            $month = date_format(date_create($data['end_date']),"m");
+            $year = date_format(date_create($data['end_date']),"Y");
+
+
+            if($data['product'] != 'Dive Boat'){
+                if($month < 7){
+                    $data['surplusLineYear'] = $year - 1;
+                }else{
+                    $data['surplusLineYear'] = $year;
+                }
+            }else{
+                if($month < 8){
+                    $data['surplusLineYear'] = $year - 1;
+                }else{
+                    $data['surplusLineYear'] = $year;
+                }
+            }
+
             if(isset($data['update_date'])){
                 $updateDate = $data['update_date'];
             }
@@ -169,7 +187,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $coverageList = array();
                     if($data['product'] == "Individual Professional Liability"){
                         array_push($coverageList,$data['careerCoverage']);
-                        if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
+                        if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor" || $data['scubaFit'] == "scubaFitInstructorDeclined"){
                             $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
                             array_push($coverageList,$data['scubaFit']);
                         }
@@ -660,7 +678,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else{  
                 $data[$previousCoverageKeyStore] = array();
             }
-
             if($policy[$previousCoverageKey] != $data[$coverageName]){
                 $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),$coverageName => $coverages[$data[$coverageName]]);
                 array_push($data[$previousCoverageKeyStore], $upgrades);
@@ -670,7 +687,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
         protected function setPolicyInfo(&$data,$persistenceService,$endorsementOptions = null)
         {
-                if($this->type != "quote" || $this->type != "lapse" || $this->type != 'endorsementQuote'){
+                if($this->type != "quote" && $this->type != "lapse" && $this->type != 'endorsementQuote'){
                     $coi_number = $this->generateCOINumber($data,$persistenceService);
                     if($this->type == 'endorsement'){
                         if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){

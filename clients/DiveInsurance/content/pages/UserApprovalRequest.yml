@@ -5,9 +5,9 @@ content:
         type: List
         content:
             route: assignments
-            filterable: true
+            filterable: false
             resizable: true
-            sortable: true
+            sortable: false
             pageable:
                 buttonCount: 3
                 pageSizes:

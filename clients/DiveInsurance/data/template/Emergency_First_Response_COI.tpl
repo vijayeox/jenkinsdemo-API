@@ -125,187 +125,187 @@
 
 			{if $state == 'Alaska'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/AK.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/AK.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Alabama'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/AL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/AL.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Arkansas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/AR.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/AR.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Arizona'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/AZ.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/AZ.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Colorado'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/CO.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/CO.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Connecticut'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/CT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/CT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'District of Columbia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/DC.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/DC.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Delaware'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/DE.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/DE.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Florida'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/FL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/FL.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Micronesia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/FM.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/FM.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Georgia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/GA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/GA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Hawaii'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/HI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/HI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Iowa'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/IA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/IA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Idaho'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/EFR/ID.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/ID.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Illinois'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/IL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/IL.tpl"}</b>
 				</p></center>
 			{elseif $state == 'International'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/International.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/International.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Kansas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/KS.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/KS.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Kentucky'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/KY.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/KY.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Louisiana'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/EFR/LA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/LA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Massachusetts'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/MA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Maryland'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/MD.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MD.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Maine'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/ME.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/ME.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Marshall Islands'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/MH.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MH.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Michigan'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/EFR/MI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Minnesota'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/EFR/MN.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MN.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Missouri'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/MO.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MO.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Mississippi'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/MS.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MS.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Montana'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/MT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/MT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'North Carolina'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/NC.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/NC.tpl"}</b>
 				</p></center>
 			{elseif $state == 'North Dakota'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/ND.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/ND.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Nebraska'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/NE.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/NE.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New Hampshire'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/NH.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/NH.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New Jersey'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/NJ.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/NJ.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New Mexico'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/NM.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/NM.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Nevada'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/NV.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/NV.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New York'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/EFR/NY.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/NY.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Ohio'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/OH.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/OH.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Oklahoma'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/OK.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/OK.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Oregon'}
 				<center><center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/OR.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/OR.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Pennsylvania'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/PA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/PA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Palau'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/PW.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/PW.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Rhode Island'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/RI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/RI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'South Carolina'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/SC.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/SC.tpl"}</b>
 				</p></center>
 			{elseif $state == 'South Dakota'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/SD.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/SD.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Tennessee'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/TN.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/TN.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Texas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/TX.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/TX.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
@@ -313,31 +313,31 @@
 				</p></center>
 			{elseif $state == 'Virginia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/VA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/EFR/VT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Washington'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/WA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/WA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Wisconsin'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/WI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/WI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'West Virginias'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/WV.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/WV.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Wyoming'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/WY.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/WY.tpl"}</b>
 				</p></center>
 			{else}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/EFR/International.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/International.tpl"}</b>
 				</p></center>
 			{/if}
 		</div>

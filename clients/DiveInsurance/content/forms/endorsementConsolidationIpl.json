@@ -633,6 +633,14 @@
 				"type": "columns",
 				"input": false,
 				"path": "panelColumns2"
+			}, {
+				"label": "name",
+				"calculateValue": "value = data.firstname + \" \" + data.lastname",
+				"calculateServer": false,
+				"key": "name",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}]
 		}, {
 			"title": "Mailing Address",
@@ -981,43 +989,6 @@
 									"customMessage": "Please enter a valid Home or Work Phone number"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
 								"type": "textfield",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -1082,43 +1053,6 @@
 									"customMessage": "Please enter a valid Mobile Phone number"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
 								"type": "textfield",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -2865,7 +2799,7 @@
 		}, {
 			"label": "amount",
 			"defaultValue": "0",
-			"calculateValue": "if(data.CSRReviewRequired ===false || data.CSRReviewRequired ==='false' || data.CSRReviewRequired ===''){\n  value = (parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00).toFixed(0);\n}\nif(data.balanceEndor > 0){\n  value = parseFloat(data.balanceEndor).toFixed(0)\n}",
+			"calculateValue": "if(!(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = (parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00).toFixed(0);\n} else {\n  value = 0;\n}",
 			"calculateServer": false,
 			"key": "amount",
 			"properties": {
@@ -2953,7 +2887,7 @@
 							"attr": "",
 							"value": ""
 						}],
-						"content": "Please Submit the Consent form found <a href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
+						"content": "Please Submit the Consent form found <a target=\"_blank\" href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html5",
@@ -3051,9 +2985,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
 						"key": "orderId",
 						"type": "textfield",
 						"input": true,
@@ -3136,16 +3067,6 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
-			"label": "Notes",
-			"autoExpand": false,
-			"spellcheck": true,
-			"tableView": true,
-			"clearOnHide": false,
-			"calculateServer": false,
-			"key": "notes",
-			"type": "textarea",
-			"input": true
-		}, {
 			"title": "Approve/Reject the Application",
 			"theme": "primary",
 			"breadcrumbClickable": false,
@@ -3220,7 +3141,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 158,
+	"_vid": 165,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3239,6 +3160,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-21T22:54:24.004Z",
+	"modified": "2020-05-22T22:42:11.096Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

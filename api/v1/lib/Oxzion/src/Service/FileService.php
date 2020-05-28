@@ -389,12 +389,19 @@ class FileService extends AbstractService
                 $keyValueFields[$i]['field_value']=$fieldvalue;
                 if(isset($field['data_type'])){
                     switch ($field['data_type']) {
-                        case 'numeric':
+                        case 'text':
+                            $keyValueFields[$i]['field_value_type'] = 'TEXT';
+                            $keyValueFields[$i]['field_value_text'] = $fieldvalue;
+                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
-                            $keyValueFields[$i]['field_value_numeric'] = $fieldvalue;
-                            $keyValueFields[$i]['field_value_text'] = NULL;
+                            break;
+                        case 'numeric':
                             $keyValueFields[$i]['field_value_type'] = 'NUMERIC';
+                            $keyValueFields[$i]['field_value_text'] = NULL;
+                            $keyValueFields[$i]['field_value_numeric'] = (double)$fieldvalue;
+                            $keyValueFields[$i]['field_value_boolean'] = NULL;
+                            $keyValueFields[$i]['field_value_date'] = NULL;
                             break;
                         case 'boolean':
                             if($fieldvalue == true || $fieldvalue == "true") {
@@ -403,33 +410,26 @@ class FileService extends AbstractService
                             if($fieldvalue == false || $fieldvalue == "false") {
                                 $fieldvalue = 0;
                             }
+                            $keyValueFields[$i]['field_value_type'] = 'BOOLEAN';
+                            $keyValueFields[$i]['field_value_text'] = NULL;
+                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = $fieldvalue;
                             $keyValueFields[$i]['field_value_date'] = NULL;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_text'] = NULL;
-                            $keyValueFields[$i]['field_value_type'] = 'BOOLEAN';
                             break;
                         case 'date':
                         case 'datetime':
-                            $keyValueFields[$i]['field_value_boolean'] = NULL;
-                            $keyValueFields[$i]['field_value_date'] = $fieldvalue;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_type'] = 'DATE';
-                            break;
-                        case 'text':
-                            $keyValueFields[$i]['field_value_boolean'] = NULL;
-                            $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_text'] = $fieldvalue;
-                            $keyValueFields[$i]['field_value_type'] = 'TEXT';
+                            $keyValueFields[$i]['field_value_boolean'] = NULL;
+                            $keyValueFields[$i]['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
                             break;
                         default:
+                            $keyValueFields[$i]['field_value_type'] = 'OTHER';
+                            $keyValueFields[$i]['field_value_text'] = NULL;
+                            $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_text'] = NULL;
-                            $keyValueFields[$i]['field_value_type'] = 'OTHER';
                             break;
                     }
                 }
@@ -605,9 +605,8 @@ class FileService extends AbstractService
                 }
                 $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=oa.id
                 INNER JOIN ox_file_attribute ofa on ofa.file_id = `of`.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
-                $whereQuery = " owufi.user_id = :userId and owufi.org_id = :orgId AND ";
+                $whereQuery = " owufi.user_id = :userId AND ";
                 $queryParams['userId'] = $userId;
-                $queryParams['orgId'] = $orgId;
             } else {
                 $whereQuery = "";
             }
@@ -690,9 +689,10 @@ class FileService extends AbstractService
                 $where .= " " . $whereQuery ;
             }
             $where = trim($where) != "" ? "WHERE $where" : "";
+            $where = rtrim($where, " AND ");
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $select = "SELECT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery $where $sort $pageSize $offset";
+                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $fromQuery $where $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 $countQuery = "SELECT FOUND_ROWS();";
@@ -709,11 +709,12 @@ class FileService extends AbstractService
                             if ($content) {
                                 if (isset($filterParams['columns'])) {
                                     foreach ($filterParams['columns'] as $column){
-                                        $file[$column] = $content[$column];
+                                        isset($content[$column]) ? $file[$column] = $content[$column] : null;
                                     }                                    
                                     if(isset($file["data"])){
                                         unset($file["data"]);
                                     }
+                                    $resultSet[$i] = ($file);
                                 } else{
                                     $resultSet[$i] = array_merge($file, $content);
                                 }
