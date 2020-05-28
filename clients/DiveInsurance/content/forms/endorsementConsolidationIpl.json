@@ -1704,7 +1704,7 @@
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"customDefaultValue": "value=0.00",
-								"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var policyLength = previousPolicyData.length -1;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
+								"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0];\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
 								"calculateServer": false,
 								"key": "excessLiabilityPricePayable",
 								"type": "number",
@@ -3208,7 +3208,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 205,
+	"_vid": 212,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3227,6 +3227,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-28T05:56:19.386Z",
+	"modified": "2020-05-28T07:49:21.331Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
