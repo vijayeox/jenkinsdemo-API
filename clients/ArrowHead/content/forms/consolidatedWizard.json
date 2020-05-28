@@ -89,7 +89,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "e39j45o"
+                      "id": "eckw3k"
                     }
                   ],
                   "width": 6,
@@ -207,7 +207,7 @@
                       "timezone": "",
                       "datepickerMode": "day",
                       "customOptions": {},
-                      "id": "e7xwwcc"
+                      "id": "evjlu3n"
                     }
                   ],
                   "width": 6,
@@ -271,7 +271,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "edyvbx8"
+              "id": "enwebjd"
             }
           ],
           "input": false,
@@ -331,7 +331,7 @@
           "tree": false,
           "theme": "default",
           "breadcrumb": "default",
-          "id": "emig3yq"
+          "id": "epynx6q"
         },
         {
           "type": "panel",
@@ -358,6 +358,7 @@
                           "calculateServer": false,
                           "validate": {
                             "required": true,
+                            "customMessage": "Please enter Named Insured",
                             "custom": "",
                             "customPrivate": false,
                             "strictDateValidation": false,
@@ -420,7 +421,7 @@
                           "inputType": "text",
                           "inputFormat": "plain",
                           "inputMask": "",
-                          "id": "eapiidj"
+                          "id": "e62mp1c"
                         }
                       ],
                       "width": 4,
@@ -437,7 +438,14 @@
                           "placeholder": "Please Select",
                           "tableView": true,
                           "data": {
-                            "values": [{ "label": "", "value": "" }],
+                            "values": [
+                              {
+                                "label": "Corporation",
+                                "value": "corporation"
+                              },
+                              { "label": "LLC", "value": "llc" },
+                              { "label": "Individual", "value": "individual" }
+                            ],
                             "json": "",
                             "url": "",
                             "resource": "",
@@ -445,6 +453,15 @@
                           },
                           "selectThreshold": 0.3,
                           "calculateServer": false,
+                          "validate": {
+                            "required": true,
+                            "customMessage": "Please select Legal Entity",
+                            "custom": "",
+                            "customPrivate": false,
+                            "strictDateValidation": false,
+                            "multiple": false,
+                            "unique": false
+                          },
                           "key": "legalEntity",
                           "type": "select",
                           "indexeddb": { "filter": {} },
@@ -476,14 +493,6 @@
                           "calculateValue": "",
                           "attributes": {},
                           "validateOn": "change",
-                          "validate": {
-                            "required": false,
-                            "custom": "",
-                            "customPrivate": false,
-                            "strictDateValidation": false,
-                            "multiple": false,
-                            "unique": false
-                          },
                           "conditional": {
                             "show": null,
                             "when": null,
@@ -521,7 +530,7 @@
                             "threshold": 0.3
                           },
                           "customOptions": {},
-                          "id": "ef3wbjd"
+                          "id": "e1ekzqu"
                         }
                       ],
                       "width": 4,
@@ -533,7 +542,7 @@
                     {
                       "components": [
                         {
-                          "label": "DBA (if any)",
+                          "label": "DBA (If any)",
                           "placeholder": "DBA",
                           "spellcheck": true,
                           "tableView": true,
@@ -602,7 +611,7 @@
                           "inputType": "text",
                           "inputFormat": "plain",
                           "inputMask": "",
-                          "id": "e0is3dv"
+                          "id": "efs0gwp"
                         }
                       ],
                       "width": 4,
@@ -666,7 +675,7 @@
                   "tree": false,
                   "autoAdjust": false,
                   "hideOnChildrenHidden": false,
-                  "id": "eykq6u"
+                  "id": "ea3djmw"
                 },
                 {
                   "label": "Applicant Info",
@@ -684,6 +693,7 @@
                           "calculateServer": false,
                           "validate": {
                             "required": true,
+                            "customMessage": "Please enter Mailing Address",
                             "custom": "",
                             "customPrivate": false,
                             "strictDateValidation": false,
@@ -746,7 +756,7 @@
                           "inputType": "text",
                           "inputFormat": "plain",
                           "inputMask": "",
-                          "id": "eoexxua"
+                          "id": "etmp7e"
                         }
                       ],
                       "width": 3,
@@ -765,6 +775,7 @@
                           "calculateServer": false,
                           "validate": {
                             "required": true,
+                            "customMessage": "Please enter City",
                             "custom": "",
                             "customPrivate": false,
                             "strictDateValidation": false,
@@ -827,7 +838,7 @@
                           "inputType": "text",
                           "inputFormat": "plain",
                           "inputMask": "",
-                          "id": "easere6"
+                          "id": "ezrd5b"
                         }
                       ],
                       "width": 3,
@@ -996,7 +1007,7 @@
                             "threshold": 0.3
                           },
                           "customOptions": {},
-                          "id": "eay1f"
+                          "id": "ec82oas"
                         }
                       ],
                       "width": 3,
@@ -1019,6 +1030,7 @@
                           "calculateServer": false,
                           "validate": {
                             "required": true,
+                            "customMessage": "Please enter Zip code",
                             "min": null,
                             "max": null,
                             "custom": "",
@@ -1079,7 +1091,7 @@
                           "showWordCount": false,
                           "properties": {},
                           "allowMultipleMasks": false,
-                          "id": "e61lo2q"
+                          "id": "e7bep8f"
                         }
                       ],
                       "width": 3,
@@ -1143,7 +1155,7 @@
                   "tree": false,
                   "autoAdjust": false,
                   "hideOnChildrenHidden": false,
-                  "id": "eaf1mfl"
+                  "id": "eq8jzb"
                 },
                 {
                   "label": "Columns",
@@ -1225,7 +1237,7 @@
                           "inputType": "text",
                           "inputFormat": "plain",
                           "inputMask": "",
-                          "id": "e742cfq"
+                          "id": "erunuwd"
                         }
                       ],
                       "width": 4,
@@ -1237,7 +1249,7 @@
                     {
                       "components": [
                         {
-                          "label": "FIEN/Soc Sec #",
+                          "label": "FIEN/Social Security #",
                           "placeholder": "FIEN/Social Security #",
                           "mask": false,
                           "spellcheck": true,
@@ -1308,7 +1320,7 @@
                           "showWordCount": false,
                           "properties": {},
                           "allowMultipleMasks": false,
-                          "id": "ellnbc"
+                          "id": "ebzlb2u"
                         }
                       ],
                       "width": 4,
@@ -1324,6 +1336,7 @@
                           "widget": "choicesjs",
                           "placeholder": "Type",
                           "tableView": true,
+                          "defaultValue": "auto",
                           "data": {
                             "values": [
                               { "value": "auto", "label": "Auto" },
@@ -1336,7 +1349,7 @@
                                 "value": "nonFranchised",
                                 "label": "Non-Franchised"
                               },
-                              { "value": "lR", "label": "L&R" }
+                              { "value": "lronly", "label": "L&R only" }
                             ],
                             "json": "",
                             "url": "",
@@ -1359,7 +1372,6 @@
                           "indexeddb": { "filter": {} },
                           "input": true,
                           "hideOnChildrenHidden": false,
-                          "defaultValue": "auto",
                           "prefix": "",
                           "customClass": "",
                           "suffix": "",
@@ -1422,7 +1434,7 @@
                             "threshold": 0.3
                           },
                           "customOptions": {},
-                          "id": "eh47htj"
+                          "id": "eks5hx"
                         }
                       ],
                       "width": 4,
@@ -1486,7 +1498,7 @@
                   "tree": false,
                   "autoAdjust": false,
                   "hideOnChildrenHidden": false,
-                  "id": "e72g2ve"
+                  "id": "esnv0p"
                 },
                 {
                   "label": "Columns",
@@ -1567,7 +1579,7 @@
                           "inputType": "tel",
                           "inputFormat": "plain",
                           "inputMask": "(999) 999-9999",
-                          "id": "eodo0nh"
+                          "id": "epjhx2"
                         }
                       ],
                       "width": 4,
@@ -1650,7 +1662,7 @@
                           "showWordCount": false,
                           "properties": {},
                           "allowMultipleMasks": false,
-                          "id": "e74rhc"
+                          "id": "e3igjs"
                         }
                       ],
                       "width": 4,
@@ -1733,7 +1745,7 @@
                           "inputFormat": "plain",
                           "inputMask": "",
                           "kickbox": { "enabled": false },
-                          "id": "exbz3w"
+                          "id": "erse1eg"
                         }
                       ],
                       "width": 4,
@@ -1797,7 +1809,7 @@
                   "tree": false,
                   "autoAdjust": false,
                   "hideOnChildrenHidden": false,
-                  "id": "ehfl6t9"
+                  "id": "e6guiqp"
                 },
                 {
                   "label": "Columns",
@@ -1877,7 +1889,7 @@
                           "inputType": "url",
                           "inputFormat": "plain",
                           "inputMask": "",
-                          "id": "ev8ppfw"
+                          "id": "ey4zkkp"
                         }
                       ],
                       "width": 4,
@@ -1889,13 +1901,14 @@
                     {
                       "components": [
                         {
-                          "input": true,
-                          "tableView": true,
                           "label": "Dealer Name",
-                          "key": "dealerName",
+                          "placeholder": "Dealer Name",
                           "spellcheck": true,
+                          "tableView": true,
+                          "calculateServer": false,
                           "validate": {
                             "required": true,
+                            "customMessage": "Please enter Dealer Name",
                             "custom": "",
                             "customPrivate": false,
                             "strictDateValidation": false,
@@ -1905,11 +1918,12 @@
                             "maxLength": "",
                             "pattern": ""
                           },
-                          "type": "textfield",
-                          "hideOnChildrenHidden": false,
-                          "placeholder": "Dealer Name",
-                          "lockKey": true,
                           "errorLabel": "Please enter Dealer Name",
+                          "key": "dealerName",
+                          "type": "textfield",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true,
                           "prefix": "",
                           "customClass": "",
                           "suffix": "",
@@ -1958,7 +1972,7 @@
                           "inputType": "text",
                           "inputFormat": "plain",
                           "inputMask": "",
-                          "id": "ek9bctx"
+                          "id": "evoi9ye"
                         }
                       ],
                       "width": 4,
@@ -1970,15 +1984,17 @@
                     {
                       "components": [
                         {
-                          "input": true,
-                          "tableView": true,
-                          "inputType": "number",
-                          "label": "% of ownership",
-                          "key": "percOwnership",
-                          "type": "number",
-                          "hideOnChildrenHidden": false,
+                          "label": "% of Ownership",
                           "placeholder": "% of Ownership",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": true,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "calculateServer": false,
                           "validate": {
+                            "customMessage": "% of ownership can be between 1 to 100",
                             "min": 0,
                             "max": 100,
                             "required": false,
@@ -1990,9 +2006,13 @@
                             "step": "any",
                             "integer": ""
                           },
-                          "lockKey": true,
+                          "key": "percOwnership",
+                          "type": "number",
                           "decimalLimit": 2,
-                          "errorLabel": "% of ownership can be between 1 to 100",
+                          "input": true,
+                          "inputType": "number",
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true,
                           "prefix": "",
                           "customClass": "",
                           "suffix": "",
@@ -2008,6 +2028,7 @@
                           "modalEdit": false,
                           "labelPosition": "top",
                           "description": "",
+                          "errorLabel": "",
                           "tooltip": "",
                           "hideLabel": false,
                           "tabindex": "",
@@ -2037,7 +2058,7 @@
                           "showWordCount": false,
                           "properties": {},
                           "allowMultipleMasks": false,
-                          "id": "eqm5e7e"
+                          "id": "evbx1yu"
                         }
                       ],
                       "width": 4,
@@ -2101,7 +2122,7 @@
                   "tree": false,
                   "autoAdjust": false,
                   "hideOnChildrenHidden": false,
-                  "id": "ez5j7hi"
+                  "id": "eymxriv"
                 }
               ],
               "tableView": false,
@@ -2157,7 +2178,7 @@
               "properties": {},
               "allowMultipleMasks": false,
               "tree": false,
-              "id": "ec618fv"
+              "id": "e53z6ns"
             },
             {
               "key": "insuranceContact",
@@ -2248,7 +2269,7 @@
                               "inputType": "text",
                               "inputFormat": "plain",
                               "inputMask": "",
-                              "id": "e1rcb8k"
+                              "id": "eavot23"
                             }
                           ],
                           "width": 3,
@@ -2329,7 +2350,7 @@
                               "inputType": "text",
                               "inputFormat": "plain",
                               "inputMask": "",
-                              "id": "eqxg2c"
+                              "id": "e8ofyq9"
                             }
                           ],
                           "width": 3,
@@ -2410,7 +2431,7 @@
                               "inputType": "text",
                               "inputFormat": "plain",
                               "inputMask": "",
-                              "id": "e2n1gue"
+                              "id": "eh99ko3"
                             }
                           ],
                           "width": 3,
@@ -2491,7 +2512,7 @@
                               "inputType": "text",
                               "inputFormat": "plain",
                               "inputMask": "",
-                              "id": "e62cv0h"
+                              "id": "e5f2q7d"
                             }
                           ],
                           "width": 3,
@@ -2555,7 +2576,7 @@
                       "tree": false,
                       "autoAdjust": false,
                       "hideOnChildrenHidden": false,
-                      "id": "e1ybmtg"
+                      "id": "ekpnek"
                     },
                     {
                       "label": "Columns",
@@ -2634,7 +2655,7 @@
                               "inputType": "tel",
                               "inputFormat": "plain",
                               "inputMask": "(999) 999-9999",
-                              "id": "eycrttrl"
+                              "id": "ej3o8we"
                             }
                           ],
                           "width": 4,
@@ -2715,7 +2736,7 @@
                               "inputFormat": "plain",
                               "inputMask": "",
                               "kickbox": { "enabled": false },
-                              "id": "e1buder"
+                              "id": "ej7v12"
                             }
                           ],
                           "width": 4,
@@ -2727,15 +2748,15 @@
                         {
                           "components": [
                             {
-                              "input": true,
-                              "tableView": true,
-                              "inputType": "number",
                               "label": "Accounting",
-                              "key": "accounting",
-                              "type": "number",
-                              "hideOnChildrenHidden": false,
                               "placeholder": "Accounting",
-                              "lockKey": true,
+                              "spellcheck": true,
+                              "tableView": true,
+                              "calculateServer": false,
+                              "key": "accounting",
+                              "type": "textfield",
+                              "input": true,
+                              "hideOnChildrenHidden": false,
                               "prefix": "",
                               "customClass": "",
                               "suffix": "",
@@ -2770,10 +2791,9 @@
                                 "strictDateValidation": false,
                                 "multiple": false,
                                 "unique": false,
-                                "min": "",
-                                "max": "",
-                                "step": "any",
-                                "integer": ""
+                                "minLength": "",
+                                "maxLength": "",
+                                "pattern": ""
                               },
                               "conditional": {
                                 "show": null,
@@ -2793,7 +2813,11 @@
                               "showWordCount": false,
                               "properties": {},
                               "allowMultipleMasks": false,
-                              "id": "e78b5wu9"
+                              "mask": false,
+                              "inputType": "text",
+                              "inputFormat": "plain",
+                              "inputMask": "",
+                              "id": "emty5ss"
                             }
                           ],
                           "width": 4,
@@ -2857,7 +2881,7 @@
                       "tree": false,
                       "autoAdjust": false,
                       "hideOnChildrenHidden": false,
-                      "id": "e4dga4b"
+                      "id": "ewfv5cr"
                     },
                     {
                       "label": "Column",
@@ -2937,7 +2961,7 @@
                               "inputType": "text",
                               "inputFormat": "plain",
                               "inputMask": "",
-                              "id": "evfottr"
+                              "id": "eyqclo"
                             }
                           ],
                           "width": 6,
@@ -3018,7 +3042,7 @@
                               "inputType": "text",
                               "inputFormat": "plain",
                               "inputMask": "",
-                              "id": "eens5y"
+                              "id": "e2i84hi"
                             }
                           ],
                           "width": 6,
@@ -3082,7 +3106,7 @@
                       "tree": false,
                       "autoAdjust": false,
                       "hideOnChildrenHidden": false,
-                      "id": "eham4m6"
+                      "id": "ehdutva"
                     }
                   ],
                   "tableView": false,
@@ -3138,7 +3162,7 @@
                   "properties": {},
                   "allowMultipleMasks": false,
                   "tree": false,
-                  "id": "eauj37i"
+                  "id": "ed3on6f"
                 }
               ],
               "type": "panel",
@@ -3197,7 +3221,7 @@
               "tree": false,
               "theme": "default",
               "breadcrumb": "default",
-              "id": "elcm42j"
+              "id": "el007xa"
             }
           ],
           "input": false,
@@ -3257,7 +3281,7 @@
           "tree": false,
           "theme": "default",
           "breadcrumb": "default",
-          "id": "e7cjm47"
+          "id": "evxs24"
         },
         {
           "type": "panel",
@@ -3277,6 +3301,7 @@
                       "placeholder": "Effective Date",
                       "tableView": true,
                       "datePicker": {
+                        "minDate": "moment()",
                         "disableWeekends": false,
                         "disableWeekdays": false,
                         "datepickerMode": "day",
@@ -3287,7 +3312,6 @@
                         "maxMode": "year",
                         "yearRows": 4,
                         "yearColumns": 5,
-                        "minDate": null,
                         "maxDate": null
                       },
                       "enableTime": false,
@@ -3310,7 +3334,7 @@
                         "hourIncrement": 1,
                         "minuteIncrement": 1,
                         "time_24hr": false,
-                        "minDate": null,
+                        "minDate": "moment()",
                         "disableWeekends": false,
                         "disableWeekdays": false,
                         "maxDate": null
@@ -3379,7 +3403,7 @@
                         "arrowkeys": true
                       },
                       "customOptions": {},
-                      "id": "eyt1muf"
+                      "id": "e1r54c1"
                     }
                   ],
                   "width": 6,
@@ -3396,6 +3420,7 @@
                       "placeholder": "Need by Date",
                       "tableView": true,
                       "datePicker": {
+                        "minDate": "moment()",
                         "disableWeekends": false,
                         "disableWeekdays": false,
                         "datepickerMode": "day",
@@ -3406,7 +3431,6 @@
                         "maxMode": "year",
                         "yearRows": 4,
                         "yearColumns": 5,
-                        "minDate": null,
                         "maxDate": null
                       },
                       "enableTime": false,
@@ -3419,7 +3443,7 @@
                         "arrowkeys": true
                       },
                       "calculateServer": false,
-                      "key": "page3ColumnsNeedbyDate",
+                      "key": "needByDate",
                       "type": "datetime",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -3437,7 +3461,7 @@
                         "hourIncrement": 0,
                         "minuteIncrement": 1,
                         "time_24hr": true,
-                        "minDate": null,
+                        "minDate": "moment()",
                         "disableWeekends": false,
                         "disableWeekdays": false,
                         "maxDate": null
@@ -3497,7 +3521,7 @@
                       "timezone": "",
                       "datepickerMode": "day",
                       "customOptions": {},
-                      "id": "ebyx2z"
+                      "id": "ec90fsl"
                     }
                   ],
                   "width": 6,
@@ -3561,7 +3585,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "eym4q6o"
+              "id": "er5rl3j"
             },
             {
               "label": "Columns",
@@ -3572,27 +3596,19 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
-                      "inputType": "number",
                       "label": "Package Target Premium",
-                      "key": "packageTargetPremium",
-                      "type": "number",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "Package Target Premium",
-                      "validate": {
-                        "min": 0,
-                        "required": false,
-                        "custom": "",
-                        "customPrivate": false,
-                        "strictDateValidation": false,
-                        "multiple": false,
-                        "unique": false,
-                        "max": "",
-                        "step": "any",
-                        "integer": ""
-                      },
-                      "lockKey": true,
+                      "mask": false,
+                      "spellcheck": true,
+                      "tableView": false,
+                      "currency": "USD",
+                      "inputFormat": "plain",
+                      "calculateServer": false,
+                      "key": "packageTargetPremium",
+                      "type": "currency",
+                      "input": true,
+                      "delimiter": true,
+                      "hideOnChildrenHidden": false,
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -3620,6 +3636,18 @@
                       "widget": { "type": "input" },
                       "attributes": {},
                       "validateOn": "change",
+                      "validate": {
+                        "required": false,
+                        "custom": "",
+                        "customPrivate": false,
+                        "strictDateValidation": false,
+                        "multiple": false,
+                        "unique": false,
+                        "min": "",
+                        "max": "",
+                        "step": "any",
+                        "integer": ""
+                      },
                       "conditional": { "show": null, "when": null, "eq": "" },
                       "overlay": {
                         "style": "",
@@ -3634,7 +3662,7 @@
                       "showWordCount": false,
                       "properties": {},
                       "allowMultipleMasks": false,
-                      "id": "e3fcb4h"
+                      "id": "e90qx3v"
                     }
                   ],
                   "width": 6,
@@ -3646,27 +3674,19 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
-                      "inputType": "number",
                       "label": "DOL Target Premium",
-                      "key": "dolTargetPremium",
-                      "type": "number",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "DOL Target Premium",
-                      "validate": {
-                        "min": 0,
-                        "required": false,
-                        "custom": "",
-                        "customPrivate": false,
-                        "strictDateValidation": false,
-                        "multiple": false,
-                        "unique": false,
-                        "max": "",
-                        "step": "any",
-                        "integer": ""
-                      },
-                      "lockKey": true,
+                      "mask": false,
+                      "spellcheck": true,
+                      "tableView": false,
+                      "currency": "USD",
+                      "inputFormat": "plain",
+                      "calculateServer": false,
+                      "key": "dolTargetPremium",
+                      "type": "currency",
+                      "input": true,
+                      "delimiter": true,
+                      "hideOnChildrenHidden": false,
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -3694,6 +3714,18 @@
                       "widget": { "type": "input" },
                       "attributes": {},
                       "validateOn": "change",
+                      "validate": {
+                        "required": false,
+                        "custom": "",
+                        "customPrivate": false,
+                        "strictDateValidation": false,
+                        "multiple": false,
+                        "unique": false,
+                        "min": "",
+                        "max": "",
+                        "step": "any",
+                        "integer": ""
+                      },
                       "conditional": { "show": null, "when": null, "eq": "" },
                       "overlay": {
                         "style": "",
@@ -3708,7 +3740,7 @@
                       "showWordCount": false,
                       "properties": {},
                       "allowMultipleMasks": false,
-                      "id": "e8govfg"
+                      "id": "ezkt2ur"
                     }
                   ],
                   "width": 6,
@@ -3772,7 +3804,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "e1rwyqc"
+              "id": "e34d4xj"
             }
           ],
           "input": false,
@@ -3832,7 +3864,7 @@
           "tree": false,
           "theme": "default",
           "breadcrumb": "default",
-          "id": "elwk1k"
+          "id": "eiuiu6m"
         },
         {
           "type": "panel",
@@ -3918,7 +3950,7 @@
                           "inputType": "checkbox",
                           "value": "",
                           "name": "",
-                          "id": "es8po3s"
+                          "id": "euf33l9"
                         }
                       ],
                       "width": 4,
@@ -3996,7 +4028,7 @@
                           "inputType": "checkbox",
                           "value": "",
                           "name": "",
-                          "id": "ep6pzme"
+                          "id": "ejhj6m"
                         }
                       ],
                       "width": 4,
@@ -4074,7 +4106,7 @@
                           "inputType": "checkbox",
                           "value": "",
                           "name": "",
-                          "id": "et4s9q9"
+                          "id": "eoevzi"
                         }
                       ],
                       "width": 4,
@@ -4139,7 +4171,7 @@
                   "tree": false,
                   "autoAdjust": false,
                   "hideOnChildrenHidden": false,
-                  "id": "emdjsbm"
+                  "id": "epw67mi"
                 },
                 {
                   "label": "Columns",
@@ -4216,7 +4248,7 @@
                           "inputType": "checkbox",
                           "value": "",
                           "name": "",
-                          "id": "eueo6l6"
+                          "id": "ey0e8zn"
                         }
                       ],
                       "width": 4,
@@ -4294,7 +4326,7 @@
                           "inputType": "checkbox",
                           "value": "",
                           "name": "",
-                          "id": "e055de"
+                          "id": "est7ro"
                         }
                       ],
                       "width": 4,
@@ -4372,7 +4404,7 @@
                           "inputType": "checkbox",
                           "value": "",
                           "name": "",
-                          "id": "ebe1cor"
+                          "id": "ejrzp34"
                         }
                       ],
                       "width": 4,
@@ -4436,7 +4468,7 @@
                   "tree": false,
                   "autoAdjust": false,
                   "hideOnChildrenHidden": false,
-                  "id": "e28on7"
+                  "id": "edjdwt"
                 }
               ],
               "tableView": false,
@@ -4492,7 +4524,7 @@
               "properties": {},
               "allowMultipleMasks": false,
               "tree": false,
-              "id": "e16nkad"
+              "id": "elp9srl"
             }
           ],
           "input": false,
@@ -4553,7 +4585,7 @@
           "tree": false,
           "theme": "default",
           "breadcrumb": "default",
-          "id": "ea6qdc"
+          "id": "eao1uib"
         },
         {
           "type": "panel",
@@ -4579,17 +4611,17 @@
                       "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter number of Years of Experience (e.g., 2.25)",
                         "min": 0,
-                        "max": 100,
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
                         "multiple": false,
                         "unique": false,
+                        "max": "",
                         "step": "any",
                         "integer": ""
                       },
-                      "errorLabel": "Please enter number of Years of Experience (e.g., 2.25)",
                       "key": "numYearsOfOwnership",
                       "type": "number",
                       "decimalLimit": 2,
@@ -4612,6 +4644,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -4637,7 +4670,7 @@
                       "showWordCount": false,
                       "properties": {},
                       "allowMultipleMasks": false,
-                      "id": "ea4h9p3"
+                      "id": "e2qrpic"
                     }
                   ],
                   "width": 6,
@@ -4649,16 +4682,14 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "If less than three years, describe experience of management",
-                      "key": "lessThan3years",
-                      "spellcheck": true,
-                      "type": "textfield",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "If less than three years, describe experience of management",
+                      "spellcheck": true,
+                      "tableView": true,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter experience of management",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -4668,8 +4699,11 @@
                         "maxLength": "",
                         "pattern": ""
                       },
+                      "key": "lessThan3years",
+                      "type": "textfield",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
                       "lockKey": true,
-                      "errorLabel": "Please enter experience of management",
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -4685,6 +4719,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -4714,7 +4749,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "e0lx97k"
+                      "id": "ev8l4n5"
                     }
                   ],
                   "width": 6,
@@ -4778,7 +4813,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "ei22el"
+              "id": "ed8wznp"
             },
             {
               "label": "Columns",
@@ -4881,7 +4916,7 @@
                       "searchThreshold": 0.3,
                       "fuseOptions": { "include": "score", "threshold": 0.3 },
                       "customOptions": {},
-                      "id": "ecemjbh"
+                      "id": "eobj0woa"
                     }
                   ],
                   "width": 6,
@@ -4891,103 +4926,7 @@
                   "size": "md"
                 },
                 {
-                  "components": [
-                    {
-                      "input": true,
-                      "tableView": true,
-                      "label": "Please select",
-                      "key": "page5Columns2Pleaseselect",
-                      "data": {
-                        "values": [
-                          {
-                            "value": "2ndGeneration",
-                            "label": "2nd Generation"
-                          },
-                          {
-                            "value": "3rdGeneration",
-                            "label": "3rd+ Generation"
-                          }
-                        ],
-                        "json": "",
-                        "url": "",
-                        "resource": "",
-                        "custom": ""
-                      },
-                      "type": "select",
-                      "conditional": {
-                        "show": "true",
-                        "when": "page5Columns2Multigenerationalowner",
-                        "eq": "yes"
-                      },
-                      "hideOnChildrenHidden": false,
-                      "placeholder": "Please select",
-                      "prefix": "",
-                      "customClass": "",
-                      "suffix": "",
-                      "multiple": false,
-                      "defaultValue": null,
-                      "protected": false,
-                      "unique": false,
-                      "persistent": true,
-                      "hidden": false,
-                      "clearOnHide": true,
-                      "refreshOn": "",
-                      "redrawOn": "",
-                      "modalEdit": false,
-                      "labelPosition": "top",
-                      "description": "",
-                      "errorLabel": "",
-                      "tooltip": "",
-                      "hideLabel": false,
-                      "tabindex": "",
-                      "disabled": false,
-                      "autofocus": false,
-                      "dbIndex": false,
-                      "customDefaultValue": "",
-                      "calculateValue": "",
-                      "widget": null,
-                      "attributes": {},
-                      "validateOn": "change",
-                      "validate": {
-                        "required": false,
-                        "custom": "",
-                        "customPrivate": false,
-                        "strictDateValidation": false,
-                        "multiple": false,
-                        "unique": false
-                      },
-                      "overlay": {
-                        "style": "",
-                        "left": "",
-                        "top": "",
-                        "width": "",
-                        "height": ""
-                      },
-                      "allowCalculateOverride": false,
-                      "encrypted": false,
-                      "showCharCount": false,
-                      "showWordCount": false,
-                      "properties": {},
-                      "allowMultipleMasks": false,
-                      "clearOnRefresh": false,
-                      "limit": 100,
-                      "dataSrc": "values",
-                      "valueProperty": "",
-                      "lazyLoad": true,
-                      "filter": "",
-                      "searchEnabled": true,
-                      "searchField": "",
-                      "minSearch": 0,
-                      "readOnlyValue": false,
-                      "authenticate": false,
-                      "template": "<span>{{ item.label }}</span>",
-                      "selectFields": "",
-                      "searchThreshold": 0.3,
-                      "fuseOptions": { "include": "score", "threshold": 0.3 },
-                      "customOptions": {},
-                      "id": "e4w4jkq"
-                    }
-                  ],
+                  "components": [],
                   "width": 6,
                   "offset": 0,
                   "push": 0,
@@ -5049,7 +4988,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "ec4qvj9"
+              "id": "eznx7qi"
             },
             {
               "label": "Columns",
@@ -5124,7 +5063,7 @@
                       "allowMultipleMasks": false,
                       "inputType": "radio",
                       "fieldSet": false,
-                      "id": "emti26h"
+                      "id": "eglnrc"
                     }
                   ],
                   "width": 6,
@@ -5136,16 +5075,27 @@
                 {
                   "components": [
                     {
-                      "label": "if yes, please explain",
+                      "label": "If YES, please explain",
                       "placeholder": "Please Explain",
                       "spellcheck": true,
                       "tableView": true,
                       "calculateServer": false,
-                      "errorLabel": "Please enter the explanation",
+                      "validate": {
+                        "required": true,
+                        "customMessage": "Please enter the explanation",
+                        "custom": "",
+                        "customPrivate": false,
+                        "strictDateValidation": false,
+                        "multiple": false,
+                        "unique": false,
+                        "minLength": "",
+                        "maxLength": "",
+                        "pattern": ""
+                      },
                       "key": "policyDeclinedExplain",
                       "conditional": {
                         "show": true,
-                        "when": "page5Columns3AnypolicyorcoveragedeclinedcancelledornonRenewedduringtheprior10Yearsforanypremisesoroperations",
+                        "when": "policyDeclined",
                         "eq": "yes"
                       },
                       "type": "textfield",
@@ -5167,6 +5117,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -5178,17 +5129,6 @@
                       "widget": { "type": "input" },
                       "attributes": {},
                       "validateOn": "change",
-                      "validate": {
-                        "required": false,
-                        "custom": "",
-                        "customPrivate": false,
-                        "strictDateValidation": false,
-                        "multiple": false,
-                        "unique": false,
-                        "minLength": "",
-                        "maxLength": "",
-                        "pattern": ""
-                      },
                       "overlay": {
                         "style": "",
                         "left": "",
@@ -5206,7 +5146,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "ejta0arj"
+                      "id": "ej14eeb"
                     }
                   ],
                   "width": 6,
@@ -5270,7 +5210,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "ezjgion"
+              "id": "ecf2h3"
             },
             {
               "label": "Columns",
@@ -5345,7 +5285,7 @@
                       "allowMultipleMasks": false,
                       "inputType": "radio",
                       "fieldSet": false,
-                      "id": "evc5dy"
+                      "id": "eqks7bc"
                     }
                   ],
                   "width": 6,
@@ -5357,13 +5297,14 @@
                 {
                   "components": [
                     {
-                      "label": "If yes, please explain",
-                      "placeholder": "Please Expalin",
+                      "label": "If YES, please explain",
+                      "placeholder": "Please Explain",
                       "spellcheck": true,
                       "tableView": true,
                       "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter the explanation",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -5373,7 +5314,6 @@
                         "maxLength": "",
                         "pattern": ""
                       },
-                      "errorLabel": "Please enter the explanation",
                       "key": "indictedExplain",
                       "conditional": {
                         "show": true,
@@ -5399,6 +5339,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -5427,7 +5368,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "e872iqh"
+                      "id": "es27vra"
                     }
                   ],
                   "width": 6,
@@ -5491,7 +5432,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "eyzb8jb"
+              "id": "etq4f9a"
             }
           ],
           "input": false,
@@ -5551,7 +5492,7 @@
           "tree": false,
           "theme": "default",
           "breadcrumb": "default",
-          "id": "e2hpe05"
+          "id": "ezhohl"
         },
         {
           "type": "panel",
@@ -5628,7 +5569,7 @@
                   "allowMultipleMasks": false,
                   "inputType": "radio",
                   "fieldSet": false,
-                  "id": "eybxaa4"
+                  "id": "eindwq"
                 },
                 {
                   "legend": "If YES, check all that apply below",
@@ -5715,7 +5656,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "ezfg33p"
+                              "id": "eaglv9b"
                             }
                           ],
                           "width": 4,
@@ -5793,7 +5734,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "ey2t5z3"
+                              "id": "ekmkfh8"
                             }
                           ],
                           "width": 4,
@@ -5871,7 +5812,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "ekmurh"
+                              "id": "eh5onjm"
                             }
                           ],
                           "width": 4,
@@ -5942,7 +5883,7 @@
                       "tree": false,
                       "autoAdjust": false,
                       "hideOnChildrenHidden": false,
-                      "id": "exbnqbu"
+                      "id": "ev9yidk"
                     },
                     {
                       "label": "Columns",
@@ -6016,7 +5957,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "eet8wd6sp"
+                              "id": "ekbr92m"
                             }
                           ],
                           "width": 4,
@@ -6094,7 +6035,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "etus8pn"
+                              "id": "eixde6k"
                             }
                           ],
                           "width": 4,
@@ -6172,7 +6113,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "ebvaapf"
+                              "id": "ek5oxz9"
                             }
                           ],
                           "width": 4,
@@ -6243,7 +6184,7 @@
                       "tree": false,
                       "autoAdjust": false,
                       "hideOnChildrenHidden": false,
-                      "id": "evvyiah"
+                      "id": "ehqvyo"
                     },
                     {
                       "label": "Columns",
@@ -6251,7 +6192,7 @@
                         {
                           "components": [
                             {
-                              "label": "Share/Discuss Findings",
+                              "label": "Share / Discuss Findings",
                               "tableView": true,
                               "defaultValue": false,
                               "calculateServer": false,
@@ -6317,7 +6258,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "evtqimk"
+                              "id": "e9c5h2"
                             }
                           ],
                           "width": 4,
@@ -6395,7 +6336,7 @@
                               "inputType": "checkbox",
                               "value": "",
                               "name": "",
-                              "id": "eiuefj4"
+                              "id": "ezwbj6q"
                             }
                           ],
                           "width": 4,
@@ -6405,77 +6346,7 @@
                           "size": "md"
                         },
                         {
-                          "components": [
-                            {
-                              "label": "Is there a disciplinary program for at fault auto accidents?",
-                              "tableView": true,
-                              "defaultValue": false,
-                              "calculateServer": false,
-                              "key": "disciplinaryProgram",
-                              "type": "checkbox",
-                              "input": true,
-                              "dataGridLabel": false,
-                              "hideOnChildrenHidden": false,
-                              "lockKey": true,
-                              "placeholder": "",
-                              "prefix": "",
-                              "customClass": "",
-                              "suffix": "",
-                              "multiple": false,
-                              "protected": false,
-                              "unique": false,
-                              "persistent": true,
-                              "hidden": false,
-                              "clearOnHide": true,
-                              "refreshOn": "",
-                              "redrawOn": "",
-                              "modalEdit": false,
-                              "labelPosition": "right",
-                              "description": "",
-                              "errorLabel": "",
-                              "tooltip": "",
-                              "hideLabel": false,
-                              "tabindex": "",
-                              "disabled": false,
-                              "autofocus": false,
-                              "dbIndex": false,
-                              "customDefaultValue": "",
-                              "calculateValue": "",
-                              "widget": null,
-                              "attributes": {},
-                              "validateOn": "change",
-                              "validate": {
-                                "required": false,
-                                "custom": "",
-                                "customPrivate": false,
-                                "strictDateValidation": false,
-                                "multiple": false,
-                                "unique": false
-                              },
-                              "conditional": {
-                                "show": null,
-                                "when": null,
-                                "eq": ""
-                              },
-                              "overlay": {
-                                "style": "",
-                                "left": "",
-                                "top": "",
-                                "width": "",
-                                "height": ""
-                              },
-                              "allowCalculateOverride": false,
-                              "encrypted": false,
-                              "showCharCount": false,
-                              "showWordCount": false,
-                              "properties": {},
-                              "allowMultipleMasks": false,
-                              "inputType": "checkbox",
-                              "value": "",
-                              "name": "",
-                              "id": "eyrf2"
-                            }
-                          ],
+                          "components": [],
                           "width": 4,
                           "offset": 0,
                           "push": 0,
@@ -6544,7 +6415,7 @@
                       "tree": false,
                       "autoAdjust": false,
                       "hideOnChildrenHidden": false,
-                      "id": "ekh4zfqo"
+                      "id": "eq9n92g"
                     }
                   ],
                   "placeholder": "",
@@ -6597,7 +6468,74 @@
                   "properties": {},
                   "allowMultipleMasks": false,
                   "tree": false,
-                  "id": "ewht2mm"
+                  "id": "eldh2kh"
+                },
+                {
+                  "label": "Is there a disciplinary program for at fault auto accidents?",
+                  "optionsLabelPosition": "right",
+                  "inline": false,
+                  "tableView": false,
+                  "values": [
+                    { "label": "Yes", "value": "yes", "shortcut": "" },
+                    { "label": "No", "value": "no", "shortcut": "" }
+                  ],
+                  "calculateServer": false,
+                  "key": "isThereADisciplinaryProgramForAtFaultAutoAccidents",
+                  "type": "radio",
+                  "input": true,
+                  "placeholder": "",
+                  "prefix": "",
+                  "customClass": "",
+                  "suffix": "",
+                  "multiple": false,
+                  "defaultValue": null,
+                  "protected": false,
+                  "unique": false,
+                  "persistent": true,
+                  "hidden": false,
+                  "clearOnHide": true,
+                  "refreshOn": "",
+                  "redrawOn": "",
+                  "modalEdit": false,
+                  "labelPosition": "top",
+                  "description": "",
+                  "errorLabel": "",
+                  "tooltip": "",
+                  "hideLabel": false,
+                  "tabindex": "",
+                  "disabled": false,
+                  "autofocus": false,
+                  "dbIndex": false,
+                  "customDefaultValue": "",
+                  "calculateValue": "",
+                  "widget": null,
+                  "attributes": {},
+                  "validateOn": "change",
+                  "validate": {
+                    "required": false,
+                    "custom": "",
+                    "customPrivate": false,
+                    "strictDateValidation": false,
+                    "multiple": false,
+                    "unique": false
+                  },
+                  "conditional": { "show": null, "when": null, "eq": "" },
+                  "overlay": {
+                    "style": "",
+                    "left": "",
+                    "top": "",
+                    "width": "",
+                    "height": ""
+                  },
+                  "allowCalculateOverride": false,
+                  "encrypted": false,
+                  "showCharCount": false,
+                  "showWordCount": false,
+                  "properties": {},
+                  "allowMultipleMasks": false,
+                  "inputType": "radio",
+                  "fieldSet": false,
+                  "id": "eejtjxs"
                 }
               ],
               "tableView": false,
@@ -6653,7 +6591,7 @@
               "properties": {},
               "allowMultipleMasks": false,
               "tree": false,
-              "id": "erlaeui"
+              "id": "e0pdh6d"
             }
           ],
           "input": false,
@@ -6713,7 +6651,7 @@
           "tree": false,
           "theme": "default",
           "breadcrumb": "default",
-          "id": "ey5knh"
+          "id": "edw3wle"
         },
         {
           "label": "Location Schedule",
@@ -6739,16 +6677,14 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Location #",
-                      "key": "locationNum",
-                      "spellcheck": true,
-                      "type": "textfield",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "Location #",
+                      "spellcheck": true,
+                      "tableView": true,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter Location #",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -6758,8 +6694,11 @@
                         "maxLength": "",
                         "pattern": ""
                       },
+                      "key": "locationNum",
+                      "type": "textfield",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
                       "lockKey": true,
-                      "errorLabel": "Please enter Location #",
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -6775,6 +6714,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -6804,7 +6744,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "exe0b4t"
+                      "id": "eocfcf"
                     }
                   ],
                   "width": 4,
@@ -6816,16 +6756,14 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Building #",
-                      "key": "businessNum",
-                      "spellcheck": true,
-                      "type": "textfield",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "Building #",
+                      "spellcheck": true,
+                      "tableView": true,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter Building #",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -6835,8 +6773,11 @@
                         "maxLength": "",
                         "pattern": ""
                       },
+                      "key": "businessNum",
+                      "type": "textfield",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
                       "lockKey": true,
-                      "errorLabel": "Please enter Building #",
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -6852,6 +6793,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -6881,7 +6823,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "ebk9jv"
+                      "id": "e3bvscb"
                     }
                   ],
                   "width": 4,
@@ -6893,16 +6835,14 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Location Address",
-                      "key": "locationAddress",
-                      "spellcheck": true,
-                      "type": "textfield",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "Location Address",
+                      "spellcheck": true,
+                      "tableView": true,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter Location Address",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -6912,8 +6852,11 @@
                         "maxLength": "",
                         "pattern": ""
                       },
+                      "key": "locationAddress",
+                      "type": "textfield",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
                       "lockKey": true,
-                      "errorLabel": "Please enter Location Address",
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -6929,6 +6872,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -6958,7 +6902,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "eia47m"
+                      "id": "evo45w8"
                     }
                   ],
                   "width": 4,
@@ -7022,7 +6966,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "ey0ij6"
+              "id": "eqroyvi"
             },
             {
               "label": "Columns",
@@ -7033,16 +6977,14 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "City",
-                      "key": "citylocationschedule",
-                      "spellcheck": true,
-                      "type": "textfield",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "City",
+                      "spellcheck": true,
+                      "tableView": true,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter City",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -7052,8 +6994,11 @@
                         "maxLength": "",
                         "pattern": ""
                       },
+                      "key": "citylocationschedule",
+                      "type": "textfield",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
                       "lockKey": true,
-                      "errorLabel": "Please enter City",
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -7069,6 +7014,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -7098,7 +7044,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "egj8jsu"
+                      "id": "epcd79g"
                     }
                   ],
                   "width": 3,
@@ -7110,10 +7056,11 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "State",
-                      "key": "statelocationschedule",
+                      "widget": "choicesjs",
+                      "placeholder": "State",
+                      "tableView": true,
+                      "dataSrc": "url",
                       "data": {
                         "values": [{ "value": "", "label": "" }],
                         "url": "https://cdn.rawgit.com/mshafrir/2646763/raw/states_titlecase.json",
@@ -7122,22 +7069,27 @@
                         "resource": "",
                         "custom": ""
                       },
-                      "dataSrc": "url",
                       "valueProperty": "abbreviation",
                       "template": "<span>{{ item.name}}</span>",
-                      "type": "select",
-                      "hideOnChildrenHidden": false,
-                      "placeholder": "State",
+                      "selectThreshold": 0.3,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please select State",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
                         "multiple": false,
                         "unique": false
                       },
-                      "lockKey": true,
                       "errorLabel": "Please select State",
+                      "key": "statelocationschedule",
+                      "type": "select",
+                      "indexeddb": { "filter": {} },
+                      "input": true,
+                      "hideOnChildrenHidden": false,
+                      "lockKey": true,
+                      "disableLimit": false,
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -7161,7 +7113,6 @@
                       "dbIndex": false,
                       "customDefaultValue": "",
                       "calculateValue": "",
-                      "widget": null,
                       "attributes": {},
                       "validateOn": "change",
                       "conditional": { "show": null, "when": null, "eq": "" },
@@ -7191,7 +7142,7 @@
                       "searchThreshold": 0.3,
                       "fuseOptions": { "include": "score", "threshold": 0.3 },
                       "customOptions": {},
-                      "id": "e58871"
+                      "id": "emnqs6n"
                     }
                   ],
                   "width": 3,
@@ -7203,15 +7154,20 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
-                      "inputType": "number",
                       "label": "Zip Code",
-                      "key": "ziplocationscehdule",
+                      "placeholder": "Zip Code",
+                      "mask": false,
+                      "spellcheck": true,
+                      "tableView": true,
+                      "delimiter": false,
+                      "requireDecimal": false,
+                      "inputFormat": "plain",
+                      "calculateServer": false,
                       "validate": {
+                        "required": true,
+                        "customMessage": "Please enter Zip Code",
                         "min": null,
                         "max": null,
-                        "required": true,
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -7220,10 +7176,11 @@
                         "step": "any",
                         "integer": ""
                       },
+                      "key": "ziplocationscehdule",
                       "type": "number",
+                      "input": true,
+                      "inputType": "number",
                       "hideOnChildrenHidden": false,
-                      "placeholder": "Zip Code",
-                      "errorLabel": "Please enter Zip Code",
                       "lockKey": true,
                       "prefix": "",
                       "customClass": "",
@@ -7240,6 +7197,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -7265,7 +7223,7 @@
                       "showWordCount": false,
                       "properties": {},
                       "allowMultipleMasks": false,
-                      "id": "ex2maoj"
+                      "id": "ea38a58"
                     }
                   ],
                   "width": 3,
@@ -7277,16 +7235,14 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "County",
-                      "key": "CountyLocationSchedule",
-                      "spellcheck": true,
-                      "type": "textfield",
-                      "hideOnChildrenHidden": false,
                       "placeholder": "County",
+                      "spellcheck": true,
+                      "tableView": true,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please enter County",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
@@ -7296,8 +7252,11 @@
                         "maxLength": "",
                         "pattern": ""
                       },
+                      "key": "CountyLocationSchedule",
+                      "type": "textfield",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
                       "lockKey": true,
-                      "errorLabel": "Please enter County",
                       "prefix": "",
                       "customClass": "",
                       "suffix": "",
@@ -7313,6 +7272,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -7342,7 +7302,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "e36yr8"
+                      "id": "e34nxvg"
                     }
                   ],
                   "width": 3,
@@ -7406,7 +7366,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "e4uwzn"
+              "id": "e1us5vc"
             },
             {
               "label": "Columns",
@@ -7417,10 +7377,10 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Occupancy Type",
-                      "key": "occupancyType",
+                      "widget": "choicesjs",
+                      "placeholder": "Select Occupancy Type",
+                      "tableView": true,
                       "data": {
                         "values": [
                           {
@@ -7467,18 +7427,22 @@
                         "resource": "",
                         "custom": ""
                       },
-                      "type": "select",
-                      "hideOnChildrenHidden": false,
-                      "placeholder": "Select Occupancy Type",
+                      "selectThreshold": 0.3,
+                      "calculateServer": false,
                       "validate": {
                         "required": true,
+                        "customMessage": "Please select Occupancy Type",
                         "custom": "",
                         "customPrivate": false,
                         "strictDateValidation": false,
                         "multiple": false,
                         "unique": false
                       },
-                      "errorLabel": "Please select Occupancy Type",
+                      "key": "occupancyType",
+                      "type": "select",
+                      "indexeddb": { "filter": {} },
+                      "input": true,
+                      "hideOnChildrenHidden": false,
                       "lockKey": true,
                       "prefix": "",
                       "customClass": "",
@@ -7495,6 +7459,7 @@
                       "modalEdit": false,
                       "labelPosition": "top",
                       "description": "",
+                      "errorLabel": "",
                       "tooltip": "",
                       "hideLabel": false,
                       "tabindex": "",
@@ -7503,7 +7468,6 @@
                       "dbIndex": false,
                       "customDefaultValue": "",
                       "calculateValue": "",
-                      "widget": null,
                       "attributes": {},
                       "validateOn": "change",
                       "conditional": { "show": null, "when": null, "eq": "" },
@@ -7536,7 +7500,7 @@
                       "searchThreshold": 0.3,
                       "fuseOptions": { "include": "score", "threshold": 0.3 },
                       "customOptions": {},
-                      "id": "egexir"
+                      "id": "evmqnjd"
                     }
                   ],
                   "width": 4,
@@ -7548,10 +7512,10 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Primary OEM",
-                      "key": "primaryOEM",
+                      "widget": "choicesjs",
+                      "placeholder": "Select Primary OEM",
+                      "tableView": true,
                       "data": {
                         "values": [
                           { "value": "acura", "label": "Acura" },
@@ -7596,9 +7560,22 @@
                         "resource": "",
                         "custom": ""
                       },
+                      "selectThreshold": 0.3,
+                      "calculateServer": false,
+                      "validate": {
+                        "customMessage": "Please select Primary OEM",
+                        "required": false,
+                        "custom": "",
+                        "customPrivate": false,
+                        "strictDateValidation": false,
+                        "multiple": false,
+                        "unique": false
+                      },
+                      "key": "primaryOEM",
                       "type": "select",
+                      "indexeddb": { "filter": {} },
+                      "input": true,
                       "hideOnChildrenHidden": false,
-                      "placeholder": "Select Primary OEM",
                       "lockKey": true,
                       "prefix": "",
                       "customClass": "",
@@ -7624,17 +7601,8 @@
                       "dbIndex": false,
                       "customDefaultValue": "",
                       "calculateValue": "",
-                      "widget": null,
                       "attributes": {},
                       "validateOn": "change",
-                      "validate": {
-                        "required": false,
-                        "custom": "",
-                        "customPrivate": false,
-                        "strictDateValidation": false,
-                        "multiple": false,
-                        "unique": false
-                      },
                       "conditional": { "show": null, "when": null, "eq": "" },
                       "overlay": {
                         "style": "",
@@ -7665,7 +7633,7 @@
                       "searchThreshold": 0.3,
                       "fuseOptions": { "include": "score", "threshold": 0.3 },
                       "customOptions": {},
-                      "id": "eh9t65i"
+                      "id": "eaffyr"
                     }
                   ],
                   "width": 4,
@@ -7794,7 +7762,7 @@
                       "searchThreshold": 0.3,
                       "fuseOptions": { "include": "score", "threshold": 0.3 },
                       "customOptions": {},
-                      "id": "evyok6h"
+                      "id": "etjmu3w"
                     }
                   ],
                   "width": 4,
@@ -7858,7 +7826,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "enlmlsj"
+              "id": "emoxeh"
             }
           ],
           "placeholder": "",
@@ -7911,7 +7879,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "tree": true,
-          "id": "egfdv0l"
+          "id": "e55ie8j"
         },
         {
           "label": "Named Insured Schedule",
@@ -8005,7 +7973,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "el7c8if"
+                      "id": "eb7sz3b"
                     }
                   ],
                   "width": 4,
@@ -8082,7 +8050,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "eiwm007"
+                      "id": "ejemxptf"
                     }
                   ],
                   "width": 4,
@@ -8159,7 +8127,7 @@
                       "inputType": "text",
                       "inputFormat": "plain",
                       "inputMask": "",
-                      "id": "ey6ozl"
+                      "id": "ewlvcf"
                     }
                   ],
                   "size": "md",
@@ -8226,7 +8194,7 @@
               "tree": false,
               "autoAdjust": false,
               "hideOnChildrenHidden": false,
-              "id": "e08efg"
+              "id": "eq47osp"
             }
           ],
           "placeholder": "",
@@ -8279,7 +8247,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "tree": true,
-          "id": "ecd4b6l"
+          "id": "ek9q3sb"
         }
       ],
       "input": false,
@@ -8340,7 +8308,7 @@
       "tree": false,
       "theme": "default",
       "breadcrumb": "default",
-      "id": "ecylfgh"
+      "id": "eemtv2l"
     },
     {
       "title": "Property Liability",
@@ -8414,17 +8382,19 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Are flammables stored in UL approved cabinets?",
-                      "key": "flammables",
+                      "optionsLabelPosition": "right",
+                      "inline": false,
+                      "tableView": true,
                       "values": [
                         { "value": "yes", "label": "Yes", "shortcut": "" },
                         { "value": "no", "label": "No", "shortcut": "" }
                       ],
+                      "calculateServer": false,
                       "validate": { "required": true },
+                      "key": "flammables",
                       "type": "radio",
-                      "optionsLabelPosition": "right",
+                      "input": true,
                       "hideOnChildrenHidden": false,
                       "lockKey": true
                     }
@@ -8489,6 +8459,7 @@
                     { "label": "No", "value": "no" }
                   ],
                   "calculateServer": false,
+                  "validate": { "required": true },
                   "key": "spraypaintingysurvey",
                   "conditional": {
                     "show": true,
@@ -8548,7 +8519,8 @@
                     { "label": "No", "value": "no" }
                   ],
                   "calculateServer": false,
-                  "key": "ifYesPleaseAnswer",
+                  "validate": { "required": true },
+                  "key": "mixingroomsurvey",
                   "conditional": {
                     "show": true,
                     "when": "separatemixingroom",
@@ -8819,8 +8791,9 @@
                 {
                   "components": [
                     {
-                      "label": "Utility Options",
+                      "label": "Utilities Options",
                       "widget": "choicesjs",
+                      "placeholder": "Please Select",
                       "tableView": true,
                       "data": {
                         "values": [
@@ -8842,13 +8815,12 @@
                       },
                       "selectThreshold": 0.3,
                       "calculateServer": false,
+                      "validate": { "required": true },
                       "key": "utilityoptions",
                       "type": "select",
                       "indexeddb": { "filter": {} },
                       "input": true,
                       "hideOnChildrenHidden": false,
-                      "placeholder": "Please Select",
-                      "validate": { "required": true },
                       "lockKey": true
                     }
                   ],
@@ -9081,7 +9053,7 @@
                     {
                       "label": "State",
                       "widget": "choicesjs",
-                      "placeholder": "Please Select",
+                      "placeholder": "State",
                       "tableView": true,
                       "dataSrc": "url",
                       "data": {
@@ -9147,10 +9119,10 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Occupancy Type",
-                      "key": "occupancytype",
+                      "placeholder": "Please Select",
+                      "tableView": true,
+                      "defaultValue": "pleaseSelect",
                       "data": {
                         "values": [
                           { "value": "pleaseSelect", "label": "Please Select" },
@@ -9191,15 +9163,17 @@
                           {
                             "value": "buildingLeasedToOthers",
                             "label": "Building Leased to Others"
-                          },
-                          "Please Select"
+                          }
                         ]
                       },
+                      "selectThreshold": 0.3,
+                      "calculateServer": false,
                       "validate": { "required": true },
+                      "key": "occupancytype",
                       "type": "select",
+                      "indexeddb": { "filter": {} },
+                      "input": true,
                       "hideOnChildrenHidden": false,
-                      "placeholder": "Please Select",
-                      "defaultValue": "pleaseSelect",
                       "lockKey": true
                     }
                   ],
@@ -9342,10 +9316,10 @@
                 {
                   "components": [
                     {
-                      "input": true,
-                      "tableView": true,
                       "label": "Basement?",
-                      "key": "basement",
+                      "placeholder": "Please Select",
+                      "tableView": true,
+                      "defaultValue": "pleaseSelect",
                       "data": {
                         "values": [
                           { "value": "pleaseSelect", "label": "Please Select" },
@@ -9353,10 +9327,14 @@
                           { "value": "no", "label": "No" }
                         ]
                       },
+                      "selectThreshold": 0.3,
+                      "calculateServer": false,
+                      "validate": { "required": true },
+                      "key": "basement",
                       "type": "select",
+                      "indexeddb": { "filter": {} },
+                      "input": true,
                       "hideOnChildrenHidden": false,
-                      "placeholder": "Please Select",
-                      "defaultValue": "pleaseSelect",
                       "lockKey": true
                     }
                   ],
@@ -21946,1224 +21924,160 @@
               "hideLabel": true
             },
             {
-              "key": "pageNaNPanel",
-              "input": false,
-              "title": "Enter X for Requested Coverage",
+              "label": "Please select for Requested Coverage",
               "tableView": false,
-              "components": [
+              "questions": [
+                { "label": "New - Comp", "value": "newComp" },
+                { "label": "New - Collision", "value": "newCollision" },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNColumns4",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "New - Comp",
-                          "key": "dolnewcomprequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "New - Collision",
-                          "key": "dolnewcollisionrequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "New - False Pretense",
-                          "key": "dolnewfalsepretenserequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "New - False Pretense",
+                  "value": "newFalsePretense"
+                },
+                { "label": "Used - Comp", "value": "usedComp" },
+                { "label": "Used - Collision", "value": "usedCollision" },
+                {
+                  "label": "Used - False Pretense",
+                  "value": "usedFalsePretense"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNColumns5",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Used - Comp",
-                          "key": "dolusedcomprequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Used - Collision",
-                          "key": "dolusercollisionrequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Used - False Pretense",
-                          "key": "dolusedfalsepretenserequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Demo Furnished - Comp",
+                  "value": "demoFurnishedComp"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNColumns6",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Demo Furnished - Comp",
-                          "key": "doldemofurishedcomprequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Demo Furnished - Collision",
-                          "key": "doldemofurnishedcollisionrequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Demo Furnished - False Pretense",
-                          "key": "doldemofurnishedfalsepretenserequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Demo Furnished - Collision",
+                  "value": "demoFurnishedCollision"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNColumns7",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Service Loaners - Comp",
-                          "key": "dolserviceloanerscomprequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Service Loaners - Collison",
-                          "key": "dolserviceloanerscollisionrequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Service Loaners - False Pretense",
-                          "key": "dolserviceloanersfalsepretenserequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Demo Furnished - False Pretense",
+                  "value": "demoFurnishedFalsePretense"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNColumns8",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Owned - Comp",
-                          "key": "dolotherownedcomprequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Owned - Collision",
-                          "key": "dolotherownedcollisionrequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Owned - False Pretense",
-                          "key": "dolothrownedfalsepretenserequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Service Loaners - Comp",
+                  "value": "serviceLoanersComp"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNColumns9",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Non-Owned - Comp",
-                          "key": "dolothernonownedcomprequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Non-Owned - Collision",
-                          "key": "dolothernonownedcollissionrequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Non-Owned - False Pretense",
-                          "key": "dolothernonownedfalsepretenserequested",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Service Loaners - Collision",
+                  "value": "serviceLoanersCollision"
+                },
+                {
+                  "label": "Service Loaners - False Pretense",
+                  "value": "serviceLoanersFalsePretense"
+                },
+                { "label": "Other - Owned - Comp", "value": "otherOwnedComp" },
+                {
+                  "label": "Other - Owned - Collision",
+                  "value": "otherOwnedCollision"
+                },
+                {
+                  "label": "Other - Owned - False Pretense",
+                  "value": "otherOwnedFalsePretense"
+                },
+                {
+                  "label": "Other - Non-Owned - Comp",
+                  "value": "otherNonOwnedComp"
+                },
+                {
+                  "label": "Other - Non-Owned - Collision",
+                  "value": "otherNonOwnedCollision"
+                },
+                {
+                  "label": "Other - Non-Owned - False Pretense",
+                  "value": "otherNonOwnedFalsePretense"
                 }
               ],
-              "type": "panel",
-              "label": "Panel"
+              "values": [
+                { "label": "Yes", "value": "yes" },
+                { "label": "No", "value": "no" }
+              ],
+              "calculateServer": false,
+              "validate": { "required": true },
+              "key": "pleaseSelectForRequestedCoverage",
+              "type": "survey",
+              "input": true
             },
             {
-              "key": "pageNaNPanel2",
-              "input": false,
-              "title": "Enter X for Coverage Placed Through Floor Plan or Other:",
+              "label": "Enter X for Coverage Placed Through Floor Plan or Other",
               "tableView": false,
-              "components": [
+              "questions": [
+                { "label": "New - Comp", "value": "newComp" },
+                { "label": "New - Collision", "value": "newCollision" },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "New - Comp",
-                          "key": "dolnewcomp",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "New - Collision",
-                          "key": "dolnewcollision",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "New - False Pretense",
-                          "key": "dolnewfalsepretense",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "New - False Pretense",
+                  "value": "newFalsePretense"
+                },
+                { "label": "New - None", "value": "newNone" },
+                { "label": "Used - Comp", "value": "usedComp" },
+                { "label": "Used - Collision", "value": "usedCollision" },
+                {
+                  "label": "Used - False Pretense",
+                  "value": "usedFalsePretense"
+                },
+                { "label": "Used - None", "value": "usedNone" },
+                {
+                  "label": "Demo Furnished - Comp",
+                  "value": "demoFurnishedComp"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns2",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "New - None",
-                          "key": "dolnewnone",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Used - Comp",
-                          "key": "dolusedcomp",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Used - Collision",
-                          "key": "dolusercollision",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Demo Furnished - Collision",
+                  "value": "demoFurnishedCollision"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns3",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Used - False Pretense",
-                          "key": "dolusedfalsepretense",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Used - None",
-                          "key": "dolusednone",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Demo Furnished - Comp",
-                          "key": "doldemofurishedcomp",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Demo Furnished - False Pretense",
+                  "value": "demoFurnishedFalsePretense"
+                },
+                { "label": "Demo - None", "value": "demoNone" },
+                {
+                  "label": "Service Loaners - Comp",
+                  "value": "serviceLoanersComp"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns4",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Demo Furnished - Collision",
-                          "key": "doldemofurnishedcollision",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Demo Furnished - False Pretense",
-                          "key": "doldemofurnishedfalsepretense",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Demo - None",
-                          "key": "doldemonone",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Service Loaners - Collison",
+                  "value": "serviceLoanersCollison"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns5",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Service Loaners - Comp",
-                          "key": "dolserviceloanerscomp",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Service Loaners - Collison",
-                          "key": "dolserviceloanerscollision",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Service Loaners - False Pretense",
-                          "key": "dolserviceloanersfalsepretense",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Service Loaners - False Pretense",
+                  "value": "serviceLoanersFalsePretense"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns6",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Service Loaners - None",
-                          "key": "dolserviceloanersnone",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Owned - Comp",
-                          "key": "dolotherownedcomp",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Owned - Collision",
-                          "key": "dolotherownedcollision",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Service Loaners - None",
+                  "value": "serviceLoanersNone"
+                },
+                { "label": "Other - Owned - Comp", "value": "otherOwnedComp" },
+                {
+                  "label": "Other - Owned - Collision",
+                  "value": "otherOwnedCollision"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns7",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Owned - False Pretense",
-                          "key": "dolothrownedfalsepretense",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Owned - None",
-                          "key": "dolotherownednone",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Non-Owned - Comp",
-                          "key": "dolothernonownedcomp",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Other - Owned - False Pretense",
+                  "value": "otherOwnedFalsePretense"
+                },
+                { "label": "Other - Owned - None", "value": "otherOwnedNone" },
+                {
+                  "label": "Other - Non-Owned - Comp",
+                  "value": "otherNonOwnedComp"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns8",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Non-Owned - Collision",
-                          "key": "dolothernonownedcollission",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Non-Owned - False Pretense",
-                          "key": "dolothernonownedfalsepretense",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Other - Non-Owned - None",
-                          "key": "dolothernonownednone",
-                          "values": [
-                            { "value": "yes", "label": "Yes", "shortcut": "" },
-                            { "value": "no", "label": "No", "shortcut": "" }
-                          ],
-                          "validate": { "required": true },
-                          "type": "radio",
-                          "optionsLabelPosition": "right",
-                          "hideOnChildrenHidden": false,
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 4,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Other - Non-Owned - Collision",
+                  "value": "otherNonOwnedCollision"
                 },
                 {
-                  "label": "Columns",
-                  "input": false,
-                  "tableView": false,
-                  "key": "pageNaNPanel2Columns9",
-                  "columns": [
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Total number of demos/furnished auto provided",
-                          "key": "doltotalnoofdemos",
-                          "spellcheck": true,
-                          "validate": { "required": true },
-                          "type": "textfield",
-                          "hideOnChildrenHidden": false,
-                          "placeholder": "Total number of demos/furnished auto provided",
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 6,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    },
-                    {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Total number of vehicles you are constantly required to insure, i.e., consignments, lease returns, program cars, etc.",
-                          "key": "doltotalnoofvehicles",
-                          "spellcheck": true,
-                          "validate": { "required": true },
-                          "type": "textfield",
-                          "hideOnChildrenHidden": false,
-                          "placeholder": "Total number of vehicles you are constantly required to insure, i.e., consignments, lease returns, program cars, etc.",
-                          "lockKey": true
-                        }
-                      ],
-                      "width": 6,
-                      "offset": 0,
-                      "push": 0,
-                      "pull": 0,
-                      "size": "md"
-                    }
-                  ],
-                  "type": "columns",
-                  "hideLabel": true
+                  "label": "Other - Non-Owned - False Pretense",
+                  "value": "otherNonOwnedFalsePretense"
+                },
+                {
+                  "label": "Other - Non-Owned - None",
+                  "value": "otherNonOwnedNone"
                 }
               ],
-              "type": "panel",
-              "label": "Panel"
+              "values": [
+                { "label": "Yes", "value": "yes" },
+                { "label": "No", "value": "no" }
+              ],
+              "calculateServer": false,
+              "validate": { "required": true },
+              "key": "pleaseSelectForOther",
+              "type": "survey",
+              "input": true
             }
           ],
           "input": false,
@@ -24945,17 +23859,15 @@
                       "placeholder": "Premium",
                       "mask": false,
                       "spellcheck": true,
-                      "tableView": true,
-                      "delimiter": false,
-                      "requireDecimal": false,
+                      "tableView": false,
+                      "currency": "USD",
                       "inputFormat": "plain",
                       "calculateServer": false,
-                      "key": "secpremium",
-                      "type": "number",
+                      "key": "premium",
+                      "type": "currency",
                       "input": true,
-                      "inputType": "number",
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
+                      "delimiter": true,
+                      "hideOnChildrenHidden": false
                     }
                   ],
                   "width": 4,
@@ -26200,7 +25112,7 @@
   ],
   "controller": "",
   "revisions": "current",
-  "_vid": 1,
+  "_vid": 29,
   "title": "Consolidated Wizard",
   "display": "wizard",
   "access": [
@@ -26215,11 +25127,13 @@
   ],
   "submissionAccess": [],
   "settings": {},
-  "properties": {},
+  "properties": {
+    "submission_commands": "[{ \t\"command\": \"fileSave\", \t\"entity_name\": \"Workbook\" }, { \t\"command\": \"delegate\", \t\"async\": \"true\", \t\"entity_name\": \"Workbook\", \t\"delegate\": \"SaveWorkbook\" }, { \t\"command\": \"fileSave\", \t\"entity_name\": \"Workbook\" }]"
+  },
   "name": "consolidatedWizard",
   "path": "consolidatedwizard",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-05-18T07:42:20.331Z",
-  "modified": "2020-05-25T13:25:02.840Z",
+  "modified": "2020-05-26T11:30:14.132Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:consolidatedWizard"
 }
