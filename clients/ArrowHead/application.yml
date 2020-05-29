@@ -45,6 +45,7 @@ role:
 entity:
     -
         name: 'Dealer Policy'
+        fieldReference: 'DealerPolicyFields.xlsx'
         field:
             -
                 name: status
