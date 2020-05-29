@@ -14,7 +14,7 @@
       for (var query_string in query_strings_from_url) {
           if (query_strings_from_url.hasOwnProperty(query_string)) {
               var temp_var = query_strings_from_url[query_string].split('=', 2);
-              vars[temp_var[0]] = decodeURI(temp_var[1]);
+              vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
        var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','update_date','state_in_short'];
