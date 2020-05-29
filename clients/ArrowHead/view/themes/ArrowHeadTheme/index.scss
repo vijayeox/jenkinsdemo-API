@@ -5,6 +5,9 @@
 @import "./src/gui";
 @import "./src/animations";
 
+@import "variables.scss";
+@import "eox.scss";
+
 body,
 html {
   width: 100%;
@@ -13,7 +16,9 @@ html {
 
 .osjs-root {
   font-size: 15px;
-  background-image: url("./src/images/wallpaper.png");
+  background-image: url("./src/images/background.gif");
+  background-color: $soft!important;
+  background-size: contain!important;
 }
 
 ::-webkit-scrollbar {
@@ -22,7 +27,7 @@ html {
 
 .osjs-window {
   // @include window;
-  // background: #275362;
+  // background: $primary;
   // padding :0px;
 
   &[data-focused="false"] {
@@ -33,7 +38,7 @@ html {
     pointer-events: none;
 
     &::after {
-      background: #275362;
+      background: $primary;
     }
   }
 }
@@ -130,7 +135,11 @@ html {
   }
 }
 
-.osjs-panel-item[data-name="tray"] > div > img {
+.osjs-panel-item[data-name="menu"] .logo-here img {
+  // background: url(./src/images/main-icon.png) left top no-repeat;
+  content: url(./src/images/main-icon.png);
+  width: 150px;
+  height: auto;
 }
 
 .osjs-gui-menu-separator::after {
@@ -166,7 +175,7 @@ html {
 .osjs-window-icon > div {
   width: 3em;
   height: 3em;
-  background-color: #275362;
+  background-color: $primary;
 }
 
 .osjs-panel-item[data-name="windows"] > div {
@@ -294,14 +303,72 @@ label {
   color: #fff;
 }
 .appmenu .app-bar .app {
-  border-bottom: 1px solid #275362;
+  border-bottom: 1px solid $primary;
 }
 .appmenu .app-bar .app .appcaption {
-  color: #275362;
+  color: $primary;
 }
 .profile-dropdown-div:hover {
-  color: #275362;
+  color: $primary;
 }
 
-@import "variables.scss";
-@import "eox.scss";
+.LeftMenuTemplate .sidenav---sidenav---_2tBP {
+  background: $primary;
+}
+
+.k-button.k-primary, .manageIcons{
+  background-color: $secondary;
+  border-color: $secondary;
+  color: white!important;
+  // color: black!important;
+}
+
+.k-button.k-primary:hover, .manageIcons:hover{
+  background-color: $secondary;
+  border-color: $secondary;
+  color: white!important;
+  // color: black!important;
+}
+.gridOperationDropdown .k-button.k-primary{
+  font-size: small;
+}
+
+.PageRender .breadcrumbs-item a{
+  font-size: 20px;
+  color: $primary;
+}
+.PageRender .breadcrumbs-item a:hover{
+  color: $primary;
+}
+
+.PageRender .breadcrumbs{
+  padding: 5px 0px 5px 0px;
+}
+
+.GridCustomStyle .k-pager-numbers li a.k-state-selected{
+  background-color: $secondary;
+  border-color: $secondary;
+}
+
+.osjs-panel-item[data-name="profile"]{
+height: unset;
+padding: 10px!important;
+}
+
+.osjs-window.Window_ArrowHead[data-maximized="true"]{
+  .osjs-window-button[data-action="maximize"]{
+    div{
+      background-image: url(./src/images/restore.png);
+      background-size: 25px;
+    }
+  }
+}
+
+.k-list .k-item {
+  background-color: $secondary;
+  color: white;
+}
+
+.PageRender .AppBuilderPage{
+  height: calc(100% - 45px);
+}
