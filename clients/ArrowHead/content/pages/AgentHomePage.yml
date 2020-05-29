@@ -33,8 +33,8 @@ content:
                     details:
                         -
                             type: Form
-                            url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
-                            workflowInstanceId: '{{workflowInstanceId}}'
+                            form_id: a8f015fa-2dcb-4806-8ec0-ca5847c1c471
+                            fileId: '{{uuid}}'
                     icon: 'fa fa-pencil'
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:

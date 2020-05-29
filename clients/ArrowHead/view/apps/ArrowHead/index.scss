@@ -23,7 +23,10 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 }
 
 .Window_ArrowHead {
-  $primary-color: #275362;
+  $primary-color: #1e1246;
+  $secondary: #55B089;
+  $secondary-dark: #282b2d;
+  $secondary-light-grey: #7b7878
 
   .formContent {
     height: 100%;
@@ -44,6 +47,11 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     color: #fff;
     background-color: $primary-color;
     border-color: $primary-color;
+  }
+  .btn-secondary{
+    color: #ffffff;
+    background-color: $secondary;
+    border-color: $secondary;
   }
 
   .k-button.k-primary {

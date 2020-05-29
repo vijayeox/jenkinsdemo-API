@@ -372,3 +372,13 @@ padding: 10px!important;
 .PageRender .AppBuilderPage{
   height: calc(100% - 45px);
 }
+
+.swal2-confirm.swal2-styled{
+  background-color: $primary!important;
+    border-left-color: $primary!important;
+    border-right-color: $primary!important;
+}
+
+.osjs-panel-item[data-name=menu]:hover{
+  background-color: #9189ad5c!important;
+}
