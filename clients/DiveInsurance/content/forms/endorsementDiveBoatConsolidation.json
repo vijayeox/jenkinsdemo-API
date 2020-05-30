@@ -20,14 +20,128 @@
 			"key": "initiatedByCsr",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"validate": {
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "ecx7di"
 		}, {
 			"label": "previousPolicyLength",
 			"calculateValue": "value = data['previous_policy_data'].length - 1;",
 			"key": "previousPolicyLength",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"validate": {
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "epx83hk"
 		}, {
 			"label": "disableOptions",
 			"customDefaultValue": "value = false;",
@@ -35,24 +149,64 @@
 			"key": "disableOptions",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
-		}, {
-			"label": "documentFields",
-			"calculateValue": "value = ['attachments1','csrApprovalAttachments1',[\"groupPL\",\"document1\"]]",
-			"calculateServer": false,
-			"key": "documentFieldnames",
-			"type": "hidden",
-			"input": true,
 			"tableView": false,
-			"hideOnChildrenHidden": false
-		}, {
-			"label": "attachmentsFieldnames",
-			"calculateValue": "value = [[\"groupPL\",\"documentattach\"],'attachments','csrApprovalAttachments'];",
-			"calculateServer": false,
-			"key": "attachmentsFieldnames",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"calculateValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"validate": {
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "ekjifgq"
 		}, {
 			"label": "start_date",
 			"calculateServer": false,
@@ -64,7 +218,64 @@
 			"input": true,
 			"tableView": true,
 			"lockKey": true,
-			"hideOnChildrenHidden": false
+			"hideOnChildrenHidden": false,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"validate": {
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "eo59p2"
 		}, {
 			"label": "product",
 			"calculateValue": "value = 'Dive Boat';",
@@ -72,7 +283,64 @@
 			"key": "product",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"validate": {
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "e37phj"
 		}, {
 			"label": "Please select areas you want to modify",
 			"optionsLabelPosition": "right",
@@ -120,13 +388,66 @@
 			"clearOnHide": false,
 			"calculateServer": false,
 			"validate": {
-				"minSelectedCount": 1
+				"minSelectedCount": 1,
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
 			},
 			"minSelectedCountMessage": "Select atleast one option to go next.",
 			"key": "endorsement_options",
 			"type": "selectboxes",
 			"input": true,
-			"inputType": "checkbox"
+			"inputType": "checkbox",
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"widget": null,
+			"attributes": {},
+			"validateOn": "change",
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"fieldSet": false,
+			"inline": false,
+			"id": "e1b5vda"
 		}, {
 			"label": "HTML",
 			"attrs": [{
@@ -139,14 +460,126 @@
 			"key": "html34",
 			"type": "htmlelement",
 			"input": false,
-			"hideLabel": true
+			"hideLabel": true,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": false,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"widget": null,
+			"attributes": {},
+			"validateOn": "change",
+			"validate": {
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"tag": "p",
+			"id": "e4y11g"
 		}, {
 			"label": "automatic_renewal",
 			"customDefaultValue": "value = false",
 			"key": "automatic_renewal",
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
+			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
+			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
+			"calculateValue": "",
+			"widget": {
+				"type": "input"
+			},
+			"attributes": {},
+			"validateOn": "change",
+			"validate": {
+				"required": false,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
+			"conditional": {
+				"show": null,
+				"when": null,
+				"eq": ""
+			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"inputType": "hidden",
+			"id": "eg5x6pl"
 		}],
 		"path": "endorsementChange",
 		"properties": {
@@ -178,7 +611,63 @@
 				},
 				"state": true
 			}]
-		}]
+		}],
+		"placeholder": "",
+		"prefix": "",
+		"customClass": "",
+		"suffix": "",
+		"multiple": false,
+		"defaultValue": null,
+		"protected": false,
+		"unique": false,
+		"persistent": false,
+		"hidden": false,
+		"clearOnHide": false,
+		"refreshOn": "",
+		"redrawOn": "",
+		"modalEdit": false,
+		"labelPosition": "top",
+		"description": "",
+		"errorLabel": "",
+		"tooltip": "",
+		"hideLabel": false,
+		"tabindex": "",
+		"disabled": false,
+		"autofocus": false,
+		"dbIndex": false,
+		"customDefaultValue": "",
+		"calculateValue": "",
+		"widget": null,
+		"attributes": {},
+		"validateOn": "change",
+		"validate": {
+			"required": false,
+			"custom": "",
+			"customPrivate": false,
+			"strictDateValidation": false,
+			"multiple": false,
+			"unique": false
+		},
+		"conditional": {
+			"show": null,
+			"when": null,
+			"eq": ""
+		},
+		"overlay": {
+			"style": "",
+			"left": "",
+			"top": "",
+			"width": "",
+			"height": ""
+		},
+		"allowCalculateOverride": false,
+		"encrypted": false,
+		"showCharCount": false,
+		"showWordCount": false,
+		"allowMultipleMasks": false,
+		"tree": false,
+		"breadcrumb": "default",
+		"id": "elpgxi5"
 	}, {
 		"title": "Personal Information",
 		"theme": "primary",
@@ -4043,8 +4532,8 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": false,
-					"storage": "base64",
-					"webcam": false,
+					"storage": "url",
+					"webcam": true,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
@@ -4052,12 +4541,14 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
+					"calculateServer": false,
 					"validate": {
 						"multiple": true
 					},
 					"key": "attachments",
 					"type": "file",
-					"input": true
+					"input": true,
+					"url": "/file/attachment"
 				}, {
 					"type": "documentviewer",
 					"key": "attachments1",
@@ -4806,8 +5297,8 @@
 						"label": "Document",
 						"hideLabel": true,
 						"tableView": true,
-						"storage": "base64",
-						"webcam": false,
+						"storage": "url",
+						"webcam": true,
 						"fileTypes": [{
 							"label": "",
 							"value": ""
@@ -4823,7 +5314,8 @@
 						"type": "file",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"url": "/file/attachment"
 					}, {
 						"label": "verified",
 						"calculateServer": false,
@@ -6052,7 +6544,7 @@
 			"delegate": "RateCard"
 		}
 	}, {
-		"title": "Quote & Approval",
+		"title": "Quote Information",
 		"theme": "primary",
 		"collapsible": false,
 		"tableView": false,
@@ -9209,11 +9701,20 @@
 			"type": "hidden",
 			"lockKey": true
 		}, {
-			"key": "page5Panel4",
-			"input": false,
-			"title": "Quote Information",
+			"title": "Quote Requirements",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "page5Panel4",
+			"type": "panel",
+			"label": "Quote Information",
+			"input": false,
 			"components": [{
 				"label": "Columns",
 				"input": false,
@@ -9307,19 +9808,19 @@
 						"tableView": false,
 						"values": [{
 							"label": "Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX",
-							"value": "marineSurveyCompletedWithinThePast12MonthsVesselsFive5YearsOrOlderAreRequiredToProvideCurrentConditionAndValuationSurveyWithConfirmationThatAllRecommendationsAreCompletedXxx",
+							"value": "Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX",
 							"shortcut": ""
 						}, {
 							"value": "Completed Boat Insurance Renewal Questionnaire.",
 							"label": "Completed Boat Insurance Renewal Questionnaire.",
 							"shortcut": ""
 						}, {
-							"value": "In Water coverage supplemental application – ONLY if purchasing in water coverage for passengers or crew.",
-							"label": "In Water coverage supplemental application – ONLY if purchasing in water coverage for passengers or crew.",
+							"value": "In Water coverage supplemental application - ONLY if purchasing in water coverage for passengers or crew.",
+							"label": "In Water coverage supplemental application - ONLY if purchasing in water coverage for passengers or crew.",
 							"shortcut": ""
 						}, {
-							"value": "Copy of Captain’s License (front & back) for XXX",
-							"label": "Copy of Captain’s License (front & back) for XXX",
+							"value": "Copy of Captain's License (front & back) for XXX",
+							"label": "Copy of Captain's License (front & back) for XXX",
 							"shortcut": ""
 						}, {
 							"value": "Hurricane Questionnaire.",
@@ -9348,25 +9849,14 @@
 						}],
 						"calculateServer": false,
 						"validate": {
-							"customMessage": "Please select any one of the option"
+							"customMessage": "Please select any one of the option",
+							"minSelectedCount": 1
 						},
 						"key": "quoteInfo",
 						"type": "selectboxes",
 						"input": true,
 						"inputType": "checkbox",
-						"hideOnChildrenHidden": false,
-						"defaultValue": {
-							"marineSurveyCompletedWithinThePast12MonthsVesselsFive5YearsOrOlderAreRequiredToProvideCurrentConditionAndValuationSurveyWithConfirmationThatAllRecommendationsAreCompletedXxx": false,
-							"Completed Boat Insurance Renewal Questionnaire.": false,
-							"In Water coverage supplemental application – ONLY if purchasing in water coverage for passengers or crew.": false,
-							"Copy of Captain’s License (front & back) for XXX": false,
-							"Hurricane Questionnaire.": false,
-							"Signed Crew Exclusions.": false,
-							"Signed Finance Agreement with down payment if not paying in full.": false,
-							"Certificate of Inspection.": false,
-							"Signed Proposal": false,
-							"Other": false
-						}
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -9416,7 +9906,7 @@
 						"conditional": {
 							"show": true,
 							"when": "quoteInfo",
-							"eq": "Copy of Captain’s License (front & back) for XXX"
+							"eq": "Copy of Captain's License (front & back) for XXX"
 						},
 						"type": "textfield",
 						"input": true,
@@ -9487,8 +9977,8 @@
 					"label": "Upload",
 					"hideLabel": true,
 					"tableView": false,
-					"storage": "base64",
-					"webcam": false,
+					"storage": "url",
+					"webcam": true,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
@@ -9500,7 +9990,8 @@
 					},
 					"key": "csrApprovalAttachments",
 					"type": "file",
-					"input": true
+					"input": true,
+					"url": "/file/attachment"
 				}, {
 					"type": "documentviewer",
 					"key": "csrApprovalAttachments1",
@@ -9520,71 +10011,7 @@
 					"persistent": false,
 					"keyModified": true
 				}]
-			}, {
-				"key": "page5Panel2",
-				"input": false,
-				"title": "Approval",
-				"theme": "primary",
-				"tableView": false,
-				"components": [{
-					"clearOnHide": false,
-					"key": "page5Panel2Well",
-					"input": false,
-					"components": [{
-						"label": "Approve/Reject",
-						"optionsLabelPosition": "right",
-						"inline": true,
-						"hideLabel": true,
-						"tableView": false,
-						"values": [{
-							"value": "accepted",
-							"label": "Approved",
-							"shortcut": ""
-						}, {
-							"value": "rejected",
-							"label": "Rejected",
-							"shortcut": ""
-						}],
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "csrApproved",
-						"type": "radio",
-						"input": true,
-						"lockKey": true
-					}, {
-						"label": "Rejection Reason",
-						"autoExpand": false,
-						"spellcheck": true,
-						"tableView": true,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"validate": {
-							"required": true
-						},
-						"key": "rejectionReason",
-						"conditional": {
-							"show": true,
-							"when": "csrApproved",
-							"eq": "false"
-						},
-						"type": "textarea",
-						"input": true,
-						"lockKey": true
-					}],
-					"tableView": false,
-					"type": "well",
-					"hideLabel": true,
-					"label": ""
-				}],
-				"type": "panel",
-				"lockKey": true,
-				"label": "Panel"
 			}],
-			"type": "panel",
-			"label": "Panel",
 			"path": "page5Panel4"
 		}],
 		"path": "page5Panel",
@@ -9598,10 +10025,87 @@
 		"tableView": false,
 		"key": "submit",
 		"type": "button"
+	}, {
+		"title": "Approval",
+		"label": "Approval",
+		"type": "panel",
+		"key": "page5Panel2",
+		"components": [{
+			"title": "Approve/Reject the Application",
+			"theme": "primary",
+			"breadcrumbClickable": false,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "page77Panel",
+			"type": "panel",
+			"label": "Approve/Reject the Application",
+			"input": false,
+			"components": [{
+				"label": "Approve/Reject",
+				"optionsLabelPosition": "right",
+				"inline": true,
+				"hideLabel": true,
+				"tableView": true,
+				"values": [{
+					"value": "accepted",
+					"label": "Approved",
+					"shortcut": ""
+				}, {
+					"value": "rejected",
+					"label": "Rejected",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"validate": {
+					"required": true
+				},
+				"key": "csrApproved",
+				"type": "radio",
+				"input": true,
+				"lockKey": true
+			}],
+			"path": "page77Panel"
+		}, {
+			"label": "Rejection Reason",
+			"autoExpand": false,
+			"spellcheck": true,
+			"tableView": true,
+			"inputFormat": "plain",
+			"clearOnHide": false,
+			"validate": {
+				"required": true
+			},
+			"key": "rejectionReason",
+			"conditional": {
+				"show": true,
+				"when": "csrApproved",
+				"eq": "rejected"
+			},
+			"type": "textarea",
+			"input": true,
+			"lockKey": true
+		}],
+		"input": false,
+		"tableView": false,
+		"theme": "primary",
+		"lockKey": true,
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 219,
+	"_vid": 225,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9611,14 +10115,14 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveBoat\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveBoat\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
 		"post_delegate_refresh": "excess_liability_coverage,groupCoverageSelect,groupExcessLiabilitySelect,quoteRequirement"
 	},
 	"name": "endorsementDiveBoatConsolidation",
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-05-28T06:10:33.779Z",
+	"modified": "2020-05-30T22:31:42.866Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

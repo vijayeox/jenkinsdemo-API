@@ -1210,15 +1210,16 @@
 				"tableView": true,
 				"lockKey": true
 			}, {
-				"input": true,
-				"tableView": true,
-				"key": "end_date",
 				"label": "end_date",
-				"type": "hidden",
+				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
+				"calculateServer": false,
+				"key": "end_date",
 				"properties": {
 					"data_type": "Date"
 				},
-				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
+				"type": "hidden",
+				"input": true,
+				"tableView": true,
 				"lockKey": true
 			}],
 			"path": "panel1"
@@ -1572,14 +1573,6 @@
 			}],
 			"path": "techrecPanel"
 		}, {
-			"label": "documentFields",
-			"calculateValue": "value = [\"attachments1\"];",
-			"calculateServer": false,
-			"key": "documentFieldnames",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
-		}, {
 			"title": "Attachments",
 			"theme": "primary",
 			"breadcrumbClickable": true,
@@ -1599,7 +1592,7 @@
 				"label": "Attachments",
 				"hideLabel": true,
 				"tableView": true,
-				"storage": "base64",
+				"storage": "url",
 				"webcam": true,
 				"fileTypes": [{
 					"label": "",
@@ -1616,18 +1609,10 @@
 				"errorLabel": "Addtional Attachments",
 				"key": "attachments",
 				"type": "file",
+				"url": "/file/attachment",
 				"input": true
 			}],
 			"path": "page3PanelPanel"
-		}, {
-			"label": "attachmentFields",
-			"customDefaultValue": "value = [\"attachments\"];",
-			"calculateValue": "value = [\"attachments\", \"chequeConsentFile\"];",
-			"calculateServer": false,
-			"key": "attachmentsFieldnames",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
 		}, {
 			"title": "Attachments",
 			"theme": "primary",
@@ -1648,7 +1633,7 @@
 				"label": "Attachments",
 				"hideLabel": true,
 				"tableView": true,
-				"storage": "base64",
+				"storage": "url",
 				"webcam": true,
 				"fileTypes": [{
 					"label": "",
@@ -1664,16 +1649,8 @@
 				},
 				"key": "csr_attachments",
 				"type": "file",
+				"url": "/file/attachment",
 				"input": true
-			}, {
-				"label": "csrAttachmentsFieldnames",
-				"customDefaultValue": "value = [\"csr_attachments\"];",
-				"calculateValue": "value = [\"csr_attachments\"];",
-				"calculateServer": false,
-				"key": "csrAttachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}],
 			"path": "CsrAttachments"
 		}, {
@@ -2820,7 +2797,7 @@
 						}, {
 							"label": "Upload Consent Form",
 							"tableView": false,
-							"storage": "base64",
+							"storage": "url",
 							"webcam": false,
 							"fileTypes": [{
 								"label": "",
@@ -2830,7 +2807,8 @@
 							"calculateServer": false,
 							"key": "chequeConsentFile",
 							"type": "file",
-							"input": true
+							"input": true,
+							"url": "/file/attachment"
 						}],
 						"hideOnChildrenHidden": false
 					}, {
@@ -3083,7 +3061,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 499,
+	"_vid": 501,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3160,14 +3138,14 @@
 		"clickable": "false",
 		"showNext": "true",
 		"showPrevious": "true",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]"
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
 	},
 	"name": "emergencyFirstResponseProfessionalLiability",
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-28T05:58:12.609Z",
+	"modified": "2020-05-30T22:06:43.309Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

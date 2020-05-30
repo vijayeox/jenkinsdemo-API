@@ -141,12 +141,28 @@
 			"defaultValue": "Individual Professional Liability",
 			"lockKey": true
 		}, {
+			"label": "start_date",
+			"calculateServer": false,
+			"key": "start_date",
+			"properties": {
+				"data_type": "Date"
+			},
+			"type": "hidden",
 			"input": true,
 			"tableView": true,
-			"key": "start_date",
-			"label": "start_date",
-			"type": "hidden",
 			"lockKey": true
+		}, {
+			"label": "end_date",
+			"calculateServer": false,
+			"key": "end_date",
+			"properties": {
+				"data_type": "Date"
+			},
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
 		}, {
 			"label": "update_date",
 			"key": "update_date",
@@ -2079,8 +2095,12 @@
 					"label": "Proof of Technical Certification",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
@@ -2093,6 +2113,7 @@
 					"errorLabel": "Proof of Technical Certification",
 					"key": "endor_techRec_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel1"
@@ -2129,7 +2150,7 @@
 					"label": "Cylinder Inspector Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2148,6 +2169,7 @@
 					"errorLabel": "Proof of your Cylinder Inspector",
 					"key": "endor_cylinderInspector_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel3"
@@ -2184,7 +2206,7 @@
 					"label": "Cylinder Instructor Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2203,6 +2225,7 @@
 					"errorLabel": "Cylinder Instructor Attachments",
 					"key": "endor_cylinderInstructor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel4"
@@ -2239,7 +2262,7 @@
 					"label": "ScubaFit Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2258,18 +2281,10 @@
 					"errorLabel": "ScubaFit Certification",
 					"key": "endor_scubaFit_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel5"
-			}, {
-				"label": "attachmentFields",
-				"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
-				"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\",\"endor_attachments\" ,\"chequeConsentFile\",\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\"];",
-				"calculateServer": false,
-				"key": "endorAttachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2290,7 +2305,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2306,17 +2321,10 @@
 					},
 					"key": "endor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel2"
-			}, {
-				"label": "csrEndorAttachmentsFieldnames",
-				"calculateValue": "value = [\"csr_attachments\"];",
-				"calculateServer": false,
-				"key": "csrEndorAttachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2337,7 +2345,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2354,6 +2362,7 @@
 					},
 					"key": "csr_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "attachmentsCsrEndor"
@@ -2963,7 +2972,7 @@
 					}, {
 						"label": "Upload Consent Form",
 						"tableView": false,
-						"storage": "base64",
+						"storage": "url",
 						"webcam": false,
 						"fileTypes": [{
 							"label": "",
@@ -2973,6 +2982,7 @@
 						"calculateServer": false,
 						"key": "chequeConsentFile",
 						"type": "file",
+						"url": "/file/attachment",
 						"input": true
 					}],
 					"hideOnChildrenHidden": false
@@ -3109,7 +3119,7 @@
 			"cancel": true,
 			"next": true
 		},
-		"customConditional": "show = false;\nif((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ) && (data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0)){\n\tshow =true;\n}"
+		"customConditional": "show = false;\nif((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ) && (data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0)){\n\tshow =true;\n}\n if (data.privileges) {\n    show =\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]\n        ? true\n        : false;\n  }"
 	}, {
 		"title": "Approval",
 		"theme": "primary",
@@ -3208,7 +3218,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 212,
+	"_vid": 217,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3219,14 +3229,16 @@
 	"settings": {},
 	"properties": {
 		"showNext": "true",
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"},{\"command\" : \"delegate\",\"delegate\":\"DocumentFetchDelegate\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"showPrevious": "false"
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
+		"showPrevious": "false",
+		"showCancel": "true",
+		"clickable": "false"
 	},
 	"name": "endorsementConsolidationIpl",
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-28T07:49:21.331Z",
+	"modified": "2020-05-30T22:01:40.176Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

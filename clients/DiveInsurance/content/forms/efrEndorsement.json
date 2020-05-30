@@ -101,17 +101,37 @@
 			"columns": [{
 				"components": [{
 					"label": "start_date",
+					"calculateServer": false,
 					"key": "start_date",
+					"properties": {
+						"data_type": "Date"
+					},
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "update_date",
+					"calculateServer": false,
 					"key": "update_date",
+					"properties": {
+						"data_type": "Date"
+					},
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "end_date",
+					"calculateServer": false,
+					"key": "end_date",
+					"properties": {
+						"data_type": "Date"
+					},
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "autoRenewalJob",
@@ -128,16 +148,6 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "attachmentFields",
-					"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
-					"calculateValue": "value = [\"attachments\" ,\"endor_attachments\" , \"chequeConsentFile\"];",
-					"calculateServer": false,
-					"key": "endorAttachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
 					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
@@ -177,15 +187,6 @@
 					"label": "liabilityCoverage5000000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "csrEndorAttachmentsFieldnames",
-					"calculateValue": "value = [\"csr_attachments\"];",
-					"calculateServer": false,
-					"key": "csrEndorAttachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
 					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
@@ -1335,7 +1336,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -1351,6 +1352,7 @@
 					},
 					"key": "endor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel2"
@@ -1374,7 +1376,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -1391,6 +1393,7 @@
 					},
 					"key": "csr_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "attachmentsCsrEndor"
@@ -1909,8 +1912,8 @@
 					}, {
 						"label": "Upload Consent Form",
 						"tableView": false,
-						"storage": "base64",
-						"webcam": false,
+						"storage": "url",
+						"webcam": true,
 						"fileTypes": [{
 							"label": "",
 							"value": ""
@@ -1919,7 +1922,8 @@
 						"calculateServer": false,
 						"key": "chequeConsentFile",
 						"type": "file",
-						"input": true
+						"input": true,
+						"url": "/file/attachment"
 					}],
 					"hideOnChildrenHidden": false
 				}, {
@@ -2121,7 +2125,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 157,
+	"_vid": 161,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2131,8 +2135,8 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
 		"showCancel": "true",
 		"clickable": "false",
 		"showNext": "true",
@@ -2142,7 +2146,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-28T10:22:09.328Z",
+	"modified": "2020-05-30T22:03:16.487Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

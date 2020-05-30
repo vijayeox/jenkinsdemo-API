@@ -2323,13 +2323,6 @@
 				"hideLabel": true,
 				"label": ""
 			}, {
-				"label": "documentFields",
-				"calculateValue": "value = [\"attachments1\" ,\"scubaFit_attachments1\" , \"cylinderInstructor_attachments1\" , \"cylinderInspector_attachments1\" , \"techRec_attachments1\"];",
-				"key": "documentFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}, {
 				"title": "User Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": false,
@@ -2469,7 +2462,7 @@
 					"label": "TecRec Attachments",
 					"hideLabel": true,
 					"tableView": false,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2488,7 +2481,8 @@
 					"errorLabel": "Technical Certification Documents",
 					"key": "TechRec_attachments",
 					"type": "file",
-					"input": true
+					"input": true,
+					"url": "/file/attachment"
 				}],
 				"path": "techRecAttachment"
 			}, {
@@ -2523,7 +2517,7 @@
 					"label": "Cylinder Inspector Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2542,6 +2536,7 @@
 					"errorLabel": "Cylinder Inspector Certification",
 					"key": "cylinderInspector_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "cylinderInspectorAttachments"
@@ -2577,7 +2572,7 @@
 					"label": "Cylinder Instructor Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2595,6 +2590,7 @@
 					},
 					"key": "cylinderInstructor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "cylinderInstructorAttachments"
@@ -2630,7 +2626,7 @@
 					"label": "ScubaFit Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2649,17 +2645,10 @@
 					"errorLabel": "Scuba Fit Certification Documents",
 					"key": "scubaFit_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "scubaFitAttachments"
-			}, {
-				"label": "attachmentFields",
-				"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\",\"chequeConsentFile\"];",
-				"calculateServer": false,
-				"key": "attachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2680,7 +2669,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2697,16 +2686,10 @@
 					"errorLabel": "Addtional Attachments",
 					"key": "attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "page3PanelPanel"
-			}, {
-				"label": "csrAttachmentsFieldnames",
-				"calculateValue": "value = [\"csr_attachments\"];",
-				"key": "csrAttachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2727,7 +2710,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2742,6 +2725,7 @@
 					},
 					"key": "csr_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "CsrAttachments"
@@ -4056,13 +4040,18 @@
 						}, {
 							"label": "Upload Consent Form",
 							"tableView": false,
-							"storage": "base64",
+							"storage": "url",
 							"webcam": false,
+							"fileTypes": [{
+								"label": "",
+								"value": ""
+							}],
 							"clearOnHide": false,
 							"calculateServer": false,
 							"key": "chequeConsentFile",
 							"type": "file",
-							"input": true
+							"input": true,
+							"url": "/file/attachment"
 						}],
 						"hideOnChildrenHidden": false
 					}, {
@@ -4181,7 +4170,7 @@
 			"next": true
 		},
 		"collapsible": false,
-		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  }\n} else {\n  if (data.privileges) {\n    show =\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]\n        ? false\n        : true;\n  }\n}"
+		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  }\n}\n  if (data.privileges) {\n    show =\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]\n        ? true\n        : false;\n  }"
 	}, {
 		"input": false,
 		"label": "Approval",
@@ -4318,7 +4307,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 317,
+	"_vid": 322,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4332,13 +4321,13 @@
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]"
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
 	},
 	"name": "csrInitiatesIpl",
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-28T05:36:31.697Z",
+	"modified": "2020-05-30T21:53:43.834Z",
 	"machineName": "testdivehub:csrInitiates"
 }

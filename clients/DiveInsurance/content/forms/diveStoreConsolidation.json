@@ -2261,7 +2261,7 @@
 			}, {
 				"label": "Upload Receipts",
 				"tableView": false,
-				"storage": "base64",
+				"storage": "url",
 				"webcam": false,
 				"fileTypes": [{
 					"label": "",
@@ -2276,7 +2276,8 @@
 				"key": "receipts",
 				"type": "file",
 				"input": true,
-				"lockKey": true
+				"lockKey": true,
+				"url": "/file/attachment"
 			}, {
 				"type": "documentviewer",
 				"key": "receipts1",
@@ -6229,7 +6230,7 @@
 								}, {
 									"label": "Upload Receipts",
 									"tableView": true,
-									"storage": "base64",
+									"storage": "url",
 									"webcam": false,
 									"fileTypes": [{
 										"label": "",
@@ -6244,7 +6245,8 @@
 									"key": "receiptsAL",
 									"type": "file",
 									"input": true,
-									"lockKey": true
+									"lockKey": true,
+									"url": "/file/attachment"
 								}, {
 									"type": "documentviewer",
 									"key": "receiptsAL1",
@@ -8468,7 +8470,7 @@
 						"label": "Document",
 						"hideLabel": true,
 						"tableView": true,
-						"storage": "base64",
+						"storage": "url",
 						"webcam": false,
 						"fileTypes": [{
 							"label": "",
@@ -8484,7 +8486,8 @@
 						"type": "file",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"url": "/file/attachment"
 					}, {
 						"label": "verified",
 						"calculateServer": false,
@@ -10840,7 +10843,7 @@
 				"label": "Upload",
 				"hideLabel": true,
 				"tableView": false,
-				"storage": "base64",
+				"storage": "url",
 				"webcam": false,
 				"fileTypes": [{
 					"label": "",
@@ -10854,7 +10857,8 @@
 				},
 				"key": "csrApprovalAttachments",
 				"type": "file",
-				"input": true
+				"input": true,
+				"url": "/file/attachment"
 			}]
 		}, {
 			"key": "page5Panel2",
@@ -10942,7 +10946,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 124,
+	"_vid": 125,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10952,13 +10956,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"}, {\"command\" : \"submitWorkflow\"}]"
+		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
 	},
 	"name": "diveStoreConsolidation",
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-05-28T06:19:30.499Z",
+	"modified": "2020-05-30T22:20:26.757Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
