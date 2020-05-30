@@ -35,10 +35,11 @@ class ProcessEndorsementAttachments extends AbstractAppDelegate
         }
         if(isset($data[$destAttach])){
             $destinationAttachment = $data[$destAttach];
-        }
-        if(!isset($destinationAttachment)){
+        } else {
+            $data[$destAttach] = array();
             $destinationAttachment = array();
-        }else if(is_string($destinationAttachment)){
+        }
+        if(is_string($destinationAttachment)){
             $destinationAttachment = json_decode($destinationAttachment,true);
         }
         if(is_array($attachment) && !empty($attachment)){
