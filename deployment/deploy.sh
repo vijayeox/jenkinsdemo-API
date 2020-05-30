@@ -433,8 +433,8 @@ insuranceoi()
         npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
-        cd /opt/oxzion/view/apps/InsuranceOI/
-        rm -rf /opt/oxzion/view/apps/InsuranceOI/node_modules
+        cd /opt/oxzion/view/apps/Insurance/
+        rm -rf /opt/oxzion/view/apps/Insurance/node_modules
         npm install --unsafe-perm
         npm run build
         chown oxzion:oxzion -R /opt/oxzion/view
