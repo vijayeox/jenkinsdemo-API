@@ -254,6 +254,7 @@ view()
         rm -Rf view/vfs
         unlink /opt/oxzion/view/vfs
         find -L /opt/oxzion/view/apps/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/apps/  \;
+        find -L /opt/oxzion/view/themes/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/themes/  \;
         rsync -rl --delete view/ /opt/oxzion/view/
         ln -nfs /var/lib/oxzion/vfs /opt/oxzion/view/vfs
         chown oxzion:oxzion -R /opt/oxzion/view/vfs
