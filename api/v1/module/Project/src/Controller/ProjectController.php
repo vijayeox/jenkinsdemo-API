@@ -288,4 +288,17 @@ class ProjectController extends AbstractApiController
         }
         return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
+
+    public function getSubprojectsAction()
+    {
+        $params = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . "-> \nGet Project - " . print_r($params, true) . "Parameters - " . print_r($params, true));
+        try {
+            $result = $this->projectService->getSubprojects($params);
+        } catch (Exception $e) {
+            $response = ['errors' => $e->getMessage()];
+            return $this->getErrorResponse($e->getMessage(), 404, $response);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
 }

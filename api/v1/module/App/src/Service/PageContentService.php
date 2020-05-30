@@ -75,8 +75,8 @@ class PageContentService extends AbstractService
                 if($value['type'] == 'List' || $value['type'] == 'Search'){
                     $value['content'] = json_encode($value['content']);
                 }
-                if($value['type'] == 'Form' && isset($value['formUuid'])){
-                    $value['form_id'] = $this->getIdFromUuid('ox_form', $value['formUuid']);
+                if($value['type'] == 'Form' && isset($value['form_id'])){
+                    $value['form_id'] = $this->getIdFromUuid('ox_form', $value['form_id']);
                 }
                 unset($value['id']);
                 if (!isset($value['id'])) {
@@ -193,13 +193,12 @@ class PageContentService extends AbstractService
             $resultSet= $this->executeQuerywithBindParameters($queryString,$selectQuery)->toArray();
             // $resultSet = new ResultSet();
             // $resultSet->initialize($result);
-            // // $resultSet = $resultSet->toArray();
-            // if (isset($resultSet[0])) {
-            //     $resultSet[0]["hello"]= "awdawd";
-            //     return $resultSet[0];
-            // } else {
-            //     return array();
-            // }
+            // $resultSet = $resultSet->toArray();
+            if (isset($resultSet[0])) {
+                return $resultSet[0];
+            } else {
+                return array();
+            }
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
             throw $e;

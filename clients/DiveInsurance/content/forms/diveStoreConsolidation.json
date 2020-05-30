@@ -193,6 +193,15 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "isRenewalFlow",
+						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
+						"calculateServer": false,
+						"key": "isRenewalFlow",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -267,7 +276,7 @@
 						"customClass": "alignCenter",
 						"tableView": false,
 						"key": "changePadi",
-						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n} else {\n    show = false;\n}",
+						"customConditional": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  console.log(\"PADI\");\n  show = false;\n}else if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = false;\n} else {\n    show = false;\n}",
 						"logic": [{
 							"name": "Event Handler",
 							"trigger": {
@@ -324,7 +333,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}",
+						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
@@ -339,7 +348,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "PadiNotFoundCSRMessage",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));",
+						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideOnChildrenHidden": false,
@@ -586,7 +595,7 @@
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
 				"calculateServer": false,
-				"key": "name1",
+				"key": "name",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -1212,51 +1221,18 @@
 						}, {
 							"components": [{
 								"label": "Work Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1313,52 +1289,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"spellcheck": false,
+								"mask": false,
+								"spellcheck": true,
 								"tableView": false,
-								"clearOnHide": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1511,6 +1455,9 @@
 						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\nvalue = moment(data.policyPeriod).format(\"YYYY-MM-DD\");\n}",
 						"calculateServer": false,
 						"key": "start_date",
+						"properties": {
+							"data_type": "Date"
+						},
 						"type": "hidden",
 						"input": true,
 						"tableView": true,
@@ -2314,7 +2261,7 @@
 			}, {
 				"label": "Upload Receipts",
 				"tableView": false,
-				"storage": "base64",
+				"storage": "url",
 				"webcam": false,
 				"fileTypes": [{
 					"label": "",
@@ -2329,7 +2276,8 @@
 				"key": "receipts",
 				"type": "file",
 				"input": true,
-				"lockKey": true
+				"lockKey": true,
+				"url": "/file/attachment"
 			}, {
 				"type": "documentviewer",
 				"key": "receipts1",
@@ -6282,7 +6230,7 @@
 								}, {
 									"label": "Upload Receipts",
 									"tableView": true,
-									"storage": "base64",
+									"storage": "url",
 									"webcam": false,
 									"fileTypes": [{
 										"label": "",
@@ -6297,7 +6245,8 @@
 									"key": "receiptsAL",
 									"type": "file",
 									"input": true,
-									"lockKey": true
+									"lockKey": true,
+									"url": "/file/attachment"
 								}, {
 									"type": "documentviewer",
 									"key": "receiptsAL1",
@@ -8521,7 +8470,7 @@
 						"label": "Document",
 						"hideLabel": true,
 						"tableView": true,
-						"storage": "base64",
+						"storage": "url",
 						"webcam": false,
 						"fileTypes": [{
 							"label": "",
@@ -8537,7 +8486,8 @@
 						"type": "file",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"url": "/file/attachment"
 					}, {
 						"label": "verified",
 						"calculateServer": false,
@@ -10893,7 +10843,7 @@
 				"label": "Upload",
 				"hideLabel": true,
 				"tableView": false,
-				"storage": "base64",
+				"storage": "url",
 				"webcam": false,
 				"fileTypes": [{
 					"label": "",
@@ -10907,7 +10857,8 @@
 				},
 				"key": "csrApprovalAttachments",
 				"type": "file",
-				"input": true
+				"input": true,
+				"url": "/file/attachment"
 			}]
 		}, {
 			"key": "page5Panel2",
@@ -10928,7 +10879,7 @@
 				"properties": {
 					"negate": "padiVerified"
 				},
-				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));",
+				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 				"type": "checkbox",
 				"input": true,
 				"hideOnChildrenHidden": false,
@@ -10995,7 +10946,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 117,
+	"_vid": 125,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11005,13 +10956,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"}, {\"command\" : \"submitWorkflow\"}]"
+		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
 	},
 	"name": "diveStoreConsolidation",
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-05-22T16:08:10.641Z",
+	"modified": "2020-05-30T22:20:26.757Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

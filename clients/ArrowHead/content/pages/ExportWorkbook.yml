@@ -1,0 +1,40 @@
+name: 'Export Workbooks'
+description: 'Allows agents to export workbooks'
+content:
+    -
+        type: List
+        content:
+            route: 'file'
+            filterable: true
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: 'View'
+                    rule: '''{{policyStatus}}'' == ''Completed'''
+                    icon: 'fa fa-envelope-open'
+                    details:
+                        -
+                            type: Document
+                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period : {moment(data.start_date).format(''MM-DD-YYYY'')} to {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+            toolbarTemplate: '<h5>List of completed workbooks</h5>'
+            columnConfig:
+                -
+                    title: Applicant Name
+                    field: applicant_name
+                -
+                    title: 'Policy Effective Date'
+                    field: effectiveDate
+                -
+                    title: 'Producer'
+                    field: producer_name

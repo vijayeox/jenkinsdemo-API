@@ -619,6 +619,14 @@
 			"type": "columns",
 			"input": false
 		}, {
+			"label": "name",
+			"calculateValue": "value = data.firstname + \" \"+ data.lastname",
+			"calculateServer": false,
+			"key": "name",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Legal Business Name",
 			"hidden": true,
 			"spellcheck": false,
@@ -1017,64 +1025,18 @@
 					}, {
 						"components": [{
 							"label": "Home or Work Phone",
-							"placeholder": " ",
+							"mask": false,
 							"spellcheck": true,
-							"tableView": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
 							"calculateServer": false,
 							"validate": {
-								"customMessage": "Please enter a valid Home or Work Phone number"
+								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 							},
 							"key": "home_phone_number",
-							"logic": [{
-								"name": "Change Field Name based on Store",
-								"trigger": {
-									"type": "simple",
-									"simple": {
-										"show": true,
-										"when": "product",
-										"eq": "Dive Store"
-									}
-								},
-								"actions": [{
-									"name": "Change Label",
-									"type": "property",
-									"property": {
-										"label": "Label",
-										"value": "label",
-										"type": "string"
-									},
-									"text": "Work Phone"
-								}, {
-									"name": "Change Error Label Based on Store",
-									"type": "mergeComponentSchema",
-									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid Work Phone number\""
-								}]
-							}, {
-								"name": "Set Label Name based on Product",
-								"trigger": {
-									"type": "javascript",
-									"simple": {
-										"show": true,
-										"when": "product"
-									},
-									"javascript": "if(data['product'] == 'Individual Professional Liability' || data['product'] == 'Emergency First Response'|| data['product'] == 'Dive Boat' ){\n  result = true;\n} else {\n  result = false;\n}"
-								},
-								"actions": [{
-									"name": "Change Label to Work or Home Phone",
-									"type": "property",
-									"property": {
-										"label": "Label",
-										"value": "label",
-										"type": "string"
-									},
-									"text": "Home or Work Phone"
-								}, {
-									"name": "Change Error Message to Work or Home phone",
-									"type": "mergeComponentSchema",
-									"schemaDefinition": "component.validate.customMessage = \"Please enter a valid Home or Work Phone number\""
-								}]
-							}],
-							"type": "textfield",
+							"type": "number",
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -1135,16 +1097,20 @@
 					}, {
 						"components": [{
 							"label": "Mobile Phone",
-							"placeholder": " ",
+							"mask": false,
 							"spellcheck": true,
-							"tableView": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
 							"calculateServer": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please enter a valid Mobile Phone number"
+								"customMessage": "Please enter a valid Mobile Phone number",
+								"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 							},
 							"key": "phone_number",
-							"type": "textfield",
+							"type": "number",
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -1227,7 +1193,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 90,
+	"_vid": 92,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1241,6 +1207,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-05-22T16:55:09.373Z",
+	"modified": "2020-05-28T05:53:27.845Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

@@ -157,187 +157,187 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 
 {if $state == 'Alaska'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/AK.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/AK.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Alabama'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/AL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/AL.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Arkansas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/AR.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/AR.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Arizona'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/AZ.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/AZ.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Colorado'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/CO.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/CO.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Connecticut'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/CT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/CT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'District of Columbia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/DC.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/DC.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Delaware'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/DE.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/DE.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Florida'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/FL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/FL.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Micronesia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/FM.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/FM.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Georgia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/GA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/GA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Hawaii'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/HI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/HI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Iowa'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/IA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/IA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Idaho'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/ID.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/ID.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Illinois'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/IL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/IL.tpl"}</b>
 				</p></center>
 			{elseif $state == 'International'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/International.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/International.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Kansas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/KS.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/KS.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Kentucky'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/KY.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/KY.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Louisiana'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/LA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/LA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Massachusetts'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Maryland'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MD.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MD.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Maine'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/ME.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/ME.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Marshall Islands'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MH.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MH.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Michigan'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Minnesota'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MN.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MN.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Missouri'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MO.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MO.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Mississippi'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MS.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MS.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Montana'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/MT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/MT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'North Carolina'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/NC.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/NC.tpl"}</b>
 				</p></center>
 			{elseif $state == 'North Dakota'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/ND.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/ND.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Nebraska'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/NE.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/NE.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New Hampshire'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/NH.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/NH.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New Jersey'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/NJ.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/NJ.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New Mexico'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/NM.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/NM.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Nevada'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/NV.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/NV.tpl"}</b>
 				</p></center>
 			{elseif $state == 'New York'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/NY.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/NY.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Ohio'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/OH.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/OH.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Oklahoma'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/OK.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/OK.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Oregon'}
 				<center><center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/OR.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/OR.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Pennsylvania'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/PA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/PA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Palau'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/PW.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/PW.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Rhode Island'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/RI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/RI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'South Carolina'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/SC.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/SC.tpl"}</b>
 				</p></center>
 			{elseif $state == 'South Dakota'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/SD.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/SD.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Tennessee'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/TN.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/TN.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Texas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/TX.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/TX.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
@@ -345,27 +345,27 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Virginia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/VA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/VT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Washington'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/WA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/WA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Wisconsin'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/WI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/WI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'West Virginias'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/WV.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/WV.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Wyoming'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/DiveStoreSurplus/WY.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/WY.tpl"}</b>
 				</p></center>
 			{/if}
 	</div>

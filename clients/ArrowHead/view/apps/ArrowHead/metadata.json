@@ -1,0 +1,15 @@
+{
+  "type": "application",
+  "name": "ArrowHead",
+  "appId": "da8f0152-b8d3-43bf-8090-40103bb98d5e",
+  "category": null,
+  "autostart": false,
+  "singleton": true,
+  "icon": "icon.png",
+  "icon_white": "icon_white.png",
+  "defaultAppforOrgs": false,
+  "server": "server.js",
+  "title": { "en_EN": "Auto Dealer" },
+  "description": { "en_EN": "App for Arrow Head" },
+  "files": ["main.js", "main.css"]
+}

@@ -774,14 +774,20 @@ return [
                     ],
                 ],
             ],
-            'doclist' => [
+            'attachmentUpload' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/b',
+                    'route' => '/app/:appId/file/attachment',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
-                        'controller' => Controller\DocumentController::class,
-                        'action' => 'convertdocument',
-                        'method' => 'GET',
+                        'controller' => Controller\FileAttachmentController::class,
+                        'method' => 'POST',
+                        'action' => 'addAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
                     ],
                 ],
             ],

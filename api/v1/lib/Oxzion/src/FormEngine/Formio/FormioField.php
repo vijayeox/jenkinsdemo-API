@@ -66,11 +66,7 @@ class FormioField
             $this->data['parent'] = $parent->toArray();
         }
         $this->data['type'] = isset($field['type']) ? $field['type'] : $field['inputType'];
-        if(isset($field['properties']) && count($field['properties'])){
-            if(isset($field['properties']['data_type'])){
-                $this->data['data_type'] = strtolower($field['properties']['data_type']);
-            }
-        }
+
         switch ($this->data['type']) {
             case 'day':
                 $props = $this->getDayProps($field);
@@ -119,6 +115,13 @@ class FormioField
                 }
                 break;
         }
+
+        if(isset($field['properties']) && count($field['properties'])){
+            if(isset($field['properties']['data_type'])){
+                $this->data['data_type'] = strtolower($field['properties']['data_type']);
+            }
+        }
+
         $this->data['template'] = json_encode($field);
         if (isset($field['data'])) {
             $this->data['options'] = json_encode($field['data']);
@@ -167,12 +170,20 @@ class FormioField
     }
     private function validateField($field, $fieldReference){
         if(isset($field['parent'])){
+            if(!isset($fieldReference[$field['parent']['name']])){
+                $this->error[] = "Field ".$field['name']." - Unexpected Parent Field '".$field['parent']['name']."'";
+                return;
+            }
             $parent = $fieldReference[$field['parent']['name']];
+            if(!isset($parent['FIELDS'][$field['name']])){
+                $this->error[] = "Field ".$field['name']." - Unexpected";
+                return;
+            }
             $fieldRef = $parent['FIELDS'][$field['name']];
         }else if(isset($fieldReference[$field['name']])) {
             $fieldRef = $fieldReference[$field['name']];
         }else{
-            $this->error[] = "Field ".$field['name']." Unexpected";
+            $this->error[] = "Field ".$field['name']." - Unexpected";
             return; 
         }
         $name = $field['name'];
@@ -230,6 +241,7 @@ class FormioField
                     continue;
                 }
                 $items = $fieldRef['ITEMS'];
+                $dataValues = null;
                 if($field['type'] == 'day'){
                     foreach ($items as $key => $value) {
                         foreach($value as $dayProp => $dayVal){
@@ -266,20 +278,31 @@ class FormioField
                 }
                 $itemFields = array_keys($items);
                 $options = array();
-
+                if(!$dataValues){
+                    $this->error[] = "Field $name - No/Invalid Options given Expected one of -".implode($itemFields, ',');
+                    continue;
+                }
                 foreach ($dataValues as $key => $value) {
+                    if(!isset($value['value']) || empty($value['value'])){
+                        $this->error[] = "Field $name - Empty option given expecting one of - ".implode($itemFields, ',');
+                        continue;
+                    }
+                    if(empty($items[$value['value']])){
+                        $this->error[] = "Field $name - Unexpected Option '".$value['value'];
+                        continue;       
+                    }
                     $this->validateFieldProperty($name, $items[$value['value']], $value, 'LABEL', 'label');
                     $options[] = $value['value'];
                 }
                 if(count($itemFields) > count($options)){
-                    $diff = array_diff($itemfields, $options);
+                    $diff = array_diff($itemFields, $options);
                     $missing = 1;
                 }else if(count($itemFields) < count($options)){
-                    $diff = array_diff($options, $itemfields);
+                    $diff = array_diff($options, $itemFields);
                     $missing = 0;
                 }
                 if(isset($diff)){
-                    foreach ($$diff as $value) {
+                    foreach ($diff as $value) {
                         $this->error[] = $missing == 1 ? "Field $name - expected option $value is missing" : "Field $name - unexpected option" ;
                     }
                 }

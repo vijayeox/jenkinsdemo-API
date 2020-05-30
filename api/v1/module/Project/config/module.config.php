@@ -37,6 +37,20 @@ return [
                     ],
                 ],
             ],
+            'getsubproject' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/project/:projectUuid/subproject',
+                    'defaults' => [
+                        'controller' => Controller\ProjectController::class,
+                        'method' => 'GET',
+                        'action' => 'getSubprojects',
+                        'access' => [
+                            'getSubprojects' => 'MANAGE_PROJECT_WRITE',
+                        ],
+                    ],
+                ],
+            ],
             'projectuser' => [
                 'type' => Segment::class,
                 'options' => [

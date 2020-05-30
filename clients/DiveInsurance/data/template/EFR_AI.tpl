@@ -44,9 +44,7 @@
           </div>
           <div>
             <hr />
-            <p class="p_margin">
-              Policy issued by Tokio Marine Specialty Insurance Company
-            </p>
+            <p class="p_margin"></p>
             <p class = "policy">Policy issued by &nbsp{$carrier}</p>
             <p class = "policy2">Policy #: {$policy_id}</p>
             <hr />
