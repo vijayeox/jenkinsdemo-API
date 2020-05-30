@@ -53,13 +53,12 @@ class ActivityService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
+            $this->rollback();
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
-                $this->rollback();
                 throw $e;
                 break;
              default:
-                $this->rollback();
                 throw $e;
                 break;
             }
@@ -89,13 +88,12 @@ class ActivityService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
+            $this->rollback();
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
-                $this->rollback();
                 throw $e;
                 break;
              default:
-                $this->rollback();
                 throw $e;
                 break;
             }
