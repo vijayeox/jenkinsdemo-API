@@ -242,23 +242,39 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['liabilityVal'] = $result[$data['liabilityCoverage']];
                         }
                     }
+
                     if(!empty($previous_data)) {
                         $policy =array();
-                        $upgrades = array();
-                        $policy =  $previous_data[$length - 1];
+                        $policy =  $previous_data[0];
                         if($data['product'] == "Individual Professional Liability"){
-                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCoverage','previous_careerCoverage','careerCoverage');
-                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousScubaFit','previous_scubaFit','scubaFit');
-                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousTecRec','previous_tecRecEndorsment','tecRecEndorsment');
-                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousCylinder','previous_cylinder','cylinder');
-                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousEquipment','previous_equipment','equipment');
-                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousExcess','previous_excessLiability','excessLiability');
+                            $upgrade = array();
+
+                            if(is_string($data['previous_policy_data'])){
+                                $data['previous_policy_data'] = json_decode($data['previous_policy_data'],true);
+                            }
+
+                            if($policy['prevSingleLimit'] != $data['single_limit']){
+                                $upgrade = array("upgraded_single_limit" => $data['single_limit'],"upgraded_annual_aggregate" => $data['annual_aggregate']);
+                                $data['previous_policy_data'][0] = array_merge($data['previous_policy_data'][0],$upgrade);
+                            }
+                            $this->processUpgradeCoverages($data,$temp,$policy,$result,'previous_careerCoverage','careerCoverageName','careerCoverage',array());
+
+                            $this->processUpgradeCoverages($data,$temp,$policy,$result,'previous_scubaFit','scubaCoverageName','scubaFit',array());
+
+                            $this->processUpgradeCoverages($data,$temp,$policy,$result,'previous_cylinder','cylinderCoverageName','cylinder',array());
+
+                            $this->processUpgradeCoverages($data,$temp,$policy,$result,'previous_equipment','equipmentCoverageName','equipment',array());
+
+                            $this->processUpgradeCoverages($data,$temp,$policy,$result,'previous_tecRecEndorsment','tecRecCoverageName','tecRecEndorsment',array());
                         }
                         if($data['product'] == "Emergency First Response"){
-                            $this->setPreviousCoverages($data,$temp,$policy,$upgrades,$result,'previousLiabilityCoverage','previous_excessLiability','liabilityCoverage');
+                            $this->processUpgradeCoverages($data,$temp,$policy,$result,'previousLiabilityCoverage','previous_excessLiability','liabilityCoverage');
                         }
                     }
                 }
+
+
+
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
@@ -672,19 +688,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             return $data;
         }
 
-        protected function setPreviousCoverages(&$data,&$temp,&$policy,&$upgrades,$coverages,$previousCoverageKeyStore,$previousCoverageKey,$coverageName){
-            if(isset($data[$previousCoverageKeyStore])){
-                $data[$previousCoverageKeyStore] = is_array($data[$previousCoverageKeyStore]) ? $data[$previousCoverageKeyStore] : json_decode($data[$previousCoverageKeyStore],true);
-            }else{  
-                $data[$previousCoverageKeyStore] = array();
-            }
-            if($policy[$previousCoverageKey] != $data[$coverageName]){
-                $upgrades = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),$coverageName => $coverages[$data[$coverageName]]);
-                array_push($data[$previousCoverageKeyStore], $upgrades);
-            }
-            $temp[$previousCoverageKeyStore] = json_encode($data[$previousCoverageKeyStore]);
-        }
-
         protected function setPolicyInfo(&$data,$persistenceService,$endorsementOptions = null)
         {
                 if($this->type != "quote" && $this->type != "lapse" && $this->type != 'endorsementQuote'){
@@ -1082,5 +1085,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
     }
+
+     private function processUpgradeCoverages(&$data,&$temp,$policy,$coverages,$prevCoverage,$coverageNameLabel,$coverageName,$upgrade){
+        if($policy[$prevCoverage] != $data[$coverageName]){
+            $upgrade = array($coverageNameLabel => $coverages[$data[$coverageName]]);
+            $data['previous_policy_data'][0] = array_merge($data['previous_policy_data'][0],$upgrade);
+        }
+        $temp['previous_policy_data'] = json_encode($data['previous_policy_data']);
+     }
+
     
 }

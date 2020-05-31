@@ -120,14 +120,6 @@
 			"defaultValue": "Individual Professional Liability",
 			"lockKey": true
 		}, {
-			"label": "previousPolicyLength",
-			"calculateValue": "if(data['previous_policy_data']){\n  value = data['previous_policy_data'].length - 1;\n}",
-			"calculateServer": false,
-			"key": "previousPolicyLength",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
-		}, {
 			"input": true,
 			"tableView": true,
 			"key": "start_date",
@@ -1695,6 +1687,28 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
+							}, {
+								"label": "single_limit",
+								"defaultValue": "$1,000,000",
+								"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
+								"calculateServer": false,
+								"key": "single_limit",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "annual_aggregate",
+								"defaultValue": "$2,000,000",
+								"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+								"calculateServer": false,
+								"key": "annual_aggregate",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -3141,7 +3155,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 165,
+	"_vid": 168,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3160,6 +3174,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-22T22:42:11.096Z",
+	"modified": "2020-05-26T07:09:21.823Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

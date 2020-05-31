@@ -198,7 +198,7 @@ class SetupEndorsement extends AbstractAppDelegate
                     unset($rate);
                 }
             }
-            array_push($data['previous_policy_data'],$policy);
+            array_unshift($data['previous_policy_data'],$policy);
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
             if(isset($data['paymentOptions'])){
                 $data['paymentOptions'] = "";
