@@ -395,7 +395,6 @@ class FileService extends AbstractService
                 $keyValueFields[$i]['field_id'] = $field['id'];
                 $keyValueFields[$i]['file_id'] = $fileId;
                 $keyValueFields[$i]['field_value']=$fieldvalue;
-                $keyValueFields['data'][$field['name']] = $fieldvalue;
                 if(isset($field['data_type'])){
                     switch ($field['data_type']) {
                         case 'text':
@@ -404,6 +403,7 @@ class FileService extends AbstractService
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields['data'][$field['name']] = $fieldvalue;
                             break;
                         case 'numeric':
                             $keyValueFields[$i]['field_value_type'] = 'NUMERIC';
@@ -414,12 +414,15 @@ class FileService extends AbstractService
                             $keyValueFields[$i]['field_value_date'] = NULL;
                             break;
                         case 'boolean':
+                            if(isset($boolVal)){
+                                unset($boolVal);
+                            }
                             $boolVal = false;
                             if($fieldvalue == true || $fieldvalue == "true") {
                                 $boolVal = true;
                                 $fieldvalue = 1;
                             }
-                            if($fieldvalue == false || $fieldvalue == "false") {
+                            if($fieldvalue == false || $fieldvalue == "false"|| $fieldvalue == null || empty($fieldvalue)) {
                                 $boolVal = false;
                                 $fieldvalue = 0;
                             }
@@ -463,6 +466,7 @@ class FileService extends AbstractService
                                 $keyValueFields[$i]['field_value_numeric'] = NULL;
                                 $keyValueFields[$i]['field_value_boolean'] = NULL;
                                 $keyValueFields[$i]['field_value_date'] = NULL;
+                                $keyValueFields['data'][$field['name']] = $fieldvalue;
                                 break;
                             }
                         default:
@@ -471,9 +475,11 @@ class FileService extends AbstractService
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = NULL;
                             $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields['data'][$field['name']] = $fieldvalue;
                             break;
                     }
                 }
+                unset($fieldvalue);
                 $i++;
             }
         }
