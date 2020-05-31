@@ -3119,7 +3119,7 @@
 			"cancel": true,
 			"next": true
 		},
-		"customConditional": "show = false;\nif((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ) && (data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0)){\n\tshow =true;\n}\n if (data.privileges) {\n    show =\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]\n        ? true\n        : false;\n  }"
+		"customConditional": "show = false;\nif((data['endorsement_options'].modify_coverage === 'true' || data['endorsement_options'].modify_coverage === true ) && (data['endorsementTotal'] != 'undefined' && data['endorsementTotal'] > 0)){\n\tshow =true;\n}"
 	}, {
 		"title": "Approval",
 		"theme": "primary",
@@ -3218,7 +3218,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 217,
+	"_vid": 218,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3239,6 +3239,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-30T22:01:40.176Z",
+	"modified": "2020-05-31T12:46:37.085Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

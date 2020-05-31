@@ -4170,7 +4170,7 @@
 			"next": true
 		},
 		"collapsible": false,
-		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  }\n}\n  if (data.privileges) {\n    show =\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]\n        ? true\n        : false;\n  }"
+		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}"
 	}, {
 		"input": false,
 		"label": "Approval",
@@ -4307,7 +4307,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 322,
+	"_vid": 323,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4328,6 +4328,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-30T21:53:43.834Z",
+	"modified": "2020-05-31T12:44:14.958Z",
 	"machineName": "testdivehub:csrInitiates"
 }
