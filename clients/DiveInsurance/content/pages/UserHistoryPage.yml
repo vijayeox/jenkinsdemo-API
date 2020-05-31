@@ -16,6 +16,19 @@ content:
                     - 20
                     - 50
                 info: true
+            actions:
+                -
+                    name: 'View Policy'
+                    rule: '''{{policyStatus}}'' != ''In Force'''
+                    icon: 'fa fa-envelope-open'
+                    details:
+                        -
+                            type: Document
+                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period : {moment(data.start_date).format(''MM-DD-YYYY'')} to {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
             columnConfig:
                 -
                     title: PADI
