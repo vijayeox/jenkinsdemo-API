@@ -222,7 +222,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Padi Number is not Valid!"
+							"customMessage": "Padi Number is required"
 						},
 						"key": "padi",
 						"logic": [{
@@ -260,6 +260,23 @@
 							"commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
 						},
 						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = false;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = false;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = false;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = false;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = true;\n} else {\n    show = true;\n}",
+						"logic": [{
+							"name": "disable button",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "result = (!data.padi || data.padi === '') ? true : false;"
+							},
+							"actions": [{
+								"name": "disable field",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
 						"overlay": {
 							"style": "text-align:center"
 						},
@@ -368,25 +385,6 @@
 						"input": false,
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
-					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "style",
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
-						}],
-						"content": "PADI Number cannot be blank",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "html",
-						"conditional": {
-							"show": true,
-							"when": "padi_empty",
-							"eq": "true"
-						},
-						"type": "htmlelement",
-						"input": false,
-						"hideOnChildrenHidden": false,
-						"hideLabel": true
 					}],
 					"width": 4,
 					"offset": 0,
@@ -10946,7 +10944,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 125,
+	"_vid": 128,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10963,6 +10961,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-05-30T22:20:26.757Z",
+	"modified": "2020-06-01T05:01:01.174Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

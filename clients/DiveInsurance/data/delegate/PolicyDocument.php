@@ -322,7 +322,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
 
                 if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
-                    if(isset($temp['additionalInsured']) && $temp['additional_insured_select'] == 'newListOfAdditionalInsureds'){
+                    if(isset($temp['additionalInsured']) && $temp['additional_insured_select'] == 'addAdditionalInsureds'){
                     $this->logger->info("DOCUMENT additionalInsured");
                     $temp['additionalInsured'] = json_decode($temp['additionalInsured'],true);
                     for($i = 0;$i< sizeof($temp['additionalInsured']);$i++){
@@ -360,16 +360,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                          $documents['water_acknowledgement'] = $this->copyDocuments($temp,$dest['relativePath'],'waterAcknowledgement');
                     }
 
-                    if(isset($data['quoteRequirement'])){
-                        if(is_string($data['quoteRequirement'])){
-                            $data['quoteRequirement'] = json_decode($data['quoteRequirement'],true);
-                        } 
-                        for($i = 0;$i < sizeof($data['quoteRequirement']);$i++){
-                            if($data['quoteRequirement'][$i]['quoteInfo'] == 'Hurricane Questionnaire.'){
+                    if(isset($data['quoteInfo'])){
+                        if(is_string($data['quoteInfo'])){
+                            $quoteInfo = json_decode($data['quoteRequirement'],true);
+                        } else{
+                            $quoteInfo = $data['quoteInfo'];
+                        }
+                        for($i = 0;$i < sizeof($quoteInfo);$i++){
+                            if($quoteInfo['Hurricane Questionnaire.']){
                                 $documents['hurricane_questionnaire'] = $this->copyDocuments($temp,$dest['relativePath'],'hurricaneQuestionnaire');
                             }
                         }
-                        $data['quoteRequirement'] = json_encode($data['quoteRequirement']);
                     }
                 }
 

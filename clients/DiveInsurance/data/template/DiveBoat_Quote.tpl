@@ -50,7 +50,7 @@
    {else}
    CERTIFICATE DOES NOT HAVE LOSS PAYEES.
  {/if}</p>
- <p class ="title_value">{if $additional_insured_select == 'newListOfAdditionalInsureds'}
+ <p class ="title_value">{if $additional_insured_select == 'addAdditionalInsureds'}
    CERTIFICATE HAS ADDITIONAL INSURED (SEE ATTACHED).
    {else}
    CERTIFICATE DOES NOT HAVE ADDITIONAL INSURED.

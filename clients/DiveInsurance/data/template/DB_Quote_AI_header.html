@@ -13,7 +13,7 @@
       for (var query_string in query_strings_from_url) {
           if (query_strings_from_url.hasOwnProperty(query_string)) {
               var temp_var = query_strings_from_url[query_string].split('=', 2);
-              vars[temp_var[0]] = decodeURI(temp_var[1]);
+              vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
@@ -32,6 +32,7 @@
 </head>
 <body onload="subst()" id = "doc_body">  
  <div>
+  <div id = 'test'></div>
             <hr class="line1"></hr>
           <div class="spacer"></div>
           <hr class="line2"></hr>
