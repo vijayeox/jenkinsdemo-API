@@ -462,10 +462,10 @@ class ProjectService extends AbstractService
 
     public function getSubprojects($params)
     {
-        try{
+        try {
             if (isset($params['projectUuid'])) {
                 $id = $this->getIdFromUuid('ox_project',$params['projectUuid']);
-                $queryString = "select name,description,uuid,date_created from ox_project where parent_id =".$id;
+                $queryString = "select oxp.name,oxp.description,oxp.uuid,oxp.date_created,ou.uuid as manager_id,sub.uuid as parent_id from ox_project as oxp INNER JOIN ox_user as ou on oxp.manager_id = ou.id INNER JOIN ox_project as sub on sub.id = oxp.parent_id where oxp.parent_id =".$id;
                 $resultSet = $this->executeQuerywithParams($queryString);
                 return $resultSet->toArray();
             }
