@@ -1075,7 +1075,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
+						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data[data['liabilityCoverage']]) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
 						"calculateServer": false,
 						"key": "excessLiabilityPricePayable",
 						"customConditional": "show = false;",
@@ -2125,7 +2125,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 161,
+	"_vid": 162,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2146,7 +2146,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-30T22:03:16.487Z",
+	"modified": "2020-06-01T09:22:47.955Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
