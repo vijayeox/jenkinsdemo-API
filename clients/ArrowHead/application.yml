@@ -65,23 +65,17 @@ pages:
 menu:
     -
         name: Home
-        icon: 'fa fa-home'
+        icon: 'fas fa-home'
         page_uuid: dce7df02-7a3b-4468-bed8-edffd8216822
         uuid: 2ba0936d-94d1-4b68-9da2-ccc60faaefe0
         privilege: MANAGE_POLICY_APPLICATION_READ
     -
         name: 'Export Workbooks'
-        icon: 'fa fa-book'
+        icon: 'fad fa-book'
         page_uuid: 219b3a85-7901-4360-9a73-09ed6a659a1d
         uuid: 6d768db0-6e99-4480-819f-8f3522b99b5d
         privilege: MANAGE_APPLICATION_EXPORT_READ
 form:
-    -
-        name: 'General Information'
-        uuid: a8f015fa-2dcb-4806-8ec0-ca5847c1c471
-        description: 'Page General Info'
-        template_file: generalInformation.json
-        entity: Workbook
     -
         name: 'Consolidated Form'
         uuid: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7

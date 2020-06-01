@@ -16,13 +16,14 @@ content:
                 info: true
             actions:
                 -
-                    name: 'View'
-                    rule: '''{{policyStatus}}'' == ''Completed'''
-                    icon: 'fa fa-envelope-open'
+                    name: 'Export'
+                    rule: 'true'
+                    icon: 'far fa-file-download'
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period : {moment(data.start_date).format(''MM-DD-YYYY'')} to {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            content: '<h4>Producer Name: {data.producername} </h4>
+                                    <p> Producer Date : {moment(data.producerdate).format("MM-DD-YYYY")}</p>'
                             useRowData: true
                         -
                             type: DocumentViewer
@@ -30,11 +31,20 @@ content:
             toolbarTemplate: '<h5>List of completed workbooks</h5>'
             columnConfig:
                 -
-                    title: Applicant Name
-                    field: applicant_name
-                -
-                    title: 'Policy Effective Date'
-                    field: effectiveDate
+                    title: Insured
+                    field: namedInsured
                 -
                     title: 'Producer'
-                    field: producer_name
+                    field: producername
+                -
+                    title: 'Effective Date'
+                    field: effectiveDate
+                    cell: '<td>{moment(item.effectiveDate).format("MM-DD-YYYY")}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: 'Producer Date'
+                    field: producerdate
+                    cell: '<td>{moment(item.producerdate).format("MM-DD-YYYY")}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
