@@ -23,7 +23,7 @@ content:
                         -
                             type: Document
                             content: '<h4>Producer Name: {data.producername} </h4>
-                                    <p> Producer Date : {moment(data.producerdate).format("MM-DD-YYYY")}</p>'
+                                    <p> Producer Date : {moment(data.producerdate).format("MMMM Do YYYY")}</p>'
                             useRowData: true
                         -
                             type: DocumentViewer
@@ -39,12 +39,12 @@ content:
                 -
                     title: 'Effective Date'
                     field: effectiveDate
-                    cell: '<td>{moment(item.effectiveDate).format("MM-DD-YYYY")}</td>'
+                    cell: '<td>{moment(item.effectiveDate).format("MMMM Do YYYY")}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD
                 -
                     title: 'Producer Date'
                     field: producerdate
-                    cell: '<td>{moment(item.producerdate).format("MM-DD-YYYY")}</td>'
+                    cell: '<td>{moment(item.producerdate).format("MMMM Do YYYY")}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD

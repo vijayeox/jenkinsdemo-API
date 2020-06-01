@@ -26,7 +26,7 @@ content:
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period : {moment(data.start_date).format(''MM-DD-YYYY'')} to {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period : {moment(data.start_date).format(''MMMM Do YYYY'')} to {moment(data.end_date).format(''MMMM Do YYYY'')} </p>'
                             useRowData: true
                         -
                             type: DocumentViewer
@@ -60,12 +60,12 @@ content:
                 -
                     title: 'Effective Date'
                     field: effectiveDate
-                    cell: '<td>{moment(item.effectiveDate).format("MM-DD-YYYY")}</td>'
+                    cell: '<td>{moment(item.effectiveDate).format("MMMM Do YYYY")}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD
                 -
                     title: 'Producer Date'
                     field: producerdate
-                    cell: '<td>{moment(item.producerdate).format("MM-DD-YYYY")}</td>'
+                    cell: '<td>{moment(item.producerdate).format("MMMM Do YYYY")}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD
