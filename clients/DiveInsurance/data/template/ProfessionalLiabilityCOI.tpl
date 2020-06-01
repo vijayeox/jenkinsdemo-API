@@ -50,12 +50,13 @@
 		{if isset($previous_policy_data) && !empty($previous_policy_data)}
 			{assign var=previousPolicyData value=$previous_policy_data|json_decode:true}
 				{if isset($previousPolicyData) && !empty($previousPolicyData) && (count($previousPolicyData) > 0)}
-				{assign var=careerCov value=$previousPolicyData[0].previous_careerCoverageLabel}
-				{assign var=initialSingleLimit value=$previousPolicyData[0].prevSingleLimit}
-				{assign var=initialAnnualAggregate value=$previousPolicyData[0].prevAnnualAggregate}
-				{assign var=initialEquipment value=$previousPolicyData[0].previous_equipment}
-				{assign var=initialCylinderCoverage value=$previousPolicyData[0].previous_cylinder}
-				{assign var=initialScubaFit value=$previousPolicyData[0].previous_scubaFit}
+				{assign var=policyIndex value=count($previousPolicyData) - 1}
+				{assign var=careerCov value=$previousPolicyData.$policyIndex.previous_careerCoverageLabel}
+				{assign var=initialSingleLimit value=$previousPolicyData.$policyIndex.prevSingleLimit}
+				{assign var=initialAnnualAggregate value=$previousPolicyData.$policyIndex.prevAnnualAggregate}
+				{assign var=initialEquipment value=$previousPolicyData.$policyIndex.previous_equipment}
+				{assign var=initialCylinderCoverage value=$previousPolicyData.$policyIndex.previous_cylinder}
+				{assign var=initialScubaFit value=$previousPolicyData.$policyIndex.previous_scubaFit}
 										{else}
 				{assign var=careerCov value=$careerCoverageVal}
 				{assign var=previous_scubaFit value=""}
@@ -89,8 +90,8 @@
 							<tr>
 								<th nowrap><b class = "ins_font">COMBINED SINGLE LIMIT:</COMBINED></th>
 								<td><p class = "ins_font">
-								{if isset($prevSingleLimit)}
-								${$prevSingleLimit|number_format}&nbsp&nbsp&nbsp(per occurrence)
+								{if isset($initialSingleLimit)}
+								${$initialSingleLimit|number_format}&nbsp&nbsp&nbsp(per occurrence)
 								{else}
 								${$single_limit|number_format}&nbsp&nbsp&nbsp(per occurrence)
 								{/if}</p></td>
@@ -170,74 +171,44 @@
 		</div>
 		<div class = "second_content">
 			{if isset($update_date)}
+				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>	
 				{if isset($previousPolicyData) && !empty($previousPolicyData)}
-				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
-				{if !empty($previousCoverage)}
-				{assign var=list value=$previousCoverage|json_decode:true}
-            		{foreach from=$list item=$upgradeData}
-                        <p class = "policy_status">
-                            Status of Insured:  {$upgradeData.careerCoverage} as of {$upgradeData.update_date}
-                        </p>
-            		{/foreach}
-            	{/if}
 
-				{if !empty($previousTecRec)}
-				{assign var=list value=$previousTecRec|json_decode:true}
-						{if isset($tecRecEndorsment) && !empty($tecRecEndorsment)}
-            		{foreach from=$list item=$upgradeData}
-								<p class = "policy_status">TecRec Coverage: {$upgradeData.tecRecEndorsment} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
-            		{/foreach}
-						{/if}
-						{/if}
-            	{if !empty($previousExcess)}
-				{assign var=listLiability value=$previousExcess|json_decode:true}
-            		{foreach from=$listLiability item=$upgradeLiabilityData}
-                        <p class = "policy_status">
-							{if $upgradeLiabilityData.excessLiability == '1M Excess'}
-                            	Liability Limits :  $2,000,000 Combined and $3,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == '2M Excess'}
-							Liability Limits :  $3,000,000 Combined and $4,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == '3M Excess'}
-							Liability Limits :  $4,000,000 Combined and $5,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == '4M Excess'}
-							Liability Limits :  $5,000,000 Combined and $6,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-							{elseif $upgradeLiabilityData.excessLiability == '9M Excess'}
-							Liability Limits :  $10,000,000 Combined and $11,000,000 Annual Aggregate as of {$upgradeLiabilityData.update_date}
-                            {/if}
-                        </p>
-            		{/foreach}
-            	{/if}
-				{if !empty($previousEquipment)}
-				{assign var=list value=$previousEquipment|json_decode:true}
-						{if isset($equipment) && !empty($equipment)}
-            		{foreach from=$list item=$upgradeData}
-						{if $equipment != "equipmentLiabilityCoverage"}
-							<p class = "policy_status">Equipment Liability: Added to this certificate as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
-						{/if}
-            		{/foreach}
-						{/if}
-            	{/if}
-				{if !empty($previousScubaFit)}
-				{assign var=list value=$previousScubaFit|json_decode:true}
-						{if isset($scubaFit) && !empty($scubaFit)}
-            		{foreach from=$list item=$upgradeData}
-						{if $scubaFit != "scubaFitInstructorDeclined"}
+					{foreach from=$previousPolicyData item=$upgradeData}
+						{if isset($upgradeData.careerCoverageName)}
+							<p class = "policy_status">
+	                            Status of Insured:  {$upgradeData.careerCoverageName} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}
+	                        </p>
+	                    {/if}
+
+	                    {if isset($upgradeData.upgraded_single_limit)}
+							<p class = "policy_status">
+	                            Liability Limits :  ${$upgradeData.upgraded_single_limit|number_format} Combined and ${$upgradeData.upgraded_annual_aggregate|number_format} Annual Aggregate as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}
+	                        </p>
+	                    {/if}
+
+	                    {if isset($upgradeData.scubaCoverageName)}
 							<p class = "policy_status">ScubaFit Instructor: Added to this certificate as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
-						{/if}
-            		{/foreach}
-						{/if}
-            	{/if}
+	                    {/if}
 
-						{if !empty($previousCylinder)}
-				{assign var=listcylinder value=$previousCylinder|json_decode:true}
-            		{foreach from=$listcylinder item=$upgradeCylinderData}
-                        <p class = "policy_status">
-                            Cylinder Coverage :  {$upgradeCylinderData.cylinder} as of {$upgradeCylinderData.update_date}
-                        </p>
-            		{/foreach}
-            	{/if}
+	                    {if isset($upgradeData.equipmentCoverageName)}
+							<p class = "policy_status">Equipment Liability: Added to this certificate as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}</p>
+	                    {/if}
+
+
+	                    {if isset($upgradeData.cylinderCoverageName)}
+							<p class = "policy_status">
+	                            Cylinder Coverage :  {$upgradeData.cylinderCoverageName} as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}
+	                        </p>
+	                    {/if}
+
+	                    {if isset($upgradeData.tecRecCoverageName)}
+							<p class = "policy_status">
+	                            TecRec Coverage:  Added to this certificate as of  {$upgradeData.update_date|date_format:"%m/%d/%Y"}
+	                        </p>
+	                    {/if}
+					{/foreach}
 				{/if}
-
 			{/if}
 				
 			<hr></hr>
@@ -247,6 +218,7 @@
 			<p class = "policy_notice">
 				Notice of cancelation: The premium and any taxes or fees are fully earned upon inception and no refund is granted unless cancelled by the company.If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.
 			</p>
+
 
 			{if $state == 'Alaska'}
 				<center><p class = "notice">

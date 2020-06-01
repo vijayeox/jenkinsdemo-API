@@ -1,0 +1,67 @@
+name: 'Agent Workbooks'
+description: 'Shows a list of users policies'
+content:
+    -
+        type: List
+        content:
+            route: 'file'
+            filterable: true
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: 'View'
+                    rule: '''{{policyStatus}}'' == ''Completed'''
+                    icon: 'fa fa-envelope-open'
+                    details:
+                        -
+                            type: Document
+                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period : {moment(data.start_date).format(''MM-DD-YYYY'')} to {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+                -
+                    name: Edit
+                    rule: 'true'
+                    details:
+                        -
+                            type: Form
+                            form_id: a8f015fa-2dcb-4806-8ec0-ca5847c1c471
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-pencil'
+            toolbarTemplate: '<h5>List of workbooks</h5>'
+            operations:
+                title: 'Create New Workbook'
+                actions:
+                    -
+                        name: General Information
+                        rule: "true"
+                        details:
+                            -
+                                type: Form
+                                form_id: a8f015fa-2dcb-4806-8ec0-ca5847c1c471
+                    -
+                        name: Consolidated Workbook
+                        rule: "true"
+                        details:
+                            -
+                                type: Form
+                                form_id: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7           
+            columnConfig:
+                -
+                    title: Insured
+                    field: namedInsured
+                -
+                    title: 'Producer'
+                    field: producer
+                -
+                    title: 'Effective Date'
+                    field: effectiveDate
+                    cell: '<td>{moment(item.effectiveDate).format("MM-DD-YYYY")}</td>'

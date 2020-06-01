@@ -174,15 +174,6 @@
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "documentFields",
-						"calculateValue": "value = ['attachments1','csrApprovalAttachments1',[\"groupPL\",\"document1\"]]",
-						"calculateServer": false,
-						"key": "documentFieldnames",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
 						"label": "isRenewalFlow",
 						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
 						"calculateServer": false,
@@ -211,7 +202,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Padi Number is not Valid!",
+							"customMessage": "Padi Number is required",
 							"min": 0
 						},
 						"key": "padi",
@@ -249,7 +240,7 @@
 						"properties": {
 							"commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
 						},
-						"customConditional": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = false;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    show = false;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = false;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    show = false;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    show = true;\n} else {\n    show = true;\n}",
+						"customConditional": "if ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") && (data['businessPadiVerified']!==true && data['businessPadiVerified']!=='true')) {\n    show = false;\n} else {\n    show = true;\n}",
 						"logic": [{
 							"name": "disable field",
 							"trigger": {
@@ -316,21 +307,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "style",
-							"value": "text-align: center;background-color: #fcf4ac;color: black;border-radius: 10px;line-height: 30px;"
-						}],
-						"content": "The PADI could not be verified by the system. Please check with the PADI Office and select the PADI Verified checkbox below.",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "PadiNotFoundCSRMessage",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
-						"type": "htmlelement",
-						"input": false,
-						"hideOnChildrenHidden": false,
-						"hideLabel": true
-					}, {
 						"label": "Content",
 						"attrs": [{
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
@@ -345,25 +321,6 @@
 						"input": false,
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
-					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "style",
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
-						}],
-						"content": "PADI Number cannot be blank",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "html2",
-						"conditional": {
-							"show": true,
-							"when": "padi_empty",
-							"eq": "true"
-						},
-						"type": "htmlelement",
-						"input": false,
-						"hideOnChildrenHidden": false,
-						"hideLabel": true
 					}],
 					"width": 4,
 					"offset": 0,
@@ -507,7 +464,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "panel",
-			"customConditional": "if (!(data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true')){\n\tshow = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true')){\n\tshow = true;\n} else {\n    show = false;\n}",
+			"customConditional": "if (!(data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    show = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  else if((data.padiNotFound===true || data.padiNotFound=='true') && (data.verified === true || data.verified=='true') &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\")){\n\tshow = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n         show = true;\n        }  \nelse {\n    show = false;\n}",
 			"type": "panel",
 			"label": "Personal Information",
 			"input": false,
@@ -965,52 +922,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"placeholder": "     ",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid home or work phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1067,53 +990,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"placeholder": "   ",
-								"spellcheck": false,
+								"mask": false,
+								"spellcheck": true,
 								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid mobile phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1765,19 +1655,21 @@
 							}, {
 								"components": [{
 									"label": "Work Phone",
-									"placeholder": "  ",
+									"mask": false,
 									"spellcheck": true,
-									"tableView": true,
-									"clearOnHide": false,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
 									"calculateServer": false,
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter a valid phone number"
+										"customMessage": "Please enter a valid phone number",
+										"custom": "if(data.buisness_work_number){\n  valid = (data.buisness_work_number.toString().length > 15) ? 'Please enter a valid phone number' : true; \n}"
 									},
 									"key": "buisness_work_number",
-									"type": "phoneNumber",
+									"type": "number",
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "business_work_phone",
@@ -4734,8 +4626,8 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
-					"webcam": false,
+					"storage": "url",
+					"webcam": true,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
@@ -4750,15 +4642,8 @@
 					},
 					"key": "attachments",
 					"type": "file",
-					"input": true
-				}, {
-					"label": "attachmentFields",
-					"calculateValue": "value = [[\"groupPL\",\"documentattach\"],\"attachments\",\"csrApprovalAttachments\"];",
-					"calculateServer": false,
-					"key": "attachmentsFieldnames",
-					"type": "hidden",
 					"input": true,
-					"tableView": false
+					"url": "/file/attachment"
 				}],
 				"path": "attachments"
 			}, {
@@ -5256,8 +5141,8 @@
 						"label": "Document",
 						"hideLabel": true,
 						"tableView": true,
-						"storage": "base64",
-						"webcam": false,
+						"storage": "url",
+						"webcam": true,
 						"fileTypes": [{
 							"label": "",
 							"value": ""
@@ -5273,7 +5158,8 @@
 						"type": "file",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"url": "/file/attachment"
 					}, {
 						"label": "verified",
 						"calculateServer": false,
@@ -6332,7 +6218,7 @@
 	}, {
 		"key": "page5Panel",
 		"input": false,
-		"title": "Quote & Approval",
+		"title": "Quote Information",
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
@@ -8203,11 +8089,20 @@
 			"input": true,
 			"tableView": false
 		}, {
-			"key": "page5Panel4",
-			"input": false,
-			"title": "Quote Information",
+			"title": "Quote Requirements",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "page5Panel4",
+			"type": "panel",
+			"label": "Quote Information",
+			"input": false,
 			"components": [{
 				"label": "Columns",
 				"input": false,
@@ -8311,12 +8206,12 @@
 							"label": "Completed Boat Insurance Renewal Questionnaire.",
 							"shortcut": ""
 						}, {
-							"value": "In Water coverage supplemental application – ONLY if purchasing in water coverage for passengers or crew.",
-							"label": "In Water coverage supplemental application – ONLY if purchasing in water coverage for passengers or crew.",
+							"value": "In Water coverage supplemental application - ONLY if purchasing in water coverage for passengers or crew.",
+							"label": "In Water coverage supplemental application - ONLY if purchasing in water coverage for passengers or crew.",
 							"shortcut": ""
 						}, {
-							"value": "Copy of Captain’s License (front & back) for XXX",
-							"label": "Copy of Captain’s License (front & back) for XXX",
+							"value": "Copy of Captain's License (front & back) for XXX",
+							"label": "Copy of Captain's License (front & back) for XXX",
 							"shortcut": ""
 						}, {
 							"value": "Hurricane Questionnaire.",
@@ -8403,7 +8298,7 @@
 						"conditional": {
 							"show": true,
 							"when": "quoteInfo",
-							"eq": "Copy of Captain’s License (front & back) for XXX"
+							"eq": "Copy of Captain's License (front & back) for XXX"
 						},
 						"type": "textfield",
 						"input": true,
@@ -8429,10 +8324,12 @@
 				"layoutFixed": false,
 				"enableRowGroups": false,
 				"tableView": false,
+				"defaultValue": [{
+					"info": ""
+				}],
 				"calculateServer": false,
 				"validate": {
-					"required": true,
-					"minLength": 1
+					"required": true
 				},
 				"key": "quoteInfoOther",
 				"conditional": {
@@ -8456,8 +8353,6 @@
 					"input": true
 				}]
 			}],
-			"type": "panel",
-			"label": "Panel",
 			"path": "page5Panel4"
 		}, {
 			"title": "Attachments",
@@ -8478,8 +8373,8 @@
 				"label": "Upload",
 				"hideLabel": true,
 				"tableView": false,
-				"storage": "base64",
-				"webcam": false,
+				"storage": "url",
+				"webcam": true,
 				"fileTypes": [{
 					"label": "",
 					"value": ""
@@ -8492,7 +8387,8 @@
 				},
 				"key": "csrApprovalAttachments",
 				"type": "file",
-				"input": true
+				"input": true,
+				"url": "/file/attachment"
 			}, {
 				"type": "documentviewer",
 				"key": "csrApprovalAttachments1",
@@ -8511,86 +8407,6 @@
 				"protected": true,
 				"persistent": false
 			}]
-		}, {
-			"key": "page5Panel2",
-			"input": false,
-			"title": "Approval",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"clearOnHide": false,
-				"key": "page5Panel2Well",
-				"input": false,
-				"components": [{
-					"label": "PADI Verified",
-					"tableView": false,
-					"defaultValue": false,
-					"calculateServer": false,
-					"validate": {
-						"required": true,
-						"customMessage": "Please verify the PADI before proceeding."
-					},
-					"key": "padiVerifiedCSRCheck",
-					"properties": {
-						"negate": "padiVerified"
-					},
-					"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
-					"type": "checkbox",
-					"input": true,
-					"hideOnChildrenHidden": false,
-					"dataGridLabel": false
-				}, {
-					"label": "Approve/Reject",
-					"optionsLabelPosition": "right",
-					"inline": true,
-					"hideLabel": true,
-					"tableView": true,
-					"values": [{
-						"value": "accepted",
-						"label": "Approved",
-						"shortcut": ""
-					}, {
-						"value": "rejected",
-						"label": "Rejected",
-						"shortcut": ""
-					}],
-					"clearOnHide": false,
-					"validate": {
-						"required": true
-					},
-					"key": "csrApproved",
-					"type": "radio",
-					"input": true,
-					"lockKey": true
-				}, {
-					"label": "Rejection Reason",
-					"autoExpand": false,
-					"spellcheck": true,
-					"tableView": true,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"validate": {
-						"required": true
-					},
-					"key": "rejectionReason",
-					"conditional": {
-						"show": true,
-						"when": "csrApproved",
-						"eq": "rejected"
-					},
-					"type": "textarea",
-					"input": true,
-					"lockKey": true
-				}],
-				"tableView": false,
-				"type": "well",
-				"hideLabel": true,
-				"label": "",
-				"path": "page5Panel2Well"
-			}],
-			"type": "panel",
-			"lockKey": true,
-			"label": "Panel"
 		}],
 		"type": "panel",
 		"breadcrumb": "none",
@@ -8607,10 +8423,126 @@
 		"properties": {
 			"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"EndorsementUpdateData\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]"
 		}
+	}, {
+		"title": "Approval",
+		"label": "Approval",
+		"type": "panel",
+		"key": "page5Panel2",
+		"components": [{
+			"label": "jdsgf",
+			"tableView": false,
+			"key": "jdsgf",
+			"type": "well",
+			"input": false,
+			"components": [{
+				"label": "Please process the payment and approve",
+				"tag": "h4",
+				"attrs": [{
+					"attr": "style",
+					"value": "background-color:#FFEB3B;font-size:20px; padding:10px;font-weight:400"
+				}],
+				"content": "The PADI used for the policy could not be verified by the system. </br>\nPlease check with the PADI Office and select the PADI Verified checkbox below.",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page6Pleaseprocessthepaymentandapprove1",
+				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+				"type": "htmlelement",
+				"input": false
+			}, {
+				"label": "PADI Verified",
+				"tableView": false,
+				"defaultValue": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Please verify the PADI before proceeding."
+				},
+				"key": "padiVerifiedCSRCheck",
+				"properties": {
+					"negate": "padiVerified"
+				},
+				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+				"type": "checkbox",
+				"input": true,
+				"hideOnChildrenHidden": false,
+				"dataGridLabel": false
+			}]
+		}, {
+			"title": "Approve/Reject the Application",
+			"theme": "primary",
+			"breadcrumbClickable": false,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "page77Panel",
+			"type": "panel",
+			"label": "Approve/Reject the Application",
+			"input": false,
+			"components": [{
+				"label": "Approve/Reject",
+				"optionsLabelPosition": "right",
+				"inline": true,
+				"hideLabel": true,
+				"tableView": true,
+				"values": [{
+					"value": "accepted",
+					"label": "Approved",
+					"shortcut": ""
+				}, {
+					"value": "rejected",
+					"label": "Rejected",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"validate": {
+					"required": true
+				},
+				"key": "csrApproved",
+				"type": "radio",
+				"input": true,
+				"lockKey": true
+			}],
+			"path": "page77Panel"
+		}, {
+			"label": "Rejection Reason",
+			"autoExpand": false,
+			"spellcheck": true,
+			"tableView": true,
+			"inputFormat": "plain",
+			"clearOnHide": false,
+			"validate": {
+				"required": true
+			},
+			"key": "rejectionReason",
+			"conditional": {
+				"show": true,
+				"when": "csrApproved",
+				"eq": "rejected"
+			},
+			"type": "textarea",
+			"input": true,
+			"lockKey": true
+		}],
+		"input": false,
+		"tableView": false,
+		"theme": "primary",
+		"lockKey": true,
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 549,
+	"_vid": 564,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8620,14 +8552,14 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"}, {\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
 		"post_delegate_refresh": "excess_liability_coverage"
 	},
 	"name": "diveBoatConsolidation",
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-05-25T06:28:31.596Z",
+	"modified": "2020-06-01T05:00:56.209Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

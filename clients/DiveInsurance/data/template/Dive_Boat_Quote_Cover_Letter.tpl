@@ -27,7 +27,7 @@ function subst() {
 			<li class = "quote_list">Pollution coverage for sudden and accidental fuel or oil spills, up to $500,000</li>
 			<li class = "quote_list">Collision liability coverage</li>
 			<li class = "quote_list">Higher liability limits available - Call us for a quote!</li>
-			<li class = "quote_list">Optional In Water Coverage for passengers and paid crew (Optional – Supplemental application required)</li>
+			<li class = "quote_list">Optional In Water Coverage for passengers and paid crew (Optional - Supplemental application required)</li>
 		</ul>
 
 		<p>(This is a summary of coverage and does not change the policy language. The policy is what determines the coverage and
@@ -40,16 +40,20 @@ a policy will be sent to you.)</p>
 					{if $key == 'Other' &&  ($quoteData == true || $quoteData == 'true')}
 						 {assign var=other value=$quoteInfoOther|json_decode:true}
 						 {foreach from=$other item=$otherInfo}
-						  <p class = "quote_list">[X]{$otherInfo.info}</p>
+						 {assign var=other1 value=urldecode($otherInfo.info)}
+						  <p class = "quote_list">[X]{$other1}</p>
 						 {/foreach}
 					{else if $key == 'Copy of Captain’s License (front & back) for XXX' && ($quoteData == true || $quoteData == 'true')}
 	    			   	  {assign var=captainInfo value=str_replace('XXX',$captainX,$key)}
-	    			   	  <p class = "quote_list">[X]{$captainInfo}</p>
+	    			   	  {assign var=captainInfo1 value=urldecode($captainInfo)}
+	    			   	  <p class = "quote_list">[X]{$captainInfo1}</p>
 	    			{else if $key == 'Marine Survey (completed within the past 12 months) Vessels five (5) years or older are required to provide current condition and valuation survey with confirmation that all recommendations are completed: XXX' && ($quoteData == true || $quoteData == 'true')}
 	    			   	  {assign var=marineInfo value=str_replace('XXX',$marineX,$key)}
-	    			   	  <p class = "quote_list">[X]{$marineInfo}</p>
+	    			   	  {assign var=marine value=urldecode($marineInfo)}
+	    			   	  <p class = "quote_list">[X]{$marine}</p>
 	    			{else if $quoteData == true || $quoteData == 'true'}
-						  <p class = "quote_list">[X]{$key}</p>	    			   		
+	    				  {assign var=keyData value=urldecode($key)}
+						  <p class = "quote_list">[X]{$keyData}</p>	    			   		
 	    			{/if}
     	{/foreach}
      {/if}

@@ -328,10 +328,10 @@ class CommandService extends AbstractService
                 $res = $res . "}";
                 $res = json_decode($res, true);
                 if ($res['status'] == 404) {
-                    $this->logger->warn($res['message']."JOB NOT FOUND ---- " . print_r($e->getMessage(), true));
+                    $this->logger->warn($res['message']."JOB NOT FOUND ---- " . $e->getMessage(), $e);
                 }
             }
-            $this->logger->warn("JOB ---- " . print_r($e->getMessage(), true));
+            $this->logger->warn("JOB ---- " . $e->getMessage(), $e);
         }
         $this->logger->info("Cancel Job Data - " . print_r($data, true));
         return $data;

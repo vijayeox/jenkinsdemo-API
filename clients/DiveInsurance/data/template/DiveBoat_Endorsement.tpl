@@ -94,7 +94,7 @@
         {/if}
 
 
-            {if isset($additionalInsured) && $additional_insured_select == 'newListOfAdditionalInsureds'}
+            {if isset($additionalInsured) && $additional_insured_select == 'addAdditionalInsureds'}
             {assign var=list value=$additionalInsured|json_decode:true}
 
             <p>Name & Address</p>

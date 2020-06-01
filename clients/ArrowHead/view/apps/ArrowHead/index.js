@@ -13,13 +13,13 @@ const register = (core, args, options, metadata) => {
       title: metadata.title.en_EN,
       icon: proc.resource(icon_white),
       dimension: {
-        width: document.body.clientWidth,
-        height: document.body.clientHeight,
+        width: 850,
+        height: 550,
       },
       state: {
         maximized: true,
       },
-      position: { left: 700, top: 200 },
+      position: { left: 150, top: 100 },
     })
     .on("destroy", () => proc.destroy())
     .render(($content) =>

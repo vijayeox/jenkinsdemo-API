@@ -449,18 +449,12 @@ export default class Core extends CoreBase {
     //OXZION CHANGE START
     const splash = this.make("oxzion/splash");
     splash.show();
-    this.on(`osjs/application:launched`, app => {
+    this.on(`osjs/application:${name}:launched`, app => {
       splash.destroy();
     });
-    if (name == "Admin" || name == "Preferences" || name == "CRM") {
-      var runningApps = this.make("osjs/packages").running();
-      runningApps.forEach(app => {
-        if (app === "Admin" || app === "Preferences" || app === "CRM") {
-          splash.destroy();
-        }
-      });
-    }
-    //OXZION CHANGE END
+    this.make("osjs/packages")
+      .running()
+      .map((appName) => (appName == name ? splash.destroy() : null));
     return this.make('osjs/packages').launch(name, args, options);
   }
 

@@ -77,12 +77,10 @@ class SetupEndorsement extends AbstractAppDelegate
                         }
                         if($rate['key'] == $policy['previous_careerCoverage']){
                             $policy['previous_careerCoverageLabel'] = $rate['coverage'];
-                            $endorsementCoverages[$rate['key']] = $rate['coverage'];
                             $premiumRateCardDetails[$rate['key']] = 0;
                             $data['careerCoveragePrice'] = 0;
-                        } else {
-                            $endorsementCoverages[$rate['key']] = $rate['coverage'];
-                        }
+                        } 
+                        $endorsementCoverages[$rate['key']] = $rate['coverage'];
                     }
                 }
                 $data['endorsementCoverage'] = $endorsementCoverages;
@@ -102,17 +100,18 @@ class SetupEndorsement extends AbstractAppDelegate
                         }
                         if($rate['key'] == $policy['previous_cylinder']){
                             $policy['previous_cylinderLabel'] = $rate['coverage'];
-                            $endorsementCylinder[$rate['key']] = $rate['coverage'];
                             $premiumRateCardDetails[$rate['key']] = 0;
                             $data['cylinderPrice'] = 0;
-                        } else {
-                            $endorsementCylinder[$rate['key']] = $rate['coverage'];
                         }
+                        $endorsementCylinder[$rate['key']] = $rate['coverage'];
                     }
                     unset($rate);
                 }
                 $data['endorsementCylinder'] = $endorsementCylinder;
             }
+
+
+
             if(isset($policy['previous_excessLiability'])){
                 $endorsementExcessLiability = array();
                 $fromClause = "";
@@ -139,7 +138,6 @@ class SetupEndorsement extends AbstractAppDelegate
                         if($rate['key'] == $policy['previous_excessLiability']){
                             $policy['previous_excessLiabilityLabel'] = $rate['coverage'];
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
-                            // $premiumRateCardDetails[$rate['key']] = 0;
                             $data['excessLiabilityPrice'] = $rate['total'];
                         } else {
                             $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
@@ -150,55 +148,96 @@ class SetupEndorsement extends AbstractAppDelegate
                 $data['endorsementExcessLiability'] = $endorsementExcessLiability;
             }
             if(isset($policy['previous_equipment'])){
+                $endorsementEquipment = array();
                 $selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_equipment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Equipment Query".$selectEquipment);
                 $resultEquipment= $persistenceService->selectQuery($selectEquipment);
                 if($resultEquipment->count() == 0){
                     $premiumRateCardDetails[$data['equipment']] = 0;
                     $data['equipmentPrice'] = 0;
+                    $endorsementEquipment['equipment'] = $data['equipment'];
                 }
                 while ($resultEquipment->next()) {
                     $rate = $resultEquipment->current();
                     if(isset($rate['key'])){
                         if(isset($rate['total'])){
-                           
                             $premiumRateCardDetails[$rate['key']] = $rate['total'];
-                            $data['equipmentPrice'] = 0;
                         } else {
-                            
                             $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                         }
+                        if($rate['key'] == $policy['previous_equipment']){
+                            $policy['previous_equipmentLabel'] = $rate['coverage'];
+                            $data['equipment'] = $policy['previous_equipment'];
+                            $premiumRateCardDetails[$rate['key']] = 0;
+                            $data['equipmentPrice'] = 0;
+                        }
+                        $endorsementEquipment[$rate['key']] = $rate['coverage'];
                     }
                     unset($rate);
                 }
+                $data['endorsementEquipment'] = $endorsementEquipment;
             }
             if(isset($policy['previous_tecRecEndorsment'])){
-                $premiumRateCardDetails['withTecRecEndorsementForSelectionAbove'] = 0;
-                $premiumRateCardDetails['tecRecDeclined'] = 0;
+                $endorsementTecRec = array();
+                $selectTecRec = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_tecRecEndorsment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                $this->logger->info("Executing Endorsement Rate Card TecRec Query".$selectEquipment);
+                $resultTecRec= $persistenceService->selectQuery($selectTecRec);
+                if($resultTecRec->count() == 0){
+                    $premiumRateCardDetails[$data['tecRecEndorsment']] = 0;
+                    $data['techRecPrice'] = 0;
+                    $endorsementTecRec['tecRecEndorsment'] = $data['tecRecEndorsment'];
+                }
+                while ($resultTecRec->next()) {
+                    $rate = $resultTecRec->current();
+                    if(isset($rate['key'])){
+                        if(isset($rate['total'])){
+                            $premiumRateCardDetails[$rate['key']] = $rate['total'];
+                        } else {
+                            $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                        }
+                        if($rate['key'] == $policy['previous_tecRecEndorsment']){
+                            $policy['previous_tecRecEndorsmentLabel'] = $rate['coverage'];
+                            $data['tecRecEndorsment'] = $policy['previous_tecRecEndorsment'];
+                            $premiumRateCardDetails[$rate['key']] = 0;
+                            $data['techRecPrice'] = 0;
+                        }
+                        $endorsementTecRec[$rate['key']] = $rate['coverage'];
+                    }
+                    unset($rate);
+                }
+                $data['endorsementTecRec'] = $endorsementTecRec;
             }
             if(isset($policy['previous_scubaFit'])){
+                $endorsementScubaFit = array();
                 $selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Scuba fit Query".$selectScubafit);
                 $resultScubafit = $persistenceService->selectQuery($selectScubafit);
-
                 if($resultScubafit->count() == 0){
                     $premiumRateCardDetails[$data['scubaFit']] = 0;
                     $data['scubaFitPrice'] = 0;
+                    $endorsementScubaFit['scubaFit'] = $data[$data['scubaFit']];
                 }
                 while ($resultScubafit->next()) {
                     $rate = $resultScubafit->current();
                     if(isset($rate['key'])){
                         if(isset($rate['total'])){
                             $premiumRateCardDetails[$rate['key']] = $rate['total'];
-                            $data['scubaFitPrice'] = 0; 
                         } else {
                             $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                         }
+                        if($rate['key'] == $policy['previous_scubaFit']){
+                            $policy['previous_scubaFitLabel'] = $rate['coverage'];
+                            $data['scubaFit'] = $policy['previous_scubaFit'];
+                            $premiumRateCardDetails[$rate['key']] = 0;
+                            $data['scubaFitPrice'] = 0;
+                        }
+                        $endorsementScubaFit[$rate['key']] = $rate['coverage'];
                     }
                     unset($rate);
                 }
+                $data['endorsementScubaFit'] = $endorsementScubaFit;
             }
-            array_push($data['previous_policy_data'],$policy);
+            array_unshift($data['previous_policy_data'],$policy);
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
             if(isset($data['paymentOptions'])){
                 $data['paymentOptions'] = "";
@@ -241,6 +280,9 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             if(isset($data['endorsementTotal'])){
                 $data['endorsementTotal']= 0;
+            }
+            if(isset($data['amount'])){
+                $data['amount']= 0;
             }
             if(isset($premiumRateCardDetails)){
                 $returnArray = array_merge($data,$premiumRateCardDetails);

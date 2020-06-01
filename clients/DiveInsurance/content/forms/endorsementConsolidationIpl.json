@@ -87,6 +87,27 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "endorsementTecRec",
+			"calculateServer": false,
+			"key": "endorsementTecRec",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "endorsementScubaFit",
+			"calculateServer": false,
+			"key": "endorsementScubaFit",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "endorsementEquipment",
+			"calculateServer": false,
+			"key": "endorsementEquipment",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "product_email_id",
 			"calculateValue": "value = 'instructors@diveinsurance.com';",
 			"calculateServer": false,
@@ -120,20 +141,28 @@
 			"defaultValue": "Individual Professional Liability",
 			"lockKey": true
 		}, {
-			"label": "previousPolicyLength",
-			"calculateValue": "if(data['previous_policy_data']){\n  value = data['previous_policy_data'].length - 1;\n}",
+			"label": "start_date",
 			"calculateServer": false,
-			"key": "previousPolicyLength",
+			"key": "start_date",
+			"properties": {
+				"data_type": "Date"
+			},
 			"type": "hidden",
-			"input": true,
-			"tableView": false
-		}, {
 			"input": true,
 			"tableView": true,
-			"key": "start_date",
-			"label": "start_date",
-			"type": "hidden",
 			"lockKey": true
+		}, {
+			"label": "end_date",
+			"calculateServer": false,
+			"key": "end_date",
+			"properties": {
+				"data_type": "Date"
+			},
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
 		}, {
 			"label": "update_date",
 			"key": "update_date",
@@ -982,14 +1011,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid Home or Work Phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1045,15 +1078,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1299,28 +1337,31 @@
 						"columns": [{
 							"components": [{
 								"label": "TecRec Coverage",
-								"optionsLabelPosition": "right",
-								"inline": false,
+								"widget": "choicesjs",
 								"tableView": true,
-								"values": [{
-									"value": "withTecRecEndorsementForSelectionAbove",
-									"label": "With TecRec Endorsement for selection above",
-									"shortcut": ""
-								}, {
-									"value": "tecRecDeclined",
-									"label": "With TecRec Endorsement for selection above - Declined",
-									"shortcut": ""
-								}],
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['endorsementTecRec']){\n  for(var key in data['endorsementTecRec']){\nvar item = {}\nitem.label = data['endorsementTecRec'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"calculateServer": false,
 								"validate": {
-									"required": true,
-									"customMessage": "Please choose one of these options."
+									"required": true
 								},
 								"key": "tecRecEndorsment",
-								"type": "radio",
+								"properties": {
+									"target": "techRecPrice"
+								},
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
@@ -1378,31 +1419,31 @@
 						"columns": [{
 							"components": [{
 								"label": "ScubaFit Coverage",
-								"optionsLabelPosition": "right",
-								"inline": false,
+								"widget": "choicesjs",
 								"tableView": true,
-								"values": [{
-									"value": "scubaFitInstructor",
-									"label": "ScubaFit Instructor",
-									"shortcut": ""
-								}, {
-									"value": "scubaFitInstructorDeclined",
-									"label": "ScubaFit Instructor - Declined",
-									"shortcut": ""
-								}],
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['endorsementScubaFit']){\n  for(var key in data['endorsementScubaFit']){\nvar item = {}\nitem.label = data['endorsementScubaFit'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"calculateServer": false,
 								"validate": {
-									"required": true,
-									"customMessage": "Please choose one of these options."
+									"required": true
 								},
 								"key": "scubaFit",
 								"properties": {
 									"target": "scubaFitPrice"
 								},
-								"type": "radio",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
@@ -1546,31 +1587,31 @@
 						"columns": [{
 							"components": [{
 								"label": "Equipment Liability Coverage",
-								"optionsLabelPosition": "right",
-								"inline": false,
+								"widget": "choicesjs",
 								"tableView": true,
-								"values": [{
-									"value": "equipmentLiabilityCoverage",
-									"label": "Equipment Liability Coverage",
-									"shortcut": ""
-								}, {
-									"value": "equipmentLiabilityCoverageDeclined",
-									"label": "Equipment Liability Coverage - Declined",
-									"shortcut": ""
-								}],
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "if(data['endorsementEquipment']){\n  for(var key in data['endorsementEquipment']){\nvar item = {}\nitem.label = data['endorsementEquipment'][key];\nitem.value = key;\nvalues.push(item);\n}\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"calculateServer": false,
 								"validate": {
-									"required": true,
-									"customMessage": "Please choose one of these options."
+									"required": true
 								},
 								"key": "equipment",
 								"properties": {
 									"target": "equipmentPrice"
 								},
-								"type": "radio",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 8,
@@ -1679,7 +1720,7 @@
 								"inputFormat": "plain",
 								"clearOnHide": false,
 								"customDefaultValue": "value=0.00",
-								"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var policyLength = previousPolicyData.length -1;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
+								"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0];\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
 								"calculateServer": false,
 								"key": "excessLiabilityPricePayable",
 								"type": "number",
@@ -1694,6 +1735,28 @@
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "single_limit",
+								"defaultValue": "$1,000,000",
+								"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
+								"calculateServer": false,
+								"key": "single_limit",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "annual_aggregate",
+								"defaultValue": "$2,000,000",
+								"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+								"calculateServer": false,
+								"key": "annual_aggregate",
+								"type": "hidden",
+								"input": true,
+								"tableView": true,
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
@@ -1765,11 +1828,12 @@
 										"disabled": true,
 										"tableView": true,
 										"defaultValue": "0.00",
-										"delimiter": false,
+										"delimiter": true,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"redrawOn": "data",
 										"clearOnHide": false,
-										"calculateValue": "var total = (parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0);\nif(total > 0){\n  value = total;\n} else {\n  total =0;\n}",
+										"calculateValue": "var total = ((parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0));\nif(total > 0){\n  value = total;\n} else {\n  value = 0;\n}",
 										"calculateServer": false,
 										"key": "endorsementTotal",
 										"properties": {
@@ -1827,8 +1891,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"redrawOn": "data",
 										"clearOnHide": false,
-										"calculateValue": "if(parseFloat(data['amount']).toFixed(0) < parseFloat(data['endorsementTotal']).toFixed(0)){\n  value = (parseFloat(data['endorsementTotal'])).toFixed(0) - (parseFloat(data['amount'])).toFixed(0);\n} else {\n  value = 0;\n}",
+										"calculateValue": "if(data.csrGrandTotal && parseFloat(data.csrGrandTotal) != 0){\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}else{\n  value = 0;\n}",
 										"calculateServer": false,
 										"key": "balanceEndor",
 										"type": "number",
@@ -1849,6 +1914,24 @@
 								"input": false,
 								"path": "columns1",
 								"hideLabel": true
+							}, {
+								"label": "userGrandTotal",
+								"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
+								"calculateServer": false,
+								"key": "userGrandTotal",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "csrGrandTotal",
+								"calculateValue": "if(data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
+								"calculateServer": false,
+								"key": "csrGrandTotal",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
+								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
 							"offset": 0,
@@ -2012,8 +2095,12 @@
 					"label": "Proof of Technical Certification",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
@@ -2026,6 +2113,7 @@
 					"errorLabel": "Proof of Technical Certification",
 					"key": "endor_techRec_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel1"
@@ -2062,7 +2150,7 @@
 					"label": "Cylinder Inspector Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2081,6 +2169,7 @@
 					"errorLabel": "Proof of your Cylinder Inspector",
 					"key": "endor_cylinderInspector_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel3"
@@ -2117,7 +2206,7 @@
 					"label": "Cylinder Instructor Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2136,6 +2225,7 @@
 					"errorLabel": "Cylinder Instructor Attachments",
 					"key": "endor_cylinderInstructor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel4"
@@ -2172,7 +2262,7 @@
 					"label": "ScubaFit Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2191,18 +2281,10 @@
 					"errorLabel": "ScubaFit Certification",
 					"key": "endor_scubaFit_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel5"
-			}, {
-				"label": "attachmentFields",
-				"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
-				"calculateValue": "value = [\"endor_attachments\" ,\"endor_scubaFit_attachments\" , \"endor_cylinderInstructor_attachments\" , \"endor_cylinderInspector_attachments\" , \"endor_techRec_attachments\",\"endor_attachments\" ,\"chequeConsentFile\",\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\"];",
-				"calculateServer": false,
-				"key": "endorAttachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2223,7 +2305,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2239,17 +2321,10 @@
 					},
 					"key": "endor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel2"
-			}, {
-				"label": "csrEndorAttachmentsFieldnames",
-				"calculateValue": "value = [\"csr_attachments\"];",
-				"calculateServer": false,
-				"key": "csrEndorAttachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2270,7 +2345,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2287,6 +2362,7 @@
 					},
 					"key": "csr_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "attachmentsCsrEndor"
@@ -2799,7 +2875,7 @@
 		}, {
 			"label": "amount",
 			"defaultValue": "0",
-			"calculateValue": "if(!(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = (parseFloat(data['endorsementTotal'])?parseFloat(data['endorsementTotal']):0.00).toFixed(0);\n} else {\n  value = 0;\n}",
+			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) > 0){\n    value = data.balanceEndor;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.endorsementTotal) || 0).toFixed(0);\n}",
 			"calculateServer": false,
 			"key": "amount",
 			"properties": {
@@ -2896,7 +2972,7 @@
 					}, {
 						"label": "Upload Consent Form",
 						"tableView": false,
-						"storage": "base64",
+						"storage": "url",
 						"webcam": false,
 						"fileTypes": [{
 							"label": "",
@@ -2906,6 +2982,7 @@
 						"calculateServer": false,
 						"key": "chequeConsentFile",
 						"type": "file",
+						"url": "/file/attachment",
 						"input": true
 					}],
 					"hideOnChildrenHidden": false
@@ -3141,7 +3218,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 165,
+	"_vid": 218,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3152,14 +3229,16 @@
 	"settings": {},
 	"properties": {
 		"showNext": "true",
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"},{\"command\" : \"delegate\",\"delegate\":\"DocumentFetchDelegate\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"showPrevious": "false"
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
+		"showPrevious": "false",
+		"showCancel": "true",
+		"clickable": "false"
 	},
 	"name": "endorsementConsolidationIpl",
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-22T22:42:11.096Z",
+	"modified": "2020-05-31T12:46:37.085Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

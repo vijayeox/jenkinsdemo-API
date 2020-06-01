@@ -9,6 +9,7 @@
 	<div class ="body_div_ai">
 
 			<div class = "ai_spacing"></div>
+			<p style="margin-bottom:2%">&nbsp</p> 
 			{foreach from=$list item=$additional}
 	    		<p class = "ai_list">
 	    			{$additional.name},{$additional.address},{$additional.city},{$additional.state}&nbsp&nbsp&nbsp{$additional.zip}

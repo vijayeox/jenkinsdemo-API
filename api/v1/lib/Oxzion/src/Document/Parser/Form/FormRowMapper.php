@@ -98,7 +98,7 @@ class FormRowMapper extends BaseRowMapper{
     private function convertToNamedArray($rowData){
         $result = array();
         foreach (FormRowMapper::COLUMNS as $key => $column) {
-            $result[$column] = $rowData[$key];
+            $result[$column] = isset($rowData[$key]) ? (trim($rowData[$key]) != "" ? $rowData[$key] : NULL ) : NULL;
         }
 
         return $result;

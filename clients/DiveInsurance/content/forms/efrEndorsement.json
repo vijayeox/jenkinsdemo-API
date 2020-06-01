@@ -101,17 +101,37 @@
 			"columns": [{
 				"components": [{
 					"label": "start_date",
+					"calculateServer": false,
 					"key": "start_date",
+					"properties": {
+						"data_type": "Date"
+					},
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "update_date",
+					"calculateServer": false,
 					"key": "update_date",
+					"properties": {
+						"data_type": "Date"
+					},
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "end_date",
+					"calculateServer": false,
+					"key": "end_date",
+					"properties": {
+						"data_type": "Date"
+					},
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "autoRenewalJob",
@@ -128,16 +148,6 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "attachmentFields",
-					"customDefaultValue": "value = [\"attachments\" , \"scubaFit_attachments\", \"cylinderInstructor_attachments\",\"cylinderInspector_attachments\",\"techRec_attachments\"];",
-					"calculateValue": "value = [\"attachments\" ,\"endor_attachments\" , \"chequeConsentFile\"];",
-					"calculateServer": false,
-					"key": "endorAttachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
 					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
@@ -177,15 +187,6 @@
 					"label": "liabilityCoverage5000000",
 					"type": "hidden",
 					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "csrEndorAttachmentsFieldnames",
-					"calculateValue": "value = [\"csr_attachments\"];",
-					"calculateServer": false,
-					"key": "csrEndorAttachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
 					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
@@ -789,51 +790,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid Home or Work Phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.home_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -889,52 +857,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"logic": [{
-									"name": "fieldMask",
-									"trigger": {
-										"type": "simple",
-										"simple": {
-											"show": true,
-											"when": "home_country_code",
-											"eq": "52"
-										}
-									},
-									"actions": [{
-										"name": "mask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(99) 9999-9999"
-									}]
-								}, {
-									"name": "defaultMask",
-									"trigger": {
-										"type": "javascript",
-										"javascript": "result = (data.phone_country_code != 52)"
-									},
-									"actions": [{
-										"name": "defaultMask",
-										"type": "property",
-										"property": {
-											"label": "Input Mask",
-											"value": "inputMask",
-											"type": "string"
-										},
-										"text": "(999) 999-9999"
-									}]
-								}],
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1139,7 +1075,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData.length >= 0){\n  var policyLength = previousPolicyData.length -1;\n  var currentPolicy = previousPolicyData[policyLength]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var amount =0;\n  if(data.excessLiabilityPrice === 0){\n    amount = data.coverageAmount\n  } else {\n    amount = data.excessLiabilityPrice\n  }\n  var difference = (parseFloat(amount) - parseFloat(data[liabilityPrice]))\n  console.log(difference);\nvalue = difference.toFixed(0);\n}",
+						"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0]\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
 						"calculateServer": false,
 						"key": "excessLiabilityPricePayable",
 						"customConditional": "show = false;",
@@ -1155,6 +1091,29 @@
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "single_limit",
+						"defaultValue": "1000000",
+						"redrawOn": "liabilityCoverage",
+						"calculateValue": "var singleLimit = 0\nif(data.liabilityCoverage == \"liabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.liabilityCoverage == \"liabilityCoverage5000000\"){\n  singleLimit +=5000000; \n}\nvalue = singleLimit",
+						"calculateServer": false,
+						"key": "single_limit",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annual_aggregate",
+						"defaultValue": "2000000",
+						"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+						"calculateServer": false,
+						"key": "annual_aggregate",
+						"type": "hidden",
+						"input": true,
+						"tableView": true,
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -1257,26 +1216,27 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"label": "Current Total",
-								"placeholder": "0",
+								"label": "Balance",
 								"prefix": "$",
+								"customClass": "textRight",
 								"hideLabel": true,
 								"mask": false,
 								"spellcheck": true,
 								"disabled": true,
 								"tableView": true,
-								"delimiter": true,
+								"defaultValue": 0,
+								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
+								"redrawOn": "data",
 								"clearOnHide": false,
-								"calculateValue": "var temp = (parseFloat(data['endorAmount']) - parseFloat(data['endorAmountPayable'])) ;\nif(parseInt(temp) < 0){\n  value = 0;\n} else {\n  value = temp ? temp : 0 ;\n}",
+								"calculateValue": "if(data.csrGrandTotal && parseFloat(data.csrGrandTotal) != 0){\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}else{\n  value = 0;\n}",
 								"calculateServer": false,
 								"key": "balanceEndor",
 								"type": "number",
 								"input": true,
-								"inputType": "number",
-								"lockKey": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "number"
 							}],
 							"width": 8,
 							"offset": 0,
@@ -1287,9 +1247,27 @@
 						"hideLabel": true,
 						"tableView": false,
 						"key": "pageNaNPanelColumns2Columns1",
-						"customConditional": "show = data.privileges.MANAGE_POLICY_APPROVAL_WRITE && (parseInt(data.balanceEndor) !== 0);",
+						"customConditional": "show = data.CSRReviewRequired;",
 						"type": "columns",
 						"input": false
+					}, {
+						"label": "userGrandTotal",
+						"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.endorAmount;\n}",
+						"calculateServer": false,
+						"key": "userGrandTotal",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "csrGrandTotal",
+						"calculateValue": "if(data.CSRReviewRequired){\n  value = data.endorAmount;\n}",
+						"calculateServer": false,
+						"key": "csrGrandTotal",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 9,
 					"offset": 0,
@@ -1358,7 +1336,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -1374,6 +1352,7 @@
 					},
 					"key": "endor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "panel2"
@@ -1397,7 +1376,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -1414,6 +1393,7 @@
 					},
 					"key": "csr_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "attachmentsCsrEndor"
@@ -1825,7 +1805,7 @@
 		},
 		"components": [{
 			"label": "amountPayable",
-			"calculateValue": "value = parseFloat(data['endorAmount']);",
+			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) > 0){\n    value = data.balanceEndor;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.endorsementTotal) || 0).toFixed(0);\n}",
 			"calculateServer": false,
 			"key": "endorAmountPayable",
 			"type": "hidden",
@@ -1932,8 +1912,8 @@
 					}, {
 						"label": "Upload Consent Form",
 						"tableView": false,
-						"storage": "base64",
-						"webcam": false,
+						"storage": "url",
+						"webcam": true,
 						"fileTypes": [{
 							"label": "",
 							"value": ""
@@ -1942,7 +1922,8 @@
 						"calculateServer": false,
 						"key": "chequeConsentFile",
 						"type": "file",
-						"input": true
+						"input": true,
+						"url": "/file/attachment"
 					}],
 					"hideOnChildrenHidden": false
 				}, {
@@ -2144,7 +2125,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 149,
+	"_vid": 161,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2154,8 +2135,8 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
 		"showCancel": "true",
 		"clickable": "false",
 		"showNext": "true",
@@ -2165,7 +2146,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-05-22T22:41:44.723Z",
+	"modified": "2020-05-30T22:03:16.487Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

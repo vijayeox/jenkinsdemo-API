@@ -32,9 +32,6 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
-       {from:'public/css',to:'css'},
-       {from:'public/js',to:'js'},
-       {from:'public/register',to:'register'},
        {from:'public/img',to:'img'},
        "icon.png",
        "icon_white.png"

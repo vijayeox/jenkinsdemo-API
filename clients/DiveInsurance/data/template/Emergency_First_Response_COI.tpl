@@ -60,23 +60,19 @@
 		{if isset($previous_policy_data) && !empty($previous_policy_data)}
 			{assign var=previousPolicyData value=$previous_policy_data|json_decode:true}
 				{if isset($previousPolicyData) && !empty($previousPolicyData) && (count($previousPolicyData) > 0)}
-				{assign var=liability value=$previousPolicyData[0].previous_excessLiability}
-				{assign var="liability" value=$liability|replace:'liabilityCoverage':''}
-		        {math assign="annualA" equation='x+y' x=$liability y=1000000} 
-										{else}
-				{assign var=liability value=$liabilityCoverage}
-				{$liability|replace:'liabilityCoverage':''}
-		        {math assign="annualA" equation='x+y' x=$liability y=1000000} 
+					{assign var=policyIndex value=count($previousPolicyData) - 1}
+					{assign var=liability value=$previousPolicyData.$policyIndex.prevSingleLimit}
+					{assign var=annualA value=$previousPolicyData.$policyIndex.prevAnnualAggregate}
 				{/if}
-				{else}
-				{assign var=liability value=$liabilityCoverage}
-				{assign var="liability" value=$liability|replace:'liabilityCoverage':''}
-		        {math assign="annualA" equation='x+y' x=$liability y=1000000} 
+		{else}
+			{assign var=liability value=$single_limit} 
+		    {assign var=annualA value=$annual_aggregate} 
 		{/if}
+
 	        	<div class = "in-type1" style="width: 60%"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claim s Made Form</p>
 		            	{math assign="sl" equation='x/y' x=$liability y=1000000} 
-		            	{math assign="aa" equation='x/y' x=$annualA y=1000000} 
+		            	{math assign="aa" equation='x/y' x=$annualA y=1000000}
 			            <p class = "ins_font">Insured's Status EFR Instructor ({$sl}M/{$aa}M)</p>
 			            <p class = "ins_font">${$liability|number_format}&nbsp&nbsp&nbsp(per occurence)</p>
 			            <p class = "ins_font">${$annualA|number_format}</p>						
@@ -94,27 +90,17 @@
 		</p></center>
 		<hr class = "spacing1"></hr>
 		<div class = "second_content">
-			{if isset($previousLiabilityCoverage) }
-				{assign var=list value=$previousLiabilityCoverage|json_decode:true}
-				{if !empty($previousLiabilityCoverage)}
+			{if isset($previousPolicyData) && !empty($previousPolicyData)}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
-            		{foreach from=$list item=$upgradeData}
-                        <p class = "policy_status">
-							{if $upgradeData.liabilityCoverage == 'Liability Coverage($1,000,000)'}
-                            	Liability Limits :  $1,000,000 Combined and $2,000,000 Annual Aggregate as of {$upgradeData.update_date}
-							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($2,000,000)'}
-							Liability Limits :  $2,000,000 Combined and $3,000,000 Annual Aggregate as of {$upgradeData.update_date}
-							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($3,000,000)'}
-							Liability Limits :  $3,000,000 Combined and $4,000,000 Annual Aggregate as of {$upgradeData.update_date}
-							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($4,000,000)'}
-							Liability Limits :  $4,000,000 Combined and $5,000,000 Annual Aggregate as of {$upgradeData.update_date}
-							{elseif $upgradeData.liabilityCoverage == 'Liability Coverage($5,000,000)'}
-							Liability Limits :  $5,000,000 Combined and $6,000,000 Annual Aggregate as of {$upgradeData.update_date}
-                            {/if}
-                        </p>
-            		{/foreach}
-            	{/if}
-            	{/if}
+					{foreach from=$previousPolicyData item=$upgradeData}
+						{if isset($upgradeData.upgraded_single_limit)}
+							<p class = "policy_status">
+	                            Liability Limits :  ${$upgradeData.upgraded_single_limit|number_format} Combined and ${$upgradeData.upgraded_annual_aggregate|number_format} Annual Aggregate as of {$upgradeData.update_date|date_format:"%m/%d/%Y"}
+	                        </p>
+	                    {/if}
+	                 {/foreach}
+	        {/if}
+
 			<hr class = "hr_efr"></hr>
 			<p class = "policy_notice">
 				The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688. The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description of the terms, conditions and exclusions of the policy. This certificate does not amend, alter or extend the coverage afforded by the policy referenced on this certificate.
