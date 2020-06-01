@@ -656,6 +656,11 @@ class CommandService extends AbstractService
             unset($data['data']);
             $processedData = array_merge($data,$fileData);
             $this->logger->info("Processed Data".print_r($processedData,true));
+            foreach ($processedData as $key => $value) {
+                if(is_array($value)){
+                    $processedData[$key] = json_encode($value);
+                }
+            }
             return $processedData;
         } else {
             return $data;
