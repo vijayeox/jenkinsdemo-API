@@ -1300,6 +1300,7 @@
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateValue": "if(data['careerCoverage'] && data[data['careerCoverage']] != undefined){\n    var previousPolicyData = data.previous_policy_data;\n\tif(previousPolicyData && previousPolicyData.length >= 0){\n  \t\tvar currentPolicy = previousPolicyData[0];\n  \t\tvar originalCareer = currentPolicy.previous_careerCoverage;\n  \t\tif(originalCareer==data['careerCoverage']){\n    \t\tvalue = 0;\n  \t\t} else {\n    \t\tvalue = data[data['careerCoverage']];\n  \t\t}\n  \t} else {\n  \t  value = 0;\n  \t}\n} else {\n  value = 0;\n}",
 								"calculateServer": false,
 								"key": "careerCoveragePrice",
 								"type": "number",
@@ -1521,9 +1522,6 @@
 									"customMessage": "Please select the Cylinder Coverage"
 								},
 								"key": "cylinder",
-								"properties": {
-									"target": "cylinderPrice"
-								},
 								"type": "select",
 								"indexeddb": {
 									"filter": {}
@@ -1552,6 +1550,7 @@
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
+								"calculateValue": "if(data.cylinder && data[data['cylinder']] != undefined){\n  value = data[data['cylinder']];\n}\nif(data['cylinder'] && data[data['cylinder']] != undefined){\n    var previousPolicyData = data.previous_policy_data;\n\tif(previousPolicyData && previousPolicyData.length >= 0){\n  \t\tvar currentPolicy = previousPolicyData[0];\n  \t\tvar originalCylinder = currentPolicy.previous_cylinder;\n  \t\tif(originalCylinder==data['cylinder']){\n    \t\tvalue = 0;\n  \t\t} else {\n    \t\tvalue = data[data['cylinder']];\n  \t\t}\n  \t} else {\n  \t  value = 0;\n  \t}\n} else {\n  value = 0;\n}",
 								"calculateServer": false,
 								"key": "cylinderPrice",
 								"type": "number",
@@ -1718,9 +1717,10 @@
 								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
+								"redrawOn": "excessLiabilityPrice",
 								"clearOnHide": false,
 								"customDefaultValue": "value=0.00",
-								"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0];\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data.excessLiabilityPrice) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
+								"calculateValue": "var previousPolicyData = data.previous_policy_data;\nif(previousPolicyData && previousPolicyData.length >= 0){\n  var currentPolicy = previousPolicyData[0];\n  var liabilityPrice = currentPolicy.previous_excessLiability;\n  var difference = (parseFloat(data[data['excessLiability']]) - parseFloat(data[liabilityPrice]))\nvalue = difference.toFixed(0);\n}",
 								"calculateServer": false,
 								"key": "excessLiabilityPricePayable",
 								"type": "number",
@@ -3218,7 +3218,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 218,
+	"_vid": 220,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3239,6 +3239,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-05-31T12:46:37.085Z",
+	"modified": "2020-06-01T09:02:19.709Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
