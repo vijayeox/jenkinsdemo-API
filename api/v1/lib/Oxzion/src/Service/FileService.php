@@ -375,6 +375,9 @@ class FileService extends AbstractService
             //     }
             // }
             foreach ($fields as $field) {
+                if(array_search($field['name'],array_keys($fieldData)) == -1){
+                    continue;
+                }
                 if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
                     // Update the existing record
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
@@ -386,15 +389,15 @@ class FileService extends AbstractService
                 if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
                 }
+                $keyValueFields[$i]['file_id'] = $fileId;
+                $keyValueFields[$i]['field_id'] = $field['id'];
+                $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
+                $keyValueFields[$i]['field_value']=$fieldvalue;
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                 $keyValueFields[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
+                $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
                 $keyValueFields[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
                 $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
-                $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
-                $keyValueFields[$i]['field_id'] = $field['id'];
-                $keyValueFields[$i]['file_id'] = $fileId;
-                $keyValueFields[$i]['field_value']=$fieldvalue;
                 if(isset($field['data_type'])){
                     switch ($field['data_type']) {
                         case 'text':
@@ -421,17 +424,17 @@ class FileService extends AbstractService
                             if($fieldvalue == true || $fieldvalue == "true") {
                                 $boolVal = true;
                                 $fieldvalue = 1;
-                            }
-                            if($fieldvalue == false || $fieldvalue == "false"|| $fieldvalue == null || empty($fieldvalue)) {
+                            } else {
                                 $boolVal = false;
                                 $fieldvalue = 0;
                             }
+                            $keyValueFields[$i]['field_value']=$fieldvalue;
                             $keyValueFields[$i]['field_value_type'] = 'BOOLEAN';
                             $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
                             $keyValueFields[$i]['field_value_boolean'] = $fieldvalue;
-                            $keyValueFields['data'][$field['name']] = $boolVal;
                             $keyValueFields[$i]['field_value_date'] = NULL;
+                            $keyValueFields['data'][$field['name']] = $boolVal;
                             break;
                         case 'date':
                         case 'datetime':
@@ -725,7 +728,7 @@ class FileService extends AbstractService
                             $sort .= "`of`.date_created ".$value['dir'].",";
                         }else{
                             $fromQuery .= " inner join ox_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$fieldName.$tablePrefix." on(".$fieldName.$tablePrefix.".id = ".$tablePrefix.".field_id and ". $fieldName.$tablePrefix.".name='".$fieldName."')";
-                            $sort .= "CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean ELSE (".$tablePrefix.".field_value_text) END ".$value['dir'].",";
+                            $sort .= " (CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean WHEN ".$tablePrefix.".field_value_type='TEXT' THEN ".$tablePrefix.".field_value_text ELSE (".$tablePrefix.".field_value) END )".$value['dir'].",";
                         }
                         $sortCount += 1;
                     }
