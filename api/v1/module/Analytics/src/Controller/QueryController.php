@@ -2,12 +2,11 @@
 
 namespace Analytics\Controller;
 
-use Zend\Log\Logger;
 use Analytics\Model\Query;
+use Exception;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
-use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class QueryController extends AbstractApiController
@@ -44,8 +43,7 @@ class QueryController extends AbstractApiController
         $data = $this->params()->fromPost();
         try {
             $count = $this->queryService->createQuery($data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -68,12 +66,10 @@ class QueryController extends AbstractApiController
     {
         try {
             $count = $this->queryService->updateQuery($uuid, $data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (VersionMismatchException $e) {
+        } catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         if ($count == 0) {
@@ -82,14 +78,14 @@ class QueryController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function delete($uuid) {
+    public function delete($uuid)
+    {
         $params = $this->params()->fromQuery();
-        if(isset($params['version'])){
+        if (isset($params['version'])) {
             try {
                 $response = $this->queryService->deleteQuery($uuid, $params['version']);
-            }
-            catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED',  'new record' => $e->getReturnObject()]);
+            } catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
                 return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
@@ -163,19 +159,17 @@ class QueryController extends AbstractApiController
 
     public function previewQueryAction()
     {
-        $data = $this->params()->fromPost();
+        $data   = $this->params()->fromPost();
         $params = array_merge($data, $this->params()->fromRoute());
-        try{
+        try {
             $result = $this->queryService->previewQuery($params);
             if (!$result) {
                 return $this->getErrorResponse("Query Cannot be executed", 404);
             }
-        }
-        catch(ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             $response = ['data' => $data, 'errors' => 'Query could not be executed'];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -193,32 +187,33 @@ class QueryController extends AbstractApiController
      *   } </code>
      * @return array Returns a JSON Response with Status Code and executed querys result.
      */
-    public function queryDataAction() {
+    public function queryDataAction()
+    {
         $data = $this->extractPostData();
+        // print_r($data);exit;
         try {
             $this->log->info("Query Data Action- " . print_r($data, true));
             $result = $this->queryService->queryData($data);
             if (!$result) {
                 return $this->getErrorResponse("Querys cannot be executed", 404);
             }
-        } catch(ValidationException $e) {
-            $this->log->error("Validation Exception- " ,$e);
+        } catch (ValidationException $e) {
+            $this->log->error("Validation Exception- ", $e);
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch(ZendDbException $e) {
-            $this->log->error("Zend DB Exception- " ,$e);
+        } catch (ZendDbException $e) {
+            $this->log->error("Zend DB Exception- ", $e);
             $response = ['data' => $data, 'errors' => 'Looks like the server encountered some problem'];
             return $this->getErrorResponse("Internal Error", 500, $response);
-        } catch(InvalidInputException $e) {
-            $this->log->error("Invalid Input Exception- " ,$e);
+        } catch (InvalidInputException $e) {
+            $this->log->error("Invalid Input Exception- ", $e);
             $response = ['data' => $data, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Invalid Input Errors", 404, $response);
-        } catch(Exception $e) {
-            $this->log->error("Query Data Action Exception- " ,$e);
+        } catch (Exception $e) {
+            $this->log->error("Query Data Action Exception- ", $e);
             $response = ['data' => $data, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Errors", 404, $response);
         }
         return $this->getSuccessResponseWithData(array('result' => $result));
     }
 }
-

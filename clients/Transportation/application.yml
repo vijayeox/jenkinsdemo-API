@@ -54,7 +54,7 @@ pages:
         uuid: 46bd5754-62d7-4a80-a7a0-8d97131d7cb8
     -
         page_name: monthlyrevenuesummary.yml
-        uuid: d2c3a908-465b-4468-8ba7-d51eadd93e6a
+        uuid: c5debd4b-7948-4bb9-90ce-e58e95b496b0
     -
         page_name: payperiodsummary.yml
         uuid: 20633819-40e6-45de-b123-eef2772f2503
@@ -67,49 +67,49 @@ pages:
 menu:
     -
         name: 'Available Loads'
-        icon: 'fa fa-road'
+        icon: 'far fa-road'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: 68b97b51-c68d-4678-8b5b-07b6dbb7057e
         uuid: 218b1966-d94d-42fa-b4e4-c8518f088493
     -
         name: 'Trailer Current Location'
-        icon: 'fa fa-map'
+        icon: 'fal fa-map-marked-alt'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: bdcf93cb-b63b-4e57-adea-ce5b6d25cea7
         uuid: c3b1d64e-b61d-4f5e-8807-d34cd6a9c868
     -
         name: 'Trip Summary'
-        icon: 'fa fa-university'
+        icon: 'fal fa-truck-container'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: 1c8eb1e5-f5ec-4af9-88e6-d17eca54d8e4
         uuid: 6a288707-b121-4b99-874d-b682c01cca56
     -
         name: 'Monthly Mileage'
-        icon: 'fa fa-usd'
+        icon: 'fal fa-tachometer-slow'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: 46bd5754-62d7-4a80-a7a0-8d97131d7cb8
         uuid: 7da49137-324a-477d-94d0-7b566e6274c7
     -
         name: 'Monthly Revenue'
-        icon: 'fa fa-usd'
+        icon: 'fal fa-dollar-sign'
         privilege: MANAGE_TRANSPORTATION_WRITE
-        page_uuid: d2c3a908-465b-4468-8ba7-d51eadd93e6a
+        page_uuid: c5debd4b-7948-4bb9-90ce-e58e95b496b0
         uuid: 936b6dfe-d704-4dc8-8acb-ec6582054759
     -
         name: 'Pay Period'
-        icon: 'fa fa-credit-card-alt'
+        icon: 'fal fa-credit-card'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: 20633819-40e6-45de-b123-eef2772f2503
         uuid: 2a288707-c121-4c99-874d-b282e01cca34
     -
         name: 'Unbilled Revenue'
-        icon: 'fa fa-money'
+        icon: 'fal fa-money-bill-alt'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: fec34db0-3d69-46dc-af75-f794fa4e3ad1
         uuid: 6a285707-b541-4b99-874d-b682c01cca56
     -
         name: 'Revenue v.s Pay'
-        icon: 'fa fa-money'
+        icon: 'fal fa-chart-pie'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: c643663f-4c40-4298-bd6e-3fafdd65ceca
         uuid: 639a1d83-b01c-49c0-a91a-f3d60f1280b1

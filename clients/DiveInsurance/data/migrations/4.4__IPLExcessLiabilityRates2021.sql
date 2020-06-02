@@ -1,5 +1,5 @@
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
-('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2021-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-08-01 00:00:00','2020-08-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-09-01 00:00:00','2020-09-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-10-01 00:00:00','2020-10-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
@@ -12,8 +12,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
 ('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-05-01 00:00:00','2020-05-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-06-01 00:00:00','2021-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2021-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-06-01 00:00:00','2020-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-08-01 00:00:00','2020-08-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-09-01 00:00:00','2020-09-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-10-01 00:00:00','2020-10-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
@@ -26,8 +26,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-03-01 00:00:00','2020-03-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-04-01 00:00:00','2020-04-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-05-01 00:00:00','2020-05-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-01 00:00:00','2021-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2021-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-01 00:00:00','2020-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-08-01 00:00:00','2020-08-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-09-01 00:00:00','2020-09-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-10-01 00:00:00','2020-10-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
@@ -40,8 +40,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-03-01 00:00:00','2020-03-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-04-01 00:00:00','2020-04-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-05-01 00:00:00','2020-05-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2021-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2021-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2020-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-08-01 00:00:00','2020-08-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-09-01 00:00:00','2020-09-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-10-01 00:00:00','2020-10-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
@@ -54,8 +54,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-03-01 00:00:00','2020-03-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-04-01 00:00:00','2020-04-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-05-01 00:00:00','2020-05-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2021-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2021-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2020-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-08-01 00:00:00','2020-08-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
@@ -68,10 +68,10 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-03-01 00:00:00','2020-03-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-04-01 00:00:00','2020-04-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-05-01 00:00:00','2020-05-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2021-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2020-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
-('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2021-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
+('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-08-01 00:00:00','2020-08-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-09-01 00:00:00','2020-09-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-10-01 00:00:00','2020-10-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
@@ -84,8 +84,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
 ('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-05-01 00:00:00','2020-05-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2021-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2021-06-30 00:00:00','2020-07-31 00:00:00',487.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2020-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage9000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-30 00:00:00','2020-07-31 00:00:00',487.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-08-01 00:00:00','2020-08-31 00:00:00',447.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-09-01 00:00:00','2020-09-30 00:00:00',407.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-10-01 00:00:00','2020-10-31 00:00:00',366.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
@@ -98,8 +98,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-03-01 00:00:00','2020-03-31 00:00:00',163.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-04-01 00:00:00','2020-04-30 00:00:00',122.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-05-01 00:00:00','2020-05-31 00:00:00',81.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-01 00:00:00','2021-06-30 00:00:00',41.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2021-06-30 00:00:00','2020-07-31 00:00:00',976.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-01 00:00:00','2020-06-30 00:00:00',41.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-30 00:00:00','2020-07-31 00:00:00',976.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-08-01 00:00:00','2020-08-31 00:00:00',895.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-09-01 00:00:00','2020-09-30 00:00:00',814.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-10-01 00:00:00','2020-10-31 00:00:00',732.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
@@ -112,8 +112,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-03-01 00:00:00','2020-03-31 00:00:00',325.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-04-01 00:00:00','2020-04-30 00:00:00',244.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-05-01 00:00:00','2020-05-31 00:00:00',163.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2021-06-30 00:00:00',81.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2021-06-30 00:00:00','2020-07-31 00:00:00',1267.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2020-06-30 00:00:00',81.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-30 00:00:00','2020-07-31 00:00:00',1267.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-08-01 00:00:00','2020-08-31 00:00:00',1162.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-09-01 00:00:00','2020-09-30 00:00:00',1057.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-10-01 00:00:00','2020-10-31 00:00:00',951.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
@@ -126,8 +126,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-03-01 00:00:00','2020-03-31 00:00:00',422.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-04-01 00:00:00','2020-04-30 00:00:00',317.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-05-01 00:00:00','2020-05-31 00:00:00',212.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2021-06-30 00:00:00',106.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2021-06-30 00:00:00','2020-07-31 00:00:00',1592.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2020-06-30 00:00:00',106.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-30 00:00:00','2020-07-31 00:00:00',1592.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-08-01 00:00:00','2020-08-31 00:00:00',1459.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
@@ -140,10 +140,10 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-03-01 00:00:00','2020-03-31 00:00:00',529.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-04-01 00:00:00','2020-04-30 00:00:00',398.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-05-01 00:00:00','2020-05-31 00:00:00',266.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2021-06-30 00:00:00',134.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2020-06-30 00:00:00',134.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
-('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2021-06-30 00:00:00','2020-07-31 00:00:00',3555.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-30 00:00:00','2020-07-31 00:00:00',3555.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-08-01 00:00:00','2020-08-31 00:00:00',3258.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-09-01 00:00:00','2020-09-30 00:00:00',2962.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-10-01 00:00:00','2020-10-31 00:00:00',2666.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
@@ -156,8 +156,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
 ('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-05-01 00:00:00','2020-05-31 00:00:00',492.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2021-06-30 00:00:00',296.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2021-06-30 00:00:00','2020-07-31 00:00:00',2288.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2020-06-30 00:00:00',296.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverageDeclined','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-30 00:00:00','2020-07-31 00:00:00',2288.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-08-01 00:00:00','2020-08-31 00:00:00',2096.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-09-01 00:00:00','2020-09-30 00:00:00',1905.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-10-01 00:00:00','2020-10-31 00:00:00',1715.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
@@ -170,8 +170,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-03-01 00:00:00','2020-03-31 00:00:00',763.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-04-01 00:00:00','2020-04-30 00:00:00',572.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-05-01 00:00:00','2020-05-31 00:00:00',380.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2021-06-30 00:00:00',190.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2021-06-30 00:00:00','2020-07-31 00:00:00',325.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2020-06-30 00:00:00',190.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage4000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-30 00:00:00','2020-07-31 00:00:00',325.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-08-01 00:00:00','2020-08-31 00:00:00',297.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-09-01 00:00:00','2020-09-30 00:00:00',270.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-10-01 00:00:00','2020-10-31 00:00:00',243.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
@@ -184,8 +184,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-03-01 00:00:00','2020-03-31 00:00:00',109.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-04-01 00:00:00','2020-04-30 00:00:00',81.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-05-01 00:00:00','2020-05-31 00:00:00',54.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2021-06-30 00:00:00',28.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2021-06-30 00:00:00','2020-07-31 00:00:00',2288.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2020-06-30 00:00:00',28.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-30 00:00:00','2020-07-31 00:00:00',2288.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-08-01 00:00:00','2020-08-31 00:00:00',2096.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-09-01 00:00:00','2020-09-30 00:00:00',1905.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-10-01 00:00:00','2020-10-31 00:00:00',1715.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
@@ -198,8 +198,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-03-01 00:00:00','2020-03-31 00:00:00',763.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-04-01 00:00:00','2020-04-30 00:00:00',572.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-05-01 00:00:00','2020-05-31 00:00:00',380.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2021-06-30 00:00:00',190.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2021-06-30 00:00:00','2020-07-31 00:00:00',291.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2020-06-30 00:00:00',190.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage3000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-30 00:00:00','2020-07-31 00:00:00',291.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-08-01 00:00:00','2020-08-31 00:00:00',267.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
@@ -212,10 +212,10 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-03-01 00:00:00','2020-03-31 00:00:00',97.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-04-01 00:00:00','2020-04-30 00:00:00',73.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-05-01 00:00:00','2020-05-31 00:00:00',49.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2021-06-30 00:00:00',25.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2020-06-30 00:00:00',25.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
-('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2021-06-30 00:00:00','2020-07-31 00:00:00',616.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-30 00:00:00','2020-07-31 00:00:00',616.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-08-01 00:00:00','2020-08-31 00:00:00',564.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-09-01 00:00:00','2020-09-30 00:00:00',513.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-10-01 00:00:00','2020-10-31 00:00:00',462.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
@@ -228,8 +228,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
 ('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-05-01 00:00:00','2020-05-31 00:00:00',103.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2021-06-30 00:00:00',53.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2021-06-30 00:00:00','2020-07-31 00:00:00',2579.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2020-06-30 00:00:00',53.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-30 00:00:00','2020-07-31 00:00:00',2579.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-08-01 00:00:00','2020-08-31 00:00:00',2363.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-09-01 00:00:00','2020-09-30 00:00:00',2148.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-10-01 00:00:00','2020-10-31 00:00:00',1934.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
@@ -242,8 +242,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-03-01 00:00:00','2020-03-31 00:00:00',860.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-04-01 00:00:00','2020-04-30 00:00:00',645.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-05-01 00:00:00','2020-05-31 00:00:00',429.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2021-06-30 00:00:00',215.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2021-06-30 00:00:00','2020-07-31 00:00:00',489.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2020-06-30 00:00:00',215.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage2000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-30 00:00:00','2020-07-31 00:00:00',489.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-08-01 00:00:00','2020-08-31 00:00:00',448.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-09-01 00:00:00','2020-09-30 00:00:00',407.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-10-01 00:00:00','2020-10-31 00:00:00',366.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
@@ -256,8 +256,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-03-01 00:00:00','2020-03-31 00:00:00',162.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-04-01 00:00:00','2020-04-30 00:00:00',122.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-05-01 00:00:00','2020-05-31 00:00:00',82.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2021-06-30 00:00:00',40.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2021-06-30 00:00:00','2020-07-31 00:00:00',780.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2020-06-30 00:00:00',40.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-30 00:00:00','2020-07-31 00:00:00',780.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-08-01 00:00:00','2020-08-31 00:00:00',715.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-09-01 00:00:00','2020-09-30 00:00:00',650.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-10-01 00:00:00','2020-10-31 00:00:00',585.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
@@ -270,8 +270,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-03-01 00:00:00','2020-03-31 00:00:00',259.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-04-01 00:00:00','2020-04-30 00:00:00',195.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-05-01 00:00:00','2020-05-31 00:00:00',131.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2021-06-30 00:00:00',65.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2021-06-30 00:00:00','2020-07-31 00:00:00',1105.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2020-06-30 00:00:00',65.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-30 00:00:00','2020-07-31 00:00:00',1105.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-08-01 00:00:00','2020-08-31 00:00:00',1012.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
@@ -284,10 +284,10 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-03-01 00:00:00','2020-03-31 00:00:00',368.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-04-01 00:00:00','2020-04-30 00:00:00',276.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-05-01 00:00:00','2020-05-31 00:00:00',185.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2021-06-30 00:00:00',93.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2020-06-30 00:00:00',93.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
-('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2021-06-30 00:00:00','2020-07-31 00:00:00',3068.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-30 00:00:00','2020-07-31 00:00:00',3068.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-08-01 00:00:00','2020-08-31 00:00:00',2811.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-09-01 00:00:00','2020-09-30 00:00:00',2555.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-10-01 00:00:00','2020-10-31 00:00:00',2300.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
@@ -300,8 +300,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
 ('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-05-01 00:00:00','2020-05-31 00:00:00',511.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2021-06-30 00:00:00',255.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2021-06-30 00:00:00','2020-07-31 00:00:00',467.00000,'VALUE',20.00,NULL,487.00,0,'1','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2020-06-30 00:00:00',255.00000,'VALUE',NULL,NULL,NULL,1,'excessLiabilityCoverage1000000','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-30 00:00:00','2020-07-31 00:00:00',467.00000,'VALUE',20.00,NULL,487.00,0,'1','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-08-01 00:00:00','2020-08-31 00:00:00',429.00000,'VALUE',18.00,NULL,447.00,0,'1','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-09-01 00:00:00','2020-09-30 00:00:00',390.00000,'VALUE',17.00,NULL,407.00,0,'1','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-10-01 00:00:00','2020-10-31 00:00:00',351.00000,'VALUE',15.00,NULL,366.00,0,'1','EXCESS_LIABILITY',2020)
@@ -314,8 +314,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-03-01 00:00:00','2020-03-31 00:00:00',156.00000,'VALUE',7.00,NULL,163.00,0,'1','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-04-01 00:00:00','2020-04-30 00:00:00',117.00000,'VALUE',5.00,NULL,122.00,0,'1','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-05-01 00:00:00','2020-05-31 00:00:00',78.00000,'VALUE',3.00,NULL,81.00,0,'1','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-01 00:00:00','2021-06-30 00:00:00',39.00000,'VALUE',2.00,NULL,41.00,0,'1','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2021-06-30 00:00:00','2020-07-31 00:00:00',936.00000,'VALUE',40.00,NULL,976.00,0,'2','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','1M Excess','excessLiabilityCoverage1000000','2020-06-01 00:00:00','2020-06-30 00:00:00',39.00000,'VALUE',2.00,NULL,41.00,0,'1','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-30 00:00:00','2020-07-31 00:00:00',936.00000,'VALUE',40.00,NULL,976.00,0,'2','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-08-01 00:00:00','2020-08-31 00:00:00',858.00000,'VALUE',37.00,NULL,895.00,0,'2','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-09-01 00:00:00','2020-09-30 00:00:00',780.00000,'VALUE',34.00,NULL,814.00,0,'2','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-10-01 00:00:00','2020-10-31 00:00:00',702.00000,'VALUE',30.00,NULL,732.00,0,'2','EXCESS_LIABILITY',2020)
@@ -328,8 +328,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-03-01 00:00:00','2020-03-31 00:00:00',312.00000,'VALUE',13.00,NULL,325.00,0,'2','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-04-01 00:00:00','2020-04-30 00:00:00',234.00000,'VALUE',10.00,NULL,244.00,0,'2','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-05-01 00:00:00','2020-05-31 00:00:00',156.00000,'VALUE',7.00,NULL,163.00,0,'2','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2021-06-30 00:00:00',78.00000,'VALUE',3.00,NULL,81.00,0,'2','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2021-06-30 00:00:00','2020-07-31 00:00:00',1215.00000,'VALUE',52.00,NULL,1267.00,0,'3','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','2M Excess','excessLiabilityCoverage2000000','2020-06-01 00:00:00','2020-06-30 00:00:00',78.00000,'VALUE',3.00,NULL,81.00,0,'2','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-30 00:00:00','2020-07-31 00:00:00',1215.00000,'VALUE',52.00,NULL,1267.00,0,'3','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-08-01 00:00:00','2020-08-31 00:00:00',1114.00000,'VALUE',48.00,NULL,1162.00,0,'3','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-09-01 00:00:00','2020-09-30 00:00:00',1013.00000,'VALUE',44.00,NULL,1057.00,0,'3','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-10-01 00:00:00','2020-10-31 00:00:00',912.00000,'VALUE',39.00,NULL,951.00,0,'3','EXCESS_LIABILITY',2020)
@@ -342,8 +342,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-03-01 00:00:00','2020-03-31 00:00:00',405.00000,'VALUE',17.00,NULL,422.00,0,'3','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-04-01 00:00:00','2020-04-30 00:00:00',304.00000,'VALUE',13.00,NULL,317.00,0,'3','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-05-01 00:00:00','2020-05-31 00:00:00',203.00000,'VALUE',9.00,NULL,212.00,0,'3','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2021-06-30 00:00:00',102.00000,'VALUE',4.00,NULL,106.00,0,'3','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2021-06-30 00:00:00','2020-07-31 00:00:00',1526.00000,'VALUE',66.00,NULL,1592.00,0,'4','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','3M Excess','excessLiabilityCoverage3000000','2020-06-01 00:00:00','2020-06-30 00:00:00',102.00000,'VALUE',4.00,NULL,106.00,0,'3','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-30 00:00:00','2020-07-31 00:00:00',1526.00000,'VALUE',66.00,NULL,1592.00,0,'4','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-08-01 00:00:00','2020-08-31 00:00:00',1399.00000,'VALUE',60.00,NULL,1459.00,0,'4','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
@@ -356,10 +356,10 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-03-01 00:00:00','2020-03-31 00:00:00',509.00000,'VALUE',22.00,NULL,529.00,0,'4','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-04-01 00:00:00','2020-04-30 00:00:00',382.00000,'VALUE',16.00,NULL,398.00,0,'4','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-05-01 00:00:00','2020-05-31 00:00:00',255.00000,'VALUE',11.00,NULL,266.00,0,'4','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2021-06-30 00:00:00',128.00000,'VALUE',6.00,NULL,134.00,0,'4','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','4M Excess','excessLiabilityCoverage4000000','2020-06-01 00:00:00','2020-06-30 00:00:00',128.00000,'VALUE',6.00,NULL,134.00,0,'4','EXCESS_LIABILITY',2020)
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
-('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2021-06-30 00:00:00','2020-07-31 00:00:00',3408.00000,'VALUE',147.00,NULL,3555.00,0,'5','EXCESS_LIABILITY',2020)
+('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-30 00:00:00','2020-07-31 00:00:00',3408.00000,'VALUE',147.00,NULL,3555.00,0,'5','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-08-01 00:00:00','2020-08-31 00:00:00',3124.00000,'VALUE',134.00,NULL,3258.00,0,'5','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-09-01 00:00:00','2020-09-30 00:00:00',2840.00000,'VALUE',122.00,NULL,2962.00,0,'5','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-10-01 00:00:00','2020-10-31 00:00:00',2556.00000,'VALUE',110.00,NULL,2666.00,0,'5','EXCESS_LIABILITY',2020)
@@ -372,8 +372,8 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ;
 INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`) VALUES 
 ('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-05-01 00:00:00','2020-05-31 00:00:00',568.00000,'VALUE',24.00,NULL,492.00,0,'5','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2021-06-30 00:00:00',284.00000,'VALUE',12.00,NULL,296.00,0,'5','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2021-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','9M Excess','excessLiabilityCoverage9000000','2020-06-01 00:00:00','2020-06-30 00:00:00',284.00000,'VALUE',12.00,NULL,296.00,0,'5','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-06-30 00:00:00','2020-07-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-09-01 00:00:00','2020-09-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-10-01 00:00:00','2020-10-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-11-01 00:00:00','2020-11-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
@@ -386,5 +386,5 @@ INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premiu
 ('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-08-01 00:00:00','2020-08-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-04-01 00:00:00','2020-04-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
 ,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-05-01 00:00:00','2020-05-31 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
-,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-06-01 00:00:00','2021-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
+,('Individual Professional Liability','0 Excess','excessLiabilityCoverageDeclined','2020-06-01 00:00:00','2020-06-30 00:00:00',0.00000,'VALUE',NULL,NULL,NULL,0,'0','EXCESS_LIABILITY',2020)
 ;
