@@ -120,7 +120,7 @@ class FileService extends AbstractService
                 throw new ValidationException("Validation Errors" . json_encode($fields));
             }
             $this->logger->info("Check Fields - " . json_encode($validFields));
-            $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
+            $this->multiInsertOrUpdate('ox_file_attribute', $validFields);
             $this->logger->info("Created successfully  - file record");
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
@@ -421,14 +421,14 @@ class FileService extends AbstractService
                                 unset($boolVal);
                             }
                             $boolVal = false;
-                            if($fieldvalue == true || $fieldvalue == "true") {
+                            if((is_bool($fieldvalue) && $fieldvalue == true) || (is_string($fieldvalue) && $fieldvalue == "true") || (is_int($fieldvalue) && $fieldvalue == 1)) {
                                 $boolVal = true;
                                 $fieldvalue = 1;
                             } else {
                                 $boolVal = false;
                                 $fieldvalue = 0;
                             }
-                            $keyValueFields[$i]['field_value']=$fieldvalue;
+                            $keyValueFields[$i]['field_value']=$boolVal;
                             $keyValueFields[$i]['field_value_type'] = 'BOOLEAN';
                             $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
