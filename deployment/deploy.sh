@@ -378,6 +378,7 @@ diveinsurance()
         npm install --unsafe-perm
         npm run build
         chown oxzion:oxzion -R /opt/oxzion/view
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
