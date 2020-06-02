@@ -370,11 +370,17 @@ diveinsurance()
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/DiveInsurance'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/apps/DiveInsurance/
+        rm -rf /opt/oxzion/view/apps/DiveInsurance/node_modules
+        npm install --unsafe-perm
+        cd /opt/oxzion/view/themes/VicenciaAndBuckleyTheme/
+        rm -rf /opt/oxzion/view/themes/VicenciaAndBuckleyTheme/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chown oxzion:oxzion -R /opt/oxzion/view
         chmod 777 -R /opt/oxzion/eoxapps
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
