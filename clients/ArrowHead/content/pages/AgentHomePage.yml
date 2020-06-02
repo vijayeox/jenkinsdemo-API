@@ -14,7 +14,6 @@ content:
                     - 20
                     - 50
                 info: true
-            defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
             sortable: 
                 allowUnsort: true
                 mode: single
