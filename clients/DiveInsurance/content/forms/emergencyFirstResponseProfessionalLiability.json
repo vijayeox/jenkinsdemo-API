@@ -2711,6 +2711,13 @@
 				"type": "hidden",
 				"lockKey": true
 			}, {
+				"label": "transaction_reference_number",
+				"calculateServer": false,
+				"key": "transactionReferenceNumber",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"label": "Columns",
 				"columns": [{
 					"components": [{
@@ -2826,12 +2833,12 @@
 						"label": "Card Details",
 						"input": false,
 						"components": [{
-							"label": "Transaction ID",
+							"label": "Transaction Reference Number",
 							"spellcheck": false,
 							"disabled": true,
 							"tableView": false,
 							"clearOnHide": false,
-							"calculateValue": "value = data.transaction_id",
+							"calculateValue": "value = data.transaction_reference_number",
 							"calculateServer": false,
 							"key": "transactionId",
 							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
@@ -3013,7 +3020,7 @@
 				"tableView": false,
 				"values": [{
 					"label": "Approved",
-					"value": "approved",
+					"value": "accepted",
 					"shortcut": ""
 				}, {
 					"label": "Rejected",
@@ -3061,7 +3068,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 501,
+	"_vid": 503,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3145,7 +3152,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-30T22:06:43.309Z",
+	"modified": "2020-06-02T15:30:54.093Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
