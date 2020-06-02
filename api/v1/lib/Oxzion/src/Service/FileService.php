@@ -375,7 +375,7 @@ class FileService extends AbstractService
             //     }
             // }
             foreach ($fields as $field) {
-                if(array_search($field['name'],array_keys($fieldData)) == -1){
+                if(!in_array($field['name'], array_keys($fieldData))){
                     continue;
                 }
                 if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
