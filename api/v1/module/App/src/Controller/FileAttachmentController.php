@@ -79,10 +79,8 @@ class FileAttachmentController extends AbstractApiController
             $this->log->error($e->getMessage(), $e);
         }
         if (!isset($_FILES['file'])) {
-            return $this->getErrorResponse("File Not attached", 400, $data);
-        } else if (!isset($dataArray['type'])) {
-            return $this->getErrorResponse("File type not specified", 400, $data);
+            return $this->getErrorResponse("File Not attached", 400, $files);
         }
-        return $this->getErrorResponse("File Not attached", 400, $data);
+        return $this->getErrorResponse("File Not attached", 400, $files);
     }
 }
