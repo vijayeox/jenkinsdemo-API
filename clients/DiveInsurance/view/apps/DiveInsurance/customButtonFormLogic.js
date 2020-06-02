@@ -17,7 +17,6 @@ s.onload = function (e) {
         clone.children[0].id = "saveDraftCustomButton";
         insertAfter($("ul[id*=nav]").children()[0], clone);
         saveDraftCustomButton.onclick = function () {
-          alert("Save Draft");
           let ev = new CustomEvent("customButtonAction", {
             detail: {
               timerVariable: appendCustomButtonTimer,
