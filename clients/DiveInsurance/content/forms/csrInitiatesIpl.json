@@ -3933,7 +3933,7 @@
 			"tableView": false,
 			"components": [{
 				"label": "amountPayable",
-				"calculateValue": "if(!data.CSRReviewRequired){\n  value = (data['finalAmount']||0).toFixed(0);\n}",
+				"calculateValue": "if(!data.CSRReviewRequired ){\n  value = (data['finalAmount']||0).toFixed(0);\n} else {\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data['balance'] > 0){\n    value = (data['balance']||0).toFixed(0);\n  }\n}",
 				"calculateServer": false,
 				"key": "amountPayable",
 				"type": "hidden",
@@ -3953,6 +3953,13 @@
 				"label": "transaction_status",
 				"type": "hidden",
 				"lockKey": true
+			}, {
+				"label": "transaction_reference_number",
+				"calculateServer": false,
+				"key": "transactionReferenceNumber",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -4069,14 +4076,14 @@
 						"label": "Card Details",
 						"input": false,
 						"components": [{
-							"label": "Transaction ID",
+							"label": "Transaction Reference Number",
 							"spellcheck": false,
 							"disabled": true,
 							"tableView": false,
 							"clearOnHide": false,
 							"calculateValue": "value = data.transaction_id",
 							"calculateServer": false,
-							"key": "transactionId",
+							"key": "transaction_reference_number",
 							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 							"type": "textfield",
 							"input": true
@@ -4307,7 +4314,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 323,
+	"_vid": 325,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4328,6 +4335,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-31T12:44:14.958Z",
+	"modified": "2020-06-02T14:22:31.235Z",
 	"machineName": "testdivehub:csrInitiates"
 }

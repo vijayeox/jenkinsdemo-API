@@ -120,7 +120,7 @@ class FileService extends AbstractService
                 throw new ValidationException("Validation Errors" . json_encode($fields));
             }
             $this->logger->info("Check Fields - " . json_encode($validFields));
-            $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
+            $this->multiInsertOrUpdate('ox_file_attribute', $validFields);
             $this->logger->info("Created successfully  - file record");
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
@@ -421,14 +421,14 @@ class FileService extends AbstractService
                                 unset($boolVal);
                             }
                             $boolVal = false;
-                            if($fieldvalue == true || $fieldvalue == "true") {
+                            if((is_bool($fieldvalue) && $fieldvalue == true) || (is_string($fieldvalue) && $fieldvalue == "true") || (is_int($fieldvalue) && $fieldvalue == 1)) {
                                 $boolVal = true;
                                 $fieldvalue = 1;
                             } else {
                                 $boolVal = false;
                                 $fieldvalue = 0;
                             }
-                            $keyValueFields[$i]['field_value']=$fieldvalue;
+                            $keyValueFields[$i]['field_value']=$boolVal;
                             $keyValueFields[$i]['field_value_type'] = 'BOOLEAN';
                             $keyValueFields[$i]['field_value_text'] = NULL;
                             $keyValueFields[$i]['field_value_numeric'] = NULL;
@@ -1194,12 +1194,12 @@ class FileService extends AbstractService
             $this->logger->info("attachment- " . json_encode($fileAttachment));
             if(file_exists($fileLocation)){
                 FileUtils::copy($fileLocation,$fileAttachment['name'],$targetLocation);
-                FileUtils::deleteFile($fileAttachment['originalName'],dirname($fileLocation)."/");
+                // FileUtils::deleteFile($fileAttachment['originalName'],dirname($fileLocation)."/");
                 $fileAttachment['file'] = AuthContext::get(AuthConstants::ORG_UUID) . '/' . $fileUuid . '/'.$fileAttachment['name'];
                 $fileAttachment['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $fileUuid . '/'.$fileAttachment['name'];
                 $fileAttachment['path'] = FileUtils::truepath($targetLocation."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $fileUuid . '/'.$fileAttachment['name']);
                 $this->logger->info("File Moved- " . json_encode($fileAttachment));
-                $count = $this->attachmentTable->delete($fileAttachment['id'], []);
+                // $count = $this->attachmentTable->delete($fileAttachment['id'], []);
             }
             $this->logger->info("File Deleted- " . json_encode($fileAttachment));
         }

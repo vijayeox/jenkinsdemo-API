@@ -1826,6 +1826,13 @@
 			"type": "hidden",
 			"lockKey": true
 		}, {
+			"label": "transaction_reference_number",
+			"calculateServer": false,
+			"key": "transactionReferenceNumber",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Columns",
 			"columns": [{
 				"components": [{
@@ -1941,6 +1948,18 @@
 					"label": "Card Details",
 					"input": false,
 					"components": [{
+						"label": "Transaction Reference Number",
+						"spellcheck": false,
+						"disabled": true,
+						"tableView": false,
+						"clearOnHide": false,
+						"calculateValue": "value = data.transaction_reference_number",
+						"calculateServer": false,
+						"key": "transactionId",
+						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"type": "textfield",
+						"input": true
+					}, {
 						"type": "convergepay",
 						"key": "creditcardPayment",
 						"amount_field": "endorAmountPayable",
@@ -1948,18 +1967,6 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
-					}, {
-						"label": "Transaction ID",
-						"spellcheck": false,
-						"disabled": true,
-						"tableView": false,
-						"clearOnHide": false,
-						"calculateValue": "value = data.transaction_id",
-						"calculateServer": false,
-						"key": "transactionId",
-						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-						"type": "textfield",
-						"input": true
 					}, {
 						"label": "Content",
 						"attrs": [{
@@ -2125,7 +2132,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 162,
+	"_vid": 163,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2146,7 +2153,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-01T09:22:47.955Z",
+	"modified": "2020-06-02T15:24:56.300Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

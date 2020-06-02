@@ -91,6 +91,13 @@
 		<hr class = "spacing1"></hr>
 		<div class = "second_content">
 			{if isset($previousPolicyData) && !empty($previousPolicyData)}
+				{assign var=hasEndorsement value=0}
+				{foreach from=$previousPolicyData item=$upgradeData}
+				{if isset($upgradeData.upgraded_single_limit)}
+				{assign var=hasEndorsement value=1}
+				{/if}
+				{/foreach}
+			{if $hasEndorsement == 1}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 					{foreach from=$previousPolicyData item=$upgradeData}
 						{if isset($upgradeData.upgraded_single_limit)}
@@ -99,6 +106,7 @@
 	                        </p>
 	                    {/if}
 	                 {/foreach}
+	        {/if}
 	        {/if}
 
 			<hr class = "hr_efr"></hr>
