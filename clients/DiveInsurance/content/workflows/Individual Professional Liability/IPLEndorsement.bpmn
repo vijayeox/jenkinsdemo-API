@@ -189,12 +189,18 @@ def cylinder = execution.getVariable('upgradecylinder')
 def paymentOptions = execution.getVariable('paymentOptions')
 def initiatedByCsr = execution.getVariable('initiatedByCsr')
 
+boolean result0 = false
 boolean result1 = false
 boolean result3 = false
 boolean result4 = false
 boolean result5 = false
 boolean result6 = true
 
+if(personalInfo){
+    if(country != "United States of America"){
+       result0=true 
+    }
+}
 if(cylinder){
   if(cylinder == "cylinderInspector" || cylinder == "cylinderInstructor"){
     result5 = true
@@ -209,8 +215,10 @@ if (additionalInsured) {
  }
 }
 if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternationalCoverages == "internationalAssistantInstructor" || upgradeInternationalCoverages == "internationalDivemaster" || upgradeInternationalCoverages =="internationalNonteachingSupervisoryInstructor" || upgradeInternationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){
-  result4 = true
+	result4 = true
 }
+}
+
 
 if(paymentOptions){
   if(paymentOptions == "creditCard"){
@@ -218,23 +226,22 @@ if(paymentOptions){
   }
 }
 
-if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6 || country != "United States of America")) {
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6 || result0)) {
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)
-}
 
 if(result3){
-  execution.setVariable('policyStatus', 'Pending Approval') 
+	execution.setVariable('policyStatus', 'Pending Approval')	
 }
 
 
 if(!autoRenewalJob){
-  execution.setVariable('autoRenewalJob', "")
-} 
-if(initiatedByCsr == true &amp;&amp; approved == "rejected"){ 
-  execution.setVariable('RejectedPolicy', true) 
-}else{    
+	execution.setVariable('autoRenewalJob', "")
+}	
+if(initiatedByCsr == true &amp;&amp; approved == "rejected"){	
+  execution.setVariable('RejectedPolicy', true)	
+}else{  	
   execution.setVariable('RejectedPolicy', false)
 }</camunda:script>
         </camunda:executionListener>
