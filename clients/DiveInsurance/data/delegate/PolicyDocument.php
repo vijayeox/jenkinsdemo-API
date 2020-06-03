@@ -267,7 +267,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 $upgrade = array("upgraded_single_limit" => $data['single_limit'],"upgraded_annual_aggregate" => $data['annual_aggregate']);
                                 $data['previous_policy_data'][0] = array_merge($data['previous_policy_data'][0],$upgrade);
                         }
-                        
                         $temp['previous_policy_data'] = json_encode($data['previous_policy_data']);
                     }
                 }
@@ -361,14 +360,16 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
 
                     if(isset($data['quoteInfo'])){
-                        if(is_string($data['quoteInfo'])){
+                        if(is_string($data['quoteInfo']) && isset($data['quoteRequirement'])){
                             $quoteInfo = json_decode($data['quoteRequirement'],true);
                         } else{
                             $quoteInfo = $data['quoteInfo'];
                         }
-                        for($i = 0;$i < sizeof($quoteInfo);$i++){
-                            if($quoteInfo['Hurricane Questionnaire.']){
-                                $documents['hurricane_questionnaire'] = $this->copyDocuments($temp,$dest['relativePath'],'hurricaneQuestionnaire');
+                        if(is_array($quoteInfo)){
+                            for($i = 0;$i < sizeof($quoteInfo);$i++){
+                                if($quoteInfo['Hurricane Questionnaire.']){
+                                    $documents['hurricane_questionnaire'] = $this->copyDocuments($temp,$dest['relativePath'],'hurricaneQuestionnaire');
+                                }
                             }
                         }
                     }

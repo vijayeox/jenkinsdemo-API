@@ -3227,6 +3227,13 @@
 						"layoutFixed": false,
 						"enableRowGroups": false,
 						"tableView": true,
+						"defaultValue": [{
+							"protective_devices": ""
+						}],
+						"calculateServer": false,
+						"validate": {
+							"minLength": 1
+						},
 						"key": "pageNaNPanel3DataGrid",
 						"type": "datagrid",
 						"input": true,
@@ -8315,38 +8322,52 @@
 				"type": "columns",
 				"input": false
 			}, {
-				"label": "Please mention the other requirements",
+				"label": "Please enter the other requirements",
 				"disableAddingRemovingRows": false,
 				"reorder": false,
-				"addAnother": "Add More",
 				"addAnotherPosition": "bottom",
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
+				"hidden": true,
 				"tableView": false,
 				"defaultValue": [{
-					"info": ""
+					"info": "",
+					"info1": ""
 				}],
 				"calculateServer": false,
 				"validate": {
-					"required": true
+					"minLength": 1
 				},
 				"key": "quoteInfoOther",
-				"conditional": {
-					"show": true,
-					"when": "quoteInfo",
-					"eq": "Other"
-				},
+				"logic": [{
+					"name": "Hide ",
+					"trigger": {
+						"type": "javascript",
+						"javascript": "result = false;\nconsole.log(data.quoteInfo)\nif(data.quoteInfo.Other == 'true' || data.quoteInfo.Other === true){\n  result = true;\n}"
+					},
+					"actions": [{
+						"name": "Hide",
+						"type": "property",
+						"property": {
+							"label": "Hidden",
+							"value": "hidden",
+							"type": "boolean"
+						},
+						"state": false
+					}]
+				}],
 				"type": "datagrid",
 				"input": true,
 				"components": [{
-					"label": "Please Mention",
+					"label": "Text Field",
 					"hideLabel": true,
 					"spellcheck": true,
 					"tableView": true,
 					"calculateServer": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Please enter the other requirements"
 					},
 					"key": "info",
 					"type": "textfield",
@@ -8542,7 +8563,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 564,
+	"_vid": 573,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8560,6 +8581,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-06-01T05:00:56.209Z",
+	"modified": "2020-06-03T05:22:30.244Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
