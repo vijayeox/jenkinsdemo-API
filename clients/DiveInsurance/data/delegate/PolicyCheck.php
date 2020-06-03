@@ -30,6 +30,9 @@ class PolicyCheck extends FileDelegate
         } else {
             $data['policy_exists'] = false;
         }
+        $data['firstname'] = "";
+        $data['lastname'] = "";
+        $data['initial'] = "";
         return $data;
     }
 }
