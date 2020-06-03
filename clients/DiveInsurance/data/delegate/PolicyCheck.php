@@ -21,9 +21,9 @@ class PolicyCheck extends FileDelegate
         $today = date('Y-m-d');
         $params['status'] = 'Completed';
         $params['entityName'] = $data['product'];
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'gte','value'=>$today);
+        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'gt','value'=>$today);
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['padi']);
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'policyStatus','operator'=>'neq','value'=> 'Cancelled');
+        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'policyStatus','operator'=>'neq','value'=> 'Cancelled');
         $policyList = $this->getFileList($params,$filterParams);
         if(count($policyList['data']) > 0){
             $data['policy_exists'] = true;
