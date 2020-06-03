@@ -360,16 +360,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
 
                     if(isset($data['quoteInfo'])){
-                        if(is_string($data['quoteInfo']) && isset($data['quoteRequirement'])){
-                            $quoteInfo = json_decode($data['quoteRequirement'],true);
+                        if(is_string($data['quoteInfo'])){
+                            $quoteInfo = json_decode($data['quoteInfo'],true);
                         } else{
                             $quoteInfo = $data['quoteInfo'];
                         }
-                        if(is_array($quoteInfo)){
-                            for($i = 0;$i < sizeof($quoteInfo);$i++){
-                                if($quoteInfo['Hurricane Questionnaire.']){
-                                    $documents['hurricane_questionnaire'] = $this->copyDocuments($temp,$dest['relativePath'],'hurricaneQuestionnaire');
-                                }
+                        for($i = 0;$i < sizeof($quoteInfo);$i++){
+                            if($quoteInfo['Hurricane Questionnaire.']){
+                                $documents['hurricane_questionnaire'] = $this->copyDocuments($temp,$dest['relativePath'],'hurricaneQuestionnaire');
                             }
                         }
                     }

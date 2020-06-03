@@ -145,5 +145,6 @@ content:
                     field: policyStatus
                 -
                     title: 'Policy Effective Period'
-                    cell: '<td>{item.start_date}&nbsp;-&nbsp;{item.end_date}</td>'
+                    cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}&nbsp;-&nbsp;{moment(item.end_date).format("MM-DD-YYYY")}</td>'
                     field: start_date
+
