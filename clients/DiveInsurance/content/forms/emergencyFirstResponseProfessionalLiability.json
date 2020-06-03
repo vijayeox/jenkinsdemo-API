@@ -3020,7 +3020,7 @@
 				"tableView": false,
 				"values": [{
 					"label": "Approved",
-					"value": "accepted",
+					"value": "approved",
 					"shortcut": ""
 				}, {
 					"label": "Rejected",
@@ -3068,7 +3068,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 503,
+	"_vid": 504,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3152,7 +3152,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-02T15:30:54.093Z",
+	"modified": "2020-06-03T08:18:36.641Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
