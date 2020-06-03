@@ -55,7 +55,9 @@ class PadiVerification extends AbstractAppDelegate
         }else{
             $data['initiatedByCsr'] = false;
         }
-
+        $data['firstname'] = "";
+        $data['lastname'] = "";
+        $data['initial'] = "";
         if(isset($data['user_exists']) && ($data['user_exists'] == 1 || $data['user_exists'] == "1")){
             $data['padiNotApplicable'] = false;
             $data['padi_empty'] = false;
