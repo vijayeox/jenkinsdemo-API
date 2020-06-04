@@ -607,6 +607,10 @@ arrowhead()
         rm -rf /opt/oxzion/view/apps/ArrowHead/node_modules
         npm install --unsafe-perm
         npm run build
+        cd /opt/oxzion/view/themes/ArrowHeadTheme/
+        rm -rf /opt/oxzion/view/themes/ArrowHeadTheme/node_modules
+        npm install --unsafe-perm
+        npm run build
         chown oxzion:oxzion -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
