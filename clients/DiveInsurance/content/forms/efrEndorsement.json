@@ -1828,7 +1828,7 @@
 		}, {
 			"label": "transaction_reference_number",
 			"calculateServer": false,
-			"key": "transactionReferenceNumber",
+			"key": "transaction_reference_number",
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -1955,7 +1955,7 @@
 						"clearOnHide": false,
 						"calculateValue": "value = data.transaction_reference_number",
 						"calculateServer": false,
-						"key": "transactionId",
+						"key": "transactionReferenceNumber",
 						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 						"type": "textfield",
 						"input": true
@@ -2132,7 +2132,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 165,
+	"_vid": 166,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2153,7 +2153,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-04T10:24:41.294Z",
+	"modified": "2020-06-04T13:38:32.929Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

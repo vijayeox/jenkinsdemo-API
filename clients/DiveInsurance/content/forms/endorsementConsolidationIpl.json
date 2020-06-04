@@ -1272,6 +1272,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateServer": false,
+								"validate": {
+									"required": true
+								},
 								"key": "careerCoverage",
 								"properties": {
 									"target": "careerCoveragePrice"
@@ -2892,7 +2895,7 @@
 		}, {
 			"label": "transaction_reference_number",
 			"calculateServer": false,
-			"key": "transactionReferenceNumber",
+			"key": "transaction_reference_number",
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -3019,7 +3022,7 @@
 						"clearOnHide": false,
 						"calculateValue": "value = data.transaction_reference_number",
 						"calculateServer": false,
-						"key": "transactionId",
+						"key": "transactionReferenceNumber",
 						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 						"type": "textfield",
 						"input": true
@@ -3229,7 +3232,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 222,
+	"_vid": 224,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3250,6 +3253,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-02T15:21:28.198Z",
+	"modified": "2020-06-04T13:41:31.713Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
