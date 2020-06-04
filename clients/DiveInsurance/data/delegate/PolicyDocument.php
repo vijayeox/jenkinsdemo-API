@@ -27,7 +27,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'aiTemplate' => 'Individual_PL_AI',
                 'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
                 'aiheader' => 'IPL_AI_header.html',
-                'aifooter' => null,
+                'aifooter' => 'IPL_AI_footer.html',
                 'iplScuba' => 'PL_Scuba_Fit_Endorsement.pdf',
                 'iplCylinder' => 'PL_Cylinder_Endorsement.pdf',
                 'iplEquipment' => 'PL_Equipment_Liability_Endorsement.pdf'),
@@ -187,8 +187,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $coverageList = array();
                     if($data['product'] == "Individual Professional Liability"){
                         array_push($coverageList,$data['careerCoverage']);
-                        if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor" || $data['scubaFit'] == "scubaFitInstructorDeclined"){
-                            $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
+                        if(isset($data['scubaFit']) && ($data['scubaFit'] == "scubaFitInstructor" || $data['scubaFit'] == "scubaFitInstructorDeclined")){
+                            if($data['scubaFit'] == "scubaFitInstructor"){
+                                $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
+                            }
                             array_push($coverageList,$data['scubaFit']);
                         }
                         if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
