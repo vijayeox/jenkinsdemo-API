@@ -477,28 +477,7 @@ class WorkflowInstanceService extends AbstractService
     }
 
     public function getActivityLog($fileId,$appId,$filterParams=null){
-        $selectQuery = "(SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName,oai.start_date, owi.date_created as workflowInstanceCreatedDate,owi.date_modified as workflowInstanceSubmissionDate,owi.created_by,ouu.name as ModifiedBy,ou.name as activityModifiedBy,owi.modified_by,oa.name as activityName, oai.submitted_date as activitySubmittedDate,oai.modified_by,oai.activity_instance_id as activityInstanceId from ox_workflow_instance owi 
-        inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id 
-        inner join ox_workflow ow on ow.id = owd.workflow_id
-        inner join ox_activity_instance oai on oai.workflow_instance_id = owi.id
-        inner join ox_activity oa on oa.id = oai.activity_id
-        inner join ox_file of on of.id = owi.file_id
-        inner join ox_user ou on ou.id = oai.modified_by
-        inner join ox_user ouu on ouu.id = owi.created_by
-        where of.uuid = :fileId and owi.app_id = :appId ORDER BY oai.start_date ASC) UNION (SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName,
-        owi.date_created, owi.date_created as workflowInstanceCreatedDate,
-        owi.date_modified as workflowInstanceSubmissionDate,
-        owi.created_by,ouu.name as ModifiedBy,ouu.name as activityModifiedBy,
-        owi.modified_by,'Initiated' as activityName
-        , owi.date_created as activitySubmittedDate,
-        owi.created_by,'' as activityInstanceId from ox_workflow_instance owi 
-        inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id 
-        inner join ox_workflow ow on ow.id = owd.workflow_id
-        inner join ox_file of on of.id = owi.file_id
-        left join ox_activity_instance oai on oai.workflow_instance_id = owi.id
-        left join ox_activity oa on oa.id = oai.activity_id
-        inner join ox_user ouu on ouu.id = owi.created_by
-        where of.uuid = :fileId and owi.app_id = :appId and oai.id is NULL)";         
+        $selectQuery = "(SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName,oai.start_date, owi.date_created as workflowInstanceCreatedDate,owi.date_modified as workflowInstanceSubmissionDate,owi.created_by,ouu.name as ModifiedBy,ou.name as activityModifiedBy,owi.modified_by,oa.name as activityName, oai.submitted_date as activitySubmittedDate,oai.modified_by,oai.activity_instance_id as activityInstanceId from ox_workflow_instance owi inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id inner join ox_workflow ow on ow.id = owd.workflow_id inner join ox_activity_instance oai on oai.workflow_instance_id = owi.id inner join ox_activity oa on oa.id = oai.activity_id inner join ox_file of on of.id = owi.file_id inner join ox_user ou on ou.id = oai.modified_by inner join ox_user ouu on ouu.id = owi.created_by where of.uuid = :fileId and owi.app_id = :appId ORDER BY oai.start_date ASC) UNION (SELECT owi.process_instance_id as workflowInstanceId, ow.name as workflowName, owi.date_created, owi.date_created as workflowInstanceCreatedDate, owi.date_modified as workflowInstanceSubmissionDate, owi.created_by,ouu.name as ModifiedBy,ouu.name as activityModifiedBy, owi.modified_by,'Initiated' as activityName , owi.date_created as activitySubmittedDate,owi.created_by,'' as activityInstanceId from ox_workflow_instance owi inner join ox_workflow_deployment owd on owd.id = owi.workflow_deployment_id inner join ox_workflow ow on ow.id = owd.workflow_id inner join ox_file of on of.id = owi.file_id inner join ox_user ouu on ouu.id = owi.created_by where of.uuid = :fileId and owi.app_id = :appId)";
         $selectQueryParams = array('fileId' => $fileId, 'appId' => $this->getIdFromUuid('ox_app', $appId));
         $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
         return $result;
