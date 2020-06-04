@@ -1910,7 +1910,7 @@
 							"attr": "",
 							"value": ""
 						}],
-						"content": "Please Submit the Consent form found <a href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
+						"content": "Please Submit the Consent form found <a target=\"_blank\" href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html5",
@@ -2132,7 +2132,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 164,
+	"_vid": 165,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2153,7 +2153,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-03T08:17:24.544Z",
+	"modified": "2020-06-04T10:24:41.294Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
