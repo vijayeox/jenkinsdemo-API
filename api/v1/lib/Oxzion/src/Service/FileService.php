@@ -203,7 +203,7 @@ class FileService extends AbstractService
         $fileObject = $obj;
         $dataArray = $this->cleanData($dataArray);
         $this->updateFileData($id, $dataArray);
-        $fileObject['data'] = json_encode($dataArray);
+        $fileObject['data'] = $data['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
         $this->beginTransaction();
