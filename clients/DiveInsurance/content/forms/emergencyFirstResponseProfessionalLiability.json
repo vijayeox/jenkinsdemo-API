@@ -1275,9 +1275,6 @@
 							"customMessage": "Please choose one of these options."
 						},
 						"key": "liabilityCoverage",
-						"properties": {
-							"target": "coverageAmount"
-						},
 						"type": "radio",
 						"input": true,
 						"lockKey": true,
@@ -1302,6 +1299,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateValue": "if(data.liabilityCoverage && data[data.liabilityCoverage]){\n  value = data[data['liabilityCoverage']];\n} else {\n  value = 0;\n}",
 						"calculateServer": false,
 						"key": "coverageAmount",
 						"customConditional": "show = false;",
@@ -3069,7 +3067,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 506,
+	"_vid": 507,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3153,7 +3151,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-04T10:20:31.967Z",
+	"modified": "2020-06-04T11:16:20.029Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
