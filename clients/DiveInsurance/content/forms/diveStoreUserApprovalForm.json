@@ -169,7 +169,7 @@
         "tableView": false
       }, {
         "label": "amountPayable",
-        "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  if(month == 6 ||month == 7){\n    value = (parseFloat(data.totalAmount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.totalAmount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.totalAmount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.totalAmount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.totalAmount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.totalAmount).toFixed(2);\ndata.paymentInstallments = 0;\n}",
+        "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  var day = moment(data.start_date).format('DD');\n  if((day == 30 && month == 6) || month == 7){\n    value = (parseFloat(data.totalAmount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.totalAmount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.totalAmount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.totalAmount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.totalAmount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.totalAmount).toFixed(2);\ndata.paymentInstallments = 0;\n}",
         "calculateServer": false,
         "key": "amountPayable",
         "type": "hidden",
@@ -560,7 +560,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 11,
+  "_vid": 12,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -577,6 +577,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-02T21:32:36.440Z",
+  "modified": "2020-06-03T16:02:14.266Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

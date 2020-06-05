@@ -3956,7 +3956,7 @@
 			}, {
 				"label": "transaction_reference_number",
 				"calculateServer": false,
-				"key": "transactionReferenceNumber",
+				"key": "transaction_reference_number",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -4081,9 +4081,9 @@
 							"disabled": true,
 							"tableView": false,
 							"clearOnHide": false,
-							"calculateValue": "value = data.transaction_id",
+							"calculateValue": "value = data.transaction_reference_number",
 							"calculateServer": false,
-							"key": "transaction_reference_number",
+							"key": "transactionReferenceNumber",
 							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 							"type": "textfield",
 							"input": true
@@ -4314,7 +4314,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 326,
+	"_vid": 327,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4335,6 +4335,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-03T08:34:54.738Z",
+	"modified": "2020-06-04T13:42:22.801Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -154,7 +154,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0a6b2gy" sourceRef="UserTask_0h45jpd" targetRef="ServiceTask_1oi73v1">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="approved"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1bu9f8a" sourceRef="UserTask_0h45jpd" targetRef="ServiceTask_0ujmkhk">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="rejected"}</bpmn:conditionExpression>
@@ -356,7 +356,7 @@ execution.setVariable('CSRReviewRequired',true);</camunda:script>
         <di:waypoint x="1691" y="270" />
         <di:waypoint x="1691" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1699" y="318" width="84" height="14" />
+          <dc:Bounds x="1698" y="303" width="84" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1im3y1y_di" bpmnElement="SequenceFlow_1im3y1y">

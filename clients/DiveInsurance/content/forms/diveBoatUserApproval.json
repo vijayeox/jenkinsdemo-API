@@ -23,7 +23,7 @@
 			"type": "documentviewer",
 			"key": "documents1",
 			"properties": {
-				"data_type": "list"
+				"data_type": "document"
 			},
 			"datatype": "documentviewer",
 			"data_type": "documentviewer",
@@ -32,7 +32,9 @@
 			"hideLabel": true,
 			"inputType": "documentviewer",
 			"input": 1,
-			"tableView": false
+			"tableView": false,
+			"keyModified": true,
+			"protected": true
 		}, {
 			"label": "orgId",
 			"key": "orgId",
@@ -171,7 +173,7 @@
 				"tableView": false
 			}, {
 				"label": "amountPayable",
-				"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  if(month == 6 ||month == 7){\n    value = (parseFloat(data.amount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.amount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.amount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.amount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.amount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.amount).toFixed(2);\n}",
+				"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  var day = moment(data.start_date).format('DD');\n  if(day >= 22 && month == 7){\n    value = (parseFloat(data.amount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.amount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.amount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.amount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.amount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.amount).toFixed(2);\n}",
 				"calculateServer": false,
 				"key": "amountPayable",
 				"type": "hidden",
@@ -567,7 +569,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 78,
+	"_vid": 83,
 	"title": "Dive Boat - User Approval",
 	"display": "form",
 	"access": [{
@@ -584,6 +586,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-06-02T21:31:39.022Z",
+	"modified": "2020-06-03T16:23:29.672Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

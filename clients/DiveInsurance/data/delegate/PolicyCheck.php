@@ -30,9 +30,11 @@ class PolicyCheck extends FileDelegate
         } else {
             $data['policy_exists'] = false;
         }
-        $data['firstname'] = "";
-        $data['lastname'] = "";
-        $data['initial'] = "";
+        if(isset($data['efrToIPLUpgrade']) && !$data['efrToIPLUpgrade']){
+            $data['firstname'] = "";
+            $data['lastname'] = "";
+            $data['initial'] = "";
+        }
         return $data;
     }
 }
