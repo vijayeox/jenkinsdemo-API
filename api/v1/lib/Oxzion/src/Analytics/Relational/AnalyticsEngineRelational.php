@@ -28,6 +28,9 @@ class AnalyticsEngineRelational extends AnalyticsAbstract {
 				$result = $this->getResultsFromView($orgId,$parameters['view']);	
 				$finalResult['meta']['type'] = 'view';
 				foreach(array_keys($result) as $key) {
+					if ($result[$key]['org_id']!=$orgId) {  //Temp solution to protect with org id instead the where clause
+						$result = [];break;
+					}
 					unset($result[$key]['org_id']);
 				 }
 				 $finalResult['data'] = $result;
@@ -138,8 +141,8 @@ class AnalyticsEngineRelational extends AnalyticsAbstract {
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
 		$select->from($view);
-		$select->where(['org_id' => $orgId]);
-
+	//	$select->where(['org_id' => $orgId]);   //commented it out for now since it is clearning out the order. 
+	//We will need this in the future so cross org by mistake is not possible
 		$statement = $sql->prepareStatementForSqlObject($select);
 		$result = $statement->execute();
 		$resultSet = new ResultSet();
