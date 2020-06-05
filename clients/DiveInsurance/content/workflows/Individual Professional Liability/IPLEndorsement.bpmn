@@ -120,7 +120,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
       <bpmn:outgoing>SequenceFlow_02bcggt</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_01ocuoy" name="Auto renewal(False)" sourceRef="ExclusiveGateway_1uh392h" targetRef="Task_08p2msc">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false || automatic_renewal=="false"  || automatic_renewal==""}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_09bil4y" name="Auto renewal(True)" sourceRef="ExclusiveGateway_1uh392h" targetRef="ServiceTask_1j9vqhf">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(automatic_renewal==true or automatic_renewal=="true") and (autoRenewalJob == null or autoRenewalJob == "")}</bpmn:conditionExpression>
@@ -152,7 +152,6 @@ execution.setVariable("process_reminder",false)</camunda:script>
             <camunda:list>
               <camunda:value>{"command" : "file"}</camunda:value>
               <camunda:value>{"command" : "processFileData"}</camunda:value>
-              <camunda:value>{}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>

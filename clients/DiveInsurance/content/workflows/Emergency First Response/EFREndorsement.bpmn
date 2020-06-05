@@ -91,7 +91,7 @@ if(!autoRenewalJob){
     <bpmn:sequenceFlow id="SequenceFlow_1pwoes4" sourceRef="ServiceTask_02qqpqb" targetRef="EndEvent_0hzrlj6" />
     <bpmn:sequenceFlow id="SequenceFlow_0hd4flu" sourceRef="StartEvent_0gg9v2k" targetRef="ServiceTask_1ifup62" />
     <bpmn:sequenceFlow id="SequenceFlow_0nuqtvp" name="No" sourceRef="ExclusiveGateway_1mm785e" targetRef="Task_11mfxyj">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false || automatic_renewal=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false || automatic_renewal=="false" || automatic_renewal==""}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_010xyrl" sourceRef="ServiceTask_1eqz313" targetRef="ServiceTask_02qqpqb" />
     <bpmn:sequenceFlow id="SequenceFlow_0h1kjkp" name="Approved" sourceRef="UserTask_0efijti" targetRef="ExclusiveGateway_1mm785e">
