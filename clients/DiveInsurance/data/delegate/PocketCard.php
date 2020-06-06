@@ -64,11 +64,11 @@ class PocketCard extends PolicyDocument
             $this->logger->info("Generating batch pocket cards");
             $params = array();
             if(isset($data['pocketCardStartDate'])){
-                $data['pocketCardStartDate'] = substr($data['pocketCardStartDate'], 0, -6);
+                $data['pocketCardStartDate'] = substr($data['pocketCardStartDate'], 0, -9);
                 $params['gtCreatedDate'] =  $data['pocketCardStartDate'];
             }
             if(isset($data['pocketCardEndDate'])){
-                $data['pocketCardEndDate'] = substr($data['pocketCardEndDate'], 0, -6);
+                $data['pocketCardEndDate'] = substr($data['pocketCardEndDate'], 0, -9);
                 $params['ltCreatedDate'] =  $data['pocketCardEndDate'];
             }
             $params['workflowStatus'] = 'Completed';
@@ -111,9 +111,11 @@ class PocketCard extends PolicyDocument
                 }
                 
                 if((isset($result)) && !empty($result)){
-                    foreach ($result['data'] as $key => $value) {
-                        ++$total;
-                        $files['data'][$total] = $value;
+                    if(isset($result['data'])){
+                        foreach ($result['data'] as $key => $value) {
+                            ++$total;
+                            $files['data'][$total] = $value;
+                        }
                     }
                     $files['total'] = $files['total'] + $result['total'];
                 }
