@@ -33,20 +33,20 @@ class PocketCard extends PolicyDocument
             $this->logger->info("generating individual pocket card");
             $params = array();
             $currentDate = date_create()->format("Y-m-d");
-            $filter[] = array("field" => "end_date", "operator" => "gte", "value" => $currentDate);
-            $filter[] = array("field" => "policyStatus", "operator" => "eq", "value" => "In Force");
+            $filter[] = array("field" => "end_date", "operator" => "gt", "value" => $currentDate);
+            // $filter[] = array("field" => "policyStatus", "operator" => "eq", "value" => "In Force");
             $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
             if($data['padiProductType'] == 'individualProfessionalLiability'){
-                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Individual Professional Liability");
+                $params['entityName'] = 'Individual Professional Liability';
             }
             if($data['padiProductType'] == 'emergencyFirstResponse'){
-                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Emergency First Response");
+                $params['entityName'] = 'Emergency First Response';
             }
             if($data['padiProductType'] == 'diveBoat'){
-                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Boat");
+                $params['entityName'] = 'Dive Boat';
             }
             if($data['padiProductType'] == 'diveStore'){
-                $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Store");
+                $params['entityName'] = 'Dive Store';
             }
             $filterParams = array(array("filter" => array("logic" => "AND", "filters" => $filter)));
             $this->logger->info("filter params is : ". json_encode($filterParams));
@@ -64,11 +64,11 @@ class PocketCard extends PolicyDocument
             $this->logger->info("Generating batch pocket cards");
             $params = array();
             if(isset($data['pocketCardStartDate'])){
-                $data['pocketCardStartDate'] = substr($data['pocketCardStartDate'], 0, -6);
+                // $data['pocketCardStartDate'] = substr($data['pocketCardStartDate'], 0, -6);
                 $params['gtCreatedDate'] =  $data['pocketCardStartDate'];
             }
             if(isset($data['pocketCardEndDate'])){
-                $data['pocketCardEndDate'] = substr($data['pocketCardEndDate'], 0, -6);
+                // $data['pocketCardEndDate'] = substr($data['pocketCardEndDate'], 0, -6);
                 $params['ltCreatedDate'] =  $data['pocketCardEndDate'];
             }
             $params['workflowStatus'] = 'Completed';
@@ -76,10 +76,10 @@ class PocketCard extends PolicyDocument
             $data['pocketCardProductType'] = json_decode($data['pocketCardProductType'], true);
             if($data['pocketCardProductType']['individualProfessionalLiability'] || $data['pocketCardProductType']['emergencyFirstResponse']){
                 if($data['pocketCardProductType']['individualProfessionalLiability']){
-                    $filter[] = array("field" => "product", "operator" => "eq", "value" => "Individual Professional Liability");
+                    $params['entityName'][] = 'Individual Professional Liability';
                 }
                 if($data['pocketCardProductType']['emergencyFirstResponse']){
-                    $filter[] = array("field" => "product", "operator" => "eq", "value" => "Emergency First Response");
+                    $params['entityName'][] = 'Emergency First Response';
                 }
                 $filterParams = array(array("filter" => array("logic" => "OR", "filters" => $filter), "skip" => 0, "take" => 1000));
                 $files = $this->getFileList($params, $filterParams);
@@ -88,10 +88,10 @@ class PocketCard extends PolicyDocument
             if($data['pocketCardProductType']['diveBoat'] || $data['pocketCardProductType']['diveStore']){
                 $filter = array();
                 if($data['pocketCardProductType']['diveBoat']){
-                    $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Boat");
+                    $params['entityName'][] = 'Dive Boat';
                 }
                 if($data['pocketCardProductType']['diveStore']){
-                    $filter[] = array("field" => "product", "operator" => "eq", "value" => "Dive Store");
+                    $params['entityName'][] = 'Dive Store';
                 }
                 $filterParams = array(array("filter" => array("logic" => "OR", "filters" => $filter), "skip" => 0, "take" => 1000));
                 $files2 = $this->getFileList($params, $filterParams);
@@ -111,9 +111,11 @@ class PocketCard extends PolicyDocument
                 }
                 
                 if((isset($result)) && !empty($result)){
-                    foreach ($result['data'] as $key => $value) {
-                        ++$total;
-                        $files['data'][$total] = $value;
+                    if(isset($result['data'])){
+                        foreach ($result['data'] as $key => $value) {
+                            ++$total;
+                            $files['data'][$total] = $value;
+                        }
                     }
                     $files['total'] = $files['total'] + $result['total'];
                 }
@@ -137,7 +139,7 @@ class PocketCard extends PolicyDocument
             $newData[$key]['product'] = $value['product'];
             $newData[$key]['email'] = $value['email'];
             $newData[$key]['padi'] = $value['padi'];
-            $newData[$key]['certificate_no'] = $value['certificate_no'];
+            $newData[$key]['certificate_no'] = isset($value['certificate_no'])?$value['certificate_no']:null;
             $newData[$key]['start_date'] = $value['start_date'];
             $newData[$key]['end_date'] = $value['end_date'];
             $newData[$key]['firstname'] = $value['firstname'];
@@ -147,8 +149,8 @@ class PocketCard extends PolicyDocument
             $newData[$key]['city'] = $value['city'];
             $newData[$key]['state'] = $value['state'];
             $newData[$key]['zip'] = $value['zip'];
-            $newData[$key]['country'] = $value['country'];
-            $newData[$key]['product_email_id'] = $value['product_email_id'];
+            $newData[$key]['country'] = isset($value['country'])?$value['country']:null;
+            $newData[$key]['product_email_id'] = isset($value['product_email_id'])?$value['product_email_id']:null;
             $newData[$key]['entity_name'] = 'Pocket Card Job';
             if(isset($value['business_name']) && $value['business_name']){
                 $newData[$key]['business_name'] = $value['business_name'];

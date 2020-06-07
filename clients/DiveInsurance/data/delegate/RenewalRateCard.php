@@ -89,6 +89,8 @@ class RenewalRateCard extends RateCard
         $data['form_data']['premiumFinanceSelect'] = "";
         $data['form_data']['paymentOptions'] = "";
         $data['form_data']['paymentVerified'] = "";
+        $data['form_data']['verified'] = true;
+        $data['form_data']['padiVerified'] = true;
         $data['data'] = json_encode($data['form_data']);
         unset($data['form_data']);
         return $data;

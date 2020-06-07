@@ -58,6 +58,7 @@ class AutoRenewalRateCard extends RateCard{
             $this->DiveStoreRates($data);
         }
         $data['policyStatus'] = 'AutoRenewal Pending';
+        $data['previous_policy_data'] = json_encode(array());
         $this->logger->info("AutoRenewalRateCard Final DATA".print_r($data,true));
         return $data;
     }

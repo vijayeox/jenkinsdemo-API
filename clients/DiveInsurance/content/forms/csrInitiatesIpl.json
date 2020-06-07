@@ -2277,11 +2277,29 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = data[\"amount\"] - data[\"amountPayable\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n  value = data[\"amount\"] - data[\"amountPayable\"];\n}",
+									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = data[\"amount\"] - data[\"amountPayable\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
 									"calculateServer": false,
 									"key": "balance",
 									"type": "number",
 									"input": true,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "userGrandTotal",
+									"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
+									"calculateServer": false,
+									"key": "userGrandTotal",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "csrGrandTotal",
+									"calculateValue": "if(data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
+									"calculateServer": false,
+									"key": "csrGrandTotal",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 8,
@@ -3933,7 +3951,7 @@
 			"tableView": false,
 			"components": [{
 				"label": "amountPayable",
-				"calculateValue": "if(!data.CSRReviewRequired ){\n  value = (data['finalAmount']||0).toFixed(0);\n} else {\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data['balance'] > 0){\n    value = (data['balance']||0).toFixed(0);\n  }\n}",
+				"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balance) > 0){\n    value = data.balance;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.finalAmount) || 0).toFixed(0);\n}",
 				"calculateServer": false,
 				"key": "amountPayable",
 				"type": "hidden",
@@ -4084,7 +4102,7 @@
 							"calculateValue": "value = data.transaction_reference_number",
 							"calculateServer": false,
 							"key": "transactionReferenceNumber",
-							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+							"customConditional": "if (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "textfield",
 							"input": true
 						}, {
@@ -4314,7 +4332,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 327,
+	"_vid": 338,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4335,6 +4353,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-04T13:42:22.801Z",
+	"modified": "2020-06-04T17:06:41.602Z",
 	"machineName": "testdivehub:csrInitiates"
 }

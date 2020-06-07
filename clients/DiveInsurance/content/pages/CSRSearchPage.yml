@@ -136,7 +136,8 @@ content:
                     icon: 'fa fa-repeat'
             filterColumns:
                 - padi
-                - name
+                - firstname
+                - lastname
                 - product
                 - phone
             filterOperator : startswith
@@ -178,7 +179,10 @@ content:
                     field: padi
                 -
                     title: Name
-                    field: name
+                    field: firstname
+                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    multiFieldFilter:
+                        - lastname
                 -
                     title: Product
                     field: entity_name
