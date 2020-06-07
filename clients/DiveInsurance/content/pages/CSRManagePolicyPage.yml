@@ -59,6 +59,86 @@ content:
                                         delegate: EFRToIPLUpgrade
                     icon: 'fa fa-arrow-circle-up'
                 -
+                    name: 'Renew Policy'
+                    rule: '''{{policyStatus}}'' == ''Expired'' && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands: 
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
+                -
+                    name: 'Renew Policy'
+                    rule: '''{{policyStatus}}'' == ''Expired'' && (''{{entity_name}}'' == ''Emergency First Response'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: cb74d176-225a-11ea-978f-2e728ce88125
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands: 
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
+                -
+                    name: 'Renew Policy'
+                    rule: '''{{policyStatus}}'' == ''Expired'' && (''{{entity_name}}'' == ''Dive Store'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: cb99e634-de00-468d-9230-d6f77d241c5b
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands: 
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
+                -
+                    name: 'Renew Policy'
+                    rule: '''{{policyStatus}}'' == ''Expired'' && (''{{entity_name}}'' == ''Dive Boat'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands: 
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
+                -
                     name: Endorsement
                     rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
                     details:
