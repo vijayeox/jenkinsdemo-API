@@ -19,6 +19,8 @@ $ docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rai
 To connect into the docker container's shell
 
 $ docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint bash integrations
+$ docker run -it --network="host" -v ${PWD}:/integrations -v ${PWD}/rainloop/data:/var/www/public/rainloop/data --entrypoint bash integrations
+
 ======================================================================================================================================
 
 
