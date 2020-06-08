@@ -38,13 +38,7 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         if(is_array($temp)){
             foreach($temp as $key => $value){
                 if (is_array($value)) {
-                    $i = 0; 
-                    foreach ($value as $val) {
-                        $fileName = basename($val);
-                        $data['documents'][$key][$i] = $dest['relativePath'].$fileName;
-                        FileUtils::copy($this->destination.$val, $fileName, $this->destination.$dest['relativePath']);
-                        $i += 1;
-                    }
+                    $data['documents'][$key] = $value;
                 }
                 else {
                     $fileName = basename($value);
