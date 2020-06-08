@@ -39,7 +39,7 @@ class CoverageList extends AbstractAppDelegate
             $is_upgrade = 1;
             $product = 'Dive Store';
         }
-        $selectQuery  = "SELECT DISTINCT coverage from premium_rate_card WHERE product = '" . $product . "' AND is_upgrade = 0 AND `year` = " . $data['year']." AND coverage_category = '".$data['coverage_category']."' ORDER BY coverage";
+        $selectQuery  = "SELECT DISTINCT coverage from premium_rate_card WHERE product = '" . $product . "' AND is_upgrade = 0 AND `year` = " . $data['year']." AND coverage_category = '".$data['coverage_category']."' AND coverage NOT IN ('".$data['coverage']."') ORDER BY coverage";
         $result = $persistenceService->selectQuery($selectQuery);
         while ($result->next()) {
             $coverage = $result->current();

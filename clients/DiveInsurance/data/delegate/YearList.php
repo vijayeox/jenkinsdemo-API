@@ -30,16 +30,16 @@ class YearList extends TemplateAppDelegate
             } else if ($data['product'] == 'Emergency First Response - Endorsement') {
                 $is_upgrade = 1;
                 $product = 'Emergency First Response';
-            } else if ($data['product'] == 'Dive Boat - New Policy') {
+            } else if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Boat - Group PL') {
                 $is_upgrade = 0;
                 $product = 'Dive Boat';
-            } else if ($data['product'] == 'Dive Boat - Endorsement') {
+            } else if ($data['product'] == 'Dive Boat - Endorsement' || $data['product'] == "Dive Boat - Group PL Endorsement") {
                 $is_upgrade = 1;
                 $product = 'Dive Boat';
-            } else if ($data['product'] == 'Dive Store - New Policy') {
+            } else if ($data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Store - Group PL') {
                 $is_upgrade = 0;
                 $product = 'Dive Store';
-            } else if ($data['product'] == 'Dive Store - Endorsement') {
+            } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement'){
                 $is_upgrade = 1;
                 $product = 'Dive Store';
             } else {
@@ -47,9 +47,17 @@ class YearList extends TemplateAppDelegate
                 $product = $data['product'];
             }
             if ($data['type'] == 'PremiumRates') {
+                $andClause1 = " ";
+                if($data['product'] == 'Dive Boat - Group PL' || $data['product'] == 'Dive Store - Group PL'){
+                    $andClause1  = " AND coverage_category IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY') ";
+                }
+                if($data['product'] == 'Dive Boat - Group PL Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement'){
+                    $andClause1 = " AND coverage_category IN ('GROUP_EXCESS_LIABILITY')";
+                }
+
                 $selectQuery  = "SELECT DISTINCT year from premium_rate_card WHERE 
                                 product = '" . $product . "' AND
-                                 is_upgrade = " . $is_upgrade;
+                                 is_upgrade = " . $is_upgrade." ".$andClause1;
             } else if ($data['type'] == 'SurplusLines') {
                 if($product == 'Individual Professional Liability'){
                     $product = 'IPL';

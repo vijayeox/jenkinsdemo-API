@@ -17,8 +17,12 @@ content:
                   - "Emergency First Response - New Policy"
                   - "Dive Boat - New Policy"
                   - "Dive Boat - Endorsement"
+                  - "Dive Boat - Group PL"
+                  - "Dive Boat - Group PL Endorsement"
                   - "Dive Store - New Policy"
                   - "Dive Store - Endorsement"
+                  - "Dive Store - Group PL"
+                  - "Dive Store - Group PL Endorsement"
               gridConfig:
                 delegate: "GetPremiumRates"
                 inlineDelegate: UpdatePolicyRates
