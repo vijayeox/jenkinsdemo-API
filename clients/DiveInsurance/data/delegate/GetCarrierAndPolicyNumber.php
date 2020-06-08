@@ -7,7 +7,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\DelegateException;
 use Oxzion\AppDelegate\UserContextTrait;
 
-class GetCarrierandPolicyNumber extends AbstractAppDelegate
+class GetCarrierAndPolicyNumber extends AbstractAppDelegate
 {
     use UserContextTrait;
     public function __construct(){
@@ -33,14 +33,14 @@ class GetCarrierandPolicyNumber extends AbstractAppDelegate
     private function getCarrierPolicyNumber(&$data,$persistenceService){
         $data['carrier'] = array();
 
-        $stateTax = "SELECT * FROM carrier_policy WHERE `year` = ".$data['year']." AND product = '".$data['product']."'";
+        $stateTax = "SELECT * FROM carrier_policy WHERE `year` = ".$data['year'];
         $carrierResult = $persistenceService->selectQuery($stateTax);
         
         if(count($carrierResult) == 0){
              $this->addNewRecord($data,$persistenceService);
         }
 
-        $selectQuery = "SELECT id,carrier,policy_number,year FROM carrier_policy WHERE `year` = ".$data['year']." AND product = '".$data['product']."'";
+        $selectQuery = "SELECT id,carrier,policy_number,year,product FROM carrier_policy WHERE `year` = ".$data['year'];
         $result = $persistenceService->selectQuery($selectQuery);
         while ($result->next()) {
             $rate = $result->current();
@@ -50,7 +50,7 @@ class GetCarrierandPolicyNumber extends AbstractAppDelegate
     }
 
     private function getMaxYear($data,$persistenceService){
-        $yearSelect = "SELECT max(`year`) as `year` FROM carrier_policy WHERE product = '".$data['product']."'";
+        $yearSelect = "SELECT max(`year`) as `year` FROM carrier_policy";
         $result = $persistenceService->selectQuery($yearSelect);
         while ($result->next()) {
             $year = $result->current();
@@ -63,7 +63,7 @@ class GetCarrierandPolicyNumber extends AbstractAppDelegate
         $year = $this->getMaxYear($data,$persistenceService);
         $persistenceService->beginTransaction();
         try{
-            $query = "INSERT INTO carrier_policy (`product`,`carrier`,`policy_number`,`start_date`,`end_date`,`year`) SELECT product,carrier,policy_number,DATE_ADD(start_date, INTERVAL 1 year) as start_date,DATE_ADD(end_date, INTERVAL 1 year) as end_date,".$data['year']." as `year` FROM carrier_policy WHERE `year` = ".$year." AND product = '".$data['product']."'";
+            $query = "INSERT INTO carrier_policy (`product`,`carrier`,`policy_number`,`start_date`,`end_date`,`year`) SELECT product,carrier,policy_number,DATE_ADD(start_date, INTERVAL 1 year) as start_date,DATE_ADD(end_date, INTERVAL 1 year) as end_date,".$data['year']." as `year` FROM carrier_policy WHERE `year` = ".$year;
             $persistenceService->insertQuery($query);
             $persistenceService->commit();
         }catch(Exception $e){

@@ -46,9 +46,11 @@ class YearList extends TemplateAppDelegate
                 $is_upgrade = 0;
                 $product = $data['product'];
             }
-            if ($data['type'] == 'rates') {
-                $selectQuery  = "SELECT DISTINCT year from premium_rate_card WHERE product = '" . $product . "' AND is_upgrade = " . $is_upgrade;
-            } else if ($data['type'] == 'surplus') {
+            if ($data['type'] == 'PremiumRates') {
+                $selectQuery  = "SELECT DISTINCT year from premium_rate_card WHERE 
+                                product = '" . $product . "' AND
+                                 is_upgrade = " . $is_upgrade;
+            } else if ($data['type'] == 'SurplusLines') {
                 if($product == 'Individual Professional Liability'){
                     $product = 'IPL';
                 }else if($product == 'Emergency First Response'){
@@ -65,11 +67,11 @@ class YearList extends TemplateAppDelegate
                 array_shift($yearList);
                 array_shift($yearList);
                 return $yearList;
-            }else if ($data['type'] == 'carrierpolicy') {
+            }else if ($data['type'] == 'CarrierPolicy') {
                 $selectQuery  = "SELECT DISTINCT year from carrier_policy WHERE product = '" . $product . "'";
             }
         } else {
-            if ($data['type'] == 'stateTax') {
+            if ($data['type'] == 'StateTax') {
                 $selectQuery  = "SELECT DISTINCT year from state_tax WHERE coverage = '" . $data['coverage'] . "'";
             } 
         }
