@@ -17,4 +17,3 @@ UPDATE premium_rate_card SET coverage_category = "EXCESS_LIABILITY" WHERE produc
 UPDATE premium_rate_card SET coverage_category = "GROUP_COVERAGE" WHERE product = 'DIVE BOAT' AND `key` in ('groupCoverageMoreThan0','groupCoverageMoreThan25000','groupCoverageMoreThan50000','groupCoverageMoreThan100000','groupCoverageMoreThan150000','groupCoverageMoreThan200000','groupCoverageMoreThan250000','groupCoverageMoreThan350000','groupCoverageMoreThan500000');
 UPDATE premium_rate_card SET coverage_category = "GROUP_EXCESS_LIABILITY" WHERE product = 'DIVE BOAT' AND `key` in ('groupExcessLiability1M','groupExcessLiability2M','groupExcessLiability3M','groupExcessLiability4M','groupExcessLiability9M');
 
-UPDATE premium_rate_card SET previous_key = NULL WHERE `is_upgrade` = 0;
