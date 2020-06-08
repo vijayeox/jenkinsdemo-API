@@ -263,6 +263,15 @@ class SetupEndorsement extends AbstractAppDelegate
             if(isset($data['disableOptions'])){
                 $data['disableOptions'] = "";
             }
+            if(isset($data['amountPayable'])){
+                $data['amountPayable'] = 0;
+            }
+            if(isset($data['balanceEndor'])){
+                $data['balanceEndor'] = 0;
+            }
+            if(isset($data['endorAmount'])){
+                $data['endorAmount'] = 0;
+            }
             if(isset($data['endor_cylinderInstructor_attachments'])){
                 $data['endor_cylinderInstructor_attachments']=array();
             }

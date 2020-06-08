@@ -233,6 +233,16 @@ transportation()
     echo -e "${YELLOW}Copying clients Transportation Completed.${RESET}"
 
 }
+arrowhead()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Arrowhead to build folder.${RESET}"
+    rsync -rl clients/ArrowHead/ ./build/clients/ArrowHead/
+    echo -e "${YELLOW}Copying clients Arrowhead Completed.${RESET}"
+
+}
 integrations()
 {
     camel
@@ -304,6 +314,12 @@ do
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 transportation
+                package
+                break;;
+        arrowhead)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                arrowhead
                 package
                 break;;
         camel)

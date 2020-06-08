@@ -10,7 +10,7 @@ require_once __DIR__."/RateCard.php";
 class AutoRenewalRateCard extends RateCard{
     public function __construct(){
         parent::__construct();
-        $this->unsetVariables = array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents');
+        $this->unsetVariables = array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents','previous_policy_data');
     }
 
     // Premium Calculation values are fetched here
@@ -33,8 +33,6 @@ class AutoRenewalRateCard extends RateCard{
             $policy_period = "July 01,".$startYear." - June 30,".$endYear;
             $data['start_date_range'] = array("label" => $policy_period,"value" => $data['start_date']); 
         }
-       
-
         $this->logger->info("AUTO RATE CARD PERSISTENCE".print_r($data,true));
         $data = parent::execute($data,$persistenceService);
 
@@ -60,6 +58,7 @@ class AutoRenewalRateCard extends RateCard{
             $this->DiveStoreRates($data);
         }
         $data['policyStatus'] = 'AutoRenewal Pending';
+        $data['previous_policy_data'] = json_encode(array());
         $this->logger->info("AutoRenewalRateCard Final DATA".print_r($data,true));
         return $data;
     }

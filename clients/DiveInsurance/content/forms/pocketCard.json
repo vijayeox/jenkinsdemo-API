@@ -249,6 +249,8 @@
 			"columns": [{
 				"components": [{
 					"label": "Start Date",
+					"useLocaleSettings": true,
+					"allowInput": false,
 					"format": "yyyy-MM-dd",
 					"tableView": false,
 					"datePicker": {
@@ -260,6 +262,7 @@
 					"timePicker": {
 						"showMeridian": false
 					},
+					"defaultDate": "moment()",
 					"calculateServer": false,
 					"validate": {
 						"required": true,
@@ -274,8 +277,8 @@
 						"type": "calendar",
 						"displayInTimezone": "viewer",
 						"language": "en",
-						"useLocaleSettings": false,
-						"allowInput": true,
+						"useLocaleSettings": true,
+						"allowInput": false,
 						"mode": "single",
 						"enableTime": false,
 						"noCalendar": false,
@@ -298,6 +301,8 @@
 			}, {
 				"components": [{
 					"label": "End Date",
+					"useLocaleSettings": true,
+					"allowInput": false,
 					"format": "yyyy-MM-dd",
 					"tableView": false,
 					"datePicker": {
@@ -309,6 +314,7 @@
 					"timePicker": {
 						"showMeridian": false
 					},
+					"defaultDate": "moment()",
 					"calculateServer": false,
 					"validate": {
 						"required": true,
@@ -323,8 +329,8 @@
 						"type": "calendar",
 						"displayInTimezone": "viewer",
 						"language": "en",
-						"useLocaleSettings": false,
-						"allowInput": true,
+						"useLocaleSettings": true,
+						"allowInput": false,
 						"mode": "single",
 						"enableTime": false,
 						"noCalendar": false,
@@ -376,7 +382,7 @@
 	}],
 	"controller": "",
 	"revisions": "original",
-	"_vid": 48,
+	"_vid": 50,
 	"title": "Pocket Card",
 	"display": "form",
 	"access": [{
@@ -392,6 +398,6 @@
 	"path": "pocketcard",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-22T13:47:45.298Z",
-	"modified": "2020-04-29T14:50:19.777Z",
+	"modified": "2020-06-05T18:54:51.125Z",
 	"machineName": "testdivehub:pocketCard"
 }

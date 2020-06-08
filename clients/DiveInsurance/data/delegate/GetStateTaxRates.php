@@ -40,7 +40,7 @@ class GetStateTaxRates extends AbstractAppDelegate
              $this->addNewRecord($data,$persistenceService);
         }
 
-        $selectQuery = "SELECT CONCAT(UCASE(MID(coverage,1,1)),MID(coverage,2)) as coverage,state,percentage,year FROM state_tax WHERE `year` = ".$data['year']." and `coverage` = '".$data['coverage']."'";
+        $selectQuery = "SELECT id,CONCAT(UCASE(MID(coverage,1,1)),MID(coverage,2)) as coverage,state,percentage,year FROM state_tax WHERE `year` = ".$data['year']." and `coverage` = '".$data['coverage']."'";
         $result = $persistenceService->selectQuery($selectQuery);
         while ($result->next()) {
             $rate = $result->current();

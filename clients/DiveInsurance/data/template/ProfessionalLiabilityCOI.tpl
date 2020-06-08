@@ -171,6 +171,14 @@
 		</div>
 		<div class = "second_content">
 			{if isset($update_date)}
+
+			{assign var=hasEndorsement value=0}
+			{foreach from=$previousPolicyData item=$upgradeData}
+			{if isset($upgradeData.careerCoverageName) || isset($upgradeData.upgraded_single_limit) || isset($upgradeData.scubaCoverageName) || isset($upgradeData.equipmentCoverageName) ||  isset($upgradeData.cylinderCoverageName) || isset($upgradeData.tecRecCoverageName)}
+			{assign var=hasEndorsement value=1}
+			{/if}
+			{/foreach}
+			{if $hasEndorsement == 1}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>	
 				{if isset($previousPolicyData) && !empty($previousPolicyData)}
 
@@ -209,6 +217,7 @@
 	                    {/if}
 					{/foreach}
 				{/if}
+			{/if}
 			{/if}
 				
 			<hr></hr>

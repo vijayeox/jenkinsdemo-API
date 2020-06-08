@@ -168,9 +168,10 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Padi Number is not Valid!",
+							"customMessage": "PADI Number is not Valid!",
 							"min": 0
 						},
 						"key": "padi",
@@ -1274,9 +1275,6 @@
 							"customMessage": "Please choose one of these options."
 						},
 						"key": "liabilityCoverage",
-						"properties": {
-							"target": "coverageAmount"
-						},
 						"type": "radio",
 						"input": true,
 						"lockKey": true,
@@ -1301,6 +1299,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
+						"calculateValue": "if(data.liabilityCoverage && data[data.liabilityCoverage]){\n  value = data[data['liabilityCoverage']];\n} else {\n  value = 0;\n}",
 						"calculateServer": false,
 						"key": "coverageAmount",
 						"customConditional": "show = false;",
@@ -2711,6 +2710,13 @@
 				"type": "hidden",
 				"lockKey": true
 			}, {
+				"label": "transaction_reference_number",
+				"calculateServer": false,
+				"key": "transaction_reference_number",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"label": "Columns",
 				"columns": [{
 					"components": [{
@@ -2788,7 +2794,7 @@
 								"attr": "",
 								"value": ""
 							}],
-							"content": "Please Submit the Consent form found <a href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
+							"content": "Please Submit the Consent form found <a target=\"_blank\" href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html5",
@@ -2826,14 +2832,14 @@
 						"label": "Card Details",
 						"input": false,
 						"components": [{
-							"label": "Transaction ID",
+							"label": "Transaction Reference Number",
 							"spellcheck": false,
 							"disabled": true,
 							"tableView": false,
 							"clearOnHide": false,
-							"calculateValue": "value = data.transaction_id",
+							"calculateValue": "value = data.transaction_reference_number",
 							"calculateServer": false,
-							"key": "transactionId",
+							"key": "transactionReferenceNumber",
 							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 							"type": "textfield",
 							"input": true
@@ -3061,7 +3067,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 501,
+	"_vid": 508,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3145,7 +3151,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-05-30T22:06:43.309Z",
+	"modified": "2020-06-04T13:39:51.621Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

@@ -76,7 +76,6 @@ class GetSurplusLines extends TemplateAppDelegate
     }
 
     private function getMaxYear($product,$destinationPath){
-        $yearList = array();
         $directories = scandir($destinationPath, 1);
         return $directories[0];
     }

@@ -6,27 +6,31 @@ import Home from "./home";
 // Our launcher
 const register = (core, args, options, metadata) => {
   // Create a new Application instance
-  const proc = core.make("osjs/application", { args, options, metadata }); 
+  const proc = core.make("osjs/application", { args, options, metadata });
   proc
     .createWindow({
       id: metadata.name + "_Window",
       title: metadata.title.en_EN,
       icon: proc.resource(icon_white),
-      dimension: {
-        width: 850,
-        height: 550,
+      attributes: {
+        classNames: ["Window_" + metadata.name],
+        dimension: {
+          width: 900,
+          height: 500,
+        },
+        minDimension: {
+          width: 900,
+          height: 500,
+        },
+        position: {
+          left: 150,
+          top: 50,
+        },
       },
-      state: {
-        maximized: true,
-      },
-      position: { left: 150, top: 100 },
     })
     .on("destroy", () => proc.destroy())
     .render(($content) =>
-      ReactDOM.render(
-          <Home args={core} params={args} proc={proc} />,
-        $content
-      )
+      ReactDOM.render(<Home args={core} params={args} proc={proc} />, $content)
     );
   return proc;
 };

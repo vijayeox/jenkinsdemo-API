@@ -27,7 +27,7 @@ class UpdateCarrierandPolicyNumber extends AbstractAppDelegate
 
 
     private function updateCarrierPolicyNumber(&$data,$persistenceService){
-        $updateQuery = "UPDATE carrier_policy SET carrier = '".$data['carrier']."',policy_number = '".$data['policy_number']."' WHERE `year` = ".$data['year']." AND product = '".$data['product']."'";
+        $updateQuery = "UPDATE carrier_policy SET carrier = '".$data['carrier']."',policy_number = '".$data['policy_number']."' WHERE id = ".$data['id'];
         $result = $persistenceService->updateQuery($updateQuery);
     }
 

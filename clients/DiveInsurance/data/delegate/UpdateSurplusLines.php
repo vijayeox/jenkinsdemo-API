@@ -14,7 +14,6 @@ class UpdateSurplusLines extends TemplateAppDelegate
         parent::__construct();
     }
 
-    // Premium Calculation values are fetched here
     public function execute(array $data,Persistence $persistenceService)
     {  
         if(AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')){
@@ -45,7 +44,7 @@ class UpdateSurplusLines extends TemplateAppDelegate
        $filename = $this->getStateInShort($data['state'],$persistenceService);
        $filePath = $destinationPath.'/'.$data['year'].'/'.$filename.'.tpl';
        $fp = fopen($filePath, 'w');
-       fwrite($fp, '"'.$data['surplusLine'].'"');
+       fwrite($fp, $data['surplusLine']);
        fclose($fp);
     }
 

@@ -1805,7 +1805,7 @@
 		},
 		"components": [{
 			"label": "amountPayable",
-			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) > 0){\n    value = data.balanceEndor;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.endorsementTotal) || 0).toFixed(0);\n}",
+			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) > 0){\n    value = data.balanceEndor;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.endorAmount) || 0).toFixed(0);\n}",
 			"calculateServer": false,
 			"key": "endorAmountPayable",
 			"type": "hidden",
@@ -1825,6 +1825,13 @@
 			"label": "transaction_status",
 			"type": "hidden",
 			"lockKey": true
+		}, {
+			"label": "transaction_reference_number",
+			"calculateServer": false,
+			"key": "transaction_reference_number",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"label": "Columns",
 			"columns": [{
@@ -1903,7 +1910,7 @@
 							"attr": "",
 							"value": ""
 						}],
-						"content": "Please Submit the Consent form found <a href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
+						"content": "Please Submit the Consent form found <a target=\"_blank\" href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "html5",
@@ -1941,6 +1948,18 @@
 					"label": "Card Details",
 					"input": false,
 					"components": [{
+						"label": "Transaction Reference Number",
+						"spellcheck": false,
+						"disabled": true,
+						"tableView": false,
+						"clearOnHide": false,
+						"calculateValue": "value = data.transaction_reference_number",
+						"calculateServer": false,
+						"key": "transactionReferenceNumber",
+						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"type": "textfield",
+						"input": true
+					}, {
 						"type": "convergepay",
 						"key": "creditcardPayment",
 						"amount_field": "endorAmountPayable",
@@ -1948,18 +1967,6 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
-					}, {
-						"label": "Transaction ID",
-						"spellcheck": false,
-						"disabled": true,
-						"tableView": false,
-						"clearOnHide": false,
-						"calculateValue": "value = data.transaction_id",
-						"calculateServer": false,
-						"key": "transactionId",
-						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-						"type": "textfield",
-						"input": true
 					}, {
 						"label": "Content",
 						"attrs": [{
@@ -2078,7 +2085,7 @@
 				"tableView": true,
 				"values": [{
 					"label": "Approved",
-					"value": "accepted",
+					"value": "approved",
 					"shortcut": ""
 				}, {
 					"label": "Rejected",
@@ -2125,7 +2132,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 162,
+	"_vid": 166,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2146,7 +2153,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-01T09:22:47.955Z",
+	"modified": "2020-06-04T13:38:32.929Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

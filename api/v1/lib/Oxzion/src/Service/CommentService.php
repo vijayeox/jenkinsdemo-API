@@ -121,7 +121,7 @@ class CommentService extends AbstractService
 
     public function getComments($fileId)
     {
-        $query = "select text,ou.name as name,ou.icon as icon,ou.uuid as userId,ox_comment.date_created as time from ox_comment inner join ox_user ou on ou.id = ox_comment.created_by where ox_comment.org_id = :orgId AND ox_comment.file_id = :fileId order by ox_comment.created_by asc";
+        $query = "select text,ou.name as name,ou.icon as icon,ou.uuid as userId,ox_comment.date_created as time from ox_comment inner join ox_user ou on ou.id = ox_comment.created_by where ox_comment.org_id = :orgId AND ox_comment.file_id = :fileId order by ox_comment.date_created desc";
         $fileId = $this->getIdFromUuid('ox_file', $fileId);
         $queryParams = array("orgId"=>AuthContext::get(AuthConstants::ORG_ID),"fileId"=>$fileId);
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
