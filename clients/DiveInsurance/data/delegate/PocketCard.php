@@ -126,6 +126,7 @@ class PocketCard extends PolicyDocument
         $totalfiles = $files['total'];
         if($totalfiles == 0){
             $data['jobStatus'] = 'No Records Found';
+            return $data;
         } 
         $this->logger->info("pocket card - the file details of get file is : ".print_r($files['data'], true));
         $options = array();
@@ -158,6 +159,10 @@ class PocketCard extends PolicyDocument
         }
         $this->logger->info("New array data is : ".print_r($newData,true));
 
+        if(empty($newData)){
+            $data['jobStatus'] = 'No Records Found';
+            return $data;
+        }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
         $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
         $this->logger->info("The destination folder is : ".print_r($dest, true));        
