@@ -31,9 +31,6 @@ class SetupEndorsement extends AbstractAppDelegate
             }else{
                 $policy['update_date'] = $data['update_date'] = $update_date;
             }
-            if(isset($data['liabilityCoverage'])){
-                $data['excessLiability'] = $data['liabilityCoverage'];
-            }
             $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
             if(isset($data['single_limit'])){
                 $policy['prevSingleLimit'] = $data['single_limit'];

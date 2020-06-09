@@ -156,7 +156,7 @@ class GetPremiumRates extends AbstractAppDelegate
    
     private function getCoverageName($previousKey, $persistenceService)
     {
-        $selectQuery = "SELECT DISTINCT `key` from premium_rate_card WHERE coverage = '" . $previousKey . "'";
+        $selectQuery = "SELECT `key` from premium_rate_card WHERE coverage = '" . $previousKey . "'";
         $result = $persistenceService->selectQuery($selectQuery);
         while ($result->next()) {
             $previous_key = $result->current();

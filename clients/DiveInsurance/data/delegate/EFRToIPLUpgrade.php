@@ -19,11 +19,11 @@ class EFRToIPLUpgrade extends PolicyCheck
             $new_data['EFRFileId'] = $data['fileId'];
             $new_data['EFRWorkflowInstanceId'] = $data['workflowInstanceId'];
             $new_data['efrToIPLUpgrade'] = true;
-            $new_data['efrAmountPaid'] = (!empty($fileData['amount']) ? $fileData['amount'] : 0.00) + 
-                                         (!empty($fileData['endorAmount']) ? $fileData['endorAmount'] : 0.00);
+            $new_data['efrAmountPaid'] = (!empty($fileData['liabilityCoverage1000000'])?$fileData['liabilityCoverage1000000'] : 0.00) + (!empty($fileData['amountPayable']) ? $fileData['amountPayable'] : 0.00) + 
+                                         (!empty($fileData['endorAmountPayable']) ? $fileData['endorAmountPayable'] : 0.00);
             $new_data['product'] = "Individual Professional Liability";
             $new_data['disableUserInfoEdit'] = true;
-            $new_data['excessLiability'] = (str_replace("excessLiabilityCoverage", "liabilityCoverage", $fileData['liabilityCoverage']));
+            $new_data['excessLiability'] = $fileData['excessLiability'];
             $new_data['padi']= isset($fileData['padi']) ? $fileData['padi'] : NULL ;
             $new_data['padiNotFound']= isset($fileData['padiNotFound']) ? $fileData['padiNotFound'] : NULL ;
             $new_data['padiNotFoundCsrReview']= isset($fileData['padiNotFoundCsrReview']) ? $fileData['padiNotFoundCsrReview'] : NULL ;
