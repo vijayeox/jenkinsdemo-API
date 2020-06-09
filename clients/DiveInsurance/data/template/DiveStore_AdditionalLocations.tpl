@@ -33,7 +33,7 @@
                         <th>Property Coverages</th>
                         <th>Limits</th>
                     </tr>
-                    <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
+                    <tr><td>Policy issued by {$carrier}</td></tr>
                     <tr><td>Policy #: PPK1992907</td></tr>
                     <tr>
                         <td>Contents Limit:</td>
@@ -108,7 +108,7 @@
                         <th>Liability Coverages</th>
                         <th>Limits</th>
                     </tr>
-                    <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
+                    <tr><td>Policy issued by {$carrier}</td></tr>
                     <tr><td>Policy #: PPK1992907</td></tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>

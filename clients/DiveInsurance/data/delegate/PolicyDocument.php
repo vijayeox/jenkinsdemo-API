@@ -182,7 +182,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
-                if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['liabilityCoverage'])){
+                if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['excessLiability'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
                     if($data['product'] == "Individual Professional Liability"){
@@ -212,8 +212,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                     if($data['product'] == "Emergency First Response"){
-                        if(isset($data['liabilityCoverage'])){
-                            array_push($coverageList,$data['liabilityCoverage']);
+                        if(isset($data['excessLiability'])){
+                            array_push($coverageList,$data['excessLiability']);
                         }
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
@@ -240,8 +240,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
                     }
                     if($data['product'] == "Emergency First Response"){
-                        if(isset($result[$data['liabilityCoverage']])){
-                            $temp['liabilityVal'] = $result[$data['liabilityCoverage']];
+                        if(isset($result[$data['excessLiability']])){
+                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
                         }
                     }
 
@@ -269,10 +269,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 $upgrade = array("upgraded_single_limit" => $data['single_limit'],"upgraded_annual_aggregate" => $data['annual_aggregate']);
                                 $data['previous_policy_data'][0] = array_merge($data['previous_policy_data'][0],$upgrade);
                         }
+
                         $temp['previous_policy_data'] = json_encode($data['previous_policy_data']);
                     }
                 }
-
 
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){

@@ -30,16 +30,16 @@ class GetPremiumRates extends AbstractAppDelegate
             }else if($data['product'] == 'Emergency First Response - Endorsement'){
                 $is_upgrade = 1;
                 $product = 'Emergency First Response';
-            }else if($data['product'] == 'Dive Boat - New Policy'){
+            }else if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Boat - Group PL') {
                 $is_upgrade = 0;
                 $product = 'Dive Boat';
-            }else if($data['product'] == 'Dive Boat - Endorsement'){
+            } else if ($data['product'] == 'Dive Boat - Endorsement' || $data['product'] == "Dive Boat - Group PL Endorsement") {
                 $is_upgrade = 1;
                 $product = 'Dive Boat';
-            }else if($data['product'] == 'Dive Store - New Policy'){
+            }else if ($data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Store - Group PL') {
                 $is_upgrade = 0;
                 $product = 'Dive Store';
-            }else if($data['product'] == 'Dive Store - Endorsement'){
+            } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement'){
                 $is_upgrade = 1;
                 $product = 'Dive Store';
             }  
@@ -64,20 +64,34 @@ class GetPremiumRates extends AbstractAppDelegate
 
     private function getCoverageList(&$data,$product,$is_upgrade,$persistenceService){
         $coverageList = array();
+        $andClause = " ";
         if($is_upgrade == 0){
+            
+            if($data['product'] == 'Dive Boat - Group PL' || $data['product'] == 'Dive Store - Group PL'){
+                $andClause = " AND coverage_category IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY') ";
+            }
+
             $select = "SELECT DISTINCT coverage,coverage_category from premium_rate_card 
-            WHERE product = '".$product."' 
-              AND is_upgrade = 0 
-              AND `year` = ".$data['year']." ORDER BY coverage";
+                            WHERE product = '".$product."' 
+                              AND is_upgrade = 0 
+                              AND `year` = ".$data['year']." ".$andClause." ORDER BY coverage";
+
         }else if($is_upgrade == 1){
+            if($product == 'Individual Professional Liability'){
+                 $andClause = " AND prc1.coverage_category NOT IN ('EXCESS_LIABILITY') ";
+            }
+            if($data['product'] == 'Dive Boat - Group PL Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement'){
+                $andClause = " AND prc1.coverage_category IN ('GROUP_EXCESS_LIABILITY') ";
+            }        
+
             $select = "SELECT DISTINCT prc2.coverage as coverage,prc2.coverage_category FROM premium_rate_card as prc1 
-            INNER JOIN (SELECT DISTINCT `key`,coverage,coverage_category FROM premium_rate_card 
+                INNER JOIN (SELECT DISTINCT `key`,coverage,coverage_category FROM premium_rate_card 
                 WHERE product = '".$product."' 
                     AND `is_upgrade` = 0 
                     AND `year` = ".$data['year'].") as prc2 on  prc1.previous_key = prc2.key 
                     WHERE prc1.product = '".$product."' 
                         AND prc1.year = ".$data['year']." 
-                        AND prc1.is_upgrade = 1 ORDER BY prc2.coverage";           
+                        AND prc1.is_upgrade = 1 AND prc1.coverage_category IS NOT NULL ".$andClause." ORDER BY prc2.coverage";   
         }
         $result = $persistenceService->selectQuery($select);
         while ($result->next()) {
@@ -89,7 +103,12 @@ class GetPremiumRates extends AbstractAppDelegate
 
     private function getSubCoverageList(&$data,$product,$is_upgrade,$persistenceService){
         $subCoverageList = array();
+        $andClause = " ";
         if($is_upgrade == 0){
+            if($data['product'] == 'Dive Boat - Group PL' || $data['product'] == 'Dive Store - Group PL'){
+                $andClause = " AND coverage_category IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY') ";
+            }
+
             $select = "SELECT id,coverage,CASE 
                         WHEN DAY(start_date) = '30' AND MONTH(start_date) = 6 AND product = 'Individual Professional Liability' 
                         THEN 'July' 
@@ -97,12 +116,15 @@ class GetPremiumRates extends AbstractAppDelegate
                         FROM premium_rate_card WHERE product = '".$product."' 
                         AND `year` = '".$data['year']."' 
                         AND `is_upgrade` = 0 
-                        AND coverage = '".$data['coverage']."' ORDER BY coverage";       
+                        AND coverage = '".$data['coverage']."' ".$andClause." ORDER BY coverage";       
         }else if($is_upgrade == 1){
+            if($data['product'] == 'Dive Boat - Group PL Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement'){
+                $andClause = " AND coverage_category IN ('GROUP_EXCESS_LIABILITY') ";
+            }  
             $coverage = $this->getCoverageName($data['coverage'], $persistenceService);
             $select = "SELECT id,coverage,`key`,CASE WHEN DAY(start_date) = '30' AND MONTH(start_date) = 6 AND product = 'Individual Professional Liability' THEN
                 'July' ELSE MONTHNAME(start_date) END as `month`,start_date,end_date,premium,tax,padi_fee,coverage_category FROM premium_rate_card 
-                 WHERE product = '".$product."' and `year` = '".$data['year']."' and is_upgrade = 1 AND previous_key = '".$coverage."' ORDER BY coverage";     
+                 WHERE product = '".$product."' and `year` = '".$data['year']."' and is_upgrade = 1 AND previous_key = '".$coverage."' ".$andClause." ORDER BY coverage";     
         }
         $result = $persistenceService->selectQuery($select);
         while ($result->next()) {
@@ -134,7 +156,7 @@ class GetPremiumRates extends AbstractAppDelegate
    
     private function getCoverageName($previousKey, $persistenceService)
     {
-        $selectQuery = "SELECT DISTINCT `key` from premium_rate_card WHERE coverage = '" . $previousKey . "'";
+        $selectQuery = "SELECT `key` from premium_rate_card WHERE coverage = '" . $previousKey . "'";
         $result = $persistenceService->selectQuery($selectQuery);
         while ($result->next()) {
             $previous_key = $result->current();

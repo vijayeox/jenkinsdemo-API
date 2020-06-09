@@ -26,9 +26,11 @@ class UpdatePolicyRates extends AbstractAppDelegate
         }
         
     }
-
     private function updatePolicyRates($data,$persistenceService){
-        $total = (float)$data['premium'] + (float)$data['tax'] + (float)$data['padi_fee'];
+        $data['padi_fee'] = isset($data['padi_fee']) ? $data['padi_fee'] : 0;
+        $data['premium'] = isset($data['premium']) ? $data['premium'] : 0;
+        $data['tax'] = isset($data['tax']) ? $data['tax'] : 0;
+        $total = ((float)$data['premium'] || 0) + ((float)$data['tax'] || 0) + ((float)$data['padi_fee'] || 0);
         $updateQuery = "UPDATE premium_rate_card SET `premium` = ".$data['premium'].",`tax` = ".$data['tax'].", padi_fee = ".$data['padi_fee'].",total = ".$total." WHERE id = ".$data['id'];
         $result = $persistenceService->updateQuery($updateQuery);
     }

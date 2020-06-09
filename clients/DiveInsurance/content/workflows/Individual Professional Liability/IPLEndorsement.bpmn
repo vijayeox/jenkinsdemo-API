@@ -148,12 +148,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:serviceTask id="Task_08p2msc" name="Cancel Autorenewal Job" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="commands">
-            <camunda:list>
-              <camunda:value>{"command" : "file"}</camunda:value>
-              <camunda:value>{"command" : "processFileData"}</camunda:value>
-            </camunda:list>
-          </camunda:inputParameter>
+          <camunda:inputParameter name="command">command</camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -208,9 +203,7 @@ if(cylinder){
 if(coverage || additionalIn){
 if (additionalInsured) {
  additionalInsured.each {
-  if (it.businessRelation == 'other') {
-   result1 = true
-  }
+  result1 = true
  }
 }
 if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternationalCoverages == "internationalAssistantInstructor" || upgradeInternationalCoverages == "internationalDivemaster" || upgradeInternationalCoverages =="internationalNonteachingSupervisoryInstructor" || upgradeInternationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){

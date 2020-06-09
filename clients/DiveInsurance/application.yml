@@ -145,6 +145,9 @@ pages:
     -
         page_name: ViewChangeLog.yml
         uuid: 121ba91d-f17a-2034-a25f-86f108594637
+    -
+        page_name: AdminPage.yml
+        uuid: c869ce1d-022c-40b8-8214-86ba3d6442e4
 menu:
     -
         name: Home
@@ -212,6 +215,12 @@ menu:
         icon: 'fa fa-list'
         page_uuid: 151ba91d-f17a-4034-a25f-86f108594637
         uuid: 3b396d26-c0cb-4436-8804-f22431d6ac8c
+    -
+        name: Administrator
+        privilege: MANAGE_ADMIN_WRITE
+        icon: 'far fa-users-cog'
+        page_uuid: c869ce1d-022c-40b8-8214-86ba3d6442e4
+        uuid: d9cca9b1-dc90-4e34-9cf6-34e42706462c
 workflow:
     -
         name: 'Individual Liability'
@@ -318,7 +327,7 @@ job:
         url: /app/d77ea120-b028-479b-8c6e-60476b6a4456/delegate/UpdatePolicyStatusOnExpiration
         cron: '0 30 9 1 JUL ? *'
         data:
-            flag: 'notEqualTo'
+            flag: notEqualTo
             orgId: f0033dc0-126b-40ba-89e0-d3061bdeda4c
             appId: d77ea120-b028-479b-8c6e-60476b6a4456
     -
@@ -327,6 +336,6 @@ job:
         url: /app/d77ea120-b028-479b-8c6e-60476b6a4456/delegate/UpdatePolicyStatusOnExpiration
         cron: '0 30 9 23 JUL ? *'
         data:
-            flag: 'equalTo'
+            flag: equalTo
             orgId: f0033dc0-126b-40ba-89e0-d3061bdeda4c
             appId: d77ea120-b028-479b-8c6e-60476b6a4456
