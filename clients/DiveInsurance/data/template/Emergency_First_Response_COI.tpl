@@ -19,7 +19,7 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
+					<p class = "details">{$lastname}, {$firstname} {if isset($initial)}, {$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city}, {$state_in_short} {$zip}</p>
@@ -310,6 +310,10 @@
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
+				<center><p class = "notice">both of 
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+				</p></center>
+			{elseif $state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/EFR/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>

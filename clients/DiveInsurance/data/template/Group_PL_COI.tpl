@@ -216,7 +216,11 @@
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Virgin Islands'}
+			{elseif $state == 'Virgin Islands'}
+				<center><p class = "notice">both of 
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+				</p></center>
+			{elseif $business_state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>
