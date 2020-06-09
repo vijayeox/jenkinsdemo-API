@@ -8,7 +8,7 @@
                 <p>{$firstname} {$lastname}<br/>
                 {$address1}<br/>
 				{$address2}<br/>
-				{$city},{$state},{$zip}<br/></p>
+				{$city},{$state} {$zip}<br/></p>
 
 
 				<br/>
