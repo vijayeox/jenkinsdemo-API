@@ -10,7 +10,7 @@ org:
     -
         name: ArrowHead
         uuid: 34bf01ab-79ca-42df-8284-965d8dbf290e
-        email: arrowhead@gmail.com
+        email: admin@arrowhead.com
         address1: '6 bCenterpoint'
         address2: Dr.
         city: 'La Palma'
@@ -18,10 +18,10 @@ org:
         zip: 90623
         country: 'United States'
         contact:
-            username: arrowhead.gmail.com
+            username: arrowheadAdmin
             firstname: Admin
             lastname: User
-            email: arrowhead@gmail.com
+            email: admin@arrowhead.com
         preferences: '{}'
 privilege:
     -
