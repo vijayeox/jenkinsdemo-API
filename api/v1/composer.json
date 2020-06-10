@@ -65,7 +65,8 @@
     "mikehaertl/php-pdftk": "dev-master",
     "zendframework/zend-hydrator": "^3.0@dev",
     "quickbooks/v3-php-sdk": ">=4.0.1",
-    "phpoffice/phpspreadsheet": "dev-master" 
+    "phpoffice/phpspreadsheet": "dev-master",
+    "alhimik1986/php-excel-templator": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",
