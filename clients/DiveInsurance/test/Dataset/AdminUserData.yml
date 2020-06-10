@@ -1,0 +1,14 @@
+ox_privilege:
+-
+    id: 100
+    name: MANAGE_ADMIN
+    permission_allowed: 3
+
+ox_role_privilege:
+-
+    id: 100
+    role_id: 4
+    privilege_name: MANAGE_ADMIN
+    permission: 3
+    org_id: 1
+
