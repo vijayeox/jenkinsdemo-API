@@ -322,7 +322,7 @@
 						"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 						"attr": "style"
 					}],
-					"content": "Your PADI membership is invalid at this moment. After the submission of the application form our CSRs will assist you in validating the membership with PADI Office.",
+					"content": "Your PADI membership may not be invalid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "panelColumnsContent4",
@@ -1255,7 +1255,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 94,
+	"_vid": 95,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1269,6 +1269,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-08T13:00:12.147Z",
+	"modified": "2020-06-11T09:21:11.691Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
