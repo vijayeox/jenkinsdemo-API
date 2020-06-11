@@ -346,7 +346,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership is invalid at this moment. After the submission of the application form our CSRs will assist you in validating the membership with PADI Office.",
+						"content": "Your PADI membership may not be invalid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -10944,7 +10944,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 128,
+	"_vid": 129,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10961,6 +10961,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-01T05:01:01.174Z",
+	"modified": "2020-06-11T09:35:51.745Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

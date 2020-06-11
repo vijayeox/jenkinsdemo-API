@@ -10,6 +10,7 @@ use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
+use Zend\Db\Sql\Sql;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Console\Console;
 
@@ -210,5 +211,11 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
         return $result;
+    }
+    protected function executeUpdateQuery($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $sql = new Sql($dbAdapter);
+        $statement = $this->sql->prepareStatementForSqlObject($query);
+        return $statement->execute();
     }
 }

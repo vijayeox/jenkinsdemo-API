@@ -251,7 +251,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership is invalid at this moment. After the submission of the application form our CSRs will assist you in validating the membership with PADI Office.",
+						"content": "Your PADI membership may not be invalid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -2350,7 +2350,7 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = data[\"amount\"] - data[\"amountPayable\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
+									"calculateValue": "var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
 									"calculateServer": false,
 									"key": "balance",
 									"type": "number",
@@ -3946,6 +3946,57 @@
 						"key": "additionalInformation",
 						"type": "textarea",
 						"input": true
+					}, {
+						"label": "additional Insured Attached Grid",
+						"disableAddingRemovingRows": false,
+						"reorder": false,
+						"addAnotherPosition": "bottom",
+						"defaultOpen": false,
+						"layoutFixed": false,
+						"enableRowGroups": false,
+						"tableView": false,
+						"defaultValue": [{}],
+						"calculateServer": false,
+						"key": "additionalInsuredAttachedGrid",
+						"type": "datagrid",
+						"input": true,
+						"components": [{
+							"label": "Additional Insured Attachments",
+							"tableView": false,
+							"storage": "url",
+							"webcam": false,
+							"fileTypes": [{
+								"label": "",
+								"value": ""
+							}],
+							"multiple": true,
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"multiple": true
+							},
+							"key": "additionalInsuredAttachments",
+							"type": "file",
+							"url": "/file/attachment",
+							"input": true
+						}]
+					}, {
+						"type": "documentviewer",
+						"key": "additionalInsuredAttachments1",
+						"calculateValue": "try{\n  value = JSON.parse(row.additionalInsuredAttachments)\n} catch(e){\n  value = row.additionalInsuredAttachments\n}",
+						"dtype": "documentviewer",
+						"datype": "documentviewer",
+						"dattype": "documentviewer",
+						"customConditional": "if(row.additionalInsuredAttachments && row.additionalInsuredAttachments.length > 0){show = true;} else {show = false;}",
+						"datatype": "documentviewer",
+						"data_type": "documentviewer",
+						"label": "Additional Insured Attachments",
+						"hideLabel": true,
+						"inputType": "documentviewer",
+						"input": 1,
+						"tableView": false,
+						"protected": true,
+						"persistent": false
 					}],
 					"tableView": false,
 					"type": "well",
@@ -3955,17 +4006,6 @@
 				}],
 				"lockKey": true
 			}]
-		}, {
-			"label": "Additional Insured Attachments",
-			"tableView": false,
-			"storage": "url",
-			"webcam": false,
-			"clearOnHide": false,
-			"calculateServer": false,
-			"key": "additionalInsuredAttachments",
-			"type": "file",
-			"input": true,
-			"url": "/file/attachment"
 		}],
 		"input": false,
 		"key": "page4",
@@ -4085,7 +4125,7 @@
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  var day = moment(data.start_date).format('DD');\n  if(day >= 22 && month == 7){\n    value = (parseFloat(data.amountPayable).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.amountPayable).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.amountPayable).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.amountPayable).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.amountPayable).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.amountPayable).toFixed(2);\n}",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = parseFloat(data.amountPayable).toFixed(2);\n    data.paymentInstallments = 0;\n} else {\nvalue = parseFloat(data.amountPayable).toFixed(2);\n}",
 						"calculateServer": false,
 						"key": "finalAmountPayable",
 						"type": "number",
@@ -4480,7 +4520,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 346,
+	"_vid": 353,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4501,6 +4541,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-09T10:41:52.836Z",
+	"modified": "2020-06-11T09:34:54.125Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -48,7 +48,7 @@ class AutoRenewalRateCard extends RateCard{
             $this->IPLRates($data,$result);
         } else if($data['product'] == 'Emergency First Response'){
             $coverageList = array();
-            array_push($coverageList,$data['liabilityCoverage']);
+            array_push($coverageList,$data['excessLiability']);
             $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
             $result = json_decode($result,true);
             $this->EFRRates($data,$result);
@@ -100,11 +100,14 @@ class AutoRenewalRateCard extends RateCard{
 
     private function EFRRates(&$data,$coverages){
         $this->logger->info("EFR RATES");
-        if(isset($coverages[$data['liabilityCoverage']])){
-            $data['LiabilityVal'] = $coverages[$data['liabilityCoverage']];
+        if(isset($coverages[$data['liabilityCoverage1000000']])&& !isset($data['liabilityCoverage1000000'])){
+            $data['liabilityVal'] = $coverages[$data['liabilityCoverage1000000']];
         }
-        $data['coverageAmount'] = $data[$data['liabilityCoverage']];
-        $data['amount'] = (float)$data['coverageAmount'];
+        if(isset($coverages[$data['excessLiability']])&& !isset($data['excessLiabilityVal'])){
+            $data['excessLiabilityVal'] = $coverages[$data['excessLiability']];
+        }
+        $data['coverageAmount'] = $data['liabilityVal']+$data['excessLiabilityVal'];
+        $data['amount'] = (float) $data['coverageAmount'];
     }
 
     private function DiveBoatRates(&$data){
