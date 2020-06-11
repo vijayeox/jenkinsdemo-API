@@ -108,6 +108,17 @@ entity:
                 name: documents
                 text: 'Pocket Card'
                 data_type: document
+    -
+        name: 'Auto Renewal'
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+            -
+                name: documents
+                text: 'Policy Documents'
+                data_type: document
 pages:
     -
         page_name: UserHomePage.yml
@@ -233,10 +244,10 @@ workflow:
         bpmn_file: 'Individual Professional Liability/IPLEndorsement.bpmn'
         entity: 'Individual Professional Liability'
     -
-        name: 'Individual Liability Auto Renewal'
+        name: 'Auto Renewal'
         uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
         bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
-        entity: 'Individual Professional Liability'
+        entity: 'Auto Renewal'
     -
         name: 'Emergency First Response'
         uuid: cb74d176-225a-11ea-978f-2e728ce88125
