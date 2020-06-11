@@ -49,11 +49,13 @@ class AddOrRemovePolicyRates extends AbstractAppDelegate
                     $is_upgrade = 1;
                     $product = 'Dive Boat';
                     $data['end_date'] = $year . '-07-22';
-                } else if ($data['product'] == 'Dive Store - Endorsement') {
+                }else if ($data['product'] == "Dive Boat - Group PL Endorsement") {
+                    $is_upgrade = 1;
+                    $product = 'Dive Boat';
+                } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
                     $is_upgrade = 1;
                     $product = 'Dive Store';
                 }
-
                 if ($data['coverage_category'] == 'GROUP_COVERAGE' || $data['coverage_category'] == 'GROUP_EXCESS_LIABILITY') {
                     $days = date('t', mktime(0, 0, 0, $month, 1, $year));
                     $data['end_date'] = $year . '-' . $month . '-' . $days;

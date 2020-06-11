@@ -326,7 +326,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership is invalid at this moment. After the submission of the application form our CSRs will assist you in validating the membership with PADI Office.",
+						"content": "Your PADI membership may not be invalid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -735,10 +735,11 @@
 							"label": "City",
 							"spellcheck": true,
 							"tableView": true,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
-							"key": "city1",
+							"key": "city",
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
@@ -756,22 +757,29 @@
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
-								"values": [{}],
+								"values": [{
+									"label": "",
+									"value": ""
+								}],
 								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 							},
 							"template": "<span>{{ item }}</span>",
+							"refreshOn": "country",
+							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
-							"key": "state1",
+							"key": "state",
 							"type": "select",
-							"refreshOn": "country",
+							"indexeddb": {
+								"filter": {}
+							},
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false,
-							"clearOnRefresh": true,
 							"isNew": false
 						}],
 						"width": 4,
@@ -789,7 +797,7 @@
 								"required": true,
 								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 							},
-							"key": "zip1",
+							"key": "zip",
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
@@ -2813,6 +2821,42 @@
 						"key": "additionalInformation",
 						"type": "textarea",
 						"input": true
+					}, {
+						"label": "Additional Insured Attachments",
+						"tableView": false,
+						"storage": "url",
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"multiple": true,
+						"clearOnHide": false,
+						"calculateServer": false,
+						"validate": {
+							"multiple": true
+						},
+						"key": "additionalInsuredAttachments",
+						"type": "file",
+						"url": "/file/attachment",
+						"input": true
+					}, {
+						"type": "documentviewer",
+						"key": "additionalInsuredAttachments1",
+						"calculateValue": "try{\n  value = JSON.parse(row.additionalInsuredAttachments)\n} catch(e){\n  value = row.additionalInsuredAttachments\n}",
+						"dtype": "documentviewer",
+						"datype": "documentviewer",
+						"dattype": "documentviewer",
+						"customConditional": "if(row.additionalInsuredAttachments && row.additionalInsuredAttachments.length > 0){show = true;} else {show = false;}",
+						"datatype": "documentviewer",
+						"data_type": "documentviewer",
+						"label": "Additional Insured Attachments",
+						"hideLabel": true,
+						"inputType": "documentviewer",
+						"input": 1,
+						"tableView": false,
+						"protected": true,
+						"persistent": false
 					}],
 					"tableView": false,
 					"type": "well",
@@ -2822,17 +2866,6 @@
 				}],
 				"lockKey": true
 			}]
-		}, {
-			"label": "Additional Insured Attachments",
-			"tableView": false,
-			"storage": "url",
-			"webcam": false,
-			"clearOnHide": false,
-			"calculateServer": false,
-			"key": "additionalInsuredAttachments",
-			"type": "file",
-			"input": true,
-			"url": "/file/attachment"
 		}],
 		"input": false,
 		"key": "additionalInsuredPanel",
@@ -2960,7 +2993,7 @@
 						"inputFormat": "plain",
 						"redrawOn": "amount",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  value = parseFloat(data.amount).toFixed(2);\n  data.paymentInstallments = 0;\n} else {\nvalue = parseFloat(data.amount).toFixed(2);\n}",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  value = parseFloat(data.amountPayable).toFixed(2);\n  data.paymentInstallments = 0;\n} else {\nvalue = parseFloat(data.amountPayable).toFixed(2);\n}",
 						"calculateServer": false,
 						"key": "finalAmountPayable",
 						"type": "number",
@@ -3352,7 +3385,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 525,
+	"_vid": 530,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3436,7 +3469,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-09T10:42:19.005Z",
+	"modified": "2020-06-11T09:35:15.247Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

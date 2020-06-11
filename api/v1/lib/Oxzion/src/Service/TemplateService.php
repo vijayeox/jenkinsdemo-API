@@ -8,13 +8,19 @@ use Oxzion\Utils\BosUtils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Utils\ArtifactUtils;
+use Oxzion\Document\Template\Smarty\SmartyTemplateProcessorImpl;
+use Oxzion\Document\Template\Excel\ExcelTemplateProcessorImpl;
 
 class TemplateService extends AbstractService
 {
     private $client;
+    private $excelClient;
     private $templateName;
     private $templateExt = ".tpl";
     private $templateDir;
+
+    const HTML_TEMPLATE = 1;
+    const EXCEL_TEMPLATE = 2;
 
     public function __construct($config, $dbAdapter)
     {
@@ -40,15 +46,11 @@ class TemplateService extends AbstractService
         }
 
         $this->templateDir = $templateDir;
-        $this->client = new Smarty();
-        // $this->client->debugging = true;
-        $this->client->setCacheDir($cacheDir);
-        $this->client->setConfigDir($configsDir);
-        $this->client->setTemplateDir($templateDir);
-        $this->client->setCompileDir($templatescDir);
-        // $this->testInstall();
-        // echo "<pre>";print_r($this->getContent('newAdminUser', array('company_name' => 'Test Organization', 'username' => 'testadmin', 'password' => 'welcome2oxzion')));exit();
-        // echo "<pre>";print_r($this->getContent('test', array('name' => $this->adminUser)));exit();
+        $this->client = new SmartyTemplateProcessorImpl();
+        $params = array('cacheDir' => $cacheDir, 'configsDir' => $configsDir, 'templateDir' => $templateDir, 'compileDir' => $templatescDir);
+        $this->client->init($params);
+        $this->excelClient = new ExcelTemplateProcessorImpl();
+        $this->excelClient->init(array('templateDir' => $templateDir));
     }
 
     /**
@@ -56,24 +58,34 @@ class TemplateService extends AbstractService
      *
      * @param      String     $templateName  The template name
      * @param      array      $data          The data element pathed in the template
+     *@param      array      $options - templateType along with templator processor supported option. For example: ExcelTemplateProcessorImpl
      *
      * @throws     Exception  (If the template is not found)
      *
      * @return     String     The template content.
      */
-    public function getContent($templateName, $data = array())
+    public function getContent($templateName, $data = array(), $options = array())
     {
         $this->logger->info("Template Name:".$templateName);
         $this->logger->info("Data context".print_r($data,true));
 
-        $template = $this->setTemplateDir($templateName, $data);
-        $this->logger->info("Template Directory:".print_r($template,true));
+        $template = $this->getTemplateDir($templateName, $data);
+        $this->logger->info("Template Directory:".print_r($template['templatePath'],true));
+        $this->logger->info("Template Directory:".print_r($template['templateNameWithExt'],true));
         if (!$template) {
             throw new Exception("Template not found!");
         }
-        $this->client->assign($data);
+
+        if (isset($options['templateType']) && $options['templateType'] == static::EXCEL_TEMPLATE) {
+            $client = $this->excelClient;
+            $template = $template['templateNameWithExt'];
+            unset($options['templateType']);
+        }
+        else{
+            $client = $this->client;
+        }
         try{
-            $content = $this->client->fetch($template);
+            $content = $client->getContent($template, $data, $options);
             $this->logger->info("TEMPLATE CONTENT".print_r($content,true));
         }catch(Exception $e){
             print("Error - ".$e->getMessage()."\n");
@@ -82,25 +94,17 @@ class TemplateService extends AbstractService
         return $content;
     }
 
-    private function setTemplateDir($templateName, $params = array()){
-        $this->logger->info("in setTemplateDir");
-        $template = $templateName.$this->templateExt;
-        $templatePath = $this->getTemplatePath($template, $params);
-       $this->logger->info("template - $templatePath/$template");
-        
-        if($templatePath){
-            $this->client->setTemplateDir($templatePath);
-            return $template;
-        }
-
-        return false;
-        
+    private function getTemplateDir($templateName, $params = array()){
+        $this->logger->info("in getTemplateDir");
+        $template['templateNameWithExt'] = $templateName.$this->templateExt;
+        $template['templatePath'] = $this->getTemplatePath($template['templateNameWithExt'], $params);
+        return $template;
     } 
 
-    public function getTemplatePath($template, $params = array())
+    private function getTemplatePath($template, $params = array())
     {
         $this->logger->info("Params - ".print_r($params, true));
-       if (!isset($params['orgUuid']) && isset($params['orgId'])) {
+        if (!isset($params['orgUuid']) && isset($params['orgId'])) {
             $org = $this->getIdFromUuid('ox_organization', $params['orgId']);
             if ($org != 0) {
                 $orgUuid = $params['orgId'];
