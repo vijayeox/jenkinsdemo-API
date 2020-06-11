@@ -23,9 +23,9 @@ s.onload = function (e) {
               formData: data,
               commands:
                 '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
-              exit: true,
+              exit: true
             },
-            bubbles: false,
+            bubbles: false
           });
           document
             .getElementById(
@@ -40,3 +40,13 @@ s.onload = function (e) {
   }, 1000);
 };
 document.head.appendChild(s);
+
+fetch("https://api.npoint.io/ac5a62e2a6c18c0dbb6c")
+  .then((response) => response.json())
+  .then((jsondata) => {
+    setTimeout(() => {
+      for (item in jsondata) {
+        data[item] = jsondata[item];
+      }
+    }, 2000);
+  });
