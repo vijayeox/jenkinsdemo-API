@@ -19,6 +19,7 @@ class GetPremiumRates extends AbstractAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Get Premium Rates -----" . print_r($data, true));
+        $andClause = " ";
         if (AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')) {
             if ($data['product'] == 'Individual Professional Liability - New Policy') {
                 $is_upgrade = 0;
@@ -51,7 +52,10 @@ class GetPremiumRates extends AbstractAppDelegate
             if ($data['type'] == 'coverage') {
                 $data = $this->getCoverageList($data, $product, $is_upgrade, $persistenceService);
             } else if ($data['type'] == 'subcoverage') {
-                $data = $this->getSubCoverageList($data, $product, $is_upgrade, $persistenceService);
+                if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Boat - Endorsement' || $data['product'] == 'Dive Store - Endorsement') {
+                        $andClause = " AND (coverage_category = '' OR coverage_category IS NULL OR coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE')) ";
+                }
+                $data = $this->getSubCoverageList($data, $product, $is_upgrade, $andClause,$persistenceService);
             } else if ($data['type'] == 'addNew') {
                 $data = $this->addNewRecord($data, $product, $is_upgrade, $persistenceService);
             }
@@ -75,7 +79,7 @@ class GetPremiumRates extends AbstractAppDelegate
             }
 
             if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Store - New Policy') {
-                $andClause = " AND coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE') ";
+                $andClause = " AND (coverage_category = '' OR coverage_category IS NULL OR coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE')) ";
             }
 
             $select = "SELECT DISTINCT coverage,coverage_category from premium_rate_card 
@@ -91,7 +95,7 @@ class GetPremiumRates extends AbstractAppDelegate
             }
 
             if ($data['product'] == 'Dive Boat - Endorsement' || $data['product'] == 'Dive Store - Endorsement') {
-                $andClause = " AND coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE') ";
+                $andClause = " AND prc1.coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE') ";
             }
 
             $select = "SELECT DISTINCT prc2.coverage as coverage,prc2.coverage_category FROM premium_rate_card as prc1 
@@ -112,20 +116,15 @@ class GetPremiumRates extends AbstractAppDelegate
         return $coverageList;
     }
 
-    private function getSubCoverageList(&$data, $product, $is_upgrade, $persistenceService)
+    private function getSubCoverageList(&$data, $product, $is_upgrade, $andClause, $persistenceService)
     {
         $this->logger->info("Get Premium Sub Coverage Data -----" . print_r($data, true));
         $subCoverageList = array();
         $andClause = " ";
         if ($is_upgrade == 0) {
             if ($data['product'] == 'Dive Boat - Group PL' || $data['product'] == 'Dive Store - Group PL') {
-                $andClause = " AND coverage_category IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY') ";
+                $andClause = " AND coverage_category IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE') ";
             }
-
-            if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Store - New Policy') {
-                $andClause = " AND coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE') ";
-            }
-
             $select = "SELECT id,coverage,CASE 
                         WHEN DAY(start_date) = '30' AND MONTH(start_date) = 6 AND product = 'Individual Professional Liability' 
                         THEN 'July' 
@@ -138,11 +137,6 @@ class GetPremiumRates extends AbstractAppDelegate
             if ($data['product'] == 'Dive Boat - Group PL Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
                 $andClause = " AND coverage_category IN ('GROUP_EXCESS_LIABILITY') ";
             }
-
-            if ($data['product'] == 'Dive Boat - Endorsement' || $data['product'] == 'Dive Store - Endorsement') {
-                $andClause = " AND coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE') ";
-            }
-
             $coverage = $this->getCoverageName($data['coverage'], $persistenceService);
             $select = "SELECT id,coverage,`key`,CASE WHEN DAY(start_date) = '30' AND MONTH(start_date) = 6 AND product = 'Individual Professional Liability' THEN
                 'July' ELSE MONTHNAME(start_date) END as `month`,start_date,end_date,premium,tax,padi_fee,coverage_category FROM premium_rate_card 
@@ -159,15 +153,25 @@ class GetPremiumRates extends AbstractAppDelegate
 
     private function addNewRecord($data, $product, $is_upgrade, $persistenceService)
     {
+        $andClause = " ";
+        if ($data['product'] == 'Dive Boat - Group PL' || $data['product'] == 'Dive Store - Group PL' || $data['product'] == 'Dive Boat - Group PL Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
+            $andClause = " AND coverage_category IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE') ";
+        }
+
+        if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Boat - Endorsement' || $data['product'] == 'Dive Store - Endorsement') {
+           $andClause = " AND (coverage_category = '' OR coverage_category IS NULL OR coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE')) ";
+        }
         $this->logger->info("Add New Record for Next Year-----" . print_r($data, true));
-        $year = $this->getMaxYear($data, $product, $is_upgrade, $persistenceService);
+        $year = $this->getMaxYear($data, $product, $is_upgrade, $andClause,$persistenceService);
         $persistenceService->beginTransaction();
         try {
-            $query = "INSERT INTO premium_rate_card (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`,`tax`,`padi_fee`,`total`,`is_upgrade`,`previous_key`,`coverage_category`,`year`) SELECT product,coverage,`key`,DATE_ADD(start_date, INTERVAL 1 year) as start_date,CASE WHEN ((YEAR(end_date) + 1) % 4 = 0 AND MONTH(end_date) = 2) THEN 
+            $query = "INSERT INTO premium_rate_card (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`,`tax`,`padi_fee`,`total`,`is_upgrade`,`previous_key`,`coverage_category`,`year`) ";
+
+            $query = "SELECT product,coverage,`key`,DATE_ADD(start_date, INTERVAL 1 year) as start_date,CASE WHEN ((YEAR(end_date) + 1) % 4 = 0 AND MONTH(end_date) = 2) THEN 
                                 DATE_ADD(DATE_ADD(end_date, INTERVAL 1 YEAR),INTERVAL 1 dAY)
                             ELSE
                                 DATE_ADD(end_date, INTERVAL 1 year) 
-                            END as end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category," . $data['year'] . " as `year` FROM premium_rate_card WHERE product = '" . $product . "' and `year` = " . $year . " and `is_upgrade` = " . $is_upgrade;
+                            END as end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category," . $data['year'] . " as `year` FROM premium_rate_card WHERE product = '" . $product . "' and `year` = " . $year . " and `is_upgrade` = " . $is_upgrade." ".$andClause;
             $this->logger->info("Add New Record for Next Year Query -----" . print_r($query, true));
             $persistenceService->insertQuery($query);
             $persistenceService->commit();
@@ -190,9 +194,9 @@ class GetPremiumRates extends AbstractAppDelegate
         return $previous_key;
     }
 
-    private function getMaxYear($data, $product, $is_upgrade, $persistenceService)
+    private function getMaxYear($data, $product, $is_upgrade, $andClause,$persistenceService)
     {
-        $yearSelect = "SELECT max(`year`) as `year` FROM premium_rate_card WHERE product = '" . $product . "' and `is_upgrade` = " . $is_upgrade;
+        $yearSelect = "SELECT max(`year`) as `year` FROM premium_rate_card WHERE product = '" . $product . "' and `is_upgrade` = " . $is_upgrade ." " .$andClause;
         $result = $persistenceService->selectQuery($yearSelect);
         while ($result->next()) {
             $year = $result->current();

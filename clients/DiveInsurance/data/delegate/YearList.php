@@ -56,9 +56,13 @@ class YearList extends TemplateAppDelegate
                         $andClause1 = " AND coverage_category IN ('GROUP_EXCESS_LIABILITY')";
                     }
 
+                    if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Boat - Endorsement' || $data['product'] == 'Dive Store - Endorsement') {
+                       $andClause1 = " AND (coverage_category = '' OR coverage_category IS NULL OR coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE')) ";
+                    }
+
                     $selectQuery  = "SELECT DISTINCT year from premium_rate_card WHERE 
                                 product = '" . $product . "' AND
-                                 is_upgrade = " . $is_upgrade . " " . $andClause1;
+                                 is_upgrade = " . $is_upgrade . " " . $andClause1." ORDER BY `year`" ;
                 } else if ($data['type'] == 'SurplusLines') {
                     if ($product == 'Individual Professional Liability') {
                         $product = 'IPL';
@@ -76,12 +80,12 @@ class YearList extends TemplateAppDelegate
                     array_shift($yearList);
                     array_shift($yearList);
                     return $yearList;
-                } 
+                } else if ($data['type'] == 'CarrierPolicy') {
+                    $selectQuery  = "SELECT DISTINCT year from carrier_policy";
+                }
             } else {
                 if ($data['type'] == 'StateTax') {
                     $selectQuery  = "SELECT DISTINCT year from state_tax WHERE coverage = '" . $data['coverage'] . "'";
-                }else if ($data['type'] == 'CarrierPolicy') {
-                    $selectQuery  = "SELECT DISTINCT year from carrier_policy";
                 }
             }
             $result = $persistenceService->selectQuery($selectQuery);

@@ -26,16 +26,16 @@ class CoverageList extends AbstractAppDelegate
         } else if ($data['product'] == 'Emergency First Response - Endorsement') {
             $is_upgrade = 1;
             $product = 'Emergency First Response';
-        } else if ($data['product'] == 'Dive Boat - New Policy') {
+        } else if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Boat - Group PL') {
             $is_upgrade = 0;
             $product = 'Dive Boat';
-        } else if ($data['product'] == 'Dive Boat - Endorsement') {
+        } else if ($data['product'] == 'Dive Boat - Endorsement' || $data['product'] == "Dive Boat - Group PL Endorsement") {
             $is_upgrade = 1;
             $product = 'Dive Boat';
-        } else if ($data['product'] == 'Dive Store - New Policy') {
+        } else if ($data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Store - Group PL') {
             $is_upgrade = 0;
             $product = 'Dive Store';
-        } else if ($data['product'] == 'Dive Store - Endorsement') {
+        } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
             $is_upgrade = 1;
             $product = 'Dive Store';
         }
