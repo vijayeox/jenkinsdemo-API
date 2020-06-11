@@ -251,7 +251,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership may not be invalid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
+						"content": "Your PADI membership is invalid at this moment. After the submission of the application form our CSRs will assist you in validating the membership with PADI Office.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -3947,39 +3947,24 @@
 						"type": "textarea",
 						"input": true
 					}, {
-						"label": "additional Insured Attached Grid",
-						"disableAddingRemovingRows": false,
-						"reorder": false,
-						"addAnotherPosition": "bottom",
-						"defaultOpen": false,
-						"layoutFixed": false,
-						"enableRowGroups": false,
+						"label": "Additional Insured Attachments",
 						"tableView": false,
-						"defaultValue": [{}],
+						"storage": "url",
+						"webcam": false,
+						"fileTypes": [{
+							"label": "",
+							"value": ""
+						}],
+						"multiple": true,
+						"clearOnHide": false,
 						"calculateServer": false,
-						"key": "additionalInsuredAttachedGrid",
-						"type": "datagrid",
-						"input": true,
-						"components": [{
-							"label": "Additional Insured Attachments",
-							"tableView": false,
-							"storage": "url",
-							"webcam": false,
-							"fileTypes": [{
-								"label": "",
-								"value": ""
-							}],
-							"multiple": true,
-							"clearOnHide": false,
-							"calculateServer": false,
-							"validate": {
-								"multiple": true
-							},
-							"key": "additionalInsuredAttachments",
-							"type": "file",
-							"url": "/file/attachment",
-							"input": true
-						}]
+						"validate": {
+							"multiple": true
+						},
+						"key": "additionalInsuredAttachments",
+						"type": "file",
+						"url": "/file/attachment",
+						"input": true
 					}, {
 						"type": "documentviewer",
 						"key": "additionalInsuredAttachments1",
@@ -4520,7 +4505,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 353,
+	"_vid": 354,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4541,6 +4526,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-11T09:34:54.125Z",
+	"modified": "2020-06-11T09:58:03.543Z",
 	"machineName": "testdivehub:csrInitiates"
 }
