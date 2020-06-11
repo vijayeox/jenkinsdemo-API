@@ -36,8 +36,12 @@
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
-                        {if $dspropownbuilding != "no"}
+                        {if isset($dspropownbuilding) && $dspropownbuilding != "no"}
+                            {if isset($dspropreplacementvalue)}
                             <td>${$dspropreplacementvalue|number_format}</td>
+                            {else}
+                            <td>$0</td>
+                            {/if}
                         {else}
                             <td>$0</td>
                         {/if}
@@ -242,7 +246,7 @@
 
             <!-- Alarm Calc -->
             <div style="margin: 2% 0;">
-                {if $dspropcentralfire.centralStationAlarmPL != "yes"}
+                {if isset($dspropcentralfire.centralStationAlarmPL) && $dspropcentralfire.centralStationAlarmPL != "yes"}
                 <center>
                     <b>
                         <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>

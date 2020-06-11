@@ -194,6 +194,16 @@
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "ApproverDesignation",
+						"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].designation;\n  }\n}",
+						"calculateServer": false,
+						"key": "approverDesignation",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false,
+						"keyModified": true
+					}, {
 						"label": "isRenewalFlow",
 						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
 						"calculateServer": false,
@@ -10944,7 +10954,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 129,
+	"_vid": 130,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10961,6 +10971,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-11T09:35:51.745Z",
+	"modified": "2020-06-11T13:43:59.065Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

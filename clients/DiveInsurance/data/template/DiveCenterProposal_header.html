@@ -61,14 +61,17 @@
                     <p class ="info" id = "nameVal"></p>
                     <p class ="info" id = "addressLineVal"></p>
                     <p class ="info" id = "addressLine2Val"></p>
-                    <p class = "info">License#: {$license_number}</p>
+                    <p class = "info">License#: <span class="license_number"></span></p>
                 </div>
-                    <b class = "caption2">Insured's Name and Mailing Address:</b>
-                    <p class = "details">{$lastname}, {$firstname} {if isset($initial)}, {$initial}{/if}</p>
-                    <p class = "details">{$address1}</p>
-                    <p class = "details">{$address2}</p>
-                    <p class = "details">{$city}, {$state_in_short} {$zip}</p>
-                    <p class = "details">{$country}</p>
+                    <b class="caption2">Insured's Name and Mailing Address:</b>
+                <p class="details"><span class="firstname"></span>&nbsp<span class="lastname"></span></p>
+                <p class="details">DBA:&nbsp<span class="dba"></span></p>
+                <p class="details">Entity Type:&nbsp<span class="entity_type"></span></p>
+                <p class="details"><span class="address1"></span></p>
+                <p class="details">
+                    <span class="city"></span>,
+                    <span class="state"></span> <span class="zip"></span>
+                </p>
             </div>
             <div class="content2">
                 <b class="p_margin">Agent Contact Information</b>
@@ -79,7 +82,7 @@
                 </p>
                 <p class="info" id="phone2Val"></p>
                 <p class="info">www.diveinsurance.com</p>
-                <p class="info">diveboat@diveinsurance.com</p>
+                <p class="info">divestore@diveinsurance.com</p>
                 <p class="info">Policy period: <span class="start_date"></span> thru
                     <span class="end_date"></span> 12:01:00 AM
                 </p>
@@ -89,28 +92,24 @@
         </div>
 
     </div>
-    </div>
-    </div>
+    <div>&nbsp</div>
+    <div>&nbsp</div>
+    <div>&nbsp</div>
     <div>&nbsp</div>
     <div class="spacer2"></div>
     <center>
         <b>
-            <!-- <p style="margin-top: 5px;" class="info">Store Location: <span class="storeLocation uppercase">{$address1},
-                    {$address2}, {$city}, {$state},
-                    {$zip}</span></p> -->
             <p style="margin-top: 5px;" class="info">Store Location:
-                <span class="uppercase">{$address1}</span>,
-                <span class="uppercase">{$address2}</span>,
-                <span class="uppercase">{$city}</span>,
-                <span class="uppercase">{$state}</span>,
-                <span class="uppercase">{$zip}</span>
+                <span class="address1 uppercase"></span>,
+                <span class="address2 uppercase"></span>,
+                <span class="city uppercase"></span>,
+                <span class="state uppercase"></span> <span class="zip uppercase"></span>
             </p>
         </b>
     </center>
     <div class="spacer2"></div>
     <p></p>
     <div class="clearfix"></div>
-
 </body>
 
 </html>
