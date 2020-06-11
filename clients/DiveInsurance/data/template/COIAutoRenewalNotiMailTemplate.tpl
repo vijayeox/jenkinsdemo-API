@@ -27,7 +27,7 @@
 				<br/>
 				<p>It's that time of the year to think about insurance. Fortunately, you are currently signed up for automatic renewal under the PADI Endorsed Professional Liability Program.</p><br/>
 
-				<p>The final amount that will be deducted from your account for the policy period June 30,{$year} to June 30,{$year+1} is ${$amount}.</p>
+				<p>The final amount that will be deducted from your account for the policy period June 20,{$year} to June 20,{$year+1} is ${$amount}.</p>
 
 				<p style = 'font-size:13px;text-transform: uppercase;'><b>Please reply to this email with your request to be taken off auto renewal by May 29, {$year+1}. Not responding is confirmation you want to stay on auto renewal.</b></p><br/>
 
@@ -39,7 +39,22 @@
 			 <br/>
 
             </div>
-
-Regards,
+<br/>
+Sincerely,
 <br/><br/>
-Vicencia & Buckley A Division of HUB International
+PADI Department<br/>
+Vicencia & Buckley, a Division of HUB International Insurance Services Inc.<br/>
+A division of HUB International<br/>
+6 Centerpointe Dr. #350<br/>
+La Palma, CA  90623<br/>
+Email: padi-professional@hubinternational.com<br/>
+Phone: 800-223-9998 or 714-739-3177<br/>
+Fax: 714-739-3188<br/>
+License #0757776
+<br/><br/>
+PLEASE ADD OUR DOMAINS <a href = 'hubinternational.com'>hubinternational.com</a> and <a href = 'www.diveinsurance.com'>www.diveinsurance.com</a> TO YOUR SAFE SENDERS LIST!
+<br/><br/>
+You can find us at <a href = 'www.diveinsurance.com'>www.diveinsurance.com</a>
+<br/><br/><br/><br/>
+This message, together with any attachments, is intended only for the use of the individual or entity to which it is addressed. It may contain information that is confidential and prohibited from disclosure. If you are not the intended recipient, you are hereby notified that any dissemination or copying of this message or any attachment is strictly prohibited. If you have received this message in error, please notify the original sender immediately by telephone or by return e-mail and delete this message, along with any attachments, from your computer. Thank You!
+

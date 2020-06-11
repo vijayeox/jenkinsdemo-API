@@ -64,7 +64,7 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
             throw new DelegateException('Documents Not Found','file.not.found',0,$errorFile);
         }
         $data['document'] =$fileData;
-        $data['subject'] = 'Certificate Of Insurance';
+        $data['subject'] = 'PADI Endorsed Insurance Documents - '.$data['padi'];
         $response = $this->dispatch($data);
         return $response;
     }

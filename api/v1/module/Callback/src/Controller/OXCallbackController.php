@@ -38,7 +38,7 @@ class OXCallbackController extends AbstractApiControllerHelper
         $params['baseurl'] = $this->config['applicationUrl'];
         $this->messageProducer->sendQueue(json_encode(array(
             'to' => $params['email'],
-            'subject' => 'Your Login Credentials.',
+            'subject' => isset($params['subject']) ? $params['subject'] : 'Your Login Credentials.',
             'body' => $this->templateService->getContent('newUser', $params),
         )), 'mail');
         return $this->getSuccessResponse();

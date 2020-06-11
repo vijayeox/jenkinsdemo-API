@@ -438,6 +438,15 @@
 					"input": true,
 					"tableView": false,
 					"hideOnChildrenHidden": false
+				}, {
+					"label": "subject",
+					"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+					"calculateServer": false,
+					"key": "subject",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}],
 				"width": 4,
 				"offset": 0,
@@ -1255,7 +1264,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 95,
+	"_vid": 98,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1269,6 +1278,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-11T09:21:11.691Z",
+	"modified": "2020-06-11T11:12:04.939Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
