@@ -23,7 +23,7 @@ class DispatchAutoRenewalNotification extends DispatchNotification {
     {
         $this->logger->info("DispatchAutoRenewalNotification");
         $data['template'] = $this->template[$data['product']];
-        $data['subject'] = 'Policy Auto Renewal';
+        $data['subject'] = 'PADI Endorsed Insurance Automatic Renewal - '.$data['padi'];
         $response = $this->dispatch($data);
         return $response;
     }

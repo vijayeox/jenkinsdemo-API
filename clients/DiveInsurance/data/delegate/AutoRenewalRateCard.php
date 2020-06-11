@@ -101,12 +101,16 @@ class AutoRenewalRateCard extends RateCard{
     private function EFRRates(&$data,$coverages){
         $this->logger->info("EFR RATES");
         if(isset($coverages[$data['liabilityCoverage1000000']])&& !isset($data['liabilityCoverage1000000'])){
-            $data['liabilityVal'] = $coverages[$data['liabilityCoverage1000000']];
+            $data['liabilityVal'] = $coverages['liabilityCoverage1000000'];
+        } else {
+            $data['liabilityVal'] = $data['liabilityCoverage1000000'];
         }
         if(isset($coverages[$data['excessLiability']])&& !isset($data['excessLiabilityVal'])){
             $data['excessLiabilityVal'] = $coverages[$data['excessLiability']];
+        } else {
+            $data['excessLiabilityVal'] = $data[$data['excessLiability']];
         }
-        $data['coverageAmount'] = $data['liabilityVal']+$data['excessLiabilityVal'];
+        $data['coverageAmount'] = (float) $data['liabilityVal']+ (float) $data['excessLiabilityVal'];
         $data['amount'] = (float) $data['coverageAmount'];
     }
 
