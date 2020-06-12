@@ -112,6 +112,9 @@ class FileService extends AbstractService
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
             $fields = array_merge($fields, array_intersect_key($validFields['data'], $fields));
             unset($validFields['data']);
+            if(is_array($fields)){
+                $data['data'] = json_encode($fields);
+            }
             $data['data'] = $fields;
             $file->exchangeArray($data);
             $this->updateFileData($id, $fields);
@@ -347,9 +350,10 @@ class FileService extends AbstractService
         $this->logger->info("Entering into checkFields method---EntityId : " . $entityId);
         $required = array();
         if (isset($entityId)) {
-            $query = "SELECT ox_field.* from ox_field
-            left join ox_app_entity on ox_app_entity.id = ox_field.entity_id
-            where ox_app_entity.id=?";
+            $query = "SELECT ox_field.*,group_concat(childFieldsTable.name order by childFieldsTable.name separator ',') child_fields from ox_field
+            inner join ox_app_entity on ox_app_entity.id = ox_field.entity_id
+            left join ox_field childFieldsTable on ox_field.id = childFieldsTable.parent_id
+            where ox_app_entity.id=? and ox_field.parent_id is NULL group by ox_field.id;";
             $where = array($entityId);
             $this->logger->info("Executing query - $query with  params" . json_encode($where));
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
@@ -365,27 +369,17 @@ class FileService extends AbstractService
         $this->logger->info("Query result got " . count($fileArray) . " records");
         $keyValueFields = array();
         $i = 0;
+        $childFields = array();
         if (!empty($fields)) {
-            //Remove All Protected fields
-            // foreach ($fieldData as $k => $v) {
-            //     if (($key = array_search($k, array_column($fields, 'name')) > -1)) {
-            //         continue;
-            //     } else {
-            //         unset($fieldData[$k]);
-            //     }
-            // }
             foreach ($fields as $field) {
                 if(!in_array($field['name'], array_keys($fieldData))){
                     continue;
                 }
                 if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
-                    // Update the existing record
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
                 } else {
-                    // Insert the Record
                     $keyValueFields[$i]['id'] = null;
                 }
-
                 if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
                 }
@@ -398,96 +392,212 @@ class FileService extends AbstractService
                 $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
                 $keyValueFields[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
                 $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
-                if(isset($field['data_type'])){
-                    switch ($field['data_type']) {
-                        case 'text':
-                            $keyValueFields[$i]['field_value_type'] = 'TEXT';
-                            $keyValueFields[$i]['field_value_text'] = $fieldvalue;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_boolean'] = NULL;
-                            $keyValueFields[$i]['field_value_date'] = NULL;
-                            $keyValueFields['data'][$field['name']] = $fieldvalue;
-                            break;
-                        case 'numeric':
-                            $keyValueFields[$i]['field_value_type'] = 'NUMERIC';
-                            $keyValueFields[$i]['field_value_text'] = NULL;
-                            $keyValueFields[$i]['field_value_numeric'] = (double)$fieldvalue;
-                            $keyValueFields['data'][$field['name']] = $keyValueFields[$i]['field_value_numeric'];
-                            $keyValueFields[$i]['field_value_boolean'] = NULL;
-                            $keyValueFields[$i]['field_value_date'] = NULL;
-                            break;
-                        case 'boolean':
-                            if(isset($boolVal)){
-                                unset($boolVal);
-                            }
-                            $boolVal = false;
-                            if((is_bool($fieldvalue) && $fieldvalue == true) || (is_string($fieldvalue) && $fieldvalue == "true") || (is_int($fieldvalue) && $fieldvalue == 1)) {
-                                $boolVal = true;
-                                $fieldvalue = 1;
-                            } else {
-                                $boolVal = false;
-                                $fieldvalue = 0;
-                            }
-                            $keyValueFields[$i]['field_value']=$boolVal;
-                            $keyValueFields[$i]['field_value_type'] = 'BOOLEAN';
-                            $keyValueFields[$i]['field_value_text'] = NULL;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_boolean'] = $fieldvalue;
-                            $keyValueFields[$i]['field_value_date'] = NULL;
-                            $keyValueFields['data'][$field['name']] = $boolVal;
-                            break;
-                        case 'date':
-                        case 'datetime':
-                            $keyValueFields[$i]['field_value_type'] = 'DATE';
-                            $keyValueFields[$i]['field_value_text'] = NULL;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_boolean'] = NULL;
-                            $keyValueFields[$i]['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
-                            $keyValueFields['data'][$field['name']] = $keyValueFields[$i]['field_value_date'];
-                            break;
-                        case 'list':
-                            if($field['type']=='file'){
-                                $attachmentsArray = json_decode($fieldvalue,true);
-                                if(is_array($attachmentsArray)){
-                                    $finalAttached = array();
-                                    foreach ($attachmentsArray as $attachment) {
-                                        $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
-                                    }
-                                    $keyValueFields[$i]['field_value']=json_encode($finalAttached);
-                                    $keyValueFields['data'][$field['name']] = $finalAttached;
-                                }
-                                $this->logger->info("Field Created with File- " . json_encode($keyValueFields[$i]));
-                                $keyValueFields[$i]['field_value_type'] = 'OTHER';
-                                $keyValueFields[$i]['field_value_text'] = NULL;
-                                $keyValueFields[$i]['field_value_numeric'] = NULL;
-                                $keyValueFields[$i]['field_value_boolean'] = NULL;
-                                $keyValueFields[$i]['field_value_date'] = NULL;
-                                break;
-                            } else {
-                                $keyValueFields[$i]['field_value_type'] = 'OTHER';
-                                $keyValueFields[$i]['field_value_text'] = NULL;
-                                $keyValueFields[$i]['field_value_numeric'] = NULL;
-                                $keyValueFields[$i]['field_value_boolean'] = NULL;
-                                $keyValueFields[$i]['field_value_date'] = NULL;
-                                $keyValueFields['data'][$field['name']] = $fieldvalue;
-                                break;
-                            }
-                        default:
-                            $keyValueFields[$i]['field_value_type'] = 'OTHER';
-                            $keyValueFields[$i]['field_value_text'] = NULL;
-                            $keyValueFields[$i]['field_value_numeric'] = NULL;
-                            $keyValueFields[$i]['field_value_boolean'] = NULL;
-                            $keyValueFields[$i]['field_value_date'] = NULL;
-                            $keyValueFields['data'][$field['name']] = $fieldvalue;
-                            break;
+                $keyValueFields[$i] = array_merge($keyValueFields[$i],$this->generateFieldPayload($field['data_type'],$field,$keyValueFields[$i],$fieldvalue,$entityId,$fileId,$fileArray));
+                $keyValueFields['data'][$field['name']] = $keyValueFields[$i][$field['name']];
+                if( isset($keyValueFields[$i]['childFields']) && count($keyValueFields[$i]['childFields']) > 0){
+                    foreach ($keyValueFields[$i]['childFields'] as $childField) {
+                        array_push($childFields, $childField);
                     }
                 }
+                if(isset($keyValueFields[$i]['data'])){
+                    $fieldvalue = json_encode($keyValueFields[$i]['data']);
+                    $keyValueFields['data'][$field['name']] =$fieldvalue;
+                    unset($keyValueFields[$i]['data']);
+                }
+                $fieldData[$field['name']] = $fieldvalue;
+                unset($keyValueFields[$i]['childFields']);
+                unset($keyValueFields[$i][$field['name']]);
                 unset($fieldvalue);
+                $i++;
+            }
+        }
+        if(isset($childFields)){
+            foreach ($childFields as $child) {
+                $keyValueFields[$i] = $child;
+                if(isset($keyValueFields[$i]['childFields'])){
+                    unset($keyValueFields[$i]['childFields']);
+                }
+                if(isset($keyValueFields[$i]['data'])){
+                    $keyValueFields['data'][$field['name']] = json_encode($keyValueFields[$i]['data']);
+                    unset($keyValueFields[$i]['data']);
+                }
                 $i++;
             }
         }
         $this->logger->info("Key Values - " . json_encode($keyValueFields));
         return $keyValueFields;
+    }
+
+    private function generateFieldPayload($dataType,$field,$fieldData,&$fieldvalue,$entityId,$fileId,$fileArray){
+        switch ($dataType) {
+            case 'text':
+                $fieldData['field_value_type'] = 'TEXT';
+                $fieldData['field_value_text'] = $fieldvalue;
+                $fieldData['field_value_numeric'] = NULL;
+                $fieldData['field_value_boolean'] = NULL;
+                $fieldData['field_value_date'] = NULL;
+                $fieldData[$field['name']] = $fieldvalue;
+                break;
+            case 'numeric':
+                $fieldData['field_value_type'] = 'NUMERIC';
+                $fieldData['field_value_text'] = NULL;
+                $fieldData['field_value_numeric'] = (double)$fieldvalue;
+                $fieldData[$field['name']] = $fieldData['field_value_numeric'];
+                $fieldData['field_value_boolean'] = NULL;
+                $fieldData['field_value_date'] = NULL;
+                break;
+            case 'boolean':
+                if(isset($boolVal)){
+                    unset($boolVal);
+                }
+                $boolVal = false;
+                if((is_bool($fieldvalue) && $fieldvalue == true) || (is_string($fieldvalue) && $fieldvalue == "true") || (is_int($fieldvalue) && $fieldvalue == 1)) {
+                    $boolVal = true;
+                    $fieldvalue = 1;
+                } else {
+                    $boolVal = false;
+                    $fieldvalue = 0;
+                }
+                $fieldData['field_value']=$boolVal;
+                $fieldData['field_value_type'] = 'BOOLEAN';
+                $fieldData['field_value_text'] = NULL;
+                $fieldData['field_value_numeric'] = NULL;
+                $fieldData['field_value_boolean'] = $fieldvalue;
+                $fieldData['field_value_date'] = NULL;
+                $fieldData[$field['name']] = $boolVal;
+                break;
+            case 'date':
+            case 'datetime':
+                $fieldData['field_value_type'] = 'DATE';
+                $fieldData['field_value_text'] = NULL;
+                $fieldData['field_value_numeric'] = NULL;
+                $fieldData['field_value_boolean'] = NULL;
+                $fieldData['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
+                $fieldData[$field['name']] = $fieldData['field_value_date'];
+                break;
+            case 'list':
+                $fieldData['field_value_type'] = 'OTHER';
+                $fieldData['field_value_text'] = NULL;
+                $fieldData['field_value_numeric'] = NULL;
+                $fieldData['field_value_boolean'] = NULL;
+                $fieldData['field_value_date'] = NULL;
+                if($field['type']=='file'){
+                    $attachmentsArray = json_decode($fieldvalue,true);
+                    $finalAttached = array();
+                    if(is_array($attachmentsArray)){
+                        foreach ($attachmentsArray as $attachment) {
+                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                        }
+                        $fieldData['field_value']=json_encode($finalAttached);
+                    }
+                    $fieldData[$field['name']] = $finalAttached;
+                    $this->logger->info("Field Created with File- " . json_encode($fieldData));
+                    break;
+                } else {
+                    $fieldData[$field['name']] = $fieldvalue;
+                    break;
+                }
+            default:
+                $fieldData['field_value_type'] = 'OTHER';
+                $fieldData['field_value_text'] = NULL;
+                $fieldData['field_value_numeric'] = NULL;
+                $fieldData['field_value_boolean'] = NULL;
+                $fieldData['field_value_date'] = NULL;
+                if($field['type']=='file'){
+                    if(is_string($fieldvalue)){
+                        $attachmentsArray = json_decode($fieldvalue,true);
+                    } else {
+                        $attachmentsArray = $fieldvalue;
+                    }
+                    if(is_array($attachmentsArray)){
+                        $finalAttached = array();
+                        foreach ($attachmentsArray as $attachment) {
+                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                        }
+                        $fieldData['field_value']=json_encode($finalAttached);
+                        $fieldvalue = $finalAttached;
+                        $fieldData[$field['name']] = $finalAttached;
+                    }
+                } else {
+                    $fieldData[$field['name']] = $fieldvalue;
+                }
+            break;
+        }
+        $fieldvalue = $fieldData[$field['name']];
+        if(isset($field['child_fields'])){
+            if(is_string($fieldvalue)){
+                $fieldvalue = json_decode($fieldvalue,true);
+            }
+            $fieldData['childFields'] = $this->getChildFieldsData($field,$fieldvalue,$field['child_fields'],$entityId,$fileId,$fileArray);
+            $fieldData['data'] = $fieldvalue;
+            if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
+                foreach ($fieldData['childFields']['childFields'] as $childfield) {
+                    array_push($fieldData['childFields'],$childfield);
+                }
+                unset($fieldData['childFields']['childFields']);
+            }
+        } else {
+            $fieldData['childFields'] = array();
+        }
+        return $fieldData;
+    }
+
+    public function getChildFieldsData($parentField,&$fieldvalue,$fieldsString,$entityId,$fileId,$fileArray){
+        $query = "SELECT ox_field.*,group_concat(childFieldsTable.name order by childFieldsTable.name separator ',') child_fields from ox_field
+            inner join ox_app_entity on ox_app_entity.id = ox_field.entity_id
+            left join ox_field childFieldsTable on childFieldsTable.parent_id=ox_field.id 
+            where ox_app_entity.id=:entityId and ox_field.parent_id =:parentId group by ox_field.id";
+        $where = array('entityId'=>$entityId,'parentId'=>$parentField['id']);
+        $this->logger->info("Executing query - $query with  params" . json_encode($where));
+        $childFields = $this->executeQueryWithBindParameters($query, $where)->toArray();
+        $childFieldsArray = array();
+        $grandChildren = array();
+        if(count($childFields) > 0){
+            if(is_array($fieldvalue)){
+                $i = 0;
+                foreach ($fieldvalue as $k => $value) {
+                    $childFieldValues = array();
+                    foreach ($childFields as $field) {
+                        if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
+                            $childFieldsArray[$i]['id'] = $fileArray[$key]['id'];
+                        } else {
+                            $childFieldsArray[$i]['id'] = null;
+                        }
+                        if (isset($value[$field['name']]) && is_array($value[$field['name']])) {
+                            $value[$field['name']] = json_encode($value[$field['name']]);
+                        }
+                        $childFieldsArray[$i]['file_id'] = $fileId;
+                        $childFieldsArray[$i]['field_id'] = $field['id'];
+                        $val = isset($value[$field['name']]) ? $value[$field['name']] : null;
+                        $childFieldsArray[$i]['field_value']=$val;
+                        $childFieldsArray[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
+                        $childFieldsArray[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
+                        $childFieldsArray[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+                        $childFieldsArray[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
+                        $childFieldsArray[$i]['date_modified'] = date('Y-m-d H:i:s');
+                        $childFieldsArray[$i] = array_merge($childFieldsArray[$i],$this->generateFieldPayload($field['data_type'],$field,$childFieldsArray[$i],$val,$entityId,$fileId,$fileArray));
+                        if(count($childFieldsArray[$i]['childFields']) > 0){
+                            foreach ($childFieldsArray[$i]['childFields'] as $childField) {
+                                array_push($grandChildren, $childField);
+                            }
+                        } else {
+                            unset($childFieldsArray[$i]['childFields']);
+                        }
+                        $childFieldValues[$field['name']] = $val;
+                        unset($childFieldsArray[$i][$field['name']]);
+                        $i++;
+                    }
+                    if(is_array($childFieldValues)){
+                        json_encode($childFieldValues);
+                    }
+                    $fieldvalue[$k] = $childFieldValues;
+                }
+            }
+            if(isset($grandChildren) && count($grandChildren)>0){
+                $childFieldsArray['childFields'] = $grandChildren;
+            }
+        }
+        return $childFieldsArray;
     }
 
     public function checkFollowUpFiles($appId, $data)

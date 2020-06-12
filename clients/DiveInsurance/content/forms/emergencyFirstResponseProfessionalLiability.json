@@ -326,7 +326,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership may not be invalid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
+						"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -1382,8 +1382,10 @@
 						"components": [{
 							"label": "Excess Liability Coverage",
 							"optionsLabelPosition": "right",
+							"description": "Excess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
 							"inline": false,
 							"tableView": false,
+							"defaultValue": "excessLiabilityCoverageDeclined",
 							"values": [{
 								"label": "Excess Liability Coverage ($9,000,000)",
 								"value": "excessLiabilityCoverage9000000",
@@ -2469,17 +2471,18 @@
 		"type": "panel",
 		"title": "Additional Insured",
 		"components": [{
-			"key": "page4PanelAdditionalInsureds",
 			"label": "AdditionalInsureds",
-			"input": false,
 			"attrs": [{
 				"value": "",
 				"attr": ""
 			}],
-			"content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
+			"content": "<ol>\n<li>Additional Insureds are only added if required by written contract.</li>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page4PanelAdditionalInsureds",
 			"type": "htmlelement",
-			"hideLabel": true,
-			"tableView": false
+			"input": false,
+			"hideLabel": true
 		}, {
 			"clearOnHide": false,
 			"key": "page4PanelWell",
@@ -3385,7 +3388,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 530,
+	"_vid": 532,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3469,7 +3472,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-11T09:35:15.247Z",
+	"modified": "2020-06-12T04:22:12.528Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

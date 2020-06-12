@@ -23,7 +23,7 @@ class CsrRejection extends DispatchNotification {
     {
         $this->logger->info("Rejection Policy Notification");
         $data['template'] = $this->template[$data['product']];
-        $data['subject'] = 'Rejection of Policy';
+        $data['subject'] = 'PADI Professional Liability Insurance Application on Hold – '.$data['padi'];
         if(isset($data['state'])){
             $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
         }

@@ -322,7 +322,7 @@
 						"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 						"attr": "style"
 					}],
-					"content": "Your PADI membership may not be invalid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
+					"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "panelColumnsContent4",
@@ -434,6 +434,15 @@
 				}, {
 					"label": "businessPadiVerified",
 					"key": "businessPadiVerified",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "subject",
+					"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+					"calculateServer": false,
+					"key": "subject",
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
@@ -1255,7 +1264,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 95,
+	"_vid": 99,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1269,6 +1278,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-11T09:21:11.691Z",
+	"modified": "2020-06-12T04:21:58.688Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
