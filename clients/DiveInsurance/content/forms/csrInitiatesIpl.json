@@ -251,7 +251,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership is invalid at this moment. After the submission of the application form our CSRs will assist you in validating the membership with PADI Office.",
+						"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -1562,6 +1562,24 @@
 							"lockKey": true,
 							"defaultValue": "0",
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "careerCoverageDownPayment",
+							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_downpayments']){\n  value = data[data['careerCoverage']+'_downpayments'];\n}",
+							"calculateServer": false,
+							"key": "careerCoverageDownPayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "careerCoverageInstallmentAmount",
+							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_installment_amount']){\n  value = data[data['careerCoverage']+'_installment_amount'];\n}",
+							"calculateServer": false,
+							"key": "careerCoverageInstallmentAmount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1593,7 +1611,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "withTecRecEndorsementForSelectionAbove",
+								"value": "withTecRecEndorsementForSelectionAbove5",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
@@ -1611,7 +1629,8 @@
 							"type": "radio",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"defaultValue": "tecRecDeclined"
 						}],
 						"width": 8,
 						"offset": 0,
@@ -1671,6 +1690,24 @@
 							"tableView": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "tecRecDownPayment",
+							"calculateValue": "value = 0;",
+							"calculateServer": false,
+							"key": "tecRecDownPayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "tecRecInstallmentAmount",
+							"calculateValue": "value = 0;",
+							"calculateServer": false,
+							"key": "tecRecInstallmentAmount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1701,7 +1738,7 @@
 							"inline": false,
 							"tableView": true,
 							"values": [{
-								"value": "scubaFitInstructor",
+								"value": "scubaFitInstructor6",
 								"label": "ScubaFit Instructor (6)",
 								"shortcut": ""
 							}, {
@@ -1721,7 +1758,8 @@
 							"type": "radio",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"defaultValue": "scubaFitInstructorDeclined"
 						}],
 						"width": 8,
 						"offset": 0,
@@ -1770,6 +1808,24 @@
 							"tableView": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "scubaFitDownPayment",
+							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_downpayments']){\n  value = data[data['scubaFit']+'_downpayments'];\n}",
+							"calculateServer": false,
+							"key": "scubaFitDownPayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "scubaFitInstallmentAmount",
+							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_installments']){\n  value = data[data['scubaFit']+'_installments'];\n}",
+							"calculateServer": false,
+							"key": "scubaFitInstallmentAmount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1799,8 +1855,9 @@
 							"optionsLabelPosition": "right",
 							"inline": false,
 							"tableView": true,
+							"defaultValue": "cylinderInspectorOrInstructorDeclined",
 							"values": [{
-								"value": "cylinderInspector",
+								"value": "cylinderInspector6",
 								"label": "Cylinder Inspector (6)",
 								"shortcut": ""
 							}, {
@@ -1809,7 +1866,7 @@
 								"shortcut": ""
 							}, {
 								"value": "cylinderInspectorAndInstructor",
-								"label": "Cylinder Inspector and Instructor (6)",
+								"label": "Cylinder Inspection Inspector and Instructor (6)",
 								"shortcut": ""
 							}, {
 								"value": "cylinderInspectorOrInstructorDeclined",
@@ -1894,6 +1951,24 @@
 							"tableView": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "cylinderInstallmentAmount",
+							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_installments']){\n  value = data[data['cylinder']+'_installments'];\n}",
+							"calculateServer": false,
+							"key": "cylinderInstallmentAmount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "cylinderDownPayment",
+							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_downpayments']){\n  value = data[data['cylinder']+'_downpayments'];\n}",
+							"calculateServer": false,
+							"key": "cylinderDownPayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1944,7 +2019,8 @@
 							"type": "radio",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"defaultValue": "equipmentLiabilityCoverageDeclined"
 						}],
 						"width": 8,
 						"offset": 0,
@@ -1993,6 +2069,24 @@
 							"tableView": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "equipmentDownPayment",
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayments']){\n  value = data[data['equipment']+'_downpayments'];\n}",
+							"calculateServer": false,
+							"key": "equipmentDownPayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "equipmentInstallmentAmount",
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_installments']){\n  value = data[data['equipment']+'_installments'];\n}",
+							"calculateServer": false,
+							"key": "equipmentInstallmentAmount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -2020,8 +2114,10 @@
 						"components": [{
 							"label": "Excess Liability Coverage",
 							"optionsLabelPosition": "right",
+							"description": "Excess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
 							"inline": false,
 							"tableView": false,
+							"defaultValue": "excessLiabilityCoverageDeclined",
 							"values": [{
 								"label": "Excess Liability Coverage ($9,000,000)",
 								"value": "excessLiabilityCoverage9000000",
@@ -2141,6 +2237,24 @@
 							"input": true,
 							"tableView": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "excessLiabilityInstallmentAmount",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installments']){\n  value = data[data['excessLiability']+'_installments'];\n}",
+							"calculateServer": false,
+							"key": "excessLiabilityInstallmentAmount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "excessLiabilityDownPayment",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayments']){\n  value = data[data['excessLiability']+'_downpayments'];\n}",
+							"calculateServer": false,
+							"key": "excessLiabilityDownPayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "single_limit",
@@ -2565,15 +2679,14 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true,
 						"customMessage": "Please attach proof of your Technical Certification",
 						"multiple": true
 					},
 					"errorLabel": "Technical Certification Documents",
 					"key": "TechRec_attachments",
 					"type": "file",
-					"input": true,
-					"url": "/file/attachment"
+					"url": "/file/attachment",
+					"input": true
 				}],
 				"path": "techRecAttachment"
 			}, {
@@ -2620,7 +2733,6 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true,
 						"customMessage": "Please attach proof of Cylinder Inspector Certification",
 						"multiple": true
 					},
@@ -2675,7 +2787,6 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true,
 						"customMessage": "Please attach Proof of Cylinder Instructor Inspection",
 						"multiple": true
 					},
@@ -2729,7 +2840,6 @@
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
-						"required": true,
 						"customMessage": "Please attach proof of your Scuba Fit Certification",
 						"multiple": true
 					},
@@ -2833,17 +2943,18 @@
 				"key": "page3Panel2Well",
 				"input": false,
 				"components": [{
-					"key": "page3Panel2Footnotes",
 					"label": "Footnotes",
-					"input": false,
 					"attrs": [{
 						"value": "",
 						"attr": ""
 					}],
-					"content": "The insurance costs include a premium, a $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax or email a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax or email a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
+					"content": "The insurance costs include a premium, a $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax, email or upload a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax, email or upload a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "page3Panel2Footnotes",
 					"type": "htmlelement",
-					"hideLabel": true,
-					"tableView": false
+					"input": false,
+					"hideLabel": true
 				}],
 				"tableView": false,
 				"type": "well",
@@ -3019,17 +3130,18 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"key": "page4PanelSection1Content",
 					"label": "Section1Content",
-					"input": false,
 					"attrs": [{
 						"value": "",
 						"attr": ""
 					}],
 					"content": "I have no knowledge of any incident, accident, occurrence, act, error, or omission that might lead to, or has already lead to, a legal action or claim except any matter already reported to PADI. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "page4PanelSection1Content",
 					"type": "htmlelement",
-					"hideLabel": true,
-					"tableView": false
+					"input": false,
+					"hideLabel": true
 				}, {
 					"label": "I Agree",
 					"autofocus": true,
@@ -3572,17 +3684,18 @@
 		"type": "panel",
 		"title": "Additional Insured",
 		"components": [{
-			"key": "page4PanelAdditionalInsureds",
 			"label": "AdditionalInsureds",
-			"input": false,
 			"attrs": [{
 				"value": "",
 				"attr": ""
 			}],
-			"content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
+			"content": "<ol>\n<li>Additional Insureds are only added if required by written contract.</li>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page4PanelAdditionalInsureds",
 			"type": "htmlelement",
-			"hideLabel": true,
-			"tableView": false
+			"input": false,
+			"hideLabel": true
 		}, {
 			"clearOnHide": false,
 			"key": "page4PanelWell",
@@ -4119,7 +4232,7 @@
 						"inputType": "text",
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "Would you like to apply for Premium Finance?",
+						"label": "Would you like to enroll for installment billing?",
 						"optionsLabelPosition": "right",
 						"inline": false,
 						"tableView": false,
@@ -4143,18 +4256,77 @@
 						"hideOnChildrenHidden": false,
 						"keyModified": true
 					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "",
-							"value": ""
-						}],
-						"content": "<h3>Number of Installments would be {{data.paymentInstallments}}</h3>",
-						"refreshOnChange": false,
+						"title": "Installments",
+						"theme": "primary",
+						"breadcrumbClickable": true,
+						"buttonSettings": {
+							"previous": true,
+							"cancel": true,
+							"next": true
+						},
+						"collapsible": false,
 						"tableView": false,
-						"key": "html",
-						"customConditional": "if(data.premiumFinanceSelect == \"yes\" && data.paymentInstallments > 0){\n  show = true;\n}",
-						"type": "htmlelement",
+						"key": "installments",
+						"conditional": {
+							"show": true,
+							"when": "premiumFinanceSelect",
+							"eq": "yes"
+						},
+						"type": "panel",
+						"label": "Installments",
 						"input": false,
+						"components": [{
+							"label": "Down Payment",
+							"prefix": "$",
+							"mask": false,
+							"spellcheck": false,
+							"disabled": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"calculateValue": "value = data['careerCoverageDownPayment'] + data['excessLiabilityDownPayment']+data['tecRecDownPayment']+data['scubaFitDownPayment']+data['cylinderDownPayment']",
+							"calculateServer": false,
+							"key": "downPayment",
+							"type": "number",
+							"input": true
+						}, {
+							"label": "Installment Amount",
+							"prefix": "$",
+							"mask": false,
+							"spellcheck": false,
+							"disabled": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"calculateValue": "value = data['careerCoverageInstallmentAmount'] + data['excessLiabilityInstallmentAmount']+data['tecRecInstallmentAmount']+data['scubaFitInstallmentAmount']+data['cylinderInstallmentAmount']",
+							"calculateServer": false,
+							"key": "installmentAmount",
+							"type": "number",
+							"input": true
+						}, {
+							"label": "paymentInstallments",
+							"calculateValue": "if(data['careerCoverage'] && data[data['careerCoverage']+'_installments']){\n  value = data[data['careerCoverage']+'_installments'];\n}",
+							"calculateServer": false,
+							"key": "paymentInstallments",
+							"type": "hidden",
+							"input": true,
+							"tableView": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Number of Installments would be {{data.paymentInstallments}}</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html6",
+							"type": "htmlelement",
+							"input": false,
+							"hideOnChildrenHidden": false
+						}],
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Payment Options",
@@ -4187,6 +4359,32 @@
 						"properties": {
 							"render": "columns"
 						},
+						"logic": [{
+							"name": "Disable on Installment Payment",
+							"trigger": {
+								"type": "simple",
+								"simple": {
+									"show": true,
+									"when": "premiumFinanceSelect",
+									"eq": "yes"
+								}
+							},
+							"actions": [{
+								"name": "Select Credit Card",
+								"type": "value",
+								"property": {},
+								"value": "return \"creditCard\""
+							}, {
+								"name": "Disable Options",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false
@@ -4505,7 +4703,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 354,
+	"_vid": 360,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4526,6 +4724,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-11T09:58:03.543Z",
+	"modified": "2020-06-12T04:21:52.284Z",
 	"machineName": "testdivehub:csrInitiates"
 }
