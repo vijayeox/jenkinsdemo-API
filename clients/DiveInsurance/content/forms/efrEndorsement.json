@@ -2157,13 +2157,20 @@
 			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
-			"autoExpand": false,
-			"spellcheck": true,
-			"tableView": true,
-			"inputFormat": "plain",
+			"disableAddingRemovingRows": false,
+			"reorder": false,
+			"addAnother": "Add More",
+			"addAnotherPosition": "bottom",
+			"defaultOpen": false,
+			"layoutFixed": false,
+			"enableRowGroups": false,
+			"tableView": false,
+			"defaultValue": [{
+				"reason": ""
+			}],
+			"calculateServer": false,
 			"validate": {
-				"required": true,
-				"customMessage": "Please provide the reason for rejecting the policy"
+				"minLength": 1
 			},
 			"key": "rejectionReason",
 			"conditional": {
@@ -2171,8 +2178,22 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
-			"type": "textarea",
-			"input": true
+			"type": "datagrid",
+			"input": true,
+			"components": [{
+				"label": "Text Field",
+				"hideLabel": true,
+				"spellcheck": true,
+				"tableView": true,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Rejection reason is required"
+				},
+				"key": "reason",
+				"type": "textfield",
+				"input": true
+			}]
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -2185,7 +2206,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 174,
+	"_vid": 175,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2206,7 +2227,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-11T10:12:48.847Z",
+	"modified": "2020-06-12T06:24:47.040Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

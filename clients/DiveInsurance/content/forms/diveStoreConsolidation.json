@@ -10862,24 +10862,44 @@
 				"input": true,
 				"lockKey": true
 			}, {
-				"label": "Comment",
-				"autoExpand": false,
-				"spellcheck": true,
-				"tableView": true,
-				"inputFormat": "plain",
+				"label": "Rejection Reason",
+				"disableAddingRemovingRows": false,
+				"reorder": false,
+				"addAnother": "Add More",
+				"addAnotherPosition": "bottom",
+				"defaultOpen": false,
+				"layoutFixed": false,
+				"enableRowGroups": false,
+				"tableView": false,
+				"defaultValue": [{
+					"reason": ""
+				}],
 				"calculateServer": false,
 				"validate": {
-					"required": true
+					"minLength": 1
 				},
 				"key": "rejectionReason",
 				"conditional": {
 					"show": true,
-					"when": "csrApproved",
+					"when": "approved",
 					"eq": "rejected"
 				},
-				"type": "textarea",
+				"type": "datagrid",
 				"input": true,
-				"lockKey": true
+				"components": [{
+					"label": "Text Field",
+					"hideLabel": true,
+					"spellcheck": true,
+					"tableView": true,
+					"calculateServer": false,
+					"validate": {
+						"required": true,
+						"customMessage": "Rejection reason is required"
+					},
+					"key": "reason",
+					"type": "textfield",
+					"input": true
+				}]
 			}],
 			"type": "panel",
 			"label": "Panel"
@@ -10901,7 +10921,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 134,
+	"_vid": 135,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10918,6 +10938,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-12T04:22:54.913Z",
+	"modified": "2020-06-12T06:20:12.763Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

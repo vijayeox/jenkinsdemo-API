@@ -3,9 +3,28 @@
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
             <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/><br/>
-				<p>The cancellation of your policy is 'Approved'.</p><br/>
-				<p>Relevant information is in the attached document.</p><br/>
-				<p>We thank you for your long-standing relationship with PADI and Vicencia & Buckley, a Division of HUB International Insurance Services Inc. If you have any questions feel free to give us a call or send us an email.</p>
+			<p>Your PADI Endorsed Professional Liability insurance has been canceled effective 12:01 a.m. {$CancelDate|date_format:"%m/%d/%Y"} due to {if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
+				Non-payment of installment premium. 
+			{elseif $reasonforCsrCancellation == 'padiMembershipNotCurrent'}
+				PADI Membership is not current.
+			{elseif $reasonforCsrCancellation == 'nonSufficientFunds'}
+				Non-Payment of premium,due yo non-sufficient funds.
+			{elseif $reasonforCsrCancellation == 'boatSold'}
+				Boat Sold.
+			{elseif $reasonforCsrCancellation == 'storeSold'}
+				Store Sold.
+			{elseif $reasonforCsrCancellation == 'others'}
+				{$othersCsr}
+			{/if}
+			</p>To reinstate your coverage, with no lapse, we need the following within 10days.<br/>
+				<center>{assign var=reasons value=$reinstatementCriteria|json_decode:true}
+				{assign var=count value=$reasons|@sizeof}
+				{assign var=count1 value=$count}
+				{for $foo=1 to $count1}
+					<p>{$foo}.{$reasons[$foo - 1]['criteria']}</p><br/>
+				{/for}</center>	
+				<br/><br/>
+				<p>If you have any questions feel free to give us a call or send us an email.</p>
 			 <br/>
 
             </div>

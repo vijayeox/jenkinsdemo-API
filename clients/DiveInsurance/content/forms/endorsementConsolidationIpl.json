@@ -3326,12 +3326,20 @@
 			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
-			"autoExpand": false,
-			"spellcheck": true,
-			"tableView": true,
+			"disableAddingRemovingRows": false,
+			"reorder": false,
+			"addAnother": "Add More",
+			"addAnotherPosition": "bottom",
+			"defaultOpen": false,
+			"layoutFixed": false,
+			"enableRowGroups": false,
+			"tableView": false,
+			"defaultValue": [{
+				"reason": ""
+			}],
+			"calculateServer": false,
 			"validate": {
-				"required": true,
-				"customMessage": "Please provide the reason for Rejecting the Policy"
+				"minLength": 1
 			},
 			"key": "rejectionReason",
 			"conditional": {
@@ -3339,8 +3347,22 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
-			"type": "textarea",
-			"input": true
+			"type": "datagrid",
+			"input": true,
+			"components": [{
+				"label": "Text Field",
+				"hideLabel": true,
+				"spellcheck": true,
+				"tableView": true,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Rejection reason is required"
+				},
+				"key": "reason",
+				"type": "textfield",
+				"input": true
+			}]
 		}],
 		"path": "endorcsrapprovalscreen",
 		"breadcrumb": "none",
@@ -3358,7 +3380,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 241,
+	"_vid": 242,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3379,6 +3401,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-11T09:58:46.736Z",
+	"modified": "2020-06-12T06:24:51.454Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

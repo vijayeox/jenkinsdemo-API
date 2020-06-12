@@ -3359,14 +3359,20 @@
 			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
-			"placeholder": "Please enter the reason for Rejection",
-			"autoExpand": false,
-			"spellcheck": true,
-			"tableView": true,
-			"inputFormat": "plain",
+			"disableAddingRemovingRows": false,
+			"reorder": false,
+			"addAnother": "Add More",
+			"addAnotherPosition": "bottom",
+			"defaultOpen": false,
+			"layoutFixed": false,
+			"enableRowGroups": false,
+			"tableView": false,
+			"defaultValue": [{
+				"reason": ""
+			}],
+			"calculateServer": false,
 			"validate": {
-				"required": true,
-				"customMessage": "Please Provide the reason for Rejecting the Policy"
+				"minLength": 1
 			},
 			"key": "rejectionReason",
 			"conditional": {
@@ -3374,8 +3380,22 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
-			"type": "textarea",
-			"input": true
+			"type": "datagrid",
+			"input": true,
+			"components": [{
+				"label": "Text Field",
+				"hideLabel": true,
+				"spellcheck": true,
+				"tableView": true,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Rejection reason is required"
+				},
+				"key": "reason",
+				"type": "textfield",
+				"input": true
+			}]
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -3388,7 +3408,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 532,
+	"_vid": 533,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3472,7 +3492,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-12T04:22:12.528Z",
+	"modified": "2020-06-12T06:17:00.427Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

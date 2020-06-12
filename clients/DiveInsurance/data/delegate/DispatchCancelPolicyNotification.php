@@ -48,7 +48,7 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
             $mailData = array();
             $mailData = $data;
             $mailData['email'] = $data['email'];
-            $mailData['subject'] = 'Request for cancellation of policy';
+            $mailData['subject'] = 'PADI Endorsed Insurance Cancellation – '.$data['padi'];
             $mailData['template'] = $data['template'];
             $mailData['document'] = $fileData;
             $response = $this->dispatch($mailData);
