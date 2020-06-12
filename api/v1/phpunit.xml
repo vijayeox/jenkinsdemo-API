@@ -47,12 +47,6 @@
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
         </testsuite>
-        <testsuite name="Dive Insurance Fixtures">
-            <directory>../../clients/DiveInsurance/test/</directory>
-        </testsuite>
-        <testsuite name="BridgeMed Fixtures">
-            <directory>../../clients/BridgeMed/test/</directory>
-        </testsuite>
     </testsuites> 
     <php>
         <ini name="memory_limit" value="500M" />
