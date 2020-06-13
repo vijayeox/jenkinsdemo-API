@@ -13,7 +13,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplateParser
 {
     private $excelTemplator;
-    private $templateLocation;
 
     /**
      * Initializes the template processor
@@ -21,21 +20,8 @@ class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplatePa
      * @param array $params - templateDir
      * @return none
      */
-    public function init(array $params){
+    public function init(array $params = null){
         $this->excelTemplator = new PhpExcelTemplator();
-        $this->templateLocation = $params['templateDir'];
-        if(!$this->endsWith($this->templateLocation, '/')){
-            $this->templateLocation .= '/';
-        }
-    }
-
-    private function endsWith($haystack, $needle)
-    {
-        $length = strlen($needle);
-        if ($length == 0) {
-            return true;
-        }
-        return (substr($haystack, -$length) === $needle);
     }
 
     /**
@@ -47,7 +33,7 @@ class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplatePa
      * @return PhpOffice\PhpSpreadsheet\Spreedsheet
      */
     public function getContent($template, $data = array(), $options = array()){
-        $templateFile = $this->templateLocation.$template;
+        $templateFile = $template['templatePath']. '/' . $template['templateNameWithExt']; 
         $spreadsheet = PhpExcelTemplator::getSpreadsheet($templateFile);
         if (!isset($options['sheets'])) {
             $options['sheets'] = array($spreadsheet->getSheetNames()[0]);
