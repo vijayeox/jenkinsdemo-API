@@ -122,6 +122,7 @@ def initiatedByCsr = execution.getVariable('initiatedByCsr')
 def approved = execution.getVariable('approved')
 def scubaFit = execution.getVariable('scubaFit')
 def cylinder = execution.getVariable('cylinder')
+def excessLiability = execution.getVariable('excessLiability')
 def padiNotFoundCsrReview = execution.getVariable('padiNotFoundCsrReview')
 def efrToIPLUpgrade = execution.getVariable('efrToIPLUpgrade')
 def paymentOptions = execution.getVariable('paymentOptions')
@@ -132,6 +133,7 @@ boolean result3 = false
 boolean result4 = false
 boolean result5 = false
 boolean result6 = true
+boolean result7 = false
 
 if (additionalInsured) {
  additionalInsured.each {
@@ -147,6 +149,11 @@ if (section2Agreement) {
 if (cylinder) {
   if (cylinder == "cylinderInspector" || cylinder == "cylinderInstructor") {
     result5 = true;
+  }
+}
+if (excessLiability) {
+  if (excessLiability == "excessLiabilityCoverage3000000" || excessLiability == "excessLiabilityCoverage4000000" || excessLiability == "excessLiabilityCoverage9000000") {
+    result7 = true;
   }
 }
 if (paymentOptions) {
@@ -178,6 +185,7 @@ if (
     result2 ||
     result4 ||
     result6 ||
+    result7 ||
     efrToIPLUpgrade == true || efrToIPLUpgrade == "true" ||
     scubaFit == "scubaFitInstructor" ||
     result5 ||
