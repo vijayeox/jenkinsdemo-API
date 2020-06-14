@@ -1053,6 +1053,7 @@
 						"components": [{
 							"label": "Excess Liability Coverage",
 							"widget": "choicesjs",
+							"description": "Excess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
 							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
@@ -1450,17 +1451,18 @@
 		"type": "panel",
 		"title": "Additional Insured",
 		"components": [{
-			"key": "page4PanelAdditionalInsureds",
 			"label": "AdditionalInsureds",
-			"input": false,
 			"attrs": [{
 				"value": "",
 				"attr": ""
 			}],
-			"content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
+			"content": "<ol>\n<li>Additional Insureds are only added if required by written contract.</li>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page4PanelAdditionalInsureds",
 			"type": "htmlelement",
-			"hideLabel": true,
-			"tableView": false
+			"input": false,
+			"hideLabel": true
 		}, {
 			"clearOnHide": false,
 			"key": "page4PanelWell",
@@ -1801,6 +1803,24 @@
 						"clearOnHide": false,
 						"key": "additionalInformation",
 						"type": "textarea",
+						"input": true
+					}, {
+						"label": "Do you have a Written Contract?",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"calculateServer": false,
+						"key": "doYouHaveAWrittenContract",
+						"type": "radio",
 						"input": true
 					}, {
 						"label": "Additional Insured Attachments",
@@ -2206,7 +2226,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 175,
+	"_vid": 179,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2227,7 +2247,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-12T06:24:47.040Z",
+	"modified": "2020-06-14T21:37:18.891Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

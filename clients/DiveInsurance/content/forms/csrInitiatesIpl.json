@@ -1564,7 +1564,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "careerCoverageDownPayment",
-							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_downpayments']){\n  value = data[data['careerCoverage']+'_downpayments'];\n}",
+							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_downpayment']){\n  value = data[data['careerCoverage']+'_downpayment'];\n}",
 							"calculateServer": false,
 							"key": "careerCoverageDownPayment",
 							"type": "hidden",
@@ -1737,8 +1737,9 @@
 							"optionsLabelPosition": "right",
 							"inline": false,
 							"tableView": true,
+							"defaultValue": "scubaFitInstructorDeclined",
 							"values": [{
-								"value": "scubaFitInstructor6",
+								"value": "scubaFitInstructor",
 								"label": "ScubaFit Instructor (6)",
 								"shortcut": ""
 							}, {
@@ -1758,8 +1759,7 @@
 							"type": "radio",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"defaultValue": "scubaFitInstructorDeclined"
+							"hideOnChildrenHidden": false
 						}],
 						"width": 8,
 						"offset": 0,
@@ -1810,7 +1810,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "scubaFitDownPayment",
-							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_downpayments']){\n  value = data[data['scubaFit']+'_downpayments'];\n}",
+							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_downpayment']){\n  value = data[data['scubaFit']+'_downpayment'];\n}",
 							"calculateServer": false,
 							"key": "scubaFitDownPayment",
 							"type": "hidden",
@@ -1819,7 +1819,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "scubaFitInstallmentAmount",
-							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_installments']){\n  value = data[data['scubaFit']+'_installments'];\n}",
+							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_installment_amount']){\n  value = data[data['scubaFit']+'_installment_amount'];\n}",
 							"calculateServer": false,
 							"key": "scubaFitInstallmentAmount",
 							"type": "hidden",
@@ -1857,7 +1857,7 @@
 							"tableView": true,
 							"defaultValue": "cylinderInspectorOrInstructorDeclined",
 							"values": [{
-								"value": "cylinderInspector6",
+								"value": "cylinderInspector",
 								"label": "Cylinder Inspector (6)",
 								"shortcut": ""
 							}, {
@@ -1953,7 +1953,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "cylinderInstallmentAmount",
-							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_installments']){\n  value = data[data['cylinder']+'_installments'];\n}",
+							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_installment_amount']){\n  value = data[data['cylinder']+'_installment_amount'];\n}",
 							"calculateServer": false,
 							"key": "cylinderInstallmentAmount",
 							"type": "hidden",
@@ -1962,7 +1962,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "cylinderDownPayment",
-							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_downpayments']){\n  value = data[data['cylinder']+'_downpayments'];\n}",
+							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_downpayment']){\n  value = data[data['cylinder']+'_downpayment'];\n}",
 							"calculateServer": false,
 							"key": "cylinderDownPayment",
 							"type": "hidden",
@@ -2071,7 +2071,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "equipmentDownPayment",
-							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayments']){\n  value = data[data['equipment']+'_downpayments'];\n}",
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayment']){\n  value = data[data['equipment']+'_downpayment'];\n}",
 							"calculateServer": false,
 							"key": "equipmentDownPayment",
 							"type": "hidden",
@@ -2080,7 +2080,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "equipmentInstallmentAmount",
-							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_installments']){\n  value = data[data['equipment']+'_installments'];\n}",
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_installment_amount']){\n  value = data[data['equipment']+'_installment_amount'];\n}",
 							"calculateServer": false,
 							"key": "equipmentInstallmentAmount",
 							"type": "hidden",
@@ -2240,7 +2240,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "excessLiabilityInstallmentAmount",
-							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installments']){\n  value = data[data['excessLiability']+'_installments'];\n}",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n}",
 							"calculateServer": false,
 							"key": "excessLiabilityInstallmentAmount",
 							"type": "hidden",
@@ -2249,7 +2249,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "excessLiabilityDownPayment",
-							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayments']){\n  value = data[data['excessLiability']+'_downpayments'];\n}",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayment']){\n  value = data[data['excessLiability']+'_downpayment'];\n}",
 							"calculateServer": false,
 							"key": "excessLiabilityDownPayment",
 							"type": "hidden",
@@ -3135,7 +3135,7 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "I have no knowledge of any incident, accident, occurrence, act, error, or omission that might lead to, or has already lead to, a legal action or claim except any matter already reported to PADI. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"content": "I, {{data.firstname}} {{data.lastname}}, have no knowledge of an incident, accident, occurrence, act, error, or omission not previously reported to PADI, or reported to PADI while I was NOT insured with Vicencia & Buckley, that might lead to, or already has led to, a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "page4PanelSection1Content",
@@ -3239,18 +3239,19 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"key": "page4Panel2Content",
 					"label": "Content",
-					"input": false,
 					"attrs": [{
 						"value": "",
 						"attr": ""
 					}],
-					"content": "I have knowledge of an incident, accident, occurrence, act, error, or omission, that might lead to a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"content": "I, {{data.firstname}} {{data.lastname}}, have knowledge of an incident, accident, occurrence, act, error, or omission not previously reported to PADI, or reported to PADI while I was NOT insured with Vicencia & Buckley, that might lead to, or already has led to, a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "page4Panel2Content",
 					"type": "htmlelement",
+					"input": false,
 					"hideLabel": true,
-					"lockKey": true,
-					"tableView": false
+					"lockKey": true
 				}, {
 					"label": "Incidents",
 					"disableAddingRemovingRows": false,
@@ -4060,6 +4061,24 @@
 						"type": "textarea",
 						"input": true
 					}, {
+						"label": "Do you have a Written Contract?",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"calculateServer": false,
+						"key": "doYouHaveAWrittenContract",
+						"type": "radio",
+						"input": true
+					}, {
 						"label": "Additional Insured Attachments",
 						"tableView": false,
 						"storage": "url",
@@ -4223,7 +4242,7 @@
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = parseFloat(data.amountPayable).toFixed(2);\n    data.paymentInstallments = 0;\n} else {\nvalue = parseFloat(data.amountPayable).toFixed(2);\n}",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = parseFloat(data.downPayment).toFixed(2);\n} else {\n  value = parseFloat(data.amountPayable).toFixed(2);\n}",
 						"calculateServer": false,
 						"key": "finalAmountPayable",
 						"type": "number",
@@ -4251,6 +4270,7 @@
 							"required": true
 						},
 						"key": "premiumFinanceSelect",
+						"customConditional": "if(data[data['careerCoverage']+'_installments'] > 0){\n  show = true;\n} else {\n  show = false;\n}",
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false,
@@ -4285,7 +4305,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"calculateValue": "value = data['careerCoverageDownPayment'] + data['excessLiabilityDownPayment']+data['tecRecDownPayment']+data['scubaFitDownPayment']+data['cylinderDownPayment']",
+							"calculateValue": "value = (parseFloat(data['careerCoverageDownPayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)+data['scubaFitDownPayment']+data['cylinderDownPayment']",
 							"calculateServer": false,
 							"key": "downPayment",
 							"type": "number",
@@ -4306,26 +4326,57 @@
 							"type": "number",
 							"input": true
 						}, {
-							"label": "paymentInstallments",
-							"calculateValue": "if(data['careerCoverage'] && data[data['careerCoverage']+'_installments']){\n  value = data[data['careerCoverage']+'_installments'];\n}",
-							"calculateServer": false,
-							"key": "paymentInstallments",
-							"type": "hidden",
-							"input": true,
-							"tableView": false
-						}, {
 							"label": "HTML",
 							"attrs": [{
 								"attr": "",
 								"value": ""
 							}],
-							"content": "<h5>Number of Installments would be {{data.paymentInstallments}}</h5>",
+							"content": "<h5>Number of Installments would be {{data[data['careerCoverage']+'_installments']}}</h5>",
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html6",
 							"type": "htmlelement",
 							"input": false,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Installment Dates are 15/09/2020,15/12/2020 and 15/03/2021</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html7",
+							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 3){\n  show = true;\n}",
+							"type": "htmlelement",
+							"input": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Installment Dates are 15/12/2020 and 15/03/2021</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html8",
+							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 2){\n  show = true;\n}",
+							"type": "htmlelement",
+							"input": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Installment Dates are 15/03/2021</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html9",
+							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 1){\n  show = true;\n}",
+							"type": "htmlelement",
+							"input": false
 						}],
 						"hideOnChildrenHidden": false
 					}, {
@@ -4724,7 +4775,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 363,
+	"_vid": 374,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4745,6 +4796,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-12T06:16:15.896Z",
+	"modified": "2020-06-14T21:41:38.393Z",
 	"machineName": "testdivehub:csrInitiates"
 }
