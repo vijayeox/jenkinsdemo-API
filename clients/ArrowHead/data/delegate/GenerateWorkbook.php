@@ -54,16 +54,21 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
         }
         $data = $temp;
+        $fieldTypeMapping = include(__DIR__ . "/fieldMapping.php");
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : (isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
         $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['fileId'], array('orgUuid' => $orgUuid));
         $this->logger->info("GenerateWorkbook Dest" . json_encode($dest));
         $generatedDocumentspath = array();
         $this->logger->info("Execute generate document ---------");
+        $tempData = $data;
         foreach (json_decode($data['workbooksToBeGenerated'], true) as  $key => $templateSelected) {
             if ($templateSelected) {
                 $selectedTemplate = $this->carrierTemplateTypeMapping[$key];
                 $docDest = $dest['absolutePath'] .  $selectedTemplate["template"];
-                $data["utilityoptions"] =  $this->parseArray($data["utilityoptions"]);
+                foreach ($fieldTypeMapping as  $fieldkey => $field) {
+                    $varFunction = $field["method"];
+                    $data[$fieldkey] = $this->$varFunction($data[$fieldkey]);
+                }
                 $this->documentBuilder->fillExcelTemplate(
                     $selectedTemplate["template"],
                     $data,
@@ -80,6 +85,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 );
             }
         }
+        $data = $tempData; 
         $data["documents"] = json_encode($generatedDocumentspath);
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
