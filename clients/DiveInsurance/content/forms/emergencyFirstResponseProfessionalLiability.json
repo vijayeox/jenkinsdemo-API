@@ -1358,19 +1358,19 @@
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "liabilityCoverage1000000DownPayment",
+							"label": "liabilityCoverage1000000_downpayment",
 							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_downpayment']){\n  value = data[data['careerCoverage']+'_downpayment'];\n}",
 							"calculateServer": false,
-							"key": "liabilityCoverage1000000DownPayment",
+							"key": "liabilityCoverage1000000_downpayment",
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "liabilityCoverage1000000InstallmentAmount",
+							"label": "liabilityCoverage1000000_installment_amount",
 							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_installment_amount']){\n  value = data[data['careerCoverage']+'_installment_amount'];\n}",
 							"calculateServer": false,
-							"key": "liabilityCoverage1000000InstallmentAmount",
+							"key": "liabilityCoverage1000000_installment_amount",
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
@@ -3076,9 +3076,9 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
-						"redrawOn": "amount",
+						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  value = parseFloat(data.amountPayable).toFixed(2);\n  data.paymentInstallments = 0;\n} else {\nvalue = parseFloat(data.amountPayable).toFixed(2);\n}",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = parseFloat(data.downPayment).toFixed(2);\n} else {\n  value = parseFloat(data.amountPayable).toFixed(2);\n}",
 						"calculateServer": false,
 						"key": "finalAmountPayable",
 						"type": "number",
@@ -3106,7 +3106,7 @@
 							"required": true
 						},
 						"key": "premiumFinanceSelect",
-						"customConditional": "if(data[data['excessLiabilityCoverage1000000']+'_installments'] > 0){\n  show = true;\n} else {\n  show = false;\n}",
+						"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] > 0){\n  show = true;\n} else {\n  show = false;\n}",
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false,
@@ -3141,7 +3141,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"calculateValue": "value = (parseFloat(data['liabilityCoverage1000000DownPayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)",
+							"calculateValue": "value = (parseFloat(data['liabilityCoverage1000000_downpayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)",
 							"calculateServer": false,
 							"key": "downPayment",
 							"type": "number",
@@ -3156,7 +3156,7 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"calculateValue": "value = data['liabilityCoverage1000000InstallmentAmount'] + data['excessLiabilityInstallmentAmount']",
+							"calculateValue": "value = data['liabilityCoverage1000000_installment_amount'] + data['excessLiabilityInstallmentAmount']",
 							"calculateServer": false,
 							"key": "installmentAmount",
 							"type": "number",
@@ -3167,7 +3167,7 @@
 								"attr": "",
 								"value": ""
 							}],
-							"content": "<h5>Number of Installments would be {{data[data['excessLiabilityCoverage1000000']+'_installments']}}</h5>",
+							"content": "<h5>Number of Installments would be {{data['excessLiabilityCoverage1000000_installments']}}</h5>",
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html6",
@@ -3184,7 +3184,7 @@
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html7",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 3){\n  show = true;\n}",
+							"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] == 3){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false
 						}, {
@@ -3197,7 +3197,7 @@
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html8",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 2){\n  show = true;\n}",
+							"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] == 2){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false
 						}, {
@@ -3210,7 +3210,7 @@
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html9",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 1){\n  show = true;\n}",
+							"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] == 1){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false
 						}],
@@ -3246,6 +3246,32 @@
 						"properties": {
 							"render": "columns"
 						},
+						"logic": [{
+							"name": "Disable on Installment Payment",
+							"trigger": {
+								"type": "simple",
+								"simple": {
+									"show": true,
+									"when": "premiumFinanceSelect",
+									"eq": "yes"
+								}
+							},
+							"actions": [{
+								"name": "Select Credit Card",
+								"type": "value",
+								"property": {},
+								"value": "return \"creditCard\""
+							}, {
+								"name": "Disable Options",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false
@@ -3581,7 +3607,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 536,
+	"_vid": 541,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3665,7 +3691,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-14T21:31:00.614Z",
+	"modified": "2020-06-15T07:45:31.833Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

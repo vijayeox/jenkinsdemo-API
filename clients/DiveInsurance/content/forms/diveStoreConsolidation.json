@@ -366,21 +366,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "style",
-							"value": "text-align: center;background-color: #fcf4ac;color: black;border-radius: 10px;line-height: 30px;"
-						}],
-						"content": "The PADI could not be verified by the system. Please check with the PADI Office.",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "PadiNotFoundCSRMessage",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
-						"type": "htmlelement",
-						"input": false,
-						"hideOnChildrenHidden": false,
-						"hideLabel": true
-					}, {
 						"label": "Content",
 						"attrs": [{
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
@@ -8040,7 +8025,7 @@
 		"type": "panel",
 		"title": "Group Professional Liability",
 		"components": [{
-			"label": "Would you like to apply for Group Professional Liability?",
+			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
 			"autofocus": true,
 			"tableView": true,
@@ -8090,7 +8075,7 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
-						"label": "Excess Liability Coverage",
+						"label": "Select Liability Limit",
 						"widget": "choicesjs",
 						"tableView": true,
 						"data": {
@@ -8121,6 +8106,9 @@
 							"required": true
 						},
 						"key": "groupExcessLiabilitySelect",
+						"properties": {
+							"delegate": "RateCard"
+						},
 						"type": "select",
 						"indexeddb": {
 							"filter": {}
@@ -9736,7 +9724,7 @@
 		"tableView": false,
 		"label": "Panel"
 	}, {
-		"title": "Quote Approval",
+		"title": "Quote Information",
 		"theme": "primary",
 		"collapsible": false,
 		"tableView": false,
@@ -11046,94 +11034,6 @@
 				"input": true,
 				"url": "/file/attachment"
 			}]
-		}, {
-			"key": "page5Panel2",
-			"input": false,
-			"title": "Approval",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"label": "PADI Verified",
-				"tableView": false,
-				"defaultValue": false,
-				"clearOnHide": false,
-				"calculateServer": false,
-				"validate": {
-					"required": true
-				},
-				"key": "padiVerifiedCSRCheck",
-				"properties": {
-					"negate": "padiVerified"
-				},
-				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
-				"type": "checkbox",
-				"input": true,
-				"hideOnChildrenHidden": false,
-				"dataGridLabel": false
-			}, {
-				"label": "Approve/Reject",
-				"optionsLabelPosition": "right",
-				"inline": true,
-				"hideLabel": true,
-				"tableView": true,
-				"values": [{
-					"value": "accepted",
-					"label": "Approved",
-					"shortcut": ""
-				}, {
-					"value": "rejected",
-					"label": "Rejected",
-					"shortcut": ""
-				}],
-				"validate": {
-					"required": true
-				},
-				"key": "csrApproved",
-				"type": "radio",
-				"input": true,
-				"lockKey": true
-			}, {
-				"label": "Rejection Reason",
-				"disableAddingRemovingRows": false,
-				"reorder": false,
-				"addAnother": "Add More",
-				"addAnotherPosition": "bottom",
-				"defaultOpen": false,
-				"layoutFixed": false,
-				"enableRowGroups": false,
-				"tableView": false,
-				"defaultValue": [{
-					"reason": ""
-				}],
-				"calculateServer": false,
-				"validate": {
-					"minLength": 1
-				},
-				"key": "rejectionReason",
-				"conditional": {
-					"show": true,
-					"when": "approved",
-					"eq": "rejected"
-				},
-				"type": "datagrid",
-				"input": true,
-				"components": [{
-					"label": "Text Field",
-					"hideLabel": true,
-					"spellcheck": true,
-					"tableView": true,
-					"calculateServer": false,
-					"validate": {
-						"required": true,
-						"customMessage": "Rejection reason is required"
-					},
-					"key": "reason",
-					"type": "textfield",
-					"input": true
-				}]
-			}],
-			"type": "panel",
-			"label": "Panel"
 		}],
 		"path": "page5PanelPanel",
 		"breadcrumbClickable": true,
@@ -11149,10 +11049,138 @@
 		"key": "submit",
 		"type": "button",
 		"event": "submitForm"
+	}, {
+		"title": "Approval",
+		"label": "Panel",
+		"type": "panel",
+		"key": "page5Panel2",
+		"components": [{
+			"label": "jdsgf",
+			"tableView": false,
+			"key": "jdsgf",
+			"type": "well",
+			"input": false,
+			"components": [{
+				"label": "Please process the payment and approve",
+				"tag": "h4",
+				"attrs": [{
+					"attr": "style",
+					"value": "background-color:#FFEB3B;font-size:20px; padding:10px;font-weight:400"
+				}],
+				"content": "The PADI used for the policy could not be verified by the system. </br>\nPlease check with the PADI Office and select the PADI Verified checkbox below.",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page6Pleaseprocessthepaymentandapprove1",
+				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+				"type": "htmlelement",
+				"input": false
+			}, {
+				"label": "PADI Verified",
+				"tableView": false,
+				"defaultValue": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Please verify the PADI before proceeding."
+				},
+				"key": "padiVerifiedCSRCheck",
+				"properties": {
+					"negate": "padiVerified"
+				},
+				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+				"type": "checkbox",
+				"input": true,
+				"hideOnChildrenHidden": false,
+				"dataGridLabel": false
+			}]
+		}, {
+			"title": "Approve/Reject the Application",
+			"theme": "primary",
+			"breadcrumbClickable": false,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "page77Panel",
+			"type": "panel",
+			"label": "Approve/Reject the Application",
+			"input": false,
+			"components": [{
+				"label": "Approve/Reject",
+				"optionsLabelPosition": "right",
+				"inline": true,
+				"hideLabel": true,
+				"tableView": true,
+				"values": [{
+					"value": "approved",
+					"label": "Approved",
+					"shortcut": ""
+				}, {
+					"value": "rejected",
+					"label": "Rejected",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
+				"key": "csrApproved",
+				"type": "radio",
+				"input": true,
+				"lockKey": true
+			}],
+			"path": "page77Panel"
+		}, {
+			"label": "Rejection Reason",
+			"disableAddingRemovingRows": false,
+			"reorder": false,
+			"addAnother": "Add More",
+			"addAnotherPosition": "bottom",
+			"defaultOpen": false,
+			"layoutFixed": false,
+			"enableRowGroups": false,
+			"tableView": false,
+			"defaultValue": [{
+				"reason": ""
+			}],
+			"calculateServer": false,
+			"validate": {
+				"minLength": 1
+			},
+			"key": "rejectionReason",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "rejected"
+			},
+			"type": "datagrid",
+			"input": true,
+			"components": [{
+				"label": "Text Field",
+				"hideLabel": true,
+				"spellcheck": true,
+				"tableView": true,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Rejection reason is required"
+				},
+				"key": "reason",
+				"type": "textfield",
+				"input": true
+			}]
+		}],
+		"input": false,
+		"tableView": false,
+		"theme": "primary"
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 138,
+	"_vid": 143,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11169,6 +11197,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-14T21:54:20.869Z",
+	"modified": "2020-06-15T07:58:45.677Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

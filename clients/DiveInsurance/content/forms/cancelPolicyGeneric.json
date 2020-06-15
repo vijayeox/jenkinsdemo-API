@@ -14,7 +14,7 @@
 				"value": "",
 				"label": ""
 			}],
-			"custom": "var list = [{\n    \"label\": \"Non-payment of Premium\",\n    \"value\": \"nonPaymentOfPremium\"\n}, {\n    \"label\": \"PADI Membership not current\",\n    \"value\": \"padiMembershipNotCurrent\"\n}, {\n    \"label\": \"Non-Sufficient Funds\",\n    \"value\": \"nonSufficientFunds\"\n}, {\n    \"label\": \"Others\",\n    \"value\": \"others\"\n}]\nif (data['product'] == 'Dive Boat') {\n    list.push({\n        \"label\": \"Boat Sold\",\n        \"value\": \"boatSold\"\n    })\n}\nif (data['product'] == 'Dive Store') {\n    list.push({\n        \"label\": \"Store Sold\",\n        \"value\": \"storeSold\"\n    })\n}\nconsole.log(list);\nvalues = list"
+			"custom": "var list = [{\n    \"label\": \"Non-payment of Premium\",\n    \"value\": \"nonPaymentOfPremium\"\n}, {\n    \"label\": \"PADI Membership not current\",\n    \"value\": \"padiMembershipNotCurrent\"\n}, {\n    \"label\": \"Non-Sufficient Funds\",\n    \"value\": \"nonSufficientFunds\"\n}, {\n    \"label\": \"Others\",\n    \"value\": \"others\"\n}]\nif (data['product'] == 'Dive Boat') {\n    list.push({\n        \"label\": \"Boat Sold\",\n        \"value\": \"boatSold\"\n    })\n}\nif (data['product'] == 'Dive Store') {\n    list.push({\n        \"label\": \"Store Sold\",\n        \"value\": \"storeSold\"\n    });\n    list.push({\n        \"label\": \"Business Closed\",\n        \"value\": \"Business CLosed\"\n    });\n}\nconsole.log(list);\nvalues = list"
 		},
 		"selectThreshold": 0.3,
 		"calculateValue": "if (data.reasonForUserCancellation) {\n    value = data.reasonForUserCancellation;\n   \n}",
@@ -217,7 +217,7 @@
 		"type": "button"
 	}],
 	"revisions": "original",
-	"_vid": 110,
+	"_vid": 111,
 	"title": "Cancel Policy Generic",
 	"display": "form",
 	"access": [{
@@ -231,7 +231,7 @@
 	"path": "cancelpolicygeneric",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-08T05:30:33.387Z",
-	"modified": "2020-06-12T10:20:22.314Z",
+	"modified": "2020-06-15T06:52:32.648Z",
 	"machineName": "testdivehub:cancelPolicyGeneric",
 	"controller": ""
 }
