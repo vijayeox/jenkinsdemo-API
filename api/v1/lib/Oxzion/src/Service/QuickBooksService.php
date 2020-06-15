@@ -12,13 +12,14 @@ class QuickBooksService {
 	private $data;
 	private $config;
 
-    public function __construct($config) {
-		$this->config = $config;
-        $this->dataService = DataService::Configure($config);
-        $this->setLoginHelper();
-
+    public function __construct() {
     }
 
+    public function setConfig($config){
+    	$this->config = $config;
+        $this->dataService = DataService::Configure($config);
+        $this->setLoginHelper();
+    }
 	public function getData(){
 		return $this->data;
 	}
