@@ -29,8 +29,16 @@ class ExcelTemplateProcessorTest extends TestCase
         $params['templateDir'] = __DIR__."/Data";
         $this->parser->init($params);
         $template = 'template.xlsx';
-        $data = ['firstname' => 'Polly',
-        'address' => [['ksrtc', 'layout', 'jpnagar']], 'hobbies' => ['badminton','basketball','tennis'], 'expenses' => [['Jan', 2500], ['Feb', 3000], ['Mar', 2000]]];
+        $data = [
+            'firstname' => 'Polly',
+            'address' => [['ksrtc', 'layout', 'jpnagar']],
+            'hobbies' => ['badminton', 'basketball', 'tennis'],
+            'expenses' => [
+                ['Jan', 2500],
+                ['Feb', 3000],
+                ['Mar', 2000]
+            ]
+        ];
         $options['fileLocation'] = __DIR__.'/Data/outputtemplate.xlsx';
         $options['sheets'] = array('Introduction');
         $result = $this->parser->getContent($template, $data, $options);
@@ -48,9 +56,17 @@ class ExcelTemplateProcessorTest extends TestCase
         $params['templateDir'] = __DIR__."/Data";
         $this->parser->init($params);
         $template = 'template2.xlsx';
-        $data = ['firstname' => 'Polly',
-        'address' => [['ksrtc', 'layout', 'jpnagar']], 'hobbies' => ['badminton','basketball','tennis'], 'expenses' => [['Jan', 2500], ['Feb', 3000], ['Mar', 2000]]];
-        $options['fileLocation'] = __DIR__.'/Data/outputtemplate.xlsx';
+        $data = [
+            'firstname' => 'Polly',
+            'address' => [['ksrtc', 'layout', 'jpnagar']],
+            'hobbies' => ['badminton', 'basketball', 'tennis'],
+            'expenses' => [
+                ['Jan', 2500],
+                ['Feb', 3000],
+                ['Mar', 2000]
+            ]
+        ];
+       $options['fileLocation'] = __DIR__.'/Data/outputtemplate.xlsx';
         $result = $this->parser->getContent($template, $data, $options);
         if (file_exists(__DIR__.'/Data/outputtemplate.xlsx')) {
             $this->assertEquals(true, true);
@@ -67,8 +83,15 @@ class ExcelTemplateProcessorTest extends TestCase
         $this->parser->init($params);
         $template = 'template2.xlsx';
         $options = array();
-        $data = ['firstname' => 'Polly',
-        'address' => [['ksrtc', 'layout', 'jpnagar']], 'hobbies' => ['badminton','basketball','tennis'], 'expenses' => [['Jan', 2500], ['Feb', 3000], ['Mar', 2000]]];
+        $data = [
+            'firstname' => 'Polly',
+            'address' => [['ksrtc', 'layout', 'jpnagar']],
+            'hobbies' => ['badminton', 'basketball', 'tennis'],
+            'expenses' => [
+                ['Jan', 2500],
+                ['Feb', 3000],
+                ['Mar', 2000]
+            ]];
         $result = $this->parser->getContent($template, $data, $options);
         if (!empty($result)) {
             $this->assertEquals(true, true);
