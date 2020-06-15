@@ -95,7 +95,14 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         }
         $temp = $data;
         $temp['template'] = $this->template[$data['product']];
-        $temp['subject'] = 'Your Policy has been Reinstated!';
+        if($data['product'] == 'Dive Store'){
+            $subject = 'PADI Endorsed Dive Store Insurance Reinstatement - '.$data['padi'];
+        }else if($data['product'] == 'Dive Boat'){
+            $subject = 'PADI Endorsed Dive Boat Insurance Reinstatement - '.$data['padi'];
+        }else{
+            $subject = 'PADI Endorsed Insurance Reinstatement - '.$data['padi'];
+        }
+        $temp['subject'] = $subject;
         $response = $this->dispatch($temp);
         $this->logger->info("Dispatch reinstate policy returning data --- ".json_encode($data));
         return $data;

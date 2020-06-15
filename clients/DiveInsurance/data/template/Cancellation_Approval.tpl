@@ -24,6 +24,8 @@
 				<p>DUE TO BOAT SOLD.</p>
 			{elseif $reasonforCsrCancellation == 'storeSold'}
 				<p>DUE TO STORE SOLD.</p>
+			{elseif $reasonforCsrCancellation == 'businessClosed'}
+				<p>DUE TO BUSINESS CLOSED.</p>
 			{elseif $reasonforCsrCancellation == 'others'}
 				<p>DUE TO {$othersCsr}</p>
 			{/if}

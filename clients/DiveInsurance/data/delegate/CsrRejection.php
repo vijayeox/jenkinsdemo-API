@@ -23,7 +23,17 @@ class CsrRejection extends DispatchNotification {
     {
         $this->logger->info("Rejection Policy Notification");
         $data['template'] = $this->template[$data['product']];
-        $data['subject'] = 'PADI Professional Liability Insurance Application on Hold – '.$data['padi'];
+        if($data['product'] == 'Dive Store'){
+            $subject = 'Dive Store Insurance Application on Hold - '.$data['padi'];
+            $data['productType'] = 'Dive Store';
+        }else if($data['product'] == 'Dive Boat'){
+            $subject = 'Dive Boat Insurance Application on Hold - '.$data['padi'];
+            $data['productType'] = 'Dive Boat';
+        }else{
+            $subject = 'PADI Professional Liability Insurance Application on Hold – '.$data['padi'];
+            $data['productType'] = 'Endorsed Professional Liability';
+        }
+        $data['subject'] = $subject;
         if(isset($data['state'])){
             $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
         }

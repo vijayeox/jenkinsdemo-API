@@ -9570,23 +9570,43 @@
 			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
-			"autoExpand": false,
-			"spellcheck": true,
-			"tableView": true,
-			"inputFormat": "plain",
-			"clearOnHide": false,
+			"disableAddingRemovingRows": false,
+			"reorder": false,
+			"addAnother": "Add More",
+			"addAnotherPosition": "bottom",
+			"defaultOpen": false,
+			"layoutFixed": false,
+			"enableRowGroups": false,
+			"tableView": false,
+			"defaultValue": [{
+				"reason": ""
+			}],
+			"calculateServer": false,
 			"validate": {
-				"required": true
+				"minLength": 1
 			},
 			"key": "rejectionReason",
 			"conditional": {
 				"show": true,
-				"when": "csrApproved",
+				"when": "approved",
 				"eq": "rejected"
 			},
-			"type": "textarea",
+			"type": "datagrid",
 			"input": true,
-			"lockKey": true
+			"components": [{
+				"label": "Text Field",
+				"hideLabel": true,
+				"spellcheck": true,
+				"tableView": true,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Rejection reason is required"
+				},
+				"key": "reason",
+				"type": "textfield",
+				"input": true
+			}]
 		}],
 		"input": false,
 		"tableView": false,
@@ -9603,7 +9623,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 230,
+	"_vid": 232,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9621,6 +9641,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-06-03T11:09:37.392Z",
+	"modified": "2020-06-12T06:24:37.127Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
