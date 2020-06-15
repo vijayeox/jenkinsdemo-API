@@ -63,6 +63,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             if ($templateSelected) {
                 $selectedTemplate = $this->carrierTemplateTypeMapping[$key];
                 $docDest = $dest['absolutePath'] .  $selectedTemplate["template"];
+                $data["utilityoptions"] =  $this->parseArray($data["utilityoptions"]);
                 $this->documentBuilder->fillExcelTemplate(
                     $selectedTemplate["template"],
                     $data,
@@ -82,5 +83,14 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $data["documents"] = json_encode($generatedDocumentspath);
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
+    }
+
+    private function parseArray($data)
+    {
+        $temp = array();
+        foreach (json_decode($data, true) as $tempItem) {
+            array_push($temp,  $tempItem ? "true" : "false");
+        }
+        return $temp;
     }
 }
