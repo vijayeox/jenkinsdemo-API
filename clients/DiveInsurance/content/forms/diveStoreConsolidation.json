@@ -2972,12 +2972,18 @@
 					"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
 					"tableView": true,
+					"defaultValue": [{
+						"dsgldateoftheclaim": "2020-06-15T11:04:20.000Z",
+						"claimsInformatio": ""
+					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -4616,6 +4622,7 @@
 					"label": "Additional Insured",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -4631,7 +4638,10 @@
 						"zip": "",
 						"businessRelation": "",
 						"businessRelationOther": "",
-						"additionalInformation": ""
+						"additionalInformation": "",
+						"doYouHaveAWrittenContract": "",
+						"additionalInsuredAttachments": [],
+						"additionalInsuredAttachments1": []
 					}],
 					"clearOnHide": false,
 					"calculateServer": false,
@@ -6890,13 +6900,15 @@
 									"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
 									"disableAddingRemovingRows": false,
 									"reorder": false,
+									"addAnother": "Add More",
 									"addAnotherPosition": "bottom",
 									"defaultOpen": false,
 									"layoutFixed": false,
 									"enableRowGroups": false,
 									"tableView": true,
 									"defaultValue": [{
-										"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime": ""
+										"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime": "",
+										"claimsInformatio": ""
 									}],
 									"clearOnHide": false,
 									"calculateServer": false,
@@ -9086,7 +9098,7 @@
 						"type": "columns",
 						"input": false
 					}, {
-						"label": "Group Named Insureds",
+						"label": "Edit Grid",
 						"disableAddingRemovingRows": false,
 						"hideLabel": true,
 						"tableView": false,
@@ -9094,13 +9106,12 @@
 							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
 							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 						},
-						"addAnother": "Not a PADI Member?Click here to add external members",
+						"addAnother": "Not registered in system?Click here to add external members",
 						"modal": false,
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";",
-							"minLength": 1
+							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";"
 						},
 						"key": "namedInsureds",
 						"type": "editgrid",
@@ -9110,10 +9121,8 @@
 							"columns": [{
 								"components": [{
 									"label": "Membership Number",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9131,10 +9140,8 @@
 							}, {
 								"components": [{
 									"label": "First Name",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9152,10 +9159,8 @@
 							}, {
 								"components": [{
 									"label": "Last Name",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9182,10 +9187,8 @@
 							"columns": [{
 								"components": [{
 									"label": "Status",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9203,10 +9206,8 @@
 							}, {
 								"components": [{
 									"label": "Name of Training Agency",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9224,7 +9225,6 @@
 								"components": [{
 									"label": "start_date",
 									"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
-									"calculateServer": false,
 									"key": "start_date",
 									"type": "hidden",
 									"input": true,
@@ -9240,7 +9240,8 @@
 							"tableView": false,
 							"key": "columns",
 							"type": "columns",
-							"input": false
+							"input": false,
+							"hideLabel": true
 						}, {
 							"label": "verified",
 							"key": "verified",
@@ -9248,8 +9249,7 @@
 							"input": true,
 							"tableView": false
 						}],
-						"path": "namedInsureds",
-						"defaultValue": [{}]
+						"path": "namedInsureds"
 					}],
 					"path": "page7Panel"
 				}]
@@ -11180,7 +11180,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 143,
+	"_vid": 148,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11197,6 +11197,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-15T07:58:45.677Z",
+	"modified": "2020-06-15T13:13:25.756Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
