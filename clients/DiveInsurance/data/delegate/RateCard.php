@@ -33,9 +33,15 @@ class Ratecard extends AbstractAppDelegate
                         $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                     }
                 }
-                $premiumRateCardDetails[$rate['key']."_downpayment"] = $rate['downpayment'];
-                $premiumRateCardDetails[$rate['key']."_installments"] = $rate['installment_count'];
-                $premiumRateCardDetails[$rate['key']."_installment_amount"] = $rate['installment_amount'];
+                if(isset($rate['downpayment'])){
+                    $premiumRateCardDetails[$rate['key']."_downpayment"] = $rate['downpayment'];    
+                }
+                if(isset($rate['installment_count'])){
+                    $premiumRateCardDetails[$rate['key']."_installments"] = $rate['installment_count'];
+                }
+                if(isset($rate['installment_amount'])){
+                    $premiumRateCardDetails[$rate['key']."_installment_amount"] = $rate['installment_amount'];
+                }  
             }
             unset($rate);
         }
