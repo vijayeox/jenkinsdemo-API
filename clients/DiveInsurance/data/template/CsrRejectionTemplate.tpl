@@ -9,7 +9,7 @@
 					{$city},{$state_in_short} - {$zip}<br/>
 					{$country}<br/></p>
 				<br/>
-				<p>Your application for the PADI Endorsed Professional Liability Insurance is on hold, pending additional information from you.  Please provide us with the following additional information.<br/></p>
+				<p>Your application for the PADI {$productType} Insurance is on hold, pending additional information from you.  Please provide us with the following additional information.<br/></p>
 				<br/>
 				<center>{assign var=reasons value=$rejectionReason|json_decode:true}
 				{assign var=count value=$reasons|@sizeof}

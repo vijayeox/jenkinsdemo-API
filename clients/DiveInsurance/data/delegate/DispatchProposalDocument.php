@@ -62,9 +62,15 @@ class DispatchProposalDocument extends DispatchDocument {
             $this->logger->error("Documents Not Found".$error);
             throw new DelegateException('Documents Not Found','file.not.found',0,$errorFile);
         }
-        
+        if($data['product'] == 'Dive Store'){
+            $subject = 'PADI Endorsed Dive Store Insurance Proposal - '.$data['padi'];
+        }else if($data['product'] == 'Dive Boat'){
+            $subject = 'PADI Endorsed Dive Boat Insurance Proposal - '.$data['padi'];
+        }else{
+            $subject = 'Proposal Document';
+        }
         $data['document'] =$fileData;
-        $data['subject'] = 'Proposal Document';
+        $data['subject'] = $subject;
         $data['url'] = $this->baseUrl. '?app=DiveInsurance&params={"name":"","detail":[{"type":"Form","url": "pipeline","urlPostParams":{"activityInstanceId":"'.$data['activityInstanceId'].'","workflowInstanceId":"'.$data['workflowInstanceId'].'","commands":[{"command":"claimForm"},{"command":"activityInstanceForm"}]}}]}';
         $response = $this->dispatch($data);
         return $response;

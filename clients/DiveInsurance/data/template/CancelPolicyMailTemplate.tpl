@@ -12,7 +12,9 @@
 			{elseif $reasonforCsrCancellation == 'boatSold'}
 				Boat Sold.
 			{elseif $reasonforCsrCancellation == 'storeSold'}
-				Store Sold.
+				Per your request - Business Sold.
+			{elseif $reasonforCsrCancellation == 'businessClosed'}
+				Per your request - Business Closed.
 			{elseif $reasonforCsrCancellation == 'others'}
 				{$othersCsr}
 			{/if}
