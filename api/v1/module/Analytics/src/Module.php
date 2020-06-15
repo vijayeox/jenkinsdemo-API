@@ -33,7 +33,11 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $config = $container->get('config');
                     $table = $container->get(Model\DataSourceTable::class);
-                    return new Service\DataSourceService($config, $dbAdapter, $table);
+                    return new Service\DataSourceService($config, $dbAdapter, $table,
+                                array("ELASTIC" => $container->get(\Oxzion\Analytics\Elastic\AnalyticsEngineImpl::class),
+                                      "MYSQL" => $container->get(\Oxzion\Analytics\Relational\AnalyticsEngineMySQLImpl::class),
+                                      "POSTGRES" => $container->get(\Oxzion\Analytics\Relational\AnalyticsEnginePostgresImpl::class),
+                                      "QUICKBOOKS" => $container->get(\Oxzion\Analytics\API\AnalyticsEngineQuickBooksImpl::class)));
                     // return new \Oxzion\ServiceLogWrapper($service);
                 },
                 Model\DataSourceTable::class => function($container) {
