@@ -18,9 +18,9 @@ class AppRegisterContollerTest extends ControllerTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
         if ($this->getName() == 'testDeployAppWithWrongUuidInDatabase' || $this->getName() == 'testDeployAppWithWrongNameInDatabase' || $this->getName() == 'testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase' || $this->getName() == 'testDeployAppAddExtraPrivilegesInDatabaseFromYml' || $this->getName() == 'testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml') {
-            $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/App2.yml");
+            $dataset->addYamlFile(dirname(__FILE__) . "/../../Dataset/App2.yml");
         }
         return $dataset;
     }

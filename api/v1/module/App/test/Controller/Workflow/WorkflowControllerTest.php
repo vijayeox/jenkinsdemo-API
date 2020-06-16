@@ -20,7 +20,7 @@ class WorkflowControllerTest extends ControllerTest
     }
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__)."/../../Dataset/Workflow.yml");
         return $dataset;
     }
 

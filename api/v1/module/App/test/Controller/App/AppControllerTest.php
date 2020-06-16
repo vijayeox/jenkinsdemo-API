@@ -26,9 +26,9 @@ class AppControllerTest extends ControllerTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
         if ($this->getName() == 'testDeployAppWithWrongUuidInDatabase' || $this->getName() == 'testDeployAppWithWrongNameInDatabase' || $this->getName() == 'testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase' || $this->getName() == 'testDeployAppAddExtraPrivilegesInDatabaseFromYml' || $this->getName() == 'testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml') {
-            $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/App2.yml");
+            $dataset->addYamlFile(dirname(__FILE__) . "/../../Dataset/App2.yml");
         }
         return $dataset;
     }
@@ -228,15 +228,15 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployApp()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DiveInsuranceSample';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DiveInsuranceSample';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        copy(__DIR__ . '/../sampleapp/application1.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application1.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
@@ -252,13 +252,13 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -332,12 +332,12 @@ class AppControllerTest extends ControllerTest
         $this->clean($path, $yaml, $appName, $YmlappUuid);   
     }
     private function clean($path, $yaml, $appName, $YmlappUuid){
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
-        $deletdirectoryPath = __DIR__ . '/../../../';
+        $deletdirectoryPath = __DIR__ . '/../../../../';
         $deletenpm = $deletdirectoryPath . '.npm';
         if (file_exists($deletenpm)) {
             FileUtils::deleteDirectoryContents($deletenpm);
@@ -348,23 +348,23 @@ class AppControllerTest extends ControllerTest
         }
     }
     public function testDeplayAppWithFieldValidation(){
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        copy(__DIR__ . '/../sampleapp/application12.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application12.yml', __DIR__ . '/../../sampleapp/application.yml');
         $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -388,18 +388,18 @@ class AppControllerTest extends ControllerTest
     }
 
     public function testDeplayAppWithFieldValidationErrors(){
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        copy(__DIR__ . '/../sampleapp/application13.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application13.yml', __DIR__ . '/../../sampleapp/application.yml');
         $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
@@ -410,7 +410,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals("Field padi - Value of property 'decimalLimit' is '2' expected ''", $errors[0]);
         $this->assertEquals("Field dateTime Unexpected", $errors[1]);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -439,24 +439,24 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithoutOptionalFieldsInYml()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        copy(__DIR__ . '/../sampleapp/application5.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application5.yml', __DIR__ . '/../../sampleapp/application.yml');
         $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -476,7 +476,7 @@ class AppControllerTest extends ControllerTest
                 $this->assertEquals(file_exists($apps . "/$appName" . $nodemodules), false);
             }
         }
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
@@ -485,37 +485,37 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithWrongUuidInDatabase()
     {
-        copy(__DIR__ . '/../sampleapp/application8.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application8.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
     }
 
     public function testDeployAppWithWrongNameInDatabase()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../sampleapp/application9.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application9.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -534,7 +534,7 @@ class AppControllerTest extends ControllerTest
         if (!isset($yaml['org'][0]['uuid'])) {
             $yaml['org'][0]['uuid'] = null;
         }
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
@@ -543,28 +543,28 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../sampleapp/application10.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application10.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $this->assertEquals(isset($yaml['app'][0]['uuid']), true);
         $appName = $yaml['app'][0]['name'];
@@ -581,7 +581,7 @@ class AppControllerTest extends ControllerTest
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
@@ -591,7 +591,7 @@ class AppControllerTest extends ControllerTest
     public function testDeployAppNoDirectory()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp1/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp1/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
@@ -602,7 +602,7 @@ class AppControllerTest extends ControllerTest
     public function testDeployAppNoFile()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp2/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp2/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
@@ -612,44 +612,44 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppNoFileData()
     {
-        copy(__DIR__ . '/../sampleapp/application2.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application2.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
     }
 
     public function testDeployAppNoAppData()
     {
-        copy(__DIR__ . '/../sampleapp/application3.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application3.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
     }
 
     public function testDeployAppOrgDataWithoutUuidAndContactAndPreferencesInYml()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_link($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_link($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../sampleapp/application4.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application4.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -659,7 +659,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -674,7 +674,7 @@ class AppControllerTest extends ControllerTest
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
@@ -683,18 +683,18 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppAddExtraPrivilegesInDatabaseFromYml()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../sampleapp/application6.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application6.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -704,7 +704,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -723,7 +723,7 @@ class AppControllerTest extends ControllerTest
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
@@ -732,18 +732,18 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../sampleapp/application6.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application6.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -753,7 +753,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
@@ -772,7 +772,7 @@ class AppControllerTest extends ControllerTest
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
@@ -781,22 +781,22 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithNoEntityInYml()
     {
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/DummyDive';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__ . '/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        copy(__DIR__ . '/../sampleapp/application7.yml', __DIR__ . '/../sampleapp/application.yml');
+        copy(__DIR__ . '/../../sampleapp/application7.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
             $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
-        $data = ['path' => __DIR__ . '/../sampleapp/'];
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -806,12 +806,12 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../sampleapp/';
+        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
         $this->assertEquals($content['status'], 'success');
-        unlink(__DIR__ . '/../sampleapp/application.yml');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
