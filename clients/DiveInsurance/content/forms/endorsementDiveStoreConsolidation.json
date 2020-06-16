@@ -2088,42 +2088,6 @@
 				"labelMargin": null,
 				"lockKey": true
 			}, {
-				"label": "Upload Receipts",
-				"tableView": false,
-				"storage": "url",
-				"webcam": true,
-				"fileTypes": [{
-					"label": "",
-					"value": ""
-				}],
-				"multiple": true,
-				"clearOnHide": false,
-				"validate": {
-					"multiple": true
-				},
-				"key": "receipts",
-				"type": "file",
-				"input": true,
-				"lockKey": true,
-				"url": "/file/attachment"
-			}, {
-				"type": "documentviewer",
-				"key": "receipts1",
-				"calculateValue": "try{ value = JSON.parse(data.receipts)}catch(e){value = data.receipts}",
-				"dtype": "documentviewer",
-				"datype": "documentviewer",
-				"dattype": "documentviewer",
-				"customConditional": "if (data.privileges){\n  if(data.receipts !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
-				"datatype": "documentviewer",
-				"data_type": "documentviewer",
-				"label": "Receipts Attachments",
-				"hideLabel": true,
-				"inputType": "documentviewer",
-				"input": 1,
-				"tableView": false,
-				"protected": true,
-				"persistent": false
-			}, {
 				"key": "pageNaNPanel3YesNo",
 				"label": "Yes/No",
 				"input": false,
@@ -2900,18 +2864,19 @@
 		"breadcrumbClickable": true,
 		"input": false,
 		"components": [{
-			"key": "page4PanelPanelPanelPleaseCheckaccordingtoyourpreference2",
-			"label": "Please Check according to your preference",
-			"input": false,
+			"label": "Optional Liability Coverage",
 			"tag": "h4",
 			"attrs": [{
 				"value": "",
 				"attr": ""
 			}],
 			"content": "Please Check according to your preference",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page4PanelPanelPanelPleaseCheckaccordingtoyourpreference2",
 			"type": "htmlelement",
-			"hideLabel": true,
-			"tableView": false
+			"input": false,
+			"hideLabel": true
 		}, {
 			"label": "Columns",
 			"input": false,
@@ -3144,9 +3109,6 @@
 					"tableView": true,
 					"data": {
 						"values": [{
-							"value": "no",
-							"label": "No"
-						}, {
 							"value": "nonOwnedAutoLiability100K",
 							"label": "100K"
 						}, {
@@ -5741,9 +5703,6 @@
 										"tableView": true,
 										"data": {
 											"values": [{
-												"value": "no",
-												"label": "No"
-											}, {
 												"value": "nonOwnedAutoLiability100K",
 												"label": "100K"
 											}, {
@@ -6632,9 +6591,6 @@
 							"required": true
 						},
 						"key": "groupExcessLiabilitySelect",
-						"properties": {
-							"delegate": "RateCard"
-						},
 						"type": "select",
 						"indexeddb": {
 							"filter": {}
@@ -6993,7 +6949,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Status",
+								"label": "Certificate Level",
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
@@ -10991,9 +10947,19 @@
 		}
 	}, {
 		"title": "Approval",
-		"label": "Approval",
-		"type": "panel",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
 		"key": "page5Panel2",
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"type": "panel",
+		"label": "Approval",
 		"components": [{
 			"title": "Approve/Reject the Application",
 			"theme": "primary",
@@ -11071,21 +11037,11 @@
 			}]
 		}],
 		"input": false,
-		"tableView": false,
-		"theme": "primary",
-		"lockKey": true,
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false,
-		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
+		"lockKey": true
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 140,
+	"_vid": 146,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11102,6 +11058,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-16T04:10:25.906Z",
+	"modified": "2020-06-16T12:12:34.699Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

@@ -13,6 +13,9 @@ class Ratecard extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {  
         $this->logger->info("Executing Rate Card -STart".print_r($data,true));
+        if(!isset($data['product']) || !isset($data['start_date']) || !isset($data['end_date'])){
+            return $data;
+        }
         $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
         $this->logger->info("Rate Card query -> $select");
