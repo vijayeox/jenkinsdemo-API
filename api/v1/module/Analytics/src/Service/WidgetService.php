@@ -483,6 +483,7 @@ class WidgetService extends AbstractService
             'uuid' => $widgetUuid,
         ];
         try {
+            $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
             $resultGet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultGet) == 0) {
                 throw new Exception("Given wiget id ${widgetUuid} either does not exist OR user has no permission to read the widget.");
