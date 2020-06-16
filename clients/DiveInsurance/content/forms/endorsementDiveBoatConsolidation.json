@@ -1575,6 +1575,7 @@
 			"components": [{
 				"label": "Excess Liability Coverage",
 				"widget": "choicesjs",
+				"description": "Primary limit $1,000,000.<br>\nExcess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
 				"tooltip": "Primary limit $1,000,000",
 				"tableView": true,
 				"dataSrc": "custom",
@@ -4296,6 +4297,7 @@
 					"components": [{
 						"label": "Select Liability Limit",
 						"widget": "choicesjs",
+						"description": "Primary limit $1,000,000.<br>\nExcess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
 						"tableView": true,
 						"dataSrc": "custom",
 						"data": {
@@ -9312,7 +9314,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 233,
+	"_vid": 234,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9330,6 +9332,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-06-15T11:17:56.223Z",
+	"modified": "2020-06-16T04:13:05.206Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
