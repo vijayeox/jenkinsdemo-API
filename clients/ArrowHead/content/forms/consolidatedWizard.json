@@ -18937,7 +18937,7 @@
     "showPrevious": "true",
     "showCancel": "true",
     "showBreadcrumbs": "true",
-    "clickable": "false"
+    "clickable": "true"
   },
   "name": "consolidatedWizard",
   "path": "consolidatedwizard",
