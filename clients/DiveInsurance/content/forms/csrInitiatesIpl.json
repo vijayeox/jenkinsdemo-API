@@ -100,15 +100,18 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
+						"mask": false,
 						"autofocus": true,
+						"spellcheck": true,
 						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"pattern": "[0-9\\s-]*$",
 							"customMessage": "PADI Number is not Valid!",
-							"min": 0,
-							"step": "any"
+							"min": 0
 						},
 						"key": "padi",
 						"logic": [{
@@ -144,11 +147,10 @@
 								"state": true
 							}]
 						}],
-						"type": "textfield",
-						"delimiter": false,
-						"requireDecimal": false,
+						"type": "number",
 						"decimalLimit": 0,
 						"input": true,
+						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -1019,16 +1021,23 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1261,7 +1270,7 @@
 				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
 				"key": "start_date",
 				"properties": {
-					"data_type": "Date"
+					"data_type": " Date"
 				},
 				"type": "hidden",
 				"input": true,
@@ -1777,7 +1786,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "scubaFitInstallmentAmount",
-							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_installment_amount']){\n  value = data[data['scubaFit']+'_installment_amount'];\n}",
+							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_installment_amount']){\n  value = data[data['scubaFit']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "scubaFitInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -1812,13 +1821,13 @@
 							"optionsLabelPosition": "right",
 							"inline": false,
 							"tableView": true,
-							"defaultValue": "cylinderInspectorOrInstructorDeclined",
+							"defaultValue": "cylinderInspectorOrCylinderInspectionInstructorDeclined",
 							"values": [{
 								"value": "cylinderInspector",
 								"label": "Cylinder Inspector (6)",
 								"shortcut": ""
 							}, {
-								"value": "cylinderInstructor",
+								"value": "cylinderInspectionInstructor",
 								"label": "Cylinder Inspection Instructor (6)",
 								"shortcut": ""
 							}, {
@@ -1882,8 +1891,8 @@
 						}, {
 							"input": true,
 							"tableView": true,
-							"key": "cylinderInstructor",
-							"label": "cylinderInstructor",
+							"key": "cylinderInspectionInstructor",
+							"label": "cylinderInspectionInstructor",
 							"type": "hidden",
 							"lockKey": true,
 							"defaultValue": "0",
@@ -1897,10 +1906,10 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "cylinderInspectorOrInstructorDeclined",
+							"label": "cylinderInspectorOrCylinderInspectionInstructorDeclined",
 							"defaultValue": "0",
 							"customDefaultValue": "value = \"0\"",
-							"key": "cylinderInspectorOrInstructorDeclined",
+							"key": "cylinderInspectorOrCylinderInspectionInstructorDeclined",
 							"type": "hidden",
 							"input": true,
 							"tableView": true,
@@ -1908,7 +1917,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "cylinderInstallmentAmount",
-							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_installment_amount']){\n  value = data[data['cylinder']+'_installment_amount'];\n}",
+							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_installment_amount']){\n  value = data[data['cylinder']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "cylinderInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -2030,7 +2039,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "equipmentInstallmentAmount",
-							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_installment_amount']){\n  value = data[data['equipment']+'_installment_amount'];\n}",
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_installment_amount']){\n  value = data[data['equipment']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "equipmentInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -2068,28 +2077,28 @@
 							"tableView": false,
 							"defaultValue": "excessLiabilityCoverageDeclined",
 							"values": [{
-								"label": "Excess Liability Coverage ($9,000,000)",
-								"value": "excessLiabilityCoverage9000000",
-								"shortcut": ""
-							}, {
-								"label": "Excess Liability Coverage ($4,000,000)",
-								"value": "excessLiabilityCoverage4000000",
-								"shortcut": ""
-							}, {
-								"label": "Excess Liability Coverage ($3,000,000)",
-								"value": "excessLiabilityCoverage3000000",
-								"shortcut": ""
-							}, {
-								"label": "Excess Liability Coverage ($2,000,000)",
-								"value": "excessLiabilityCoverage2000000",
+								"label": "Excess Liability Coverage - Declined",
+								"value": "excessLiabilityCoverageDeclined",
 								"shortcut": ""
 							}, {
 								"label": "Excess Liability Coverage ($1,000,000)",
 								"value": "excessLiabilityCoverage1000000",
 								"shortcut": ""
 							}, {
-								"label": "Excess Liability Coverage - Declined",
-								"value": "excessLiabilityCoverageDeclined",
+								"label": "Excess Liability Coverage ($2,000,000)",
+								"value": "excessLiabilityCoverage2000000",
+								"shortcut": ""
+							}, {
+								"label": "Excess Liability Coverage ($3,000,000)",
+								"value": "excessLiabilityCoverage3000000",
+								"shortcut": ""
+							}, {
+								"label": "Excess Liability Coverage ($4,000,000)",
+								"value": "excessLiabilityCoverage4000000",
+								"shortcut": ""
+							}, {
+								"label": "Excess Liability Coverage ($9,000,000)",
+								"value": "excessLiabilityCoverage9000000",
 								"shortcut": ""
 							}],
 							"validate": {
@@ -2187,7 +2196,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "excessLiabilityInstallmentAmount",
-							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n}",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "excessLiabilityInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -2346,8 +2355,8 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "value = parseFloat(data.efrAmountPaid);",
-									"key": "efrAmtPaid",
+									"clearOnHide": false,
+									"key": "efrAmountPaid",
 									"type": "number",
 									"input": true,
 									"hideOnChildrenHidden": false
@@ -2405,7 +2414,7 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
+									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n  console.log(total)\n    if(total > 0){\n      value = total;\n    }else{\n      value = \"0\";\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -2420,7 +2429,8 @@
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "csrGrandTotal",
-									"calculateValue": "if(data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
+									"redrawOn": "amount",
+									"calculateValue": "if(data.CSRReviewRequired){\n  value = data.amount;\n}",
 									"key": "csrGrandTotal",
 									"type": "hidden",
 									"input": true,
@@ -2879,7 +2889,7 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "The insurance costs include a premium, upto $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax, email or upload a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax, email or upload a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
+					"content": "The insurance costs include the premium, upto $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax, email or upload a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax, email or upload a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "page3Panel2Footnotes",
@@ -2954,12 +2964,6 @@
 				}],
 				"type": "checkbox",
 				"input": true
-			}, {
-				"label": "efrAmountPaid",
-				"key": "efrAmountPaid",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"label": "upgradeFromIPL",
 				"customDefaultValue": "value = true;",
@@ -3877,20 +3881,29 @@
 								"tableView": false,
 								"data": {
 									"values": [{
-										"value": "diveStoreOwner",
-										"label": "Dive Store Owner"
+										"value": "confinedWaterTrainingLocation",
+										"label": "Confined Water Training Location"
 									}, {
-										"value": "Dive Boat Owner",
-										"label": "Dive Boat Owner"
+										"value": "openWaterTrainingLocation",
+										"label": " Open Water Training Location"
 									}, {
-										"value": "Hotel/Resort Owner",
-										"label": "Hotel/Resort Owner"
+										"label": "Dive Boat Owner",
+										"value": "diveBoatOwner"
 									}, {
-										"value": "Pool/Quarry/Lake Owner",
-										"label": "Pool/Quarry/Lake Owner"
+										"label": "Mortgagee / Loss Payee",
+										"value": "mortgageeLossPayee"
 									}, {
-										"value": "Government Entity",
-										"label": "Government Entity"
+										"label": "Landlord",
+										"value": "landlord"
+									}, {
+										"label": " Government Entity – Permit Requirement",
+										"value": "governmentEntityPermitRequirement"
+									}, {
+										"label": "Dive Store",
+										"value": "diveStore"
+									}, {
+										"label": "Training Agency",
+										"value": "trainingAgency"
 									}, {
 										"value": "other",
 										"label": "Other"
@@ -3911,7 +3924,7 @@
 								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
-								"label": "Please specify ",
+								"label": "Provide description to be reviewed by underwriting",
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
@@ -3971,6 +3984,21 @@
 						"key": "doYouHaveAWrittenContract",
 						"type": "radio",
 						"input": true
+					}, {
+						"label": "Content",
+						"attrs": [{
+							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
+							"attr": "style"
+						}],
+						"content": "Additional Insureds can only be added when required by written contract",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "panelColumnsContent5",
+						"customConditional": "show = (row['doYouHaveAWrittenContract']=='no')?true:false",
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Additional Insured Attachments",
 						"tableView": false,
@@ -4084,8 +4112,11 @@
 			"tableView": false,
 			"components": [{
 				"label": "amountPayable",
-				"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balance) > 0){\n    value = data.balance;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.finalAmount) || 0).toFixed(0);\n}",
+				"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balance) > 0){\n    value = (parseFloat(data.balance)||0).toFixed(0);\n  }else{\n    value = \"0\";\n  }\n}else{\n  value = (parseFloat(data.finalAmount) || 0).toFixed(0);\n}",
 				"key": "amountPayable",
+				"properties": {
+					"render": "columns"
+				},
 				"type": "hidden",
 				"input": true,
 				"tableView": true
@@ -4131,7 +4162,7 @@
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = parseFloat(data.downPayment).toFixed(2);\n} else {\n  value = parseFloat(data.amountPayable).toFixed(2);\n}",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
 						"key": "finalAmountPayable",
 						"type": "number",
 						"decimalLimit": 2,
@@ -4157,6 +4188,9 @@
 							"required": true
 						},
 						"key": "premiumFinanceSelect",
+						"properties": {
+							"render": "columns"
+						},
 						"customConditional": "if(data[data['careerCoverage']+'_installments'] > 0){\n  show = true;\n} else {\n  show = false;\n}",
 						"type": "radio",
 						"input": true,
@@ -4193,7 +4227,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "value = (parseFloat(data['careerCoverageDownPayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)+(parseFloat(data['scubaFitDownPayment'])||0)+(parseFloat(data['cylinderDownPayment'])||0)",
+							"calculateValue": "value = (parseFloat(data['careerCoverageDownPayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)+(parseFloat(data['scubaFitDownPayment'])||0)+(parseFloat(data['cylinderDownPayment'])||0)+(parseFloat(data['equipmentDownPayment'])||0)",
 							"key": "downPayment",
 							"type": "number",
 							"input": true
@@ -4208,7 +4242,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "value = (parseFloat(data['careerCoverageInstallmentAmount'])||0) + (parseFloat(data['excessLiabilityInstallmentAmount'])||0)+(parseFloat(data['tecRecInstallmentAmount'])||0)+(parseFloat(data['scubaFitInstallmentAmount'])||0)+(parseFloat(data['cylinderInstallmentAmount'])||0)",
+							"calculateValue": "value = parseFloat(parseFloat(data['careerCoverageInstallmentAmount'])||0)+parseFloat(parseFloat(data['scubaFitInstallmentAmount'])||0)+parseFloat(parseFloat(data['cylinderInstallmentAmount'])||0) + parseFloat(parseFloat(data['excessLiabilityInstallmentAmount'])||0) + parseFloat(parseFloat(data['equipmentInstallmentAmount'])||0)",
 							"key": "installmentAmount",
 							"type": "number",
 							"input": true
@@ -4429,6 +4463,8 @@
 							"type": "convergepay",
 							"key": "creditcardPayment",
 							"amount_field": "finalAmountPayable",
+							"refreshOn": "finalAmountPayable",
+							"redrawOn": "finalAmountPayable",
 							"description": "payment_description",
 							"label": "custom",
 							"input": true,
@@ -4663,7 +4699,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 390,
+	"_vid": 423,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4684,6 +4720,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-16T03:41:55.185Z",
+	"modified": "2020-06-16T21:59:57.517Z",
 	"machineName": "testdivehub:csrInitiates"
 }
