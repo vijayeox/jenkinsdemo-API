@@ -1,4 +1,5 @@
 <?php
+
 namespace Oxzion\Document\Template\Excel;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -13,7 +14,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplateParser
 {
     private $excelTemplator;
-    private $templateLocation;
 
     /**
      * Initializes the template processor
@@ -21,21 +21,9 @@ class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplatePa
      * @param array $params - templateDir
      * @return none
      */
-    public function init(array $params){
-        $this->excelTemplator = new PhpExcelTemplator();
-        $this->templateLocation = $params['templateDir'];
-        if(!$this->endsWith($this->templateLocation, '/')){
-            $this->templateLocation .= '/';
-        }
-    }
-
-    private function endsWith($haystack, $needle)
+    public function init(array $params = null)
     {
-        $length = strlen($needle);
-        if ($length == 0) {
-            return true;
-        }
-        return (substr($haystack, -$length) === $needle);
+        $this->excelTemplator = new PhpExcelTemplator();
     }
 
     /**
@@ -46,8 +34,14 @@ class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplatePa
      * @param array $options - fileLocation, sheets (array of sheet names)
      * @return PhpOffice\PhpSpreadsheet\Spreedsheet
      */
-    public function getContent($template, $data = array(), $options = array()){
-        $templateFile = $this->templateLocation.$template;
+    public function getContent($template, $data = array(), $options = array())
+    {
+        $templateFile = $template['templatePath'] . '/' . $template['templateNameWithExt'];
+        $wrapData = array();
+        foreach ($data as $key => $value) {
+            $wrapData['{' . $key . '}'] = $value;
+        }
+        $data = $wrapData;
         $spreadsheet = PhpExcelTemplator::getSpreadsheet($templateFile);
         if (!isset($options['sheets'])) {
             $options['sheets'] = array($spreadsheet->getSheetNames()[0]);
@@ -60,7 +54,7 @@ class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplatePa
         if (isset($options['fileLocation'])) {
             $fileName = $options['fileLocation'];
             PhpExcelTemplator::saveSpreadsheetToFile($spreadsheet, $fileName);
-        }        
+        }
         return $spreadsheet;
     }
 }

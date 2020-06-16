@@ -32,8 +32,7 @@ class DocumentBuilder {
     */
     public function generateDocument($template, $data, $destination, $options = null){
         $this->logger->info("Template - $template");
-        $content = $this->templateService->getContent($template, $data);
-        $this->logger->info("Content  - $content");
+        $content = $this->templateService->getContent($template, $data, $options);
         $append = array();
         $prepend = array();
         $header = null;
@@ -64,6 +63,23 @@ class DocumentBuilder {
 
     public function fillPDFForm($template,$data,$destination) {
         return $this->documentGenerator->fillPDFForm($template,$data,$destination);
+    }
+
+      /**
+    *  $template - string - template name
+    *  $data - array - the context data to process the template
+    *               orgUuid - if present will be used else current logged in org uuid 
+    *                         will be used 
+    *  $destination - string - the file path of the destination file
+    *  $sheets - array -  (optional) 
+    *               List of sheets to be processed
+    */
+    public function fillExcelTemplate($template, $data, $destination, $sheets = null){
+        $options = array( "templateType" => TemplateService::EXCEL_TEMPLATE, "fileLocation" => $destination);
+        if($sheets){
+            $options["sheets"] = $sheets;
+        }
+        return $this->templateService->getContent($template, $data, $options);
     }
 
     public function copyTemplateToDestination($template,$destination){

@@ -195,6 +195,7 @@ class FileService extends AbstractService
             }
         }
 
+
         //TODO avoid doing array merge here instead replace the incoming data as is
         $fields = array_merge($fileObject, $data);
         $file = new File();
@@ -354,6 +355,7 @@ class FileService extends AbstractService
             inner join ox_app_entity on ox_app_entity.id = ox_field.entity_id
             left join ox_field childFieldsTable on ox_field.id = childFieldsTable.parent_id
             where ox_app_entity.id=? and ox_field.parent_id is NULL group by ox_field.id;";
+           
             $where = array($entityId);
             $this->logger->info("Executing query - $query with  params" . json_encode($where));
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
@@ -403,6 +405,8 @@ class FileService extends AbstractService
                     $fieldvalue = json_encode($keyValueFields[$i]['data']);
                     $keyValueFields['data'][$field['name']] =$fieldvalue;
                     unset($keyValueFields[$i]['data']);
+                }else if(array_key_exists('data',$keyValueFields[$i])){
+                     unset($keyValueFields[$i]['data']);
                 }
                 $fieldData[$field['name']] = $fieldvalue;
                 unset($keyValueFields[$i]['childFields']);
@@ -420,6 +424,8 @@ class FileService extends AbstractService
                 if(isset($keyValueFields[$i]['data'])){
                     $keyValueFields['data'][$field['name']] = json_encode($keyValueFields[$i]['data']);
                     unset($keyValueFields[$i]['data']);
+                }else if(array_key_exists('data',$keyValueFields[$i])){
+                     unset($keyValueFields[$i]['data']);
                 }
                 $i++;
             }

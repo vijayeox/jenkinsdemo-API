@@ -50,7 +50,7 @@ class TemplateService extends AbstractService
         $params = array('cacheDir' => $cacheDir, 'configsDir' => $configsDir, 'templateDir' => $templateDir, 'compileDir' => $templatescDir);
         $this->client->init($params);
         $this->excelClient = new ExcelTemplateProcessorImpl();
-        $this->excelClient->init(array('templateDir' => $templateDir));
+        $this->excelClient->init();
     }
 
     /**
@@ -69,7 +69,7 @@ class TemplateService extends AbstractService
         $this->logger->info("Template Name:".$templateName);
         $this->logger->info("Data context".print_r($data,true));
 
-        $template = $this->getTemplateDir($templateName, $data);
+        $template = $this->getTemplateDir($templateName, $data, $options);
         $this->logger->info("Template Directory:".print_r($template['templatePath'],true));
         $this->logger->info("Template Directory:".print_r($template['templateNameWithExt'],true));
         if (!$template) {
@@ -78,7 +78,6 @@ class TemplateService extends AbstractService
 
         if (isset($options['templateType']) && $options['templateType'] == static::EXCEL_TEMPLATE) {
             $client = $this->excelClient;
-            $template = $template['templateNameWithExt'];
             unset($options['templateType']);
         }
         else{
@@ -94,9 +93,13 @@ class TemplateService extends AbstractService
         return $content;
     }
 
-    private function getTemplateDir($templateName, $params = array()){
+    private function getTemplateDir($templateName, $params = array(), $options = null){
         $this->logger->info("in getTemplateDir");
-        $template['templateNameWithExt'] = $templateName.$this->templateExt;
+        if (isset($options['templateType']) && $options['templateType'] == static::EXCEL_TEMPLATE) {
+            $template['templateNameWithExt'] = $templateName;
+        } else {
+            $template['templateNameWithExt'] = $templateName . $this->templateExt;
+        }
         $template['templatePath'] = $this->getTemplatePath($template['templateNameWithExt'], $params);
         return $template;
     } 

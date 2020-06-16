@@ -41,11 +41,7 @@
 					</p>
 					<p></p>
 					<p class = "sec_title2">                        
-						{if $additionalLossofBusinessIncomePL != "false"}
-                            ${$lossOfBusIncome|number_format}
-                        {else}
-                            $0
-                        {/if}</p>
+                            ${$lossOfBusIncome|number_format}</p>
 					<p class = "sec_title2">
 						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
                             ${$dspropreplacementvalue|number_format}

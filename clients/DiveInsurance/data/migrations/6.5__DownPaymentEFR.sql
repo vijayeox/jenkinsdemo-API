@@ -1,0 +1,3 @@
+DELETE from premium_rate_card where start_date IN ('2020-07-01 00:00:00') AND `key` IN ('liabilityCoverage1000000') AND product IN ('Emergency First Response');
+
+INSERT INTO premium_rate_card (product,coverage,`key`,start_date,end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category,`year`,downpayment,installment_count,installment_amount) VALUES ('Emergency First Response','Liability Coverage($1,000,000)','liabilityCoverage1000000','2020-06-30 00:00:00','2021-06-30 00:00:00',409.00000,'VALUE',NULL,NULL,409.00,0,'1','',2020,115.0,3,98.0);

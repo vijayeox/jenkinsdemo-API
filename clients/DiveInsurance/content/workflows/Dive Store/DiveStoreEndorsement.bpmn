@@ -94,7 +94,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_0ref3rx123</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1ij66tv123" sourceRef="UserTask_0vsw34x123" targetRef="ServiceTask_1aqfyhm123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved=="approved"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="UserTask_0cskr81123" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:candidateUsers="{{padi}},{{role:CSR}}">
       <bpmn:extensionElements>

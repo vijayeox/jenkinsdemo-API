@@ -1357,6 +1357,24 @@
 							"type": "number",
 							"input": true,
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "liabilityCoverage1000000_downpayment",
+							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_downpayment']){\n  value = data[data['careerCoverage']+'_downpayment'];\n}",
+							"calculateServer": false,
+							"key": "liabilityCoverage1000000_downpayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "liabilityCoverage1000000_installment_amount",
+							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_installment_amount']){\n  value = data[data['careerCoverage']+'_installment_amount'];\n}",
+							"calculateServer": false,
+							"key": "liabilityCoverage1000000_installment_amount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1505,6 +1523,24 @@
 							"input": true,
 							"tableView": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "excessLiabilityInstallmentAmount",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n}",
+							"calculateServer": false,
+							"key": "excessLiabilityInstallmentAmount",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "excessLiabilityDownPayment",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayment']){\n  value = data[data['excessLiability']+'_downpayment'];\n}",
+							"calculateServer": false,
+							"key": "excessLiabilityDownPayment",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "single_limit",
@@ -1918,13 +1954,13 @@
 		},
 		"collapsible": false
 	}, {
-		"key": "specialNoticePanel",
+		"key": "page4",
 		"input": false,
 		"title": "Special Notice",
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
-			"key": "page5ColumnsPanel2Content3",
+			"key": "page4Content",
 			"label": "Content",
 			"input": false,
 			"attrs": [{
@@ -1946,21 +1982,24 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"key": "page4PanelSection1Content",
 					"label": "Section1Content",
-					"input": false,
 					"attrs": [{
 						"value": "",
 						"attr": ""
 					}],
-					"content": "I have no knowledge of any incident, accident, occurrence, act, error, or omission that might lead to, or has already lead to, a legal action or claim except any matter already reported to PADI. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"content": "I, {{data.firstname}} {{data.lastname}}, have no knowledge of an incident, accident, occurrence, act, error, or omission not previously reported to PADI, or reported to PADI while I was NOT insured with Vicencia & Buckley, that might lead to, or already has led to, a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "page4PanelSection1Content",
 					"type": "htmlelement",
-					"hideLabel": true,
-					"tableView": false
+					"input": false,
+					"hideLabel": true
 				}, {
 					"label": "I Agree",
+					"autofocus": true,
 					"tableView": false,
 					"defaultValue": "false",
+					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please let us know if any incidents have occured in the past!",
 						"custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)"
@@ -2052,18 +2091,19 @@
 				"theme": "primary",
 				"tableView": false,
 				"components": [{
-					"key": "page4Panel2Content",
 					"label": "Content",
-					"input": false,
 					"attrs": [{
 						"value": "",
 						"attr": ""
 					}],
-					"content": "I have knowledge of an incident, accident, occurrence, act, error, or omission, that might lead to a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"content": "I, {{data.firstname}} {{data.lastname}}, have knowledge of an incident, accident, occurrence, act, error, or omission not previously reported to PADI, or reported to PADI while I was NOT insured with Vicencia & Buckley, that might lead to, or already has led to, a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "page4Panel2Content",
 					"type": "htmlelement",
+					"input": false,
 					"hideLabel": true,
-					"lockKey": true,
-					"tableView": false
+					"lockKey": true
 				}, {
 					"label": "Incidents",
 					"disableAddingRemovingRows": false,
@@ -2112,6 +2152,8 @@
 									"autofocus": true,
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
+									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -2129,8 +2171,9 @@
 							}, {
 								"components": [{
 									"label": "Date of incident",
+									"allowInput": false,
 									"format": "MM-dd-yyyy",
-									"tableView": true,
+									"tableView": false,
 									"datePicker": {
 										"maxDate": "moment()",
 										"disableWeekends": false,
@@ -2141,6 +2184,7 @@
 									"timePicker": {
 										"showMeridian": false
 									},
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true,
@@ -2156,7 +2200,7 @@
 										"displayInTimezone": "viewer",
 										"language": "en",
 										"useLocaleSettings": false,
-										"allowInput": true,
+										"allowInput": false,
 										"mode": "single",
 										"enableTime": false,
 										"noCalendar": false,
@@ -2181,6 +2225,8 @@
 									"label": "Location of incident",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "locationofincident",
 									"type": "textfield",
 									"input": true,
@@ -2202,11 +2248,13 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"label": "Report Details :",
+									"label": "Report Details",
 									"autoExpand": false,
 									"spellcheck": true,
 									"tableView": true,
 									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "reportcanbeobtained",
 									"type": "textarea",
 									"input": true,
@@ -2220,11 +2268,13 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Brief Summary :",
+									"label": "Brief Summary",
 									"autoExpand": false,
 									"spellcheck": true,
 									"tableView": true,
 									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "briefSummary",
 									"type": "textarea",
 									"input": true,
@@ -2246,10 +2296,10 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Incident report filed?",
-									"key": "page4Panel2ColumnsIncidentreportfiled",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -2259,10 +2309,13 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "page4Panel2ColumnsIncidentreportfiled",
 									"type": "radio",
-									"optionsLabelPosition": "right",
 									"labelWidth": 30,
 									"labelMargin": 3,
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -2273,21 +2326,24 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Fatality?",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
+									"values": [{
+										"value": "yes",
+										"label": "Yes",
+										"shortcut": ""
+									}, {
+										"value": "no",
+										"label": "No",
+										"shortcut": ""
+									}],
+									"clearOnHide": false,
+									"calculateServer": false,
 									"key": "page4Panel2Columns2Fatality",
-									"values": [{
-										"value": "yes",
-										"label": "Yes",
-										"shortcut": ""
-									}, {
-										"value": "no",
-										"label": "No",
-										"shortcut": ""
-									}],
 									"type": "radio",
-									"optionsLabelPosition": "right",
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -2298,10 +2354,10 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Serious Injury?",
-									"key": "page4Panel2Columns2SeriousInjury",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -2311,8 +2367,11 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "page4Panel2Columns2SeriousInjury",
 									"type": "radio",
-									"optionsLabelPosition": "right",
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -2323,10 +2382,10 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "In Training?",
-									"key": "page4Panel2ColumnsInTraining",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": false,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -2336,8 +2395,11 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
+									"calculateServer": false,
+									"key": "page4Panel2ColumnsInTraining",
 									"type": "radio",
-									"optionsLabelPosition": "right",
+									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
@@ -2405,13 +2467,13 @@
 			"hideLabel": true,
 			"label": ""
 		}, {
-			"key": "page5ColumnsPanel4",
+			"key": "page4Panel2Panel",
 			"input": false,
 			"title": "GDPR Agreement",
 			"theme": "primary",
 			"tableView": false,
 			"components": [{
-				"key": "page5ColumnsPanel4Content2",
+				"key": "page4Panel2PanelContent",
 				"label": "Content",
 				"input": false,
 				"attrs": [{
@@ -2421,12 +2483,12 @@
 				"content": "HUB International Insurance will use the information you provide on this form to be in touch with you and to provide updates and marketing. We will treat your information with respect. For more information about our privacy practices please visit our website. By checking this box, you agree that we may process your information in accordance with these terms.",
 				"type": "htmlelement",
 				"hideLabel": true,
+				"lockKey": true,
 				"tableView": false
 			}, {
 				"label": "I Agree",
 				"tableView": true,
 				"defaultValue": false,
-				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please acknowledge the GDPR Agreement"
@@ -2460,13 +2522,15 @@
 		"type": "panel",
 		"label": "Special Notice",
 		"path": "page5ColumnsPanel2",
-		"breadcrumbClickable": true,
+		"breadcrumbClickable": false,
 		"buttonSettings": {
 			"previous": true,
 			"cancel": true,
 			"next": true
 		},
-		"collapsible": false
+		"collapsible": false,
+		"collapsed": false,
+		"lockKey": true
 	}, {
 		"type": "panel",
 		"title": "Additional Insured",
@@ -2815,6 +2879,24 @@
 						"type": "columns",
 						"hideLabel": true
 					}, {
+						"label": "Do you have a Written Contract?",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"calculateServer": false,
+						"key": "doYouHaveAWrittenContract",
+						"type": "radio",
+						"input": true
+					}, {
 						"label": "Additional Information",
 						"autoExpand": false,
 						"spellcheck": true,
@@ -2994,9 +3076,9 @@
 						"delimiter": true,
 						"requireDecimal": true,
 						"inputFormat": "plain",
-						"redrawOn": "amount",
+						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  value = parseFloat(data.amountPayable).toFixed(2);\n  data.paymentInstallments = 0;\n} else {\nvalue = parseFloat(data.amountPayable).toFixed(2);\n}",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = parseFloat(data.downPayment).toFixed(2);\n} else {\n  value = parseFloat(data.amountPayable).toFixed(2);\n}",
 						"calculateServer": false,
 						"key": "finalAmountPayable",
 						"type": "number",
@@ -3005,7 +3087,7 @@
 						"inputType": "text",
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "Would you like to apply for Premium Finance?",
+						"label": "Would you like to enroll for installment billing?",
 						"optionsLabelPosition": "right",
 						"inline": false,
 						"tableView": false,
@@ -3024,23 +3106,114 @@
 							"required": true
 						},
 						"key": "premiumFinanceSelect",
+						"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] > 0){\n  show = true;\n} else {\n  show = false;\n}",
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false,
 						"keyModified": true
 					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "",
-							"value": ""
-						}],
-						"content": "<h3>Number of Installments would be {{data.paymentInstallments}}</h3>",
-						"refreshOnChange": false,
+						"title": "Installments",
+						"theme": "primary",
+						"breadcrumbClickable": true,
+						"buttonSettings": {
+							"previous": true,
+							"cancel": true,
+							"next": true
+						},
+						"collapsible": false,
 						"tableView": false,
-						"key": "html",
-						"customConditional": "if(data.premiumFinanceSelect == \"yes\" && data.paymentInstallments > 0){\n  show = true;\n}",
-						"type": "htmlelement",
+						"key": "installments",
+						"conditional": {
+							"show": true,
+							"when": "premiumFinanceSelect",
+							"eq": "yes"
+						},
+						"type": "panel",
+						"label": "Installments",
 						"input": false,
+						"components": [{
+							"label": "Down Payment",
+							"prefix": "$",
+							"mask": false,
+							"spellcheck": false,
+							"disabled": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"calculateValue": "value = (parseFloat(data['liabilityCoverage1000000_downpayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)",
+							"calculateServer": false,
+							"key": "downPayment",
+							"type": "number",
+							"input": true
+						}, {
+							"label": "Installment Amount",
+							"prefix": "$",
+							"mask": false,
+							"spellcheck": false,
+							"disabled": true,
+							"tableView": false,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"calculateValue": "value = data['liabilityCoverage1000000_installment_amount'] + data['excessLiabilityInstallmentAmount']",
+							"calculateServer": false,
+							"key": "installmentAmount",
+							"type": "number",
+							"input": true
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Number of Installments would be {{data['excessLiabilityCoverage1000000_installments']}}</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html6",
+							"type": "htmlelement",
+							"input": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Installment Dates are 15/09/2020,15/12/2020 and 15/03/2021</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html7",
+							"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] == 3){\n  show = true;\n} else {\n  show = false;\n}",
+							"type": "htmlelement",
+							"input": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Installment Dates are 15/12/2020 and 15/03/2021</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html8",
+							"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] == 2){\n  show = true;\n} else {\n  show = false;\n}",
+							"type": "htmlelement",
+							"input": false
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Installment Dates are 15/03/2021</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html9",
+							"customConditional": "if(data['excessLiabilityCoverage1000000_installments'] == 1){\n  show = true;\n} else {\n  show = false;\n}",
+							"type": "htmlelement",
+							"input": false
+						}],
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Payment Options",
@@ -3073,6 +3246,32 @@
 						"properties": {
 							"render": "columns"
 						},
+						"logic": [{
+							"name": "Disable on Installment Payment",
+							"trigger": {
+								"type": "simple",
+								"simple": {
+									"show": true,
+									"when": "premiumFinanceSelect",
+									"eq": "yes"
+								}
+							},
+							"actions": [{
+								"name": "Select Credit Card",
+								"type": "value",
+								"property": {},
+								"value": "return \"creditCard\""
+							}, {
+								"name": "Disable Options",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false
@@ -3359,14 +3558,20 @@
 			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
-			"placeholder": "Please enter the reason for Rejection",
-			"autoExpand": false,
-			"spellcheck": true,
-			"tableView": true,
-			"inputFormat": "plain",
+			"disableAddingRemovingRows": false,
+			"reorder": false,
+			"addAnother": "Add More",
+			"addAnotherPosition": "bottom",
+			"defaultOpen": false,
+			"layoutFixed": false,
+			"enableRowGroups": false,
+			"tableView": false,
+			"defaultValue": [{
+				"reason": ""
+			}],
+			"calculateServer": false,
 			"validate": {
-				"required": true,
-				"customMessage": "Please Provide the reason for Rejecting the Policy"
+				"minLength": 1
 			},
 			"key": "rejectionReason",
 			"conditional": {
@@ -3374,8 +3579,22 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
-			"type": "textarea",
-			"input": true
+			"type": "datagrid",
+			"input": true,
+			"components": [{
+				"label": "Text Field",
+				"hideLabel": true,
+				"spellcheck": true,
+				"tableView": true,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Rejection reason is required"
+				},
+				"key": "reason",
+				"type": "textfield",
+				"input": true
+			}]
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -3388,7 +3607,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 532,
+	"_vid": 541,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3472,7 +3691,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-12T04:22:12.528Z",
+	"modified": "2020-06-15T07:45:31.833Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

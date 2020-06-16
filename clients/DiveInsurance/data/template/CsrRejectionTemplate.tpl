@@ -9,8 +9,14 @@
 					{$city},{$state_in_short} - {$zip}<br/>
 					{$country}<br/></p>
 				<br/>
-				<p>Your application for the PADI Endorsed Professional Liability Insurance is on hold, pending additional information from you.  Please provide us with the following additional information.<br/>{$rejectionReason}</p><br/>
-				
+				<p>Your application for the PADI {$productType} Insurance is on hold, pending additional information from you.  Please provide us with the following additional information.<br/></p>
+				<br/>
+				<center>{assign var=reasons value=$rejectionReason|json_decode:true}
+				{assign var=count value=$reasons|@sizeof}
+				{assign var=count1 value=$count}
+				{for $foo=1 to $count1}
+					<p>{$foo}.{$reasons[$foo - 1]['reason']}</p><br/>
+				{/for}</center>				
 				<p>Please provide the additional requested information so we may finalize your coverage.  If you have any questions please call or e-mail us.</p>
 			 <br/>
 
@@ -28,9 +34,9 @@ Phone: 800-223-9998 or 714-739-3177<br/>
 Fax: 714-739-3188<br/>
 License #0757776
 <br/><br/>
-PLEASE ADD OUR DOMAINS <a href = 'hubinternational.com'>hubinternational.com</a> and <a href = 'www.diveinsurance.com'>www.diveinsurance.com</a> TO YOUR SAFE SENDERS LIST!
+PLEASE ADD OUR DOMAINS <a href = "https://www.hubinternational.com/" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>hubinternational.com</u></a> and <a href = "https://www.diveinsurance.com/" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>diveinsurance.com</u></a> TO YOUR SAFE SENDERS LIST!
 <br/><br/>
-You can find us at <a href = 'www.diveinsurance.com'>www.diveinsurance.com</a>
+You can find us at <a href = "https://www.diveinsurance.com/" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>www.diveinsurance.com</u></a>
 <br/><br/><br/><br/>
 This message, together with any attachments, is intended only for the use of the individual or entity to which it is addressed. It may contain information that is confidential and prohibited from disclosure. If you are not the intended recipient, you are hereby notified that any dissemination or copying of this message or any attachment is strictly prohibited. If you have received this message in error, please notify the original sender immediately by telephone or by return e-mail and delete this message, along with any attachments, from your computer. Thank You!
 

@@ -526,6 +526,32 @@ class Module
                         $container->get(Service\CommandService::class)
                     );
                 },
+                Service\QuickBooksService::class => function ($container) {
+                    return new Service\QuickBooksService();
+                },
+                Service\ElasticService::class => function ($container) {
+                    return new Service\ElasticService();
+                },
+                Analytics\API\AnalyticsEngineQuickBooksImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\API\AnalyticsEngineQuickBooksImpl($dbAdapter, 
+                                $container->get('config'),
+                                $container->get(Service\QuickBooksService::class));
+                },
+                Analytics\Elastic\AnalyticsEngineImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Elastic\AnalyticsEngineImpl($dbAdapter, 
+                                $container->get('config'),
+                                $container->get(Service\ElasticService::class));
+                },
+                Analytics\Relational\AnalyticsEngineMySQLImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Relational\AnalyticsEngineMySQLImpl($dbAdapter, $container->get('config'));
+                },
+                Analytics\Relational\AnalyticsEnginePostgresImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Relational\AnalyticsEnginePostgresImpl($dbAdapter, $container->get('config'));
+                },
             ],
         ];
     }

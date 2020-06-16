@@ -4,22 +4,28 @@ namespace Oxzion\Analytics\API;
 
 use Oxzion\Service\QuickBooksService;
 use Zend\Db\Sql\Sql;
-use Oxzion\Analytics\AnalyticsEngine;
 
 use function GuzzleHttp\json_encode;
 
-class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI implements AnalyticsEngine
+class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI
 {
 
-  public function __construct($config, $appDBAdapter, $appConfig)
+  private $quickbookService;
+
+  public function __construct($appDBAdapter, $appConfig, QuickBooksService $quickbookService)
   {
-    parent::__construct($config, $appDBAdapter, $appConfig);
+    parent::__construct(null, $appDBAdapter, $appConfig);
+    $this->quickbookService = $quickbookService;
   }
 
+  public function setConfig($config){
+    parent::setConfig($config);
+    $this->quickbookService->setConfig($config);
+  }
   public function getData($app_name,$entity_name,$parameters)
   {
     $finalResult['meta']=$parameters;
-    $qbService = new QuickBooksService($this->config);
+    $qbService = $this->quickbookService;
     $dateperiod = null;
     if (!empty($parameters['filter']) || !empty($parameters['inline_filter'])) {
       $parameters = $this->parseFilter($parameters);

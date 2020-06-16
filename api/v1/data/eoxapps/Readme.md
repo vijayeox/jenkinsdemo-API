@@ -19,3 +19,12 @@ Scenario 2: Deploy App - path + parameters
 3. If you choose to deploy menu then 'parameters' to be specified is: menu
 
 4. All the options must be written in CSV format.
+
+Testing Delegates
+-----------------
+Run composer to setup the test environment
+$ composer install
+
+Set the .env file with the location of the API Folder. Refer the .env.sample for reference
+Run the phpunit from the application HOME folder
+$ ./phpunit

@@ -366,21 +366,6 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "HTML",
-						"attrs": [{
-							"attr": "style",
-							"value": "text-align: center;background-color: #fcf4ac;color: black;border-radius: 10px;line-height: 30px;"
-						}],
-						"content": "The PADI could not be verified by the system. Please check with the PADI Office.",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "PadiNotFoundCSRMessage",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
-						"type": "htmlelement",
-						"input": false,
-						"hideOnChildrenHidden": false,
-						"hideLabel": true
-					}, {
 						"label": "Content",
 						"attrs": [{
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
@@ -2286,6 +2271,19 @@
 			"label": "GENERAL LIABILITY INFORMATION",
 			"input": false,
 			"components": [{
+				"label": "Actual Receipts Amount",
+				"prefix": "$",
+				"mask": false,
+				"spellcheck": true,
+				"tableView": false,
+				"delimiter": false,
+				"requireDecimal": false,
+				"inputFormat": "plain",
+				"calculateServer": false,
+				"key": "annualEstimatedReceipts",
+				"type": "number",
+				"input": true
+			}, {
 				"label": "Estimated 12 month retail receipts",
 				"description": "Except Instructional/Supervisory & Travel Receipts. This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
 				"prefix": "$",
@@ -2614,7 +2612,7 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
-						"label": "Do you conduct recreational or business activities, other than diving, at your facility?",
+						"label": "Do you conduct recreational or business activities, other than diving?",
 						"optionsLabelPosition": "right",
 						"inline": false,
 						"tableView": false,
@@ -2974,12 +2972,18 @@
 					"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
 					"tableView": true,
+					"defaultValue": [{
+						"dsgldateoftheclaim": "2020-06-15T11:04:20.000Z",
+						"claimsInformatio": ""
+					}],
 					"clearOnHide": false,
+					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -2992,96 +2996,167 @@
 					"type": "datagrid",
 					"input": true,
 					"components": [{
-						"label": "Date of the claim",
-						"allowInput": false,
-						"format": "MM-dd-yyyy",
-						"dataGridLabel": false,
+						"label": "claimswell",
 						"tableView": false,
-						"datePicker": {
-							"minDate": "moment().subtract(5, 'years')",
-							"maxDate": "moment()",
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"datepickerMode": "day"
-						},
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
-						"defaultDate": "moment()",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "dsgldateoftheclaim",
-						"type": "datetime",
-						"input": true,
-						"inDataGrid": true,
-						"lockKey": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"language": "en",
-							"useLocaleSettings": false,
-							"allowInput": false,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": "moment().subtract(5, 'years')",
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": "moment()"
-						},
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
-					}, {
-						"label": "Amount Paid",
-						"prefix": "$",
-						"mask": false,
-						"spellcheck": true,
-						"dataGridLabel": false,
-						"tableView": true,
-						"delimiter": true,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "Pleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
-						"type": "number",
-						"labelWidth": 0,
-						"labelMargin": 3,
-						"input": true,
-						"inputType": "number",
-						"inDataGrid": true
-					}, {
-						"label": "Amounts outstanding",
-						"prefix": "$",
-						"mask": false,
-						"spellcheck": true,
-						"dataGridLabel": false,
-						"tableView": true,
-						"delimiter": true,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateServer": false,
-						"validate": {
-							"required": true
-						},
-						"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding3",
-						"type": "number",
-						"labelWidth": 0,
-						"labelMargin": 3,
-						"input": true,
-						"inputType": "number",
-						"inDataGrid": true
+						"key": "claimswell",
+						"type": "well",
+						"input": false,
+						"components": [{
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Date of the claim",
+									"allowInput": false,
+									"format": "MM-dd-yyyy",
+									"dataGridLabel": false,
+									"tableView": false,
+									"datePicker": {
+										"minDate": "moment().subtract(5, 'years')",
+										"maxDate": "moment()",
+										"disableWeekends": false,
+										"disableWeekdays": false,
+										"datepickerMode": "day"
+									},
+									"enableTime": false,
+									"timePicker": {
+										"showMeridian": false
+									},
+									"defaultDate": "moment()",
+									"clearOnHide": false,
+									"calculateServer": false,
+									"validate": {
+										"required": true
+									},
+									"key": "dsgldateoftheclaim",
+									"type": "datetime",
+									"input": true,
+									"inDataGrid": true,
+									"lockKey": true,
+									"widget": {
+										"type": "calendar",
+										"displayInTimezone": "viewer",
+										"language": "en",
+										"useLocaleSettings": false,
+										"allowInput": false,
+										"mode": "single",
+										"enableTime": false,
+										"noCalendar": false,
+										"format": "MM-dd-yyyy",
+										"hourIncrement": 1,
+										"minuteIncrement": 1,
+										"time_24hr": true,
+										"minDate": "moment().subtract(5, 'years')",
+										"disableWeekends": false,
+										"disableWeekdays": false,
+										"maxDate": "moment()"
+									},
+									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Amount Paid",
+									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"dataGridLabel": false,
+									"tableView": true,
+									"delimiter": true,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
+									"validate": {
+										"required": true
+									},
+									"key": "Pleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
+									"type": "number",
+									"labelWidth": 0,
+									"labelMargin": 3,
+									"input": true,
+									"inputType": "number",
+									"inDataGrid": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Amounts outstanding",
+									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"dataGridLabel": false,
+									"tableView": true,
+									"delimiter": true,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"calculateServer": false,
+									"validate": {
+										"required": true
+									},
+									"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding3",
+									"type": "number",
+									"labelWidth": 0,
+									"labelMargin": 3,
+									"input": true,
+									"inputType": "number",
+									"inDataGrid": true,
+									"hideOnChildrenHidden": false
+								}],
+								"size": "md",
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0
+							}],
+							"hideLabel": true,
+							"tableView": false,
+							"key": "columns17",
+							"type": "columns",
+							"input": false
+						}, {
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Information on Claims",
+									"autoExpand": false,
+									"spellcheck": true,
+									"tableView": true,
+									"calculateServer": false,
+									"key": "claimsInformatio",
+									"type": "textarea",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [],
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}],
+							"hideLabel": true,
+							"tableView": false,
+							"key": "columns18",
+							"type": "columns",
+							"input": false
+						}]
 					}],
 					"lockKey": true
 				}, {
@@ -3276,11 +3351,11 @@
 				}, {
 					"label": "Excess Liability Coverage",
 					"widget": "choicesjs",
-					"description": "Primary limit $1,000,000",
+					"description": "Primary limit $1,000,000<br>\nExcess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
 					"tableView": true,
 					"data": {
 						"values": [{
-							"value": "1M",
+							"value": "excessLiabilityCoverage1M",
 							"label": "1M"
 						}, {
 							"value": "excessLiabilityCoverage2M",
@@ -4479,7 +4554,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<ol>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>\n</ol>",
+				"content": "<ol>\n<li>Additional Insureds are only added if required by written contract.</li>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "page_content",
@@ -4544,7 +4619,7 @@
 				"label": "Information for each Additional Insured is required as follows",
 				"input": false,
 				"components": [{
-					"label": "Additional Insureds",
+					"label": "Additional Insured",
 					"disableAddingRemovingRows": false,
 					"reorder": false,
 					"addAnother": "Add More",
@@ -4553,37 +4628,39 @@
 					"layoutFixed": false,
 					"enableRowGroups": false,
 					"hideLabel": true,
-					"tableView": false,
+					"tableView": true,
 					"defaultValue": [{
 						"name": "",
+						"address": "",
 						"city": "",
 						"country": "",
 						"state": {},
-						"address": "",
 						"zip": "",
 						"businessRelation": "",
-						"additionalInformation": ""
+						"businessRelationOther": "",
+						"additionalInformation": "",
+						"doYouHaveAWrittenContract": "",
+						"additionalInsuredAttachments": [],
+						"additionalInsuredAttachments1": []
 					}],
 					"clearOnHide": false,
 					"calculateServer": false,
 					"validate": {
+						"required": true,
 						"minLength": 1
 					},
 					"key": "additionalInsured",
-					"conditional": {
-						"show": true,
-						"when": "page4PanelSelect"
-					},
 					"type": "datagrid",
 					"input": true,
 					"components": [{
-						"label": "well",
-						"tableView": false,
-						"key": "well1",
-						"type": "well",
+						"clearOnHide": false,
+						"key": "page4PanelPanelWell",
 						"input": false,
 						"components": [{
 							"label": "Columns",
+							"input": false,
+							"tableView": false,
+							"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
 							"columns": [{
 								"components": [{
 									"label": "Name",
@@ -4592,23 +4669,11 @@
 									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Please enter the Name of the Additional Insured"
 									},
+									"errorLabel": "Additional Insured Name",
 									"key": "name",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "City",
-									"spellcheck": true,
-									"tableView": true,
-									"clearOnHide": false,
-									"calculateServer": false,
-									"validate": {
-										"required": true
-									},
-									"key": "city",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -4620,6 +4685,59 @@
 								"pull": 0,
 								"size": "md"
 							}, {
+								"components": [{
+									"label": "Address",
+									"spellcheck": true,
+									"tableView": true,
+									"clearOnHide": false,
+									"calculateServer": false,
+									"validate": {
+										"required": true,
+										"customMessage": "Please enter the Address of the Additional Insured"
+									},
+									"errorLabel": "Additional Insured Address",
+									"key": "address",
+									"type": "textfield",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "City",
+									"spellcheck": true,
+									"tableView": true,
+									"clearOnHide": false,
+									"calculateServer": false,
+									"validate": {
+										"required": true,
+										"customMessage": "Please enter the City of the Additional Insured"
+									},
+									"errorLabel": "Additional Insured City",
+									"key": "city",
+									"type": "textfield",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}],
+							"type": "columns",
+							"inDataGrid": true,
+							"hideLabel": true
+						}, {
+							"label": "Columns",
+							"input": false,
+							"tableView": false,
+							"key": "additionalInsuredPanelColumns2",
+							"columns": [{
 								"components": [{
 									"label": "Country",
 									"widget": "choicesjs",
@@ -4639,8 +4757,9 @@
 									"calculateServer": false,
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter your country."
+										"customMessage": "Please select the Country of the Additional Insured"
 									},
+									"errorLabel": "Additional Insured Country",
 									"key": "country",
 									"properties": {
 										"clear_field": "state"
@@ -4653,7 +4772,14 @@
 									"lockKey": true,
 									"source": "5d347da33e9be31e15d3b115",
 									"hideOnChildrenHidden": false
-								}, {
+								}],
+								"width": 3,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
 									"label": "State",
 									"widget": "choicesjs",
 									"tableView": true,
@@ -4672,9 +4798,12 @@
 									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Please select the State of the Additional Insured"
 									},
+									"errorLabel": "Additional Insured State",
 									"key": "state",
+									"customConditional": "show = (row.country)",
 									"type": "select",
 									"indexeddb": {
 										"filter": {}
@@ -4683,43 +4812,31 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 4,
+								"width": 3,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Address",
-									"spellcheck": true,
-									"tableView": true,
-									"clearOnHide": false,
-									"calculateServer": false,
-									"validate": {
-										"required": true
-									},
-									"key": "address",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Zip",
-									"spellcheck": true,
+									"label": "Zip Code",
+									"spellcheck": false,
 									"tableView": true,
 									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
 										"required": true,
+										"customMessage": "Please enter the Zip Code of the Additional Insured",
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
+									"errorLabel": "Additional Insured Zip Code",
 									"key": "zip",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 4,
+								"width": 3,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
@@ -4728,22 +4845,22 @@
 								"components": [{
 									"label": "Business Relation",
 									"widget": "choicesjs",
-									"tableView": true,
+									"tableView": false,
 									"data": {
 										"values": [{
 											"value": "diveStoreOwner",
 											"label": "Dive Store Owner"
 										}, {
-											"value": "diveBoatOwner",
+											"value": "Dive Boat Owner",
 											"label": "Dive Boat Owner"
 										}, {
-											"value": "hotelResortOwner",
+											"value": "Hotel/Resort Owner",
 											"label": "Hotel/Resort Owner"
 										}, {
-											"value": "poolQuarryLakeOwner",
+											"value": "Pool/Quarry/Lake Owner",
 											"label": "Pool/Quarry/Lake Owner"
 										}, {
-											"value": "governmentEntity",
+											"value": "Government Entity",
 											"label": "Government Entity"
 										}, {
 											"value": "other",
@@ -4753,8 +4870,10 @@
 									"selectThreshold": 0.3,
 									"calculateServer": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Please select the Business Relation with the Additional Insured"
 									},
+									"errorLabel": "Additional Insured Business Relation",
 									"key": "businessRelation",
 									"type": "select",
 									"indexeddb": {
@@ -4764,13 +4883,16 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "Please Mention",
+									"label": "Please specify ",
 									"spellcheck": true,
 									"tableView": true,
+									"clearOnHide": false,
 									"calculateServer": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Please specify the Business Relation"
 									},
+									"errorLabel": "Additonal Insured Business Relation Details",
 									"key": "businessRelationOther",
 									"conditional": {
 										"show": true,
@@ -4779,45 +4901,95 @@
 									},
 									"type": "textfield",
 									"input": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Additional Information",
-									"autoExpand": false,
-									"spellcheck": true,
-									"tableView": true,
-									"inputFormat": "plain",
-									"clearOnHide": false,
-									"calculateServer": false,
-									"key": "additionalInformation",
-									"type": "textarea",
-									"input": true,
+									"style": {
+										"margin-top": "4px"
+									},
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 8,
+								"width": 3,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
 								"size": "md"
 							}],
-							"hideLabel": true,
-							"dataGridLabel": false,
-							"tableView": false,
-							"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns1",
 							"type": "columns",
-							"input": false,
-							"inDataGrid": true
+							"hideLabel": true
+						}, {
+							"label": "Additional Information",
+							"autoExpand": false,
+							"spellcheck": true,
+							"tableView": true,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"customMessage": "Please enter Additional Information about the Additional Insured"
+							},
+							"errorLabel": "Additional Insured Additional Information",
+							"key": "additionalInformation",
+							"type": "textarea",
+							"input": true
+						}, {
+							"label": "Do you have a Written Contract?",
+							"optionsLabelPosition": "right",
+							"inline": false,
+							"tableView": false,
+							"values": [{
+								"label": "Yes",
+								"value": "yes",
+								"shortcut": ""
+							}, {
+								"label": "No",
+								"value": "no",
+								"shortcut": ""
+							}],
+							"calculateServer": false,
+							"key": "doYouHaveAWrittenContract",
+							"type": "radio",
+							"input": true
+						}, {
+							"label": "Additional Insured Attachments",
+							"tableView": false,
+							"storage": "url",
+							"webcam": false,
+							"fileTypes": [{
+								"label": "",
+								"value": ""
+							}],
+							"multiple": true,
+							"clearOnHide": false,
+							"calculateServer": false,
+							"validate": {
+								"multiple": true
+							},
+							"key": "additionalInsuredAttachments",
+							"type": "file",
+							"url": "/file/attachment",
+							"input": true
+						}, {
+							"type": "documentviewer",
+							"key": "additionalInsuredAttachments1",
+							"calculateValue": "try{\n  value = JSON.parse(row.additionalInsuredAttachments)\n} catch(e){\n  value = row.additionalInsuredAttachments\n}",
+							"dtype": "documentviewer",
+							"datype": "documentviewer",
+							"dattype": "documentviewer",
+							"customConditional": "if(row.additionalInsuredAttachments && row.additionalInsuredAttachments.length > 0){show = true;} else {show = false;}",
+							"datatype": "documentviewer",
+							"data_type": "documentviewer",
+							"label": "Additional Insured Attachments",
+							"hideLabel": true,
+							"inputType": "documentviewer",
+							"input": 1,
+							"tableView": false,
+							"protected": true,
+							"persistent": false
 						}],
+						"tableView": false,
+						"type": "well",
 						"inDataGrid": true,
-						"clearOnHide": false,
-						"hideLabel": true
+						"hideLabel": true,
+						"label": ""
 					}],
 					"lockKey": true
 				}],
@@ -5954,6 +6126,32 @@
 												"labelWidth": null,
 												"labelMargin": null,
 												"hideOnChildrenHidden": false
+											}, {
+												"label": "Loss of Business Income",
+												"prefix": "$",
+												"mask": false,
+												"spellcheck": true,
+												"tableView": true,
+												"delimiter": true,
+												"requireDecimal": false,
+												"inputFormat": "plain",
+												"clearOnHide": false,
+												"calculateServer": false,
+												"validate": {
+													"required": true
+												},
+												"key": "ALLossofBusIncome",
+												"conditional": {
+													"show": true,
+													"when": "ALLossofBusIncomeCheckBox",
+													"eq": "true"
+												},
+												"type": "number",
+												"input": true,
+												"inputType": "number",
+												"lockKey": true,
+												"hideOnChildrenHidden": false,
+												"defaultValue": 0
 											}],
 											"width": 12,
 											"offset": 0,
@@ -6702,13 +6900,15 @@
 									"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
 									"disableAddingRemovingRows": false,
 									"reorder": false,
+									"addAnother": "Add More",
 									"addAnotherPosition": "bottom",
 									"defaultOpen": false,
 									"layoutFixed": false,
 									"enableRowGroups": false,
 									"tableView": true,
 									"defaultValue": [{
-										"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime": ""
+										"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime": "",
+										"claimsInformatio": ""
 									}],
 									"clearOnHide": false,
 									"calculateServer": false,
@@ -6721,119 +6921,156 @@
 									"type": "datagrid",
 									"input": true,
 									"components": [{
-										"label": "Columns",
-										"input": false,
+										"label": "claimsWellAl",
 										"tableView": false,
-										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumns",
-										"columns": [{
-											"components": [{
-												"label": "Date of the claim",
-												"allowInput": false,
-												"format": "MM-dd-yyyy",
-												"tableView": false,
-												"datePicker": {
-													"minDate": "moment().subtract(5, 'years')",
-													"maxDate": "moment()",
-													"disableWeekends": false,
-													"disableWeekdays": false,
-													"datepickerMode": "day"
-												},
-												"enableTime": false,
-												"timePicker": {
-													"showMeridian": false
-												},
-												"clearOnHide": false,
-												"calculateServer": false,
-												"validate": {
-													"required": true
-												},
-												"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime",
-												"type": "datetime",
-												"input": true,
-												"hideOnChildrenHidden": false,
-												"widget": {
-													"type": "calendar",
-													"displayInTimezone": "viewer",
-													"language": "en",
-													"useLocaleSettings": false,
+										"key": "claimsWellAl",
+										"type": "well",
+										"input": false,
+										"components": [{
+											"label": "Columns",
+											"columns": [{
+												"components": [{
+													"label": "Date of the claim",
 													"allowInput": false,
-													"mode": "single",
-													"enableTime": false,
-													"noCalendar": false,
 													"format": "MM-dd-yyyy",
-													"hourIncrement": 1,
-													"minuteIncrement": 1,
-													"time_24hr": true,
-													"minDate": "moment().subtract(5, 'years')",
-													"disableWeekends": false,
-													"disableWeekdays": false,
-													"maxDate": "moment()"
-												},
-												"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
+													"tableView": false,
+													"datePicker": {
+														"minDate": "moment().subtract(5, 'years')",
+														"maxDate": "moment()",
+														"disableWeekends": false,
+														"disableWeekdays": false,
+														"datepickerMode": "day"
+													},
+													"enableTime": false,
+													"timePicker": {
+														"showMeridian": false
+													},
+													"clearOnHide": false,
+													"calculateServer": false,
+													"validate": {
+														"required": true
+													},
+													"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime",
+													"type": "datetime",
+													"input": true,
+													"hideOnChildrenHidden": false,
+													"widget": {
+														"type": "calendar",
+														"displayInTimezone": "viewer",
+														"language": "en",
+														"useLocaleSettings": false,
+														"allowInput": false,
+														"mode": "single",
+														"enableTime": false,
+														"noCalendar": false,
+														"format": "MM-dd-yyyy",
+														"hourIncrement": 1,
+														"minuteIncrement": 1,
+														"time_24hr": true,
+														"minDate": "moment().subtract(5, 'years')",
+														"disableWeekends": false,
+														"disableWeekdays": false,
+														"maxDate": "moment()"
+													},
+													"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
+												}],
+												"width": 4,
+												"offset": 0,
+												"push": 0,
+												"pull": 0,
+												"size": "md"
+											}, {
+												"components": [{
+													"label": "Amount Paid",
+													"prefix": "$",
+													"mask": false,
+													"spellcheck": true,
+													"tableView": true,
+													"delimiter": true,
+													"requireDecimal": false,
+													"inputFormat": "plain",
+													"clearOnHide": false,
+													"calculateServer": false,
+													"validate": {
+														"required": true
+													},
+													"key": "claimAmountPaid",
+													"type": "number",
+													"input": true,
+													"inputType": "number",
+													"hideOnChildrenHidden": false,
+													"lockKey": true
+												}],
+												"width": 4,
+												"offset": 0,
+												"push": 0,
+												"pull": 0,
+												"size": "md"
+											}, {
+												"components": [{
+													"label": "Amounts outstanding",
+													"prefix": "$",
+													"mask": false,
+													"spellcheck": true,
+													"tableView": true,
+													"delimiter": true,
+													"requireDecimal": false,
+													"inputFormat": "plain",
+													"clearOnHide": false,
+													"calculateServer": false,
+													"validate": {
+														"required": true
+													},
+													"key": "claimAmountOutstanding",
+													"type": "number",
+													"input": true,
+													"inputType": "number",
+													"hideOnChildrenHidden": false,
+													"lockKey": true
+												}],
+												"size": "md",
+												"width": 4,
+												"offset": 0,
+												"push": 0,
+												"pull": 0
 											}],
-											"width": 4,
-											"offset": 0,
-											"push": 0,
-											"pull": 0,
-											"size": "md"
+											"tableView": false,
+											"key": "columns19",
+											"type": "columns",
+											"input": false
 										}, {
-											"components": [{
-												"label": "Amount Paid",
-												"prefix": "$",
-												"mask": false,
-												"spellcheck": true,
-												"tableView": true,
-												"delimiter": true,
-												"requireDecimal": false,
-												"inputFormat": "plain",
-												"clearOnHide": false,
-												"calculateServer": false,
-												"validate": {
-													"required": true
-												},
-												"key": "claimAmountPaid",
-												"type": "number",
-												"input": true,
-												"inputType": "number",
-												"hideOnChildrenHidden": false,
-												"lockKey": true
+											"label": "Columns",
+											"columns": [{
+												"components": [{
+													"label": "Information on Claims",
+													"autoExpand": false,
+													"spellcheck": true,
+													"tableView": true,
+													"calculateServer": false,
+													"key": "claimsInformatio",
+													"type": "textarea",
+													"input": true,
+													"hideOnChildrenHidden": false
+												}],
+												"width": 6,
+												"offset": 0,
+												"push": 0,
+												"pull": 0,
+												"size": "md"
+											}, {
+												"components": [],
+												"width": 6,
+												"offset": 0,
+												"push": 0,
+												"pull": 0,
+												"size": "md"
 											}],
-											"width": 4,
-											"offset": 0,
-											"push": 0,
-											"pull": 0,
-											"size": "md"
-										}, {
-											"components": [{
-												"label": "Amounts outstanding",
-												"prefix": "$",
-												"mask": false,
-												"spellcheck": true,
-												"tableView": true,
-												"delimiter": true,
-												"requireDecimal": false,
-												"inputFormat": "plain",
-												"clearOnHide": false,
-												"calculateServer": false,
-												"validate": {
-													"required": true
-												},
-												"key": "claimAmountOutstanding",
-												"type": "number",
-												"input": true,
-												"inputType": "number",
-												"hideOnChildrenHidden": false,
-												"lockKey": true
-											}],
-											"width": 4,
-											"offset": 0,
-											"push": 0,
-											"pull": 0,
-											"size": "md"
-										}],
-										"type": "columns",
-										"inDataGrid": true,
-										"hideLabel": true
+											"hideLabel": true,
+											"tableView": false,
+											"key": "columns18",
+											"type": "columns",
+											"input": false
+										}]
 									}],
 									"lockKey": true
 								}, {
@@ -6933,95 +7170,6 @@
 								"hideLabel": true
 							}, {
 								"label": "Columns",
-								"input": false,
-								"tableView": false,
-								"key": "page4PanelPanelPanel2Panel2Columns2",
-								"columns": [{
-									"components": [{
-										"label": "Additional Loss of Business Income",
-										"tableView": true,
-										"defaultValue": false,
-										"clearOnHide": false,
-										"calculateServer": false,
-										"key": "ALLossofBusIncomeCheckBox",
-										"type": "checkbox",
-										"input": true,
-										"dataGridLabel": false,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "Additional Loss of Business Income - Enter amount over $40,000",
-										"prefix": "$",
-										"mask": false,
-										"spellcheck": true,
-										"tableView": true,
-										"delimiter": true,
-										"requireDecimal": false,
-										"inputFormat": "plain",
-										"clearOnHide": false,
-										"calculateServer": false,
-										"validate": {
-											"required": true
-										},
-										"key": "ALLossofBusIncomeVal",
-										"conditional": {
-											"show": true,
-											"when": "ALLossofBusIncomeCheckBox",
-											"eq": "true"
-										},
-										"type": "number",
-										"input": true,
-										"inputType": "number",
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "Minimum Loss of Business Income",
-										"prefix": "$",
-										"mask": false,
-										"spellcheck": true,
-										"tableView": false,
-										"delimiter": true,
-										"requireDecimal": false,
-										"inputFormat": "plain",
-										"clearOnHide": false,
-										"customDefaultValue": "value = 40000",
-										"calculateServer": false,
-										"key": "minimumLossOfBusinessIncomeAL",
-										"type": "number",
-										"input": true,
-										"hideOnChildrenHidden": false,
-										"conditional": {
-											"show": true,
-											"when": "ALLossofBusIncomeCheckBox",
-											"eq": "true"
-										}
-									}, {
-										"label": "ALLossofBusIncome",
-										"calculateValue": "value = parseFloat(row.minimumLossOfBusinessIncomeAL)+(parseFloat(row.ALLossofBusIncomeVal)||0.00)",
-										"calculateServer": false,
-										"key": "ALLossofBusIncome",
-										"type": "hidden",
-										"input": true,
-										"tableView": false,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}],
-								"type": "columns",
-								"hideLabel": true
-							}, {
-								"label": "Columns",
 								"columns": [{
 									"components": [{
 										"label": "Medical Payment",
@@ -7070,15 +7218,12 @@
 										"input": true,
 										"hideOnChildrenHidden": false
 									}, {
-										"label": "NON-Owned Auto Liability (U.S. Only)",
+										"label": "NON-Owned Auto Liability",
 										"widget": "choicesjs",
 										"tableView": true,
 										"data": {
 											"values": [{
-												"value": "no",
-												"label": "No"
-											}, {
-												"value": "nonOwnedAutoLiability100K",
+												"value": "100K",
 												"label": "100K"
 											}, {
 												"value": "nonOwnedAutoLiability1M",
@@ -7892,7 +8037,7 @@
 		"type": "panel",
 		"title": "Group Professional Liability",
 		"components": [{
-			"label": "Would you like to apply for Group Professional Liability?",
+			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
 			"autofocus": true,
 			"tableView": true,
@@ -7942,7 +8087,7 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
-						"label": "Excess Liability Coverage",
+						"label": "Select Liability Limit",
 						"widget": "choicesjs",
 						"tableView": true,
 						"data": {
@@ -7973,6 +8118,9 @@
 							"required": true
 						},
 						"key": "groupExcessLiabilitySelect",
+						"properties": {
+							"delegate": "RateCard"
+						},
 						"type": "select",
 						"indexeddb": {
 							"filter": {}
@@ -8950,7 +9098,7 @@
 						"type": "columns",
 						"input": false
 					}, {
-						"label": "Group Named Insureds",
+						"label": "Edit Grid",
 						"disableAddingRemovingRows": false,
 						"hideLabel": true,
 						"tableView": false,
@@ -8958,13 +9106,12 @@
 							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
 							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 						},
-						"addAnother": "Not a PADI Member?Click here to add external members",
+						"addAnother": "Not registered in system?Click here to add external members",
 						"modal": false,
 						"clearOnHide": false,
 						"calculateServer": false,
 						"validate": {
-							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";",
-							"minLength": 1
+							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";"
 						},
 						"key": "namedInsureds",
 						"type": "editgrid",
@@ -8974,10 +9121,8 @@
 							"columns": [{
 								"components": [{
 									"label": "Membership Number",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -8995,10 +9140,8 @@
 							}, {
 								"components": [{
 									"label": "First Name",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9016,10 +9159,8 @@
 							}, {
 								"components": [{
 									"label": "Last Name",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9046,10 +9187,8 @@
 							"columns": [{
 								"components": [{
 									"label": "Status",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9067,10 +9206,8 @@
 							}, {
 								"components": [{
 									"label": "Name of Training Agency",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -9088,7 +9225,6 @@
 								"components": [{
 									"label": "start_date",
 									"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
-									"calculateServer": false,
 									"key": "start_date",
 									"type": "hidden",
 									"input": true,
@@ -9104,7 +9240,8 @@
 							"tableView": false,
 							"key": "columns",
 							"type": "columns",
-							"input": false
+							"input": false,
+							"hideLabel": true
 						}, {
 							"label": "verified",
 							"key": "verified",
@@ -9112,8 +9249,7 @@
 							"input": true,
 							"tableView": false
 						}],
-						"path": "namedInsureds",
-						"defaultValue": [{}]
+						"path": "namedInsureds"
 					}],
 					"path": "page7Panel"
 				}]
@@ -9124,9 +9260,92 @@
 				"key": "page7Table",
 				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "table",
+				"numRows": 5,
 				"clearOnHide": false,
 				"input": false,
 				"rows": [
+					[{
+						"components": [{
+							"label": "Group Coverage Amount",
+							"tag": "h4",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "Group Coverage Amount",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7TableTaxes2",
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true
+						}]
+					}, {
+						"components": []
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"redrawOn": "data",
+							"clearOnHide": false,
+							"calculateValue": "value = (parseFloat(data[\"groupCoverage\"]) || 0).toFixed(0);",
+							"calculateServer": false,
+							"key": "groupCoverageAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
+						}]
+					}],
+					[{
+						"components": [{
+							"label": "Group Excess Liability",
+							"tag": "h4",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "Group Excess Liability",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7TableTaxes1",
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true
+						}]
+					}, {
+						"components": []
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"redrawOn": "data",
+							"clearOnHide": false,
+							"calculateValue": "value = (parseFloat(data[\"groupExcessLiability\"]) || 0).toFixed(0);",
+							"calculateServer": false,
+							"key": "groupExcessLiabilityAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
+						}]
+					}],
 					[{
 						"components": [{
 							"key": "page7TableTaxes",
@@ -9260,7 +9479,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = ((parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00))",
+							"calculateValue": "value = ((parseFloat(data[\"groupExcessLiability\"])||0.00)+((parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00))",
 							"calculateServer": false,
 							"key": "groupTotalAmount",
 							"type": "number",
@@ -9505,7 +9724,7 @@
 		"tableView": false,
 		"label": "Panel"
 	}, {
-		"title": "Quote Approval",
+		"title": "Quote Information",
 		"theme": "primary",
 		"collapsible": false,
 		"tableView": false,
@@ -10815,74 +11034,6 @@
 				"input": true,
 				"url": "/file/attachment"
 			}]
-		}, {
-			"key": "page5Panel2",
-			"input": false,
-			"title": "Approval",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"label": "PADI Verified",
-				"tableView": false,
-				"defaultValue": false,
-				"clearOnHide": false,
-				"calculateServer": false,
-				"validate": {
-					"required": true
-				},
-				"key": "padiVerifiedCSRCheck",
-				"properties": {
-					"negate": "padiVerified"
-				},
-				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
-				"type": "checkbox",
-				"input": true,
-				"hideOnChildrenHidden": false,
-				"dataGridLabel": false
-			}, {
-				"label": "Approve/Reject",
-				"optionsLabelPosition": "right",
-				"inline": true,
-				"hideLabel": true,
-				"tableView": true,
-				"values": [{
-					"value": "accepted",
-					"label": "Approved",
-					"shortcut": ""
-				}, {
-					"value": "rejected",
-					"label": "Rejected",
-					"shortcut": ""
-				}],
-				"validate": {
-					"required": true
-				},
-				"key": "csrApproved",
-				"type": "radio",
-				"input": true,
-				"lockKey": true
-			}, {
-				"label": "Comment",
-				"autoExpand": false,
-				"spellcheck": true,
-				"tableView": true,
-				"inputFormat": "plain",
-				"calculateServer": false,
-				"validate": {
-					"required": true
-				},
-				"key": "rejectionReason",
-				"conditional": {
-					"show": true,
-					"when": "csrApproved",
-					"eq": "rejected"
-				},
-				"type": "textarea",
-				"input": true,
-				"lockKey": true
-			}],
-			"type": "panel",
-			"label": "Panel"
 		}],
 		"path": "page5PanelPanel",
 		"breadcrumbClickable": true,
@@ -10898,10 +11049,138 @@
 		"key": "submit",
 		"type": "button",
 		"event": "submitForm"
+	}, {
+		"title": "Approval",
+		"label": "Panel",
+		"type": "panel",
+		"key": "page5Panel2",
+		"components": [{
+			"label": "jdsgf",
+			"tableView": false,
+			"key": "jdsgf",
+			"type": "well",
+			"input": false,
+			"components": [{
+				"label": "Please process the payment and approve",
+				"tag": "h4",
+				"attrs": [{
+					"attr": "style",
+					"value": "background-color:#FFEB3B;font-size:20px; padding:10px;font-weight:400"
+				}],
+				"content": "The PADI used for the policy could not be verified by the system. </br>\nPlease check with the PADI Office and select the PADI Verified checkbox below.",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page6Pleaseprocessthepaymentandapprove1",
+				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\t\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+				"type": "htmlelement",
+				"input": false
+			}, {
+				"label": "PADI Verified",
+				"tableView": false,
+				"defaultValue": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Please verify the PADI before proceeding."
+				},
+				"key": "padiVerifiedCSRCheck",
+				"properties": {
+					"negate": "padiVerified"
+				},
+				"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+				"type": "checkbox",
+				"input": true,
+				"hideOnChildrenHidden": false,
+				"dataGridLabel": false
+			}]
+		}, {
+			"title": "Approve/Reject the Application",
+			"theme": "primary",
+			"breadcrumbClickable": false,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "page77Panel",
+			"type": "panel",
+			"label": "Approve/Reject the Application",
+			"input": false,
+			"components": [{
+				"label": "Approve/Reject",
+				"optionsLabelPosition": "right",
+				"inline": true,
+				"hideLabel": true,
+				"tableView": true,
+				"values": [{
+					"value": "approved",
+					"label": "Approved",
+					"shortcut": ""
+				}, {
+					"value": "rejected",
+					"label": "Rejected",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"calculateServer": false,
+				"validate": {
+					"required": true
+				},
+				"key": "csrApproved",
+				"type": "radio",
+				"input": true,
+				"lockKey": true
+			}],
+			"path": "page77Panel"
+		}, {
+			"label": "Rejection Reason",
+			"disableAddingRemovingRows": false,
+			"reorder": false,
+			"addAnother": "Add More",
+			"addAnotherPosition": "bottom",
+			"defaultOpen": false,
+			"layoutFixed": false,
+			"enableRowGroups": false,
+			"tableView": false,
+			"defaultValue": [{
+				"reason": ""
+			}],
+			"calculateServer": false,
+			"validate": {
+				"minLength": 1
+			},
+			"key": "rejectionReason",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "rejected"
+			},
+			"type": "datagrid",
+			"input": true,
+			"components": [{
+				"label": "Text Field",
+				"hideLabel": true,
+				"spellcheck": true,
+				"tableView": true,
+				"calculateServer": false,
+				"validate": {
+					"required": true,
+					"customMessage": "Rejection reason is required"
+				},
+				"key": "reason",
+				"type": "textfield",
+				"input": true
+			}]
+		}],
+		"input": false,
+		"tableView": false,
+		"theme": "primary"
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 134,
+	"_vid": 148,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -10918,6 +11197,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-12T04:22:54.913Z",
+	"modified": "2020-06-15T13:13:25.756Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
