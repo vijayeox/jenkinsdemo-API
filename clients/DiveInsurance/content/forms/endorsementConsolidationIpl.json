@@ -541,25 +541,23 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
-						"mask": false,
 						"autofocus": true,
-						"spellcheck": true,
 						"disabled": true,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "value = data['padi']",
 						"validate": {
 							"required": true,
-							"customMessage": "Please enter your PADI #."
+							"pattern": "[0-9\\s-]*$",
+							"customMessage": "Please enter your PADI #.",
+							"step": "any"
 						},
 						"key": "padi",
-						"type": "number",
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -3325,7 +3323,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 243,
+	"_vid": 244,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3346,6 +3344,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-14T21:41:12.376Z",
+	"modified": "2020-06-16T03:32:51.521Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
