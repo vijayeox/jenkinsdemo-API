@@ -108,7 +108,6 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "PADI Number is not Valid!",
@@ -277,7 +276,6 @@
 					}, {
 						"label": "product",
 						"customDefaultValue": "value =\"Individual Professional Liability\";",
-						"calculateServer": false,
 						"key": "product",
 						"type": "hidden",
 						"input": true,
@@ -365,7 +363,6 @@
 					}, {
 						"label": "efrToIPLUpgrade",
 						"customDefaultValue": "value = false;",
-						"calculateServer": false,
 						"key": "efrToIPLUpgrade",
 						"type": "hidden",
 						"input": true,
@@ -374,7 +371,6 @@
 					}, {
 						"label": "product_email_id",
 						"calculateValue": "value = 'instructors@diveinsurance.com';",
-						"calculateServer": false,
 						"key": "product_email_id",
 						"type": "hidden",
 						"input": true,
@@ -383,7 +379,6 @@
 					}, {
 						"label": "initiatedByCsr",
 						"customDefaultValue": "if((data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n  value = true;\n} else {\n  value =false;\n}",
-						"calculateServer": false,
 						"key": "initiatedByCsr",
 						"type": "hidden",
 						"input": true,
@@ -537,7 +532,6 @@
 					"components": [{
 						"label": "First Name",
 						"autofocus": true,
-						"spellcheck": true,
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
@@ -578,7 +572,6 @@
 				}, {
 					"components": [{
 						"label": "Initial",
-						"spellcheck": true,
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
@@ -598,7 +591,6 @@
 				}, {
 					"components": [{
 						"label": "Last Name",
-						"spellcheck": true,
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
@@ -646,7 +638,6 @@
 			}, {
 				"label": "name",
 				"calculateValue": "value = data.firstname + \" \" + data.lastname",
-				"calculateServer": false,
 				"key": "name",
 				"type": "hidden",
 				"input": true,
@@ -706,7 +697,6 @@
 					}, {
 						"components": [{
 							"label": "Address 1",
-							"spellcheck": true,
 							"tableView": true,
 							"validate": {
 								"required": true
@@ -725,7 +715,6 @@
 					}, {
 						"components": [{
 							"label": "Address 2",
-							"spellcheck": true,
 							"tableView": true,
 							"validate": {
 								"customMessage": "Please enter your mailing address."
@@ -750,9 +739,7 @@
 					"columns": [{
 						"components": [{
 							"label": "City",
-							"spellcheck": true,
 							"tableView": true,
-							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
@@ -785,7 +772,6 @@
 							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
@@ -809,7 +795,6 @@
 							"label": "Zip Code",
 							"spellcheck": false,
 							"tableView": false,
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
@@ -894,9 +879,7 @@
 					}, {
 						"components": [{
 							"label": " Address 1",
-							"spellcheck": true,
 							"tableView": true,
-							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
@@ -946,9 +929,7 @@
 					"columns": [{
 						"components": [{
 							"label": "City",
-							"spellcheck": true,
 							"tableView": true,
-							"calculateServer": false,
 							"validate": {
 								"required": true
 							},
@@ -998,7 +979,6 @@
 							"spellcheck": false,
 							"tableView": true,
 							"clearOnHide": false,
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
@@ -1041,16 +1021,23 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
 								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1068,7 +1055,6 @@
 								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
-								"calculateServer": false,
 								"validate": {
 									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
@@ -1135,7 +1121,6 @@
 								"delimiter": false,
 								"requireDecimal": false,
 								"inputFormat": "plain",
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter a valid Mobile Phone number",
@@ -1176,9 +1161,7 @@
 					"components": [{
 						"label": "Fax",
 						"placeholder": " ",
-						"spellcheck": true,
 						"tableView": true,
-						"calculateServer": false,
 						"validate": {
 							"customMessage": "Please enter a valid Fax number"
 						},
@@ -1193,7 +1176,6 @@
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
 						"spellcheck": false,
 						"tableView": false,
-						"calculateServer": false,
 						"validate": {
 							"required": true,
 							"customMessage": "Please enter your email address in format: yourname@example.com"
@@ -1286,7 +1268,6 @@
 				"label": "start_date",
 				"defaultValue": "null",
 				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
-				"calculateServer": false,
 				"key": "start_date",
 				"properties": {
 					"data_type": " Date"
@@ -1298,7 +1279,6 @@
 			}, {
 				"label": "end_date",
 				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar day = today.date();\nvar year = today.year();\nif((day == 30 && month == 5) || month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
-				"calculateServer": false,
 				"key": "end_date",
 				"properties": {
 					"data_type": "Date"
@@ -1399,7 +1379,6 @@
 							}],
 							"dataType": "auto",
 							"clearOnHide": false,
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -1436,7 +1415,6 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "careerCoveragePrice",
 							"type": "number",
 							"input": true,
@@ -1565,7 +1543,6 @@
 						}, {
 							"label": "careerCoverageDownPayment",
 							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_downpayment']){\n  value = data[data['careerCoverage']+'_downpayment'];\n}",
-							"calculateServer": false,
 							"key": "careerCoverageDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -1574,7 +1551,6 @@
 						}, {
 							"label": "careerCoverageInstallmentAmount",
 							"calculateValue": "if(data['careerCoverage'] &&data[data['careerCoverage']+'_installment_amount']){\n  value = data[data['careerCoverage']+'_installment_amount'];\n}",
-							"calculateServer": false,
 							"key": "careerCoverageInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -1610,8 +1586,9 @@
 							"optionsLabelPosition": "right",
 							"inline": false,
 							"tableView": true,
+							"defaultValue": "tecRecDeclined",
 							"values": [{
-								"value": "withTecRecEndorsementForSelectionAbove5",
+								"value": "withTecRecEndorsementForSelectionAbove",
 								"label": "With TecRec Endorsement for selection above (5)",
 								"shortcut": ""
 							}, {
@@ -1620,7 +1597,6 @@
 								"shortcut": ""
 							}],
 							"clearOnHide": false,
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -1629,8 +1605,7 @@
 							"type": "radio",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"defaultValue": "tecRecDeclined"
+							"hideOnChildrenHidden": false
 						}],
 						"width": 8,
 						"offset": 0,
@@ -1655,7 +1630,6 @@
 							"protected": true,
 							"clearOnHide": false,
 							"calculateValue": "value = 0;",
-							"calculateServer": false,
 							"key": "techRecPrice",
 							"type": "number",
 							"input": true,
@@ -1669,7 +1643,6 @@
 							"protected": true,
 							"customDefaultValue": "value = \"0\"",
 							"calculateValue": "value = 0;",
-							"calculateServer": false,
 							"key": "withTecRecEndorsementForSelectionAbove",
 							"type": "hidden",
 							"input": true,
@@ -1683,7 +1656,6 @@
 							"protected": true,
 							"customDefaultValue": "value = \"0\"",
 							"calculateValue": "value = 0;",
-							"calculateServer": false,
 							"key": "tecRecDeclined",
 							"type": "hidden",
 							"input": true,
@@ -1693,7 +1665,6 @@
 						}, {
 							"label": "tecRecDownPayment",
 							"calculateValue": "value = 0;",
-							"calculateServer": false,
 							"key": "tecRecDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -1702,7 +1673,6 @@
 						}, {
 							"label": "tecRecInstallmentAmount",
 							"calculateValue": "value = 0;",
-							"calculateServer": false,
 							"key": "tecRecInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -1747,7 +1717,6 @@
 								"label": "ScubaFit Instructor - Declined",
 								"shortcut": ""
 							}],
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -1782,7 +1751,6 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "scubaFitPrice",
 							"type": "number",
 							"input": true,
@@ -1811,7 +1779,6 @@
 						}, {
 							"label": "scubaFitDownPayment",
 							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_downpayment']){\n  value = data[data['scubaFit']+'_downpayment'];\n}",
-							"calculateServer": false,
 							"key": "scubaFitDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -1819,8 +1786,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "scubaFitInstallmentAmount",
-							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_installment_amount']){\n  value = data[data['scubaFit']+'_installment_amount'];\n}",
-							"calculateServer": false,
+							"calculateValue": "if(data['scubaFit'] &&data[data['scubaFit']+'_installment_amount']){\n  value = data[data['scubaFit']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "scubaFitInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -1855,25 +1821,24 @@
 							"optionsLabelPosition": "right",
 							"inline": false,
 							"tableView": true,
-							"defaultValue": "cylinderInspectorOrInstructorDeclined",
+							"defaultValue": "cylinderInspectorOrCylinderInspectionInstructorDeclined",
 							"values": [{
 								"value": "cylinderInspector",
 								"label": "Cylinder Inspector (6)",
 								"shortcut": ""
 							}, {
-								"value": "cylinderInstructor",
-								"label": "Cylinder Instructor (6)",
+								"value": "cylinderInspectionInstructor",
+								"label": "Cylinder Inspection Instructor (6)",
 								"shortcut": ""
 							}, {
 								"value": "cylinderInspectorAndInstructor",
-								"label": "Cylinder Inspection Inspector and Instructor (6)",
+								"label": "Cylinder Inspector and Cylinder Inspection Instructor (6)",
 								"shortcut": ""
 							}, {
-								"value": "cylinderInspectorOrInstructorDeclined",
-								"label": "Cylinder Inspector Or Instructor - Declined",
+								"value": "cylinderInspectorOrCylinderInspectionInstructorDeclined",
+								"label": "Cylinder Inspector Or Cylinder Inspection Instructor - Declined",
 								"shortcut": ""
 							}],
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -1908,7 +1873,6 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "cylinderPrice",
 							"type": "number",
 							"input": true,
@@ -1927,8 +1891,8 @@
 						}, {
 							"input": true,
 							"tableView": true,
-							"key": "cylinderInstructor",
-							"label": "cylinderInstructor",
+							"key": "cylinderInspectionInstructor",
+							"label": "cylinderInspectionInstructor",
 							"type": "hidden",
 							"lockKey": true,
 							"defaultValue": "0",
@@ -1942,10 +1906,10 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "cylinderInspectorOrInstructorDeclined",
+							"label": "cylinderInspectorOrCylinderInspectionInstructorDeclined",
 							"defaultValue": "0",
 							"customDefaultValue": "value = \"0\"",
-							"key": "cylinderInspectorOrInstructorDeclined",
+							"key": "cylinderInspectorOrCylinderInspectionInstructorDeclined",
 							"type": "hidden",
 							"input": true,
 							"tableView": true,
@@ -1953,8 +1917,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "cylinderInstallmentAmount",
-							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_installment_amount']){\n  value = data[data['cylinder']+'_installment_amount'];\n}",
-							"calculateServer": false,
+							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_installment_amount']){\n  value = data[data['cylinder']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "cylinderInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -1963,7 +1926,6 @@
 						}, {
 							"label": "cylinderDownPayment",
 							"calculateValue": "if(data['cylinder'] &&data[data['cylinder']+'_downpayment']){\n  value = data[data['cylinder']+'_downpayment'];\n}",
-							"calculateServer": false,
 							"key": "cylinderDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -2007,7 +1969,6 @@
 								"label": "Equipment Liability Coverage - Declined",
 								"shortcut": ""
 							}],
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -2043,7 +2004,6 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "equipmentPrice",
 							"type": "number",
 							"input": true,
@@ -2072,7 +2032,6 @@
 						}, {
 							"label": "equipmentDownPayment",
 							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayment']){\n  value = data[data['equipment']+'_downpayment'];\n}",
-							"calculateServer": false,
 							"key": "equipmentDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -2080,8 +2039,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "equipmentInstallmentAmount",
-							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_installment_amount']){\n  value = data[data['equipment']+'_installment_amount'];\n}",
-							"calculateServer": false,
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_installment_amount']){\n  value = data[data['equipment']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "equipmentInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -2119,31 +2077,30 @@
 							"tableView": false,
 							"defaultValue": "excessLiabilityCoverageDeclined",
 							"values": [{
-								"label": "Excess Liability Coverage ($9,000,000)",
-								"value": "excessLiabilityCoverage9000000",
-								"shortcut": ""
-							}, {
-								"label": "Excess Liability Coverage ($4,000,000)",
-								"value": "excessLiabilityCoverage4000000",
-								"shortcut": ""
-							}, {
-								"label": "Excess Liability Coverage ($3,000,000)",
-								"value": "excessLiabilityCoverage3000000",
-								"shortcut": ""
-							}, {
-								"label": "Excess Liability Coverage ($2,000,000)",
-								"value": "excessLiabilityCoverage2000000",
+								"label": "Excess Liability Coverage - Declined",
+								"value": "excessLiabilityCoverageDeclined",
 								"shortcut": ""
 							}, {
 								"label": "Excess Liability Coverage ($1,000,000)",
 								"value": "excessLiabilityCoverage1000000",
 								"shortcut": ""
 							}, {
-								"label": "Excess Liability Coverage - Declined",
-								"value": "excessLiabilityCoverageDeclined",
+								"label": "Excess Liability Coverage ($2,000,000)",
+								"value": "excessLiabilityCoverage2000000",
+								"shortcut": ""
+							}, {
+								"label": "Excess Liability Coverage ($3,000,000)",
+								"value": "excessLiabilityCoverage3000000",
+								"shortcut": ""
+							}, {
+								"label": "Excess Liability Coverage ($4,000,000)",
+								"value": "excessLiabilityCoverage4000000",
+								"shortcut": ""
+							}, {
+								"label": "Excess Liability Coverage ($9,000,000)",
+								"value": "excessLiabilityCoverage9000000",
 								"shortcut": ""
 							}],
-							"calculateServer": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -2177,7 +2134,6 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "excessLiabilityPrice",
 							"type": "number",
 							"input": true,
@@ -2240,8 +2196,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "excessLiabilityInstallmentAmount",
-							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n}",
-							"calculateServer": false,
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n} else {\n  value = 0;\n}",
 							"key": "excessLiabilityInstallmentAmount",
 							"type": "hidden",
 							"input": true,
@@ -2250,7 +2205,6 @@
 						}, {
 							"label": "excessLiabilityDownPayment",
 							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayment']){\n  value = data[data['excessLiability']+'_downpayment'];\n}",
-							"calculateServer": false,
 							"key": "excessLiabilityDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -2260,7 +2214,6 @@
 							"label": "single_limit",
 							"defaultValue": "$1,000,000",
 							"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
-							"calculateServer": false,
 							"key": "single_limit",
 							"type": "hidden",
 							"input": true,
@@ -2271,7 +2224,6 @@
 							"label": "annual_aggregate",
 							"defaultValue": "$2,000,000",
 							"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
-							"calculateServer": false,
 							"key": "annual_aggregate",
 							"type": "hidden",
 							"input": true,
@@ -2348,7 +2300,6 @@
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);",
-									"calculateServer": false,
 									"key": "amount",
 									"type": "number",
 									"input": true,
@@ -2404,9 +2355,8 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "value = parseFloat(data.efrAmountPaid);",
-									"calculateServer": false,
-									"key": "efrAmtPaid",
+									"clearOnHide": false,
+									"key": "efrAmountPaid",
 									"type": "number",
 									"input": true,
 									"hideOnChildrenHidden": false
@@ -2464,8 +2414,7 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
-									"calculateServer": false,
+									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n  console.log(total)\n    if(total > 0){\n      value = total;\n    }else{\n      value = \"0\";\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -2473,7 +2422,6 @@
 								}, {
 									"label": "userGrandTotal",
 									"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
-									"calculateServer": false,
 									"key": "userGrandTotal",
 									"type": "hidden",
 									"input": true,
@@ -2481,8 +2429,8 @@
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "csrGrandTotal",
-									"calculateValue": "if(data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
-									"calculateServer": false,
+									"redrawOn": "amount",
+									"calculateValue": "if(data.CSRReviewRequired){\n  value = data.amount;\n}",
 									"key": "csrGrandTotal",
 									"type": "hidden",
 									"input": true,
@@ -2517,7 +2465,6 @@
 				}, {
 					"label": "finalAmount",
 					"calculateValue": "if(data.efrToIPLUpgrade){\n  value = data.balance;\n} else {\n  value = data.amount\n}",
-					"calculateServer": false,
 					"key": "finalAmount",
 					"type": "hidden",
 					"input": true,
@@ -2677,7 +2624,6 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
-					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please attach proof of your Technical Certification",
 						"multiple": true
@@ -2731,7 +2677,6 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
-					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please attach proof of Cylinder Inspector Certification",
 						"multiple": true
@@ -2744,7 +2689,7 @@
 				}],
 				"path": "cylinderInspectorAttachments"
 			}, {
-				"title": "Cylinder Instructor Attachments",
+				"title": "Cylinder Inspection Instructor Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": false,
 				"buttonSettings": {
@@ -2772,7 +2717,7 @@
 					"type": "htmlelement",
 					"input": false
 				}, {
-					"label": "Cylinder Instructor Attachments",
+					"label": "Cylinder Inspection Instructor Attachments",
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "url",
@@ -2785,7 +2730,6 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
-					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please attach Proof of Cylinder Instructor Inspection",
 						"multiple": true
@@ -2838,7 +2782,6 @@
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
-					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please attach proof of your Scuba Fit Certification",
 						"multiple": true
@@ -2879,7 +2822,6 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please attach any attachments",
 						"multiple": true
@@ -2920,7 +2862,6 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"calculateServer": false,
 					"validate": {
 						"multiple": true
 					},
@@ -2948,7 +2889,7 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "The insurance costs include a premium, a $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax, email or upload a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax, email or upload a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
+					"content": "The insurance costs include the premium, upto $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax, email or upload a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax, email or upload a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "page3Panel2Footnotes",
@@ -3000,7 +2941,6 @@
 				"label": "I Agree",
 				"tableView": false,
 				"defaultValue": false,
-				"calculateServer": false,
 				"validate": {
 					"required": true
 				},
@@ -3025,16 +2965,8 @@
 				"type": "checkbox",
 				"input": true
 			}, {
-				"label": "efrAmountPaid",
-				"calculateServer": false,
-				"key": "efrAmountPaid",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}, {
 				"label": "upgradeFromIPL",
 				"customDefaultValue": "value = true;",
-				"calculateServer": false,
 				"key": "upgradeFromIPL",
 				"type": "hidden",
 				"input": true,
@@ -3147,7 +3079,6 @@
 					"autofocus": true,
 					"tableView": false,
 					"defaultValue": "false",
-					"calculateServer": false,
 					"validate": {
 						"customMessage": "Please let us know if any incidents have occured in the past!",
 						"custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)"
@@ -3200,7 +3131,6 @@
 						"label": "agreementSection",
 						"type": "hidden",
 						"lockKey": true,
-						"calculateServer": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"key": "page4Content2",
@@ -3254,7 +3184,6 @@
 					"lockKey": true
 				}, {
 					"label": "Incidents",
-					"disableAddingRemovingRows": false,
 					"reorder": false,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
@@ -3274,7 +3203,6 @@
 						"page4Panel2Columns2SeriousInjury": "",
 						"page4Panel2ColumnsInTraining": ""
 					}],
-					"calculateServer": false,
 					"validate": {
 						"minLength": 1
 					},
@@ -3298,10 +3226,8 @@
 								"components": [{
 									"label": "Name of person injured",
 									"autofocus": true,
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true
 									},
@@ -3333,7 +3259,6 @@
 										"showMeridian": false
 									},
 									"clearOnHide": false,
-									"calculateServer": false,
 									"validate": {
 										"required": true,
 										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
@@ -3371,10 +3296,8 @@
 							}, {
 								"components": [{
 									"label": "Location of incident",
-									"spellcheck": true,
 									"tableView": true,
 									"clearOnHide": false,
-									"calculateServer": false,
 									"key": "locationofincident",
 									"type": "textfield",
 									"input": true,
@@ -3398,11 +3321,9 @@
 								"components": [{
 									"label": "Report Details",
 									"autoExpand": false,
-									"spellcheck": true,
 									"tableView": true,
 									"inputFormat": "plain",
 									"clearOnHide": false,
-									"calculateServer": false,
 									"key": "reportcanbeobtained",
 									"type": "textarea",
 									"input": true,
@@ -3418,11 +3339,9 @@
 								"components": [{
 									"label": "Brief Summary",
 									"autoExpand": false,
-									"spellcheck": true,
 									"tableView": true,
 									"inputFormat": "plain",
 									"clearOnHide": false,
-									"calculateServer": false,
 									"key": "briefSummary",
 									"type": "textarea",
 									"input": true,
@@ -3458,7 +3377,6 @@
 										"shortcut": ""
 									}],
 									"clearOnHide": false,
-									"calculateServer": false,
 									"key": "page4Panel2ColumnsIncidentreportfiled",
 									"type": "radio",
 									"labelWidth": 30,
@@ -3488,7 +3406,6 @@
 										"shortcut": ""
 									}],
 									"clearOnHide": false,
-									"calculateServer": false,
 									"key": "page4Panel2Columns2Fatality",
 									"type": "radio",
 									"input": true,
@@ -3516,7 +3433,6 @@
 										"shortcut": ""
 									}],
 									"clearOnHide": false,
-									"calculateServer": false,
 									"key": "page4Panel2Columns2SeriousInjury",
 									"type": "radio",
 									"input": true,
@@ -3544,7 +3460,6 @@
 										"shortcut": ""
 									}],
 									"clearOnHide": false,
-									"calculateServer": false,
 									"key": "page4Panel2ColumnsInTraining",
 									"type": "radio",
 									"input": true,
@@ -3717,7 +3632,6 @@
 					"shortcut": ""
 				}],
 				"clearOnHide": false,
-				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please choose an option"
@@ -3754,7 +3668,6 @@
 			"input": false,
 			"components": [{
 				"label": "Additional Insured",
-				"disableAddingRemovingRows": false,
 				"reorder": false,
 				"addAnotherPosition": "bottom",
 				"defaultOpen": false,
@@ -3774,7 +3687,6 @@
 					"additionalInformation": ""
 				}],
 				"clearOnHide": false,
-				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"minLength": 1
@@ -3794,10 +3706,8 @@
 						"columns": [{
 							"components": [{
 								"label": "Name",
-								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter the Name of the Additional Insured"
@@ -3817,10 +3727,8 @@
 						}, {
 							"components": [{
 								"label": "Address",
-								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter the Address of the Additional Insured"
@@ -3839,10 +3747,8 @@
 						}, {
 							"components": [{
 								"label": "City",
-								"spellcheck": true,
 								"tableView": true,
 								"clearOnHide": false,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter the City of the Additional Insured"
@@ -3884,7 +3790,6 @@
 								"template": "<span>{{ item.country }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please select the Country of the Additional Insured"
@@ -3926,7 +3831,6 @@
 								"clearOnRefresh": true,
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please select the State of the Additional Insured"
@@ -3953,7 +3857,6 @@
 								"spellcheck": false,
 								"tableView": true,
 								"clearOnHide": false,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter the Zip Code of the Additional Insured",
@@ -3978,27 +3881,35 @@
 								"tableView": false,
 								"data": {
 									"values": [{
-										"value": "diveStoreOwner",
-										"label": "Dive Store Owner"
+										"value": "confinedWaterTrainingLocation",
+										"label": "Confined Water Training Location"
 									}, {
-										"value": "Dive Boat Owner",
-										"label": "Dive Boat Owner"
+										"value": "openWaterTrainingLocation",
+										"label": " Open Water Training Location"
 									}, {
-										"value": "Hotel/Resort Owner",
-										"label": "Hotel/Resort Owner"
+										"label": "Dive Boat Owner",
+										"value": "diveBoatOwner"
 									}, {
-										"value": "Pool/Quarry/Lake Owner",
-										"label": "Pool/Quarry/Lake Owner"
+										"label": "Mortgagee / Loss Payee",
+										"value": "mortgageeLossPayee"
 									}, {
-										"value": "Government Entity",
-										"label": "Government Entity"
+										"label": "Landlord",
+										"value": "landlord"
+									}, {
+										"label": " Government Entity – Permit Requirement",
+										"value": "governmentEntityPermitRequirement"
+									}, {
+										"label": "Dive Store",
+										"value": "diveStore"
+									}, {
+										"label": "Training Agency",
+										"value": "trainingAgency"
 									}, {
 										"value": "other",
 										"label": "Other"
 									}]
 								},
 								"selectThreshold": 0.3,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please select the Business Relation with the Additional Insured"
@@ -4013,11 +3924,9 @@
 								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
-								"label": "Please specify ",
-								"spellcheck": true,
+								"label": "Provide description to be reviewed by underwriting",
 								"tableView": true,
 								"clearOnHide": false,
-								"calculateServer": false,
 								"validate": {
 									"required": true,
 									"customMessage": "Please specify the Business Relation"
@@ -4048,11 +3957,9 @@
 					}, {
 						"label": "Additional Information",
 						"autoExpand": false,
-						"spellcheck": true,
 						"tableView": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateServer": false,
 						"validate": {
 							"customMessage": "Please enter Additional Information about the Additional Insured"
 						},
@@ -4074,10 +3981,24 @@
 							"value": "no",
 							"shortcut": ""
 						}],
-						"calculateServer": false,
 						"key": "doYouHaveAWrittenContract",
 						"type": "radio",
 						"input": true
+					}, {
+						"label": "Content",
+						"attrs": [{
+							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
+							"attr": "style"
+						}],
+						"content": "Additional Insureds can only be added when required by written contract",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "panelColumnsContent5",
+						"customConditional": "show = (row['doYouHaveAWrittenContract']=='no')?true:false",
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Additional Insured Attachments",
 						"tableView": false,
@@ -4089,7 +4010,6 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
-						"calculateServer": false,
 						"validate": {
 							"multiple": true
 						},
@@ -4192,9 +4112,11 @@
 			"tableView": false,
 			"components": [{
 				"label": "amountPayable",
-				"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balance) > 0){\n    value = data.balance;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.finalAmount) || 0).toFixed(0);\n}",
-				"calculateServer": false,
+				"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balance) > 0){\n    value = (parseFloat(data.balance)||0).toFixed(0);\n  }else{\n    value = \"0\";\n  }\n}else{\n  value = (parseFloat(data.finalAmount) || 0).toFixed(0);\n}",
 				"key": "amountPayable",
+				"properties": {
+					"render": "columns"
+				},
 				"type": "hidden",
 				"input": true,
 				"tableView": true
@@ -4214,7 +4136,6 @@
 				"lockKey": true
 			}, {
 				"label": "transaction_reference_number",
-				"calculateServer": false,
 				"key": "transaction_reference_number",
 				"type": "hidden",
 				"input": true,
@@ -4222,7 +4143,6 @@
 			}, {
 				"label": "payment_description",
 				"calculateValue": "value = \"PADI  #:\"+ data.padi;",
-				"calculateServer": false,
 				"key": "payment_description",
 				"type": "hidden",
 				"input": true,
@@ -4242,8 +4162,7 @@
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = parseFloat(data.downPayment).toFixed(2);\n} else {\n  value = parseFloat(data.amountPayable).toFixed(2);\n}",
-						"calculateServer": false,
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
 						"key": "finalAmountPayable",
 						"type": "number",
 						"decimalLimit": 2,
@@ -4265,11 +4184,13 @@
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
-						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
 						"key": "premiumFinanceSelect",
+						"properties": {
+							"render": "columns"
+						},
 						"customConditional": "if(data[data['careerCoverage']+'_installments'] > 0){\n  show = true;\n} else {\n  show = false;\n}",
 						"type": "radio",
 						"input": true,
@@ -4305,8 +4226,8 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"calculateValue": "value = (parseFloat(data['careerCoverageDownPayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)+data['scubaFitDownPayment']+data['cylinderDownPayment']",
-							"calculateServer": false,
+							"clearOnHide": false,
+							"calculateValue": "value = (parseFloat(data['careerCoverageDownPayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)+(parseFloat(data['scubaFitDownPayment'])||0)+(parseFloat(data['cylinderDownPayment'])||0)+(parseFloat(data['equipmentDownPayment'])||0)",
 							"key": "downPayment",
 							"type": "number",
 							"input": true
@@ -4320,11 +4241,24 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"calculateValue": "value = data['careerCoverageInstallmentAmount'] + data['excessLiabilityInstallmentAmount']+data['tecRecInstallmentAmount']+data['scubaFitInstallmentAmount']+data['cylinderInstallmentAmount']",
-							"calculateServer": false,
+							"clearOnHide": false,
+							"calculateValue": "value = parseFloat(parseFloat(data['careerCoverageInstallmentAmount'])||0)+parseFloat(parseFloat(data['scubaFitInstallmentAmount'])||0)+parseFloat(parseFloat(data['cylinderInstallmentAmount'])||0) + parseFloat(parseFloat(data['excessLiabilityInstallmentAmount'])||0) + parseFloat(parseFloat(data['equipmentInstallmentAmount'])||0)",
 							"key": "installmentAmount",
 							"type": "number",
 							"input": true
+						}, {
+							"label": "HTML",
+							"attrs": [{
+								"attr": "",
+								"value": ""
+							}],
+							"content": "<h5>Your installment will be automatically charged on the effective date of each installment</h5>",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "html10",
+							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 2){\n  show = true;\n}",
+							"type": "htmlelement",
+							"input": false
 						}, {
 							"label": "HTML",
 							"attrs": [{
@@ -4348,7 +4282,7 @@
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html7",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 3){\n  show = true;\n}",
+							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 3){\n  show = true;\n} else {\n  show =false;\n}",
 							"type": "htmlelement",
 							"input": false
 						}, {
@@ -4361,7 +4295,7 @@
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html8",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 2){\n  show = true;\n}",
+							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 2){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false
 						}, {
@@ -4374,7 +4308,7 @@
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "html9",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 1){\n  show = true;\n}",
+							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 1){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false
 						}],
@@ -4402,7 +4336,6 @@
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
-						"calculateServer": false,
 						"validate": {
 							"required": true
 						},
@@ -4469,7 +4402,6 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "chequeNumber",
 							"type": "number",
 							"input": true,
@@ -4496,7 +4428,6 @@
 								"value": ""
 							}],
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "chequeConsentFile",
 							"type": "file",
 							"input": true,
@@ -4524,7 +4455,6 @@
 							"tableView": false,
 							"clearOnHide": false,
 							"calculateValue": "value = data.transaction_reference_number",
-							"calculateServer": false,
 							"key": "transactionReferenceNumber",
 							"customConditional": "if (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "textfield",
@@ -4533,6 +4463,8 @@
 							"type": "convergepay",
 							"key": "creditcardPayment",
 							"amount_field": "finalAmountPayable",
+							"refreshOn": "finalAmountPayable",
+							"redrawOn": "finalAmountPayable",
 							"description": "payment_description",
 							"label": "custom",
 							"input": true,
@@ -4576,10 +4508,8 @@
 						"hideOnChildrenHidden": false,
 						"components": [{
 							"label": "Order ID",
-							"spellcheck": true,
 							"tableView": true,
 							"clearOnHide": false,
-							"calculateServer": false,
 							"key": "orderId",
 							"type": "textfield",
 							"input": true,
@@ -4670,7 +4600,6 @@
 				"tableView": false,
 				"defaultValue": false,
 				"clearOnHide": false,
-				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please check if the PADI Member is Valid",
@@ -4713,7 +4642,6 @@
 					"value": "rejected",
 					"shortcut": ""
 				}],
-				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Please Approve/Reject the Application"
@@ -4725,7 +4653,6 @@
 			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
-			"disableAddingRemovingRows": false,
 			"reorder": false,
 			"addAnother": "Add More",
 			"addAnotherPosition": "bottom",
@@ -4736,7 +4663,6 @@
 			"defaultValue": [{
 				"reason": ""
 			}],
-			"calculateServer": false,
 			"validate": {
 				"minLength": 1
 			},
@@ -4751,9 +4677,7 @@
 			"components": [{
 				"label": "Text Field",
 				"hideLabel": true,
-				"spellcheck": true,
 				"tableView": true,
-				"calculateServer": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Rejection reason is required"
@@ -4775,7 +4699,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 374,
+	"_vid": 423,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4796,6 +4720,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-14T21:41:38.393Z",
+	"modified": "2020-06-16T21:59:57.517Z",
 	"machineName": "testdivehub:csrInitiates"
 }
