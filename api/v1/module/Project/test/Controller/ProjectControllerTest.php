@@ -559,6 +559,7 @@ class ProjectControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
     }
+    //TODO write tests for sub project scenarios - create, update, delete and get APIS
 
     public function testDeleteWithOrgId()
     {
