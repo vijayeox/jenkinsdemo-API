@@ -53,7 +53,7 @@ class EndorsementQuote extends PolicyDocument
              'aniTemplate' => 'DiveStore_ANI',
              'aniheader' => 'DS_Quote_ANI_header.html',
              'anifooter' => null,
-             'alheader' => 'DiveStore_AL_header.html',
+             'alheader' => 'DiveStore_AL_Proposal_header.html',
              'alfooter' => 'DiveStore_AL_footer.html',
              'alTemplate' => 'DiveStore_AdditionalLocations',
              'roster' => 'Roster_Certificate',

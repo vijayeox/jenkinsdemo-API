@@ -13,7 +13,7 @@
     <p></p>
     <div>
 
-    <b><p>Store/Location Description : {$business_name}</p></b>
+    <b><p class = "info">Store/Location Description : {$business_name}</p></b>
     <b><p>Store/Location Number: {$padi}</p></b>
     <p><b>Additional Named Insured:</b></p>
     {assign var=list value=$additionalNamedInsured|json_decode:true}
@@ -45,11 +45,7 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        {if $additionalLocationData.ALLossofBusIncomeCheckBox != "false"}
-                            <td>${$additionalLocationData.ALLossofBusIncome|number_format}</td>
-                        {else}
-                            <td>$0</td>
-                        {/if}
+                        <td>${$additionalLocationData.ALLossofBusIncome|number_format}</td>
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
