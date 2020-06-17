@@ -14,26 +14,36 @@ ox_address:
     city: 'Chennai'
     state: 'Tamil Nadu'
     country: 'India'
-    zip: 560079
+    zip: 560079    
+
+ox_organization_profile:
+  -
+        id: 101
+        uuid: '915d207e-ac75-11ea-bb37-0242ac130002'
+        name: 'Sample Organization'
+        address_id: 8
+  -
+        id: 102
+        uuid: '915d22cc-ac75-11ea-bb37-0242ac130002'
+        name: 'Test Organization'
+        address_id: 9  
 
 ox_organization:
   -
         id: 3
         uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
-        name: 'Sample Organization'
         status: 'Active'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
         contactid: 2
-        address_id: 8
+        org_profile_id: 101
 
   -
         id: 4
         uuid: 'b6499a34-c100-4e41-bece-5822adca3mnc'
-        name: 'Test Organization'
         status: 'Inactive'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
         contactid: 2
-        address_id: 9
+        org_profile_id: 102      
 
 ox_user:
   -
