@@ -37,6 +37,9 @@ class CsrRejection extends DispatchNotification {
         if(isset($data['state'])){
             $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
         }
+        if(isset($data['rejectionReason']) && is_array($data['rejectionReason'])){
+            $data['rejectionReason'] = json_encode($data['rejectionReason']);
+        }
         $response = $this->dispatch($data);
         return $response;
     }
