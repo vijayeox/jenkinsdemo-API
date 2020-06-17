@@ -443,15 +443,17 @@ table.proposal_table {
 }
 
 table.proposal_table th {
-    border: 0.5px solid black;
+    border: 1px solid black;
 }
 
 table.proposal_table th:first-child {
+	width: 70%;
     text-align: left;
     padding-left: 10px;
 }
 
 table.proposal_table th:last-child {
+	width: 30%;
     text-align: right;
     padding-right: 10px;
 }
@@ -524,4 +526,7 @@ table.proposal_table td:last-child {
 }
 .payment_option > div + div p {
 	margin: 0px;
+}
+.table_hd{
+	border: 1px solid black;
 }

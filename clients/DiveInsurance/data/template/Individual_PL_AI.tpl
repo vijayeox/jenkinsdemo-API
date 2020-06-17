@@ -50,7 +50,7 @@
 		<div class="spacing">&nbsp</div>
 		<hr class="hrtag"></hr>
 		<div class = "ai_margin">
-	    	<b><p class = "ai_title">Additional Insured (See Additional Insured - Blanket Form):</p></b>
+	    	<b><p class = "ai_title">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 	    		{foreach from=$list item=$additional}
 		    		<p class = "ai_list">
 		    			{$additional.name}
