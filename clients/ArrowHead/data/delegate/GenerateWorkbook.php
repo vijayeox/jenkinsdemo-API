@@ -12,30 +12,31 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     protected $type;
     protected $template;
     protected $carrierTemplateTypeMapping = array(
-        "AFDealer" => array(
+        "harco" => array(
             "type" => "excel",
             "template" => "Workbooktemplate.xlsx",
             "sheets" => array("Dealer")
         ),
-        "DGApplication" => array(
+        "dealerGuard" => array(
             "type" => "excel",
-            "template" => "DGApplication.xlsx"
+            "template" => "Workbooktemplate.xlsx",
+            "sheets" => array("Dealer")
         ),
-        "SchinnererAuto" => array(
+        "schinnererFranchisedAutoDealer" => array(
             "type" => "excel",
             "template" => "SchinnererAuto.xlsx"
         ),
-        "SchinnererGarage" => array(
+        "schinnererDolApplication" => array(
             "type" => "excel",
             "template" => "SchinnererGarage.xlsx"
         ),
-        "HarcoDealerPackApplication" => array(
-            "type" => "excel",
-            "template" => "HarcoDealerPackApplication.xlsx"
+        "epli" => array(
+            "type" => "pdf",
+            "template" => "GAIC - EPLI.pdf"
         ),
-        "HarcoEEList" => array(
-            "type" => "excel",
-            "template" => "HarcoEEList.xlsx"
+        "rpsCyber" => array(
+            "type" => "pdf",
+            "template" => "rpsCyber.pdf"
         )
     );
 
@@ -54,9 +55,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
         }
         $data = $temp;
-        $fieldTypeMapping = include(__DIR__ . "/fieldMapping.php");
-        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : (isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-        $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['fileId'], array('orgUuid' => $orgUuid));
+        $fieldTypeMappingExcel = include(__DIR__ . "/fieldMappingExcel.php");
+        $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
+        $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
+        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : (isset($data['orgId']) ?
+            $data['orgId'] :
+            AuthContext::get(AuthConstants::ORG_UUID));
+        $dest =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
         $this->logger->info("GenerateWorkbook Dest" . json_encode($dest));
         $generatedDocumentspath = array();
         $this->logger->info("Execute generate document ---------");
@@ -65,27 +70,59 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             if ($templateSelected) {
                 $selectedTemplate = $this->carrierTemplateTypeMapping[$key];
                 $docDest = $dest['absolutePath'] .  $selectedTemplate["template"];
-                foreach ($fieldTypeMapping as  $fieldkey => $field) {
-                    $varFunction = $field["method"];
-                    $data[$fieldkey] = $this->$varFunction($data[$fieldkey]);
+                if ($selectedTemplate["type"] == "excel") {
+                    foreach ($fieldTypeMappingExcel as  $fieldkey => $field) {
+                        $varFunction = $field["method"];
+                        $data[$fieldkey] = $this->$varFunction($data[$fieldkey]);
+                    }
+                    $this->documentBuilder->fillExcelTemplate(
+                        $selectedTemplate["template"],
+                        $data,
+                        $docDest,
+                        $selectedTemplate["sheets"] ? $selectedTemplate["sheets"] : "Sheet1"
+                    );
+                    array_push(
+                        $generatedDocumentspath,
+                        array(
+                            "file" => $dest['relativePath'] . $selectedTemplate["template"],
+                            "originalName" => $selectedTemplate["template"],
+                            "type" => "excel/xlsx"
+                        )
+                    );
+                } else {
+                    $pdfData = array();
+                    foreach ($fieldTypeMappingPDF["text"] as  $formField => $pdfField) {
+                        isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
+                    }
+                    foreach ($fieldTypeMappingPDF["radio"] as  $formField => $pdfField) {
+                        isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
+                    }
+                    foreach ($fieldTypeMappingPDF["date"] as  $formField => $pdfField) {
+                        isset($data[$formField]) ?
+                            $pdfData[$pdfField] = date(
+                                "m-d-Y",
+                                strtotime($data[$formField])
+                            )
+                            : null;
+                    }
+                    $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT));
+                    $this->documentBuilder->fillPDFForm(
+                        $selectedTemplate["template"],
+                        $pdfData,
+                        $docDest
+                    );
+                    array_push(
+                        $generatedDocumentspath,
+                        array(
+                            "file" => $dest['relativePath'] . $selectedTemplate["template"],
+                            "originalName" => $selectedTemplate["template"],
+                            "type" => "file/pdf"
+                        )
+                    );
                 }
-                $this->documentBuilder->fillExcelTemplate(
-                    $selectedTemplate["template"],
-                    $data,
-                    $docDest,
-                    $selectedTemplate["sheets"] ? $selectedTemplate["sheets"] : "Sheet1"
-                );
-                array_push(
-                    $generatedDocumentspath,
-                    array(
-                        "file" => $dest['relativePath'] . $selectedTemplate["template"],
-                        "originalName" => $selectedTemplate["template"],
-                        "type" => "excel/xlsx"
-                    )
-                );
             }
         }
-        $data = $tempData; 
+        $data = $tempData;
         $data["documents"] = json_encode($generatedDocumentspath);
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
@@ -94,7 +131,10 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     private function parseArray($data)
     {
         $temp = array();
-        foreach (json_decode($data, true) as $tempItem) {
+        if (!is_array($data)) {
+            $data = json_decode($data, true);
+        }
+        foreach ($data as $tempItem) {
             array_push($temp,  $tempItem ? "true" : "false");
         }
         return $temp;

@@ -268,7 +268,7 @@ class ProjectService extends AbstractService
         }
         $form = new Project();
         $data = $obj->toArray();
-        if (!isset($data['parent_id']) || !empty($data['parent_id'])){
+        if (isset($data['parent_id']) && !empty($data['parent_id'])){
             $select = "SELECT id from ox_project where parent_id = '" . $data['parent_id'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
             if(!$result){

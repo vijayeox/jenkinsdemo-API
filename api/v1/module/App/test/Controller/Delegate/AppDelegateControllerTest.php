@@ -15,9 +15,9 @@ class AppDelegateControllerTest extends ControllerTest
             'UUID' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4',
             'description' => 'FirstAppOfTheClient',
         );
-        $path = __DIR__ . '/../../../../data/delegate/' . $this->data['UUID'];
+        $path = __DIR__ . '/../../../../../data/delegate/' . $this->data['UUID'];
         if (!is_link($path)) {
-            symlink(__DIR__ . '/../../../../../../clients/DiveInsurance/data/delegate/', $path);
+            symlink(__DIR__ . '/../../../../../../../clients/DiveInsurance/data/delegate/', $path);
         }
         parent::setUp();
     }
@@ -25,7 +25,7 @@ class AppDelegateControllerTest extends ControllerTest
     public function tearDown(): void
     {
         parent::tearDown();
-        $path = __DIR__ . '/../../../../data/delegate/' . $this->data['UUID'];
+        $path = __DIR__ . '/../../../../../data/delegate/' . $this->data['UUID'];
         if (is_link($path)) {
             unlink($path);
         }
@@ -33,7 +33,7 @@ class AppDelegateControllerTest extends ControllerTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/App.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/App.yml");
         return $dataset;
     }
 

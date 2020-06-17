@@ -132,13 +132,13 @@
 								<th nowrap><p class = "ins_font"><b>Cylinder Coverage:</b></p></th>
 								<td><p class = "ins_font">
 								{if isset($initialCylinderCoverage)}
-									{if $initialCylinderCoverage != "cylinderInspectorOrInstructorDeclined"}
+									{if $initialCylinderCoverage != "cylinderInspectorOrCylinderInspectionInstructorDeclined"}
 											{$cylinderPriceVal}
 										{else}
 											Not Covered
 										{/if}
 								{else}
-									{if $cylinder != "cylinderInspectorOrInstructorDeclined"}
+									{if $cylinder != "cylinderInspectorOrCylinderInspectionInstructorDeclined"}
 											{$cylinderPriceVal}
 										{else}
 											Not Covered

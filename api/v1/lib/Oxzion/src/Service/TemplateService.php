@@ -104,7 +104,7 @@ class TemplateService extends AbstractService
         return $template;
     } 
 
-    private function getTemplatePath($template, $params = array())
+    public function getTemplatePath($template, $params = array())
     {
         $this->logger->info("Params - ".print_r($params, true));
         if (!isset($params['orgUuid']) && isset($params['orgId'])) {

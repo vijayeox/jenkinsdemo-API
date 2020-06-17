@@ -565,7 +565,7 @@ class FileIndexerControllerTest extends ControllerTest
     {
         //Both start_date and end_date is provided
         $this->initAuthToken($this->adminUser);
-        $data = ["app_id" => "5965c47d-7bc8-4ae6-ab6c-916c8d78e10f","start_date" => "2020-02-19 11:03:08"];
+        $data = ["app_id" => "ba33c8bb-29cc-4448-a5dc-7e6112225b01","start_date" => "2020-02-19 11:03:08"];
         $this->dispatch('/fileindexer/batch', 'POST', $data);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();

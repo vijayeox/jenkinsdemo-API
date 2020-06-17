@@ -40,7 +40,7 @@ class ElasticService
         $this->logger->info("core to be used - ".$this->core);
         $this->type = $config['elasticsearch']['type'];
         $clientbuilder = ClientBuilder::create(); 
-        if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test' && !$this->client){
+        if(!$this->client || !isset($_ENV['ENV']) || $_ENV['ENV'] != 'test'){
             $this->client = $clientbuilder->setHosts(array($clientsettings))->build();
         }
     }

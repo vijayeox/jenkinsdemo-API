@@ -60,10 +60,31 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true            
     -
         name: 'Dive Store'
         field:
@@ -71,10 +92,31 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true     
     -
         name: 'Dive Boat'
         field:
@@ -82,10 +124,31 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true    
     -
         name: 'Emergency First Response'
         field:
@@ -93,10 +156,31 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true    
     -
         name: 'Pocket Card Job'
         field:
@@ -115,10 +199,31 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true      
 pages:
     -
         page_name: UserHomePage.yml

@@ -16,9 +16,9 @@ class JobControllerTest extends ControllerTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Job.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Job.yml");
         if ($this->getName() == 'testGetJobsList' || $this->getName() == 'testGetJob' || $this->getName() == 'testGetJobDetails' || $this->getName() == 'testJobServiceScheduleWhichExists' || $this->getName() == 'testJobServiceCancelJob' || $this->getName() == 'testJobServiceCancelJobId' || $this->getName() == 'testJobServiceCancelJobWithoutJobID' || $this->getName() == 'testJobServiceCancelJobThatDoesNotExist') {
-            $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Job2.yml");
+            $dataset->addYamlFile(dirname(__FILE__) . "/../../Dataset/Job2.yml");
         }
         return $dataset;
     }
@@ -45,7 +45,7 @@ class JobControllerTest extends ControllerTest
         $data['jobName'] = '53012471-2863-4949-afb1-e69b0891c98b';
         $data['jobGroup'] = 'autoRenewalJob';
         $data['cron'] = '0 0/1 * * * ? *';
-        $data['orgId'] = '1835';
+        $data['orgId'] = '1';
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
@@ -67,7 +67,7 @@ class JobControllerTest extends ControllerTest
         $data['jobName'] = '8cfa0709-dbb8-41f1-b7a4-a87b5dab670f';
         $data['jobGroup'] = 'autoRenewalJob';
         $data['cron'] = '0 0/1 * * * ? *';
-        $data['orgId'] = '1835';
+        $data['orgId'] = '1';
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/scheduleJob', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -241,7 +241,10 @@ class JobControllerTest extends ControllerTest
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJobId', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertNotEmpty($job);
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(406);
+        $this->assertEquals($content['status'], "error");
+        $this->assertEquals($content['message'], "Job Not found");
+        $this->assertEquals($content['errorCode'], 406);
     }
 
 }

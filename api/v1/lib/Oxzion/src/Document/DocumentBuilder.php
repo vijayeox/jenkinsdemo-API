@@ -61,8 +61,10 @@ class DocumentBuilder {
        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend,$generateOptions);
     }
 
-    public function fillPDFForm($template,$data,$destination) {
-        return $this->documentGenerator->fillPDFForm($template,$data,$destination);
+    public function fillPDFForm($template, $data, $destination)
+    {
+        $templatePath =$this->templateService->getTemplatePath($template, $data);
+        return $this->documentGenerator->fillPDFForm($templatePath."/".$template,$data,$destination);
     }
 
       /**

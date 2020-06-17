@@ -12,6 +12,7 @@ class Dashboard extends Component {
     this.state = {
       htmlData: this.props.htmlData ? this.props.htmlData : null,
       dashboardFilter: this.props.dashboardFilter,
+      preparedDashboardFilter:null,
       widgetCounter: 0
     };
     this.content = this.props.content;
@@ -114,54 +115,61 @@ class Dashboard extends Component {
     return filter
   }
 
+extractFilterValues(){
+  let filterParams = []
+  this.props.dashboardFilter.map((filter, index) => {
+    let filterarray = []
+    if (filter["dataType"] == "date") {
+      var startDate = filter["startDate"]
+      var endDate = null
+      if (filter["startDate"] && filter["endDate"]) {
+        //convert startDate object to string
+        if (typeof startDate !== "string") {
+          startDate = filter["startDate"]
+          startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+        }
+        //date range received
+        if (filter["operator"] == "gte&&lte") {
+          endDate = filter["endDate"]
+          if (typeof endDate !== "string") {
+            endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
+          }
+          //prepare startDate array
+          filterarray.push(filter["field"])
+          filterarray.push(">=")
+          filterarray.push(startDate)
+          filterParams.push(filterarray)
+          
+
+          //prepare endDate array
+          filterarray = []
+          filterarray.push(filter["field"])
+          filterarray.push("<=")
+          filterarray.push(endDate)
+          filterParams.push(filterarray)
+        }
+      } else {
+        //single date passed
+        filterarray.push(filter["field"])
+        filterarray.push(filter["operator"])
+        filterarray.push(startDate)
+        filterParams.push(filterarray)
+      }
+    } else {
+      filterarray.push(filter["field"])
+      filterarray.push(filter["operator"])
+      filterarray.push(filter["value"]["selected"])
+      filterParams.push(filterarray)
+    }
+  })
+  return filterParams
+}
+
   componentDidUpdate(prevProps) {
     //update component when filter is changed
     if (prevProps.dashboardFilter != this.props.dashboardFilter) {
-      let filterParams = []
-      this.props.dashboardFilter.map((filter, index) => {
-        let filterarray = []
-        if (filter["dataType"] == "date") {
-          var startDate = filter["startDate"]
-          var endDate = null
-          if (filter["startDate"] && filter["endDate"]) {
-            //convert startDate object to string
-            if (typeof startDate !== "string") {
-              startDate = filter["startDate"]
-              startDate = startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
-            }
-            //date range received
-            if (filter["operator"] == "gte&&lte") {
-              endDate = filter["endDate"]
-              if (typeof endDate !== "string") {
-                endDate = endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
-              }
-              //prepare startDate array
-              filterarray.push(filter["field"])
-              filterarray.push(">=")
-              filterarray.push(startDate)
-              filterParams.push(filterarray)
-
-              //prepare endDate array
-              filterarray = []
-              filterarray.push(filter["field"])
-              filterarray.push("<=")
-              filterarray.push(endDate)
-              filterParams.push(filterarray)
-            }
-          } else {
-            //single date passed
-            filterarray.push(filter["field"])
-            filterarray.push(filter["operator"])
-            filterarray.push(startDate)
-            filterParams.push(filterarray)
-          }
-        } else {
-          filterarray.push(filter["field"])
-          filterarray.push(filter["operator"])
-          filterarray.push(filter["value"]["selected"])
-          filterParams.push(filterarray)
-        }
-      })
+      let filterParams = this.extractFilterValues()
+    
       let preapredFilter
       if (filterParams && filterParams.length > 1) {
         preapredFilter = filterParams[0]
@@ -171,15 +179,22 @@ class Dashboard extends Component {
         }
       }
 
-      if (filterParams && filterParams.length != 0) {
-        if (filterParams.length > 1)
-          this.updateGraph(preapredFilter)
-        else
-          this.updateGraph(filterParams)
-      }
-      else {
-        this.updateGraph()
-      }
+      if(filterParams && filterParams.length != 0)
+        {
+          if(filterParams.length>1){
+            this.setState({preparedDashboardFilter:preapredFilter},()=>{
+              this.updateGraph(preapredFilter)
+            })
+          } else{
+          this.setState({preparedDashboardFilter:filterParams},()=>{
+            this.updateGraph(filterParams)
+          })
+        }
+        }     
+       else{
+         this.updateGraph()
+       }
+
     }
   }
 
@@ -212,31 +227,31 @@ class Dashboard extends Component {
         var that = this;
         var widgetUUId = attributes[WidgetDrillDownHelper.OXZION_WIDGET_ID_ATTRIBUTE].value;
         this.getWidgetByUuid(widgetUUId, filterParams)
-          .then(response => {
-            if (response.status == "success") {
-              response.data.widget && console.timeEnd("analytics/widget/" + response.data.widget.uuid + "?data=true")
-              that.setState({ widgetCounter: that.state.widgetCounter + 1 });
-              if ('error' === response.status) {
-                console.error('Could not load widget.');
-                console.error(response);
-                errorFound = true;
-              }
-              else {
-                //dispose if widget exists
-                let widgetObject = WidgetRenderer.render(widget, response.data.widget);
-                if (widgetObject) {
-                  this.renderedWidgets[widgetUUId] = widgetObject;
-                }
-              }
-              if (that.state.widgetCounter >= widgets.length) {
-                this.loader.destroy();
-              }
-            } else {
-              that.setState({ widgetCounter: that.state.widgetCounter + 1 });
-              if (this.state.widgetCounter >= widgets.length) {
-                that.loader.destroy();
-              }
+        .then(response=>{
+          if(response.status =="success"){
+            response.data.widget && console.timeEnd("analytics/widget/"+response.data.widget.uuid+"?data=true")
+            that.setState({ widgetCounter: that.state.widgetCounter+1});
+            if ('error' === response.status) {
+              console.error('Could not load widget.');
+              console.error(response);
+              errorFound = true;
             }
+            else {
+            //dispose if widget exists
+            let applyingDashboardFilters=this.state.preparedDashboardFilter?true:false;
+            let widgetObject = WidgetRenderer.render(widget, response.data.widget,null,applyingDashboardFilters);
+            if (widgetObject) {
+              this.renderedWidgets[widgetUUId] = widgetObject;
+            }
+          }
+          if(that.state.widgetCounter>=widgets.length){
+            this.loader.destroy();
+          }
+          } else {
+            that.setState({ widgetCounter: that.state.widgetCounter+1});
+            if(this.state.widgetCounter>=widgets.length){
+              that.loader.destroy();
+            }}
           });
       }
     }
@@ -295,7 +310,15 @@ class Dashboard extends Component {
 
     let url = `analytics/widget/${widgetId}?data=true`;
     let filter = eventData[WidgetDrillDownHelper.MSG_PROP_FILTER];
-    if (filter && ('' !== filter)) {
+
+    //apply dashboard filter if exists
+    if(this.state.preparedDashboardFilter){
+      //combining dashboardfilter with widgetfilter
+        let preparedFilter=filter?this.preparefilter(this.state.preparedDashboardFilter,JSON.parse(filter)):this.state.preparedDashboardFilter
+      filter=preparedFilter
+      url = url + '&filter=' + JSON.stringify(filter);
+    }
+    else if(filter && ('' !== filter)) {
       url = url + '&filter=' + encodeURIComponent(filter);
     }
     //starting spinner 

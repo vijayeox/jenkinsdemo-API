@@ -16,7 +16,7 @@ class FileControllerTest extends ControllerTest
     }
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
         return $dataset;
     }
 
@@ -147,13 +147,13 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $orgUuid = $this->testOrgUuid;
 
-        $path1 = __DIR__ . '/../../../../data/template/' . $orgUuid . "/";
+        $path1 = __DIR__ . '/../../../../../data/template/' . $orgUuid . "/";
         if (!is_dir($path1)) {
             mkdir($path1, 0777, true);
         }
         $path = $path1 . $fileId;
         if (!is_link($path)) {
-            symlink(__DIR__ . '/../../../../../../clients/DiveInsurance/test/Files', $path);
+            symlink(__DIR__ . '/../../../../../../../clients/DiveInsurance/test/Files', $path);
         }
         $crypto = new Crypto();
         $documentName = $crypto->encryption($path . "/dummy.pdf");

@@ -28,11 +28,7 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        {if $additionalLossofBusinessIncomePL != "false"}
-                            <td>${((float)$lossOfBusIncome)|number_format}</td>
-                        {else}
-                            <td>$0</td>
-                        {/if}
+                        <td>${((float)$lossOfBusIncome)|number_format}</td>
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
