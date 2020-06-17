@@ -67,6 +67,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                         'header' => 'DiveStoreHeader.html',
                         'footer' => 'DiveStoreFooter.html',
+                        'psTemplate' => 'DiveStore_DCPS_template',
+                        'psHeader' => 'DiveStore_DCPS_header.html',
+                        'psFooter' => 'DiveStore_DCPS_footer.html',
                         'card' => 'PocketCard',
                         'slWording' => 'SL_Wording.pdf',
                         'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
@@ -421,6 +424,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
                     $this->logger->info("DOCUMENT lossPayees");
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+                }
+
+                if($this->type == 'quote'){
+                    $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','header','footer');
+                }
+
+                if($this->type == 'policy'){
+                    $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
                 }
 
                 if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){

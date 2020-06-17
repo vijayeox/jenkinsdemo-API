@@ -4928,43 +4928,6 @@
 									"inputType": "number",
 									"lockKey": true
 								}, {
-									"label": "Upload Receipts",
-									"tableView": true,
-									"storage": "url",
-									"webcam": true,
-									"fileTypes": [{
-										"label": "",
-										"value": ""
-									}],
-									"multiple": true,
-									"clearOnHide": false,
-									"validate": {
-										"multiple": true
-									},
-									"key": "receiptsAL",
-									"type": "file",
-									"input": true,
-									"lockKey": true,
-									"url": "/file/attachment"
-								}, {
-									"type": "documentviewer",
-									"key": "receiptsAL1",
-									"calculateValue": "value = row.receiptsAL",
-									"dtype": "documentviewer",
-									"datype": "documentviewer",
-									"dattype": "documentviewer",
-									"customConditional": "if (data.privileges){\n  if(row.receiptsAL !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
-									"datatype": "documentviewer",
-									"refreshOn": "row.receiptsAl",
-									"data_type": "documentviewer",
-									"label": "Receipts Attachments",
-									"hideLabel": true,
-									"inputType": "documentviewer",
-									"input": 1,
-									"tableView": false,
-									"protected": true,
-									"persistent": false
-								}, {
 									"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelYesNo",
 									"label": "Yes/No",
 									"input": false,
@@ -10704,12 +10667,11 @@
 				}, {
 					"components": [{
 						"label": "Date Time",
-						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"hideLabel": true,
 						"tableView": true,
 						"datePicker": {
-							"minDate": "moment()",
+							"minDate": "moment().format('YYYY MM DD')",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"datepickerMode": "day"
@@ -10719,9 +10681,6 @@
 							"showMeridian": false
 						},
 						"clearOnHide": false,
-						"validate": {
-							"custom": "if(data['quote_due_date'] && data['quote_due_date'] != ''){\n  valid = (moment(data['quote_due_date']) > moment()) ? true : \"Date must not be less than today's date \"+moment().format('MM-DD-YYYY');\n}"
-						},
 						"key": "quote_due_date",
 						"type": "datetime",
 						"input": true,
@@ -10733,7 +10692,7 @@
 							"displayInTimezone": "viewer",
 							"language": "en",
 							"useLocaleSettings": false,
-							"allowInput": false,
+							"allowInput": true,
 							"mode": "single",
 							"enableTime": false,
 							"noCalendar": false,
@@ -10741,7 +10700,7 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": "moment()",
+							"minDate": "moment().format('YYYY MM DD')",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"maxDate": null
@@ -11041,7 +11000,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 146,
+	"_vid": 148,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -11058,6 +11017,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-16T12:12:34.699Z",
+	"modified": "2020-06-17T13:15:16.545Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

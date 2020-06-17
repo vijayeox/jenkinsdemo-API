@@ -4,6 +4,30 @@
 	"tags": [],
 	"owner": "5ddfaa682859774314661851",
 	"components": [{
+		"label": "ApproverName",
+		"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].name;\n  }\n}",
+		"key": "approverName",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"hideOnChildrenHidden": false
+	}, {
+		"label": "ApproverEmailId",
+		"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].email;\n  }\n}",
+		"key": "approverEmailId",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"hideOnChildrenHidden": false
+	}, {
+		"label": "ApproverDesignation",
+		"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].designation;\n  }\n}",
+		"key": "approverDesignation",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"hideOnChildrenHidden": false
+	}, {
 		"label": "Reason for Cancellation",
 		"widget": "choicesjs",
 		"placeholder": "--Select one--",
@@ -18,7 +42,6 @@
 		},
 		"selectThreshold": 0.3,
 		"calculateValue": "if (data.reasonForUserCancellation) {\n    value = data.reasonForUserCancellation;\n   \n}",
-		"calculateServer": false,
 		"allowCalculateOverride": true,
 		"validate": {
 			"required": true,
@@ -45,7 +68,6 @@
 		"label": "Others",
 		"autoExpand": false,
 		"customClass": "others",
-		"spellcheck": true,
 		"tableView": true,
 		"inputFormat": "plain",
 		"calculateValue": "if(data.othersUser){\n  value = data.othersUser\n}",
@@ -68,7 +90,6 @@
 		"requireDecimal": false,
 		"inputFormat": "plain",
 		"clearOnHide": false,
-		"calculateServer": false,
 		"validate": {
 			"required": true,
 			"customMessage": "Please enter the Amount to be paid to Reinstate Policy"
@@ -96,7 +117,6 @@
 			"label": "Not Approved",
 			"shortcut": ""
 		}],
-		"calculateServer": false,
 		"key": "cancellationStatus",
 		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "radio",
@@ -106,7 +126,6 @@
 		"lockKey": true
 	}, {
 		"label": "Reinstatement Criteria",
-		"disableAddingRemovingRows": false,
 		"reorder": false,
 		"addAnother": "Add More",
 		"addAnotherPosition": "bottom",
@@ -118,7 +137,6 @@
 			"reason": "",
 			"criteria": ""
 		}],
-		"calculateServer": false,
 		"validate": {
 			"minLength": 1
 		},
@@ -133,9 +151,7 @@
 		"components": [{
 			"label": "Text Field",
 			"hideLabel": true,
-			"spellcheck": true,
 			"tableView": true,
-			"calculateServer": false,
 			"validate": {
 				"required": true,
 				"customMessage": "Reinstatement Criteria is required."
@@ -147,10 +163,8 @@
 	}, {
 		"label": "Reason for Cancel Policy Not Approved",
 		"autoExpand": false,
-		"spellcheck": true,
 		"tableView": true,
 		"inputFormat": "plain",
-		"calculateServer": false,
 		"validate": {
 			"required": true,
 			"customMessage": "Please Enter the reason for not Approving the Cancellation of the Policy"
@@ -217,7 +231,7 @@
 		"type": "button"
 	}],
 	"revisions": "original",
-	"_vid": 111,
+	"_vid": 112,
 	"title": "Cancel Policy Generic",
 	"display": "form",
 	"access": [{
@@ -231,7 +245,7 @@
 	"path": "cancelpolicygeneric",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-08T05:30:33.387Z",
-	"modified": "2020-06-15T06:52:32.648Z",
+	"modified": "2020-06-17T10:26:59.359Z",
 	"machineName": "testdivehub:cancelPolicyGeneric",
 	"controller": ""
 }
