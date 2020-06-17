@@ -2204,7 +2204,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "excessLiabilityDownPayment",
-							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayment']){\n  value = data[data['excessLiability']+'_downpayment'];\n}",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayment']){\n  value = data[data['excessLiability']+'_downpayment'];\n} else {\n  value = 0;\n}",
 							"key": "excessLiabilityDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -2487,7 +2487,7 @@
 				"hidden": true,
 				"tableView": true,
 				"key": "techrecPanel",
-				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n  if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}\n}\nelse{\n  show = false;\n}\nshow = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\nshow = false;",
+				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n  if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInspectionInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}\n}\nelse{\n  show = false;\n}\nshow = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\nshow = false;",
 				"type": "panel",
 				"label": "User Attachments",
 				"input": false,
@@ -2702,7 +2702,7 @@
 				"key": "cylinderInstructorAttachments",
 				"customConditional": "if (data.privileges){\n  show = (data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
-				"label": "Cylinder Instructor Attachments",
+				"label": "Cylinder Inspection Instructor Attachments",
 				"input": false,
 				"components": [{
 					"label": "HTML",
@@ -4024,7 +4024,7 @@
 						"dtype": "documentviewer",
 						"datype": "documentviewer",
 						"dattype": "documentviewer",
-						"customConditional": "if(row.additionalInsuredAttachments && row.additionalInsuredAttachments.length > 0){show = true;} else {show = false;}",
+						"customConditional": "if(row.additionalInsuredAttachments && row.additionalInsuredAttachments.length > 0 && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){show = true;} else {show = false;}",
 						"datatype": "documentviewer",
 						"data_type": "documentviewer",
 						"label": "Additional Insured Attachments",
@@ -4654,11 +4654,11 @@
 		}, {
 			"label": "Rejection Reason",
 			"reorder": false,
-			"addAnother": "Add More",
 			"addAnotherPosition": "bottom",
 			"defaultOpen": false,
 			"layoutFixed": false,
 			"enableRowGroups": false,
+			"hideLabel": true,
 			"tableView": false,
 			"defaultValue": [{
 				"reason": ""
@@ -4675,16 +4675,19 @@
 			"type": "datagrid",
 			"input": true,
 			"components": [{
-				"label": "Text Field",
-				"hideLabel": true,
-				"tableView": true,
+				"label": "Reason for Rejection",
+				"spellcheck": false,
+				"tableView": false,
+				"case": "mixed",
+				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Rejection reason is required"
 				},
 				"key": "reason",
 				"type": "textfield",
-				"input": true
+				"input": true,
+				"hideOnChildrenHidden": false
 			}]
 		}],
 		"breadcrumbClickable": false,
@@ -4699,7 +4702,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 423,
+	"_vid": 428,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4720,6 +4723,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-16T21:59:57.517Z",
+	"modified": "2020-06-17T22:32:46.828Z",
 	"machineName": "testdivehub:csrInitiates"
 }

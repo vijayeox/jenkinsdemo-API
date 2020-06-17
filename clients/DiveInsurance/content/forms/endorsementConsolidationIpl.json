@@ -2208,7 +2208,7 @@
 				}],
 				"path": "panel3"
 			}, {
-				"title": "Cylinder Instructor Attachments",
+				"title": "Cylinder Inspection Instructor Attachments",
 				"theme": "primary",
 				"breadcrumbClickable": true,
 				"buttonSettings": {
@@ -2229,7 +2229,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<b>Attach proof of your Cylinder Instructor Certification</b>",
+					"content": "<b>Attach proof of your Cylinder Inspection Instructor Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html1",
@@ -2237,7 +2237,7 @@
 					"input": false,
 					"hideLabel": true
 				}, {
-					"label": "Cylinder Instructor Attachments",
+					"label": "Cylinder Inspection Instructor Attachments",
 					"hideLabel": true,
 					"tableView": true,
 					"storage": "url",
@@ -2415,7 +2415,7 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "The insurance costs include the premium, upto $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax, email or upload a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax, email or upload a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
+					"content": "The insurance costs include the premium, upto $26 PADI Administration fee, plus applicable taxes and fees.\n<ol>\n<li>Premium fully earned means there is no refund if you cancel your insurance. This does not apply to the PADI Dive Store/Resort Instructional Policy.</li>\n<li>Divemaster/Assistant Instructor Assisting Only option provides coverage to Divemasters and Assistant Instructors ONLY while assisting insured instructors with classes.</li>\n<li>Available for non U.S. citizens teaching ONLY non U.S. citizens; not available in Australia, Canada, Japan, the Caribbean or U.S., it's territories and possessions.</li>\n<li>No coverage will be afforded for any Open Water Scuba Instructor who teaches any form of scuba diving or snorkeling during the policy period.</li>\n<li>Please fax, email or upload a copy of your Technical Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>\n<li>Please fax, email or upload a copy of your Scuba Fit, Cylinder Inspector, or Cylinder Inspection Instructor Certification along with a copy of your confirmation notice to (714) 739-3188 or email instructors@diveinsurance.com.</li>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "page3Panel2Footnotes",
@@ -3332,7 +3332,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 246,
+	"_vid": 251,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3353,6 +3353,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-16T21:51:34.091Z",
+	"modified": "2020-06-17T22:31:33.734Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

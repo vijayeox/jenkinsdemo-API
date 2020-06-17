@@ -1251,10 +1251,14 @@
 				"tableView": true,
 				"dataSrc": "custom",
 				"data": {
-					"values": [{}],
-					"custom": "var currentDate = moment()\ncurrentDate.date(1)\nvar presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nendDate.year(endYear)\nendDate.date(30)\nvar month = 3*(currentDate.quarter() - 1)\ncurrentDate.month(month)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nvar quarterDiff = monthDifference/3\nfor(i = 0;i < quarterDiff;i++){\n\tvar monthName = moment().month(i).format('MMMM');\n  if((quarterDiff -i) > 4){\n   \t\t\tvalues[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n      if(currentDate.month() == 6){\n               var val = currentDate.format(\"YYYY-MM-DD\")\n\t       currentDate.date(30)\n\t       currentDate.month(5)\n               values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : val}\ncurrentDate.date(1)\ncurrentDate.month(6)\n       }\n    }\n    currentDate.add(3,'months')\n}"
+					"values": [{
+						"label": "",
+						"value": ""
+					}],
+					"custom": "var currentDate = moment()\ncurrentDate.date(1)\nvar presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nendDate.year(endYear)\nendDate.date(30)\nvar month = 3*(currentDate.quarter() - 1)\ncurrentDate.month(month)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nvar quarterDiff = monthDifference/3\nfor(i = 0;i < quarterDiff;i++){\n\tvar monthName = moment().month(i).format('MMMM');\n  if((quarterDiff -i) > 4){\n   \t\t\tvalues[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n      if(currentDate.month() == 6){\n               var val = currentDate.format(\"YYYY-MM-DD\")\n\t       currentDate.date(30)\n\t       currentDate.month(5)\n\t       val = moment(val).date(30)\n\t       val = moment(val).month(5)\n               values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : val}\ncurrentDate.date(1)\ncurrentDate.month(6)\n       }\n    }\n    currentDate.add(3,'months')\n}"
 				},
 				"selectThreshold": 0.3,
+				"calculateServer": false,
 				"validate": {
 					"required": true
 				},
@@ -1264,6 +1268,9 @@
 					"post_delegate_refresh": "liabilityCoverageName"
 				},
 				"type": "select",
+				"indexeddb": {
+					"filter": {}
+				},
 				"input": true,
 				"lockKey": true
 			}, {
@@ -1526,7 +1533,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "excessLiabilityInstallmentAmount",
-							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n}",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_installment_amount']){\n  value = data[data['excessLiability']+'_installment_amount'];\n} else {\n  value  = 0;\n}",
 							"calculateServer": false,
 							"key": "excessLiabilityInstallmentAmount",
 							"type": "hidden",
@@ -1535,7 +1542,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "excessLiabilityDownPayment",
-							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayment']){\n  value = data[data['excessLiability']+'_downpayment'];\n}",
+							"calculateValue": "if(data['excessLiability'] &&data[data['excessLiability']+'_downpayment']){\n  value = data[data['excessLiability']+'_downpayment'];\n} else {\n  value = 0;\n}",
 							"calculateServer": false,
 							"key": "excessLiabilityDownPayment",
 							"type": "hidden",
@@ -1783,7 +1790,7 @@
 			"collapsible": false,
 			"tableView": true,
 			"key": "techrecPanel",
-			"customConditional": "if (data.privileges){\n  if(data.attachments.length > 0){\n    show = true;\n  }\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"customConditional": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ){\n  if(data.attachments.length > 0){\n    if(data.initiatedByCsr != true && data.initiatedByCsr != \"true\" ){\n      show = true;\n    } else {\n      show = false;\n    }\n  } else {\n    show = false;\n  }\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
 			"label": "  User Attachments",
 			"input": false,
@@ -2981,7 +2988,7 @@
 						"dtype": "documentviewer",
 						"datype": "documentviewer",
 						"dattype": "documentviewer",
-						"customConditional": "if(row.additionalInsuredAttachments && row.additionalInsuredAttachments.length > 0){show = true;} else {show = false;}",
+						"customConditional": "if(row.additionalInsuredAttachments && row.additionalInsuredAttachments.length > 0 && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){show = true;} else {show = false;}",
 						"datatype": "documentviewer",
 						"data_type": "documentviewer",
 						"label": "Additional Insured Attachments",
@@ -3626,18 +3633,16 @@
 			"path": "page77Panel"
 		}, {
 			"label": "Rejection Reason",
-			"disableAddingRemovingRows": false,
 			"reorder": false,
-			"addAnother": "Add More",
 			"addAnotherPosition": "bottom",
 			"defaultOpen": false,
 			"layoutFixed": false,
 			"enableRowGroups": false,
+			"hideLabel": true,
 			"tableView": false,
 			"defaultValue": [{
 				"reason": ""
 			}],
-			"calculateServer": false,
 			"validate": {
 				"minLength": 1
 			},
@@ -3650,19 +3655,23 @@
 			"type": "datagrid",
 			"input": true,
 			"components": [{
-				"label": "Text Field",
-				"hideLabel": true,
-				"spellcheck": true,
-				"tableView": true,
-				"calculateServer": false,
+				"label": "Reason for Rejection",
+				"spellcheck": false,
+				"tableView": false,
+				"case": "mixed",
+				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Rejection reason is required"
 				},
 				"key": "reason",
 				"type": "textfield",
-				"input": true
-			}]
+				"input": true,
+				"hideOnChildrenHidden": false,
+				"calculateServer": false
+			}],
+			"calculateServer": false,
+			"disableAddingRemovingRows": false
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -3675,7 +3684,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 549,
+	"_vid": 562,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3759,7 +3768,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-16T22:00:22.974Z",
+	"modified": "2020-06-17T21:59:36.098Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
