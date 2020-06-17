@@ -113,8 +113,8 @@
         "label": "Attachments",
         "hideLabel": true,
         "tableView": true,
-        "storage": "base64",
-        "webcam": false,
+        "storage": "url",
+        "webcam": true,
         "fileTypes": [{
           "label": "",
           "value": ""
@@ -131,7 +131,8 @@
         "key": "csrApprovalAttachments",
         "customConditional": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
         "type": "file",
-        "input": true
+        "input": true,
+        "url": "/file/attachment"
       }]
     }, {
       "title": "Payment Information",
@@ -168,7 +169,7 @@
         "tableView": false
       }, {
         "label": "amountPayable",
-        "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  if(month == 6 ||month == 7){\n    value = (parseFloat(data.totalAmount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.totalAmount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.totalAmount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.totalAmount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.totalAmount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.totalAmount).toFixed(2);\n}",
+        "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  var day = moment(data.start_date).format('DD');\n  if((day == 30 && month == 6) || month == 7){\n    value = (parseFloat(data.totalAmount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.totalAmount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.totalAmount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.totalAmount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.totalAmount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.totalAmount).toFixed(2);\ndata.paymentInstallments = 0;\n}",
         "calculateServer": false,
         "key": "amountPayable",
         "type": "hidden",
@@ -179,6 +180,13 @@
         "calculateValue": "value = data.totalAmount",
         "calculateServer": false,
         "key": "amount",
+        "type": "hidden",
+        "input": true,
+        "tableView": false
+      }, {
+        "label": "transaction_reference_number",
+        "calculateServer": false,
+        "key": "transactionReferenceNumber",
         "type": "hidden",
         "input": true,
         "tableView": false
@@ -317,8 +325,8 @@
             }, {
               "label": "Upload Consent Form",
               "tableView": false,
-              "storage": "base64",
-              "webcam": false,
+              "storage": "url",
+              "webcam": true,
               "fileTypes": [{
                 "label": "",
                 "value": ""
@@ -327,6 +335,7 @@
               "calculateServer": false,
               "key": "chequeConsentForm",
               "type": "file",
+              "url": "/file/attachment",
               "input": true
             }],
             "hideOnChildrenHidden": false
@@ -345,6 +354,18 @@
             "label": "Card Details",
             "input": false,
             "components": [{
+              "label": "Transaction Reference Number",
+              "spellcheck": false,
+              "disabled": true,
+              "tableView": false,
+              "clearOnHide": false,
+              "calculateValue": "value = data.transaction_reference_number",
+              "calculateServer": false,
+              "key": "transactionId",
+              "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+              "type": "textfield",
+              "input": true
+            }, {
               "type": "convergepay",
               "key": "creditcardPayment",
               "amount_field": "amountPayable",
@@ -539,7 +560,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 7,
+  "_vid": 12,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -549,14 +570,13 @@
   "submissionAccess": [],
   "settings": {},
   "properties": {
-    "commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-    "submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"}, {\"command\" : \"submitWorkflow\"}]",
-    "post_delegate_referesh": "csrApprovalAttachments"
+    "commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
+    "submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
   },
   "name": "diveStoreUserApprovalForm",
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-05-04T07:43:09.010Z",
+  "modified": "2020-06-03T16:02:14.266Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

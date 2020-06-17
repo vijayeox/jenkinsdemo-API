@@ -460,6 +460,24 @@ class ProjectService extends AbstractService
         return $newOrgId;
     }
 
+    public function getSubprojects($params)
+    {
+        try {
+            if (isset($params['projectUuid'])) {
+                $id = $this->getIdFromUuid('ox_project',$params['projectUuid']);
+                $queryString = "select oxp.name,oxp.description,oxp.uuid,oxp.date_created,ou.uuid as manager_id,sub.uuid as parent_id from ox_project as oxp INNER JOIN ox_user as ou on oxp.manager_id = ou.id INNER JOIN ox_project as sub on sub.id = oxp.parent_id where oxp.parent_id =".$id;
+                $resultSet = $this->executeQuerywithParams($queryString);
+                return $resultSet->toArray();
+            }
+            else {
+                throw new Exception("UUID is not specified");
+            }
+        }
+        catch(Exception $e){
+            throw $e;
+        }
+    }
+
 /**
  * Delete user from project API
  * ! Deprecated method, not in use at the moment

@@ -26,7 +26,7 @@ class OrganizationService extends AbstractService
     private $privilegeService;
     static $userField = array('name' => 'ox_user.name', 'id' => 'ox_user.id', 'city' => 'ox_address.city', 'country' => 'ox_address.country', 'address' => 'ox_address.address1', 'address2' => 'ox_address.address2', 'state' => 'ox_address.state');
     static $groupField = array('name' => 'oxg.name', 'description' => 'oxg.description');
-    static $projectField = array('name' => 'oxp.name', 'description' => 'oxp.description');
+    static $projectField = array('name' => 'oxp.name', 'description' => 'oxp.description', 'date_created' => 'oxp.date_created');
     static $announcementField = array('name' => 'oxa.name', 'description' => 'oxa.description');
     static $roleField = array('name' => 'oxr.name', 'description' => 'oxr.description');
     static $orgField = array('id' => 'og.id', 'uuid' => 'og.uuid', 'name' => 'og.name', 'preferences' => 'og.preferences', 'address1' => 'oa.address1', 'address2' => 'oa.address2', 'city' => 'oa.city', 'state' => 'oa.state', 'country' => 'oa.country', 'zip' => 'oa.zip', 'logo' => 'og.logo');

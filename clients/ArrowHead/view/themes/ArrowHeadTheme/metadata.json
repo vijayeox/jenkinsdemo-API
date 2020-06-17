@@ -1,0 +1,16 @@
+{
+  "type": "theme",
+  "name": "ArrowHeadTheme",
+  "internal": true,
+  "category": null,
+  "title": {
+    "en_EN": "ArrowHeadTheme"
+  },
+  "description": {
+    "en_EN": "ArrowHeadTheme"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}

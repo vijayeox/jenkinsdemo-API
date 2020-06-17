@@ -54,7 +54,7 @@ class Ratecard extends AbstractAppDelegate
         if(isset($data["quote_due_date"]) || isset($data['quoteRequirement'])){
             $data['quote_due_date'] = '';
             $data['quoteInfo'] = "";
-            $data['quoteInfoOther'] = "";
+            $data['quoteInfoOther'] = array();
             $data['marineX'] = isset($data['marineX']) ? "" : "";
             $data['captainX'] = isset($data['captainX']) ? "" : "";
         }

@@ -12,9 +12,3 @@ UPDATE premium_rate_card SET premium = 104,total = 104 WHERE `coverage` = 'Equip
 UPDATE premium_rate_card SET premium = 78,total = 78 WHERE `coverage` = 'Equipment Liability Coverage' and product = 'Individual Professional Liability' and is_upgrade = 0 and start_date = '2020-04-01' and end_date = '2020-04-30';
 UPDATE premium_rate_card SET premium = 52,total = 52 WHERE `coverage` = 'Equipment Liability Coverage' and product = 'Individual Professional Liability' and is_upgrade = 0 and start_date = '2020-05-01' and end_date = '2020-05-31';
 UPDATE premium_rate_card SET premium = 26,total = 26 WHERE `coverage` = 'Equipment Liability Coverage' and product = 'Individual Professional Liability' and is_upgrade = 0 and start_date = '2020-06-01' and end_date = '2020-06-30';
-
-UPDATE premium_rate_card SET start_date = DATE_SUB(start_date,INTERVAL 1 Year) WHERE `coverage` = '9M Excess' and product = 'Individual Professional Liability' and is_upgrade = 1 and premium = 3068 and `year` = 2020;
-UPDATE premium_rate_card SET end_date = DATE_SUB(end_date,INTERVAL 1 Year) WHERE `coverage` = '9M Excess' and product = 'Individual Professional Liability' and is_upgrade = 1 and premium = 255 and `year` = 2020;
-
-UPDATE premium_rate_card SET premium = 312,total = 312 WHERE `coverage` = 'Equipment Liability Coverage' and product = 'Individual Professional Liability' and is_upgrade = 0 and start_date = '2019-06-30' and end_date = '2019-07-31';
-

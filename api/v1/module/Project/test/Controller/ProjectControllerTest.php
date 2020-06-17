@@ -394,6 +394,23 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
+    public function testCreateWithParentId()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'parent_id' => 'ced672bb-fe33-4f0a-b153-f1d182a02603'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project', 'POST', null);
+        $this->assertResponseStatusCode(201);
+        $this->assertModuleName('Project');
+        $this->assertControllerName(ProjectController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ProjectController');
+        $this->assertMatchedRouteName('project');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['parent_id'], 2);
+    }
+
     public function testUpdate()
     {
         $data = ['name' => 'Test Project', 'description' => 'Project Description'];

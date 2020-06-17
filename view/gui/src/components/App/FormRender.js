@@ -17,6 +17,7 @@ import DocumentViewerComponent from "./Form/DocumentViewerComponent";
 import RadioCardComponent from "./Form/RadioCardComponent";
 import PhoneNumberComponent from "./Form/PhoneNumberComponent";
 import CountryComponent from "./Form/CountryComponent";
+import FileComponent from "./Form/FileComponent";
 
 class FormRender extends React.Component {
   constructor(props) {
@@ -546,6 +547,7 @@ class FormRender extends React.Component {
       Formio.registerComponent("radiocard", RadioCardComponent);
       Formio.registerComponent("phonenumber" ,PhoneNumberComponent);
       Formio.registerComponent("selectcountry", CountryComponent);
+      Formio.registerComponent("file", FileComponent);
       if (this.state.content && !this.state.form) {
         var options = {};
         if (this.state.content["properties"]) {
@@ -645,6 +647,13 @@ class FormRender extends React.Component {
             form.emit("render");
             that.runDelegates(form, form.pages[changed.page].originalComponent['properties']);
             that.setState({ page: changed.page });
+            var elm = document.getElementsByClassName(that.state.appId + "_breadcrumbParent");
+            if (elm.length > 0) {
+              scrollIntoView(elm[0], { scrollMode: "if-needed",block: "center",behavior: "smooth",inline: "nearest" });
+            }
+          });
+
+          form.on("error",errors =>{
             var elm = document.getElementsByClassName(that.state.appId + "_breadcrumbParent");
             if (elm.length > 0) {
               scrollIntoView(elm[0], { scrollMode: "if-needed",block: "center",behavior: "smooth",inline: "nearest" });
@@ -1083,13 +1092,21 @@ class FormRender extends React.Component {
           var transactionIdComponent = form.getComponent("transaction_id");
           that.storePayment({transaction_id: transactionIdComponent.getValue(),data: e.detail.data,status: e.detail.status}).then(response => {
             that.notif.current.notify("Payment has been Successfully completed!","Please wait while we get things ready!","success");
-            var formsave = that.saveForm(form,that.state.currentForm.submission.data);
             var transactionStatusComponent = form.getComponent("transaction_status");
+            var transactionReferenceComponent = form.getComponent("transaction_reference_number");
             transactionStatusComponent.setValue(e.detail.status);
-            if (formsave) {
-              that.notif.current.notify("Success","Application Has been Successfully Submitted","success");
+            if(transactionReferenceComponent !=undefined){
+              transactionReferenceComponent.setValue(e.detail.transaction_reference_number);
+            }
+            if(form.getNextPage() == -1){
+              var formsave = that.saveForm(form,that.state.currentForm.submission.data);
+              if (formsave) {
+                that.notif.current.notify("Success","Application Has been Successfully Submitted","success");
+              } else {
+                that.notif.current.notify("Error",e.detail.message,"danger");
+              }
             } else {
-              that.notif.current.notify("Error",e.detail.message,"danger");
+              form.nextPage();
             }
             that.showFormLoader(false,0);
           });
@@ -1236,7 +1253,49 @@ class FormRender extends React.Component {
         this.loadWorkflow();
       }
     }
+    $("#" + this.loaderDivID).off("customButtonAction");
+    document
+          .getElementById(this.loaderDivID)
+          .addEventListener("customButtonAction", (e)=>this.customButtonAction(e), false);
   }
+
+  customButtonAction = (e) => {
+    console.log(e);
+    e.stopPropagation();
+    e.preventDefault();
+    let actionDetails = e.detail;
+    let formData = actionDetails.formData;
+    if (this.state.workflowId) {
+      formData["workflowId"] = this.state.workflowId;
+    }
+    if (this.state.workflowInstanceId) {
+      formData["workflowInstanceId"] = this.state.workflowInstanceId;
+      if (this.state.activityInstanceId) {
+        formData["activityInstanceId"] = this.state.activityInstanceId;
+        if (this.state.instanceId) {
+          formData["instanceId"] = $this.state.instanceId;
+        }
+      }
+    }
+    if(this.props.fileId){
+      formData.fileId = this.state.fileId;
+      formData["workflow_instance_id"] = undefined;
+    }
+    this.showFormLoader(true, 0);
+    if (actionDetails["commands"]) {
+      this.callPipeline(
+        actionDetails["commands"],
+        this.cleanData(formData)
+      ).then((response) => {
+        this.showFormLoader(false, 0);
+        if (actionDetails.exit) {
+          clearInterval(actionDetails.timerVariable);
+          this.props.postSubmitCallback();
+        }
+      });
+    }
+  };
+  
   componentWillUnmount(){
     if(this.state.currentForm != undefined || this.state.currentForm != null){
       console.log('destroy form object')
@@ -1274,7 +1333,7 @@ class FormRender extends React.Component {
   render() {
     return (<div>
       <Notification ref={this.notif} />
-      <div id={this.loaderDivID} class="formLoader"></div>
+      <div id={this.loaderDivID} className="formLoader"></div>
       <div id={this.formErrorDivId} style={{display:"none"}}><h3>{this.state.formErrorMessage}</h3></div>
         <div className="form-render" id={this.formDivID}></div>
         </div>);

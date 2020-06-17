@@ -7,6 +7,7 @@
 </head>
 <body>
 	<div class ="body_div_lp">
+			<p style="margin-bottom:2%">&nbsp</p> 
 			{foreach from=$list item=$additional}
 	    		<p class = "ai_list">
 	    			&nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state} &nbsp&nbsp{$additional.zip}

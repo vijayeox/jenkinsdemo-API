@@ -774,6 +774,23 @@ return [
                     ],
                 ],
             ],
+            'attachmentUpload' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/attachment',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileAttachmentController::class,
+                        'method' => 'POST',
+                        'action' => 'addAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

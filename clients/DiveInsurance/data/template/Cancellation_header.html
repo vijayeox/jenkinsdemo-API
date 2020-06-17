@@ -3,6 +3,7 @@
 <head>
   <link href= "./css/template_css.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="./AgentInfo.js"></script> 
+  <script type="text/javascript" src="./js/moment.js"></script>
   <script>
     function subst() {
       var vars = {};
@@ -13,18 +14,33 @@
       for (var query_string in query_strings_from_url) {
         if (query_strings_from_url.hasOwnProperty(query_string)) {
           var temp_var = query_strings_from_url[query_string].split('=', 2);
-          vars[temp_var[0]] = decodeURI(temp_var[1]);
+          vars[temp_var[0]] = unescape(temp_var[1]);
         }
       }
       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2','single_limit','annual_aggregate'];
       for (var css_class in css_selector_classes) {
-        if (css_selector_classes.hasOwnProperty(css_class)) {
-          var element = document.getElementsByClassName(css_selector_classes[css_class]);
-          for (var j = 0; j < element.length; ++j) {
-            element[j].textContent = vars[css_selector_classes[css_class]];
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+            var element = document.getElementsByClassName(
+              css_selector_classes[css_class]
+            );
+            for (var j = 0; j < element.length; ++j) {
+              element[j].textContent = vars[css_selector_classes[css_class]];
+            }
+            if (css_selector_classes[css_class] == "start_date") {
+              document.getElementsByClassName(
+                "start_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+            }
+            if (css_selector_classes[css_class] == "end_date") {
+              document.getElementsByClassName("end_date")[0].textContent =
+                moment(vars[css_selector_classes[css_class]]).format(
+                  "D MMMM YYYY"
+                ) + " - 12:01:00 AM";
+            }
           }
         }
-      }
       agentInfo();
     }
   </script>
@@ -38,9 +54,9 @@
     <div class ="content1">
       <b class = "caption">Agent information</b>
       <div class = "caption1">
-        <p class ="info_efr" id="nameVal"></p><br>
-        <p class ="info_efr1" id ="addressLineVal"></p>
-						<p class ="info" id = "addressLine2Val"></p><br>
+        <p class ="info_efr" id="nameVal"></p>
+        <p class ="info" id ="addressLineVal"></p>
+				<p class ="info" id = "addressLine2Val"></p>
         <p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
         <p class ="info" style="margin-bottom:2px;" id ="phone2Val"></p>
         <p class = "info">License#: <span class = "license_number"></span></p>
@@ -85,6 +101,7 @@
     <p class = "p_margin">Policy #: <span class ="policy_id"></span></p>
   </div>
 </div><br><br>
+<div style="margin-bottom:6%"></div> 
 <div class="spacer"></div>
 <center><div class="title3"><b>COVERAGE: PADI ENDORSED DIVE CENTER INSURANCE</b></div></center>
 <div class="spacer"></div>

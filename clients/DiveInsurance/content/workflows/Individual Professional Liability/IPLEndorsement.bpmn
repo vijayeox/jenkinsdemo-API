@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.6.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="IPLEndorsement" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -120,7 +120,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
       <bpmn:outgoing>SequenceFlow_02bcggt</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_01ocuoy" name="Auto renewal(False)" sourceRef="ExclusiveGateway_1uh392h" targetRef="Task_08p2msc">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false || automatic_renewal=="false"  || automatic_renewal==""}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_09bil4y" name="Auto renewal(True)" sourceRef="ExclusiveGateway_1uh392h" targetRef="ServiceTask_1j9vqhf">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(automatic_renewal==true or automatic_renewal=="true") and (autoRenewalJob == null or autoRenewalJob == "")}</bpmn:conditionExpression>
@@ -148,7 +148,12 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:serviceTask id="Task_08p2msc" name="Cancel Autorenewal Job" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="command">cancelJob</camunda:inputParameter>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "file"}</camunda:value>
+              <camunda:value>{"command" : "processFileData"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -211,6 +216,7 @@ if (additionalInsured) {
 if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternationalCoverages == "internationalAssistantInstructor" || upgradeInternationalCoverages == "internationalDivemaster" || upgradeInternationalCoverages =="internationalNonteachingSupervisoryInstructor" || upgradeInternationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){
 	result4 = true
 }
+}
 
 
 if(paymentOptions){
@@ -223,7 +229,6 @@ if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == ""
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)
-}
 
 if(result3){
 	execution.setVariable('policyStatus', 'Pending Approval')	

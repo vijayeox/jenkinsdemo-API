@@ -70,9 +70,19 @@ class Module
                     $config = $container->get('config');
                     return new Service\ElasticService($config);
                 },
+                Model\FileAttachmentTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\FileAttachmentTableGateway::class);
+                    return new Model\FileAttachmentTable($tableGateway);
+                },
+                Model\FileAttachmentTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\FileAttachment());
+                    return new TableGateway('ox_file_attachment', $dbAdapter, null, $resultSetPrototype);
+                },
                 \Oxzion\Service\FileService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class), $container->get(Messaging\MessageProducer::class),$container->get(\Oxzion\Service\FieldService::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class), $container->get(Messaging\MessageProducer::class),$container->get(\Oxzion\Service\FieldService::class),$container->get(\Oxzion\Model\FileAttachmentTable::class));
                 },
                 Service\RoleService::class => function ($container) {
                     return new Service\RoleService(

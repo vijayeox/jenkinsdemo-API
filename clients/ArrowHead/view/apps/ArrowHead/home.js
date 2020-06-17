@@ -1,5 +1,4 @@
-import {ReactDOM,LeftMenuTemplate,FormRender} from "oxziongui";
-import React, { useContext } from 'react'
+import {React,LeftMenuTemplate,FormRender} from "oxziongui";
 import { appId as application_id } from "./metadata.json";
 import "./index.scss";
 class Home extends React.Component { 

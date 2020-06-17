@@ -1,0 +1,50 @@
+name: 'Export Workbooks'
+description: 'Allows agents to export workbooks'
+content:
+    -
+        type: List
+        content:
+            route: 'file'
+            filterable: true
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: 'Export'
+                    rule: 'true'
+                    icon: 'far fa-file-download'
+                    details:
+                        -
+                            type: Document
+                            content: '<h4>Producer Name: {data.producername} </h4>
+                                    <p> Producer Date : {moment(data.producerdate).format("MMMM Do YYYY")}</p>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+            toolbarTemplate: '<h5>List of completed workbooks</h5>'
+            columnConfig:
+                -
+                    title: Insured
+                    field: namedInsured
+                -
+                    title: 'Producer'
+                    field: producername
+                -
+                    title: 'Effective Date'
+                    field: effectiveDate
+                    cell: '<td>{moment(item.effectiveDate).format("MMMM Do YYYY")}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: 'Producer Date'
+                    field: producerdate
+                    cell: '<td>{moment(item.producerdate).format("MMMM Do YYYY")}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD

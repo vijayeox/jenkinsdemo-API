@@ -111,7 +111,7 @@
 						"calculateServer": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Padi Number is not Valid!",
+							"customMessage": "PADI Number is not Valid!",
 							"min": 0
 						},
 						"key": "padi",
@@ -993,14 +993,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
-									"customMessage": "Please enter a valid Home or Work Phone number"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "home_phone_number",
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1056,15 +1060,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
+								"mask": false,
 								"spellcheck": true,
-								"tableView": true,
+								"tableView": false,
+								"delimiter": false,
+								"requireDecimal": false,
+								"inputFormat": "plain",
 								"calculateServer": false,
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number"
+									"customMessage": "Please enter a valid Mobile Phone number",
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
-								"type": "textfield",
+								"type": "number",
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -2268,11 +2277,29 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = data[\"amount\"] - data[\"amountPayable\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n  value = data[\"amount\"] - data[\"amountPayable\"];\n}",
+									"calculateValue": "if (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = data[\"amount\"] - data[\"amountPayable\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
 									"calculateServer": false,
 									"key": "balance",
 									"type": "number",
 									"input": true,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "userGrandTotal",
+									"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
+									"calculateServer": false,
+									"key": "userGrandTotal",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "csrGrandTotal",
+									"calculateValue": "if(data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
+									"calculateServer": false,
+									"key": "csrGrandTotal",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 8,
@@ -2313,13 +2340,6 @@
 				"type": "well",
 				"hideLabel": true,
 				"label": ""
-			}, {
-				"label": "documentFields",
-				"calculateValue": "value = [\"attachments1\" ,\"scubaFit_attachments1\" , \"cylinderInstructor_attachments1\" , \"cylinderInspector_attachments1\" , \"techRec_attachments1\"];",
-				"key": "documentFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "User Attachments",
 				"theme": "primary",
@@ -2460,7 +2480,7 @@
 					"label": "TecRec Attachments",
 					"hideLabel": true,
 					"tableView": false,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2479,7 +2499,8 @@
 					"errorLabel": "Technical Certification Documents",
 					"key": "TechRec_attachments",
 					"type": "file",
-					"input": true
+					"input": true,
+					"url": "/file/attachment"
 				}],
 				"path": "techRecAttachment"
 			}, {
@@ -2514,7 +2535,7 @@
 					"label": "Cylinder Inspector Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2533,6 +2554,7 @@
 					"errorLabel": "Cylinder Inspector Certification",
 					"key": "cylinderInspector_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "cylinderInspectorAttachments"
@@ -2568,7 +2590,7 @@
 					"label": "Cylinder Instructor Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2586,6 +2608,7 @@
 					},
 					"key": "cylinderInstructor_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "cylinderInstructorAttachments"
@@ -2621,7 +2644,7 @@
 					"label": "ScubaFit Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2640,17 +2663,10 @@
 					"errorLabel": "Scuba Fit Certification Documents",
 					"key": "scubaFit_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "scubaFitAttachments"
-			}, {
-				"label": "attachmentFields",
-				"calculateValue": "value = [\"attachments\" ,\"scubaFit_attachments\" , \"cylinderInstructor_attachments\" , \"cylinderInspector_attachments\" , \"TechRec_attachments\",\"chequeConsentFile\"];",
-				"calculateServer": false,
-				"key": "attachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2671,7 +2687,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2688,16 +2704,10 @@
 					"errorLabel": "Addtional Attachments",
 					"key": "attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "page3PanelPanel"
-			}, {
-				"label": "csrAttachmentsFieldnames",
-				"calculateValue": "value = [\"csr_attachments\"];",
-				"key": "csrAttachmentsFieldnames",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -2718,7 +2728,7 @@
 					"label": "Attachments",
 					"hideLabel": true,
 					"tableView": true,
-					"storage": "base64",
+					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
 						"label": "",
@@ -2733,6 +2743,7 @@
 					},
 					"key": "csr_attachments",
 					"type": "file",
+					"url": "/file/attachment",
 					"input": true
 				}],
 				"path": "CsrAttachments"
@@ -3940,7 +3951,7 @@
 			"tableView": false,
 			"components": [{
 				"label": "amountPayable",
-				"calculateValue": "if(!data.CSRReviewRequired){\n  value = (data['finalAmount']||0).toFixed(0);\n}",
+				"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balance) > 0){\n    value = data.balance;\n  }else{\n    value = 0;\n  }\n}else{\n  value = (parseFloat(data.finalAmount) || 0).toFixed(0);\n}",
 				"calculateServer": false,
 				"key": "amountPayable",
 				"type": "hidden",
@@ -3960,6 +3971,13 @@
 				"label": "transaction_status",
 				"type": "hidden",
 				"lockKey": true
+			}, {
+				"label": "transaction_reference_number",
+				"calculateServer": false,
+				"key": "transaction_reference_number",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -4047,13 +4065,18 @@
 						}, {
 							"label": "Upload Consent Form",
 							"tableView": false,
-							"storage": "base64",
+							"storage": "url",
 							"webcam": false,
+							"fileTypes": [{
+								"label": "",
+								"value": ""
+							}],
 							"clearOnHide": false,
 							"calculateServer": false,
 							"key": "chequeConsentFile",
 							"type": "file",
-							"input": true
+							"input": true,
+							"url": "/file/attachment"
 						}],
 						"hideOnChildrenHidden": false
 					}, {
@@ -4071,15 +4094,15 @@
 						"label": "Card Details",
 						"input": false,
 						"components": [{
-							"label": "Transaction ID",
+							"label": "Transaction Reference Number",
 							"spellcheck": false,
 							"disabled": true,
 							"tableView": false,
 							"clearOnHide": false,
-							"calculateValue": "value = data.transaction_id",
+							"calculateValue": "value = data.transaction_reference_number",
 							"calculateServer": false,
-							"key": "transactionId",
-							"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+							"key": "transactionReferenceNumber",
+							"customConditional": "if (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  show = true;\n} else {\n  show = false;\n}",
 							"type": "textfield",
 							"input": true
 						}, {
@@ -4172,7 +4195,7 @@
 			"next": true
 		},
 		"collapsible": false,
-		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  }\n} else {\n  if (data.privileges) {\n    show =\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]\n        ? false\n        : true;\n  }\n}"
+		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}"
 	}, {
 		"input": false,
 		"label": "Approval",
@@ -4261,7 +4284,7 @@
 				"tableView": true,
 				"values": [{
 					"label": "Approved",
-					"value": "approved",
+					"value": "accepted",
 					"shortcut": ""
 				}, {
 					"label": "Rejected",
@@ -4309,7 +4332,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 312,
+	"_vid": 338,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4323,13 +4346,13 @@
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}, {\"command\" : \"delegate\", \"delegate\" : \"DocumentFetchDelegate\"}]"
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
 	},
 	"name": "csrInitiatesIpl",
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-05-22T17:37:25.062Z",
+	"modified": "2020-06-04T17:06:41.602Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -200,6 +200,12 @@ class Module implements ConfigProviderInterface
                         $container->get(WorkflowService::class)
                     );
                 },
+                Controller\FileAttachmentController::class => function ($container) {
+                    return new Controller\FileAttachmentController(
+                        $container->get(FileService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
                 Controller\FieldController::class => function ($container) {
                     return new Controller\FieldController(
                         $container->get(FieldTable::class),

@@ -14,17 +14,6 @@ class UpdateStateTaxRates extends AbstractAppDelegate
         parent::__construct();
     }
 
-
-    //PARAMETERs
-    // {
-    // "year": 2020,
-    // "state": "Alabama",
-    // "coverage": "liability",
-    // "percentage": 2
-    // }
-
-    
-    // State Tax values are fetched here
     public function execute(array $data,Persistence $persistenceService)
     {  
         if(AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')){ 
@@ -37,8 +26,8 @@ class UpdateStateTaxRates extends AbstractAppDelegate
     }
 
     private function updateStateTaxRates(&$data,$persistenceService){
-        $updateQuery = "UPDATE state_tax SET percentage = ".$data['percentage']." WHERE `year` = ".$data['year']." and `coverage` = '".$data['coverage']."' AND state = '".$data['state']."'";
-        $result = $persistenceService->updateQuery($updateQuery);
+        $updateQuery = "UPDATE state_tax SET percentage = ".$data['percentage']." WHERE `id` = ".$data['id'];
+        $persistenceService->updateQuery($updateQuery);
     }
 
 }

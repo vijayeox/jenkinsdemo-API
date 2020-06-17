@@ -6,8 +6,8 @@
 </head>
 <body>
 	<div class ="body_div_ai">
-		
 		{if $cancellationStatus == 'approved'}
+		<p style="margin-bottom:2%">&nbsp</p> 
 		<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$CancelDate|date_format:"%m/%d/%Y"} </p>
 			{if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
 				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>

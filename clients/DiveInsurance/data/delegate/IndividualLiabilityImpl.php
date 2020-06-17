@@ -11,10 +11,6 @@ class IndividualLiabilityImpl extends AbstractDocumentAppDelegate {
     public function setDocumentBuilder($builder){
         $this->builder = $builder;
     }
-    public function setDocumentPath($destination)
-    {
-        $this->destination = $destination;
-    }
     public function execute(array $data, $persistenceService){ 
         $this->logger->info("executing IndividualLiability");
         if(!$this->builder){
