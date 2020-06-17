@@ -10,7 +10,7 @@
 
 <body>
     <p></p>
-    <div>
+    <div class="main" style="margin-top: 3%;">
             <div class="value_main">
                 <p>${$liabilityProRataPremium|number_format}</p>
                 <p>&nbsp;</p>

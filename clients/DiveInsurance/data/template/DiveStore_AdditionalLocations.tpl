@@ -125,34 +125,27 @@
                 </tbody>
             </table>
             <div class="clearfix"></div>
-            <table class="deductible_table">
-                <tbody>
-                    <tr>
-                        <td>Deductible:</td>
-                        <td class="info">Wind/Hail is 5% of Insured Values per location, $5000 minimum, for Florida,
-                            Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
-                            (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
-                            Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is $1000.</td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr class="line_divide"></hr>
-            <hr class="line_divide">
-            </hr>
-
+            <p class="info"><b>Deductible:</b></p>
+            <p class="info">Wind/Hail is 5% of Insured Values per location, $5000 minimum, for Florida,
+                Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
+                (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
+                Carolina and all Harris County Texas locations.
+                Mechanical breakdown is $2500. All other perils is $1000.</p>
             <!-- Report Header -->
 
             <!-- Alarm Calc -->
-            <div style="margin-top: 2% 0;">
+            
                 {if $dspropcentralfire.centralStationAlarmPL != "yes"}
+                    <hr class="line_divide"></hr>
+              <div style="margin-top: 2% 0;">
                 <center>
                     <b>
                         <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>
                     </b>
                 </center>
+                 </div>
                 {/if}
-            </div>
+           
         </div>
   </div>
 </body>
