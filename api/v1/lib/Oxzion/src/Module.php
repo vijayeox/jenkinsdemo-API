@@ -218,9 +218,9 @@ class Module
                         $container->get(AdapterInterface::class),
                         $container->get(Model\OrganizationTable::class),
                         $container->get(Service\UserService::class),
-                        $container->get(Service\AddressService::class),
                         $container->get(Service\RoleService::class),
                         $container->get(Service\PrivilegeService::class),
+                        $container->get(Service\OrganizationProfileService::class),
                         $container->get(Messaging\MessageProducer::class)
                     );
                 },
@@ -256,6 +256,29 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Address());
                     return new TableGateway(
                         'ox_address',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\OrganizationProfileService::class => function ($container) {
+                    return new Service\OrganizationProfileService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Service\AddressService::class),
+                        $container->get(Model\OrganizationProfileTable::class)
+                    );
+                },
+                Model\OrganizationProfileTable::class => function ($container) {
+                    return new Model\OrganizationProfileTable(
+                        $container->get(Model\OrganizationProfileTableGateway::class)
+                    );
+                },
+                Model\OrganizationProfileTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\OrganizationProfile());
+                    return new TableGateway(
+                        'ox_organization_profile',
                         $container->get(AdapterInterface::class),
                         null,
                         $resultSetPrototype

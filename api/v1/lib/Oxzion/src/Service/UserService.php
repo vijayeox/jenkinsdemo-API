@@ -525,12 +525,12 @@ class UserService extends AbstractService
 
     private function getOrg($id)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_organization')
-            ->columns(array("id", "name"))
-            ->where(array('ox_organization.id' => $id));
-        $response = $this->executeQuery($select)->toArray();
+        $select = "SELECT oxo.id,oxop.name from ox_organization oxo inner join ox_organization_profile oxop on oxop.id = oxo.org_profile_id where oxo.id =:id";
+        $params = array("id" => $id);
+        $response = $this->executeUpdateWithBindParameters($select,$params)->toArray();
+        if (count($response) == 0) {
+            return 0;
+        }
         return $response[0];
     }
 
@@ -719,13 +719,13 @@ class UserService extends AbstractService
 
     public function getActiveOrganization($id)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_organization')
-            ->columns(array('id', 'name', 'uuid'))
-            ->where(array('ox_organization.id' => $id));
-        $result = $this->executeQuery($select)->toArray();
-        return $result[0];
+        $select = "SELECT oxo.id,oxo.uuid,oxop.name from ox_organization oxo inner join ox_organization_profile oxop on oxop.id = oxo.org_profile_id where oxo.id =:id";
+        $params = array("id" => $id);
+        $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        if (count($response) == 0) {
+            return 0;
+        }
+        return $response[0];
     }
 
     public function getPrivileges($userId, $orgId = null)
@@ -989,7 +989,10 @@ class UserService extends AbstractService
     private function addUserToOrg($userId, $organizationId)
     {
         if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))->toArray()) {
-            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
+            $select = "select og.id,oxop.name from ox_organization og join ox_organization_profile oxop on oxop.id=og.org_profile_id where og.id=:id and og.status=:status";
+            $params = array("id" => $organizationId,"status"=>"Active");
+            $res = $this->executeQueryWithBindParameters($select,$params)->toArray();
+            if ($org = $res) {
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {
                     $data = array(array(
                         'user_id' => $userId,
@@ -1139,7 +1142,7 @@ class UserService extends AbstractService
         if (empty($id)) {
             $id = AuthContext::get(AuthConstants::USER_ID);
         }
-        $queryO = "Select org.id,org.name,org.uuid,oxa.address1,oxa.address2,oxa.city,oxa.state,oxa.country,oxa.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org join ox_address as oxa on oxa.id = org.address_id LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
+        $queryO = "Select org.id,oxop.name,org.uuid,oxa.address1,oxa.address2,oxa.city,oxa.state,oxa.country,oxa.zip,org.logo,oxop.labelfile,oxop.languagefile,org.status from ox_organization as org join ox_organization_profile oxop on oxop.id=org.org_profile_id join ox_address as oxa on oxa.id = oxop.address_id LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
         $where = "where uo.user_id =" . $id . " AND org.status='Active'";
         $resultSet = $this->executeQuerywithParams($queryO, $where);
         return $resultSet->toArray();
