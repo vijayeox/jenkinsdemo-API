@@ -1,40 +1,39 @@
 {assign var=additionalLocationData value=$additionalLocationData|json_decode:true}
-{assign var=dspropcentralfire value=$additionalLocationData.dsPropCentralFireAL}
+{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
 <!DOCTYPE html>
 <html>
 
 <head>
     <link href="{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
-    <link href="{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script> -->
 </head>
-
+ 
 <body>
     <p></p>
     <div>
 
-    <b><p class = "info">Store/Location Description : {$business_name}</p></b>
-    <b><p>Store/Location Number: {$padi}</p></b>
-    <p><b>Additional Named Insured:</b></p>
+    <p class = "info"><b>Store/Location Description : </b>{$additionalLocationData.address}</p>
+    <p class = "info"><b>Store/Location Number: </b>{$padi}</p>
     {assign var=list value=$additionalNamedInsured|json_decode:true}
-    {if isset($additional_named_insureds_option) && $additional_named_insureds_option=='yes'}
+    {if isset($additional_named_insureds_option) && $additional_named_insureds_option =='yes'}
+    <p class = "info"><b>Additional Named Insured:</b></p>
     {foreach from=$list item=$additional}
-        <p class = "ai_list">
+        <p class = "ai_list info">
             &nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.country},{$additional.city},{$additional.state},{$additional.zip}
         </p>
     {/foreach}
     {/if}
-    <p><b>Location Address: {$additionalLocationData.address},<br>
+    <p  class = "info"><b>Location Address: </b>{$additionalLocationData.address},<br>
     {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.state} - {$additionalLocationData.zip}</p>
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <th>Property Coverages</th>
-                        <th>Limits</th>
+                        <th class = "table_hd">Property Coverages</th>
+                        <th class = "table_hd">Limits</th>
                     </tr>
-                    <tr><td>Policy issued by {$carrier}</td></tr>
-                    <tr><td>Policy #: PPK1992907</td></tr>
+                    <tr><td   class = "info">Policy issued by {$carrier}</td></tr>
+                    <tr><td   class = "info">Policy #: {$policy_id}</td></tr>
                     <tr>
                         <td>Contents Limit:</td>
                         <td>${$additionalLocationData.additionalLocationPropertyTotal|number_format}</td>
@@ -101,11 +100,11 @@
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <th>Liability Coverages</th>
-                        <th>Limits</th>
+                        <th class = "table_hd">Liability Coverages</th>
+                        <th class = "table_hd">Limits</th>
                     </tr>
-                    <tr><td>Policy issued by {$carrier}</td></tr>
-                    <tr><td>Policy #: PPK1992907</td></tr>
+                    <tr><td   class = "info">Policy issued by {$carrier}</td></tr>
+                    <tr><td   class = "info">Policy #: {$policy_id}</td></tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
                         {if isset($additionalLocationData.ALPoolLiability) && (int)$additionalLocationData.ALPoolLiability > 0}
@@ -148,7 +147,7 @@
 
             <!-- Alarm Calc -->
             <div style="margin: 2% 0;">
-                {if $dspropcentralfire.centralStationAlarmAL != "yes"}
+                {if $dspropcentralfire.centralStationAlarmPL != "yes"}
                 <center>
                     <b>
                         <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>

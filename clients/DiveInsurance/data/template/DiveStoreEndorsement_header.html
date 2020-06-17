@@ -3,6 +3,7 @@
 <head>
 <link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./AgentInfo.js"></script>
+ <script type="text/javascript" src="./js/moment.js"></script>
 <script>
   function subst() {
       var vars = {};
@@ -22,6 +23,19 @@
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
               for (var j = 0; j < element.length; ++j) {
                   element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+              if (css_selector_classes[css_class] == "update_date") {
+              document.getElementsByClassName(
+                "update_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+              }
+              if (css_selector_classes[css_class] == "end_date") {
+                document.getElementsByClassName("end_date")[0].textContent =
+                  moment(vars[css_selector_classes[css_class]]).format(
+                    "D MMMM YYYY"
+                  ) + " - 12:01:00 AM";
               }
           }
       }

@@ -244,7 +244,7 @@
 	</div>
 
 	{if $additional_insured == 'yes'}
-		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
+		<b><p class ="grp_add">Additional Insured >Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 		{assign var=list value=$groupAdditionalInsured|json_decode:true}
 		{foreach from=$list item=$additional}
 	    		<p class = "grpai_list">
