@@ -48,13 +48,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data));
-        $temp = $data;
-        foreach ($temp as $key => $value) {
-            if (is_array($temp[$key])) {
-                $temp[$key] = json_encode($value);
-            }
-        }
-        $data = $temp;
+        // $temp = $data;
+        // foreach ($temp as $key => $value) {
+        //     if (is_array($temp[$key])) {
+        //         $temp[$key] = json_encode($value);
+        //     }
+        // }
+        // $data = $temp;
         $fieldTypeMappingExcel = include(__DIR__ . "/fieldMappingExcel.php");
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
@@ -94,8 +94,18 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     foreach ($fieldTypeMappingPDF["text"] as  $formField => $pdfField) {
                         isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
                     }
-                    foreach ($fieldTypeMappingPDF["radio"] as  $formField => $pdfField) {
-                        isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
+                    foreach ($fieldTypeMappingPDF["radioYN"] as  $formFieldPDF => $pdfFieldData) {
+                        if (isset($data[$formFieldPDF])) {
+                            $fieldNamePDFData = $pdfFieldData["fieldname"];
+                            if (isset($pdfFieldData["options"])) {
+                                $fieldOption = $pdfFieldData["options"];
+                                $optionKeys = array_keys($fieldOption);
+                                $pdfData[$fieldNamePDFData] = ($data[$formFieldPDF] == $optionKeys[0]) ?
+                                    $fieldOption[array_key_first($fieldOption)] : $fieldOption[array_key_last($fieldOption)];
+                            } else {
+                                $pdfData[$fieldNamePDFData] = $data[$formFieldPDF];
+                            }
+                        }
                     }
                     foreach ($fieldTypeMappingPDF["date"] as  $formField => $pdfField) {
                         isset($data[$formField]) ?
