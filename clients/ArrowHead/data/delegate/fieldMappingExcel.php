@@ -1,4 +1,5 @@
 <?php
  return array(
-  'utilityoptions' => ["method" => "parseArray", ]
+  'utilityoptions' => ["method" => "parseArray"],
+  'backingupandstorage' => ["method" => "parseArray"]
  );
