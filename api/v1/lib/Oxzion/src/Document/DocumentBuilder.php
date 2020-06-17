@@ -64,6 +64,7 @@ class DocumentBuilder {
     public function fillPDFForm($template, $data, $destination)
     {
         $templatePath =$this->templateService->getTemplatePath($template, $data);
+        $this->logger->info("fillPDFForm Full Template Path \n" . $templatePath . "/" . $template, $data, $destination);
         return $this->documentGenerator->fillPDFForm($templatePath."/".$template,$data,$destination);
     }
 
