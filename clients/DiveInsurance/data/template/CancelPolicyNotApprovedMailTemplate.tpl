@@ -16,12 +16,21 @@
 
 Sincerely,
 <br/><br/>
+{if $product == 'Dive Store' || $product == 'Dive Boat'}
+{$approverName}<br/>
+{$approverDesignation}<br/>
+{else}
 PADI Department<br/>
+{/if}
 Vicencia & Buckley, a Division of HUB International Insurance Services Inc.<br/>
 A division of HUB International<br/>
 6 Centerpointe Dr. #350<br/>
 La Palma, CA  90623<br/>
+{if $product == 'Dive Store' || $product == 'Dive Boat'}
+Email: {$approverEmailId}<br/>
+{else}
 Email: padi-professional@hubinternational.com<br/>
+{/if}
 Phone: 800-223-9998 or 714-739-3177<br/>
 Fax: 714-739-3188<br/>
 License #0757776

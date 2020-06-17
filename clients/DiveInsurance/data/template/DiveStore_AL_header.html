@@ -27,7 +27,7 @@
               }
               if (css_selector_classes[css_class] == "start_date") {
               document.getElementsByClassName(
-                "update_date"
+                "start_date"
               )[0].textContent = moment(
                 vars[css_selector_classes[css_class]]
               ).format("D MMMM YYYY");
@@ -96,10 +96,12 @@
     <div>&nbsp</div>
     <div>&nbsp</div>
     <hr class="hr_value"></hr>
-    <div>
-      <p class="info">See the Certificate for Primary Liability coverages.</p>
-      <p class="info">These coverages apply to this location only.</p>
-    </div>
+    <center>
+      <div>
+        <p class="info">See the Certificate for Primary Liability coverages.</p>
+        <p class="info">These coverages apply to this location only.</p>
+      </div>
+    </center>
     <hr class="hr_value"></hr>
 </body>
 </html>
