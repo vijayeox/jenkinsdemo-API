@@ -323,7 +323,7 @@ body{
 	margin-bottom: 0px;
 }
 .footer_note{
-	font-size:13px;
+	font-size:10px;
 	margin-top: 1px;
 	margin-bottom: 1px;
 	letter-spacing: 1px;
@@ -431,7 +431,6 @@ ul > li {
 }
 
 .table_sec {
-	margin-bottom: 40%;
 	margin-top: 2%;
 }
 
