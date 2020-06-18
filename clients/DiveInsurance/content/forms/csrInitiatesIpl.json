@@ -2420,7 +2420,7 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n  console.log(total)\n    if(total > 0){\n      value = total;\n    }else{\n      value = \"0\";\n    }\n}",
+									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = \"0\";\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -4700,8 +4700,7 @@
 					"input": true,
 					"hideOnChildrenHidden": false
 				}]
-			}],
-			"id": "eeic69"
+			}]
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -4715,7 +4714,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 436,
+	"_vid": 437,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4736,6 +4735,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-18T13:57:10.945Z",
+	"modified": "2020-06-18T14:15:36.620Z",
 	"machineName": "testdivehub:csrInitiates"
 }
