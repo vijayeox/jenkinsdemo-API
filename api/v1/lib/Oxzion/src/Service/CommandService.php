@@ -259,13 +259,14 @@ class CommandService extends AbstractService
 
     protected function scheduleJob(&$data)
     {
+        $this->logger->info("DATA  ------" . json_encode($data));
+        if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
+            $this->logger->info("jobUrl/Cron/JobName Not Specified");
+            throw new EntityNotFoundException("JobUrl or Cron Expression or JobName Not Specified");
+        }
+        
         try
         {
-            $this->logger->info("DATA  ------" . json_encode($data));
-            if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
-                $this->logger->info("jobUrl/Cron/JobName Not Specified");
-                throw new EntityNotFoundException("JobUrl or Cron Expression or JobName Not Specified");
-            }
             $jobUrl = $data['jobUrl'];
             $cron = $data['cron'];
             $jobGroup = $data['jobName'];
@@ -284,9 +285,8 @@ class CommandService extends AbstractService
         } catch (Exception $e) {
             $this->logger->error("Job Schedule ---- Exception - ".$e->getMessage() , $e);
         }
-        if (isset($response) && isset($response['body'])) {
-            $response = json_decode($response['body'], true);
-            $jobData = array("jobId" => $response['JobId'], "jobGroup" => $response['JobGroup']);
+        if (isset($response) && isset($response['job_id'])) {
+            $jobData = array("jobId" => $response['job_id'], "jobGroup" => $response['group_name']);
             $data[$jobGroup] = json_encode($jobData);
         }
         $this->logger->info("Schedule JOB DATA - " . print_r($data, true));
