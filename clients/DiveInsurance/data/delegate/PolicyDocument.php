@@ -660,7 +660,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['endorsementEquipment'])){
                     $data['endorsementEquipment'] = array();
                 }
-                
+ 
                 if($this->type != 'endorsementQuote'){
                     if(is_string($data['endorsement_options'])){
                     $data['endorsement_options'] = json_decode($data['endorsement_options'],true);
@@ -705,6 +705,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['userApproved'])){
                 $data['userApproved'] = "";
             }
+            if(isset($data['rejectionReason'])){
+                $data['rejectionReason'] = array();
+            }
+               
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }
