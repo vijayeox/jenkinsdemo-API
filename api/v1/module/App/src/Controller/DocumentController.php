@@ -110,4 +110,33 @@ class DocumentController extends AbstractApiControllerHelper
     {
         return $this->getInvalidMethod();
     }
+
+
+    public function getTempDocumentAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/temp/" . $params['tempId'] . "/". $params['documentName'];
+
+        $ext = pathinfo($attachment_location, PATHINFO_EXTENSION);
+        $dispositionType = isset($ext) && $ext=="pdf"  ? "inline" : "attachment";
+        if (file_exists($attachment_location)) {
+            if (!headers_sent()) {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                header("Cache-Control: public"); // needed for internet explorer            
+                $mimeType = ArtifactUtils::getMimeType($params['documentName']);
+                header("Content-Type:".$mimeType );  
+                header("Content-Transfer-Encoding: Binary");
+                header("Content-Length:" . filesize($attachment_location));
+                header("Content-Disposition: ". $dispositionType ."; filename=" . $params['documentName']);
+            }
+            $fp = @fopen($attachment_location, 'rb');
+            fpassthru($fp);
+            fclose($fp);
+            $this->response->setStatusCode(200);
+            return $this->response;
+        } else {
+            $this->log->error("Error: File Not Found");
+            return $this->getErrorResponse("File Not Found", 404);
+        }
+    }
 }
