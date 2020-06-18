@@ -89,10 +89,6 @@ class MenuItemService extends AbstractService
         $count = 0;
         try {
             $count = $this->table->save($MenuItem);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
