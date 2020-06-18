@@ -7,8 +7,6 @@
 
 </head>
 <body onload = "agentInfo()">
-  <div class ="body_div">
-    <div>&nbsp</div>
     <div class = "content">
       <div class ="content1">
           <b class = "caption">Agent Information</b>
