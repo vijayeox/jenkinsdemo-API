@@ -3,7 +3,7 @@
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
-            <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/><br/>
+            <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, <br/><br/>
                 <p>{$business_name}<br/>
                 <p>{$firstname} {$lastname}<br/>
                 {$address1}<br/>

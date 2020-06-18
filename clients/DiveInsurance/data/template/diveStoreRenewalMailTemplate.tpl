@@ -3,7 +3,7 @@
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
             <div>{$store_name} {$store_id}</div>
-            <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/>
+            <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, <br/>
                 <p>In order to expedite your June 30, {$expiry_year} Dive Store/Resort renewal proposal, please complete the attached Renewal Application.  If you have more than one store number or location, please complete a Renewal Application for each location.  Please be sure to answer all of the questions and answer N/A if a question is not applicable. Your proposal may be delayed if it is not complete. </p><br/>
 
                 <p> Please complete section #3 for your Group Professional Liability Policy.</p><br/>
