@@ -32,7 +32,7 @@ class FormControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Task');
         $this->assertEquals($content['data'][0]['entity_id'], 'd23d0c68-98c9-11e9-adc5-308d99c9145b');
         $this->assertEquals($content['data'][1]['form_id'], '465c9142-df82-11e9-8a34-2a2ae2dbcce4');
-        $this->assertEquals($content['data'][1]['name'], 'Test Form 2');
+        $this->assertEquals($content['data'][1]['name'], 'Test-Form-2');
         $this->assertEquals($content['data'][1]['entity_id'], 'd23d0c68-98c9-11e9-adc5-308d99c9145b');
     }
 
