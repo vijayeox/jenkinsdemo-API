@@ -408,7 +408,7 @@ class AppControllerTest extends ControllerTest
         $errors = $content['data']['errors'];
         $this->assertEquals(2, count($errors));
         $this->assertEquals("Field padi - Value of property 'decimalLimit' is '2' expected ''", $errors[0]);
-        $this->assertEquals("Field dateTime Unexpected", $errors[1]);
+        $this->assertEquals("Field dateTime - Unexpected", $errors[1]);
         $filename = "application.yml";
         $path = __DIR__ . '/../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
