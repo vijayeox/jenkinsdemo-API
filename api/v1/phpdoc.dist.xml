@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor>
-    <title><![CDATA[OX Zion API Document]]></title>
+    <title><![CDATA[EOX Vantage API Document]]></title>
     <parser>
-        <default-package-name>OX Zion API Document</default-package-name>
+        <default-package-name>EOX Vantage API Document</default-package-name>
         <target>build</target>
     </parser>
     <transformer>

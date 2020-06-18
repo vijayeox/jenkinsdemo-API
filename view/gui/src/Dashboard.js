@@ -12,6 +12,8 @@ class Dashboard extends Component {
     this.state = {
       htmlData: this.props.htmlData ? this.props.htmlData : null,
       dashboardFilter: this.props.dashboardFilter,
+      preparedDashboardFilter:null,
+      drilldownDashboardFilter: [],
       widgetCounter: 0
     };
     this.content = this.props.content;
@@ -44,8 +46,8 @@ class Dashboard extends Component {
     );
     return response;
   }
-  async getWidgetByUuid(uuid, filterParams) {
 
+  async getWidgetByUuid(uuid, filterParams) {
     let filterParameter = (filterParams && filterParams != []) ? ("&filter=" + JSON.stringify(filterParams)) : ''
     let response = await this.helper.request(
       "v1",
@@ -53,13 +55,11 @@ class Dashboard extends Component {
       {},
       "get"
     );
-
-
     return response;
   }
 
-  appendToDashboardContainer(htmlData){
-    let container="<div id='dasboard-viewer-content' class='dasboard-viewer-content'>"+htmlData+"</div>"
+  appendToDashboardContainer(htmlData) {
+    let container = "<div id='dasboard-viewer-content' class='dasboard-viewer-content'>" + htmlData + "</div>"
     return container
   }
 
@@ -71,7 +71,11 @@ class Dashboard extends Component {
           this.setState({
             htmlData: response.data.dashboard.content ? response.data.dashboard.content : null
           });
-          this.updateGraph();
+          if (Array.isArray(this.props.drilldownDashboardFilter)) {
+            this.props.drilldownDashboardFilter.length > 0 ? this.updateGraph(this.props.drilldownDashboardFilter) : this.updateGraph()
+          } else {
+            this.updateGraph()
+          }
         } else {
           this.setState({
             htmlData: `<p>No Data</p>`
@@ -88,7 +92,7 @@ class Dashboard extends Component {
           });
         });
     } else if (this.state.htmlData != null) {
-      this.updateGraph();
+      (this.props.drilldownDashboardFilter.length > 0) ? this.updateGraph(this.props.drilldownDashboardFilter) : this.updateGraph()
     }
     window.addEventListener('message', this.widgetDrillDownMessageHandler, false);
   }
@@ -106,82 +110,94 @@ class Dashboard extends Component {
     window.removeEventListener('message', this.widgetDrillDownMessageHandler, false);
   }
 
-preparefilter(filter1,filter2){
-  var filter=[]
-  filter.push(filter1)
-  filter.push("AND")
-  filter.push(filter2)
-  return filter
+  preparefilter(filter1, filter2) {
+    var filter = []
+    filter.push(filter1)
+    filter.push("AND")
+    filter.push(filter2)
+    return filter
+  }
+
+extractFilterValues(){
+  let filterParams = []
+  this.props.dashboardFilter.map((filter, index) => {
+    let filterarray = []
+    if (filter["dataType"] == "date") {
+      var startDate = filter["startDate"]
+      var endDate = null
+      if (filter["startDate"] && filter["endDate"]) {
+        //convert startDate object to string
+        if (typeof startDate !== "string") {
+          startDate = filter["startDate"]
+          startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+        }
+        //date range received
+        if (filter["operator"] == "gte&&lte") {
+          endDate = filter["endDate"]
+          if (typeof endDate !== "string") {
+            endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
+          }
+          //prepare startDate array
+          filterarray.push(filter["field"])
+          filterarray.push(">=")
+          filterarray.push(startDate)
+          filterParams.push(filterarray)
+          
+
+          //prepare endDate array
+          filterarray = []
+          filterarray.push(filter["field"])
+          filterarray.push("<=")
+          filterarray.push(endDate)
+          filterParams.push(filterarray)
+        }
+      } else {
+        //single date passed
+        filterarray.push(filter["field"])
+        filterarray.push(filter["operator"])
+        filterarray.push(startDate)
+        filterParams.push(filterarray)
+      }
+    } else {
+      filterarray.push(filter["field"])
+      filterarray.push(filter["operator"])
+      filterarray.push(filter["value"]["selected"])
+      filterParams.push(filterarray)
+    }
+  })
+  return filterParams
 }
 
   componentDidUpdate(prevProps) {
     //update component when filter is changed
     if (prevProps.dashboardFilter != this.props.dashboardFilter) {
-      let filterParams = []
-      this.props.dashboardFilter.map((filter, index) => {
-        let filterarray = []
-        if (filter["dataType"] == "date") {
-          var startDate = filter["startDate"]
-          var endDate = null
-          if (filter["startDate"] && filter["endDate"]) {
-            //convert startDate object to string
-            if (typeof startDate !== "string") {
-              startDate = filter["startDate"]
-              startDate = startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
-            }
-            //date range received
-            if (filter["operator"] == "gte&&lte") {
-              endDate = filter["endDate"]
-              if (typeof endDate !== "string") {
-                endDate = endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
-              }
-              //prepare startDate array
-              filterarray.push(filter["field"])
-              filterarray.push(">=")
-              filterarray.push(startDate)
-              filterParams.push(filterarray)
-              
-
-              //prepare endDate array
-              filterarray = []
-              filterarray.push(filter["field"])
-              filterarray.push("<=")
-              filterarray.push(endDate)
-              filterParams.push(filterarray)
-            }
-          } else {
-            //single date passed
-            filterarray.push(filter["field"])
-            filterarray.push(filter["operator"])
-            filterarray.push(startDate)
-            filterParams.push(filterarray)
-          }
-        } else {
-          filterarray.push(filter["field"])
-          filterarray.push(filter["operator"])
-          filterarray.push(filter["value"]["selected"])
-          filterParams.push(filterarray)
-        }
-      })
+      let filterParams = this.extractFilterValues()
+    
       let preapredFilter
-      if(filterParams && filterParams.length>1){
-        preapredFilter=filterParams[0]
-        for(let i=1;i<filterParams.length;i++){
-          preapredFilter=this.preparefilter(preapredFilter,filterParams[i])
-          
+      if (filterParams && filterParams.length > 1) {
+        preapredFilter = filterParams[0]
+        for (let i = 1; i < filterParams.length; i++) {
+          preapredFilter = this.preparefilter(preapredFilter, filterParams[i])
+
         }
       }
 
       if(filterParams && filterParams.length != 0)
         {
-          if(filterParams.length>1)
-            this.updateGraph(preapredFilter)
-          else
+          if(filterParams.length>1){
+            this.setState({preparedDashboardFilter:preapredFilter},()=>{
+              this.updateGraph(preapredFilter)
+            })
+          } else{
+          this.setState({preparedDashboardFilter:filterParams},()=>{
             this.updateGraph(filterParams)
+          })
+        }
         }     
        else{
          this.updateGraph()
        }
+
     }
   }
 
@@ -203,11 +219,10 @@ preparefilter(filter1,filter2){
         delete this.renderedWidgets[elementId];
       }
     }
-    
-    if(widgets.length==0){
+    if (widgets.length == 0) {
       this.loader.destroy();
     }
-    else{
+    else {
       for (let widget of widgets) {
         var attributes = widget.attributes;
         //dispose 
@@ -225,7 +240,8 @@ preparefilter(filter1,filter2){
             }
             else {
             //dispose if widget exists
-            let widgetObject = WidgetRenderer.render(widget, response.data.widget);
+            let applyingDashboardFilters=this.state.preparedDashboardFilter?true:false;
+            let widgetObject = WidgetRenderer.render(widget, response.data.widget,null,applyingDashboardFilters);
             if (widgetObject) {
               this.renderedWidgets[widgetUUId] = widgetObject;
             }
@@ -237,9 +253,8 @@ preparefilter(filter1,filter2){
             that.setState({ widgetCounter: that.state.widgetCounter+1});
             if(this.state.widgetCounter>=widgets.length){
               that.loader.destroy();
-            }
-          }
-        });
+            }}
+          });
       }
     }
     if (errorFound) {
@@ -252,8 +267,22 @@ preparefilter(filter1,filter2){
     }
   };
 
+  async drillDownToDashboard(data) {
+    let event = {};
+    event.value = data.dashboard;
+    let dashboardData = await this.getDashboardHtmlDataByUuid(event.value);
+    event.value = JSON.stringify(dashboardData.data.dashboard)
+    let drilldownDashboardFilter=JSON.parse(data.filter)
+    event.drilldownDashboardFilter = drilldownDashboardFilter;
+    this.props.handleChange(event, "dashname")
+  }
+
   widgetDrillDownMessageHandler = (event) => {
     let eventData = event.data;
+    if (eventData.target == 'dashboard') {
+      this.drillDownToDashboard(eventData);
+    }
+
     let action = eventData[WidgetDrillDownHelper.MSG_PROP_ACTION];
     if ((action !== WidgetDrillDownHelper.ACTION_DRILL_DOWN) && (action !== WidgetDrillDownHelper.ACTION_ROLL_UP)) {
       return;
@@ -285,7 +314,15 @@ preparefilter(filter1,filter2){
 
     let url = `analytics/widget/${widgetId}?data=true`;
     let filter = eventData[WidgetDrillDownHelper.MSG_PROP_FILTER];
-    if (filter && ('' !== filter)) {
+
+    //apply dashboard filter if exists
+    if(this.state.preparedDashboardFilter){
+      //combining dashboardfilter with widgetfilter
+        let preparedFilter=filter?this.preparefilter(this.state.preparedDashboardFilter,JSON.parse(filter)):this.state.preparedDashboardFilter
+      filter=preparedFilter
+      url = url + '&filter=' + JSON.stringify(filter);
+    }
+    else if(filter && ('' !== filter)) {
       url = url + '&filter=' + encodeURIComponent(filter);
     }
     //starting spinner 
@@ -320,7 +357,7 @@ preparefilter(filter1,filter2){
   }
 
   render() {
-      return  <div id={this.dashboardDivId} dangerouslySetInnerHTML={{ __html: this.appendToDashboardContainer(this.state.htmlData?this.state.htmlData:'') }} />;
+    return <div id={this.dashboardDivId} dangerouslySetInnerHTML={{ __html: this.appendToDashboardContainer(this.state.htmlData ? this.state.htmlData : '') }} />;
   }
 }
 

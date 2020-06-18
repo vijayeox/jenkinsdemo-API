@@ -6,21 +6,23 @@ use Oxzion\Service\TemplateService;
 use Logger;
 
 
-class AnalyticsAbstract
+abstract class AnalyticsAbstract implements AnalyticsEngine
 {
 
     protected $logger;
-    protected $config;
+    protected $config; //This config is config for connection not the app config. 
     protected $appConfig;
     protected $appDBAdapter;
 
-    public function __construct($config,$appDBAdapter,$appConfig) {
-        $this->config = $config;  //This config is config for connection not the app config. 
+    public function __construct($appDBAdapter,$appConfig) {
         $this->appDBAdapter = $appDBAdapter;
         $this->appConfig = $appConfig;
         $this->logger = Logger::getLogger(get_class($this));
     }
 
+    public function setConfig($config){
+        $this->config;
+    }
 
     public function runQuery($app_name,$entity_name,$parameters){
         $finalResult = $this->getData($app_name,$entity_name,$parameters);

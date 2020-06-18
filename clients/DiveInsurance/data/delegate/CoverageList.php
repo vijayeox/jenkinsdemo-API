@@ -17,29 +17,29 @@ class CoverageList extends AbstractAppDelegate
         if ($data['product'] == 'Individual Professional Liability - New Policy') {
             $is_upgrade = 0;
             $product = 'Individual Professional Liability';
-        } else if ($data['product'] == 'Individual Professional Liability - Upgrade') {
+        } else if ($data['product'] == 'Individual Professional Liability - Endorsement') {
             $is_upgrade = 1;
             $product = 'Individual Professional Liability';
         } else if ($data['product'] == 'Emergency First Response - New Policy') {
             $is_upgrade = 0;
             $product = 'Emergency First Response';
-        } else if ($data['product'] == 'Emergency First Response - Upgrade') {
+        } else if ($data['product'] == 'Emergency First Response - Endorsement') {
             $is_upgrade = 1;
             $product = 'Emergency First Response';
-        } else if ($data['product'] == 'Dive Boat - New Policy') {
+        } else if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Boat - Group PL') {
             $is_upgrade = 0;
             $product = 'Dive Boat';
-        } else if ($data['product'] == 'Dive Boat - Upgrade') {
+        } else if ($data['product'] == 'Dive Boat - Endorsement' || $data['product'] == "Dive Boat - Group PL Endorsement") {
             $is_upgrade = 1;
             $product = 'Dive Boat';
-        } else if ($data['product'] == 'Dive Store - New Policy') {
+        } else if ($data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Store - Group PL') {
             $is_upgrade = 0;
             $product = 'Dive Store';
-        } else if ($data['product'] == 'Dive Store - Upgrade') {
+        } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
             $is_upgrade = 1;
             $product = 'Dive Store';
         }
-        $selectQuery  = "SELECT DISTINCT coverage from premium_rate_card WHERE product = '" . $product . "' AND is_upgrade = 0 AND `year` = " . $data['year']." AND coverage_category = '".$data['coverageCategory']."' AND coverage NOT IN ('".$data['previousCoverage']."')";
+        $selectQuery  = "SELECT DISTINCT coverage from premium_rate_card WHERE product = '" . $product . "' AND is_upgrade = 0 AND `year` = " . $data['year']." AND coverage_category = '".$data['coverage_category']."' AND coverage NOT IN ('".$data['coverage']."') ORDER BY coverage";
         $result = $persistenceService->selectQuery($selectQuery);
         while ($result->next()) {
             $coverage = $result->current();

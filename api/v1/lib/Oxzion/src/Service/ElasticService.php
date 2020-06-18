@@ -22,10 +22,13 @@ class ElasticService
     private $filterFields;
     private $filterTmpFields;
 
-    public function __construct($config)
+    public function __construct()
     {
-        $this->config = $config;
         $this->logger = Logger::getLogger(get_class($this));
+    }
+
+    public function setConfig($config){
+        $this->config = $config;
         $clientsettings = array();
         $clientsettings['host'] = $config['elasticsearch']['serveraddress'];
         $clientsettings['user'] = $config['elasticsearch']['user'];
@@ -37,15 +40,16 @@ class ElasticService
         $this->logger->info("core to be used - ".$this->core);
         $this->type = $config['elasticsearch']['type'];
         $clientbuilder = ClientBuilder::create(); 
-        if ($clientbuilder) { 
+        if(!$this->client || !isset($_ENV['ENV']) || $_ENV['ENV'] != 'test'){
             $this->client = $clientbuilder->setHosts(array($clientsettings))->build();
-        } else {
-            $this->client = new ClientBuilder(); //This is for Mocking in the test case
         }
     }
-
     public function setElasticClient($client){
         $this->client = $client;
+    }
+
+    public function getElasticClient(){
+        return $this->client;
     }
 
     public function create($indexName,$fieldList,$settings) {
@@ -311,7 +315,6 @@ class ElasticService
         if (strpos($text, 'query:') !== false) {
             $query['bool']['must'][] = array("query_string" => (array("query" => str_replace('query:', "", $text))));
         } else {
-            // $query['bool']['should'][] = array("query_string"=>(array("query"=>$text)));
             $query['bool']['should'][] = array("multi_match" => array("fields" => $this->getBoostFields($entity, $fields), "query" => $text, "fuzziness" => "AUTO"));
         }
         return $query;
@@ -322,9 +325,7 @@ class ElasticService
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
         } else if (key($aggregates) != "count") {
-            //    $aggs = array('value'=>array(key($aggregates)=>array("script"=>array("inline"=>"try { return Float.parseFloat(doc['".$aggregates[key($aggregates)].".keyword'].value); } catch (NumberFormatException e) { return 0; }"))));
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
-
         }
         return $aggs;
     }
@@ -392,25 +393,21 @@ class ElasticService
             default:
                 break;
         }
-        // print_r($mustquery);exit;
         return $mustquery;
     }
 
     public function search($q)
     {
-       if  ($this->core) {
-           $q['index'] = $this->core.'_'.$q['index'];
-       }
-       $this->logger->debug('Elastic query:');
-       $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
-       $data['query'] = json_encode($q);
-  //      print_r(json_encode($q));echo "\n";
-       $data["data"] = $this->client->search($q);
-       $this->logger->debug('Data from elastic:');
-       $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
-  //       print_r(json_encode($data['data']));echo "\n";
+        if  ($this->core) {
+            $q['index'] = $this->core.'_'.$q['index'];
+        }
+        $this->logger->debug('Elastic query:');
+        $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
+        $data['query'] = json_encode($q);
+        $data["data"] = $this->client->search($q);
+        $this->logger->debug('Data from elastic:');
+        $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
         return $data;
-
     }
 
     public function bulk($body) {
@@ -425,7 +422,6 @@ class ElasticService
         $index = ($this->core) ? $this->core.'_'.$index:$index;
         $params['index'] = $index;
         $params['id'] = $id;
-    //    $params['type'] = $this->type;
         $params['body'] = $body;
         return $this->client->index($params);
     }

@@ -4,6 +4,7 @@ namespace Oxzion\Document\Parser\Spreadsheet;
 use PHPUnit\Framework\TestCase;
 use \Exception;
 use Oxzion\Document\Parser\Form\FormRowMapper;
+use Oxzion\Document\Parser\Spreadsheet\SpreadsheetParserImpl;
 
 class SpreadsheetParserTest extends TestCase{
 

@@ -265,6 +265,7 @@ class UserService extends AbstractService
                 'email' => $data['email'],
                 'orgid' => $orgid,
                 'password' => $password,
+                'subject' => isset($data['subject']) ? $data['subject'] : null
             )), 'USER_ADDED');
             $this->addUserToOrg($form->id, $form->orgid);
             if (isset($data['role'])) {

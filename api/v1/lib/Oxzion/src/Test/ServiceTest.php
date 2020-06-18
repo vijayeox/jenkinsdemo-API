@@ -13,6 +13,9 @@ use Zend\Stdlib\ResponseInterface;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Stdlib\ArrayUtils;
+use Oxzion\Service\UserService;
+use Oxzion\Auth\AuthSuccessListener;
+use Oxzion\Auth\AuthConstants;
 
 class ServiceTest extends TestCase
 {
@@ -214,7 +217,10 @@ class ServiceTest extends TestCase
         $this->application->getServiceManager()->get('SendResponseListener')->detach($events);
 
         return $this->application;
+    
     }
+
+
 
     /**
      * Get the service manager of the application object
@@ -373,5 +379,29 @@ class ServiceTest extends TestCase
             ));
         }
         $this->assertEquals($module, $match);
+    }
+
+    protected function initAuthContext($username){
+         $userService = $this->getApplicationServiceLocator()->get(UserService::class);
+         $authSuccessListener = new AuthSuccessListener($userService);
+         $authSuccessListener->loadUserDetails(array(AuthConstants::USERNAME => $username));
+    }
+
+    protected function executeQueryTest($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
+    }
+
+    protected function executeUpdate($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        return $result;
     }
 }

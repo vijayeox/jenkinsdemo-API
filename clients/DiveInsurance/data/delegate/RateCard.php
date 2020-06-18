@@ -13,7 +13,12 @@ class Ratecard extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {  
         $this->logger->info("Executing Rate Card -STart".print_r($data,true));
-        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
+        if($data['product']=='Emergency First Response' || $data['product'] == 'Individual Professional Liability'){
+            $operation = " = ";
+        } else {
+            $operation = " <= ";
+        }
+        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date ".$operation." '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
         $this->logger->info("Rate Card query -> $select");
        
@@ -33,10 +38,24 @@ class Ratecard extends AbstractAppDelegate
                         $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                     }
                 }
+                if(isset($rate['downpayment'])){
+                    $premiumRateCardDetails[$rate['key']."_downpayment"] = $rate['downpayment'];    
+                }else{
+                    $premiumRateCardDetails[$rate['key']."_downpayment"] = 0;
+                }
+                if(isset($rate['installment_count'])){
+                    $premiumRateCardDetails[$rate['key']."_installments"] = $rate['installment_count'];
+                }else{
+                    $premiumRateCardDetails[$rate['key']."_installments"] = 0;
+                }
+                if(isset($rate['installment_amount'])){
+                    $premiumRateCardDetails[$rate['key']."_installment_amount"] = $rate['installment_amount'];
+                }else{
+                    $premiumRateCardDetails[$rate['key']."_installment_amount"] = 0;
+                }
             }
             unset($rate);
         }
-
         foreach ($data as $key => $value) {
             if(is_string($value))
             {

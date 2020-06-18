@@ -59,12 +59,12 @@ content:
                 -
                     title: 'Effective Date'
                     field: effectiveDate
-                    cell: '<td>{moment(item.effectiveDate).format("MMMM Do YYYY")}</td>'
+                    cell: '<td>{formatDate(item.effectiveDate)}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD
                 -
                     title: 'Producer Date'
                     field: producerdate
-                    cell: '<td>{moment(item.producerdate).format("MMMM Do YYYY")}</td>'
+                    cell: '<td>{formatDate(item.producerdate)}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD

@@ -6,6 +6,7 @@ use Analytics\Model\Widget;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class WidgetController extends AbstractApiController
 {

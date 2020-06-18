@@ -197,6 +197,6 @@ content:
                     title: 'Policy End Date'
                     field: end_date
                     cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
-            passColumnConfig : 
+            passColumnConfig :
                 -
-                    name
+                    lastname

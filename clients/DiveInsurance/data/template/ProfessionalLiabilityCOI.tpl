@@ -19,10 +19,10 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
+					<p class = "details">{$lastname}, {$firstname} {if isset($initial)}, {$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$city}, {$state_in_short} {$zip}</p>
 					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
@@ -132,13 +132,13 @@
 								<th nowrap><p class = "ins_font"><b>Cylinder Coverage:</b></p></th>
 								<td><p class = "ins_font">
 								{if isset($initialCylinderCoverage)}
-									{if $initialCylinderCoverage != "cylinderInspectorOrInstructorDeclined"}
+									{if $initialCylinderCoverage != "cylinderInspectorOrCylinderInspectionInstructorDeclined"}
 											{$cylinderPriceVal}
 										{else}
 											Not Covered
 										{/if}
 								{else}
-									{if $cylinder != "cylinderInspectorOrInstructorDeclined"}
+									{if $cylinder != "cylinderInspectorOrCylinderInspectionInstructorDeclined"}
 											{$cylinderPriceVal}
 										{else}
 											Not Covered
@@ -171,7 +171,6 @@
 		</div>
 		<div class = "second_content">
 			{if isset($update_date)}
-
 			{assign var=hasEndorsement value=0}
 			{foreach from=$previousPolicyData item=$upgradeData}
 			{if isset($upgradeData.careerCoverageName) || isset($upgradeData.upgraded_single_limit) || isset($upgradeData.scubaCoverageName) || isset($upgradeData.equipmentCoverageName) ||  isset($upgradeData.cylinderCoverageName) || isset($upgradeData.tecRecCoverageName)}
@@ -415,13 +414,17 @@
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
-					<b>{include file ="{$smarty.current_dir}/v/UT.tpl"}</b>
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
-				<center><p class = "notice">
+				<center><p class = "notice">both of 
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
+				<center><p class = "notice">both of 
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+				</p></center>
+			{elseif $state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>

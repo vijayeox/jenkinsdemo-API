@@ -6,6 +6,7 @@ import { filterBy } from '@progress/kendo-data-query';
 import { orderBy } from '@progress/kendo-data-query';
 import { process } from '@progress/kendo-data-query';
 import { ExcelExport } from '@progress/kendo-react-excel-export';
+import WidgetDrillDownHelper from './WidgetDrillDownHelper';
 
 export default class WidgetGrid extends React.Component {
     constructor(props) {
@@ -14,6 +15,7 @@ export default class WidgetGrid extends React.Component {
         this.allData = props.data ? props.data : [];
         this.filteredData = null;
         let configuration = props.configuration;
+        this.isDrillDownTable = props.isDrillDownTable;
         this.resizable = configuration ? (configuration.resizable ? configuration.resizable : false) : false;
         this.filterable = configuration ? (configuration.filterable ? configuration.filterable : false) : false;
         this.groupable = configuration ? (configuration.groupable ? configuration.groupable : false) : false;
@@ -54,6 +56,7 @@ export default class WidgetGrid extends React.Component {
     saveAsExcel = () => {
         this.excelExporter.save();
     }
+  
 
     parseData = () => {
         let fieldDataTypeMap = new Map();
@@ -76,10 +79,10 @@ export default class WidgetGrid extends React.Component {
     }
 
     prepareData = (refilter) => {
-        if(this.allData){
-            this.allData.map(data=>{
+        if (this.allData) {
+            this.allData.map(data => {
                 //trimmimg time from date in order for date filter to work
-                data.date?data.date.setHours(0,0,0,0):null
+                data.date ? data.date.setHours(0, 0, 0, 0) : null
             })
         }
         if (this.state.sort) {
@@ -166,8 +169,29 @@ export default class WidgetGrid extends React.Component {
         console.log(e);
     }
 
+    drillDownClick = (evt) =>{
+       WidgetDrillDownHelper.drillDownClicked(WidgetDrillDownHelper.findWidgetElement(evt.nativeEvent ? evt.nativeEvent.target : evt.target),evt.dataItem)
+       ReactDOM.unmountComponentAtNode(this.props.canvasElement)
+        
+    }
+    hasBackButton(){
+        if(this.props.canvasElement && this.props.canvasElement.parentElement){
+        let backbutton=this.props.canvasElement.parentElement.getElementsByClassName('oxzion-widget-roll-up-button')
+        if(backbutton.length>0)
+        return true
+        else
+        return false
+        }
+        else
+        {
+            return false
+        }
+
+    }
+
     render() {
         let thiz = this;
+        let hasBackButton=this.hasBackButton()
         function getColumns() {
             let columns = []
             for (const config of thiz.columnConfig) {
@@ -196,7 +220,7 @@ export default class WidgetGrid extends React.Component {
             sortable={this.sortable}
             sort={this.state.sort}
             onSortChange={this.gridSortChanged}
-
+            onRowClick={this.drillDownClick}
             groupable={this.groupable}
             group={this.state.group}
             onGroupChange={this.gridGroupChanged}
@@ -209,16 +233,15 @@ export default class WidgetGrid extends React.Component {
 
         return (
             <>
+                {this.isDrillDownTable &&
+                    <div className="oxzion-widget-drilldown-table-icon" style={hasBackButton?{right:"5%"}:{right:"7px"}} title="Drilldown Table">
+                        <i className="fas fa-angle-double-down fa-lg"></i>
+                    </div>
+                }
                 {this.exportToExcel &&
                     <>
-                        <div style={{
-                            float: "right",
-                            top: "20px",
-                            position: "relative",
-                            zIndex: "10",
-                            width: "16px",
-                            cursor: "pointer"
-                        }} onClick={this.saveAsExcel}><i className="fa fa-file-excel"></i></div>
+
+                        <div className="oxzion-widget-drilldown-excel-icon" style={hasBackButton?{right:"5%"}:{right:"10px"}} onClick={this.saveAsExcel}><i className="fa fa-file-excel "></i></div>
                         <ExcelExport
                             data={this.allData}
                             ref={exporter => this.excelExporter = exporter}

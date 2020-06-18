@@ -9,11 +9,18 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Analytics\AnalyticsAbstract;
 
 
-class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
+class AnalyticsEngineImpl extends AnalyticsAbstract {
 
 	private $hasGroup;
-    public function __construct($config,$appDBAdapter,$appConfig) {
-		parent::__construct($config,$appDBAdapter,$appConfig);
+    private $elasticService;
+    public function __construct($appDBAdapter,$appConfig, ElasticService $elasticService) {
+		parent::__construct(null,$appDBAdapter,$appConfig);
+		$this->elasticService = $elasticService;
+    }
+
+    public function setConfig($config){
+    	parent::setConfig($config);
+    	$this->elasticService->setConfig($config);
     }
 
     public function getData($app_name,$entity_name,$parameters)
@@ -29,7 +36,7 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 			if ($entity_name) {
 				$query['filter'][]=['entity_name','==',$entity_name];
 			}
-            $elasticService = new ElasticService($this->config);
+            $elasticService = $this->elasticService;
 			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
 			$finalResult['meta'] = $query;
 			$finalResult['meta']['type'] = $result['type'];

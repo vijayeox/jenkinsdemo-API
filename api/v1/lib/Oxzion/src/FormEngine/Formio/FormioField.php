@@ -29,6 +29,7 @@ class FormioField
                                           "datagrid" => "minLength",
                                           "year" => "minYear"),
                           "MAX" => array("textfield" => "maxLength",
+                                          "file" => "fileMaxSize",
                                           "email" => "maxLength",
                                           "url" => "maxLength",
                                           "password" => "maxLength",
@@ -230,7 +231,8 @@ class FormioField
                 }
             }else if($refKey == 'REQUIRED' || $refKey == 'MIN' || $refKey == 'MAX' || $refKey == 'PATTERN' || $refKey == 'ERROR_MSG'){
                 if($field['data_type'] == 'datetime'){
-                    $fieldObj = $fieldTemplate['datePicker'];
+                    $fieldObj =  ($refKey == 'MIN' || $refKey == 'MAX' ) ? $fieldTemplate['datePicker'] : 
+                                (isset($fieldTemplate['validate']) ? $fieldTemplate['validate'] : array());
                 }else if($field['type'] == 'day' || ($field['type'] == 'file' && $refKey != 'ERROR_MSG')){
                     $fieldObj = $fieldObj;
                 }else if($field['type'] != 'signature'  || ($field['type'] == 'signature' && $refKey != 'MIN' && $refKey != 'MAX')){
@@ -318,6 +320,9 @@ class FormioField
                     }
                     $items = $fieldRef['ITEMS'];
                     foreach ($fieldObj[$fieldProp] as $key => $value) {
+                        if(!isset($items[$key])){
+                          continue;
+                        }
                         $this->validateFieldProperty($name, $items[$key], $fieldObj[$fieldProp], 'DEFAULT', $key);
                     }
                     continue;

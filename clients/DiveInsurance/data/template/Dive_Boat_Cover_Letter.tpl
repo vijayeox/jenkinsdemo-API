@@ -11,8 +11,8 @@
 			<p class="name1">{$business_name}</p>
 			<p class="name1">{$business_address1}</p>
 			<p class="name1">{$business_address2}</p>
-			<p class="name1">{$business_city},{$business_state}</p>
-			<p class="name1">{$business_country},{$business_zip}</p>
+			<p class="name1">{$business_city}, {$business_state}</p>
+			<p class="name1">{$business_country}, {$business_zip}</p>
 		</div>
 
 		<p class = "rgard">RE: PADI ENDORSED DIVE BOAT INSURANCE</p>

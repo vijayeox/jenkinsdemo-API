@@ -554,6 +554,11 @@ class FormRender extends React.Component {
           if (this.state.content["properties"]["clickable"]) {
             options.breadcrumbSettings = { clickable: eval(this.state.content["properties"]["clickable"]) };
           }
+          if (this.state.content["properties"]["showBreadcrumbs"]) {
+            if (eval(this.state.content.properties.showBreadcrumbs)) {
+              document.getElementById(this.formDivID).classList.add("forceBredcrumb") ;
+            }
+          }
           if (this.state.content["properties"]["showPrevious"]) {
             options.buttonSettings = { showPrevious: eval(this.state.content["properties"]["showPrevious"]) };
           }
@@ -1161,7 +1166,6 @@ class FormRender extends React.Component {
     e.stopPropagation();
     e.stopImmediatePropagation();
     that.showFormLoader(true,0);
-    let requestbody = {firstname: e.detail.firstname,lastname: e.detail.lastname,amount: e.detail.amount};
     that.callPayment(e.detail).then(response => {
       var transactionIdComponent = form.getComponent("transaction_id");
       if(response.data){

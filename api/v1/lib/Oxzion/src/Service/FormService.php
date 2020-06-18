@@ -212,6 +212,7 @@ class FormService extends AbstractService
             return 0;
         }
         if(count($errors) > 0){
+            $this->logger->info("Form Field mapping Errors ".json_encode($errors, JSON_PRETTY_PRINT));
             $validationException = new ValidationException();
             $validationException->setErrors($errors);
             throw $validationException;

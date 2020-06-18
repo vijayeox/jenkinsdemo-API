@@ -148,12 +148,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:serviceTask id="Task_08p2msc" name="Cancel Autorenewal Job" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="commands">
-            <camunda:list>
-              <camunda:value>{"command" : "file"}</camunda:value>
-              <camunda:value>{"command" : "processFileData"}</camunda:value>
-            </camunda:list>
-          </camunda:inputParameter>
+          <camunda:inputParameter name="command">command</camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -184,7 +179,8 @@ def additionalIn = endorsementOptions.modify_additionalInsured
 def upgradeInternationalCoverages = execution.getVariable('upgradeCareerCoverage')
 def autoRenewalJob = execution.getVariable('autoRenewalJob')
 def scubaFit = execution.getVariable('scubaFit')
-def cylinder = execution.getVariable('upgradecylinder')
+def cylinder = execution.getVariable('cylinder')
+def excessLiability = execution.getVariable('excessLiability')
 def paymentOptions = execution.getVariable('paymentOptions')
 def initiatedByCsr = execution.getVariable('initiatedByCsr')
 
@@ -194,6 +190,7 @@ boolean result3 = false
 boolean result4 = false
 boolean result5 = false
 boolean result6 = true
+boolean result7 = false
 
 if(personalInfo){
     if(country != "United States of America"){
@@ -205,12 +202,15 @@ if(cylinder){
     result5 = true
   }  
 }
+if (excessLiability) {
+  if (excessLiability == "excessLiabilityCoverage3000000" || excessLiability == "excessLiabilityCoverage4000000" || excessLiability == "excessLiabilityCoverage9000000") {
+    result7 = true;
+  }
+}
 if(coverage || additionalIn){
 if (additionalInsured) {
  additionalInsured.each {
-  if (it.businessRelation == 'other') {
-   result1 = true
-  }
+  result1 = true
  }
 }
 if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternationalCoverages == "internationalAssistantInstructor" || upgradeInternationalCoverages == "internationalDivemaster" || upgradeInternationalCoverages =="internationalNonteachingSupervisoryInstructor" || upgradeInternationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){
@@ -225,7 +225,7 @@ if(paymentOptions){
   }
 }
 
-if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6 || result0)) {
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)
