@@ -268,10 +268,10 @@ class ProjectService extends AbstractService
         }
         $form = new Project();
         $data = $obj->toArray();
-        if (isset($data['parent_id']) && !empty($data['parent_id'])){
-            $select = "SELECT id from ox_project where parent_id = '" . $data['parent_id'] . "'";
+        if (!isset($data['parent_id']) || empty($data['parent_id'])){
+            $select = "SELECT id from ox_project where parent_id = '" . $data['id'] . "' and isdeleted <> 1";
             $result = $this->executeQueryWithParams($select)->toArray();
-            if(!$result){
+            if($result){
                 if(!(isset($params['force_flag']) && ($params['force_flag'] == true || $params['force_flag'] == "true")))
                     throw new ServiceException("Project has subprojects", "project.not.found");
             }
@@ -466,7 +466,7 @@ ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_
         try {
             if (isset($params['projectUuid'])) {
                 $id = $this->getIdFromUuid('ox_project',$params['projectUuid']);
-                $queryString = "select oxp.name,oxp.description,oxp.uuid,oxp.date_created,ou.uuid as manager_id,sub.uuid as parent_id from ox_project as oxp INNER JOIN ox_user as ou on oxp.manager_id = ou.id INNER JOIN ox_project as sub on sub.id = oxp.parent_id where oxp.parent_id =".$id;
+                $queryString = "select oxp.name,oxp.description,oxp.uuid,oxp.date_created,ou.uuid as manager_id,sub.uuid as parent_id from ox_project as oxp INNER JOIN ox_user as ou on oxp.manager_id = ou.id INNER JOIN ox_project as sub on sub.id = oxp.parent_id where oxp.parent_id =".$id." and oxp.isdeleted <> 1";
                 $resultSet = $this->executeQuerywithParams($queryString);
                 return $resultSet->toArray();
             }
