@@ -14,7 +14,7 @@ am4core.useTheme(am4themes_animated);
 am4core.options.commercialLicense = true;
 
 class WidgetRenderer {
-    static render(element, widget, props) {
+    static render(element, widget, props,applyingDashboardFilters) {
         // am4core.options.queue = true //reduces load on the browser
         let widgetTagName = element.tagName.toUpperCase();
         switch (widget.renderer) {
@@ -30,7 +30,7 @@ class WidgetRenderer {
                     throw (`Unexpected chart widget tag "${widgetTagName}"`);
                 }
                 try {
-                    return WidgetRenderer.renderAmCharts(element, widget.configuration, props, widget.data);
+                    return WidgetRenderer.renderAmCharts(element, widget.configuration, props, widget.data,applyingDashboardFilters);
                 }
                 catch (e) {
                     console.error(e);
@@ -43,7 +43,7 @@ class WidgetRenderer {
                     throw (`Unexpected table widget tag "${widgetTagName}"`);
                 }
                 try {
-                    return WidgetRenderer.renderTable(element, widget.configuration, widget.data);
+                    return WidgetRenderer.renderTable(element, widget.configuration, widget.data,applyingDashboardFilters);
                 }
                 catch (e) {
                     console.error(e);
@@ -52,12 +52,12 @@ class WidgetRenderer {
                 break;
 
             case 'HTML':
-                    if ((widgetTagName !== 'SPAN') && (widgetTagName !== 'DIV')) {
-                        throw (`Unexpected inline aggregate value widget tag "${widgetTagName}"`);
-                    }
-                    return WidgetRenderer.renderhtml(element, widget.configuration, props, widget.data);
-                    break;
-    
+                if ((widgetTagName !== 'SPAN') && (widgetTagName !== 'DIV')) {
+                    throw (`Unexpected inline aggregate value widget tag "${widgetTagName}"`);
+                }
+                return WidgetRenderer.renderhtml(element, widget.configuration, props, widget.data);
+                break;
+
             default:
                 throw (`Unexpected widget renderer "${widget.renderer}"`);
         }
@@ -128,7 +128,7 @@ class WidgetRenderer {
         return configuration;
     }
 
-    static renderAmCharts(element, configuration, props, data) {
+    static renderAmCharts(element, configuration, props, data,applyingDashboardFilters) {
         let isDrillDownChart=false
         let transformedConfig = WidgetTransformer.transform(configuration, data);
         configuration = transformedConfig.chartConfiguration;
@@ -191,9 +191,9 @@ class WidgetRenderer {
             }
         }
 
-        if (WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration)) {
+        if (WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration, applyingDashboardFilters)) {
             WidgetDrillDownHelper.setupAmchartsEventHandlers(series);
-            isDrillDownChart=true;
+            isDrillDownChart = true;
         }
 
         let elementTagName = element.tagName.toUpperCase();
@@ -210,16 +210,16 @@ class WidgetRenderer {
         }
         if (!canvasElement) {
             throw 'Canvas element not found for drawing the chart.';
-        } 
+        }
 
         let chart = null;
         if ('amCharts-map' === am4ChartType) {
             chart = WidgetRenderer.renderAmMap(configuration, canvasElement, data);
-            if(isDrillDownChart){
+            if (isDrillDownChart) {
                 canvasElement.insertAdjacentHTML('beforeend',
-                '<div class="oxzion-widget-drilldown-icon" title="Drilldown Chart">' +
-                '<i class="fas fa-angle-double-down fa-lg"></i>' +
-                '</div>');
+                    '<div class="oxzion-widget-drilldown-icon" title="Drilldown Chart">' +
+                    '<i class="fas fa-angle-double-down fa-lg"></i>' +
+                    '</div>');
             }
         }
         else {
@@ -227,11 +227,11 @@ class WidgetRenderer {
             if (chart && data) {
                 chart.data = data;
             }
-            if(isDrillDownChart){
+            if (isDrillDownChart) {
                 canvasElement.insertAdjacentHTML('beforeend',
-                '<div class="oxzion-widget-drilldown-icon" title="Drilldown Chart">' +
-                '<i class="fas fa-angle-double-down fa-lg"></i>' +
-                '</div>');
+                    '<div class="oxzion-widget-drilldown-icon" title="Drilldown Chart">' +
+                    '<i class="fas fa-angle-double-down fa-lg"></i>' +
+                    '</div>');
             }
         }
 
@@ -259,7 +259,7 @@ class WidgetRenderer {
             if (buttonElement) {
                 buttonElement.remove();
             }
-            
+
         }
         return chart;
     }
@@ -496,9 +496,10 @@ class WidgetRenderer {
         }
     }
 
-    static renderTable(element, configuration, data) {
+    static renderTable(element, configuration, data , applyingDashboardFilters) {
         let elementTagName = element.tagName.toUpperCase();
         let canvasElement = null;
+        let isDrillDownTable = false;
         switch (elementTagName) {
             case 'DIV':
                 canvasElement = element;
@@ -509,11 +510,19 @@ class WidgetRenderer {
             default:
                 throw `Unexpected table element "${elementTagName}"`;
         }
+      
         if (!canvasElement) {
             throw 'Canvas element not found for drawing the table/grid.';
+        } else {
+             //repainting the table if dashboard filter is applied
+             applyingDashboardFilters && ReactDOM.unmountComponentAtNode(canvasElement)
         }
 
-        WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration)
+        if (WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration , applyingDashboardFilters)) {
+            // WidgetDrillDownHelper.setupAmchartsEventHandlers(series);
+            isDrillDownTable = true;
+        }
+
         if (WidgetDrillDownHelper.isDrilledDown(element)) {
             let rollUpElements = element.getElementsByClassName('oxzion-widget-roll-up-button');
             let buttonElement = (rollUpElements && (rollUpElements.length > 0)) ? rollUpElements[0] : null;
@@ -540,8 +549,10 @@ class WidgetRenderer {
                 buttonElement.remove();
             }
         }
-        ReactDOM.unmountComponentAtNode(canvasElement)
-        ReactDOM.render(<WidgetGrid configuration={configuration} data={data} />, canvasElement);
+        
+       
+
+        ReactDOM.render(<WidgetGrid configuration={configuration} data={data} isDrillDownTable={isDrillDownTable} canvasElement={canvasElement} />, canvasElement);
     }
 }
 

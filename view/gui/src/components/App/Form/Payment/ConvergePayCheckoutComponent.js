@@ -9,6 +9,7 @@ export default class ConvergePayCheckoutComponent extends Base {
     super(component, options, data);
     this.data = data;
     this.form = this.getRoot();
+
     var that = this;
     var getPaymentToken = function(e) {
       e.preventDefault();
@@ -128,7 +129,8 @@ export default class ConvergePayCheckoutComponent extends Base {
             detail: {
               firstname: document.getElementById("convergepay-firstname").value,
               lastname: document.getElementById("convergepay-lastname").value,
-              amount: document.getElementById("convergepay-amount").value
+              amount: document.getElementById("convergepay-amount").value,
+              description: document.getElementById("convergepay-description").value
             }
           });
           that.form.element.dispatchEvent(evt);
@@ -151,6 +153,20 @@ export default class ConvergePayCheckoutComponent extends Base {
       getPaymentToken,
       false
     );
+    this.form.on("change", changed => {
+      if(changed && changed.changed){
+        var component = changed.changed.component;
+        if(component.key=="amount" && document.getElementById("convergepay-amount")){
+          document.getElementById("convergepay-amount").value = changed.data["amount"];
+        }
+      }
+      if(that.component.amount_field && changed && changed.changed){
+        var component = changed.changed.component;
+        if(component.key==that.component.amount_field && document.getElementById("convergepay-amount")){
+          document.getElementById("convergepay-amount").value = changed.data[that.component.amount_field];
+        }
+      }
+    });
   }
   static schema(...extend) {
     return Base.schema(
@@ -232,6 +248,22 @@ export default class ConvergePayCheckoutComponent extends Base {
         }
       }
     });
+    var that = this;
+    var billing_description = that.component.description_field? that.data[that.component.description_field]:"";
+    var description = this.renderTemplate("input", {
+      input: {
+        type: "input",
+        ref: `convergepay-description`,
+        attr: {
+          type: "hidden",
+          key: "convergepay-description",
+          id: "convergepay-description",
+          hideLabel: "true",
+          value: billing_description,
+          class: "form-control"
+        }
+      }
+    });
     var convergepayToken = this.renderTemplate("input", {
       input: {
         type: "input",
@@ -254,6 +286,7 @@ export default class ConvergePayCheckoutComponent extends Base {
           key: "convergepay-firstname",
           class: "form-control",
           lang: "en",
+          required: "true",
           id: "convergepay-firstname",
           placeholder: "First Name",
           hideLabel: "true"
@@ -268,6 +301,7 @@ export default class ConvergePayCheckoutComponent extends Base {
           type: "textfield",
           key: "convergepay-lastname",
           class: "form-control",
+          required: "true",
           lang: "en",
           id: "convergepay-lastname",
           placeholder: "Last Name",
@@ -275,7 +309,6 @@ export default class ConvergePayCheckoutComponent extends Base {
         }
       }
     });
-    var that = this;
     var billing_amount = that.component.amount_field? that.data[that.component.amount_field]:that.data["amount"];
     function renderWithPrefix(prefix) {
       that.component.prefix = "$";
@@ -335,6 +368,7 @@ export default class ConvergePayCheckoutComponent extends Base {
     <div id="paymentPanel" class="card-body">
     ${convergepayToken}
     ${merchanttxnid}
+    ${description}
     <div class="row">
     <div class="convergepay-success" style="display:none;">Payment successful!</div></div></div></div>
     </div>`;

@@ -7,9 +7,16 @@ use Knp\Snappy\Pdf;
 use setasign\Fpdi\Tcpdf\Fpdi;
 use Oxzion\Utils\FileUtils;
 use mikehaertl\pdftk\Pdf as PDFTK;
+use Logger;
 
 class DocumentGeneratorImpl implements DocumentGenerator
 {
+    private $logger;
+    
+    public function __construct(){
+        $this->logger = Logger::getLogger(__CLASS__);
+    }
+    
     public function generateDocument($htmlContent, $destination, array $options, $signatureCerticate=null)
     {
         // if (!$options) {

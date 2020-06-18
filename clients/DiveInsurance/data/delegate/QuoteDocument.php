@@ -39,8 +39,9 @@ class QuoteDocument extends PolicyDocument
         'Dive Store' 
             => array(
                      'template' => 'DiveCenterProposal_Template', 
-                     'header' => 'DiveCenterProposal_header',
+                     'header' => 'DiveCenterProposal_header.html',
                      'footer' => 'DiveCenterProposal_footer.html', 
+                     'psTemplate' => 'DiveStore_Proposal_Premium_Summary',
                      'cover_letter' => 'DS_Quote_Cover_Letter',
                      'lheader' => 'letter_header.html',
                      'lfooter' => 'letter_footer.html',
@@ -60,7 +61,7 @@ class QuoteDocument extends PolicyDocument
                      'gtemplate' => 'Group_PL_COI',
                      'gheader' => 'Group_header.html',
                      'gfooter' => 'Group_footer.html',
-                     'alheader' => 'DiveStore_AL_header.html',
+                     'alheader' => 'DiveStore_AL_Proposal_header.html',
                      'alfooter' => 'DiveStore_AL_footer.html',
                      'alTemplate' => 'DiveStore_AdditionalLocations',
                      'groupExclusions' => 'Group_Exclusions.pdf',

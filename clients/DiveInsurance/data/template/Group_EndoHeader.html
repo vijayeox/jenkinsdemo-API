@@ -19,7 +19,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','initial_combinedSingleLimit','initial_annualAggregate','state_in_short','padi','update_date'];
+     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','initial_combinedSingleLimit','initial_annualAggregate','state_in_short','padi','update_date','group_carrier'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -107,8 +107,7 @@
         </div>
         <div>
           <hr></hr>
-          <p class = "grpp_margin">Policy issued by Tokio Marine Specialty Insurance
-Company</p>
+          <p class = "grpp_margin">Policy issued by &nbsp<span class ="group_carrier"></span></p>
           <p class = "grpp_margin">Policy #: <span class ="group_policy_id"></span></p>
         </div>
       </div>

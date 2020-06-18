@@ -16,7 +16,7 @@
       }
       
     
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','carrier'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -37,7 +37,7 @@
 			<hr></hr>
 			<span class = "footer1">
 				Issued on behalf of:
-				<p>Tokio Marine Specialty Insurance Company</p>
+				<p><span class = "carrier"></span></p>
 			</span>
 			<span class = "footer2">
 				<center>

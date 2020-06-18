@@ -1230,5 +1230,3 @@ var phoneList = [
 "code": "ZW"
 }
 ];
-
-module.exports.phoneList = phoneList;

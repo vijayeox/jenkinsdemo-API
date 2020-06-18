@@ -216,7 +216,11 @@
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Virgin Islands'}
+			{elseif $state == 'Virgin Islands'}
+				<center><p class = "notice">both of 
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+				</p></center>
+			{elseif $business_state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>
@@ -240,7 +244,7 @@
 	</div>
 
 	{if $additional_insured == 'yes'}
-		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
+		<b><p class ="grp_add">Additional Insured >Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 		{assign var=list value=$groupAdditionalInsured|json_decode:true}
 		{foreach from=$list item=$additional}
 	    		<p class = "grpai_list">

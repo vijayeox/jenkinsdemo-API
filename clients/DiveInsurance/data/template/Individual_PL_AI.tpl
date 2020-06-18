@@ -21,10 +21,10 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
+					<p class = "details">{$lastname}, {$firstname} {if isset($initial)}, {$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$city}, {$state_in_short} {$zip}</p>
 					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
@@ -50,7 +50,7 @@
 		<div class="spacing">&nbsp</div>
 		<hr class="hrtag"></hr>
 		<div class = "ai_margin">
-	    	<b><p class = "ai_title">Additional Insured (See Additional Insured - Blanket Form):</p></b>
+	    	<b><p class = "ai_title">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 	    		{foreach from=$list item=$additional}
 		    		<p class = "ai_list">
 		    			{$additional.name}

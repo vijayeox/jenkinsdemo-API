@@ -3,6 +3,7 @@
 <head>
 <link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./AgentInfo.js"></script>
+ <script type="text/javascript" src="./js/moment.js"></script>
 <script>
   function subst() {
       var vars = {};
@@ -16,12 +17,25 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2','state_in_short','update_date','business_name'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2','state_in_short','update_date','business_name','carrier'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
               for (var j = 0; j < element.length; ++j) {
                   element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+              if (css_selector_classes[css_class] == "update_date") {
+              document.getElementsByClassName(
+                "update_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+              }
+              if (css_selector_classes[css_class] == "end_date") {
+                document.getElementsByClassName("end_date")[0].textContent =
+                  moment(vars[css_selector_classes[css_class]]).format(
+                    "D MMMM YYYY"
+                  ) + " - 12:01:00 AM";
               }
           }
       }
@@ -56,8 +70,8 @@
           <p class = "details"><span class ="business_name"></span></p>
           <p class = "details"><span class ="address1"></span></p>
           <p class = "details"><span class ="address2"></span></p>
-          <p class = "details"><span class ="city"></span>,<span class ="state_in_short"></span></p>
-          <p class = "details"><span class ="country"></span>&nbsp<span class ="zip"></span></p>
+          <p class = "details"><span class ="city"></span>, <span class ="state_in_short"></span>&nbsp<span class ="zip"></span></p>
+          <p class = "details"><span class ="country"></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -74,8 +88,7 @@
         </div>
         <div>
           <hr></hr>
-          <p class = "p_margin">Policy issued by Tokio Marine Specialty Insurance
-Company</p>
+          <p class = "p_margin">Policy issued by &nbsp<span class ="carrier"></span></p>
           <p class = "p_margin">Policy #: <span class ="policy_id"></span></p>
           <hr></hr>
         </div>

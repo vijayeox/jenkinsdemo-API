@@ -18,11 +18,13 @@ class DataSourceService extends AbstractService
 {
 
     private $table;
+    private $analyticEngines;
 
-    public function __construct($config, $dbAdapter, DataSourceTable $table)
+    public function __construct($config, $dbAdapter, DataSourceTable $table, array $analyticEngines)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->analyticEngines = $analyticEngines;
     }
 
     public function createDataSource($data)
@@ -176,21 +178,25 @@ class DataSourceService extends AbstractService
                 case 'ELASTIC':
                 case 'ELASTICSEARCH':
                     $elasticConfig['elasticsearch'] = $dsConfig['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines["ELASTIC"];
+                    $analyticsObject->setConfig($elasticConfig);
                     break;
                 case 'MYSQL':
                     $dsConfig = $dsConfig['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEngineMySQLImpl($dsConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines[$type];
+                    $analyticsObject->setConfig($dsConfig);
                     break;
                 case 'POSTGRES':
                 case 'POSTGRESQL':
                     $dsConfig = $dsConfig['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEnginePostgresImpl($dsConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines["POSTGRES"];
+                    $analyticsObject->setConfig($dsConfig);
                     break;
                 case 'QUICKBOOKS':
                     $dsConfig = $dsConfig['data'];
                     $dsConfig['dsid']=$response[0]['id'];
-                    $analyticsObject = new  \Oxzion\Analytics\API\AnalyticsEngineQuickBooksImpl($dsConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines[$type];
+                    $analyticsObject->setConfig($dsConfig);
                     break;
             }
         }

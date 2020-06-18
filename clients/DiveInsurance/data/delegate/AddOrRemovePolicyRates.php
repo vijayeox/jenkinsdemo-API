@@ -33,7 +33,7 @@ class AddOrRemovePolicyRates extends AbstractAppDelegate
                 }
                 $data['start_date'] = $year . '-' . $month . '-01';
 
-                if ($data['product'] == 'Individual Professional Liability - Upgrade') {
+                if ($data['product'] == 'Individual Professional Liability - Endorsement') {
                     $is_upgrade = 1;
                     $product = 'Individual Professional Liability';
                     if($month == 7){
@@ -41,19 +41,21 @@ class AddOrRemovePolicyRates extends AbstractAppDelegate
                     }
                     $days = date('t', mktime(0, 0, 0, $month, 1, $year));
                     $data['end_date'] = $year . '-' . $month . '-' . $days;
-                } else if ($data['product'] == 'Emergency First Response - Upgrade') {
+                } else if ($data['product'] == 'Emergency First Response - Endorsement') {
                     $is_upgrade = 1;
                     $product = 'Emergency First Response';
                     $data['end_date'] = $year . '-06-30';
-                } else if ($data['product'] == 'Dive Boat - Upgrade') {
+                } else if ($data['product'] == 'Dive Boat - Endorsement') {
                     $is_upgrade = 1;
                     $product = 'Dive Boat';
                     $data['end_date'] = $year . '-07-22';
-                } else if ($data['product'] == 'Dive Store - Upgrade') {
+                }else if ($data['product'] == "Dive Boat - Group PL Endorsement") {
+                    $is_upgrade = 1;
+                    $product = 'Dive Boat';
+                } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
                     $is_upgrade = 1;
                     $product = 'Dive Store';
                 }
-
                 if ($data['coverage_category'] == 'GROUP_COVERAGE' || $data['coverage_category'] == 'GROUP_EXCESS_LIABILITY') {
                     $days = date('t', mktime(0, 0, 0, $month, 1, $year));
                     $data['end_date'] = $year . '-' . $month . '-' . $days;

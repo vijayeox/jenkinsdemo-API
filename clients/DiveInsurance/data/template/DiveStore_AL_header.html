@@ -3,6 +3,7 @@
 <head>
 <link href= "./css/divestemplate_css.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./AgentInfo.js"></script>
+ <script type="text/javascript" src="./js/moment.js"></script>
 
 <script>
   function subst() {
@@ -23,6 +24,19 @@
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
               for (var j = 0; j < element.length; ++j) {
                   element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+              if (css_selector_classes[css_class] == "start_date") {
+              document.getElementsByClassName(
+                "start_date"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("D MMMM YYYY");
+              }
+              if (css_selector_classes[css_class] == "end_date") {
+                document.getElementsByClassName("end_date")[0].textContent =
+                  moment(vars[css_selector_classes[css_class]]).format(
+                    "D MMMM YYYY"
+                  ) + " - 12:01:00 AM";
               }
           }
       }
@@ -54,11 +68,11 @@
             <p class = "info">License#: <span class = "license_number"></span></p>
           </div>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
-          <p class = "details"><span class ="firstname"></span>&nbsp<span class ="lastname"></span></p>
-          <p class = "details"><span class ="address1"></span></p>
-          <p class = "details"><span class ="address2"></span></p>
-          <p class = "details"><span class ="city"></span>,<span class ="state"></span></p>
-          <p class = "details"><span class ="country"></span>&nbsp<span class ="zip"></span></p>
+          <p class = "details uppercase"><span class ="firstname"></span>&nbsp<span class ="lastname"></span></p>
+          <p class = "details uppercase"><span class ="address1"></span></p>
+          <p class = "details uppercase"><span class ="address2"></span></p>
+          <p class = "details uppercase"><span class ="city"></span>, <span class ="state"></span>&nbsp<span class ="zip"></span></p>
+          <p class = "details uppercase"><span class ="country"></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -78,11 +92,16 @@
       </div>
       </div>
     </div>
+    <div class = "margin_space">&nbsp</div>
+    <div>&nbsp</div>
+    <div>&nbsp</div>
     <hr class="hr_value"></hr>
-    <div>
-      <p>See the Certificate for Primary Liability coverages.</p>
-      <p>These coverages apply to this location only.</p>
-    </div>
-    <hr></hr>
+    <center>
+      <div>
+        <p class="info">See the Certificate for Primary Liability coverages.</p>
+        <p class="info">These coverages apply to this location only.</p>
+      </div>
+    </center>
+    <hr class="hr_value"></hr>
 </body>
 </html>

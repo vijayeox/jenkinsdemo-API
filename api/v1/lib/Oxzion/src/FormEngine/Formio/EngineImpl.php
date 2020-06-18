@@ -50,8 +50,13 @@ class EngineImpl implements Engine
         foreach ($items as $item) {
             if (isset($item['input']) && $item['input']==1) {
                 if (isset($item['tree']) && $item['tree']) {
-                    $itemlist = $this->searchNodes($itemlist, $item['components'],$parent);
-                } else {
+                    $temp = $parent;
+                    if((isset($item['type']) == 'datagrid' || isset($item['type']) == 'editgrid' || 
+                        isset($item['type']) == 'survey') && (isset($item['components']))){
+                            $temp = $item;
+                    }
+                    $itemlist = $this->searchNodes($itemlist, $item['components'],$temp);
+                } else {        
                     if (isset($item['type']) && $item['type']!='button') {
                         if((isset($item['type']) == 'datagrid' || isset($item['type']) == 'editgrid' || isset($item['type']) == 'survey') && (isset($item['components']))){
                             $this->logger->info("DATA GRID-----".json_encode($item));
@@ -80,7 +85,7 @@ class EngineImpl implements Engine
                 }
                 if (!$flag) {
                     if (isset($item['input']) && $item['input'] && isset($item['type']) && $item['type']!='button') {
-                        if(isset($parrent)){
+                        if(isset($parent)){
                           $item['parent'] = $parent;
                         }
                         $this->logger->info("Item------4".json_encode($item));
