@@ -152,7 +152,8 @@
                                 "value": "corporation"
                               },
                               { "label": "LLC", "value": "llc" },
-                              { "label": "Individual", "value": "individual" }
+                              { "label": "Individual", "value": "individual" },
+                              { "value": "partnership", "label": "Partnership" }
                             ]
                           },
                           "selectThreshold": 0.3,
@@ -655,10 +656,27 @@
               "label": ""
             },
             {
-              "key": "insuranceContact",
-              "input": false,
-              "title": "Insurance Contact",
+              "label": "Insurance Contact",
+              "reorder": false,
+              "addAnotherPosition": "bottom",
+              "defaultOpen": false,
+              "layoutFixed": false,
+              "enableRowGroups": false,
               "tableView": false,
+              "defaultValue": [
+                {
+                  "genfirstname": "",
+                  "genlastname": "",
+                  "phone": "",
+                  "email": "",
+                  "accounting": "",
+                  "lossControl": "",
+                  "mvrPolicyDocs": ""
+                }
+              ],
+              "key": "insurancecontactdataGrid",
+              "type": "datagrid",
+              "input": true,
               "components": [
                 {
                   "clearOnHide": false,
@@ -759,10 +777,19 @@
                           "components": [
                             {
                               "label": "Accounting",
-                              "placeholder": "Accounting",
-                              "tableView": true,
+                              "optionsLabelPosition": "right",
+                              "inline": false,
+                              "tableView": false,
+                              "values": [
+                                {
+                                  "label": "Yes",
+                                  "value": "yes",
+                                  "shortcut": ""
+                                },
+                                { "label": "No", "value": "no", "shortcut": "" }
+                              ],
                               "key": "accounting",
-                              "type": "textfield",
+                              "type": "radio",
                               "input": true,
                               "hideOnChildrenHidden": false
                             }
@@ -786,14 +813,22 @@
                         {
                           "components": [
                             {
-                              "input": true,
-                              "tableView": true,
                               "label": "Loss Control",
+                              "optionsLabelPosition": "right",
+                              "inline": false,
+                              "tableView": false,
+                              "values": [
+                                {
+                                  "label": "Yes",
+                                  "value": "yes",
+                                  "shortcut": ""
+                                },
+                                { "label": "No", "value": "no", "shortcut": "" }
+                              ],
                               "key": "lossControl",
-                              "type": "textfield",
-                              "hideOnChildrenHidden": false,
-                              "placeholder": "Loss Control",
-                              "lockKey": true
+                              "type": "radio",
+                              "input": true,
+                              "hideOnChildrenHidden": false
                             }
                           ],
                           "width": 6,
@@ -805,14 +840,22 @@
                         {
                           "components": [
                             {
-                              "input": true,
-                              "tableView": true,
                               "label": "MVR's & Policy Docs",
+                              "optionsLabelPosition": "right",
+                              "inline": false,
+                              "tableView": false,
+                              "values": [
+                                {
+                                  "label": "Yes",
+                                  "value": "yes",
+                                  "shortcut": ""
+                                },
+                                { "label": "No", "value": "no", "shortcut": "" }
+                              ],
                               "key": "mvrPolicyDocs",
-                              "type": "textfield",
-                              "hideOnChildrenHidden": false,
-                              "placeholder": "MVR's & Policy Docs",
-                              "lockKey": true
+                              "type": "radio",
+                              "input": true,
+                              "hideOnChildrenHidden": false
                             }
                           ],
                           "width": 6,
@@ -832,10 +875,7 @@
                   "hideLabel": true,
                   "label": ""
                 }
-              ],
-              "type": "panel",
-              "label": "Panel",
-              "lockKey": true
+              ]
             }
           ],
           "input": false,
@@ -1235,7 +1275,7 @@
                         "customMessage": "Please enter experience of management"
                       },
                       "key": "lessThan3years",
-                      "customConditional": "show = data.numYearsOfOwnership>3;",
+                      "customConditional": "show = data.numYearsOfOwnership<3;",
                       "type": "textfield",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -2776,7 +2816,6 @@
                       "type": "selectboxes",
                       "input": true,
                       "inputType": "checkbox",
-                      "defaultValue": { "": false },
                       "hideOnChildrenHidden": false
                     }
                   ],
@@ -4437,7 +4476,6 @@
                       "type": "selectboxes",
                       "input": true,
                       "inputType": "checkbox",
-                      "defaultValue": { "": false },
                       "hideOnChildrenHidden": false
                     }
                   ],
@@ -17346,12 +17384,16 @@
                 {
                   "label": "# of Records containing Personably Identifiable Information (PII) in electronic format?  (PII is non-public personal information such as  social security number, financial information, driver's license #, etc.)",
                   "placeholder": "# of Records containing Personably Identifiable Information (PII)",
-                  "tableView": true,
-                  "key": "identifiableinfo",
-                  "type": "textfield",
+                  "mask": false,
+                  "spellcheck": true,
+                  "tableView": false,
+                  "delimiter": false,
+                  "requireDecimal": false,
+                  "inputFormat": "plain",
+                  "key": "ofRecordsContaining",
+                  "type": "number",
                   "input": true,
-                  "hideOnChildrenHidden": false,
-                  "lockKey": true
+                  "hideOnChildrenHidden": false
                 }
               ],
               "width": 6,
@@ -17934,7 +17976,6 @@
                   "optionsLabelPosition": "right",
                   "tableView": false,
                   "defaultValue": {
-                    "": false,
                     "tapeOrOtherMedia": false,
                     "onlineBackupService": false,
                     "other": false
@@ -17974,7 +18015,7 @@
                   "key": "backingupandstorageother",
                   "conditional": {
                     "show": true,
-                    "when": "whatFormatDoesTheApplicantUtilizeForBackingUpAndStorageOfComputerSystemsData",
+                    "when": "backingupandstorage",
                     "eq": "other"
                   },
                   "type": "textfield",
@@ -18653,11 +18694,15 @@
                         {
                           "label": "F/T employees Furnished an Auto",
                           "placeholder": "F/T employees Furnished an Auto",
-                          "tableView": true,
-                          "key": "ftemployees",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "fTEmployeesFurnishedAnAuto",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18672,9 +18717,14 @@
                         {
                           "label": "P/T employees furnished an auto",
                           "placeholder": "P/T employees furnished an auto",
-                          "tableView": true,
-                          "key": "ptemployees",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "pTEmployeesFurnishedAnAuto",
+                          "type": "number",
                           "input": true,
                           "hideOnChildrenHidden": false
                         }
@@ -18700,11 +18750,15 @@
                         {
                           "label": "F/T employees who are not furnished an auto but duties allow access to an auto on a regular basis",
                           "placeholder": "F/T employees who are not furnished",
-                          "tableView": true,
-                          "key": "ftnotfurnished",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "fTEmployeesWhoAreNotFurnished",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18719,9 +18773,14 @@
                         {
                           "label": "P/T employees who are not furnished an auto but duties allow access to an auto on a regular basis",
                           "placeholder": "P/T employees who are not furnished",
-                          "tableView": true,
-                          "key": "ptnotfurnished",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "pTEmployeesWhoAreNotFurnished",
+                          "type": "number",
                           "input": true,
                           "hideOnChildrenHidden": false
                         }
@@ -18747,11 +18806,15 @@
                         {
                           "label": "F/T All other employees including F&I managers",
                           "placeholder": "F/T All other employees",
-                          "tableView": true,
-                          "key": "ftincludingfandi",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "fTAllOtherEmployees",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18766,11 +18829,15 @@
                         {
                           "label": "P/T All other employees including F&I managers",
                           "placeholder": "P/T All other employees",
-                          "tableView": true,
-                          "key": "ptincludingfandi",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "pTAllOtherEmployees",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18795,11 +18862,15 @@
                         {
                           "label": "Non-Employees under the age of 25 furnished an auto",
                           "placeholder": "Non-Employees under the age of 25",
-                          "tableView": true,
-                          "key": "underageof25",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "nonEmployeesUnderTheAge",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18814,11 +18885,15 @@
                         {
                           "label": "Non-Employees 25 years old or older furnished an auto",
                           "placeholder": "Non-Employees 25 years old or older",
-                          "tableView": true,
-                          "key": "empyearsorolder",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "nonEmployeesYearsOldorolder",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18843,11 +18918,15 @@
                         {
                           "label": "Contract Drivers - Non-employees who drive covered autos to a location as directed by the Insured",
                           "placeholder": "Contract Drivers",
-                          "tableView": true,
-                          "key": "contractdrivers",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "contractDriversNonEmployees",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18862,11 +18941,15 @@
                         {
                           "label": "Number of Dealer Plates",
                           "placeholder": "Number of Dealer Plates",
-                          "tableView": true,
-                          "key": "dealerplates",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "numberOfDealerPlates",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18943,6 +19026,22 @@
           "type": "selectboxes",
           "input": true,
           "inputType": "checkbox"
+        },
+        {
+          "label": "GAIC Epli PDF Data",
+          "calculateValue": "value = {\n  cityStateZip: data.city + \",\" + data.state  + \",\" + data.zip,\n  fullTimeEmployee:\n    data.fTEmployeesFurnishedAnAuto +\n    data.fTEmployeesWhoAreNotFurnished +\n    data.fTAllOtherEmployees,\n  partTimeEmployee:\n    data.pTEmployeesFurnishedAnAuto +\n    data.pTEmployeesWhoAreNotFurnished +\n    data.pTAllOtherEmployees,\n  fullName: data.genfirstname + data.genlastname\n};",
+          "key": "gaicEpliPdfData",
+          "type": "hidden",
+          "input": true,
+          "tableView": false
+        },
+        {
+          "label": "RPS Cyber PDF Data",
+          "calculateValue": "value = {\n  \" of Employees\":\n    data.employeedataGrid[0].fTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].fTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].fTAllOtherEmployees +\n    data.employeedataGrid[0].pTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].pTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].pTAllOtherEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership\n};\nconsole.log(data.rpsCyberPDFData);",
+          "key": "rpsCyberPDFData",
+          "type": "hidden",
+          "input": true,
+          "tableView": false
         }
       ],
       "input": false
@@ -18950,7 +19049,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: true\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
   "revisions": "current",
-  "_vid": 358,
+  "_vid": 379,
   "title": "consolidatedWizard",
   "display": "wizard",
   "access": [
@@ -18976,6 +19075,6 @@
   "path": "consolidatedwizard",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-05-18T07:42:20.331Z",
-  "modified": "2020-06-17T18:19:40.138Z",
+  "modified": "2020-06-18T13:33:58.791Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:consolidatedWizard"
 }
