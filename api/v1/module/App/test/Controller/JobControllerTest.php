@@ -54,7 +54,7 @@ class JobControllerTest extends ControllerTest
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/scheduleJob', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         if (isset($content['data'])) {
-            $select = "Select * from ox_job where job_id = '" . $content['data']['JobId'] . "'";
+            $select = "Select * from ox_job where job_id = '" . $content['data']['job_id'] . "'";
             $job = $this->executeQueryTest($select);
             $this->assertEquals(1, count($job));
         }
