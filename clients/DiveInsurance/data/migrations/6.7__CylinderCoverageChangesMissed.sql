@@ -1,0 +1,2 @@
+UPDATE premium_rate_card set `coverage`="Cylinder Inspector and Cylinder Inspection Instructor" where `coverage`='Cylinder Inspector & Instructor';
+UPDATE premium_rate_card set `coverage`="Cylinder Inspector Or Cylinder Inspection Instructor - Declined" where `coverage`='Cylinder Inspector & Cylinder Inspection Instructor - Declined';
