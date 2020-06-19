@@ -19,7 +19,7 @@ content:
                 title: 'Create Policies'
                 actions:
                     -
-                        name: IPL
+                        name: 'Professional Liability'
                         rule: 'true'
                         details:
                             -
