@@ -18548,10 +18548,15 @@
           "hideLabel": true
         },
         {
-          "key": "applicant",
-          "input": false,
-          "title": "Does the past 5 years has the Applicant:",
+          "title": "During the past 5 years, has the Applicant:",
+          "breadcrumbClickable": true,
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
+          "collapsible": false,
           "tableView": false,
+          "key": "applicant",
+          "type": "panel",
+          "label": "During the past 5 years, has the Applicant:",
+          "input": false,
           "components": [
             {
               "label": "Columns",
@@ -18712,8 +18717,6 @@
               "hideLabel": true
             }
           ],
-          "type": "panel",
-          "label": "Panel",
           "lockKey": true
         }
       ],
@@ -19187,7 +19190,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: true\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
   "revisions": "current",
-  "_vid": 419,
+  "_vid": 421,
   "title": "consolidatedWizard",
   "display": "wizard",
   "access": [
@@ -19213,6 +19216,6 @@
   "path": "consolidatedwizard",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-05-18T07:42:20.331Z",
-  "modified": "2020-06-19T11:38:29.807Z",
+  "modified": "2020-06-19T12:16:12.787Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:consolidatedWizard"
 }
