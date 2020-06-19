@@ -193,9 +193,6 @@ return array(
             'officerone' => 'Number of Officers',
             'employeefive' => 'Number of employees_5',
             'officertwo' => 'Number of Officers_2',
-            'fullTimeEmployee' => 'a  full time employees',
-            'partTimeEmployee' => 'b  part time employees',
-            'contractDriversNonEmployees' => 'c leasedcontract employees',
             'emppremium' => 'Premium',
             'empinsurername' => 'Insurer',
             'LimitCount' => 'Limit',
@@ -214,87 +211,87 @@ return array(
             ],
             'outplacement' => [
                 "fieldname" => 'Group4',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'plannedtransactions' => [
                 "fieldname" => 'Group5',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'employementapplication' => [
                 "fieldname" => 'Group6',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'screeningemployee' => [
                 "fieldname" => 'Group7',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'humanresources' => [
                 "fieldname" => 'Group8',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'humanresourcesmanual' => [
                 "fieldname" => 'Group9',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'disabilitiesact' => [
                 "fieldname" => 'Group10',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'civilrightsact' => [
                 "fieldname" => 'Group11',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'familymedical' => [
                 "fieldname" => 'Group12',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'prohibiteddiscriminatory' => [
                 "fieldname" => 'Group13',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'empperfomev' => [
                 "fieldname" => 'Group14',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'performanceevaluations' => [
                 "fieldname" => 'Group15',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'sexualharassment' => [
                 "fieldname" => 'Group16',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'reportingresolution' => [
                 "fieldname" => 'Group17',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'hrmanual' => [
                 "fieldname" => 'Group18',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'receivetraining' => [
                 "fieldname" => 'Group19',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'acknowledgereciept' => [
                 "fieldname" => 'Group20',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'compsubsidiaries' => [
                 "fieldname" => 'Group21',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'capacitydirector' => [
                 "fieldname" => 'Group22',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'civilrights' => [
                 "fieldname" => 'Group23',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ],
             'emppracticesclaim' => [
                 "fieldname" => 'Group24',
-                "options" => ["yes" => "Choice1", "no" => "Choice2"]
+                "options" => ["yes" => "Choice1", "no" => "2"]
             ]
         ]
     ]
