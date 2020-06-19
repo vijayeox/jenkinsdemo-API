@@ -42,6 +42,9 @@ class ServiceTaskService extends AbstractService
             	$taskInfo = array_merge($taskInfo,$result[0]);
             }
         }
+        if(!isset($data['activityInstanceId'])){
+            return 0;
+        }
         $taskInfo['name'] = $data['activityName'];
         $taskInfo['task_id'] = $data['activityInstanceId'];
         $taskInfo['start_data'] = json_encode($data);
