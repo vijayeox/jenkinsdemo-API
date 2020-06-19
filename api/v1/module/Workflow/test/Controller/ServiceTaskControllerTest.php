@@ -104,8 +104,8 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(500);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Template not found!');
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals("Unable to load template 'file:GenericTemplate.tpl'", $content['message']);
     }
 
     public function testServiceTaskPDFInvalidDestinationExecution()
@@ -116,13 +116,47 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(500);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Template not found!');
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals("Unable to load template 'file:GenericTemplate.tpl'", $content['message']);
     }
 
     public function testServiceTaskSchedule()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "jobUrl" => "/app/ec8942b7-aa93-4bc6-9e8c-e1371988a5d4/delegate/DispatchAutoRenewalNotification", "state" => "karnataka",  "cron" => "0 0/1 * * * ? *", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "setupjob", "command" => "schedule", "jobName" => "autoRenewalJob", "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd",
+                 "activityName" => "Setup Autorenewal", 
+                 "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", 
+                 "variables" => array("firstname" => "Neha", 
+                                      "policy_period" => "1year", 
+                                      "card_expiry_date" => "10/24", 
+                                      "city" => "Bangalore", 
+                                      "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", 
+                                      "isequipmentliability" => "1", 
+                                      "card_no" => "1234", 
+                                      "jobUrl" => "/app/ec8942b7-aa93-4bc6-9e8c-e1371988a5d4/delegate/DispatchAutoRenewalNotification", 
+                                      "state" => "karnataka",  
+                                      "cron" => "0 0/1 * * * ? *", 
+                                      "zip" => "560030", 
+                                      "coverage" => "100000", 
+                                      "product" => "Individual Professional Liability", 
+                                      "address2" => "dhgdhdh", 
+                                      "address1" => "hjfjhfjfjfhfg", 
+                                      "expiry_date" => "2020-06-30", 
+                                      "form_id" => "0", 
+                                      "entity_id" => "1", 
+                                      "created_by" => "1", 
+                                      "url" => "setupjob", 
+                                      "command" => "schedule", 
+                                      "jobName" => "autoRenewalJob", 
+                                      "expiry_year" => "2019", 
+                                      "lastname" => "Rai", 
+                                      "isexcessliability" => "1", 
+                                      "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", 
+                                      "credit_card_type" => "credit", 
+                                      "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", 
+                                      "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b", 
+                                      "email" => 'bharat@gmail.com'), 
+                                      "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", 
+                                      "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         if (enableCamel == 0) {
@@ -146,13 +180,13 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'JobUrl or Cron Expression or URL or JobName Not Specified');
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals("JobUrl or Cron Expression or JobName Not Specified", $content['message']);
     }
 
     public function testServiceTaskCancelJob()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "autoRenewalJob" => '{"jobId":"14b5370e-a580-4b80-a17a-a13be8b47ee0","jobGroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "activityName" => "Cancel Job", "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "autoRenewalJob" => '{"jobId":"14b5370e-a580-4b80-a17a-a13be8b47ee0","jobGroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         if (enableCamel == 0) {
@@ -165,7 +199,7 @@ class ServiceTaskControllerTest extends ControllerTest
 
     public function testServiceTaskCancelJobWithoutJobName()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "autoRenewalJob" => '{"jobId":"14b5370e-a580-4b80-a17a-a13be8b47ee0","jobGroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "activityName" => "Cancel Job", "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "autoRenewalJob" => '{"jobId":"14b5370e-a580-4b80-a17a-a13be8b47ee0","jobGroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
@@ -176,7 +210,7 @@ class ServiceTaskControllerTest extends ControllerTest
 
     public function testServiceTaskCancelJobWithoutJobID()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "autoRenewalJob" => '{"jobID":"14b5370e-a580-4b80-a17a-a13be8b47ee0","jobgroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "activityName" => "Setup Autorenewal Job", "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "autoRenewalJob" => '{"jobID":"14b5370e-a580-4b80-a17a-a13be8b47ee0","jobgroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
@@ -187,7 +221,7 @@ class ServiceTaskControllerTest extends ControllerTest
 
     public function testServiceTaskCancelJobEmpty()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "activityName" => "Cancel Job", "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
@@ -198,7 +232,7 @@ class ServiceTaskControllerTest extends ControllerTest
 
     public function testServiceTaskCancelInvalidJob()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "autoRenewalJob" => '{"jobId":"f4f7833e-7e34-4b00-bcab-ef6048e7fbcb","jobGroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "activityName" => "Cancel Job", "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "canceljob", "command" => "cancelJob", "jobName" => "autoRenewalJob", "autoRenewalJob" => '{"jobId":"f4f7833e-7e34-4b00-bcab-ef6048e7fbcb","jobGroup":"Job"}', "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         if (enableCamel == 0) {
@@ -210,12 +244,12 @@ class ServiceTaskControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
     }
 
     public function testFileSave()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "command" => "fileSave", "expiry_year" => "2019", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "1", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "1", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "activityName" => "File save", "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", "variables" => array("firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30 00:00:00", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "command" => "fileSave", "expiry_year" => "2019", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "1", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "1", "email" => 'bharat@gmail.com'), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $query = "Select data from ox_file where uuid = 'd13d0c68-98c9-11e9-adc5-308d99c9145b'";
@@ -242,7 +276,7 @@ class ServiceTaskControllerTest extends ControllerTest
 
     public function testExtractFile()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("command" => "file", "orgId" => "53012471-2863-4949-afb1-e69b0891c98a", "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b"), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "activityName" => "Get File", "processInstanceId" => "3f20b5c5-0124-11ea-a8a0-22e8105c0778", "variables" => array("command" => "file", "orgId" => "53012471-2863-4949-afb1-e69b0891c98a", "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b"), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
