@@ -1094,7 +1094,7 @@ class UserService extends AbstractService
         $resetCode = $data['password_reset_code'];
         $password = md5(sha1($data['new_password']));
         $expiry = date("Y-m-d H:i:s");
-        $query = "select id from ox_user where password_reset_expiry_date > '" . $expiry . "' OR password_reset_expiry_date is NULL and password_reset_code = '" . $resetCode . "'";
+        $query = "select id from ox_user where (password_reset_expiry_date > '" . $expiry . "' OR password_reset_expiry_date is NULL) and password_reset_code = '" . $resetCode . "'";
         $result = $this->executeQuerywithParams($query);
         $result = $result->toArray();
         if (count($result) == 0) {
