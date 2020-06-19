@@ -1284,7 +1284,7 @@
 				"lockKey": true
 			}, {
 				"label": "end_date",
-				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month = 5 && moment(data['start_date']).format('DD') == '30'){\nvalue = (year + 1) + \"-06-30\";\n}else if(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}\n",
+				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar day = today.date();\nvar year = today.year();\nif((day == 30 && month == 5) || month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 				"key": "end_date",
 				"properties": {
 					"data_type": "Date"
@@ -4162,14 +4162,13 @@
 						"disabled": true,
 						"tableView": false,
 						"delimiter": true,
-						"requireDecimal": true,
+						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
 						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
 						"key": "finalAmountPayable",
 						"type": "number",
-						"decimalLimit": 2,
 						"input": true,
 						"inputType": "text",
 						"hideOnChildrenHidden": false
@@ -4199,7 +4198,8 @@
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false,
-						"keyModified": true
+						"keyModified": true,
+						"defaultValue": "no"
 					}, {
 						"title": "Installments",
 						"theme": "primary",
@@ -4480,7 +4480,7 @@
 								"value": "",
 								"attr": ""
 							}],
-							"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+							"content": "</br><b><font color=\"red\">If you click \"Confirm Order\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
 							"refreshOnChange": false,
 							"tableView": false,
 							"key": "page7Content",
@@ -4714,7 +4714,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 437,
+	"_vid": 439,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4735,6 +4735,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-18T14:15:36.620Z",
+	"modified": "2020-06-19T16:28:39.081Z",
 	"machineName": "testdivehub:csrInitiates"
 }

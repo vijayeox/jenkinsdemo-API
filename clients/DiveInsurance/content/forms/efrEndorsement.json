@@ -1415,11 +1415,6 @@
 	}, {
 		"type": "panel",
 		"title": "Additional Insured",
-		"conditional": {
-			"show": "true",
-			"when": "endorsement_options",
-			"eq": "modify_additionalInsured"
-		},
 		"components": [{
 			"label": "AdditionalInsureds",
 			"attrs": [{
@@ -2060,6 +2055,7 @@
 						"type": "convergepay",
 						"key": "creditcardPayment",
 						"amount_field": "endorAmountPayable",
+						"description": "payment_description",
 						"label": "custom",
 						"input": true,
 						"tableView": false,
@@ -2070,7 +2066,7 @@
 							"value": "",
 							"attr": ""
 						}],
-						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+						"content": "</br><b><font color=\"red\">If you click \"Confirm Order\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page7Content",
@@ -2255,7 +2251,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 191,
+	"_vid": 192,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2276,7 +2272,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-18T13:57:46.562Z",
+	"modified": "2020-06-19T15:49:42.536Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
