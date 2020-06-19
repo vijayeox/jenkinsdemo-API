@@ -3,7 +3,7 @@
 <div style='width:100%;background:#053b6d;color:#fff;height:35px;margin-bottom:2px'>
 </div>
 <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, </br/>
-	<p>We has created a new ID for you,</p> <br/>Details are below: <br/>
+	<p>We have created a new ID for you,</p> <br/>Details are below: <br/>
 	Username: {$username} <br/>
 	<br/>                
     <a href = "{$passwordResetUrl}" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>Click here to set your password</u></a>
