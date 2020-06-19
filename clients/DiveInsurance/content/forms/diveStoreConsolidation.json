@@ -3881,11 +3881,11 @@
 					"key": "poolSupplementalForm2",
 					"conditional": {
 						"show": true,
-						"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-						"eq": "yes"
+						"when": "lakequarrypondContactVicenciaBuckleyforsupplementalformPL",
+						"eq": "true"
 					},
 					"type": "panel",
-					"label": "Lake / Quarry Suppllment Form",
+					"label": "PADI Lake / Quarry Suppllmental Application",
 					"input": false,
 					"components": [{
 						"label": "Applicant's Name",
@@ -13050,7 +13050,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 195,
+	"_vid": 196,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13067,6 +13067,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-19T10:55:10.975Z",
+	"modified": "2020-06-19T15:41:06.639Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
