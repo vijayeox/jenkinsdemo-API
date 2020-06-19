@@ -6,9 +6,14 @@
   "components": [
     {
       "title": "General Information",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": false,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "generalInformation",
+      "type": "panel",
+      "label": "General Information",
       "components": [
         {
           "type": "panel",
@@ -2269,17 +2274,21 @@
           ]
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Property Liability",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "propertyLiability",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Property Liability",
       "components": [
         {
           "type": "panel",
@@ -6407,17 +6416,21 @@
           "label": "Panel"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Garage Liability",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "garageLiabili",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Garage Liability",
       "components": [
         {
           "type": "panel",
@@ -11301,17 +11314,21 @@
         }
       ],
       "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
       "keyModified": true
     },
     {
       "title": "EPLI",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "epli",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "EPLI",
       "components": [
         {
           "type": "panel",
@@ -13852,17 +13869,21 @@
           "label": "Panel"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Pollution Liability",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "pollutionLiability",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Pollution Liability",
       "components": [
         {
           "type": "panel",
@@ -14523,17 +14544,20 @@
           "label": "Panel"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Dealer Open Lot",
-      "label": "Panel",
-      "type": "panel",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "dealerOpenLot",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Dealer Open Lot",
       "components": [
         {
           "type": "panel",
@@ -16666,17 +16690,21 @@
         }
       ],
       "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
       "keyModified": true
     },
     {
       "title": "General Liability",
-      "label": "General Liability",
-      "type": "panel",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "page1",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "customConditional": "show = false;\r\nif (data.locationSchedule.length > 0) {\r\n\tfor (var i = 0; i < data.locationSchedule.length; i++) {\r\n\t\tif (\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"vacantLand\" ||\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"bldgLeasedToOthers\"\r\n\t\t) {\r\n\t\t\tshow = true;\r\n\t\t\tbreak;\r\n\t\t}\r\n\t}\r\n}",
+      "type": "panel",
+      "label": "General Liability",
       "components": [
         {
           "collapsible": false,
@@ -17088,18 +17116,20 @@
           ]
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
-      "customConditional": "show = false;\r\nif (data.locationSchedule.length > 0) {\r\n\tfor (var i = 0; i < data.locationSchedule.length; i++) {\r\n\t\tif (\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"vacantLand\" ||\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"bldgLeasedToOthers\"\r\n\t\t) {\r\n\t\t\tshow = true;\r\n\t\t\tbreak;\r\n\t\t}\r\n\t}\r\n}"
+      "input": false
     },
     {
       "title": "Umbrella Coverage",
-      "label": "Umbrella Coverage Detail",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
+      "key": "umbrellaPanel",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
-      "key": "page1",
+      "label": "Umbrella Coverage",
       "components": [
         {
           "clearOnHide": false,
@@ -17240,17 +17270,20 @@
           "label": "Field Set"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Security & Privacy",
-      "label": "Security & Privacy Underwriting Information",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
+      "key": "securityPanel",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
-      "key": "page1",
+      "label": "Security & Privacy",
       "components": [
         {
           "key": "page1Panel",
@@ -18685,17 +18718,20 @@
         }
       ],
       "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
       "keyModified": true
     },
     {
       "title": "Employee List",
-      "label": "Employee Classification",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
+      "key": "employeePanel",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
-      "key": "page1",
+      "label": "Employee List",
       "components": [
         {
           "label": "Employee List",
@@ -19071,20 +19107,20 @@
           ]
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Generate Workbooks",
       "theme": "primary",
-      "breadcrumbClickable": false,
+      "breadcrumb": "none",
+      "breadcrumbClickable": true,
       "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "tableView": false,
-      "key": "page11",
+      "key": "page111",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
       "label": "Generate Workbooks",
       "components": [
@@ -19139,7 +19175,7 @@
         },
         {
           "label": "RPS Cyber PDF Data",
-          "calculateValue": "value = {\n  \"of Employees\":\n    data.employeedataGrid[0].fTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].fTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].fTAllOtherEmployees +\n    data.employeedataGrid[0].pTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].pTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].pTAllOtherEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership\n};\nconsole.log(data.rpsCyberPDFData);",
+          "calculateValue": "value = {\n  \" of Employees\":\n    data.employeedataGrid[0].fTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].fTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].fTAllOtherEmployees +\n    data.employeedataGrid[0].pTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].pTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].pTAllOtherEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership\n};\nconsole.log(data.rpsCyberPDFData);",
           "key": "rpsCyberPDFData",
           "type": "hidden",
           "input": true,
@@ -19151,7 +19187,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: true\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
   "revisions": "current",
-  "_vid": 406,
+  "_vid": 419,
   "title": "consolidatedWizard",
   "display": "wizard",
   "access": [
@@ -19177,6 +19213,6 @@
   "path": "consolidatedwizard",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-05-18T07:42:20.331Z",
-  "modified": "2020-06-19T09:09:09.061Z",
+  "modified": "2020-06-19T11:38:29.807Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:consolidatedWizard"
 }

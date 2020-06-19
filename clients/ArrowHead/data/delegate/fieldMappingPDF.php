@@ -7,7 +7,7 @@ return array(
             'breachphone' => 'BBR Contact Phone',
             'breachemail' => 'BBR Contact Email',
             'annualsales' => 'Sales',
-            'pleaseexplain' => 'Explain',
+            'natureofsizeexplain' => 'Explain',
             'secinsurer' => 'Insurer',
             'columnslimit' => 'Limit',
             'columnsdeductible' => 'Deductible',
