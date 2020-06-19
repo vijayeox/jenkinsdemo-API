@@ -1712,7 +1712,7 @@
 				"lockKey": true
 			}, {
 				"label": "end_date",
-				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
+				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month = 5 && moment(data['start_date']).format('DD') == '30'){\nvalue = (year + 1) + \"-06-30\";\n}else if(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}\n",
 				"key": "end_date",
 				"properties": {
 					"data_type": "Date"
