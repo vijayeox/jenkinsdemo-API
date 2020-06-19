@@ -2495,11 +2495,6 @@
 	}, {
 		"type": "panel",
 		"title": "Additional Insured",
-		"conditional": {
-			"show": true,
-			"when": "endorsement_options",
-			"eq": "modify_additionalInsured"
-		},
 		"components": [{
 			"label": "AdditionalInsureds",
 			"attrs": [{
@@ -3143,7 +3138,7 @@
 							"value": "",
 							"attr": ""
 						}],
-						"content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+						"content": "</br><b><font color=\"red\">If you click \"Confirm Order\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page7Content",
@@ -3362,7 +3357,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 256,
+	"_vid": 257,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3383,6 +3378,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-18T13:57:23.631Z",
+	"modified": "2020-06-19T15:51:47.703Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
