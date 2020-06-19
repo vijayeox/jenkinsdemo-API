@@ -502,14 +502,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($temp['liability'])){
                     $this->logger->info("DOCUMENT liability_coi_document");
                     $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
-                    $this->logger->info("DOCUMENT liability_policy_document");
-                    $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
+                    // $this->logger->info("DOCUMENT liability_policy_document");
+                    // $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
                 }
                 if(isset($temp['property'])){
                     $this->logger->info("DOCUMENT property_coi_document");
                     $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
-                    $this->logger->info("DOCUMENT property_policy_document");
-                    $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+                    // $this->logger->info("DOCUMENT property_policy_document");
+                    // $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 }
             }
 
@@ -538,17 +538,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['coi_document']  = $policyDocuments;
                     }
                 }
-                if($this->type != 'quote' && $this->type != 'endorsementQuote')
-                {
-                    $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
-                    if(is_array($policyDocuments)){
-                        foreach ($policyDocuments as $key => $value) {
-                            $documents[$key] = $value;
-                        } 
-                    } else {
-                        $documents['policy_document'] = $policyDocuments;
-                    }
-                }
+                // if($this->type != 'quote' && $this->type != 'endorsementQuote')
+                // {
+                //     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
+                //     if(is_array($policyDocuments)){
+                //         foreach ($policyDocuments as $key => $value) {
+                //             $documents[$key] = $value;
+                //         } 
+                //     } else {
+                //         $documents['policy_document'] = $policyDocuments;
+                //     }
+                // }
             }
             if($this->type == 'lapse'){
                 $this->logger->info("DOCUMENT lapse");
