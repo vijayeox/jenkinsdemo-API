@@ -2495,6 +2495,11 @@
 	}, {
 		"type": "panel",
 		"title": "Additional Insured",
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_additionalInsured"
+		},
 		"components": [{
 			"label": "AdditionalInsureds",
 			"attrs": [{
