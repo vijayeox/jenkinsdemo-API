@@ -196,7 +196,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }
                             array_push($coverageList,$data['scubaFit']);
                         }
-                        if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
+                        if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInspectionInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
                             $documents['cylinder_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplCylinder');
                             array_push($coverageList,$data['cylinder']);
                         }
