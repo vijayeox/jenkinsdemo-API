@@ -421,7 +421,7 @@ return [
             'gettempdocument' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/data/:orgId/temp/:tempId/:documentName',
+                    'route' => '/:appId/data/:orgId/temp/:tempId/:documentName',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'fileId' => UuidUtil::UUID_PATTERN,
