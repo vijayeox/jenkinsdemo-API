@@ -210,7 +210,9 @@ if (excessLiability) {
 if(coverage || additionalIn){
 if (additionalInsured) {
  additionalInsured.each {
-  result1 = true
+  if (it.businessRelation == 'other') {
+   result1 = true
+  }
  }
 }
 if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternationalCoverages == "internationalAssistantInstructor" || upgradeInternationalCoverages == "internationalDivemaster" || upgradeInternationalCoverages =="internationalNonteachingSupervisoryInstructor" || upgradeInternationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){
