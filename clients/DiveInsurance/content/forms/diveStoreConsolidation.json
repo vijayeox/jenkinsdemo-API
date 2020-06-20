@@ -3786,7 +3786,7 @@
 				"value": "",
 				"attr": ""
 			}],
-			"content": "Please Check according to your preference",
+			"content": "Optional Liability Coverage",
 			"refreshOnChange": false,
 			"tableView": false,
 			"key": "page4PanelPanelPanelPleaseCheckaccordingtoyourpreference2",
@@ -6080,7 +6080,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Name",
@@ -6101,7 +6100,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the Address of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Address",
@@ -6121,7 +6119,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the City of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured City",
@@ -6162,7 +6159,6 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please select the Country of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Country",
@@ -6203,7 +6199,6 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please select the State of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured State",
@@ -6229,7 +6224,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the Zip Code of the Additional Insured",
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
@@ -6282,7 +6276,6 @@
 									},
 									"selectThreshold": 0.3,
 									"validate": {
-										"required": true,
 										"customMessage": "Please select the Business Relation with the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Business Relation",
@@ -6299,7 +6292,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please specify the Business Relation"
 									},
 									"errorLabel": "Additonal Insured Business Relation Details",
@@ -13050,7 +13042,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 196,
+	"_vid": 199,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13067,6 +13059,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-19T15:41:06.639Z",
+	"modified": "2020-06-20T11:24:10.166Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
