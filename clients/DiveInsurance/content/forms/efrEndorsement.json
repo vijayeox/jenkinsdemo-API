@@ -1523,7 +1523,6 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please enter the Name of the Additional Insured"
 								},
 								"errorLabel": "Additional Insured Name",
@@ -1544,7 +1543,6 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please enter the Address of the Additional Insured"
 								},
 								"errorLabel": "Additional Insured Address",
@@ -1564,7 +1562,6 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please enter the City of the Additional Insured"
 								},
 								"errorLabel": "Additional Insured City",
@@ -1602,7 +1599,6 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please select the Country of the Additional Insured"
 								},
 								"errorLabel": "Additional Insured Country",
@@ -1643,7 +1639,6 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please select the State of the Additional Insured"
 								},
 								"errorLabel": "Additional Insured State",
@@ -1669,7 +1664,6 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please enter the Zip Code of the Additional Insured",
 									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
@@ -1730,7 +1724,6 @@
 								},
 								"selectThreshold": 0.3,
 								"validate": {
-									"required": true,
 									"customMessage": "Please select the Business Relation with the Additional Insured"
 								},
 								"errorLabel": "Additional Insured Business Relation",
@@ -1747,7 +1740,6 @@
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
-									"required": true,
 									"customMessage": "Please specify the Business Relation"
 								},
 								"errorLabel": "Additonal Insured Business Relation Details",
@@ -2251,7 +2243,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 192,
+	"_vid": 193,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2272,7 +2264,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-19T15:49:42.536Z",
+	"modified": "2020-06-20T09:30:19.322Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
