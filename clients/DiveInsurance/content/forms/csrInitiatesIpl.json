@@ -1254,7 +1254,7 @@
 						"value": "",
 						"label": ""
 					}],
-					"custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n\t    if(currentDate.year() === 2020){\n\t   \t\tconsole.log('Skipping JUNE')\n\t    }else{\n\t        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n\t    }\n    }\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}"
+					"custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n\t    if(currentDate.year() === 2020){\n\t   \t\tconsole.log('Skipping JUNE')\n\t    }else{\n\t        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n\t    }\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}"
 				},
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
@@ -4709,7 +4709,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 441,
+	"_vid": 442,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4730,6 +4730,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-20T10:29:30.400Z",
+	"modified": "2020-06-20T13:18:21.313Z",
 	"machineName": "testdivehub:csrInitiates"
 }
