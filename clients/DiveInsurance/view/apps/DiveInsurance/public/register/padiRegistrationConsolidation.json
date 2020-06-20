@@ -522,9 +522,6 @@
 			"tableView": false,
 			"clearOnHide": false,
 			"allowCalculateOverride": true,
-			"validate": {
-				"required": true
-			},
 			"key": "dba",
 			"type": "textfield",
 			"input": true
@@ -1470,7 +1467,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 116,
+	"_vid": 117,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1484,6 +1481,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-20T11:44:12.614Z",
+	"modified": "2020-06-20T12:58:07.386Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
