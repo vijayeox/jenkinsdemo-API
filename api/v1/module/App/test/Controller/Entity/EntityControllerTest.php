@@ -16,7 +16,7 @@ class EntityControllerTest extends ControllerTest
     }
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
         return $dataset;
     }
 
@@ -179,8 +179,8 @@ class EntityControllerTest extends ControllerTest
         $_FILES = array(
             'files' => array(
                 'name' => 'ScriptTaskTest.bpmn',
-                'tmp_name' => __DIR__ . "/../Dataset/ScriptTaskTest.bpmn",
-                'size' => filesize(__DIR__ . "/../Dataset/ScriptTaskTest.bpmn"),
+                'tmp_name' => __DIR__ . "/../../Dataset/ScriptTaskTest.bpmn",
+                'size' => filesize(__DIR__ . "/../../Dataset/ScriptTaskTest.bpmn"),
                 'error' => 0,
             ),
         );
@@ -210,15 +210,15 @@ class EntityControllerTest extends ControllerTest
         $_FILES = array(
             'files' => array(
                 'name' => 'SampleBPMN.bpmn',
-                'tmp_name' => __DIR__ . "/../Dataset/SampleBPMN.bpmn",
-                'size' => filesize(__DIR__ . "/../Dataset/SampleBPMN.bpmn"),
+                'tmp_name' => __DIR__ . "/../../Dataset/SampleBPMN.bpmn",
+                'size' => filesize(__DIR__ . "/../../Dataset/SampleBPMN.bpmn"),
                 'error' => 0,
             ),
         );
         $config = $this->getApplicationConfig();
         $workflowFactory = WorkflowFactory::getInstance($config);
         $processManager = $workflowFactory->getProcessManager();
-        $parsingResult = $processManager->parseBPMN(__DIR__ . "/../Dataset/SampleBPMN.bpmn", 99);
+        $parsingResult = $processManager->parseBPMN(__DIR__ . "/../../Dataset/SampleBPMN.bpmn", 99);
         $baseFolder = $config['UPLOAD_FOLDER'];
         if (enableCamunda == 0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
@@ -241,8 +241,8 @@ class EntityControllerTest extends ControllerTest
         $_FILES = array(
             'files' => array(
                 'name' => 'ScriptTaskTest.bpmn',
-                'tmp_name' => __DIR__ . "/../Dataset/ScriptTaskTest.bpmn",
-                'size' => filesize(__DIR__ . "/../Dataset/ScriptTaskTest.bpmn"),
+                'tmp_name' => __DIR__ . "/../../Dataset/ScriptTaskTest.bpmn",
+                'size' => filesize(__DIR__ . "/../../Dataset/ScriptTaskTest.bpmn"),
                 'error' => 0,
             ),
         );
@@ -260,8 +260,8 @@ class EntityControllerTest extends ControllerTest
         $_FILES = array(
             'files' => array(
                 'name' => 'ScriptTaskTestFail.bpmn',
-                'tmp_name' => __DIR__ . "/../Dataset/ScriptTaskTestFail.bpmn",
-                'size' => filesize(__DIR__ . "/../Dataset/ScriptTaskTestFail.bpmn"),
+                'tmp_name' => __DIR__ . "/../../Dataset/ScriptTaskTestFail.bpmn",
+                'size' => filesize(__DIR__ . "/../../Dataset/ScriptTaskTestFail.bpmn"),
                 'error' => 0,
             ),
         );

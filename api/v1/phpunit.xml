@@ -14,16 +14,25 @@
         </testsuite>
         <!-- <testsuite name="Home Page Fixtures">
             <directory>./module/Auth/test</directory>
-            <directory>./module/Screen/test</directory>
             <directory>./module/Announcement/test</directory>
-            <directory>./module/Widget/test</directory>
             <directory>./module/Project/test</directory>
         </testsuite>
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
         </testsuite>
         <testsuite name="App Fixtures">
-            <directory>./module/App/test</directory>
+            <directory>./module/App/test/Controller/App</directory>
+            <directory>./module/App/test/Controller/AppView</directory> 
+            <directory>./module/App/test/Controller/Cache</directory>
+            <directory>./module/App/test/Controller/Delegate</directory>
+            <directory>./module/App/test/Controller/Document</directory> 
+            <directory>./module/App/test/Controller/Entity</directory>
+            <directory>./module/App/test/Controller/Job</directory>
+            <directory>./module/App/test/Controller/Pipeline</directory>
+            <directory>./module/App/test/Controller/Workflow</directory>
+            <directory>./module/App/test/Service</directory>
+        </testsuite>
+        <testsuite name="App Fixtures">
             <directory>./module/Workflow/test</directory>
         </testsuite>
         <testsuite name="Core Fixtures">

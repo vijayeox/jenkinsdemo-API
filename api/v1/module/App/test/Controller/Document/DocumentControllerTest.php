@@ -22,7 +22,7 @@ class DocumentControllerTest extends ControllerTest
             'UUID' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4',
         );
         $this->docFile = $config['APP_DOCUMENT_FOLDER'].$this->data['UUID'];
-        $docLocation = __DIR__."/../Dataset/Files";
+        $docLocation = __DIR__."/../../Dataset/Files";
 
         if(FileUtils::fileExists($this->docFile)){
                 FileUtils::rmDir($this->docFile);
@@ -47,7 +47,7 @@ class DocumentControllerTest extends ControllerTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__)."/../../Dataset/Workflow.yml");
         return $dataset;
     }
 

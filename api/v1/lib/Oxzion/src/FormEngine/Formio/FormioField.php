@@ -29,6 +29,7 @@ class FormioField
                                           "datagrid" => "minLength",
                                           "year" => "minYear"),
                           "MAX" => array("textfield" => "maxLength",
+                                          "file" => "fileMaxSize",
                                           "email" => "maxLength",
                                           "url" => "maxLength",
                                           "password" => "maxLength",
