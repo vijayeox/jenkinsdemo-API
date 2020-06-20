@@ -522,6 +522,9 @@
 			"tableView": false,
 			"clearOnHide": false,
 			"allowCalculateOverride": true,
+			"validate": {
+				"required": true
+			},
 			"key": "dba",
 			"type": "textfield",
 			"input": true
@@ -1258,6 +1261,52 @@
 								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 							},
 							"key": "home_phone_number",
+							"logic": [{
+								"name": "Check for Dive Store",
+								"trigger": {
+									"type": "simple",
+									"simple": {
+										"when": "product",
+										"eq": "Dive Store",
+										"show": true
+									}
+								},
+								"actions": [{
+									"name": "Change Label",
+									"type": "property",
+									"property": {
+										"label": "Label",
+										"value": "label",
+										"type": "string"
+									},
+									"text": "Work Phone"
+								}, {
+									"name": "Set required",
+									"type": "property",
+									"property": {
+										"label": "Required",
+										"value": "validate.required",
+										"type": "boolean"
+									},
+									"state": true
+								}]
+							}, {
+								"name": "Check if not Dive Store",
+								"trigger": {
+									"type": "javascript",
+									"javascript": "if(data['product'] == 'Individual Professional Liability' || data['product'] == 'Emergency First Response'|| data['product'] == 'Dive Boat' ){\n  result = true;\n} else {\n  result = false;\n}"
+								},
+								"actions": [{
+									"name": "Set Label",
+									"type": "property",
+									"property": {
+										"label": "Label",
+										"value": "label",
+										"type": "string"
+									},
+									"text": "Home or Work Phone"
+								}]
+							}],
 							"type": "number",
 							"input": true,
 							"hideOnChildrenHidden": false
@@ -1387,6 +1436,18 @@
 					"input": true,
 					"lockKey": true,
 					"hideOnChildrenHidden": false
+				}, {
+					"label": "Additional Email",
+					"tableView": true,
+					"validate": {
+						"customMessage": "Please enter your email address in format: yourname@example.com"
+					},
+					"key": "additional_email",
+					"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
+					"type": "email",
+					"input": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -1409,7 +1470,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 109,
+	"_vid": 116,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1423,6 +1484,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-16T11:56:02.918Z",
+	"modified": "2020-06-20T11:44:12.614Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
