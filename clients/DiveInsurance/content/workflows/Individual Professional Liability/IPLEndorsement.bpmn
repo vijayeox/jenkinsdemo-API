@@ -168,18 +168,76 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:serviceTask id="Task_1jrn5e5" name="Policy Status Change during Review" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">def autoRenewalJob = execution.getVariable('autoRenewalJob')
+          <camunda:script scriptFormat="groovy">def additionalInsured = execution.getVariable('additionalInsured')
+def country = execution.getVariable('country')
+def tecRecEndorsment = execution.getVariable('tecRecEndorsment')
+def section2Agreement = execution.getVariable('section2Agreement')
+def endorsementOptions = execution.getVariable('endorsement_options')
+def coverage = endorsementOptions.modify_coverage
+def personalInfo = endorsementOptions.modify_personalInformation
+def additionalIn = endorsementOptions.modify_additionalInsured
+def upgradeInternationalCoverages = execution.getVariable('upgradeCareerCoverage')
+def autoRenewalJob = execution.getVariable('autoRenewalJob')
+def scubaFit = execution.getVariable('scubaFit')
+def cylinder = execution.getVariable('cylinder')
+def excessLiability = execution.getVariable('excessLiability')
+def paymentOptions = execution.getVariable('paymentOptions')
 def initiatedByCsr = execution.getVariable('initiatedByCsr')
-def approved = execution.getVariable('approved')
 
-boolean result = false
+boolean result0 = false
+boolean result1 = false
+boolean result3 = false
+boolean result4 = false
+boolean result5 = false
+boolean result6 = true
+boolean result7 = false
 
-if(initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") {
-  result=true
+if(personalInfo){
+    if(country != "United States of America"){
+       result0=true 
+    }
 }
-execution.setVariable('CSRReviewRequired', result)
+if(cylinder){
+  if(cylinder == "cylinderInspector" || cylinder == "cylinderInstructor"){
+    result5 = true
+  }  
+}
+if (excessLiability) {
+  if (excessLiability == "excessLiabilityCoverage3000000" || excessLiability == "excessLiabilityCoverage4000000" || excessLiability == "excessLiabilityCoverage9000000") {
+    result7 = true;
+  }
+}
+if(coverage || additionalIn){
+if (additionalInsured) {
+ additionalInsured.each {
+  if (it.businessRelation == 'other') {
+   result1 = true
+  }
+ }
+}
+if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternationalCoverages == "internationalAssistantInstructor" || upgradeInternationalCoverages == "internationalDivemaster" || upgradeInternationalCoverages =="internationalNonteachingSupervisoryInstructor" || upgradeInternationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){
+	result4 = true
+}
+}
 
-if(result){
+
+if(paymentOptions){
+  if(paymentOptions == "creditCard"){
+    result6 = false
+  }
+}
+
+
+if(country != "United States of America" &amp;&amp; country != "Mexico" &amp;&amp; country != "The Bahamas" &amp;&amp; country != "Turks and Caicos" &amp;&amp; country != "British Virgin Islands" &amp;&amp; country != "Cayman Islands" &amp;&amp; country != "Jamaica" &amp;&amp; country != "Aruba" &amp;&amp; country != "Curacao" &amp;&amp; country != "Grenada" &amp;&amp; country != "Barbados" &amp;&amp; country != "St Lucia" &amp;&amp; country != "Trinidad and Tobago" &amp;&amp; country != "Belize" &amp;&amp; country != "Costa Rica" &amp;&amp; country != "Dominican Republic" &amp;&amp; country != "Dominica" &amp;&amp; country != "Martinique" &amp;&amp; country != "Anguilla" &amp;&amp; country != "St Kitts and Nevis"){
+	result3 = true;
+}
+
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
+  result3=true
+}
+execution.setVariable('CSRReviewRequired', result3)
+
+if(result3){
 	execution.setVariable('policyStatus', 'Pending Approval')	
 }
 
