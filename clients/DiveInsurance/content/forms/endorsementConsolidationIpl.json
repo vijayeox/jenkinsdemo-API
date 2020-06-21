@@ -3130,7 +3130,7 @@
 							"value": "",
 							"attr": ""
 						}],
-						"content": "</br><b><font color=\"red\">If you click \"Confirm Order\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+						"content": "</br><b><font color=\"red\">If you click \"Confirm Order\", your credit card will be charged for the amount shown above.</b></font>",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page7Content",
@@ -3349,7 +3349,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 259,
+	"_vid": 260,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3370,6 +3370,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-21T19:47:23.299Z",
+	"modified": "2020-06-21T22:39:09.789Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
