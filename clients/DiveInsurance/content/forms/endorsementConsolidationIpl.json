@@ -2986,9 +2986,9 @@
 			"input": true,
 			"tableView": false
 		}, {
-			"label": "payment_description",
-			"calculateValue": "value = \"PADI  #:\"+ data.padi;",
-			"key": "payment_description",
+			"label": "payment_fields",
+			"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":\"Not Applicable\",\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":0,\"total_amount\":data.amount});",
+			"key": "payment_fields",
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -3119,7 +3119,7 @@
 						"type": "convergepay",
 						"key": "creditcardPayment",
 						"amount_field": "amount",
-						"description": "payment_description",
+						"description": "payment_fields",
 						"label": "custom",
 						"input": true,
 						"tableView": false,
@@ -3349,7 +3349,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 258,
+	"_vid": 259,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3370,6 +3370,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-20T09:33:38.755Z",
+	"modified": "2020-06-21T19:47:23.299Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
