@@ -10,10 +10,19 @@ import javax.jms.Topic;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.env.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Publisher {
+
+    @Autowired
+    private Environment env
+
+    @Value('${spring.activemq.broker-url}')
+    private String brokerUrl
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(Publisher.class);
@@ -29,9 +38,8 @@ public class Publisher {
 
         // create a Connection Factory
         ConnectionFactory connectionFactory =
-                new ActiveMQConnectionFactory(
-                        ActiveMQConnection.DEFAULT_BROKER_URL);
-
+                new ActiveMQConnectionFactory();
+        activeMQConnectionFactory.setBrokerURL(brokerUrl)
         // create a Connection
         connection = connectionFactory.createConnection();
         connection.setClientID(clientId);
