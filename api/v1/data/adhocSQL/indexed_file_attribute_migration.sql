@@ -1,1 +1,6 @@
 INSERT INTO `ox_indexed_file_attribute` (`file_id`,`field_id`,`org_id`,`created_by`,`modified_by`,`date_created`,`date_modified`,`field_value_text`,`field_value_numeric`,`field_value_boolean`,`field_value_date`,`field_value_type`) select `ox_file_attribute`.`file_id`,`ox_file_attribute`.`field_id`,`ox_file_attribute`.`org_id`, `ox_file_attribute`.`created_by`,`ox_file_attribute`.`modified_by`,`ox_file_attribute`.`date_created`,`ox_file_attribute`.`date_modified`,`ox_file_attribute`.`field_value_text`,`ox_file_attribute`.`field_value_numeric`,`ox_file_attribute`.`field_value_boolean`,`ox_file_attribute`.`field_value_date`,`ox_file_attribute`.`field_value_type` from `ox_file_attribute` inner join `ox_field` on `ox_field`.`id` = `ox_file_attribute`.`field_id` where `ox_field`.`index` = 1;
+
+
+UPDATE `ox_file_attribute` INNER JOIN `ox_field` on ox_field.id = ox_file_attribute.field_id SET ox_file_attribute.field_value_text = ox_file_attribute.field_value_numeric WHERE ox_field.name='padi';
+UPDATE `ox_file_attribute` INNER JOIN `ox_field` on ox_field.id = ox_file_attribute.field_id SET ox_file_attribute.field_value_numeric = '' WHERE ox_field.name='padi';
+UPDATE `ox_file_attribute` INNER JOIN `ox_field` on ox_field.id = ox_file_attribute.field_id SET ox_file_attribute.field_value_type = 'TEXT' WHERE ox_field.name='padi';
