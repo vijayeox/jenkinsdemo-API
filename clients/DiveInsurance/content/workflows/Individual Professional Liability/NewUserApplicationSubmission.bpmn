@@ -142,7 +142,7 @@ if (additionalInsured) {
   if (it.businessRelation == 'other') {
     result1 = true
   }
-  if (it.doYouHaveAWrittenContract=='yes'){
+  if (it.doYouHaveAWrittenContract=='no'){
     result1 = true
 }
  }
