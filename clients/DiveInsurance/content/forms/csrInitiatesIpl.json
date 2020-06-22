@@ -1215,6 +1215,20 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "Additional Email",
+						"tableView": true,
+						"multiple": true,
+						"validate": {
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"multiple": true
+						},
+						"key": "additional_email",
+						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
+						"type": "email",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -4683,7 +4697,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 450,
+	"_vid": 451,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4704,6 +4718,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-22T14:21:55.134Z",
+	"modified": "2020-06-22T15:20:17.091Z",
 	"machineName": "testdivehub:csrInitiates"
 }
