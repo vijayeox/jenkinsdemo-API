@@ -295,13 +295,13 @@ content:
                 -
                     title: 'Policy Start Date'
                     field: start_date
-                    cell: '<td>{formatDate(item.start_date)}</td>'
+                    cell: '<td>{formatDateWithoutTimezone(item.start_date)}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD
                 -
                     title: 'Policy End Date'
                     field: end_date
-                    cell: '<td>{formatDate(item.end_date)}</td>'
+                    cell: '<td>{formatDateWithoutTimezone(item.end_date)}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD
             searchOnEnter: true
