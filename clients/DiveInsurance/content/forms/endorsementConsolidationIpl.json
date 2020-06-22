@@ -1225,6 +1225,20 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "Additional Email",
+						"tableView": true,
+						"multiple": true,
+						"validate": {
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"multiple": true
+						},
+						"key": "additional_email",
+						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
+						"type": "email",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2473,7 +2487,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>[Read Exclusions] </i></li>\n&nbsp;\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>\n</ol>",
+				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>\n<a href=\"/apps/DiveInsurance/public/docs/Exclusions.pdf\" target=\"_blank\">[Read Exclusions] &nbsp; </a></i></li>\n&nbsp\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "page3Panel4Content",
@@ -3332,6 +3346,17 @@
 					"hideOnChildrenHidden": false
 				}]
 			}]
+		}, {
+			"label": "Additional Notes",
+			"tableView": true,
+			"key": "additionalNotes",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "accepted"
+			},
+			"type": "textfield",
+			"input": true
 		}],
 		"path": "endorcsrapprovalscreen",
 		"breadcrumb": "none",
@@ -3349,7 +3374,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 260,
+	"_vid": 263,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3370,6 +3395,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-22T09:29:31.328Z",
+	"modified": "2020-06-22T14:25:19.603Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

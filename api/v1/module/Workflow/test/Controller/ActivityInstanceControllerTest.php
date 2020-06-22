@@ -29,9 +29,10 @@ class ActivityInstanceControllerTest extends ControllerTest
     public function testaddactivityinstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'3f6622fd-0124-11ea-a8a0-22e8105c0779','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'3f6622fd-0124-11ea-a8a0-22e8105c0779','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>"Task_1s7qzh3",'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activityinstance', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $sqlQuery1 = "Select * from ox_activity_instance";
