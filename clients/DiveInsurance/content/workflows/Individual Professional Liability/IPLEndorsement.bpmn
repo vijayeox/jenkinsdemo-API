@@ -210,10 +210,10 @@ if (excessLiability) {
 if(coverage || additionalIn){
 if (additionalInsured) {
  additionalInsured.each {
-  if (it.businessRelation == 'other') {
-   result1 = true
+  if (it.hasProperty('businessRelation') &amp;&amp; it.businessRelation == 'other') {
+    result1 = true
   }
-  if (it.doYouHaveAWrittenContract=='no'){
+  if (it.hasProperty('doYouHaveAWrittenContract') &amp;&amp; it.doYouHaveAWrittenContract=='no'){
     result1 = true
 }
  }
