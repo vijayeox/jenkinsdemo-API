@@ -54,6 +54,32 @@ public class SendSmtpMail extends RouteBuilder {
                             }
                             messageIn.setHeader("To", toList)
                         }
+                        if(object.cc){
+                            def ccList = ""
+                            def recepientList = object.cc instanceof String ? [object.cc] : object.cc as ArrayList
+                            for (int i=0;i<recepientList.size();i++){
+                                def recepient = recepientList.get(i)
+                                if(i<recepientList.size()-1){
+                                    ccList += recepient+","
+                                } else {
+                                    ccList += recepient
+                                }
+                            }
+                            messageIn.setHeader("Cc", ccList)
+                        }
+                        if(object.bcc){
+                            def bccList = ""
+                            def recepientList = object.bcc instanceof String ? [object.bcc] : object.bcc as ArrayList
+                            for (int i=0;i<recepientList.size();i++){
+                                def recepient = recepientList.get(i)
+                                if(i<recepientList.size()-1){
+                                    bccList += recepient+","
+                                } else {
+                                    bccList += recepient
+                                }
+                            }
+                            messageIn.setHeader("Bcc", bccList)
+                        }
                         if(object.from){
                             messageIn.setHeader("From", object.from as String)
                         } else {
