@@ -2,7 +2,7 @@
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
-            <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/>
+            <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, <br/>
                 <p>Your PADI-Endorsed insurance will expire at 12:01 AM on July 22. Please apply online at <a href = '{$url}' rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>www.diveinsurance.com</u></a> or contact us at 1.800.223.9998 or 1.714.739.3177 for a new application.</p><br/>
 
                 <p>If you were on automatic renewal and you are receiving this email, we were unable to obtain an authorization for your credit card.Please call our office to update your credit card information.</p><br/>

@@ -1379,7 +1379,7 @@ class FileService extends AbstractService
     {
         $fileArray = array();
         $data = array();
-        $fileStorage = "organization/" . AuthContext::get(AuthConstants::ORG_UUID) . "/files/";
+        $fileStorage = AuthContext::get(AuthConstants::ORG_UUID) . "/temp/";
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['uuid'] = UuidUtil::uuid();
@@ -1388,13 +1388,13 @@ class FileService extends AbstractService
         $data['name'] = $tempname.".".$ext;
         $data['originalName'] = $tempname.".".$ext;
         $data['extension'] = $ext;
-        $folderPath = $this->config['UPLOAD_FOLDER'].$fileStorage.$data['uuid']."/";
+        $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
         $form = new FileAttachment();
         $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
         $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
         $data['path'] = $path;
         $data['type'] = $file['type'];
-        $data['url'] = $this->config['baseUrl']."/data/uploads/".$fileStorage.$data['uuid']."/".$data['name'];
+        $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
         $form->exchangeArray($data);
         $form->validate();
         $count = $this->attachmentTable->save($form);

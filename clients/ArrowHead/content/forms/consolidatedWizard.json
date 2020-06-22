@@ -6,9 +6,14 @@
   "components": [
     {
       "title": "General Information",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": false,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "generalInformation",
+      "type": "panel",
+      "label": "General Information",
       "components": [
         {
           "type": "panel",
@@ -152,7 +157,8 @@
                                 "value": "corporation"
                               },
                               { "label": "LLC", "value": "llc" },
-                              { "label": "Individual", "value": "individual" }
+                              { "label": "Individual", "value": "individual" },
+                              { "value": "partnership", "label": "Partnership" }
                             ]
                           },
                           "selectThreshold": 0.3,
@@ -655,10 +661,27 @@
               "label": ""
             },
             {
-              "key": "insuranceContact",
-              "input": false,
-              "title": "Insurance Contact",
+              "label": "Insurance Contact",
+              "reorder": false,
+              "addAnotherPosition": "bottom",
+              "defaultOpen": false,
+              "layoutFixed": false,
+              "enableRowGroups": false,
               "tableView": false,
+              "defaultValue": [
+                {
+                  "genfirstname": "",
+                  "genlastname": "",
+                  "phone": "",
+                  "email": "",
+                  "accounting": "",
+                  "lossControl": "",
+                  "mvrPolicyDocs": ""
+                }
+              ],
+              "key": "insurancecontactdataGrid",
+              "type": "datagrid",
+              "input": true,
               "components": [
                 {
                   "clearOnHide": false,
@@ -759,10 +782,19 @@
                           "components": [
                             {
                               "label": "Accounting",
-                              "placeholder": "Accounting",
-                              "tableView": true,
+                              "optionsLabelPosition": "right",
+                              "inline": false,
+                              "tableView": false,
+                              "values": [
+                                {
+                                  "label": "Yes",
+                                  "value": "yes",
+                                  "shortcut": ""
+                                },
+                                { "label": "No", "value": "no", "shortcut": "" }
+                              ],
                               "key": "accounting",
-                              "type": "textfield",
+                              "type": "radio",
                               "input": true,
                               "hideOnChildrenHidden": false
                             }
@@ -786,14 +818,22 @@
                         {
                           "components": [
                             {
-                              "input": true,
-                              "tableView": true,
                               "label": "Loss Control",
+                              "optionsLabelPosition": "right",
+                              "inline": false,
+                              "tableView": false,
+                              "values": [
+                                {
+                                  "label": "Yes",
+                                  "value": "yes",
+                                  "shortcut": ""
+                                },
+                                { "label": "No", "value": "no", "shortcut": "" }
+                              ],
                               "key": "lossControl",
-                              "type": "textfield",
-                              "hideOnChildrenHidden": false,
-                              "placeholder": "Loss Control",
-                              "lockKey": true
+                              "type": "radio",
+                              "input": true,
+                              "hideOnChildrenHidden": false
                             }
                           ],
                           "width": 6,
@@ -805,14 +845,22 @@
                         {
                           "components": [
                             {
-                              "input": true,
-                              "tableView": true,
                               "label": "MVR's & Policy Docs",
+                              "optionsLabelPosition": "right",
+                              "inline": false,
+                              "tableView": false,
+                              "values": [
+                                {
+                                  "label": "Yes",
+                                  "value": "yes",
+                                  "shortcut": ""
+                                },
+                                { "label": "No", "value": "no", "shortcut": "" }
+                              ],
                               "key": "mvrPolicyDocs",
-                              "type": "textfield",
-                              "hideOnChildrenHidden": false,
-                              "placeholder": "MVR's & Policy Docs",
-                              "lockKey": true
+                              "type": "radio",
+                              "input": true,
+                              "hideOnChildrenHidden": false
                             }
                           ],
                           "width": 6,
@@ -832,10 +880,7 @@
                   "hideLabel": true,
                   "label": ""
                 }
-              ],
-              "type": "panel",
-              "label": "Panel",
-              "lockKey": true
+              ]
             }
           ],
           "input": false,
@@ -1235,7 +1280,7 @@
                         "customMessage": "Please enter experience of management"
                       },
                       "key": "lessThan3years",
-                      "customConditional": "show = data.numYearsOfOwnership>3;",
+                      "customConditional": "show = data.numYearsOfOwnership<3;",
                       "type": "textfield",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -1847,8 +1892,8 @@
                         },
                         { "label": "Dodge", "value": "dodge", "shortcut": "" },
                         {
-                          "label": "Ferrari North America",
-                          "value": "ferrariNorthAmerica",
+                          "label": "Ferrari",
+                          "value": "ferrari",
                           "shortcut": ""
                         },
                         { "label": "Fiat", "value": "fiat", "shortcut": "" },
@@ -1869,11 +1914,7 @@
                           "value": "jaguar",
                           "shortcut": ""
                         },
-                        {
-                          "label": "Kia Motors America",
-                          "value": "kiaMotorsAmerica",
-                          "shortcut": ""
-                        },
+                        { "label": "Kia", "value": "kia", "shortcut": "" },
                         {
                           "label": "Land Rover",
                           "value": "landRover",
@@ -1885,11 +1926,7 @@
                           "value": "lincoln",
                           "shortcut": ""
                         },
-                        {
-                          "label": "Mazda North American Operations",
-                          "value": "mazdaNorthAmericanOperations",
-                          "shortcut": ""
-                        },
+                        { "label": "Mazda", "value": "mazda", "shortcut": "" },
                         {
                           "label": "Mercedes-Benz",
                           "value": "mercedesBenz",
@@ -2103,27 +2140,18 @@
                           { "value": "chevrolet", "label": "Chevrolet" },
                           { "value": "chrysler", "label": "Chrysler" },
                           { "value": "dodge", "label": "Dodge" },
-                          {
-                            "value": "ferrariNorthAmerica",
-                            "label": "Ferrari North America"
-                          },
+                          { "value": "ferrari", "label": "Ferrari" },
                           { "value": "fiat", "label": "Fiat" },
                           { "value": "ford", "label": "Ford" },
                           { "value": "honda", "label": "Honda" },
                           { "value": "hyundai", "label": "Hyundai" },
                           { "value": "infiniti", "label": "Infiniti" },
                           { "value": "jaguar", "label": "Jaguar" },
-                          {
-                            "value": "kiaMotorsAmerica",
-                            "label": "Kia Motors America"
-                          },
+                          { "value": "kia", "label": "Kia" },
                           { "value": "landRover", "label": "Land Rover" },
                           { "value": "lexus", "label": "Lexus" },
                           { "value": "lincoln", "label": "Lincoln" },
-                          {
-                            "value": "mazdaNorthAmericanOperations",
-                            "label": "Mazda North American Operations"
-                          },
+                          { "value": "mazda", "label": "Mazda" },
                           { "value": "mercedesBenz", "label": "Mercedes-Benz" },
                           { "value": "nissan", "label": "Nissan" },
                           { "value": "porsche", "label": "Porsche" },
@@ -2246,17 +2274,21 @@
           ]
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Property Liability",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "propertyLiability",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Property Liability",
       "components": [
         {
           "type": "panel",
@@ -2264,9 +2296,6 @@
           "components": [
             {
               "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "page1Columns",
               "columns": [
                 {
                   "components": [
@@ -2284,6 +2313,34 @@
                       "optionsLabelPosition": "right",
                       "hideOnChildrenHidden": false,
                       "lockKey": true
+                    }
+                  ],
+                  "width": 4,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md"
+                },
+                {
+                  "components": [
+                    {
+                      "label": "Applicant perform any frame cutting or welding?",
+                      "optionsLabelPosition": "right",
+                      "inline": false,
+                      "tableView": false,
+                      "values": [
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
+                      ],
+                      "key": "applicantPerformAnyFrame",
+                      "conditional": {
+                        "show": true,
+                        "when": "repair",
+                        "eq": "yes"
+                      },
+                      "type": "radio",
+                      "input": true,
+                      "hideOnChildrenHidden": false
                     }
                   ],
                   "width": 4,
@@ -2315,40 +2372,18 @@
                       "lockKey": true
                     }
                   ],
+                  "size": "md",
                   "width": 4,
                   "offset": 0,
                   "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Are flammables stored in UL approved cabinets?",
-                      "optionsLabelPosition": "right",
-                      "inline": false,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "validate": { "required": true },
-                      "key": "flammablesul",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
+                  "pull": 0
                 }
               ],
+              "hideLabel": true,
+              "tableView": false,
+              "key": "page1Columns",
               "type": "columns",
-              "hideLabel": true
+              "input": false
             },
             {
               "clearOnHide": false,
@@ -2357,116 +2392,176 @@
               "tableView": false,
               "components": [
                 {
-                  "input": true,
-                  "tableView": true,
-                  "label": "Does applicant perform body work and spray painting?",
-                  "key": "spraypainting",
-                  "values": [
-                    { "value": "yes", "label": "Yes", "shortcut": "" },
-                    { "value": "no", "label": "No", "shortcut": "" }
-                  ],
-                  "validate": { "required": true },
-                  "type": "radio",
-                  "optionsLabelPosition": "right",
-                  "lockKey": true
-                },
-                {
-                  "label": "If YES, please answer",
-                  "tableView": false,
-                  "questions": [
+                  "label": "Columns",
+                  "columns": [
                     {
-                      "label": "Is the spray booth NFPA compliant?",
-                      "value": "isTheSprayBoothNfpaCompliant"
+                      "components": [
+                        {
+                          "label": "Are flammables stored in UL approved cabinets?",
+                          "optionsLabelPosition": "right",
+                          "inline": false,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "validate": { "required": true },
+                          "key": "flammablesul",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 12,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
                     },
                     {
-                      "label": "Maint. contract in place to service/inspect booth?",
-                      "value": "maintContractInPlaceToServiceInspectBooth"
-                    },
-                    {
-                      "label": "Booth have NFPA compliant ventilation?",
-                      "value": "boothHaveNfpaCompliantVentilation"
-                    },
-                    {
-                      "label": "Auto sprinkler/dry-chem fire suppression system?",
-                      "value": "autoSprinklerDryChemFireSuppressionSystem"
-                    },
-                    {
-                      "label": "Are paints stored in UL approved cabinets?",
-                      "value": "arePaintsStoredInUlApprovedCabinets"
+                      "components": [],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
                     }
                   ],
-                  "values": [
-                    { "label": "Yes", "value": "yes" },
-                    { "label": "No", "value": "no" }
-                  ],
-                  "validate": { "required": true },
-                  "key": "spraypaintingysurvey",
-                  "conditional": {
-                    "show": true,
-                    "when": "spraypainting",
-                    "eq": "yes"
-                  },
-                  "type": "survey",
-                  "input": true
-                },
-                {
-                  "input": true,
-                  "tableView": true,
-                  "label": "Does applicant have a separate mixing room?",
-                  "key": "separatemixingroom",
-                  "values": [
-                    { "value": "yes", "label": "Yes", "shortcut": "" },
-                    { "value": "no", "label": "No", "shortcut": "" }
-                  ],
-                  "validate": { "required": true },
-                  "type": "radio",
-                  "optionsLabelPosition": "right",
-                  "hideOnChildrenHidden": false,
-                  "lockKey": true
-                },
-                {
-                  "label": "If YES, please answer",
                   "tableView": false,
-                  "questions": [
-                    {
-                      "label": "Have self closing metal door?",
-                      "value": "haveSelfClosingMetalDoor"
-                    },
-                    {
-                      "label": "Have explosion proof electrical system?",
-                      "value": "haveExplosionProofElectricalSystem"
-                    },
-                    {
-                      "label": "Applicant perform any frame cutting or welding?",
-                      "value": "applicantPerformAnyFrameCuttingOrWelding"
-                    },
-                    {
-                      "label": "Have fire suppression system?",
-                      "value": "haveFireSuppressionSystem"
-                    },
-                    {
-                      "label": "Have NFPA compliant ventilation?",
-                      "value": "haveNfpaCompliantVentilation"
-                    },
-                    {
-                      "label": "Are drums grounded and bonded during pant transfer?",
-                      "value": "areDrumsGroundedAndBondedDuringPantTransfer"
-                    },
-                    { "label": "Raised Sil?", "value": "raisedSil" }
-                  ],
-                  "values": [
-                    { "label": "Yes", "value": "yes" },
-                    { "label": "No", "value": "no" }
-                  ],
-                  "validate": { "required": true },
-                  "key": "mixingroomsurvey",
-                  "conditional": {
-                    "show": true,
-                    "when": "separatemixingroom",
-                    "eq": "yes"
+                  "key": "columns6",
+                  "type": "columns",
+                  "input": false
+                },
+                {
+                  "breadcrumbClickable": true,
+                  "buttonSettings": {
+                    "previous": true,
+                    "cancel": true,
+                    "next": true
                   },
-                  "type": "survey",
-                  "input": true
+                  "collapsible": false,
+                  "tableView": false,
+                  "key": "panel1",
+                  "type": "panel",
+                  "label": "Panel",
+                  "input": false,
+                  "components": [
+                    {
+                      "input": true,
+                      "tableView": true,
+                      "label": "Does applicant perform body work and spray painting?",
+                      "key": "spraypainting",
+                      "values": [
+                        { "value": "yes", "label": "Yes", "shortcut": "" },
+                        { "value": "no", "label": "No", "shortcut": "" }
+                      ],
+                      "validate": { "required": true },
+                      "type": "radio",
+                      "optionsLabelPosition": "right",
+                      "lockKey": true
+                    },
+                    {
+                      "label": "If YES, please answer",
+                      "tableView": false,
+                      "questions": [
+                        {
+                          "label": "Is the spray booth NFPA compliant?",
+                          "value": "isTheSprayBoothNfpaCompliant"
+                        },
+                        {
+                          "label": "Maint. contract in place to service/inspect booth?",
+                          "value": "maintContractInPlaceToServiceInspectBooth"
+                        },
+                        {
+                          "label": "Booth have NFPA compliant ventilation?",
+                          "value": "boothHaveNfpaCompliantVentilation"
+                        },
+                        {
+                          "label": "Auto sprinkler/dry-chem fire suppression system?",
+                          "value": "autoSprinklerDryChemFireSuppressionSystem"
+                        },
+                        {
+                          "label": "Are paints stored in UL approved cabinets?",
+                          "value": "arePaintsStoredInUlApprovedCabinets"
+                        }
+                      ],
+                      "values": [
+                        { "label": "Yes", "value": "yes" },
+                        { "label": "No", "value": "no" }
+                      ],
+                      "validate": { "required": true },
+                      "key": "spraypaintingysurvey",
+                      "conditional": {
+                        "show": true,
+                        "when": "spraypainting",
+                        "eq": "yes"
+                      },
+                      "type": "survey",
+                      "input": true
+                    },
+                    {
+                      "label": "Does applicant have a separate mixing room?",
+                      "optionsLabelPosition": "right",
+                      "inline": false,
+                      "tableView": true,
+                      "values": [
+                        { "value": "yes", "label": "Yes", "shortcut": "" },
+                        { "value": "no", "label": "No", "shortcut": "" }
+                      ],
+                      "validate": { "required": true },
+                      "key": "separatemixingroom",
+                      "conditional": {
+                        "show": true,
+                        "when": "spraypainting",
+                        "eq": "yes"
+                      },
+                      "type": "radio",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
+                      "lockKey": true
+                    },
+                    {
+                      "label": "If YES, please answer",
+                      "tableView": false,
+                      "questions": [
+                        {
+                          "label": "Have self closing metal door?",
+                          "value": "haveSelfClosingMetalDoor"
+                        },
+                        {
+                          "label": "Have explosion proof electrical system?",
+                          "value": "haveExplosionProofElectricalSystem"
+                        },
+                        {
+                          "label": "Have fire suppression system?",
+                          "value": "haveFireSuppressionSystem"
+                        },
+                        {
+                          "label": "Have NFPA compliant ventilation?",
+                          "value": "haveNfpaCompliantVentilation"
+                        },
+                        {
+                          "label": "Are drums grounded and bonded during pant transfer?",
+                          "value": "areDrumsGroundedAndBondedDuringPantTransfer"
+                        },
+                        { "label": "Raised Sil?", "value": "raisedSil" }
+                      ],
+                      "values": [
+                        { "label": "Yes", "value": "yes" },
+                        { "label": "No", "value": "no" }
+                      ],
+                      "validate": { "required": true },
+                      "key": "mixingroomsurvey",
+                      "conditional": {
+                        "show": true,
+                        "when": "separatemixingroom",
+                        "eq": "yes"
+                      },
+                      "type": "survey",
+                      "input": true
+                    }
+                  ]
                 }
               ],
               "type": "fieldset",
@@ -2787,6 +2882,21 @@
                   "size": "md"
                 },
                 {
+                  "components": [],
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md"
+                }
+              ],
+              "type": "columns",
+              "hideLabel": true
+            },
+            {
+              "label": "Columns",
+              "columns": [
+                {
                   "components": [
                     {
                       "label": "Wind Deductible",
@@ -2819,10 +2929,40 @@
                   "push": 0,
                   "pull": 0,
                   "size": "md"
+                },
+                {
+                  "components": [
+                    {
+                      "label": "Flat $",
+                      "placeholder": "Flat $",
+                      "mask": false,
+                      "spellcheck": true,
+                      "tableView": false,
+                      "currency": "USD",
+                      "inputFormat": "plain",
+                      "key": "flatamount",
+                      "conditional": {
+                        "show": true,
+                        "when": "winddeductible",
+                        "eq": "flat"
+                      },
+                      "type": "currency",
+                      "input": true,
+                      "delimiter": true,
+                      "hideOnChildrenHidden": false
+                    }
+                  ],
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md"
                 }
               ],
+              "tableView": false,
+              "key": "columns7",
               "type": "columns",
-              "hideLabel": true
+              "input": false
             },
             {
               "label": "Columns",
@@ -2873,6 +3013,11 @@
                       "selectThreshold": 0.3,
                       "validate": { "required": true },
                       "key": "earthquakedeductibles",
+                      "conditional": {
+                        "show": true,
+                        "when": "earthquakecoverage",
+                        "eq": "yes"
+                      },
                       "type": "select",
                       "indexeddb": { "filter": {} },
                       "input": true,
@@ -3579,12 +3724,11 @@
                           "delimiter": false,
                           "requireDecimal": false,
                           "inputFormat": "plain",
-                          "validate": { "required": true },
                           "key": "businessincomelimit",
                           "type": "number",
+                          "decimalLimit": 2,
                           "input": true,
                           "hideOnChildrenHidden": false,
-                          "decimalLimit": 2,
                           "inputType": "number"
                         }
                       ],
@@ -3761,7 +3905,6 @@
                           "placeholder": "Average Monthly Gross Profit - Car Sales",
                           "mask": false,
                           "spellcheck": true,
-                          "disabled": true,
                           "tableView": false,
                           "delimiter": false,
                           "requireDecimal": false,
@@ -3769,8 +3912,8 @@
                           "calculateValue": "value=data.ytdtotaldealershipcarsales/data.financialstatement",
                           "key": "monthlygrossprofit",
                           "type": "number",
-                          "input": true,
                           "decimalLimit": 2,
+                          "input": true,
                           "hideOnChildrenHidden": false,
                           "inputType": "number"
                         }
@@ -3788,7 +3931,6 @@
                           "placeholder": "Average Monthly Gross Profit -Other Than Car Sales",
                           "mask": false,
                           "spellcheck": true,
-                          "disabled": true,
                           "tableView": false,
                           "delimiter": false,
                           "requireDecimal": false,
@@ -3796,8 +3938,8 @@
                           "calculateValue": "value=data.ytdtotaldealershipother/data.financialstatement",
                           "key": "monthlygrossprofitotherthancar",
                           "type": "number",
-                          "input": true,
                           "decimalLimit": 2,
+                          "input": true,
                           "hideOnChildrenHidden": false,
                           "inputType": "number"
                         }
@@ -4133,11 +4275,11 @@
                         {
                           "input": true,
                           "tableView": true,
-                          "label": "Location TIV",
-                          "key": "locationtiv",
+                          "label": "Fences",
+                          "key": "fences",
                           "type": "textfield",
                           "hideOnChildrenHidden": false,
-                          "placeholder": "Location TIV",
+                          "placeholder": "Fences",
                           "lockKey": true
                         }
                       ],
@@ -4148,18 +4290,7 @@
                       "size": "md"
                     },
                     {
-                      "components": [
-                        {
-                          "input": true,
-                          "tableView": true,
-                          "label": "Fences",
-                          "key": "fences",
-                          "type": "textfield",
-                          "hideOnChildrenHidden": false,
-                          "placeholder": "Fences",
-                          "lockKey": true
-                        }
-                      ],
+                      "components": [],
                       "width": 6,
                       "offset": 0,
                       "push": 0,
@@ -5212,7 +5343,7 @@
                       "selectThreshold": 0.3,
                       "key": "theftblanketdeductible",
                       "conditional": {
-                        "show": "true",
+                        "show": true,
                         "when": "theftblanketcoverage",
                         "eq": "yes"
                       },
@@ -5895,10 +6026,11 @@
                       "tableView": true,
                       "data": {
                         "values": [
-                          { "value": "1000", "label": "$1,000" },
-                          { "value": "2500", "label": "$2,500" },
-                          { "value": "5000", "label": "$5,000" },
-                          { "value": "10000", "label": "$10,000" }
+                          { "value": "10000", "label": "$10,000" },
+                          { "value": "25000", "label": "$25,000" },
+                          { "value": "50000", "label": "$50,000" },
+                          { "value": "100000", "label": "$100,000" },
+                          { "label": "$250,000", "value": "250000" }
                         ]
                       },
                       "selectThreshold": 0.3,
@@ -6284,17 +6416,21 @@
           "label": "Panel"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Garage Liability",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "garageLiabili",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Garage Liability",
       "components": [
         {
           "type": "panel",
@@ -7432,6 +7568,11 @@
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
                       "key": "minutesfromlastmeeting",
+                      "conditional": {
+                        "show": true,
+                        "when": "formalsafetymeetings",
+                        "eq": "quarterly"
+                      },
                       "type": "file",
                       "url": "/file/attachment",
                       "input": true,
@@ -8202,9 +8343,14 @@
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
                       "key": "copyOfContractUsed",
+                      "conditional": {
+                        "show": true,
+                        "when": "loanerrentalcontractused",
+                        "eq": "yes"
+                      },
                       "type": "file",
-                      "input": true,
                       "url": "/file/attachment",
+                      "input": true,
                       "hideOnChildrenHidden": false
                     }
                   ],
@@ -11168,17 +11314,21 @@
         }
       ],
       "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
       "keyModified": true
     },
     {
       "title": "EPLI",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "epli",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "EPLI",
       "components": [
         {
           "type": "panel",
@@ -13719,17 +13869,21 @@
           "label": "Panel"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Pollution Liability",
-      "label": "Panel",
-      "type": "panel",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "pollutionLiability",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Pollution Liability",
       "components": [
         {
           "type": "panel",
@@ -14390,17 +14544,20 @@
           "label": "Panel"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Dealer Open Lot",
-      "label": "Panel",
-      "type": "panel",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "dealerOpenLot",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "type": "panel",
+      "label": "Dealer Open Lot",
       "components": [
         {
           "type": "panel",
@@ -16533,17 +16690,21 @@
         }
       ],
       "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
       "keyModified": true
     },
     {
       "title": "General Liability",
-      "label": "General Liability",
-      "type": "panel",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
       "key": "page1",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
+      "customConditional": "show = false;\r\nif (data.locationSchedule.length > 0) {\r\n\tfor (var i = 0; i < data.locationSchedule.length; i++) {\r\n\t\tif (\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"vacantLand\" ||\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"bldgLeasedToOthers\"\r\n\t\t) {\r\n\t\t\tshow = true;\r\n\t\t\tbreak;\r\n\t\t}\r\n\t}\r\n}",
+      "type": "panel",
+      "label": "General Liability",
       "components": [
         {
           "collapsible": false,
@@ -16563,6 +16724,7 @@
                   "components": [
                     {
                       "label": "Limit",
+                      "disabled": true,
                       "tableView": true,
                       "defaultValue": "$1,000,000",
                       "calculateValue": "if(data['glgkall'].length>0)\n{value = glgkall;}",
@@ -16606,8 +16768,9 @@
                     {
                       "label": "General Aggregate",
                       "widget": "choicesjs",
+                      "disabled": true,
                       "tableView": true,
-                      "defaultValue": "1000000",
+                      "defaultValue": 1000000,
                       "data": {
                         "values": [
                           { "label": "$1,000,000", "value": "1000000" }
@@ -16644,8 +16807,9 @@
                     {
                       "label": "Products & Completed Ops. Aggregate",
                       "widget": "choicesjs",
+                      "disabled": true,
                       "tableView": true,
-                      "defaultValue": "1000000",
+                      "defaultValue": 1000000,
                       "data": {
                         "values": [
                           { "label": "$1,000,000", "value": "1000000" }
@@ -16671,6 +16835,7 @@
                   "components": [
                     {
                       "label": "Personal & Advertising Injury",
+                      "disabled": true,
                       "tableView": true,
                       "defaultValue": "$1,000,000",
                       "validate": { "required": true },
@@ -16691,6 +16856,7 @@
                   "components": [
                     {
                       "label": "Damage to Rented Premises",
+                      "disabled": true,
                       "tableView": true,
                       "defaultValue": "No Coverage",
                       "key": "damagepremises",
@@ -16719,8 +16885,9 @@
                   "components": [
                     {
                       "label": "Medical Expense",
-                      "placeholder": "Medical Expense",
+                      "disabled": true,
                       "tableView": true,
+                      "defaultValue": "$1,000,000",
                       "key": "medicalexpense",
                       "type": "textfield",
                       "input": true,
@@ -16949,18 +17116,20 @@
           ]
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
-      "customConditional": "show = false;\r\nif (data.locationSchedule.length > 0) {\r\n\tfor (var i = 0; i < data.locationSchedule.length; i++) {\r\n\t\tif (\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"vacantLand\" ||\r\n\t\t\tdata.locationSchedule[i].occupancyType == \"bldgLeasedToOthers\"\r\n\t\t) {\r\n\t\t\tshow = true;\r\n\t\t\tbreak;\r\n\t\t}\r\n\t}\r\n}"
+      "input": false
     },
     {
       "title": "Umbrella Coverage",
-      "label": "Umbrella Coverage Detail",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
+      "key": "umbrellaPanel",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
-      "key": "page1",
+      "label": "Umbrella Coverage",
       "components": [
         {
           "clearOnHide": false,
@@ -17101,17 +17270,20 @@
           "label": "Field Set"
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Security & Privacy",
-      "label": "Security & Privacy Underwriting Information",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
+      "key": "securityPanel",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
-      "key": "page1",
+      "label": "Security & Privacy",
       "components": [
         {
           "key": "page1Panel",
@@ -17346,12 +17518,16 @@
                 {
                   "label": "# of Records containing Personably Identifiable Information (PII) in electronic format?  (PII is non-public personal information such as  social security number, financial information, driver's license #, etc.)",
                   "placeholder": "# of Records containing Personably Identifiable Information (PII)",
-                  "tableView": true,
-                  "key": "identifiableinfo",
-                  "type": "textfield",
+                  "mask": false,
+                  "spellcheck": true,
+                  "tableView": false,
+                  "delimiter": false,
+                  "requireDecimal": false,
+                  "inputFormat": "plain",
+                  "key": "ofRecordsContaining",
+                  "type": "number",
                   "input": true,
-                  "hideOnChildrenHidden": false,
-                  "lockKey": true
+                  "hideOnChildrenHidden": false
                 }
               ],
               "width": 6,
@@ -17974,7 +18150,7 @@
                   "key": "backingupandstorageother",
                   "conditional": {
                     "show": true,
-                    "when": "whatFormatDoesTheApplicantUtilizeForBackingUpAndStorageOfComputerSystemsData",
+                    "when": "backingupandstorage",
                     "eq": "other"
                   },
                   "type": "textfield",
@@ -18372,10 +18548,15 @@
           "hideLabel": true
         },
         {
-          "key": "applicant",
-          "input": false,
-          "title": "Does the past 5 years has the Applicant:",
+          "title": "During the past 5 years, has the Applicant:",
+          "breadcrumbClickable": true,
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
+          "collapsible": false,
           "tableView": false,
+          "key": "applicant",
+          "type": "panel",
+          "label": "During the past 5 years, has the Applicant:",
+          "input": false,
           "components": [
             {
               "label": "Columns",
@@ -18536,23 +18717,24 @@
               "hideLabel": true
             }
           ],
-          "type": "panel",
-          "label": "Panel",
           "lockKey": true
         }
       ],
       "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false,
       "keyModified": true
     },
     {
       "title": "Employee List",
-      "label": "Employee Classification",
+      "breadcrumbClickable": true,
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
+      "collapsible": false,
+      "tableView": false,
+      "key": "employeePanel",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
-      "key": "page1",
+      "label": "Employee List",
       "components": [
         {
           "label": "Employee List",
@@ -18653,11 +18835,15 @@
                         {
                           "label": "F/T employees Furnished an Auto",
                           "placeholder": "F/T employees Furnished an Auto",
-                          "tableView": true,
-                          "key": "ftemployees",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "fTEmployeesFurnishedAnAuto",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18672,9 +18858,14 @@
                         {
                           "label": "P/T employees furnished an auto",
                           "placeholder": "P/T employees furnished an auto",
-                          "tableView": true,
-                          "key": "ptemployees",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "pTEmployeesFurnishedAnAuto",
+                          "type": "number",
                           "input": true,
                           "hideOnChildrenHidden": false
                         }
@@ -18700,11 +18891,15 @@
                         {
                           "label": "F/T employees who are not furnished an auto but duties allow access to an auto on a regular basis",
                           "placeholder": "F/T employees who are not furnished",
-                          "tableView": true,
-                          "key": "ftnotfurnished",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "fTEmployeesWhoAreNotFurnished",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18719,9 +18914,14 @@
                         {
                           "label": "P/T employees who are not furnished an auto but duties allow access to an auto on a regular basis",
                           "placeholder": "P/T employees who are not furnished",
-                          "tableView": true,
-                          "key": "ptnotfurnished",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "pTEmployeesWhoAreNotFurnished",
+                          "type": "number",
                           "input": true,
                           "hideOnChildrenHidden": false
                         }
@@ -18747,11 +18947,15 @@
                         {
                           "label": "F/T All other employees including F&I managers",
                           "placeholder": "F/T All other employees",
-                          "tableView": true,
-                          "key": "ftincludingfandi",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "fTAllOtherEmployees",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18766,11 +18970,15 @@
                         {
                           "label": "P/T All other employees including F&I managers",
                           "placeholder": "P/T All other employees",
-                          "tableView": true,
-                          "key": "ptincludingfandi",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "pTAllOtherEmployees",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18795,11 +19003,15 @@
                         {
                           "label": "Non-Employees under the age of 25 furnished an auto",
                           "placeholder": "Non-Employees under the age of 25",
-                          "tableView": true,
-                          "key": "underageof25",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "nonEmployeesUnderTheAge",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18814,11 +19026,15 @@
                         {
                           "label": "Non-Employees 25 years old or older furnished an auto",
                           "placeholder": "Non-Employees 25 years old or older",
-                          "tableView": true,
-                          "key": "empyearsorolder",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "nonEmployeesYearsOldorolder",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18843,11 +19059,15 @@
                         {
                           "label": "Contract Drivers - Non-employees who drive covered autos to a location as directed by the Insured",
                           "placeholder": "Contract Drivers",
-                          "tableView": true,
-                          "key": "contractdrivers",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "contractDriversNonEmployees",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18862,11 +19082,15 @@
                         {
                           "label": "Number of Dealer Plates",
                           "placeholder": "Number of Dealer Plates",
-                          "tableView": true,
-                          "key": "dealerplates",
-                          "type": "textfield",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "key": "numberOfDealerPlates",
+                          "type": "number",
                           "input": true,
-                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -18886,20 +19110,20 @@
           ]
         }
       ],
-      "input": false,
-      "tableView": false,
-      "breadcrumbClickable": true,
-      "buttonSettings": { "previous": true, "cancel": true, "next": true },
-      "collapsible": false
+      "input": false
     },
     {
       "title": "Generate Workbooks",
       "theme": "primary",
-      "breadcrumbClickable": false,
+      "breadcrumb": "none",
+      "breadcrumbClickable": true,
       "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "tableView": false,
-      "key": "page11",
+      "key": "page111",
+      "properties": {
+        "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
+      },
       "type": "panel",
       "label": "Generate Workbooks",
       "components": [
@@ -18943,6 +19167,22 @@
           "type": "selectboxes",
           "input": true,
           "inputType": "checkbox"
+        },
+        {
+          "label": "GAIC Epli PDF Data",
+          "calculateValue": "value = {\n  \"City, State, Zip\": data.city + \",\" + data.state + \",\" + data.zip,\n  \"a  full time employees\":\n    data.employeedataGrid[0].fTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].fTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].fTAllOtherEmployees,\n  \"b  part time employees\":\n    data.employeedataGrid[0].pTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].pTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].pTAllOtherEmployees,\n  Name:\n    data.insurancecontactdataGrid[0].genfirstname +\n    data.insurancecontactdataGrid[0].genlastname,\n  \"c leasedcontract employees\" : \n    data.employeedataGrid[0].contractDriversNonEmployees,\n  Date: moment().format(\"YYYY-MM-DD\"),\n  Group25:\n    data.noticetoinsurer == \"notApplicable\"\n      ? \"Choice1\"\n      : data.noticetoinsurer == \"yes\"\n      ? \"2\"\n      : \"3\",\n  Group26:\n    data.nonrenewedcoverage == \"notApplicable\"\n      ? \"Choice1\"\n      : data.nonrenewedcoverage == \"yes\"\n      ? \"2\"\n      : \"3\"\n};\nconsole.log(value);",
+          "key": "gaicEpliPdfData",
+          "type": "hidden",
+          "input": true,
+          "tableView": false
+        },
+        {
+          "label": "RPS Cyber PDF Data",
+          "calculateValue": "value = {\n  \" of Employees\":\n    data.employeedataGrid[0].fTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].fTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].fTAllOtherEmployees +\n    data.employeedataGrid[0].pTEmployeesFurnishedAnAuto +\n    data.employeedataGrid[0].pTEmployeesWhoAreNotFurnished +\n    data.employeedataGrid[0].pTAllOtherEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership\n};\nconsole.log(data.rpsCyberPDFData);",
+          "key": "rpsCyberPDFData",
+          "type": "hidden",
+          "input": true,
+          "tableView": false
         }
       ],
       "input": false
@@ -18950,7 +19190,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: true\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
   "revisions": "current",
-  "_vid": 358,
+  "_vid": 421,
   "title": "consolidatedWizard",
   "display": "wizard",
   "access": [
@@ -18976,6 +19216,6 @@
   "path": "consolidatedwizard",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-05-18T07:42:20.331Z",
-  "modified": "2020-06-17T18:19:40.138Z",
+  "modified": "2020-06-19T12:16:12.787Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:consolidatedWizard"
 }

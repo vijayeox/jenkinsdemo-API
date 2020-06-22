@@ -67,6 +67,7 @@ class EFRToIPLUpgrade extends PolicyCheck
             $new_data['username']= isset($fileData['username']) ? $fileData['username'] : NULL;
             $new_data['zip']= isset($fileData['zip']) ? $fileData['zip'] : NULL;
             $new_data['state_in_short']= isset($fileData['state_in_short']) ? $fileData['state_in_short'] : NULL;
+            $new_data['product_email_id'] = 'instructors@diveinsurance.com';
             $new_data = parent::execute($new_data, $persistenceService );
         }
         $data['data'] = $new_data;

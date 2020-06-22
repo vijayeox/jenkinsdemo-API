@@ -6,7 +6,8 @@
                 EOX Vantage has created a new ID for you, <br/>Details are below: <br/>
                 URL: <a href='{$baseurl}' >Click here to Login </a> <br/>
                 UserName: {$username} <br/>
-                Password: {$password} <br/>
+                <br/>                
+                <a href = "{$passwordResetUrl}" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>Click here to set your password</u></a>
             </div>
 Thank you
 Team EOX Vantage

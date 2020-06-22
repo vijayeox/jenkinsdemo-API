@@ -14,7 +14,7 @@
 							{/if}#{$padi}</p>
 		</div>
 
-		<p>Dear <span class ="rgaard1">{$firstname}&nbsp{$lastname}</span></p>
+		<p>Dear <span class ="rgaard1">{$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}</span></p>
 		<div class = "line_space">
 		<p>We are pleased to enclose your PADI Endorsed Dive Center proposal. Our program includes:</p>
 		<ul class ="order">

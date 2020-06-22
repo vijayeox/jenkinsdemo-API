@@ -117,10 +117,8 @@ class JobService extends AbstractService
                 throw $e;
             }
         }
-        unset($response['Success']);
-        unset($response['Message']);
         $this->logger->info("Schedule JOB DATA in job service- " . print_r($jobData, true));
-        return $response;
+        return $jobData;
     }
     
     public function cancelJob($jobName, $jobGroup, $appId)

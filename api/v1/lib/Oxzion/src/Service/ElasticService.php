@@ -224,7 +224,7 @@ class ElasticService
                  }
                  
         } else {
-        //    echo $column.' '.$condition.' '.$value;
+           // echo $column.' '.$condition.' '.$value;exit;
             if (!in_array($column,$this->filterFields)) {
                 if ($condition=="=="){                
                         if (!is_array($value)) {
@@ -234,6 +234,8 @@ class ElasticService
                         }    
                 } elseif ($condition=="<>" || $condition=="!=") {
                         $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
+                } elseif ($condition=="NOT LIKE" || $condition=="not like") {
+                        $subQuery['bool']['must_not'][] =  ["match_phrase"=>[ $column=>$value ]];
                 }  else {
                         if (strtolower(substr($value,0,5))=="date:") {
                             $value = date("Y-m-d",strtotime(substr($value,5)));
