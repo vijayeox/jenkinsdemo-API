@@ -160,18 +160,15 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
-						"mask": false,
 						"autofocus": true,
-						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
+							"pattern": "[0-9\\s-]*$",
 							"customMessage": "PADI Number is not Valid!",
-							"min": 0
+							"min": 0,
+							"step": "any"
 						},
 						"key": "padi",
 						"logic": [{
@@ -207,10 +204,11 @@
 								"state": true
 							}]
 						}],
-						"type": "number",
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -3591,7 +3589,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 578,
+	"_vid": 579,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3675,7 +3673,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-21T22:35:59.533Z",
+	"modified": "2020-06-22T08:08:05.159Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
