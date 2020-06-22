@@ -469,16 +469,6 @@ class FileService extends AbstractService
         return array('validFields' => $keyValueFields,'indexedFields' => $indexedFields);
     }
 
-
-    private function parseKeyValueFieldsData($data){
-        foreach($data as $key => $value){
-            if(is_string($value)){
-                $data[$key] = $this->parseKeyValueFieldsData($data[$key]);
-            } 
-
-        }
-    }
-
     private function generateFieldPayload($dataType,$field,$fieldData,&$fieldvalue,$entityId,$fileId,$fileArray){
         switch ($dataType) {
             case 'text':
