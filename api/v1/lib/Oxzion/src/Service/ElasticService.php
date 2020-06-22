@@ -171,7 +171,7 @@ class ElasticService
         }
 
         $result_obj = $this->search($params);
-		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
+        if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
 			$results['type']='group';
 		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
