@@ -142,6 +142,9 @@ if (additionalInsured) {
   if (it.businessRelation == 'other') {
     result1 = true
   }
+  if (it.doYouHaveAWrittenContract=='yes'){
+    result1 = true
+}
  }
 }
 
