@@ -231,26 +231,39 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
-						"placeholder": "PADI Number",
-						"mask": false,
-						"autofocus": true,
-						"spellcheck": true,
+						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"max": null
+							"pattern": "[0-9\\s-]*$",
+							"customMessage": "Padi Number is not Valid!",
+							"step": "any"
 						},
 						"key": "padi",
-						"type": "number",
+						"logic": [{
+							"name": "Check PADI Verified",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "if ((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') ||\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") &&\n        (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\"))) {\n    result = true;\n} else if((data.padiVerified === true || data.padiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    result = true;\n} else if((data.businessPadiVerified === true || data.businessPadiVerified == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") )){\n    result = true;\n} else if((data.padiNotFound === true || data.padiNotFound == 'true') &&\n    ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\"))){\n    result = true;\n} else if((data['verified'] === true || data['verified']=='true') && (data['policy_exists']===true||data['policy_exists']=='true') ){\n    result = false;\n} else {\n    result = false;\n}"
+							},
+							"actions": [{
+								"name": "Disable",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
-						"customError": "Cannot set property 'maxLength' of null",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -2218,23 +2231,22 @@
 					"lockKey": true
 				}, {
 					"label": "PADI Number",
-					"mask": false,
-					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": false,
-					"delimiter": false,
-					"requireDecimal": false,
-					"inputFormat": "plain",
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"custom": "if(row.padi && row.padi != ''){\n  valid = (row.padi.toString().length > 0 && row.padi.toString().length <= 6) ? true : 'Please enter a valid PADI Number';\n}"
+						"pattern": "[0-9\\s-]*$",
+						"custom": "if(row.padi && row.padi != ''){\n  valid = (row.padi.toString().length > 0 && row.padi.toString().length <= 6) ? true : 'Please enter a valid PADI Number';\n}",
+						"step": "any"
 					},
 					"key": "padi",
-					"type": "number",
+					"customConditional": "if(row.padi && row.padi != ''){\n  valid = (row.padi.length > 6) ? 'Please enter valid PADI Number' : true;\n}",
+					"type": "textfield",
+					"delimiter": false,
+					"requireDecimal": false,
 					"input": true,
-					"inDataGrid": true,
-					"inputType": "number"
+					"inDataGrid": true
 				}],
 				"lockKey": true,
 				"path": "CrewGrid"
@@ -9314,7 +9326,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 234,
+	"_vid": 236,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9332,6 +9344,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-06-16T04:13:05.206Z",
+	"modified": "2020-06-22T09:22:18.584Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }
