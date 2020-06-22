@@ -1316,6 +1316,20 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "Additional Email",
+						"tableView": true,
+						"multiple": true,
+						"validate": {
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"multiple": true
+						},
+						"key": "additional_email",
+						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
+						"type": "email",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -14215,7 +14229,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 160,
+	"_vid": 161,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14232,6 +14246,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-22T09:26:00.690Z",
+	"modified": "2020-06-22T14:16:51.916Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

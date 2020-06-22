@@ -2979,17 +2979,18 @@
 				"input": true,
 				"dataGridLabel": false
 			}, {
-				"key": "page3Panel4Content",
 				"label": "Content",
-				"input": false,
 				"attrs": [{
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>\n<a href=\"https://www.diveinsurance.com/downloads/Exclusions.pdf\" target=\"_blank\">[Read Exclusions] &nbsp; </a></i></li>\n&nbsp\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>",
+				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>\n<a href=\"/apps/DiveInsurance/public/docs/Exclusions.pdf\" target=\"_blank\">[Read Exclusions] &nbsp; </a></i></li>\n&nbsp\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page3Panel4Content",
 				"type": "htmlelement",
-				"hideLabel": true,
-				"tableView": false
+				"input": false,
+				"hideLabel": true
 			}],
 			"type": "panel",
 			"label": "Panel"
@@ -4658,6 +4659,17 @@
 					"hideOnChildrenHidden": false
 				}]
 			}]
+		}, {
+			"label": "Additional Notes",
+			"tableView": true,
+			"key": "additionalNotes",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "accepted"
+			},
+			"type": "textfield",
+			"input": true
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -4671,7 +4683,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 448,
+	"_vid": 450,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4692,6 +4704,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-22T08:05:10.613Z",
+	"modified": "2020-06-22T14:21:55.134Z",
 	"machineName": "testdivehub:csrInitiates"
 }

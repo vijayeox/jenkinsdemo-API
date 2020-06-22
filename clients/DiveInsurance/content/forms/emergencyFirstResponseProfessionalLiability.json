@@ -1179,6 +1179,20 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "Additional Email",
+						"tableView": true,
+						"multiple": true,
+						"validate": {
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"multiple": true
+						},
+						"key": "additional_email",
+						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
+						"type": "email",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -3577,6 +3591,17 @@
 				"clearOnHide": false,
 				"hideLabel": true
 			}]
+		}, {
+			"label": "Additional Notes",
+			"tableView": true,
+			"key": "additionalNotes",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "approved"
+			},
+			"type": "textfield",
+			"input": true
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -3589,7 +3614,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 579,
+	"_vid": 581,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3673,7 +3698,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-22T08:08:05.159Z",
+	"modified": "2020-06-22T14:24:03.343Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

@@ -948,6 +948,20 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "Additional Email",
+						"tableView": true,
+						"multiple": true,
+						"validate": {
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"multiple": true
+						},
+						"key": "additional_email",
+						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
+						"type": "email",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -2236,6 +2250,17 @@
 					"hideOnChildrenHidden": false
 				}]
 			}]
+		}, {
+			"label": "Additional Notes",
+			"tableView": true,
+			"key": "additionalNotes",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "approved"
+			},
+			"type": "textfield",
+			"input": true
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -2248,7 +2273,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 195,
+	"_vid": 197,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2269,7 +2294,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-22T08:03:42.729Z",
+	"modified": "2020-06-22T14:24:30.980Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
