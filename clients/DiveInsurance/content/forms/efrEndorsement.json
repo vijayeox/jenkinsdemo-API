@@ -957,7 +957,6 @@
 							"multiple": true
 						},
 						"key": "additional_email",
-						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
 						"type": "email",
 						"input": true,
 						"lockKey": true,
@@ -2273,7 +2272,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 197,
+	"_vid": 198,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2294,7 +2293,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-22T14:24:30.980Z",
+	"modified": "2020-06-22T15:44:04.808Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
