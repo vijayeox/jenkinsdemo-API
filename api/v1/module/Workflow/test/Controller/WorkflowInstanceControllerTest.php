@@ -62,7 +62,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'workflow3', 'app_id' => 1, 'field2' => 1];
+        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343"];
         $fileCount = $this->getConnection()->getRowCount('ox_file');
         $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
         $this->setJsonContent(json_encode($data));
@@ -74,9 +74,9 @@ class WorkflowInstanceControllerTest extends ControllerTest
             $this->processId = 1;
         }
         $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
-        $this->assertEquals($fileAttributeCount + 6, $this->getConnection()->getRowCount('ox_file_attribute'));
-        $this->assertEquals($fileCount + 1, $this->getConnection()->getRowCount('ox_file'));
         $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($fileAttributeCount + 1, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $this->assertEquals($fileCount + 1, $this->getConnection()->getRowCount('ox_file'));
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
@@ -243,14 +243,14 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testGetActivityInstance()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflowinstance/1/activityinstance/3f6622fd-0124-11ea-a8a0-22e8105c0778/form', 'GET');
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflowinstance/3f20b5c5-0124-11ea-a8a0-22e8105c0998/activityinstance/3f6622fd-0124-11ea-a8a0-22e8105c0723/form', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('activityInstanceForm');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']) > 0, true);
     }
@@ -272,16 +272,16 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testcompleteActivityInstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0722', 'activityId' => 1, 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'bharatgtest', 'type' => 'assignee')), 'processInstanceId' => 1, 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => 1, 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'orgid' => $this->testOrgId)];
+        $data = ['activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0723', 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'bharatgtest', 'type' => 'assignee')), 'processInstanceId' => "3f20b5c5-0124-11ea-a8a0-22e8105c0998", 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => "Task_1s7qzh3", 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'orgid' => $this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activitycomplete', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(ActivityInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ActivityInstanceController');
         $this->assertMatchedRouteName('completeActivityInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
