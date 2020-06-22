@@ -36,8 +36,8 @@ class RenewalRateCard extends RateCard
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
         }else if($data['form_data']['product'] == 'Dive Store'){
-            $data['form_data']['start_date'] = $startYear."-07-01";
-            $data['form_data']['end_date'] = $endYear."-07-30";
+            $data['form_data']['start_date'] = $startYear."-06-30";
+            $data['form_data']['end_date'] = $endYear."-06-30";
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
         }
@@ -73,7 +73,33 @@ class RenewalRateCard extends RateCard
         //         }
         //     }
         // }
-
+        if($data['form_data']['product']=='Individual Professional Liability'){
+            $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['padi']."'";
+            $result = $persistenceService->selectQuery($select);
+            $coverageOptions = array();
+            if($result->count() > 0){
+                $response = array();
+                while ($result->next()) {
+                    $response[] = $result->current();
+                }
+            }
+            $coverageSelect = "Select coverage_name,coverage_level FROM coverage_options WHERE padi_rating ='".$response[0]['rating']."'";
+            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+            if($result->count() > 0){
+                while ($coverageLevels->next()) {
+                    $coverage = $coverageLevels->current();
+                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                }
+            } else {
+                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options";
+                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                while ($coverageLevels->next()) {
+                    $coverage = $coverageLevels->current();
+                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                }
+            }
+            $data['form_data']['careerCoverageOptions'] = $coverageOptions;
+        }
         
         //END DATE PERIOD SELECTION
         $this->logger->info("AUTO RATE CARD PERSISTENCE".print_r($data,true));
