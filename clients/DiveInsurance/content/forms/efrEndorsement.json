@@ -253,25 +253,23 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
-						"mask": false,
 						"autofocus": true,
-						"spellcheck": true,
 						"disabled": true,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
+							"pattern": "[0-9\\s-]*$",
 							"customMessage": "Max Length is 6",
-							"max": null
+							"max": null,
+							"step": "any"
 						},
 						"key": "padi",
-						"type": "number",
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
 						"customError": "Cannot set property 'maxLength' of null",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
@@ -2250,7 +2248,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 194,
+	"_vid": 195,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2271,7 +2269,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-21T22:19:06.472Z",
+	"modified": "2020-06-22T08:03:42.729Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

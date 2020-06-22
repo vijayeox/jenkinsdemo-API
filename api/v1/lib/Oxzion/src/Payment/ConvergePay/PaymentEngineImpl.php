@@ -28,7 +28,6 @@ class PaymentEngineImpl implements PaymentEngine
             "&ssl_transaction_type=ccsale".
             "&ssl_first_name=".$data['firstname'].
             "&ssl_last_name=".$data['lastname'].
-            "&ssl_description=".$data['description'].
             "&ssl_get_token=Y".
             "&ssl_add_token=Y".
             "&ssl_amount=".$data['amount']

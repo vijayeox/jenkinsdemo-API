@@ -100,18 +100,15 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
-						"mask": false,
 						"autofocus": true,
-						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
+							"pattern": "[0-9\\s-]*$",
 							"customMessage": "PADI Number is not Valid!",
-							"min": 0
+							"min": 0,
+							"step": "any"
 						},
 						"key": "padi",
 						"logic": [{
@@ -147,10 +144,11 @@
 								"state": true
 							}]
 						}],
-						"type": "number",
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -4673,7 +4671,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 447,
+	"_vid": 448,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4694,6 +4692,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-21T19:00:39.700Z",
+	"modified": "2020-06-22T08:05:10.613Z",
 	"machineName": "testdivehub:csrInitiates"
 }
