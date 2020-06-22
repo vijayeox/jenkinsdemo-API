@@ -48,6 +48,7 @@ module.exports = function(core, proc) {
               <script src="../js/phonelist.js"></script>
               <script src="../js/jquery.min.js"></script>
               <script src="../js/moment.js"></script>
+              <script src="../js/moment-tz.js"></script>
               <script src="../js/formio.full.min.js"></script>
               <script src="../js/custom.js"></script>
               <script src="../js/sweetaleart.js"></script>
