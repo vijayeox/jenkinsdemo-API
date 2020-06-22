@@ -31,11 +31,13 @@ class RenewalRateCard extends RateCard
         
         if($data['form_data']['product'] == 'Dive Boat'){
             // SET DEFAULT DATE FOR DIVE 
+            $data['form_data']['workflowId'] = 'bb15e393-11b9-48ea-bc5a-5b7616047cb1';
             $data['form_data']['start_date'] = $startYear."-07-22";
             $data['form_data']['end_date'] = $endYear."-07-22";
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
         }else if($data['form_data']['product'] == 'Dive Store'){
+            $data['form_data']['workflowId'] = 'cb99e634-de00-468d-9230-d6f77d241c5b';
             $data['form_data']['start_date'] = $startYear."-06-30";
             $data['form_data']['end_date'] = $endYear."-06-30";
             $date=date_create($data['form_data']['start_date']);
@@ -46,12 +48,14 @@ class RenewalRateCard extends RateCard
             $data['form_data']['businessPadiVerified'] = "false";
             $data['form_data']['start_date'] = $startYear."-06-30";
             $data['form_data']['end_date'] = $endYear."-06-30";
-            $policy_period = "July 01,".$startYear." - June 30,".$endYear;
+            $policy_period = "June 30,".$startYear." - June 30,".$endYear;
             // UPDATE DEFAULT RANGE
             $date_range = array("label" => $policy_period,"value" => $data['form_data']['start_date']);
             $data['form_data']['start_date_range'] = $date_range;
         }
-
+        if($data['form_data']['product']=='Emergency First Response'){
+            $data['form_data']['workflowId'] = 'cb74d176-225a-11ea-978f-2e728ce88125';
+        }
         // $filterParams = array();
         // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
         // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
@@ -74,6 +78,7 @@ class RenewalRateCard extends RateCard
         //     }
         // }
         if($data['form_data']['product']=='Individual Professional Liability'){
+            $data['form_data']['workflowId'] = 'f0efea9e-7863-4368-a9b2-baa1a1603067';
             $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['padi']."'";
             $result = $persistenceService->selectQuery($select);
             $coverageOptions = array();
