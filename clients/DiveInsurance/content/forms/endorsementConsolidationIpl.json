@@ -1234,7 +1234,6 @@
 							"multiple": true
 						},
 						"key": "additional_email",
-						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
 						"type": "email",
 						"input": true,
 						"lockKey": true,
@@ -2012,8 +2011,7 @@
 				"path": "page3Panel",
 				"hideOnChildrenHidden": false
 			}, {
-				"title": "User Attachments",
-				"theme": "primary",
+				"title": " ",
 				"breadcrumbClickable": false,
 				"buttonSettings": {
 					"previous": true,
@@ -2021,21 +2019,20 @@
 					"next": true
 				},
 				"collapsible": false,
-				"hidden": true,
 				"tableView": true,
-				"key": "techrecPanel",
-				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n  if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInspectionInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}\n}\nelse{\n  show = false;\n}",
+				"key": "documentPanel",
+				"customConditional": "if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  show =false;\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}",
 				"type": "panel",
-				"label": "User Attachments",
+				"label": " ",
 				"input": false,
 				"components": [{
 					"type": "documentviewer",
 					"key": "techRec_attachments1",
-					"calculateValue": "value = (data['TechRec_attachments'])",
+					"calculateValue": "try{ value = JSON.parse(data.TechRec_attachments)} catch(e){value = data.TechRec_attachments}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && data.TechRec_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){\n   show = true;\n } else {\n show = false; \n}",
+					"customConditional": "if(data.TechRec_attachments && data.TechRec_attachments.length > 0 && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove'){show = true;} else {show =false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "TecRec Attachments",
@@ -2044,16 +2041,15 @@
 					"input": 1,
 					"tableView": false,
 					"protected": true,
-					"persistent": false,
-					"refreshOn": "TechRec_attachments"
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInspector_attachments1",
-					"calculateValue": "value = (data['cylinderInspector_attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.cylinderInspector_attachments)\n} catch(e){\n  value = data.cylinderInspector_attachments\n}",
 					"dtype": "documentviewer",
-					"customConditional": "if(data.cylinder == 'cylinderInspector'&& data.cylinderInspector_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){\n  show = true;\n } else {\n show = false; \n}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
+					"customConditional": "if(data.cylinderInspector_attachments && data.cylinderInspector_attachments.length > 0 && (data.cylinder == 'cylinderInspector' || data.cylinder == 'cylinderInspectorAndInstructor')){show = true;}else{show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Cylinder Inspector Attachments",
@@ -2062,15 +2058,15 @@
 					"input": 1,
 					"tableView": false,
 					"protected": true,
-					"persistent": false,
-					"refreshOn": "cylinderInspector_attachments"
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "cylinderInstructor_attachments1",
-					"calculateValue": "value = (data['cylinderInstructor_attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.cylinderInstructor_attachments)\n} catch(e){\n  value = data.cylinderInstructor_attachments\n}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
+					"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length > 0 && (data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')){show = true;} else {show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Cylinder Instructor Attachments",
@@ -2078,18 +2074,16 @@
 					"inputType": "documentviewer",
 					"input": 1,
 					"tableView": false,
-					"customConditional": "if(data.cylinder === 'cylinderInstructor' && data.cylinderInstructor_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){\n show = true;\n} else {\n show = false; \n}",
 					"protected": true,
-					"persistent": false,
-					"refreshOn": "cylinderInstructor_attachments"
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "scubaFit_attachments1",
-					"calculateValue": "value = (data['scubaFit_attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.scubaFit_attachments)\n} catch(e){\n  value = data.scubaFit_attachments\n}",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
-					"customConditional": "if(data.scubaFit === 'scubaFitInstructor' && data.scubaFit_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){show = true;\n  } else {\n show = false; \n}",
 					"dattype": "documentviewer",
+					"customConditional": "if(data.scubaFit_attachments && data.scubaFit_attachments.length >0 && data.scubaFit == 'scubaFitInstructor'){show=true;} else {show = false}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Scuba Fit Attachments",
@@ -2098,16 +2092,15 @@
 					"input": 1,
 					"tableView": false,
 					"protected": true,
-					"persistent": false,
-					"refreshOn": "scubaFit_attachments"
+					"persistent": false
 				}, {
 					"type": "documentviewer",
 					"key": "attachments1",
-					"calculateValue": "value = (data['attachments'])",
+					"calculateValue": "try{\n  value = JSON.parse(data.attachments)\n} catch(e){\n  value = data.attachments\n}",
 					"dtype": "documentviewer",
-					"customConditional": "if(data.attachments && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){show = true;} else { show = false;}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
+					"customConditional": "if(data.attachments && data.attachments.length > 0){show = true;} else {show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "Attachments",
@@ -2118,20 +2111,21 @@
 					"protected": true,
 					"persistent": false
 				}],
-				"path": "techrecPanel"
+				"path": "documentPanel",
+				"protected": true
 			}, {
 				"title": "TecRec Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": false,
+				"breadcrumbClickable": true,
 				"buttonSettings": {
 					"previous": true,
-					"cancel": false,
+					"cancel": true,
 					"next": true
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "techRecAttachment",
-				"customConditional": "if (data.privileges){\n    show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}else{  \n    show = false;\n}",
+				"key": "panel1",
+				"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove'){\n  if(data.TechRec_attachments == undefined){\n    show = true;\n  } else {\n  if(data.TechRec_attachments && data.TechRec_attachments.length === 0){\n    show = true;\n  } else {\n    show = false;\n  }\n  }\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "TecRec Attachments",
 				"input": false,
@@ -2144,13 +2138,14 @@
 					"content": "<b>Attach proof of your Technical Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
-					"key": "html1",
+					"key": "html",
 					"type": "htmlelement",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}, {
-					"label": "TecRec Attachments",
+					"label": "Proof of Technical Certification",
 					"hideLabel": true,
-					"tableView": false,
+					"tableView": true,
 					"storage": "url",
 					"webcam": true,
 					"fileTypes": [{
@@ -2160,31 +2155,30 @@
 					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 					"fileMaxSize": "10MB",
 					"multiple": true,
-					"clearOnHide": false,
 					"validate": {
 						"customMessage": "Please attach proof of your Technical Certification",
 						"multiple": true
 					},
-					"errorLabel": "Technical Certification Documents",
-					"key": "TechRec_attachments",
+					"errorLabel": "Proof of Technical Certification",
+					"key": "endor_techRec_attachments",
 					"type": "file",
 					"url": "/file/attachment",
 					"input": true
 				}],
-				"path": "techRecAttachment"
+				"path": "panel1"
 			}, {
 				"title": "Cylinder Inspector Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": false,
+				"breadcrumbClickable": true,
 				"buttonSettings": {
 					"previous": true,
-					"cancel": false,
+					"cancel": true,
 					"next": true
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "cylinderInspectorAttachments",
-				"customConditional": "if (data.privileges){\n  show = ((data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\") && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"key": "panel3",
+				"customConditional": "if(data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\" ){\n  if(data.cylinderInspector_attachments == undefined){\n    show = true;\n  } else {\n  if(data.cylinderInspector_attachments && data.cylinderInspector_attachments.length === 0){\n    show = true;\n  } else {\n    show = false;\n  }\n  }\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2199,7 +2193,8 @@
 					"tableView": false,
 					"key": "html2",
 					"type": "htmlelement",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}, {
 					"label": "Cylinder Inspector Attachments",
 					"hideLabel": true,
@@ -2215,16 +2210,16 @@
 					"multiple": true,
 					"clearOnHide": false,
 					"validate": {
-						"customMessage": "Please attach proof of Cylinder Inspector Certification",
+						"customMessage": "Please attach proof of your Cylinder Inspector",
 						"multiple": true
 					},
-					"errorLabel": "Cylinder Inspector Certification",
-					"key": "cylinderInspector_attachments",
+					"errorLabel": "Proof of your Cylinder Inspector",
+					"key": "endor_cylinderInspector_attachments",
 					"type": "file",
 					"url": "/file/attachment",
 					"input": true
 				}],
-				"path": "cylinderInspectorAttachments"
+				"path": "panel3"
 			}, {
 				"title": "Cylinder Inspection Instructor Attachments",
 				"theme": "primary",
@@ -2282,16 +2277,16 @@
 			}, {
 				"title": "Scuba Fit Attachments",
 				"theme": "primary",
-				"breadcrumbClickable": false,
+				"breadcrumbClickable": true,
 				"buttonSettings": {
 					"previous": true,
-					"cancel": false,
+					"cancel": true,
 					"next": true
 				},
 				"collapsible": false,
 				"tableView": false,
-				"key": "scubaFitAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"key": "panel5",
+				"customConditional": "if(data.scubaFit === 'scubaFitInstructor'){\n  if((data.scubaFit_attachments && data.scubaFit_attachments.length ===0)){\n    show = true;\n  } else {\n    if(data.scubaFit_attachments === undefined){\n    show = true\n    } else {\n    show = false;\n    }\n  }\n}else{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Scuba Fit Attachments",
 				"input": false,
@@ -2304,9 +2299,10 @@
 					"content": "<b>Attach proof of your Scuba Fit Certification</b>",
 					"refreshOnChange": false,
 					"tableView": false,
-					"key": "html4",
+					"key": "html3",
 					"type": "htmlelement",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}, {
 					"label": "ScubaFit Attachments",
 					"hideLabel": true,
@@ -2322,16 +2318,16 @@
 					"multiple": true,
 					"clearOnHide": false,
 					"validate": {
-						"customMessage": "Please attach proof of your Scuba Fit Certification",
+						"customMessage": "Please attach proof of your ScubaFit Certification",
 						"multiple": true
 					},
-					"errorLabel": "Scuba Fit Certification Documents",
-					"key": "scubaFit_attachments",
+					"errorLabel": "ScubaFit Certification",
+					"key": "endor_scubaFit_attachments",
 					"type": "file",
 					"url": "/file/attachment",
 					"input": true
 				}],
-				"path": "scubaFitAttachments"
+				"path": "panel5"
 			}, {
 				"title": "Attachments",
 				"theme": "primary",
@@ -3377,7 +3373,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 265,
+	"_vid": 266,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3398,6 +3394,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-22T15:40:59.255Z",
+	"modified": "2020-06-22T20:28:25.428Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

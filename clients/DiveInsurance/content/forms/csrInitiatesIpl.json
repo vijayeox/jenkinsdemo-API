@@ -1224,7 +1224,6 @@
 							"multiple": true
 						},
 						"key": "additional_email",
-						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
 						"type": "email",
 						"input": true,
 						"lockKey": true,
@@ -4138,11 +4137,19 @@
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
+						"calculateValue": "value = (parseFloat(data.amountPayable)||0).toFixed(2);",
 						"key": "finalAmountPayable",
 						"type": "number",
 						"input": true,
 						"inputType": "text",
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "billing_amount",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
+						"key": "billing_amount",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Would you like to enroll for installment billing?",
@@ -4438,9 +4445,9 @@
 						}, {
 							"type": "convergepay",
 							"key": "creditcardPayment",
-							"amount_field": "finalAmountPayable",
-							"refreshOn": "finalAmountPayable",
-							"redrawOn": "finalAmountPayable",
+							"amount_field": "billing_amount",
+							"refreshOn": "billing_amount",
+							"redrawOn": "billing_amount",
 							"description": "payment_fields",
 							"label": "custom",
 							"input": true,
@@ -4697,7 +4704,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 453,
+	"_vid": 455,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4707,7 +4714,7 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"showCancel": "false",
+		"showCancel": "true",
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
@@ -4718,6 +4725,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-22T15:42:40.741Z",
+	"modified": "2020-06-22T20:27:53.035Z",
 	"machineName": "testdivehub:csrInitiates"
 }
