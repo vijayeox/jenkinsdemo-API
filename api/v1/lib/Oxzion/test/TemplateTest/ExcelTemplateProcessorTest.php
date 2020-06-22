@@ -28,7 +28,8 @@ class ExcelTemplateProcessorTest extends TestCase
         copy(__DIR__.'/Data/exportedtemplate1.xlsx', __DIR__.'/Data/outputtemplate.xlsx');
         $params['templateDir'] = __DIR__."/Data";
         $this->parser->init($params);
-        $template = 'template.xlsx';
+        $template['templateNameWithExt'] = 'template.xlsx';
+        $template['templatePath'] = __DIR__.'/Data';
         $data = [
             'firstname' => 'Polly',
             'address' => [['ksrtc', 'layout', 'jpnagar']],
@@ -55,7 +56,8 @@ class ExcelTemplateProcessorTest extends TestCase
         copy(__DIR__.'/Data/exportedtemplate2.xlsx', __DIR__.'/Data/outputtemplate.xlsx');
         $params['templateDir'] = __DIR__."/Data";
         $this->parser->init($params);
-        $template = 'template2.xlsx';
+        $template['templateNameWithExt'] = 'template2.xlsx';
+        $template['templatePath'] = __DIR__.'/Data';
         $data = [
             'firstname' => 'Polly',
             'address' => [['ksrtc', 'layout', 'jpnagar']],
@@ -81,7 +83,8 @@ class ExcelTemplateProcessorTest extends TestCase
         copy(__DIR__.'/Data/exportedtemplate2.xlsx', __DIR__.'/Data/outputtemplate.xlsx');
         $params['templateDir'] = __DIR__."/Data";
         $this->parser->init($params);
-        $template = 'template2.xlsx';
+        $template['templateNameWithExt'] = 'template2.xlsx';
+        $template['templatePath'] = __DIR__.'/Data';
         $options = array();
         $data = [
             'firstname' => 'Polly',

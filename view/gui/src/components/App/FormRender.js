@@ -947,9 +947,9 @@ class FormRender extends React.Component {
               value = formdata[component.value];
             } else if(formdata[formdata[component.key]] != undefined){
               value = formdata[formdata[component.key]];
-            } else if(formdata[formdata[component.key]] != undefined){
+            } else if(formdata[component.key] && formdata[formdata[component.key]] != undefined){
               value = formdata[formdata[component.key]];
-            } else if(formdata[formdata[component.key].value] != undefined){
+            } else if(formdata[component.key] &&formdata[formdata[component.key].value] != undefined){
               value = formdata[formdata[component.key].value];
             }else if(formdata[component.key] != undefined){
               value = formdata[component.key];
@@ -1063,7 +1063,14 @@ class FormRender extends React.Component {
       if (properties["commands"]) {
         var that = this;
         that.showFormLoader(true,0);
-        this.callPipeline(properties["commands"],this.cleanData(form.submission.data)).then(response => {
+        if(form.submission.data && form.submission.data['fileId']){
+          this.setState({fileId: form.submission.data['fileId']});
+        }
+        var form_data = {
+          ...form.submission.data,
+          fileId: this.state.fileId ? this.state.fileId : null
+        };
+        this.callPipeline(properties["commands"],this.cleanData(form_data)).then(response => {
           if (response.status == "success") {
             if (response.data) {
                form.setSubmission({data:that.formatFormData(response.data)}).then(response2 =>{
@@ -1180,6 +1187,8 @@ class FormRender extends React.Component {
     });
   }
   parseResponseData = data => {
+    console.log("Data before being Parsed");
+    console.log(data);
     var parsedData = {};
     Object.keys(data).forEach(key => {
       try {
@@ -1188,12 +1197,21 @@ class FormRender extends React.Component {
         if(parsedData[key] == "" && data[key] && parsedData[key] != data[key]){
           parsedData[key] = data[key];
         }
+        if(Array.isArray(parsedData[key])){
+          parsedData[key].forEach((item,index) => {
+            if(typeof item === 'object'){
+              parsedData[key][index] = this.parseResponseData(item);  
+            }
+          });
+        }
       } catch (error) {
         if(data[key] != undefined){
           parsedData[key] = data[key];
         }
       }
     });
+    console.log("Data after being Parsed");
+    console.log(parsedData);
     return parsedData;
   };
 

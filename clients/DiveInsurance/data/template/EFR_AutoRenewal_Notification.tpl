@@ -12,6 +12,12 @@
 
 
 				<br/>
+
+                Coverage Level: EFR Instructor<br/>
+                Excess Liability: Selected
+                <br/><br/>
+
+
 				<p>It's that time of the year to think about insurance. Fortunately, you are currently signed up for automatic renewal under the Emergency First Response Program.</p><br/>
 
 				<p>The final amount that will be deducted from your account for the policy period July 01, {$year} to June 30, {$year+1} is ${$amount}.</p>

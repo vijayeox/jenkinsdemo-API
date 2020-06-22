@@ -2,7 +2,6 @@
 
 namespace Analytics\Controller;
 
-use Zend\Log\Logger;
 use Analytics\Model\Visualization;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
@@ -39,8 +38,7 @@ class VisualizationController extends AbstractApiController
         $data = $this->params()->fromPost();
         try {
             $count = $this->visualizationService->createVisualization($data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -63,12 +61,10 @@ class VisualizationController extends AbstractApiController
     {
         try {
             $count = $this->visualizationService->updateVisualization($uuid, $data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (VersionMismatchException $e) {
+        } catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         if ($count == 0) {
@@ -77,13 +73,13 @@ class VisualizationController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function delete($uuid) {
+    public function delete($uuid)
+    {
         $params = $this->params()->fromQuery();
-        if(isset($params['version'])){
+        if (isset($params['version'])) {
             try {
                 $response = $this->visualizationService->deleteVisualization($uuid, $params['version']);
-            }
-            catch (VersionMismatchException $e) {
+            } catch (VersionMismatchException $e) {
                 return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
@@ -147,4 +143,3 @@ class VisualizationController extends AbstractApiController
         return $this->getSuccessResponseWithData($result);
     }
 }
-

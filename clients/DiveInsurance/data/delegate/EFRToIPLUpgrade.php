@@ -23,7 +23,7 @@ class EFRToIPLUpgrade extends PolicyCheck
                                          (!empty($fileData['endorAmountPayable']) ? $fileData['endorAmountPayable'] : 0.00);
             $new_data['product'] = "Individual Professional Liability";
             $new_data['disableUserInfoEdit'] = true;
-            $new_data['excessLiability'] = $fileData['excessLiability'];
+            $new_data['excessLiability'] = isset($fileData['excessLiability'])?$fileData['excessLiability']:NULL;
             $new_data['padi']= isset($fileData['padi']) ? $fileData['padi'] : NULL ;
             $new_data['padiNotFound']= isset($fileData['padiNotFound']) ? $fileData['padiNotFound'] : NULL ;
             $new_data['padiNotFoundCsrReview']= isset($fileData['padiNotFoundCsrReview']) ? $fileData['padiNotFoundCsrReview'] : NULL ;
@@ -67,6 +67,7 @@ class EFRToIPLUpgrade extends PolicyCheck
             $new_data['username']= isset($fileData['username']) ? $fileData['username'] : NULL;
             $new_data['zip']= isset($fileData['zip']) ? $fileData['zip'] : NULL;
             $new_data['state_in_short']= isset($fileData['state_in_short']) ? $fileData['state_in_short'] : NULL;
+            $new_data['product_email_id'] = 'instructors@diveinsurance.com';
             $new_data = parent::execute($new_data, $persistenceService );
         }
         $data['data'] = $new_data;

@@ -19,7 +19,7 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname}, {$firstname} {if isset($initial)}, {$initial}{/if}</p>
+					<p class = "details">{$lastname}, {$firstname}{if isset($initial)}, {$initial} {/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city}, {$state_in_short} {$zip}</p>
@@ -56,6 +56,7 @@
 				{assign var=initialAnnualAggregate value=$previousPolicyData.$policyIndex.prevAnnualAggregate}
 				{assign var=initialEquipment value=$previousPolicyData.$policyIndex.previous_equipment}
 				{assign var=initialCylinderCoverage value=$previousPolicyData.$policyIndex.previous_cylinder}
+				{assign var=initialCylinderCoverageLabel value=$previousPolicyData.$policyIndex.previous_cylinderLabel}
 				{assign var=initialScubaFit value=$previousPolicyData.$policyIndex.previous_scubaFit}
 										{else}
 				{assign var=careerCov value=$careerCoverageVal}
@@ -133,7 +134,7 @@
 								<td><p class = "ins_font">
 								{if isset($initialCylinderCoverage)}
 									{if $initialCylinderCoverage != "cylinderInspectorOrCylinderInspectionInstructorDeclined"}
-											{$cylinderPriceVal}
+											{$initialCylinderCoverageLabel}
 										{else}
 											Not Covered
 										{/if}
@@ -144,6 +145,7 @@
 											Not Covered
 										{/if}
 								{/if}
+
 									</p>
 								</td>
 							</tr>

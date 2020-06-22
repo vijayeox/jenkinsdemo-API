@@ -84,7 +84,7 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true            
+                index: true
     -
         name: 'Dive Store'
         field:
@@ -116,7 +116,7 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true     
+                index: true
     -
         name: 'Dive Boat'
         field:
@@ -148,7 +148,7 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true    
+                index: true
     -
         name: 'Emergency First Response'
         field:
@@ -180,7 +180,7 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true    
+                index: true
     -
         name: 'Pocket Card Job'
         field:
@@ -223,7 +223,7 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true      
+                index: true
 pages:
     -
         page_name: UserHomePage.yml

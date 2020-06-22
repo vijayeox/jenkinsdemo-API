@@ -109,7 +109,7 @@ ox_form:
   - id: 2
     app_id: 99
     uuid: "465c9142-df82-11e9-8a34-2a2ae2dbcce4"
-    name: "Test Form 2"
+    name: "Test-Form-2"
     description: "Form Description"
     entity_id: 1
 ox_form_field:

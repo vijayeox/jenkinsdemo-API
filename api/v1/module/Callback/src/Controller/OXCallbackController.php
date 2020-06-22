@@ -36,6 +36,7 @@ class OXCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $params['baseurl'] = $this->config['applicationUrl'];
+        $params['passwordResetUrl'] = $this->config['applicationUrl'] . "/?resetpassword=" . $params['resetCode'];           
         $this->messageProducer->sendQueue(json_encode(array(
             'to' => $params['email'],
             'subject' => isset($params['subject']) ? $params['subject'] : 'Your Login Credentials.',

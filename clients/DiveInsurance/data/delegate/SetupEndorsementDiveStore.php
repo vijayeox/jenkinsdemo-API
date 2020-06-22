@@ -236,8 +236,7 @@ public function execute(array $data,Persistence $persistenceService)
                 }
             }
             if(isset($policy['previous_excessLiabilityCoverage'])){
-                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_excessLiabilityCoverage']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
-                $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Store".$selectCoverage);
+                $selectCoverage = "select rc.* from premium_rate_card rc WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' order by CAST(rc.previous_key as UNSIGNED) DESC";
                 $resultCoverage = $persistenceService->selectQuery($selectCoverage);
                 while ($resultCoverage->next()) {
                     $rate = $resultCoverage->current();

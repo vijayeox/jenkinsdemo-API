@@ -32,11 +32,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         ),
         "epli" => array(
             "type" => "pdf",
-            "template" => "GAIC - EPLI.pdf"
+            "template" => "GAIC - EPLI.pdf",
+            "customData" => "gaicEpliPdfData"
         ),
         "rpsCyber" => array(
             "type" => "pdf",
-            "template" => "rpsCyber.pdf"
+            "template" => "rpsCyber.pdf",
+            "customData" => "rpsCyberPDFData"
         )
     );
 
@@ -48,13 +50,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data));
-        $temp = $data;
-        foreach ($temp as $key => $value) {
-            if (is_array($temp[$key])) {
-                $temp[$key] = json_encode($value);
-            }
-        }
-        $data = $temp;
+        // $temp = $data;
+        // foreach ($temp as $key => $value) {
+        //     if (is_array($temp[$key])) {
+        //         $temp[$key] = json_encode($value);
+        //     }
+        // }
+        // $data = $temp;
         $fieldTypeMappingExcel = include(__DIR__ . "/fieldMappingExcel.php");
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
@@ -71,13 +73,14 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 $selectedTemplate = $this->carrierTemplateTypeMapping[$key];
                 $docDest = $dest['absolutePath'] .  $selectedTemplate["template"];
                 if ($selectedTemplate["type"] == "excel") {
+                    $excelData = array();
                     foreach ($fieldTypeMappingExcel as  $fieldkey => $field) {
                         $varFunction = $field["method"];
-                        $data[$fieldkey] = $this->$varFunction($data[$fieldkey]);
+                        $excelData[$fieldkey] = $this->$varFunction($data[$fieldkey]);
                     }
                     $this->documentBuilder->fillExcelTemplate(
                         $selectedTemplate["template"],
-                        $data,
+                        $excelData,
                         $docDest,
                         $selectedTemplate["sheets"] ? $selectedTemplate["sheets"] : "Sheet1"
                     );
@@ -91,19 +94,55 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     );
                 } else {
                     $pdfData = array();
-                    foreach ($fieldTypeMappingPDF["text"] as  $formField => $pdfField) {
+                    foreach ($fieldTypeMappingPDF[$key]["text"] as  $formField => $pdfField) {
                         isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
                     }
-                    foreach ($fieldTypeMappingPDF["radio"] as  $formField => $pdfField) {
-                        isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
+                    foreach ($fieldTypeMappingPDF[$key]["radioYN"] as  $formFieldPDF => $pdfFieldData) {
+                        if (isset($data[$formFieldPDF])) {
+                            $fieldNamePDFData = $pdfFieldData["fieldname"];
+                            if (isset($pdfFieldData["options"])) {
+                                $fieldOption = $pdfFieldData["options"];
+                                $optionKeys = array_keys($fieldOption);
+                                $pdfData[$fieldNamePDFData] = ($data[$formFieldPDF] == $optionKeys[0]) ?
+                                    $fieldOption[array_key_first($fieldOption)] : $fieldOption[array_key_last($fieldOption)];
+                            } else {
+                                $pdfData[$fieldNamePDFData] = $data[$formFieldPDF];
+                            }
+                        }
                     }
-                    foreach ($fieldTypeMappingPDF["date"] as  $formField => $pdfField) {
-                        isset($data[$formField]) ?
-                            $pdfData[$pdfField] = date(
-                                "m-d-Y",
-                                strtotime($data[$formField])
-                            )
-                            : null;
+                    if (isset($fieldTypeMappingPDF[$key]["checkbox"])) {
+                        foreach ($fieldTypeMappingPDF[$key]["checkbox"] as  $formChildField => $fieldProps) {
+                            if (isset($data[$fieldProps["parentKey"]]) && !empty($data[$fieldProps["parentKey"]])) {
+                                $fieldNamePDFData = $fieldProps["fieldname"];
+                                $fieldOptions = $fieldProps["options"];
+                                $parentValues = json_decode($data[$fieldProps["parentKey"]], true);
+                                if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == true) {
+                                    $pdfData[$fieldNamePDFData] =  $fieldOptions["true"];
+                                } else {
+                                    $pdfData[$fieldNamePDFData] =  $fieldOptions["false"];
+                                }
+                            }
+                        }
+                    }
+                    if (isset($fieldTypeMappingPDF[$key]["date"])) {
+                        foreach ($fieldTypeMappingPDF[$key]["date"] as  $formField => $pdfField) {
+                            isset($data[$formField]) ?
+                                $pdfData[$pdfField] = date(
+                                    "m-d-Y",
+                                    strtotime($data[$formField])
+                                )
+                                : null;
+                        }
+                    }
+                    if (isset($selectedTemplate["customData"])) {
+                        if (!is_array($data[$selectedTemplate["customData"]])) {
+                            $customTemplateData = json_decode($data[$selectedTemplate["customData"]], true);
+                        } else {
+                            $customTemplateData = $data[$selectedTemplate["customData"]];
+                        }
+                        foreach ($customTemplateData as  $field => $value) {
+                            $pdfData[$field] = $value;
+                        }
                     }
                     $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT));
                     $this->documentBuilder->fillPDFForm(

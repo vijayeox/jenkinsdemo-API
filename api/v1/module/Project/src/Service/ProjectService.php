@@ -268,10 +268,10 @@ class ProjectService extends AbstractService
         }
         $form = new Project();
         $data = $obj->toArray();
-        if (isset($data['parent_id']) && !empty($data['parent_id'])){
-            $select = "SELECT id from ox_project where parent_id = '" . $data['parent_id'] . "'";
+        if (!isset($data['parent_id']) || empty($data['parent_id'])){
+            $select = "SELECT id from ox_project where parent_id = '" . $data['id'] . "' and isdeleted <> 1";
             $result = $this->executeQueryWithParams($select)->toArray();
-            if(!$result){
+            if($result){
                 if(!(isset($params['force_flag']) && ($params['force_flag'] == true || $params['force_flag'] == "true")))
                     throw new ServiceException("Project has subprojects", "project.not.found");
             }
@@ -323,8 +323,9 @@ class ProjectService extends AbstractService
     public function getProjectsOfUserById($userId, $orgId = null)
     {
         $orgId = isset($orgId) ? $this->getIdFromUuid('ox_organization', $orgId) :  AuthContext::get(AuthConstants::ORG_ID);
-        $queryString = "select ox_project.* , ox_user.username as manager_username, ox_user.uuid as manager_uuid from ox_project
-                inner join ox_user_project on ox_user_project.project_id = ox_project.id inner join ox_user on ox_project.manager_id = ox_user.id";
+        $queryString = "select ox_project.id,ox_project.uuid,ox_project.name,ox_project.org_id,ox_project.manager_id,ox_project.description,
+ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_user.username as manager_username, ox_user.uuid as manager_uuid from ox_project
+                inner join ox_user_project on ox_user_project.project_id = ox_project.id inner join ox_user on ox_project.manager_id = ox_user.id left join ox_project as parent on ox_project.parent_id = parent.id";
         $where = "where ox_user_project.user_id ='" . $userId . "' AND ox_project.org_id=" . AuthContext::get(AuthConstants::ORG_ID) . " AND ox_project.isdeleted!=1";
         $order = "order by ox_project.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
@@ -465,7 +466,7 @@ class ProjectService extends AbstractService
         try {
             if (isset($params['projectUuid'])) {
                 $id = $this->getIdFromUuid('ox_project',$params['projectUuid']);
-                $queryString = "select oxp.name,oxp.description,oxp.uuid,oxp.date_created,ou.uuid as manager_id,sub.uuid as parent_id from ox_project as oxp INNER JOIN ox_user as ou on oxp.manager_id = ou.id INNER JOIN ox_project as sub on sub.id = oxp.parent_id where oxp.parent_id =".$id;
+                $queryString = "select oxp.name,oxp.description,oxp.uuid,oxp.date_created,ou.uuid as manager_id,sub.uuid as parent_id from ox_project as oxp INNER JOIN ox_user as ou on oxp.manager_id = ou.id INNER JOIN ox_project as sub on sub.id = oxp.parent_id where oxp.parent_id =".$id." and oxp.isdeleted <> 1";
                 $resultSet = $this->executeQuerywithParams($queryString);
                 return $resultSet->toArray();
             }

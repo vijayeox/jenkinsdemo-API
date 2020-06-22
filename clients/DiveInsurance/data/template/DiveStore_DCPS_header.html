@@ -5,7 +5,7 @@
 <head>
     <link href="./css/divestemplate_css.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="./AgentInfo.js"></script>
-    <!-- <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script> -->
+     <script type="text/javascript" src="./js/moment.js"></script>
     <script>
         function subst() {
             var vars = {};
@@ -22,7 +22,7 @@
             var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date',
                 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages', 'start_date', 'license_number',
                 'firstname', 'lastname', 'city', 'state', 'country', 'zip', 'certificate_no', 'padi',
-                'end_date', 'policy_id', 'address1', 'address2', 'storename','carrier'
+                'end_date', 'policy_id', 'address1', 'address2', 'storename','carrier','business_name','state_in_short'
             ];
             for (var css_class in css_selector_classes) {
                 if (css_selector_classes.hasOwnProperty(css_class)) {
@@ -30,6 +30,19 @@
                     for (var j = 0; j < element.length; ++j) {
                         element[j].textContent = vars[css_selector_classes[css_class]];
                     }
+                }
+                if (css_selector_classes[css_class] == "start_date") {
+                  document.getElementsByClassName(
+                    "start_date"
+                  )[0].textContent = moment(
+                    vars[css_selector_classes[css_class]]
+                  ).format("D MMMM YYYY");
+                }
+                if (css_selector_classes[css_class] == "end_date") {
+                  document.getElementsByClassName("end_date")[0].textContent =
+                    moment(vars[css_selector_classes[css_class]]).format(
+                      "D MMMM YYYY"
+                    ) + " - 12:01:00 AM";
                 }
             }
             
@@ -70,13 +83,14 @@
                 </div>
                 <b class="caption2">Insured's Name and Mailing Address:</b>
                 <div class="line"></div>
-                <p class="info normal"><span class="storename"></span></p>
+                <p class="info normal"><span class="business_name uppercase"></span></p>
                 <div class="line"></div>
-                <p class="info normal"><span class="address1"></span></p>
+                <p class="info normal"><span class="address1 uppercase"></span></p>
                 <div class="line"></div>
-                <p class="info normal"><span class="address2"></span></p>
+                <p class="info normal"><span class="address2 uppercase"></span></p>
                 <div class="line"></div>
-                <p class="info normal"><span class="city"></span>, <span class="state"></span> <span class="zip"></span></p>
+                <p class="info normal"><span class="city uppercase"></span>, <span class="state_in_short uppercase"></span> <span class="zip uppercase"></span></p>
+                <p><span class="country uppercase"></span></p>
             </div>
             <div class="content2">
                 <div class="certificate_data">

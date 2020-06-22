@@ -2,7 +2,7 @@
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
-            <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/>
+            <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, <br/>
                 <p>Attached is your Dive Boat Proposal for {$vessel_name}. Please review carefully and let me know if you have any questions.
 				</p>
 			 <br/>
@@ -13,12 +13,13 @@
 
 Sincerely,
 <br/><br/>
-PADI Department<br/>
+{$approverName}<br/>
+{$approverDesignation}<br/>
 Vicencia & Buckley, a Division of HUB International Insurance Services Inc.<br/>
 A division of HUB International<br/>
 6 Centerpointe Dr. #350<br/>
 La Palma, CA  90623<br/>
-Email: padi-professional@hubinternational.com<br/>
+Email: {$approverEmailId}<br/>
 Phone: 800-223-9998 or 714-739-3177<br/>
 Fax: 714-739-3188<br/>
 License #0757776

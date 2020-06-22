@@ -2,7 +2,7 @@
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
-            <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/><br/>
+            <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, <br/><br/>
 			<p>Your PADI Endorsed Professional Liability insurance has been canceled effective 12:01 a.m. {$CancelDate|date_format:"%m/%d/%Y"} due to {if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
 				Non-payment of installment premium. 
 			{elseif $reasonforCsrCancellation == 'padiMembershipNotCurrent'}
@@ -34,12 +34,21 @@
 <br/>
 Sincerely,
 <br/><br/>
+{if $product == 'Dive Store' || $product == 'Dive Boat'}
+{$approverName}<br/>
+{$approverDesignation}<br/>
+{else}
 PADI Department<br/>
+{/if}
 Vicencia & Buckley, a Division of HUB International Insurance Services Inc.<br/>
 A division of HUB International<br/>
 6 Centerpointe Dr. #350<br/>
 La Palma, CA  90623<br/>
+{if $product == 'Dive Store' || $product == 'Dive Boat'}
+Email: {$approverEmailId}<br/>
+{else}
 Email: padi-professional@hubinternational.com<br/>
+{/if}
 Phone: 800-223-9998 or 714-739-3177<br/>
 Fax: 714-739-3188<br/>
 License #0757776

@@ -43,7 +43,8 @@ class RenewalRateCard extends RateCard
         }
         else{
             // UPDATE YEAR + 1
-            $data['form_data']['start_date'] = $startYear."-07-01";
+            $data['form_data']['businessPadiVerified'] = "false";
+            $data['form_data']['start_date'] = $startYear."-06-30";
             $data['form_data']['end_date'] = $endYear."-06-30";
             $policy_period = "July 01,".$startYear." - June 30,".$endYear;
             // UPDATE DEFAULT RANGE

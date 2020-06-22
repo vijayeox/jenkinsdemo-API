@@ -225,6 +225,8 @@ class UserService extends AbstractService
             $data['name'] = $data['firstname'] . " " . $data['lastname'];
             $data['uuid'] = UuidUtil::uuid();
             $data['date_created'] = date('Y-m-d H:i:s');
+            $setPasswordCode = UuidUtil::uuid();
+            $data['password_reset_code'] = $setPasswordCode;
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
             if (isset($data['managerid'])) {
                 $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
@@ -262,9 +264,11 @@ class UserService extends AbstractService
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
+                'lastname' => $data['lastname'],
                 'email' => $data['email'],
-                'orgid' => $orgid,
+                'orgId' => $orgid,
                 'password' => $password,
+                'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
             )), 'USER_ADDED');
             $this->addUserToOrg($form->id, $form->orgid);
@@ -1093,7 +1097,7 @@ class UserService extends AbstractService
         $resetCode = $data['password_reset_code'];
         $password = md5(sha1($data['new_password']));
         $expiry = date("Y-m-d H:i:s");
-        $query = "select id from ox_user where password_reset_expiry_date > '" . $expiry . "' and password_reset_code = '" . $resetCode . "'";
+        $query = "select id from ox_user where (password_reset_expiry_date > '" . $expiry . "' OR password_reset_expiry_date is NULL) and password_reset_code = '" . $resetCode . "'";
         $result = $this->executeQuerywithParams($query);
         $result = $result->toArray();
         if (count($result) == 0) {

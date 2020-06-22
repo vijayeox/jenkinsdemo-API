@@ -55,6 +55,8 @@ entity:
                 name: documents
                 text: Documents
                 data_type: document
+    -
+        name: 'Demo Entity'
 pages:
     -
         page_name: AgentHomePage.yml
@@ -82,3 +84,9 @@ form:
         description: 'Consolidated Wiz'
         template_file: consolidatedWizard.json
         entity: 'Dealer Policy'
+    -
+        name: 'Demo Form'
+        uuid: e980dac2-2ef7-467a-8e0d-863078c458e0
+        description: 'Demo Form'
+        entity: 'Demo Entity'
+        template_file: copyLocationForm.json

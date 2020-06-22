@@ -67,6 +67,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                         'header' => 'DiveStoreHeader.html',
                         'footer' => 'DiveStoreFooter.html',
+                        'psTemplate' => 'DiveStore_DCPS_template',
+                        'psHeader' => 'DiveStore_DCPS_header.html',
+                        'psFooter' => 'DiveStore_DCPS_footer.html',
                         'card' => 'PocketCard',
                         'slWording' => 'SL_Wording.pdf',
                         'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
@@ -104,6 +107,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'slWording' => 'SL_Wording.pdf',
                 'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
+                'blanketForm' => 'EFR_AI_Blanket_Endorsement.pdf',
                 'aiheader' => 'EFR_AI_header.html',
                 'aifooter' => 'EFR_AI_footer.html')
         );
@@ -193,7 +197,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }
                             array_push($coverageList,$data['scubaFit']);
                         }
-                        if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
+                        if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInspectionInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
                             $documents['cylinder_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplCylinder');
                             array_push($coverageList,$data['cylinder']);
                         }
@@ -423,6 +427,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                 }
 
+                if($this->type == 'quote'){
+                    $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','header','footer');
+                }
+
+                if($this->type == 'policy'){
+                    $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
+                }
+
                 if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
                     if(is_string($temp['additionalLocations'])){
                         $additionalLocations = json_decode($temp['additionalLocations'],true);
@@ -491,14 +503,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($temp['liability'])){
                     $this->logger->info("DOCUMENT liability_coi_document");
                     $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
-                    $this->logger->info("DOCUMENT liability_policy_document");
-                    $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
+                    // $this->logger->info("DOCUMENT liability_policy_document");
+                    // $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
                 }
                 if(isset($temp['property'])){
                     $this->logger->info("DOCUMENT property_coi_document");
                     $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
-                    $this->logger->info("DOCUMENT property_policy_document");
-                    $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+                    // $this->logger->info("DOCUMENT property_policy_document");
+                    // $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 }
             }
 
@@ -527,17 +539,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['coi_document']  = $policyDocuments;
                     }
                 }
-                if($this->type != 'quote' && $this->type != 'endorsementQuote')
-                {
-                    $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
-                    if(is_array($policyDocuments)){
-                        foreach ($policyDocuments as $key => $value) {
-                            $documents[$key] = $value;
-                        } 
-                    } else {
-                        $documents['policy_document'] = $policyDocuments;
-                    }
-                }
+                // if($this->type != 'quote' && $this->type != 'endorsementQuote')
+                // {
+                //     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
+                //     if(is_array($policyDocuments)){
+                //         foreach ($policyDocuments as $key => $value) {
+                //             $documents[$key] = $value;
+                //         } 
+                //     } else {
+                //         $documents['policy_document'] = $policyDocuments;
+                //     }
+                // }
             }
             if($this->type == 'lapse'){
                 $this->logger->info("DOCUMENT lapse");
@@ -649,7 +661,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['endorsementEquipment'])){
                     $data['endorsementEquipment'] = array();
                 }
-                
+ 
                 if($this->type != 'endorsementQuote'){
                     if(is_string($data['endorsement_options'])){
                     $data['endorsement_options'] = json_decode($data['endorsement_options'],true);
@@ -694,6 +706,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['userApproved'])){
                 $data['userApproved'] = "";
             }
+            if(isset($data['rejectionReason'])){
+                $data['rejectionReason'] = array();
+            }
+               
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }

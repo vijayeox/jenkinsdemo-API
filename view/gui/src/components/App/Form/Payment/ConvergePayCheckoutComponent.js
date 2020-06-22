@@ -9,6 +9,7 @@ export default class ConvergePayCheckoutComponent extends Base {
     super(component, options, data);
     this.data = data;
     this.form = this.getRoot();
+
     var that = this;
     var getPaymentToken = function(e) {
       e.preventDefault();
@@ -32,6 +33,19 @@ export default class ConvergePayCheckoutComponent extends Base {
       var paymentData = {
         ssl_txn_auth_token: e.detail.token
       };
+      if(document.getElementById("convergepay-description") && document.getElementById("convergepay-description").value && document.getElementById("convergepay-description").value !=""){
+        var paymentObj;
+        try{
+          paymentObj = JSON.parse(document.getElementById("convergepay-description").value)
+        } catch(e){
+          paymentObj = document.getElementById("convergepay-description").value
+        }
+        for (var prop in paymentObj) {
+          if (!paymentObj.hasOwnProperty){
+            paymentData[prop] = paymentObj[prop];
+          }
+        }
+      }
       var callback = {
         onError: function(error) {
           document.getElementById("cardPayment").style.display = "none";
@@ -128,8 +142,7 @@ export default class ConvergePayCheckoutComponent extends Base {
             detail: {
               firstname: document.getElementById("convergepay-firstname").value,
               lastname: document.getElementById("convergepay-lastname").value,
-              amount: document.getElementById("convergepay-amount").value,
-              description: document.getElementById("convergepay-description").value
+              amount: document.getElementById("convergepay-amount").value
             }
           });
           that.form.element.dispatchEvent(evt);
@@ -152,6 +165,26 @@ export default class ConvergePayCheckoutComponent extends Base {
       getPaymentToken,
       false
     );
+    this.form.on("change", changed => {
+      if(changed && changed.changed){
+        var component = changed.changed.component;
+        if(component.key=="amount" && document.getElementById("convergepay-amount")){
+          document.getElementById("convergepay-amount").value = changed.data["amount"];
+          if(that.component.description){
+            document.getElementById("convergepay-description").value = changed.data[that.component.description];
+          }
+        }
+      }
+      if(that.component.amount_field && changed && changed.changed){
+        var component = changed.changed.component;
+        if(component.key==that.component.amount_field && document.getElementById("convergepay-amount")){
+          document.getElementById("convergepay-amount").value = changed.data[that.component.amount_field];
+          if(that.component.description){
+            document.getElementById("convergepay-description").value = changed.data[that.component.description];
+          }
+        }
+      }
+    });
   }
   static schema(...extend) {
     return Base.schema(
@@ -234,7 +267,7 @@ export default class ConvergePayCheckoutComponent extends Base {
       }
     });
     var that = this;
-    var billing_description = that.component.description_field? that.data[that.component.description_field]:"";
+    var billing_description = that.component.description? that.data[that.component.description]:"";
     var description = this.renderTemplate("input", {
       input: {
         type: "input",
