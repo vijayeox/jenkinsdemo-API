@@ -80,6 +80,8 @@ class FileService extends AbstractService
         $fields = $data = $this->cleanData($data);
         $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
         $jsonData = json_encode($data);
+        $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
+
         $data['uuid'] = $uuid;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -110,12 +112,11 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
+            $this->logger->info("Check Fields Data ----- " . print_r($validFields,true));
             $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
             unset($validFields['validFields']['data']);
             unset($validFields['indexedFields']['data']);
-            if(is_array($fields)){
-                $data['data'] = json_encode($fields);
-            }
+            $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
             $data['data'] = $fields;
             $file->exchangeArray($data);
             $this->updateFileData($id, $fields);
@@ -123,7 +124,7 @@ class FileService extends AbstractService
                 $this->logger->info("FILE Validation ----- ");
                 throw new ValidationException("Validation Errors" . json_encode($fields));
             }
-            $this->logger->info("Checking Fields ---- " . print_r($validFields,true));
+            $this->logger->info("Checking Fields ---- " . print_r($validFields['validFields'],true));
             $this->multiInsertOrUpdate('ox_file_attribute', $validFields['validFields']);
             if(count($validFields['indexedFields']) > 0 ){
                 $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
@@ -396,9 +397,6 @@ class FileService extends AbstractService
                 } else {
                     $keyValueFields[$i]['id'] = null;
                 }
-                if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
-                    $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
-                }
                 if ($field['index'] != 0) {
                     $indexedFields[$i]['file_id'] = $fileId;
                     $indexedFields[$i]['field_id'] = $field['id'];  
@@ -421,7 +419,7 @@ class FileService extends AbstractService
                 }
                 $keyValueFields[$i]['file_id'] = $fileId;
                 $keyValueFields[$i]['field_id'] = $field['id'];
-                $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
+                $fieldvalue = isset($fieldData[$field['name']]) ? is_array($fieldData[$field['name']]) ? json_encode($fieldData[$field['name']]) : $fieldData[$field['name']] : null;
                 $keyValueFields[$i]['field_value']=$fieldvalue;
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                 $keyValueFields[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
@@ -436,8 +434,7 @@ class FileService extends AbstractService
                     }
                 }
                 if(isset($keyValueFields[$i]['data'])){
-                    $fieldvalue = json_encode($keyValueFields[$i]['data']);
-                    $keyValueFields['data'][$field['name']] =$fieldvalue;
+                    $keyValueFields['data'][$field['name']] = $keyValueFields[$i]['data'];
                     unset($keyValueFields[$i]['data']);
                 }else if(array_key_exists('data',$keyValueFields[$i])){
                      unset($keyValueFields[$i]['data']);
@@ -459,7 +456,7 @@ class FileService extends AbstractService
                     unset($keyValueFields[$i]['childFields']);
                 }
                 if(isset($keyValueFields[$i]['data'])){
-                    $keyValueFields['data'][$field['name']] = json_encode($keyValueFields[$i]['data']);
+                    $keyValueFields['data'][$field['name']] = $keyValueFields[$i]['data'];
                     unset($keyValueFields[$i]['data']);
                 }else if(array_key_exists('data',$keyValueFields[$i])){
                      unset($keyValueFields[$i]['data']);
@@ -470,6 +467,16 @@ class FileService extends AbstractService
         $this->logger->info("Key Values - " . json_encode($keyValueFields));
         $this->logger->info("Indexed Values - " . json_encode($indexedFields));
         return array('validFields' => $keyValueFields,'indexedFields' => $indexedFields);
+    }
+
+
+    private function parseKeyValueFieldsData($data){
+        foreach($data as $key => $value){
+            if(is_string($value)){
+                $data[$key] = $this->parseKeyValueFieldsData($data[$key]);
+            } 
+
+        }
     }
 
     private function generateFieldPayload($dataType,$field,$fieldData,&$fieldvalue,$entityId,$fileId,$fileArray){
@@ -526,7 +533,7 @@ class FileService extends AbstractService
                 $fieldData['field_value_boolean'] = NULL;
                 $fieldData['field_value_date'] = NULL;
                 if($field['type']=='file'){
-                    $attachmentsArray = json_decode($fieldvalue,true);
+                    $attachmentsArray = $fieldvalue;
                     $finalAttached = array();
                     if(is_array($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
@@ -607,12 +614,9 @@ class FileService extends AbstractService
                         } else {
                             $childFieldsArray[$i]['id'] = null;
                         }
-                        if (isset($value[$field['name']]) && is_array($value[$field['name']])) {
-                            $value[$field['name']] = json_encode($value[$field['name']]);
-                        }
                         $childFieldsArray[$i]['file_id'] = $fileId;
                         $childFieldsArray[$i]['field_id'] = $field['id'];
-                        $val = isset($value[$field['name']]) ? $value[$field['name']] : null;
+                        $val = isset($value[$field['name']]) ? is_array($value[$field['name']]) ? json_encode($value[$field['name']]) : $value[$field['name']] : null;
                         $childFieldsArray[$i]['field_value']=$val;
                         $childFieldsArray[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                         $childFieldsArray[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
@@ -627,12 +631,9 @@ class FileService extends AbstractService
                         } else {
                             unset($childFieldsArray[$i]['childFields']);
                         }
-                        $childFieldValues[$field['name']] = $val;
+                        $childFieldValues[$field['name']] = isset($value[$field['name']]) ? $value[$field['name']] : null;
                         unset($childFieldsArray[$i][$field['name']]);
                         $i++;
-                    }
-                    if(is_array($childFieldValues)){
-                        json_encode($childFieldValues);
                     }
                     $fieldvalue[$k] = $childFieldValues;
                 }
@@ -1079,7 +1080,7 @@ class FileService extends AbstractService
                   ));
             }
         } else{
-        	$this->logger->info("ParseDocument data- " . json_encode($documentItem));
+            $this->logger->info("ParseDocument data- " . json_encode($documentItem));
             array_push($parseArray, $documentItem);
         }
     }
