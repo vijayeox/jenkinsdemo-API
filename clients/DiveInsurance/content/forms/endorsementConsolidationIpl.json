@@ -1234,7 +1234,6 @@
 							"multiple": true
 						},
 						"key": "additional_email",
-						"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
 						"type": "email",
 						"input": true,
 						"lockKey": true,
@@ -3374,7 +3373,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 263,
+	"_vid": 266,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3395,6 +3394,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-22T14:25:19.603Z",
+	"modified": "2020-06-22T20:28:25.428Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

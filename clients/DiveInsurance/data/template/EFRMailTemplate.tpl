@@ -7,7 +7,10 @@
 			 <br/>
              
 			 <br/>
-			 {if isset($additionalNotes)} {$additionalNotes} {/if}
+			 {if isset($additionalNotes)} {$additionalNotes}
+			 <br/>
+			 <br/>
+			 <br/>{/if}
 			 <br/>
             </div>
 
