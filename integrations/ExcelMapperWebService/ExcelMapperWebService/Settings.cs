@@ -9,9 +9,7 @@ namespace ArrowHeadWebService
     {
         public int logging { get; set; }
         public string postURL { get; set; }
-
         public string mappingFile { get; set; }
-
         public string dwFile { get; set; }
     }
 }
