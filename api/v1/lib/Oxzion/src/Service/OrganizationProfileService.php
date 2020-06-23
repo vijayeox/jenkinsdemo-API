@@ -31,8 +31,8 @@ class OrganizationProfileService extends AbstractService
         $this->logger->info("Adding OrganizationProfile - " . print_r($data, true));
         $orgProfileData = $data;
         $orgProfileData['uuid'] = UuidUtil::uuid();
-        $orgProfileData['createdBy'] = AuthContext::get(AuthConstants::USER_ID);
-        $orgProfileData['dateCreated'] = date('Y-m-d H:i:s');
+        $orgProfileData['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $orgProfileData['date_created'] = date('Y-m-d H:i:s');
         $orgProfileData['labelfile'] = isset($data['labelfile'])?$data['labelfile']:'en';
         $orgProfileData['languagefile'] = isset($data['languagefile'])?$data['languagefile']:'en';
         $addressid = $this->addressService->addAddress($orgProfileData);
@@ -63,8 +63,8 @@ class OrganizationProfileService extends AbstractService
             throw new ServiceException("OrganizationProfile not found", "orgProfile.not.found");
         }
         $org = $obj->toArray();        
-        $data['modifiedBy'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['dateModified'] = date('Y-m-d H:i:s');
+        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['date_modified'] = date('Y-m-d H:i:s');
         if (isset($data['address_id'])) {
             $this->addressService->updateAddress($data['address_id'], $data);
         }else{
