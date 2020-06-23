@@ -165,7 +165,7 @@
         "tableView": false
       }, {
         "label": "amountPayable",
-        "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  var day = moment(data.start_date).format('DD');\n  if((day == 30 && month == 6) || month == 7){\n    value = (parseFloat(data.totalAmount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.totalAmount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.totalAmount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.totalAmount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.totalAmount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.totalAmount).toFixed(2);\ndata.paymentInstallments = 0;\n}",
+        "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  var day = moment(data.start_date).format('DD');\n  if((day == 30 && month == 6) || month == 7){\n    value = (parseFloat(data.totalAmount).toFixed(2))*25/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.totalAmount).toFixed(2))*30/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.totalAmount).toFixed(2))*35/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.totalAmount).toFixed(2))*40/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.totalAmount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.totalAmount).toFixed(2);\ndata.paymentInstallments = 0;\n}",
         "key": "amountPayable",
         "type": "hidden",
         "input": true,
@@ -194,13 +194,13 @@
             "disabled": true,
             "tableView": false,
             "delimiter": true,
-            "requireDecimal": true,
+            "requireDecimal": false,
             "inputFormat": "plain",
             "clearOnHide": false,
-            "calculateValue": "value = data.amountPayable",
+            "calculateValue": "value = data.amount",
             "key": "finalAmountPayable",
             "type": "number",
-            "decimalLimit": 2,
+            "decimalLimit": 0,
             "input": true,
             "inputType": "text",
             "hideOnChildrenHidden": false
@@ -239,29 +239,16 @@
             "theme": "primary",
             "collapsible": false,
             "tableView": false,
-            "key": "installments",
+            "key": "premiumFinance",
             "conditional": {
               "show": true,
               "when": "premiumFinanceSelect",
               "eq": "yes"
             },
             "type": "panel",
-            "label": "Installments",
-            "buttonSettings": {
-              "previous": true,
-              "cancel": true,
-              "next": true
-            },
-            "breadcrumbClickable": true,
+            "label": "Panel",
             "input": false,
             "components": [{
-              "label": "premium_finance",
-              "key": "premium_finance",
-              "type": "hidden",
-              "input": true,
-              "tableView": false,
-              "hideOnChildrenHidden": false
-            }, {
               "label": "Down Payment",
               "prefix": "$",
               "mask": false,
@@ -272,10 +259,11 @@
               "requireDecimal": false,
               "inputFormat": "plain",
               "clearOnHide": false,
-              "calculateValue": "value = parseFloat(25 * amountPayable / 100).toFixed(0);",
+              "calculateValue": "value = parseFloat(25 * data.amountPayable / 100).toFixed(0);",
               "key": "downPayment",
               "type": "number",
-              "input": true
+              "input": true,
+              "hideOnChildrenHidden": false
             }],
             "hideOnChildrenHidden": false
           }, {
@@ -314,7 +302,8 @@
                 "type": "simple",
                 "simple": {
                   "when": "premiumFinanceSelect",
-                  "eq": "yes"
+                  "eq": "yes",
+                  "show": true
                 }
               },
               "actions": [{
@@ -331,11 +320,30 @@
                 },
                 "state": true
               }]
+            }, {
+              "name": "Enable on Premium Finance",
+              "trigger": {
+                "type": "simple",
+                "simple": {
+                  "when": "premiumFinanceSelect",
+                  "eq": "no",
+                  "show": true
+                }
+              },
+              "actions": [{
+                "name": "Enable All fields",
+                "type": "property",
+                "property": {
+                  "label": "Disabled",
+                  "value": "disabled",
+                  "type": "boolean"
+                },
+                "state": false
+              }]
             }],
             "type": "radio",
             "input": true,
-            "hideOnChildrenHidden": false,
-            "defaultValue": "creditCard"
+            "hideOnChildrenHidden": false
           }],
           "width": 6,
           "offset": 0,
@@ -596,7 +604,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 14,
+  "_vid": 17,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -613,6 +621,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-23T14:28:58.102Z",
+  "modified": "2020-06-23T20:26:05.305Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

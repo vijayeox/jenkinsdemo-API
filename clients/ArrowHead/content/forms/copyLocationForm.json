@@ -11364,175 +11364,6 @@
         },
         {
           "type": "panel",
-          "title": "Storage Tank Schedule",
-          "components": [
-            {
-              "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "pageNaNColumns",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Loc #",
-                      "placeholder": "Loc #",
-                      "tableView": true,
-                      "key": "pollutionloc",
-                      "type": "textfield",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Tank #",
-                      "placeholder": "Tank #",
-                      "tableView": true,
-                      "key": "pollutiontank",
-                      "type": "textfield",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Tank Contents",
-                      "placeholder": "Tank Contents",
-                      "tableView": true,
-                      "key": "tankcontents",
-                      "type": "textfield",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "type": "columns",
-              "hideLabel": true
-            },
-            {
-              "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "pageNaNColumns2",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Other Tank Contents",
-                      "placeholder": "Other Tank Contents",
-                      "tableView": true,
-                      "key": "othertankcontents",
-                      "type": "textfield",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Installation Date",
-                      "format": "MM/dd/yyyy",
-                      "placeholder": "Installation Date",
-                      "tableView": false,
-                      "datePicker": {
-                        "disableWeekends": false,
-                        "disableWeekdays": false,
-                        "datepickerMode": "day"
-                      },
-                      "enableTime": false,
-                      "key": "installationdate",
-                      "type": "datetime",
-                      "input": true,
-                      "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-                      "widget": {
-                        "type": "calendar",
-                        "displayInTimezone": "viewer",
-                        "language": "en",
-                        "useLocaleSettings": false,
-                        "allowInput": true,
-                        "mode": "single",
-                        "enableTime": false,
-                        "noCalendar": false,
-                        "format": "MM/dd/yyyy",
-                        "hourIncrement": 1,
-                        "minuteIncrement": 1,
-                        "time_24hr": false,
-                        "minDate": null,
-                        "disableWeekends": false,
-                        "disableWeekdays": false,
-                        "maxDate": null
-                      },
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Tank Capacity",
-                      "placeholder": "Tank Capacity",
-                      "tableView": true,
-                      "key": "tankcapacity",
-                      "type": "textfield",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "type": "columns",
-              "hideLabel": true
-            }
-          ],
-          "input": false,
-          "key": "pageNaN1",
-          "tableView": false,
-          "label": "Panel"
-        },
-        {
-          "type": "panel",
           "title": "Pollution Liability Coverage Detail",
           "components": [
             {
@@ -15294,7 +15125,7 @@
       "keyModified": true
     },
     {
-      "title": "Location Details",
+      "title": "Location",
       "breadcrumbClickable": true,
       "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
@@ -15413,18 +15244,19 @@
                                   "lockKey": true
                                 },
                                 {
-                                  "label": "County",
-                                  "placeholder": "County",
-                                  "tableView": true,
+                                  "label": "Zip Code",
+                                  "placeholder": "Zip Code",
+                                  "spellcheck": false,
+                                  "tableView": false,
                                   "validate": {
                                     "required": true,
-                                    "customMessage": "Please enter County"
+                                    "custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
                                   },
-                                  "key": "CountyLocationSchedule",
+                                  "key": "zip1",
                                   "type": "textfield",
                                   "input": true,
-                                  "hideOnChildrenHidden": false,
-                                  "lockKey": true
+                                  "lockKey": true,
+                                  "hideOnChildrenHidden": false
                                 }
                               ],
                               "width": 4,
@@ -15436,45 +15268,29 @@
                             {
                               "components": [
                                 {
-                                  "label": "Building #",
-                                  "placeholder": "Building #",
-                                  "tableView": true,
-                                  "validate": {
-                                    "required": true,
-                                    "customMessage": "Please enter Building #"
-                                  },
-                                  "key": "businessNum",
-                                  "type": "textfield",
-                                  "input": true,
-                                  "hideOnChildrenHidden": false,
-                                  "lockKey": true
-                                },
-                                {
-                                  "label": "State",
+                                  "label": "Country",
                                   "widget": "choicesjs",
-                                  "placeholder": "State",
+                                  "placeholder": "Country",
+                                  "uniqueOptions": true,
                                   "tableView": true,
-                                  "dataSrc": "url",
+                                  "dataSrc": "custom",
                                   "data": {
                                     "values": [{ "value": "", "label": "" }],
-                                    "url": "https://cdn.rawgit.com/mshafrir/2646763/raw/states_titlecase.json",
-                                    "headers": [{ "value": "", "key": "" }]
+                                    "custom": "values = data['countryList'];"
                                   },
-                                  "valueProperty": "abbreviation",
-                                  "template": "<span>{{ item.name}}</span>",
+                                  "valueProperty": "country",
+                                  "template": "<span>{{ item.country }}</span>",
                                   "selectThreshold": 0.3,
-                                  "validate": {
-                                    "required": true,
-                                    "customMessage": "Please select State"
-                                  },
-                                  "errorLabel": "Please select State",
-                                  "key": "statelocationschedule",
+                                  "readOnlyValue": true,
+                                  "clearOnHide": false,
+                                  "validate": { "required": true },
+                                  "key": "country",
                                   "type": "select",
                                   "indexeddb": { "filter": {} },
                                   "input": true,
-                                  "hideOnChildrenHidden": false,
                                   "lockKey": true,
-                                  "disableLimit": false
+                                  "source": "5d347da33e9be31e15d3b115",
+                                  "hideOnChildrenHidden": false
                                 },
                                 {
                                   "label": "Occupancy Type",
@@ -15574,114 +15390,28 @@
                                   "lockKey": true
                                 },
                                 {
-                                  "label": "Zip Code",
-                                  "placeholder": "Zip Code",
-                                  "mask": false,
-                                  "spellcheck": true,
-                                  "tableView": true,
-                                  "delimiter": false,
-                                  "requireDecimal": false,
-                                  "inputFormat": "plain",
-                                  "validate": {
-                                    "required": true,
-                                    "customMessage": "Please enter Zip Code",
-                                    "min": null,
-                                    "max": null
-                                  },
-                                  "key": "ziplocationscehdule",
-                                  "type": "number",
-                                  "input": true,
-                                  "inputType": "number",
-                                  "hideOnChildrenHidden": false,
-                                  "lockKey": true
-                                },
-                                {
-                                  "label": "Primary OEM",
+                                  "label": "State",
                                   "widget": "choicesjs",
-                                  "placeholder": "Select Primary OEM",
+                                  "placeholder": "State",
                                   "tableView": true,
+                                  "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      { "value": "acura", "label": "Acura" },
-                                      {
-                                        "value": "alfaRomeo",
-                                        "label": "Alfa Romeo"
-                                      },
-                                      { "value": "audi", "label": "Audi" },
-                                      {
-                                        "value": "bentley",
-                                        "label": "Bentley"
-                                      },
-                                      { "value": "bmw", "label": "BMW" },
-                                      {
-                                        "value": "chevrolet",
-                                        "label": "Chevrolet"
-                                      },
-                                      {
-                                        "value": "chrysler",
-                                        "label": "Chrysler"
-                                      },
-                                      { "value": "dodge", "label": "Dodge" },
-                                      {
-                                        "value": "ferrari",
-                                        "label": "Ferrari"
-                                      },
-                                      { "value": "fiat", "label": "Fiat" },
-                                      { "value": "ford", "label": "Ford" },
-                                      { "value": "honda", "label": "Honda" },
-                                      {
-                                        "value": "hyundai",
-                                        "label": "Hyundai"
-                                      },
-                                      {
-                                        "value": "infiniti",
-                                        "label": "Infiniti"
-                                      },
-                                      { "value": "jaguar", "label": "Jaguar" },
-                                      { "value": "kia", "label": "Kia" },
-                                      {
-                                        "value": "landRover",
-                                        "label": "Land Rover"
-                                      },
-                                      { "value": "lexus", "label": "Lexus" },
-                                      {
-                                        "value": "lincoln",
-                                        "label": "Lincoln"
-                                      },
-                                      { "value": "mazda", "label": "Mazda" },
-                                      {
-                                        "value": "mercedesBenz",
-                                        "label": "Mercedes-Benz"
-                                      },
-                                      { "value": "nissan", "label": "Nissan" },
-                                      {
-                                        "value": "porsche",
-                                        "label": "Porsche"
-                                      },
-                                      { "value": "subaru", "label": "Subaru" },
-                                      { "value": "toyota", "label": "Toyota" },
-                                      {
-                                        "value": "volkswagen",
-                                        "label": "Volkswagen"
-                                      },
-                                      {
-                                        "value": "volvoCars",
-                                        "label": "Volvo Cars"
-                                      }
-                                    ]
+                                    "values": [{ "label": "", "value": "" }],
+                                    "custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
                                   },
+                                  "template": "<span>{{ item }}</span>",
+                                  "refreshOn": "country",
+                                  "clearOnRefresh": true,
                                   "selectThreshold": 0.3,
-                                  "validate": {
-                                    "required": true,
-                                    "customMessage": "Please select Primary OEM"
-                                  },
-                                  "key": "primaryOEM",
-                                  "customConditional": "show = row.occupancyType === 'autoSalesAndService' || row.occupancyType === 'newCarShowroomAndSales' ;",
+                                  "clearOnHide": false,
+                                  "validate": { "required": true },
+                                  "key": "state1",
                                   "type": "select",
                                   "indexeddb": { "filter": {} },
                                   "input": true,
+                                  "lockKey": true,
                                   "hideOnChildrenHidden": false,
-                                  "lockKey": true
+                                  "isNew": false
                                 }
                               ],
                               "width": 4,
@@ -15696,180 +15426,204 @@
                           "inDataGrid": true
                         },
                         {
-                          "label": "Secondary OEM",
-                          "optionsLabelPosition": "right",
-                          "customClass": "inlineCheckboxes",
-                          "inline": true,
-                          "tableView": false,
-                          "defaultValue": {
-                            "": false,
-                            "acura": false,
-                            "alfaRomeo": false,
-                            "audi": false,
-                            "bentley": false,
-                            "bmw": false,
-                            "chevrolet": false,
-                            "chrysler": false,
-                            "dodge": false,
-                            "ferrariNorthAmerica": false,
-                            "fiat": false,
-                            "ford": false,
-                            "honda": false,
-                            "hyundai": false,
-                            "infiniti": false,
-                            "jaguar": false,
-                            "kiaMotorsAmerica": false,
-                            "landRover": false,
-                            "lexus": false,
-                            "lincoln": false,
-                            "mazdaNorthAmericanOperations": false,
-                            "mercedesBenz": false,
-                            "nissan": false,
-                            "porsche": false,
-                            "subaru": false,
-                            "toyota": false,
-                            "volkswagen": false,
-                            "volvoCars": false,
-                            "ferrari": false,
-                            "kia": false,
-                            "mazda": false
-                          },
-                          "values": [
+                          "label": "Columns",
+                          "columns": [
                             {
-                              "label": "Acura",
-                              "value": "acura",
-                              "shortcut": ""
+                              "components": [
+                                {
+                                  "label": "Primary OEM",
+                                  "widget": "choicesjs",
+                                  "placeholder": "Select Primary OEM",
+                                  "tableView": true,
+                                  "dataSrc": "custom",
+                                  "data": {
+                                    "values": [{ "label": "", "value": "" }],
+                                    "custom": "values = [\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo Cars\"\n]"
+                                  },
+                                  "valueProperty": "item",
+                                  "dataType": "string",
+                                  "template": "<span>{{ item }}</span>",
+                                  "selectThreshold": 0.3,
+                                  "validate": {
+                                    "required": true,
+                                    "customMessage": "Please select Primary OEM"
+                                  },
+                                  "key": "primaryOEM",
+                                  "customConditional": "show = row.occupancyType === 'autoSalesAndService' || row.occupancyType === 'newCarShowroomAndSales' ;",
+                                  "logic": [
+                                    {
+                                      "name": "Check Disable",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = false;\nif (row.secondaryOEM) {\n  if (row.secondaryOEM[0]) {\n    if (row.secondaryOEM[0].constructor !== Object) {\n        result = true\n    }\n  }\n}"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "Disable",
+                                          "type": "property",
+                                          "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                          },
+                                          "state": true
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "type": "select",
+                                  "indexeddb": { "filter": {} },
+                                  "input": true,
+                                  "hideOnChildrenHidden": false,
+                                  "lockKey": true
+                                }
+                              ],
+                              "width": 6,
+                              "offset": 0,
+                              "push": 0,
+                              "pull": 0,
+                              "size": "md"
                             },
                             {
-                              "label": "Alfa Romeo",
-                              "value": "alfaRomeo",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Audi",
-                              "value": "audi",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Bentley",
-                              "value": "bentley",
-                              "shortcut": ""
-                            },
-                            { "label": "BMW", "value": "bmw", "shortcut": "" },
-                            {
-                              "label": "Chevrolet",
-                              "value": "chevrolet",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Chrysler",
-                              "value": "chrysler",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Dodge",
-                              "value": "dodge",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Ferrari",
-                              "value": "ferrari",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Fiat",
-                              "value": "fiat",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Ford",
-                              "value": "ford",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Honda",
-                              "value": "honda",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Hyundai",
-                              "value": "hyundai",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Infiniti",
-                              "value": "infiniti",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Jaguar",
-                              "value": "jaguar",
-                              "shortcut": ""
-                            },
-                            { "label": "Kia", "value": "kia", "shortcut": "" },
-                            {
-                              "label": "Land Rover",
-                              "value": "landRover",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Lexus",
-                              "value": "lexus",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Lincoln",
-                              "value": "lincoln",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Mazda",
-                              "value": "mazda",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Mercedes-Benz",
-                              "value": "mercedesBenz",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Nissan",
-                              "value": "nissan",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Porsche",
-                              "value": "porsche",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Subaru",
-                              "value": "subaru",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Toyota",
-                              "value": "toyota",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Volkswagen",
-                              "value": "volkswagen",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "Volvo Cars",
-                              "value": "volvoCars",
-                              "shortcut": ""
+                              "components": [
+                                {
+                                  "label": "Secondary OEM",
+                                  "widget": "choicesjs",
+                                  "placeholder": "Select Secondary OEM",
+                                  "disabled": true,
+                                  "tableView": true,
+                                  "multiple": true,
+                                  "dataSrc": "custom",
+                                  "data": {
+                                    "values": [{ "label": "", "value": "" }],
+                                    "custom": "var OEMList = [\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo Cars\"\n]\nvalues = OEMList.map(item => {\n  return row.primaryOEM != item ? item : false \n})"
+                                  },
+                                  "valueProperty": "item",
+                                  "dataType": "object",
+                                  "template": "<span>{{ item }}</span>",
+                                  "selectThreshold": 0.3,
+                                  "validate": {
+                                    "required": true,
+                                    "multiple": true
+                                  },
+                                  "key": "secondaryOEM",
+                                  "customConditional": "show = row.occupancyType === 'autoSalesAndService' || row.occupancyType === 'newCarShowroomAndSales' ;\nif(!row.primaryOEM){\n  component.disabled = true;\n}",
+                                  "logic": [
+                                    {
+                                      "name": "Check Disable",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = row.primaryOEM.length > 1;"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "Disable",
+                                          "type": "property",
+                                          "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                          },
+                                          "state": false
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "type": "select",
+                                  "indexeddb": { "filter": {} },
+                                  "input": true,
+                                  "hideOnChildrenHidden": false,
+                                  "refreshOn": "row.primaryOEM"
+                                }
+                              ],
+                              "width": 6,
+                              "offset": 0,
+                              "push": 0,
+                              "pull": 0,
+                              "size": "md"
                             }
                           ],
-                          "validate": { "required": true },
-                          "key": "secondaryOEM",
-                          "customConditional": "show = row.occupancyType === 'autoSalesAndService' || row.occupancyType === 'newCarShowroomAndSales' ;",
-                          "type": "selectboxes",
+                          "tableView": false,
+                          "key": "columns8",
+                          "type": "columns",
+                          "input": false
+                        }
+                      ],
+                      "hideOnChildrenHidden": false
+                    },
+                    {
+                      "title": "Building Details",
+                      "theme": "primary",
+                      "breadcrumbClickable": true,
+                      "buttonSettings": {
+                        "previous": true,
+                        "cancel": true,
+                        "next": true
+                      },
+                      "collapsible": false,
+                      "tableView": false,
+                      "modalEdit": true,
+                      "key": "buildingDetailsPanel",
+                      "type": "panel",
+                      "label": "Building Details",
+                      "input": false,
+                      "components": [
+                        {
+                          "label": "Building Details",
+                          "reorder": false,
+                          "addAnother": "Add building",
+                          "addAnotherPosition": "bottom",
+                          "defaultOpen": false,
+                          "layoutFixed": false,
+                          "enableRowGroups": false,
+                          "tableView": false,
+                          "defaultValue": [{}],
+                          "validate": { "required": true, "minLength": 1 },
+                          "key": "buildingDetails",
+                          "type": "datagrid",
                           "input": true,
-                          "inputType": "checkbox",
-                          "hideOnChildrenHidden": false
+                          "components": [
+                            {
+                              "label": "Columns",
+                              "columns": [
+                                {
+                                  "components": [
+                                    {
+                                      "label": "Building #",
+                                      "placeholder": "Building #",
+                                      "tableView": true,
+                                      "validate": {
+                                        "required": true,
+                                        "customMessage": "Please enter Building #"
+                                      },
+                                      "key": "businessNum",
+                                      "type": "textfield",
+                                      "input": true,
+                                      "hideOnChildrenHidden": false,
+                                      "lockKey": true
+                                    }
+                                  ],
+                                  "width": 6,
+                                  "offset": 0,
+                                  "push": 0,
+                                  "pull": 0,
+                                  "size": "md"
+                                },
+                                {
+                                  "components": [],
+                                  "width": 6,
+                                  "offset": 0,
+                                  "push": 0,
+                                  "pull": 0,
+                                  "size": "md"
+                                }
+                              ],
+                              "tableView": false,
+                              "key": "columns13",
+                              "type": "columns",
+                              "input": false
+                            }
+                          ]
                         }
                       ],
                       "hideOnChildrenHidden": false
@@ -15896,24 +15650,28 @@
                             {
                               "components": [
                                 {
-                                  "label": "Building Interest - Owner or Tenant",
-                                  "widget": "choicesjs",
-                                  "placeholder": "Please Select",
+                                  "label": "Building Interest",
+                                  "optionsLabelPosition": "right",
+                                  "inline": false,
                                   "tableView": true,
-                                  "data": {
-                                    "values": [
-                                      { "value": "owned", "label": "Owned" },
-                                      { "value": "leased", "label": "Leased" }
-                                    ]
-                                  },
-                                  "selectThreshold": 0.3,
+                                  "values": [
+                                    {
+                                      "label": "Owned",
+                                      "value": "owned",
+                                      "shortcut": ""
+                                    },
+                                    {
+                                      "label": "Leased",
+                                      "value": "leased",
+                                      "shortcut": ""
+                                    }
+                                  ],
+                                  "dataType": "auto",
                                   "validate": { "required": true },
                                   "key": "buildinginterest",
-                                  "type": "select",
-                                  "indexeddb": { "filter": {} },
+                                  "type": "radio",
                                   "input": true,
-                                  "hideOnChildrenHidden": false,
-                                  "lockKey": true
+                                  "hideOnChildrenHidden": false
                                 }
                               ],
                               "width": 6,
@@ -15922,6 +15680,52 @@
                               "pull": 0,
                               "size": "md"
                             },
+                            {
+                              "components": [
+                                {
+                                  "label": "Basement Available",
+                                  "optionsLabelPosition": "right",
+                                  "inline": false,
+                                  "tableView": true,
+                                  "values": [
+                                    {
+                                      "label": "Yes",
+                                      "value": "yes",
+                                      "shortcut": ""
+                                    },
+                                    {
+                                      "label": "No",
+                                      "value": "no",
+                                      "shortcut": ""
+                                    }
+                                  ],
+                                  "dataType": "auto",
+                                  "validate": { "required": true },
+                                  "key": "basement",
+                                  "type": "radio",
+                                  "input": true,
+                                  "hideOnChildrenHidden": false
+                                }
+                              ],
+                              "width": 6,
+                              "offset": 0,
+                              "push": 0,
+                              "pull": 0,
+                              "size": "md"
+                            }
+                          ],
+                          "hideLabel": true,
+                          "tableView": false,
+                          "key": "page3Columns3",
+                          "type": "columns",
+                          "input": false
+                        },
+                        {
+                          "label": "Columns",
+                          "input": false,
+                          "tableView": false,
+                          "key": "page3Columns7",
+                          "columns": [
                             {
                               "components": [
                                 {
@@ -15978,13 +15782,40 @@
                               "push": 0,
                               "pull": 0,
                               "size": "md"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "label": "Building Size",
+                                  "placeholder": "Building Size",
+                                  "suffix": "Square Foot",
+                                  "mask": false,
+                                  "spellcheck": true,
+                                  "tableView": false,
+                                  "delimiter": false,
+                                  "requireDecimal": false,
+                                  "inputFormat": "plain",
+                                  "validate": {
+                                    "required": true,
+                                    "min": 1,
+                                    "max": 100000
+                                  },
+                                  "key": "buildingsquarefootage",
+                                  "type": "number",
+                                  "input": true,
+                                  "decimalLimit": 3,
+                                  "hideOnChildrenHidden": false
+                                }
+                              ],
+                              "width": 6,
+                              "offset": 0,
+                              "push": 0,
+                              "pull": 0,
+                              "size": "md"
                             }
                           ],
-                          "hideLabel": true,
-                          "tableView": false,
-                          "key": "page3Columns3",
                           "type": "columns",
-                          "input": false
+                          "hideLabel": true
                         },
                         {
                           "label": "Columns",
@@ -16022,23 +15853,23 @@
                             {
                               "components": [
                                 {
-                                  "label": "Basement?",
-                                  "placeholder": "Please Select",
-                                  "tableView": true,
-                                  "data": {
-                                    "values": [
-                                      { "value": "yes", "label": "Yes" },
-                                      { "value": "no", "label": "No" }
-                                    ]
+                                  "label": "Year Built",
+                                  "placeholder": "Year Built",
+                                  "mask": false,
+                                  "spellcheck": true,
+                                  "tableView": false,
+                                  "delimiter": false,
+                                  "requireDecimal": false,
+                                  "inputFormat": "plain",
+                                  "validate": {
+                                    "required": true,
+                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
                                   },
-                                  "selectThreshold": 0.3,
-                                  "validate": { "required": true },
-                                  "key": "basement",
-                                  "type": "select",
-                                  "indexeddb": { "filter": {} },
+                                  "key": "yearBuilt",
+                                  "type": "number",
                                   "input": true,
-                                  "hideOnChildrenHidden": false,
-                                  "lockKey": true
+                                  "decimalLimit": 0,
+                                  "hideOnChildrenHidden": false
                                 }
                               ],
                               "width": 4,
@@ -16050,16 +15881,23 @@
                             {
                               "components": [
                                 {
+                                  "label": "Wiring Year",
+                                  "placeholder": "Wiring Year",
+                                  "mask": false,
+                                  "spellcheck": true,
+                                  "tableView": false,
+                                  "delimiter": false,
+                                  "requireDecimal": false,
+                                  "inputFormat": "plain",
+                                  "validate": {
+                                    "required": true,
+                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                  },
+                                  "key": "wiringyear",
+                                  "type": "number",
+                                  "decimalLimit": 0,
                                   "input": true,
-                                  "tableView": true,
-                                  "label": "Year Built",
-                                  "key": "yearbuilt",
-                                  "validate": { "required": true },
-                                  "type": "textfield",
-                                  "hideOnChildrenHidden": false,
-                                  "placeholder": "Year Built",
-                                  "lockKey": true,
-                                  "isNew": false
+                                  "hideOnChildrenHidden": false
                                 }
                               ],
                               "width": 4,
@@ -16081,14 +15919,119 @@
                             {
                               "components": [
                                 {
+                                  "label": "Roofing Year",
+                                  "placeholder": "Roofing Year",
+                                  "mask": false,
+                                  "spellcheck": true,
+                                  "tableView": false,
+                                  "delimiter": false,
+                                  "requireDecimal": false,
+                                  "inputFormat": "plain",
+                                  "validate": {
+                                    "required": true,
+                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                  },
+                                  "key": "roofingyear",
+                                  "type": "number",
+                                  "decimalLimit": 0,
+                                  "input": true,
+                                  "hideOnChildrenHidden": false
+                                }
+                              ],
+                              "width": 4,
+                              "offset": 0,
+                              "push": 0,
+                              "pull": 0,
+                              "size": "md"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "label": "Plumbing Year",
+                                  "placeholder": "Plumbing Year",
+                                  "mask": false,
+                                  "spellcheck": true,
+                                  "tableView": false,
+                                  "delimiter": false,
+                                  "requireDecimal": false,
+                                  "inputFormat": "plain",
+                                  "validate": {
+                                    "required": true,
+                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                  },
+                                  "key": "plumbingyear",
+                                  "type": "number",
+                                  "decimalLimit": 0,
+                                  "input": true,
+                                  "hideOnChildrenHidden": false
+                                }
+                              ],
+                              "width": 4,
+                              "offset": 0,
+                              "push": 0,
+                              "pull": 0,
+                              "size": "md"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "label": "Heating Year",
+                                  "placeholder": "Heating Year",
+                                  "mask": false,
+                                  "spellcheck": true,
+                                  "tableView": false,
+                                  "delimiter": false,
+                                  "requireDecimal": false,
+                                  "inputFormat": "plain",
+                                  "validate": {
+                                    "required": true,
+                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                  },
+                                  "key": "heatingyear",
+                                  "type": "number",
+                                  "decimalLimit": 0,
+                                  "input": true,
+                                  "hideOnChildrenHidden": false
+                                }
+                              ],
+                              "width": 4,
+                              "offset": 0,
+                              "push": 0,
+                              "pull": 0,
+                              "size": "md"
+                            }
+                          ],
+                          "type": "columns",
+                          "hideLabel": true
+                        },
+                        {
+                          "label": "Columns",
+                          "input": false,
+                          "tableView": false,
+                          "key": "page3Columns6",
+                          "columns": [
+                            {
+                              "components": [
+                                {
                                   "input": true,
                                   "tableView": true,
-                                  "label": "Building Square Footage",
-                                  "key": "buildingsquarefootage",
+                                  "label": "Burglar Alarm Monitoring",
+                                  "key": "burglaralarmmonitoring",
+                                  "data": {
+                                    "values": [
+                                      { "value": "none", "label": "None" },
+                                      { "value": "local", "label": "Local" },
+                                      {
+                                        "value": "central",
+                                        "label": "Central"
+                                      },
+                                      { "value": "both", "label": "Both" }
+                                    ]
+                                  },
                                   "validate": { "required": true },
-                                  "type": "textfield",
+                                  "type": "select",
                                   "hideOnChildrenHidden": false,
-                                  "placeholder": "Building Square Footage",
+                                  "placeholder": "Please Select",
                                   "lockKey": true
                                 }
                               ],
@@ -16166,137 +16109,6 @@
                           "hideLabel": true
                         },
                         {
-                          "label": "Columns",
-                          "input": false,
-                          "tableView": false,
-                          "key": "page3Columns6",
-                          "columns": [
-                            {
-                              "components": [
-                                {
-                                  "input": true,
-                                  "tableView": true,
-                                  "label": "Burglar Alarm Monitoring",
-                                  "key": "burglaralarmmonitoring",
-                                  "data": {
-                                    "values": [
-                                      { "value": "none", "label": "None" },
-                                      { "value": "local", "label": "Local" },
-                                      {
-                                        "value": "central",
-                                        "label": "Central"
-                                      },
-                                      { "value": "both", "label": "Both" }
-                                    ]
-                                  },
-                                  "validate": { "required": true },
-                                  "type": "select",
-                                  "hideOnChildrenHidden": false,
-                                  "placeholder": "Please Select",
-                                  "lockKey": true
-                                }
-                              ],
-                              "width": 4,
-                              "offset": 0,
-                              "push": 0,
-                              "pull": 0,
-                              "size": "md"
-                            },
-                            {
-                              "components": [
-                                {
-                                  "input": true,
-                                  "tableView": true,
-                                  "label": "Wiring Year",
-                                  "key": "wiringyear",
-                                  "validate": { "required": true },
-                                  "type": "textfield",
-                                  "hideOnChildrenHidden": false,
-                                  "placeholder": "Wiring Year",
-                                  "lockKey": true
-                                }
-                              ],
-                              "width": 4,
-                              "offset": 0,
-                              "push": 0,
-                              "pull": 0,
-                              "size": "md"
-                            },
-                            {
-                              "components": [
-                                {
-                                  "input": true,
-                                  "tableView": true,
-                                  "label": "Roofing Year",
-                                  "key": "roofingyear",
-                                  "validate": { "required": true },
-                                  "type": "textfield",
-                                  "hideOnChildrenHidden": false,
-                                  "placeholder": "Roofing Year",
-                                  "lockKey": true
-                                }
-                              ],
-                              "width": 4,
-                              "offset": 0,
-                              "push": 0,
-                              "pull": 0,
-                              "size": "md"
-                            }
-                          ],
-                          "type": "columns",
-                          "hideLabel": true
-                        },
-                        {
-                          "label": "Columns",
-                          "input": false,
-                          "tableView": false,
-                          "key": "page3Columns7",
-                          "columns": [
-                            {
-                              "components": [
-                                {
-                                  "input": true,
-                                  "tableView": true,
-                                  "label": "Plumbing Year",
-                                  "key": "plumbingyear",
-                                  "validate": { "required": true },
-                                  "type": "textfield",
-                                  "hideOnChildrenHidden": false,
-                                  "placeholder": "Plumbing Year",
-                                  "lockKey": true
-                                }
-                              ],
-                              "width": 6,
-                              "offset": 0,
-                              "push": 0,
-                              "pull": 0,
-                              "size": "md"
-                            },
-                            {
-                              "components": [
-                                {
-                                  "input": true,
-                                  "tableView": true,
-                                  "label": "Heating Year",
-                                  "key": "heatingyear",
-                                  "validate": { "required": true },
-                                  "type": "textfield",
-                                  "hideOnChildrenHidden": false,
-                                  "placeholder": "Heating Year",
-                                  "lockKey": true
-                                }
-                              ],
-                              "width": 6,
-                              "offset": 0,
-                              "push": 0,
-                              "pull": 0,
-                              "size": "md"
-                            }
-                          ],
-                          "type": "columns",
-                          "hideLabel": true
-                        },
-                        {
                           "label": "Tabs",
                           "components": [
                             {
@@ -16321,6 +16133,7 @@
                                             {
                                               "label": "Building Limit",
                                               "placeholder": "Building Limit",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
@@ -16347,6 +16160,7 @@
                                             {
                                               "label": "Business Personal Property Limit",
                                               "placeholder": "Business Personal Property Limit",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
@@ -16356,9 +16170,9 @@
                                               "validate": { "required": true },
                                               "key": "businesspersonal",
                                               "type": "number",
+                                              "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "decimalLimit": 2,
                                               "inputType": "number"
                                             }
                                           ],
@@ -16373,6 +16187,7 @@
                                             {
                                               "label": "Business Income Limit",
                                               "placeholder": "Business Income Limit",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
@@ -16398,216 +16213,297 @@
                                       "hideLabel": true
                                     },
                                     {
-                                      "label": "Columns",
-                                      "input": false,
+                                      "legend": "Year To Date Sales",
                                       "tableView": false,
-                                      "key": "page3PanelColumns2",
-                                      "columns": [
+                                      "key": "yearToDate",
+                                      "attributes": {
+                                        "style": "padding-top:\"10px\"",
+                                        "prajwal me": "985685"
+                                      },
+                                      "type": "fieldset",
+                                      "label": "Year to Date Sales",
+                                      "input": false,
+                                      "components": [
                                         {
-                                          "components": [
+                                          "label": "Columns",
+                                          "columns": [
                                             {
-                                              "label": "YTD Total Net Sales - New & Used Cars",
-                                              "placeholder": "YTD Total Net Sales - New & Used Cars",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "validate": { "required": true },
-                                              "key": "ytdtotalnetsales",
-                                              "type": "number",
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "decimalLimit": 2,
-                                              "inputType": "number"
+                                              "components": [
+                                                {
+                                                  "label": "Total Net Sales - New & Used Cars",
+                                                  "placeholder": "Total Net Sales - New & Used Cars",
+                                                  "prefix": "$",
+                                                  "mask": false,
+                                                  "spellcheck": true,
+                                                  "tableView": false,
+                                                  "delimiter": false,
+                                                  "requireDecimal": false,
+                                                  "inputFormat": "plain",
+                                                  "validate": {
+                                                    "required": true
+                                                  },
+                                                  "key": "ytdtotalnetsales",
+                                                  "type": "number",
+                                                  "decimalLimit": 2,
+                                                  "input": true,
+                                                  "hideOnChildrenHidden": false,
+                                                  "inputType": "number"
+                                                }
+                                              ],
+                                              "width": 6,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md"
+                                            },
+                                            {
+                                              "components": [
+                                                {
+                                                  "label": "Total Net Sales Other Than Car Sales",
+                                                  "placeholder": "Total Net Sales Other Than Car Sales",
+                                                  "prefix": "$",
+                                                  "mask": false,
+                                                  "spellcheck": true,
+                                                  "tableView": false,
+                                                  "delimiter": false,
+                                                  "requireDecimal": false,
+                                                  "inputFormat": "plain",
+                                                  "validate": {
+                                                    "required": true
+                                                  },
+                                                  "key": "otherthancarsales",
+                                                  "type": "number",
+                                                  "decimalLimit": 2,
+                                                  "input": true,
+                                                  "hideOnChildrenHidden": false,
+                                                  "inputType": "number"
+                                                }
+                                              ],
+                                              "width": 6,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md"
                                             }
                                           ],
-                                          "width": 4,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
+                                          "tableView": false,
+                                          "key": "columns9",
+                                          "type": "columns",
+                                          "input": false
                                         },
                                         {
-                                          "components": [
+                                          "label": "Columns",
+                                          "columns": [
                                             {
-                                              "label": "YTD Total Net Sales Other Than Car Sales",
-                                              "placeholder": "YTD Total Net Sales Other Than Car Sales",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "validate": { "required": true },
-                                              "key": "otherthancarsales",
-                                              "type": "number",
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "decimalLimit": 2,
-                                              "inputType": "number"
+                                              "components": [
+                                                {
+                                                  "label": "Total Dealership Gross Profit / Income - Car Sales",
+                                                  "placeholder": "Total Dealership Gross Profit / Income - Car Sales",
+                                                  "prefix": "$",
+                                                  "mask": false,
+                                                  "spellcheck": true,
+                                                  "tableView": false,
+                                                  "delimiter": false,
+                                                  "requireDecimal": false,
+                                                  "inputFormat": "plain",
+                                                  "validate": {
+                                                    "required": true
+                                                  },
+                                                  "key": "ytdtotaldealershipcarsales",
+                                                  "type": "number",
+                                                  "decimalLimit": 2,
+                                                  "input": true,
+                                                  "hideOnChildrenHidden": false,
+                                                  "inputType": "number"
+                                                }
+                                              ],
+                                              "width": 6,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md"
+                                            },
+                                            {
+                                              "components": [
+                                                {
+                                                  "label": "Total Dealership Gross Profit / Income - Other Than Car Sales",
+                                                  "placeholder": "Total Dealership Gross Profit / Income - Other Than Car Sales",
+                                                  "prefix": "$",
+                                                  "mask": false,
+                                                  "spellcheck": true,
+                                                  "tableView": false,
+                                                  "delimiter": false,
+                                                  "requireDecimal": false,
+                                                  "inputFormat": "plain",
+                                                  "validate": {
+                                                    "required": true
+                                                  },
+                                                  "key": "ytdtotaldealershipother",
+                                                  "type": "number",
+                                                  "decimalLimit": 2,
+                                                  "input": true,
+                                                  "hideOnChildrenHidden": false,
+                                                  "inputType": "number"
+                                                }
+                                              ],
+                                              "width": 6,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md"
                                             }
                                           ],
-                                          "width": 4,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
+                                          "tableView": false,
+                                          "key": "columns10",
+                                          "type": "columns",
+                                          "input": false
                                         },
                                         {
-                                          "components": [
+                                          "label": "Columns",
+                                          "columns": [
                                             {
-                                              "label": "YTD Total Dealership Gross Profit / Income - Car Sales",
-                                              "placeholder": "YTD Total Dealership Gross Profit / Income - Car Sales",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "validate": { "required": true },
-                                              "key": "ytdtotaldealershipcarsales",
-                                              "type": "number",
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "decimalLimit": 2,
-                                              "inputType": "number"
+                                              "components": [],
+                                              "width": 3,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md"
+                                            },
+                                            {
+                                              "components": [
+                                                {
+                                                  "label": "Number of Months Covered on Financial Statement",
+                                                  "placeholder": "Number of Months",
+                                                  "mask": false,
+                                                  "spellcheck": true,
+                                                  "tableView": false,
+                                                  "delimiter": false,
+                                                  "requireDecimal": false,
+                                                  "inputFormat": "plain",
+                                                  "validate": {
+                                                    "required": true,
+                                                    "min": 0
+                                                  },
+                                                  "key": "financialstatement",
+                                                  "type": "number",
+                                                  "decimalLimit": 2,
+                                                  "input": true,
+                                                  "hideOnChildrenHidden": false,
+                                                  "inputType": "number"
+                                                }
+                                              ],
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md",
+                                              "width": 6
+                                            },
+                                            {
+                                              "components": [],
+                                              "size": "md",
+                                              "width": 3,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0
                                             }
                                           ],
-                                          "width": 4,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
+                                          "tableView": false,
+                                          "key": "columns11",
+                                          "type": "columns",
+                                          "input": false
+                                        },
+                                        {
+                                          "label": "Columns",
+                                          "columns": [
+                                            {
+                                              "components": [
+                                                {
+                                                  "label": "Average Monthly Gross Profit - Car Sales",
+                                                  "prefix": "$",
+                                                  "mask": false,
+                                                  "spellcheck": true,
+                                                  "disabled": true,
+                                                  "tableView": false,
+                                                  "defaultValue": 0,
+                                                  "delimiter": false,
+                                                  "requireDecimal": true,
+                                                  "inputFormat": "plain",
+                                                  "calculateValue": "value = row.ytdtotaldealershipcarsales / row.financialstatement ? \n        row.ytdtotaldealershipcarsales / row.financialstatement: 0;",
+                                                  "key": "monthlygrossprofit",
+                                                  "type": "number",
+                                                  "decimalLimit": 2,
+                                                  "input": true,
+                                                  "hideOnChildrenHidden": false,
+                                                  "inputType": "number"
+                                                }
+                                              ],
+                                              "width": 6,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md"
+                                            },
+                                            {
+                                              "components": [
+                                                {
+                                                  "label": "Average Monthly Gross Profit -Other Than Car Sales",
+                                                  "placeholder": "Average Monthly Gross Profit -Other Than Car Sales",
+                                                  "prefix": "$",
+                                                  "mask": false,
+                                                  "spellcheck": true,
+                                                  "disabled": true,
+                                                  "tableView": false,
+                                                  "defaultValue": 0,
+                                                  "delimiter": false,
+                                                  "requireDecimal": true,
+                                                  "inputFormat": "plain",
+                                                  "calculateValue": "value = row.ytdtotaldealershipother / row.financialstatement ? \n        row.ytdtotaldealershipother / row.financialstatement : 0;",
+                                                  "key": "monthlygrossprofitotherthancar",
+                                                  "type": "number",
+                                                  "decimalLimit": 2,
+                                                  "input": true,
+                                                  "hideOnChildrenHidden": false,
+                                                  "inputType": "number"
+                                                }
+                                              ],
+                                              "width": 6,
+                                              "offset": 0,
+                                              "push": 0,
+                                              "pull": 0,
+                                              "size": "md"
+                                            }
+                                          ],
+                                          "tableView": false,
+                                          "key": "columns12",
+                                          "type": "columns",
+                                          "input": false
                                         }
-                                      ],
-                                      "type": "columns",
-                                      "hideLabel": true
+                                      ]
                                     },
                                     {
-                                      "label": "Columns",
-                                      "input": false,
-                                      "tableView": false,
-                                      "key": "page3PanelColumns3",
-                                      "columns": [
-                                        {
-                                          "components": [
-                                            {
-                                              "label": "YTD Total Dealership Gross Profit / Income - Other Than Car Sales",
-                                              "placeholder": "YTD Total Dealership Gross Profit / Income - Other Than Car Sales",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "validate": { "required": true },
-                                              "key": "ytdtotaldealershipother",
-                                              "type": "number",
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "decimalLimit": 2,
-                                              "inputType": "number"
-                                            }
-                                          ],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
-                                        },
-                                        {
-                                          "components": [
-                                            {
-                                              "label": "Number of Months Covered on Financial Statement",
-                                              "placeholder": "Number of Months Covered on Financial Statement",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "validate": { "required": true },
-                                              "key": "financialstatement",
-                                              "type": "number",
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "decimalLimit": 2,
-                                              "inputType": "number"
-                                            }
-                                          ],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
-                                        }
-                                      ],
-                                      "type": "columns",
-                                      "hideLabel": true
+                                      "label": "Total Average",
+                                      "calculateValue": "value =\r\n  row.monthlygrossprofit + row.monthlygrossprofitotherthancar\r\n    ? Math.round(\r\n        (row.monthlygrossprofit +\r\n          row.monthlygrossprofitotherthancar +\r\n          Number.EPSILON) *\r\n          100\r\n      ) / 100\r\n    : 0;",
+                                      "key": "totalAverageSales",
+                                      "type": "hidden",
+                                      "input": true,
+                                      "tableView": false
                                     },
                                     {
-                                      "label": "Columns",
-                                      "input": false,
-                                      "tableView": false,
-                                      "key": "page3Columns8",
-                                      "columns": [
+                                      "label": "HTML",
+                                      "attrs": [
                                         {
-                                          "components": [
-                                            {
-                                              "label": "Average Monthly Gross Profit - Car Sales",
-                                              "placeholder": "Average Monthly Gross Profit - Car Sales",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "calculateValue": "value=data.ytdtotaldealershipcarsales/data.financialstatement",
-                                              "key": "monthlygrossprofit",
-                                              "type": "number",
-                                              "decimalLimit": 2,
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "inputType": "number"
-                                            }
-                                          ],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
-                                        },
-                                        {
-                                          "components": [
-                                            {
-                                              "label": "Average Monthly Gross Profit -Other Than Car Sales",
-                                              "placeholder": "Average Monthly Gross Profit -Other Than Car Sales",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "calculateValue": "value=data.ytdtotaldealershipother/data.financialstatement",
-                                              "key": "monthlygrossprofitotherthancar",
-                                              "type": "number",
-                                              "decimalLimit": 2,
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "inputType": "number"
-                                            }
-                                          ],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
+                                          "attr": "style",
+                                          "value": "text-align:center; font-size:25px; padding:15px"
                                         }
                                       ],
-                                      "type": "columns",
-                                      "hideLabel": true
+                                      "content": "Total Average Monthly Gross Profit : &nbsp ${{row.totalAverageSales}}",
+                                      "refreshOnChange": true,
+                                      "tableView": false,
+                                      "key": "html",
+                                      "customConditional": "show = row.totalAverageSales > 0;",
+                                      "type": "htmlelement",
+                                      "input": false,
+                                      "hideOnChildrenHidden": false
                                     },
                                     {
                                       "label": "Columns",
@@ -16740,6 +16636,27 @@
                                       "hideLabel": true
                                     },
                                     {
+                                      "label": "Minimum Recommended Business Income Limit",
+                                      "prefix": "$",
+                                      "mask": false,
+                                      "spellcheck": true,
+                                      "disabled": true,
+                                      "tableView": false,
+                                      "defaultValue": 0,
+                                      "delimiter": false,
+                                      "requireDecimal": true,
+                                      "inputFormat": "plain",
+                                      "customDefaultValue": "value =\r\n  row.totalAverageSales * row.coinsuranceamount\r\n    ? row.totalAverageSales * row.coinsuranceamount\r\n    : 0;",
+                                      "calculateValue": "var calculateValue = row.totalAverageSales * (row.coinsuranceamount / 100);\r\nvalue = calculateValue ? calculateValue : 0;",
+                                      "key": "recommendedbuisness",
+                                      "customConditional": "show = row.coinsuranceamount;",
+                                      "type": "number",
+                                      "decimalLimit": 2,
+                                      "input": true,
+                                      "hideOnChildrenHidden": false,
+                                      "inputType": "number"
+                                    },
+                                    {
                                       "label": "Columns",
                                       "input": false,
                                       "tableView": false,
@@ -16820,68 +16737,25 @@
                                       "hideLabel": true
                                     },
                                     {
-                                      "label": "Columns",
-                                      "input": false,
+                                      "label": "Minimum Recommended Business Income Limit - Monthly Limitation",
+                                      "placeholder": "Minimum Recommended Business income Limit - Monthly Limitation",
+                                      "prefix": "$",
+                                      "mask": false,
+                                      "spellcheck": true,
+                                      "disabled": true,
                                       "tableView": false,
-                                      "key": "page3PanelColumns6",
-                                      "columns": [
-                                        {
-                                          "components": [
-                                            {
-                                              "label": "Minimum Recommended Business Income Limit",
-                                              "placeholder": "Minimum Recommended Business Income Limit",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "disabled": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "calculateValue": "value=(data.monthlygrossprofit+data.monthlygrossprofitotherthancar)*(data.coinsuranceamount/100)",
-                                              "key": "recommendedbuisness",
-                                              "type": "number",
-                                              "decimalLimit": 2,
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "inputType": "number"
-                                            }
-                                          ],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
-                                        },
-                                        {
-                                          "components": [
-                                            {
-                                              "label": "Minimum Recommended Business income Limit - Monthly Limitation",
-                                              "placeholder": "Minimum Recommended Business income Limit - Monthly Limitation",
-                                              "mask": false,
-                                              "spellcheck": true,
-                                              "disabled": true,
-                                              "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
-                                              "inputFormat": "plain",
-                                              "calculateValue": "value=(data.monthlygrossprofit+data.monthlygrossprofitotherthancar)*data.bimonthlylimitation",
-                                              "key": "monthlylimitation",
-                                              "type": "number",
-                                              "decimalLimit": 2,
-                                              "input": true,
-                                              "hideOnChildrenHidden": false,
-                                              "inputType": "number"
-                                            }
-                                          ],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
-                                        }
-                                      ],
-                                      "type": "columns",
-                                      "hideLabel": true
+                                      "defaultValue": 0,
+                                      "delimiter": false,
+                                      "requireDecimal": true,
+                                      "inputFormat": "plain",
+                                      "calculateValue": "value =\r\n  row.totalAverageSales * row.bimonthlylimitation\r\n    ? row.totalAverageSales * row.bimonthlylimitation\r\n    : 0;",
+                                      "key": "monthlylimitation",
+                                      "customConditional": "show= row.bimonthlylimitation;",
+                                      "type": "number",
+                                      "decimalLimit": 2,
+                                      "input": true,
+                                      "hideOnChildrenHidden": false,
+                                      "inputType": "number"
                                     },
                                     {
                                       "label": "Columns",
@@ -16892,28 +16766,27 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
-                                              "label": "BI Waiting Period",
+                                              "label": "Business Interruption Waiting Period",
+                                              "optionsLabelPosition": "right",
+                                              "inline": false,
+                                              "tableView": false,
+                                              "values": [
+                                                {
+                                                  "label": "None",
+                                                  "value": "none",
+                                                  "shortcut": ""
+                                                },
+                                                {
+                                                  "label": "24 Hours",
+                                                  "value": "24Hours",
+                                                  "shortcut": ""
+                                                }
+                                              ],
+                                              "dataType": "auto",
                                               "key": "biwaitingperiod",
-                                              "data": {
-                                                "values": [
-                                                  {
-                                                    "value": "24Hours",
-                                                    "label": "24 hours"
-                                                  },
-                                                  {
-                                                    "value": "none",
-                                                    "label": "None"
-                                                  }
-                                                ]
-                                              },
-                                              "validate": { "required": true },
-                                              "type": "select",
-                                              "hideOnChildrenHidden": false,
-                                              "placeholder": "BI Waiting Period",
-                                              "defaultValue": "24Hours",
-                                              "lockKey": true
+                                              "type": "radio",
+                                              "input": true,
+                                              "hideOnChildrenHidden": false
                                             }
                                           ],
                                           "width": 6,
@@ -16996,41 +16869,14 @@
                                       "hideLabel": true
                                     },
                                     {
-                                      "label": "Columns",
-                                      "input": false,
-                                      "tableView": false,
-                                      "key": "page3PanelColumns9",
-                                      "columns": [
-                                        {
-                                          "components": [
-                                            {
-                                              "input": true,
-                                              "tableView": true,
-                                              "label": "Fences",
-                                              "key": "fences",
-                                              "type": "textfield",
-                                              "hideOnChildrenHidden": false,
-                                              "placeholder": "Fences",
-                                              "lockKey": true
-                                            }
-                                          ],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
-                                        },
-                                        {
-                                          "components": [],
-                                          "width": 6,
-                                          "offset": 0,
-                                          "push": 0,
-                                          "pull": 0,
-                                          "size": "md"
-                                        }
-                                      ],
-                                      "type": "columns",
-                                      "hideLabel": true
+                                      "input": true,
+                                      "tableView": true,
+                                      "label": "Fences",
+                                      "key": "fences",
+                                      "type": "textfield",
+                                      "hideOnChildrenHidden": false,
+                                      "placeholder": "Fences",
+                                      "lockKey": true
                                     },
                                     {
                                       "label": "Columns",
@@ -17041,14 +16887,19 @@
                                         {
                                           "components": [
                                             {
+                                              "label": "Sign(s) <10k attached to the building",
+                                              "prefix": "$",
+                                              "mask": false,
+                                              "spellcheck": true,
+                                              "tableView": false,
+                                              "delimiter": false,
+                                              "requireDecimal": true,
+                                              "inputFormat": "plain",
+                                              "key": "signsLessThan",
+                                              "type": "number",
+                                              "decimalLimit": 2,
                                               "input": true,
-                                              "tableView": true,
-                                              "label": "Sign(s) <10k attached to the bldg",
-                                              "key": "signs",
-                                              "type": "textfield",
-                                              "hideOnChildrenHidden": false,
-                                              "placeholder": "Sign(s) <10k attached to the bldg",
-                                              "lockKey": true
+                                              "hideOnChildrenHidden": false
                                             }
                                           ],
                                           "width": 6,
@@ -17060,14 +16911,19 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
                                               "label": "Sign(s) > 10k attached to the bldg",
-                                              "key": "signsgreaterthan",
-                                              "type": "textfield",
+                                              "prefix": "$",
+                                              "mask": false,
+                                              "spellcheck": true,
+                                              "tableView": false,
+                                              "delimiter": false,
+                                              "requireDecimal": true,
+                                              "inputFormat": "plain",
+                                              "key": "signsGreaterThan",
+                                              "type": "number",
+                                              "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "placeholder": "Sign(s) > 10k attached to the bldg",
-                                              "lockKey": true
+                                              "decimalLimit": 2
                                             }
                                           ],
                                           "width": 6,
@@ -17230,6 +17086,161 @@
                                             }
                                           ],
                                           "width": 6,
+                                          "offset": 0,
+                                          "push": 0,
+                                          "pull": 0,
+                                          "size": "md"
+                                        }
+                                      ],
+                                      "type": "columns",
+                                      "hideLabel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "label": "Storage Tank",
+                              "key": "storageTank",
+                              "components": [
+                                {
+                                  "label": "storagetank",
+                                  "tableView": false,
+                                  "key": "storagetank",
+                                  "type": "well",
+                                  "input": false,
+                                  "components": [
+                                    {
+                                      "label": "Columns",
+                                      "columns": [
+                                        {
+                                          "components": [
+                                            {
+                                              "label": "Tank #",
+                                              "placeholder": "Tank #",
+                                              "tableView": true,
+                                              "key": "pollutiontank",
+                                              "type": "textfield",
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "lockKey": true
+                                            }
+                                          ],
+                                          "width": 6,
+                                          "offset": 0,
+                                          "push": 0,
+                                          "pull": 0,
+                                          "size": "md"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "label": "Tank Contents",
+                                              "placeholder": "Tank Contents",
+                                              "tableView": true,
+                                              "key": "tankcontents",
+                                              "type": "textfield",
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "lockKey": true
+                                            }
+                                          ],
+                                          "width": 6,
+                                          "offset": 0,
+                                          "push": 0,
+                                          "pull": 0,
+                                          "size": "md"
+                                        }
+                                      ],
+                                      "hideLabel": true,
+                                      "tableView": false,
+                                      "key": "pageNaNColumns1",
+                                      "type": "columns",
+                                      "input": false
+                                    },
+                                    {
+                                      "label": "Columns",
+                                      "input": false,
+                                      "tableView": false,
+                                      "key": "pageNaNColumns23",
+                                      "columns": [
+                                        {
+                                          "components": [
+                                            {
+                                              "label": "Other Tank Contents",
+                                              "placeholder": "Other Tank Contents",
+                                              "tableView": true,
+                                              "key": "othertankcontents",
+                                              "type": "textfield",
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "lockKey": true
+                                            }
+                                          ],
+                                          "width": 4,
+                                          "offset": 0,
+                                          "push": 0,
+                                          "pull": 0,
+                                          "size": "md"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "label": "Installation Date",
+                                              "format": "MM/dd/yyyy",
+                                              "placeholder": "Installation Date",
+                                              "tableView": false,
+                                              "datePicker": {
+                                                "disableWeekends": false,
+                                                "disableWeekdays": false,
+                                                "datepickerMode": "day"
+                                              },
+                                              "enableTime": false,
+                                              "key": "installationdate",
+                                              "type": "datetime",
+                                              "input": true,
+                                              "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+                                              "widget": {
+                                                "type": "calendar",
+                                                "displayInTimezone": "viewer",
+                                                "language": "en",
+                                                "useLocaleSettings": false,
+                                                "allowInput": true,
+                                                "mode": "single",
+                                                "enableTime": false,
+                                                "noCalendar": false,
+                                                "format": "MM/dd/yyyy",
+                                                "hourIncrement": 1,
+                                                "minuteIncrement": 1,
+                                                "time_24hr": false,
+                                                "minDate": null,
+                                                "disableWeekends": false,
+                                                "disableWeekdays": false,
+                                                "maxDate": null
+                                              },
+                                              "hideOnChildrenHidden": false
+                                            }
+                                          ],
+                                          "width": 4,
+                                          "offset": 0,
+                                          "push": 0,
+                                          "pull": 0,
+                                          "size": "md"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "label": "Tank Capacity",
+                                              "placeholder": "Tank Capacity",
+                                              "tableView": true,
+                                              "key": "tankcapacity",
+                                              "type": "textfield",
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "lockKey": true
+                                            }
+                                          ],
+                                          "width": 4,
                                           "offset": 0,
                                           "push": 0,
                                           "pull": 0,
@@ -18387,7 +18398,7 @@
         },
         {
           "label": "GAIC Epli PDF Data",
-          "calculateValue": "value = {\n  cityStateZip: data.city + \",\" + data.state  + \",\" + data.zip,\n  fullTimeEmployee:\n    data.fTEmployeesFurnishedAnAuto +\n    data.fTEmployeesWhoAreNotFurnished +\n    data.fTAllOtherEmployees,\n  partTimeEmployee:\n    data.pTEmployeesFurnishedAnAuto +\n    data.pTEmployeesWhoAreNotFurnished +\n    data.pTAllOtherEmployees,\n  fullName: data.genfirstname + data.genlastname\n};",
+          "calculateValue": "value = {\n  \"City, State, Zip\": data.city + \",\" + data.state  + \",\" + data.zip,\n  \"a full time employees\":\n    data.fTEmployeesFurnishedAnAuto +\n    data.fTEmployeesWhoAreNotFurnished +\n    data.fTAllOtherEmployees,\n  \"b part time employees\":\n    data.pTEmployeesFurnishedAnAuto +\n    data.pTEmployeesWhoAreNotFurnished +\n    data.pTAllOtherEmployees,\n  Name: data.genfirstname + data.genlastname\n};",
           "key": "gaicEpliPdfData",
           "type": "hidden",
           "input": true,
@@ -18407,7 +18418,7 @@
   ],
   "controller": "",
   "revisions": "current",
-  "_vid": 16,
+  "_vid": 49,
   "title": "copyLocationForm",
   "display": "wizard",
   "access": [
@@ -18433,6 +18444,6 @@
   "path": "copylocationform",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-06-18T21:12:14.042Z",
-  "modified": "2020-06-18T23:48:55.216Z",
+  "modified": "2020-06-23T19:58:49.374Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:copyLocationForm"
 }

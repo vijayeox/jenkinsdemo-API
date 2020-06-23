@@ -38,7 +38,7 @@ class QuoteDocument extends PolicyDocument
                      'groupExclusions' => 'Group_Exclusions.pdf'),
         'Dive Store' 
             => array(
-                     'template' => 'DiveCenterProposal_Template', 
+                     'template' => 'DiveCenterProposal', 
                      'header' => 'DiveCenterProposal_header.html',
                      'footer' => 'DiveCenterProposal_footer.html', 
                      'psTemplate' => 'DiveStore_Proposal_Premium_Summary',
