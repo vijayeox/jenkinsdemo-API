@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using Range = Microsoft.Office.Interop.Excel.Range;
 using Shape = Microsoft.Office.Interop.Excel.Shape;
 using ArrowHeadWebService;
+using RestSharp;
 
 namespace ProcessExcel
 {
@@ -27,15 +28,16 @@ namespace ProcessExcel
 
         private Settings _settings;
 
+        private string _fileuuid;
         public ProcessExcel(Settings settings)
         {
             _settings = settings;
         }
 
-        public void processFile(string baseFolder, string filename)
+        public void processFile(string baseFolder, string filename,string fileuuid)
         {
             Errorflag = false;
-
+            _fileuuid = fileuuid;
             this.baseDirectory = baseFolder;
             string fname = System.IO.Path.GetFileName(filename);
             string fnameSource = DateTime.Now.ToString("MMddyyyyhhmmss") + "-" + _settings.dwFile;
@@ -67,8 +69,17 @@ namespace ProcessExcel
                 excel.Quit();
                 LogProcess("In Catch - Workbook Closed");
                 File.Move(this.baseDirectory + @"\Templates\" + fnameSource, this.baseDirectory + @"\Errors\" + fnameSource);
+                PostError(fnameSource, 1);
                 LogProcess("In Catch - Moved to Error Folder");
                 Logerror("Error - In Catch - " + e.Message, fnameSource);
+            } finally
+            {
+                Process[] excelProcs = Process.GetProcessesByName("EXCEL");
+                foreach (Process proc in excelProcs)
+                {
+                    proc.Kill();
+                }
+
             }
 
         }
@@ -119,21 +130,43 @@ namespace ProcessExcel
         private void MapData(string vFolder, string vFile, string[,] aMapping, int vTotalCount, Workbook vCurWorkbook, Worksheet vMappingWorkSheet)
         {
             Application excel = new Application();
+
             Workbook wbDealer = excel.Workbooks.Open(vFolder + "\\" + _settings.dwFile);
             string fCarrier = DateTime.Now.ToString("MMddyyyyhhmmss") + "-" + vFile;
             File.Copy(vFolder + "\\" + vFile, vFolder + "\\" + fCarrier);
             Workbook wbCarrier = excel.Workbooks.Open(vFolder + "\\" + fCarrier);
             wbCarrier.Activate();
-            for (int i = 1; i <= vTotalCount; i++)
+            try
             {
-                Copycells(vCurWorkbook, wbDealer, wbCarrier, aMapping, i);
-            }
-            wbCarrier.Save();
-            wbCarrier.Close();
-            wbDealer.Close();
-            PostFile(vFolder + "\\" + fCarrier);
-            File.Move(vFolder + "\\" + fCarrier, this.baseDirectory + "\\Processed\\" + fCarrier);
-            excel.Quit();
+                for (int i = 1; i <= vTotalCount; i++)
+                {
+                    Copycells(vCurWorkbook, wbDealer, wbCarrier, aMapping, i);
+                }
+                wbCarrier.Save();
+                wbCarrier.Close();
+                wbDealer.Close();
+                PostFile(vFolder,fCarrier);
+                File.Move(vFolder + "\\" + fCarrier, this.baseDirectory + "\\Processed\\" + fCarrier);
+                excel.Quit();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
+            } catch (Exception e)
+            {
+                if (wbDealer!=null)
+                {
+                    wbDealer.Close();
+                }
+                if (wbCarrier!=null)
+                {
+                    Logerror("Error:" + e, wbCarrier.Name);
+                    wbCarrier.Close();
+                } else
+                {
+                    Logerror("Error:" + e, wbDealer.Name);
+                }
+                excel.Quit();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
+                PostError(wbCarrier.Name, 0);
+            } 
         }
 
         private void Copycells(Workbook vCurWorkbook, Workbook wbDealer, Workbook wbCarrier, string[,] aMapping, int i)
@@ -185,9 +218,10 @@ namespace ProcessExcel
 
         public void Logerror(string errormsg, string fname)
         {
-            using (StreamWriter errorfile = File.AppendText(this.baseDirectory + @"\Errors\error.txt"))
+            fname = fname.Replace(".", "-");
+            using (StreamWriter errorfile = File.AppendText(this.baseDirectory + @"\Errors\" + fname + "-error.txt"))
             {
-                errorfile.WriteLine("Error Processing File " + fname + ":" + errormsg);
+                errorfile.WriteLine(errormsg);
                 errorfile.Close();
             }
             Errorflag = true;
@@ -212,14 +246,33 @@ namespace ProcessExcel
             }
         }
 
-        private void PostFile(string fileName)
+        private void PostFile(string folder, string fileName)
         {
-            string url = _settings.postURL;
-            using (var client = new WebClient())
-            {
-                byte[] result = client.UploadFile(url, fileName);
-                string responseAsString = Encoding.Default.GetString(result);
+            var client = new RestClient(_settings.postURL);
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddFile("outputfile", folder + "\\" + fileName);
+            string fname = fileName.Replace(".", "-");
+                if (File.Exists(this.baseDirectory + @"\Errors\" + fname + "-error.txt")) {
+                request.AddFile("errorfile", this.baseDirectory + @"\Errors\" + fname + "-error.txt");
             }
+            request.AddParameter("filename", fileName);
+            request.AddParameter("status", 1);
+            request.AddParameter("fileuuid", _fileuuid);
+            IRestResponse response = client.Execute(request);
         }
+
+        private void PostError(string fileName,int allflag)
+        {
+            var client = new RestClient(_settings.postURL);
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddParameter("filename", fileName);
+            request.AddParameter("fileuuid", _fileuuid);
+            request.AddParameter("allfiles", allflag);
+            request.AddParameter("status", 0);
+            IRestResponse response = client.Execute(request);
+        }
+
     }
 }
