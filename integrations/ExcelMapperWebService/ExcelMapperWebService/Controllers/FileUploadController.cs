@@ -38,10 +38,14 @@ namespace ArrowHeadWebService.Controllers
         }
 
         [HttpPost]
-        public async Task<ContentResult> Post([FromForm] FileUploadAPI objFile)
+        public async Task<ContentResult> Post([FromForm] FileUploadAPI objFile, [FromForm] string fileuuid)
         {
             try
             {
+                if (fileuuid == null)
+                {
+                    return Content("{\"Status\":\"Failed\",\"Message\":\"No File ID sent\"}", "application/json");
+                }
                 if (objFile.files !=null)
                 {
                     if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
@@ -54,7 +58,7 @@ namespace ArrowHeadWebService.Controllers
                         fileStream.Flush();
                     }
                     ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
-                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName); }).Start();                    
+                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName, fileuuid); }).Start();                    
                     return Content("{\"Status\":1,\"Message\":\"" + objFile.files.FileName+" file Uploaded\"}", "application/json");
                 }
                 else
