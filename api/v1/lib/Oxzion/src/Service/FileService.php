@@ -419,7 +419,7 @@ class FileService extends AbstractService
                 }
                 $keyValueFields[$i]['file_id'] = $fileId;
                 $keyValueFields[$i]['field_id'] = $field['id'];
-                $fieldvalue = isset($fieldData[$field['name']]) ? is_array($fieldData[$field['name']]) ? json_encode($fieldData[$field['name']]) : $fieldData[$field['name']] : null;
+                $fieldvalue = isset($fieldData[$field['name']]) ? (is_array($fieldData[$field['name']]) ? json_encode($fieldData[$field['name']]) : $fieldData[$field['name']]) : null;
                 $keyValueFields[$i]['field_value']=$fieldvalue;
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                 $keyValueFields[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
@@ -427,7 +427,10 @@ class FileService extends AbstractService
                 $keyValueFields[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
                 $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
                 $keyValueFields[$i] = array_merge($keyValueFields[$i],$this->generateFieldPayload($field['data_type'],$field,$keyValueFields[$i],$fieldvalue,$entityId,$fileId,$fileArray));
-                $keyValueFields['data'][$field['name']] = $keyValueFields[$i][$field['name']];
+                if($field['type'] == 'file'){
+                    $keyValueFields['data'][$field['name']] = isset($keyValueFields[$i][$field['name']]) ? $keyValueFields[$i][$field['name']] : array();    
+                }
+
                 if( isset($keyValueFields[$i]['childFields']) && count($keyValueFields[$i]['childFields']) > 0){
                     foreach ($keyValueFields[$i]['childFields'] as $childField) {
                         array_push($childFields, $childField);
@@ -439,7 +442,6 @@ class FileService extends AbstractService
                 }else if(array_key_exists('data',$keyValueFields[$i])){
                      unset($keyValueFields[$i]['data']);
                 }
-                $fieldData[$field['name']] = $fieldvalue;
                 unset($keyValueFields[$i]['childFields']);
                 unset($indexedFields[$i]['childFields']);
                 unset($keyValueFields[$i][$field['name']]);
@@ -467,16 +469,6 @@ class FileService extends AbstractService
         $this->logger->info("Key Values - " . json_encode($keyValueFields));
         $this->logger->info("Indexed Values - " . json_encode($indexedFields));
         return array('validFields' => $keyValueFields,'indexedFields' => $indexedFields);
-    }
-
-
-    private function parseKeyValueFieldsData($data){
-        foreach($data as $key => $value){
-            if(is_string($value)){
-                $data[$key] = $this->parseKeyValueFieldsData($data[$key]);
-            } 
-
-        }
     }
 
     private function generateFieldPayload($dataType,$field,$fieldData,&$fieldvalue,$entityId,$fileId,$fileArray){
@@ -533,7 +525,7 @@ class FileService extends AbstractService
                 $fieldData['field_value_boolean'] = NULL;
                 $fieldData['field_value_date'] = NULL;
                 if($field['type']=='file'){
-                    $attachmentsArray = $fieldvalue;
+                    $attachmentsArray = is_string($fieldvalue) ? json_decode($fieldvalue,true) : $fieldvalue;
                     $finalAttached = array();
                     if(is_array($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
@@ -616,7 +608,7 @@ class FileService extends AbstractService
                         }
                         $childFieldsArray[$i]['file_id'] = $fileId;
                         $childFieldsArray[$i]['field_id'] = $field['id'];
-                        $val = isset($value[$field['name']]) ? is_array($value[$field['name']]) ? json_encode($value[$field['name']]) : $value[$field['name']] : null;
+                        $val = isset($value[$field['name']]) ? (is_array($value[$field['name']]) ? json_encode($value[$field['name']]) : $value[$field['name']]) : null;
                         $childFieldsArray[$i]['field_value']=$val;
                         $childFieldsArray[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                         $childFieldsArray[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
@@ -632,6 +624,9 @@ class FileService extends AbstractService
                             unset($childFieldsArray[$i]['childFields']);
                         }
                         $childFieldValues[$field['name']] = isset($value[$field['name']]) ? $value[$field['name']] : null;
+                        if($field['type'] == 'file'){
+                            $childFieldValues[$field['name']] = isset($childFieldsArray[$i][$field['name']]) ? $childFieldsArray[$i][$field['name']] : array();
+                        }
                         unset($childFieldsArray[$i][$field['name']]);
                         $i++;
                     }

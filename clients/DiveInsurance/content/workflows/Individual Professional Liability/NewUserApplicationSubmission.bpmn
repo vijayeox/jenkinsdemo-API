@@ -139,9 +139,12 @@ boolean result8 = false
 
 if (additionalInsured) {
  additionalInsured.each {
-  if (it.businessRelation == 'other') {
+  if (it.hasProperty('businessRelation') &amp;&amp; it.businessRelation == 'other') {
     result1 = true
   }
+  if (it.hasProperty('doYouHaveAWrittenContract') &amp;&amp; it.doYouHaveAWrittenContract=='no'){
+    result1 = true
+}
  }
 }
 

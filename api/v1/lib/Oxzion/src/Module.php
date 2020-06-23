@@ -339,11 +339,6 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\UserToken());
                     return new TableGateway('ox_user_refresh_token', $dbAdapter, null, $resultSetPrototype);
                 },
-                Analytics\AnalyticsEngine::class => function ($container) {
-                    $config = $container->get('config');
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Analytics\Elastic\AnalyticsEngineImpl($config,$dbAdapter,$config);
-                },
                 Search\SearchEngine::class => function ($container) {
                     $config = $container->get('config');
                     return new Search\Elastic\SearchEngineImpl($config);
