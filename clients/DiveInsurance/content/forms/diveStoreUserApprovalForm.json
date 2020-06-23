@@ -63,7 +63,6 @@
             "label": "Decline",
             "shortcut": ""
           }],
-          "calculateServer": false,
           "validate": {
             "required": true
           },
@@ -77,7 +76,6 @@
         }, {
           "label": "Could you let us know the Reason for Rejecting the Quote?",
           "autoExpand": false,
-          "spellcheck": true,
           "tableView": true,
           "validate": {
             "required": true
@@ -123,7 +121,6 @@
         "fileMaxSize": "10MB",
         "multiple": true,
         "clearOnHide": false,
-        "calculateServer": false,
         "validate": {
           "custom": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
           "multiple": true
@@ -155,7 +152,6 @@
       "components": [{
         "label": "payment",
         "calculateValue": "value = 'true';",
-        "calculateServer": false,
         "key": "payment",
         "type": "hidden",
         "input": true,
@@ -170,7 +166,6 @@
       }, {
         "label": "amountPayable",
         "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n  var month =moment(data.start_date).month() +1;\n  var day = moment(data.start_date).format('DD');\n  if((day == 30 && month == 6) || month == 7){\n    value = (parseFloat(data.totalAmount).toFixed(2))*30/100;\n    data.paymentInstallments = 6;\n  } else if(month == 8){\n    value = (parseFloat(data.totalAmount).toFixed(2))*35/100;\n    data.paymentInstallments = 5;\n  }else if(month == 9){\n    value = (parseFloat(data.totalAmount).toFixed(2))*40/100;\n    data.paymentInstallments = 4;\n  } else if(month == 10){\n    value = (parseFloat(data.totalAmount).toFixed(2))*45/100;\n    data.paymentInstallments = 3;\n  } else {\n    value = parseFloat(data.totalAmount).toFixed(2);\n    data.paymentInstallments = 0;\n  }\n} else {\nvalue = parseFloat(data.totalAmount).toFixed(2);\ndata.paymentInstallments = 0;\n}",
-        "calculateServer": false,
         "key": "amountPayable",
         "type": "hidden",
         "input": true,
@@ -178,14 +173,12 @@
       }, {
         "label": "amount",
         "calculateValue": "value = data.totalAmount",
-        "calculateServer": false,
         "key": "amount",
         "type": "hidden",
         "input": true,
         "tableView": false
       }, {
         "label": "transaction_reference_number",
-        "calculateServer": false,
         "key": "transactionReferenceNumber",
         "type": "hidden",
         "input": true,
@@ -203,15 +196,13 @@
             "delimiter": true,
             "requireDecimal": true,
             "inputFormat": "plain",
-            "redrawOn": "amountPayable",
             "clearOnHide": false,
             "calculateValue": "value = data.amountPayable",
-            "calculateServer": false,
             "key": "finalAmountPayable",
             "type": "number",
+            "decimalLimit": 2,
             "input": true,
             "inputType": "text",
-            "decimalLimit": 2,
             "hideOnChildrenHidden": false
           }, {
             "label": "Would you like to apply for Premium Finance?",
@@ -228,7 +219,6 @@
               "shortcut": ""
             }],
             "clearOnHide": false,
-            "calculateServer": false,
             "validate": {
               "required": true
             },
@@ -237,18 +227,56 @@
             "input": true,
             "hideOnChildrenHidden": false
           }, {
-            "label": "HTML",
-            "attrs": [{
-              "attr": "",
-              "value": ""
-            }],
-            "content": "<h3>Number of Installments would be {{data.paymentInstallments}}</h3>",
-            "refreshOnChange": false,
+            "label": "billing_amount",
+            "calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
+            "key": "billing_amount",
+            "type": "hidden",
+            "input": true,
             "tableView": false,
-            "key": "html",
-            "customConditional": "if(data.premiumFinanceSelect == \"yes\" && data.paymentInstallments > 0){\n  show = true;\n}",
-            "type": "htmlelement",
+            "hideOnChildrenHidden": false
+          }, {
+            "title": "Premium Finance",
+            "theme": "primary",
+            "collapsible": false,
+            "tableView": false,
+            "key": "installments",
+            "conditional": {
+              "show": true,
+              "when": "premiumFinanceSelect",
+              "eq": "yes"
+            },
+            "type": "panel",
+            "label": "Installments",
+            "buttonSettings": {
+              "previous": true,
+              "cancel": true,
+              "next": true
+            },
+            "breadcrumbClickable": true,
             "input": false,
+            "components": [{
+              "label": "premium_finance",
+              "key": "premium_finance",
+              "type": "hidden",
+              "input": true,
+              "tableView": false,
+              "hideOnChildrenHidden": false
+            }, {
+              "label": "Down Payment",
+              "prefix": "$",
+              "mask": false,
+              "spellcheck": false,
+              "disabled": true,
+              "tableView": false,
+              "delimiter": false,
+              "requireDecimal": false,
+              "inputFormat": "plain",
+              "clearOnHide": false,
+              "calculateValue": "value = parseFloat(25 * amountPayable / 100).toFixed(0);",
+              "key": "downPayment",
+              "type": "number",
+              "input": true
+            }],
             "hideOnChildrenHidden": false
           }, {
             "label": "Payment Options",
@@ -273,7 +301,6 @@
               "shortcut": ""
             }],
             "clearOnHide": false,
-            "calculateServer": false,
             "validate": {
               "required": true
             },
@@ -281,9 +308,34 @@
             "properties": {
               "render": "columns"
             },
+            "logic": [{
+              "name": "Disable on Installment Payment",
+              "trigger": {
+                "type": "simple",
+                "simple": {
+                  "when": "premiumFinanceSelect",
+                  "eq": "yes"
+                }
+              },
+              "actions": [{
+                "name": "Select Credit Card",
+                "type": "value",
+                "value": "return \"creditCard\""
+              }, {
+                "name": "Disable Options",
+                "type": "property",
+                "property": {
+                  "label": "Disabled",
+                  "value": "disabled",
+                  "type": "boolean"
+                },
+                "state": true
+              }]
+            }],
             "type": "radio",
             "input": true,
-            "hideOnChildrenHidden": false
+            "hideOnChildrenHidden": false,
+            "defaultValue": "creditCard"
           }],
           "width": 6,
           "offset": 0,
@@ -314,10 +366,6 @@
               "requireDecimal": false,
               "inputFormat": "plain",
               "clearOnHide": false,
-              "calculateServer": false,
-              "validate": {
-                "required": true
-              },
               "key": "chequeNumber",
               "type": "number",
               "input": true,
@@ -332,7 +380,6 @@
                 "value": ""
               }],
               "clearOnHide": false,
-              "calculateServer": false,
               "key": "chequeConsentForm",
               "type": "file",
               "url": "/file/attachment",
@@ -360,7 +407,6 @@
               "tableView": false,
               "clearOnHide": false,
               "calculateValue": "value = data.transaction_reference_number",
-              "calculateServer": false,
               "key": "transactionId",
               "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
               "type": "textfield",
@@ -368,7 +414,7 @@
             }, {
               "type": "convergepay",
               "key": "creditcardPayment",
-              "amount_field": "amountPayable",
+              "amount_field": "billing_amount",
               "label": "custom",
               "input": true,
               "tableView": false,
@@ -379,7 +425,7 @@
                 "value": "",
                 "attr": ""
               }],
-              "content": "</br><b><font color=\"red\">If you click \"Submit Application\", your credit card will be charged for the amount shown above. \nTo avoid duplicate charges to your credit card, click \"Submit Application\" only once.</b></font>",
+              "content": "</br><b><font color=\"red\">If you click \"Confirm Order\", your credit card will be charged for the amount shown above.</b></font>",
               "refreshOnChange": false,
               "tableView": false,
               "key": "page7Content",
@@ -411,13 +457,8 @@
             "hideOnChildrenHidden": false,
             "components": [{
               "label": "Order ID",
-              "spellcheck": true,
               "tableView": true,
               "clearOnHide": false,
-              "calculateServer": false,
-              "validate": {
-                "required": true
-              },
               "key": "orderId",
               "type": "textfield",
               "input": true,
@@ -478,7 +519,6 @@
             "requireDecimal": true,
             "inputFormat": "plain",
             "clearOnHide": false,
-            "calculateServer": false,
             "key": "paymentRecieved",
             "type": "number",
             "decimalLimit": 2,
@@ -493,7 +533,6 @@
             "delimiter": true,
             "requireDecimal": true,
             "inputFormat": "plain",
-            "calculateServer": false,
             "key": "amountPending",
             "type": "number",
             "decimalLimit": 2,
@@ -533,16 +572,13 @@
           "shortcut": ""
         }],
         "clearOnHide": false,
-        "calculateServer": false,
         "key": "paymentVerified",
         "type": "radio",
         "input": true
       }, {
         "label": "Notes",
         "autoExpand": false,
-        "spellcheck": true,
         "tableView": true,
-        "calculateServer": false,
         "key": "notes",
         "type": "textarea",
         "input": true
@@ -560,7 +596,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 12,
+  "_vid": 14,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -577,6 +613,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-03T16:02:14.266Z",
+  "modified": "2020-06-23T14:28:58.102Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

@@ -185,7 +185,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:userTask id="UserTask_1teet0g" name="CSR Payment Verification" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
         <camunda:properties>
-          <camunda:property name="template" value="diveStoreUserApprovalForm" />
+          <camunda:property name="template" value="endorsementDiveStoreUserApproval" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_06slfa1</bpmn:incoming>
