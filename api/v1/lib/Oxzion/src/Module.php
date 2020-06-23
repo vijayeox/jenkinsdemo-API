@@ -48,7 +48,9 @@ class Module
                         $container->get(Service\AddressService::class),
                         $container->get(Service\EmailService::class),
                         $container->get(Service\TemplateService::class),
-                        $container->get(Messaging\MessageProducer::class)
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\UserProfileService::class),
+                        $container->get(Service\EmployeeService::class)
                     );
                 },
                 Model\UserTable::class => function ($container) {
@@ -279,6 +281,51 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\OrganizationProfile());
                     return new TableGateway(
                         'ox_organization_profile',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\UserProfileService::class => function ($container) {
+                    return new Service\UserProfileService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Service\AddressService::class),
+                        $container->get(Model\UserProfileTable::class)
+                    );
+                },
+                 Model\UserProfileTable::class => function ($container) {
+                    return new Model\UserProfileTable(
+                        $container->get(Model\UserProfileTableGateway::class)
+                    );
+                },
+                Model\UserProfileTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\UserProfile());
+                    return new TableGateway(
+                        'ox_user_profile',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\EmployeeService::class => function ($container) {
+                    return new Service\EmployeeService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\EmployeeTable::class)
+                    );
+                },
+                 Model\EmployeeTable::class => function ($container) {
+                    return new Model\EmployeeTable(
+                        $container->get(Model\EmployeeTableGateway::class)
+                    );
+                },
+                Model\EmployeeTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Employee());
+                    return new TableGateway(
+                        'ox_employee',
                         $container->get(AdapterInterface::class),
                         null,
                         $resultSetPrototype

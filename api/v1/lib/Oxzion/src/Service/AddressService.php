@@ -58,6 +58,7 @@ class AddressService extends AbstractService
             $count = $this->table->save($form);
             $this->commit();
         } catch (Exception $e) {
+            $this->rollback();
             throw $e;
         }
     }
