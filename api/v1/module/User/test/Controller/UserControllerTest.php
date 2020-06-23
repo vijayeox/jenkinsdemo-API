@@ -56,7 +56,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateByAdmin()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -69,7 +69,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
-        $query = "SELECT id,address_id from ox_user where username = '" .$data['username']."'";
+        $query = "SELECT ox_user.id,usrp.address_id from ox_user join ox_user_profile usrp on usrp.id=ox_user.user_profile_id where username = '" .$data['username']."'";
         $userId = $this->executeQueryTest($query);
 
         $query = "SELECT * from ox_address where id = ".$userId[0]['address_id'];
@@ -80,6 +80,9 @@ class UserControllerTest extends ControllerTest
 
         $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
         $userRole = $this->executeQueryTest($query);
+
+        $query = "SELECT designation,date_of_join from ox_employee inner join ox_user on ox_user.user_profile_id = ox_employee.user_profile_id  where username = '" .$data['username']."'";
+        $empDetails = $this->executeQueryTest($query);
 
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['id']);
@@ -94,12 +97,14 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($address[0]['city'], $data['city']);
         $this->assertEquals($address[0]['state'], $data['state']);
         $this->assertEquals($address[0]['country'], $data['country']);
+        $this->assertEquals($empDetails[0]['designation'], $data['designation']);
+        $this->assertEquals($empDetails[0]['date_of_join'], $data['date_of_join']);
     }
 
     public function testCreateWithRoleOfOtherOrg()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '508572ae-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873a47-a6c2-11e9-b648-68ecc57cde45'])];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d'), 'icon' => 'test-oxzionlogo.png','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '508572ae-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873a47-a6c2-11e9-b648-68ecc57cde45'])];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -118,6 +123,9 @@ class UserControllerTest extends ControllerTest
         $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
         $userRole = $this->executeQueryTest($query);
 
+        $query = "SELECT designation,date_of_join from ox_employee inner join ox_user on ox_user.user_profile_id = ox_employee.user_profile_id  where username = '" .$data['username']."'";
+        $empDetails = $this->executeQueryTest($query);
+
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -127,6 +135,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($userOrg[0]['user_id'], $userId[0]['id']);
         $this->assertEquals($userOrg[0]['org_id'],1);
+        $this->assertEquals($empDetails[0]['designation'], $data['designation']);
+        $this->assertEquals($empDetails[0]['date_of_join'], $data['date_of_join']);
         $this->assertEquals(count($userRole),0);
     }
 
@@ -637,7 +647,7 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $query = "SELECT address_id from ox_user where uuid = '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'";
+        $query = "SELECT address_id from ox_user inner join ox_user_profile on ox_user.user_profile_id = ox_user_profile.id where ox_user.uuid = '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'";
         $addId = $this->executeQueryTest($query);
 
         $query = "SELECT * from ox_address where id = ".$addId[0]['address_id'];
