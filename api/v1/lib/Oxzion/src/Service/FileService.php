@@ -126,7 +126,11 @@ class FileService extends AbstractService
             $this->logger->info("Checking Fields ---- " . print_r($validFields,true));
             $this->multiInsertOrUpdate('ox_file_attribute', $validFields['validFields']);
             if(count($validFields['indexedFields']) > 0 ){
-                $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
+                $insertIndexedFields = array();
+                foreach ($validFields['indexedFields'] as $k => $v) {
+                    $insertIndexedFields[] = $v;
+                }
+                $this->multiInsertOrUpdate('ox_indexed_file_attribute', $insertIndexedFields);
             }
             $this->logger->info("Created successfully  - file record");
             $this->commit();
@@ -234,7 +238,11 @@ class FileService extends AbstractService
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields['validFields']);
                 $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
                 if(count($validFields['indexedFields']) > 0 ){
-                    $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
+                    $insertIndexedFields = array();
+                    foreach ($validFields['indexedFields'] as $k => $v) {
+                        $insertIndexedFields[] = $v;
+                    }
+                    $this->multiInsertOrUpdate('ox_indexed_file_attribute', $insertIndexedFields);
                 }
             }
             $this->logger->info("Leaving the updateFile method \n");
