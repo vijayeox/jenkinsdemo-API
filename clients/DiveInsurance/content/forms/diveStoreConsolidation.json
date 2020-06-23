@@ -26,7 +26,7 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2019.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "columnsContent",
@@ -1452,7 +1452,7 @@
 							"showMeridian": false
 						},
 						"clearOnHide": false,
-						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
+						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nvar day = today.date();\nif(month >= 5){\n  if(month==5 && day==30){\n    value = (year + 1) + \"-06-30\";\n  } else if(month ==5 && day < 30){\n    value = (year) + \"-06-30\";\n  } else {\n    value = (year + 1) + \"-06-30\";\n  }\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 						"key": "end_date",
 						"type": "datetime",
 						"input": true,
@@ -2233,7 +2233,7 @@
 				"mask": false,
 				"spellcheck": true,
 				"tableView": false,
-				"delimiter": false,
+				"delimiter": true,
 				"requireDecimal": false,
 				"inputFormat": "plain",
 				"validate": {
@@ -2553,7 +2553,6 @@
 									"columns": [{
 										"components": [{
 											"label": "From",
-											"labelPosition": "left-left",
 											"tableView": true,
 											"dataFormat": "HH:mm",
 											"key": "time",
@@ -2570,7 +2569,6 @@
 									}, {
 										"components": [{
 											"label": "To",
-											"labelPosition": "left-left",
 											"tableView": true,
 											"dataFormat": "HH:mm",
 											"key": "time1",
@@ -2832,7 +2830,6 @@
 										}, {
 											"components": [{
 												"label": "Height?",
-												"labelPosition": "left-left",
 												"mask": false,
 												"spellcheck": true,
 												"tableView": false,
@@ -3000,28 +2997,28 @@
 								}]
 							}],
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
+							"prefix": "$",
+							"mask": false,
+							"spellcheck": true,
+							"tableView": false,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"validate": {
+								"required": true
+							},
+							"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
+							"conditional": {
+								"show": true,
+								"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+								"eq": "yes"
+							},
+							"type": "number",
+							"input": true,
+							"hideOnChildrenHidden": false
 						}],
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-						"prefix": "$",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": false,
-						"delimiter": true,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"validate": {
-							"required": true
-						},
-						"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
-						"conditional": {
-							"show": true,
-							"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-							"eq": "yes"
-						},
-						"type": "number",
-						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 8,
@@ -3510,6 +3507,14 @@
 				"hideLabel": true,
 				"path": "pageNaNPanel3Columns10"
 			}, {
+				"label": "Excluded Operation",
+				"autoExpand": false,
+				"tableView": true,
+				"key": "excludedOperation",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"type": "textarea",
+				"input": true
+			}, {
 				"key": "dsglstoreprop",
 				"input": false,
 				"title": "Claims Information",
@@ -3580,9 +3585,10 @@
 									"enableMinDateInput": false,
 									"datePicker": {
 										"disableWeekends": false,
-										"disableWeekdays": false
+										"disableWeekdays": false,
+										"maxDate": "moment().startOf('day')"
 									},
-									"enableMaxDateInput": false,
+									"enableMaxDateInput": true,
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
@@ -3611,7 +3617,7 @@
 										"minDate": null,
 										"disableWeekends": false,
 										"disableWeekdays": false,
-										"maxDate": null
+										"maxDate": "moment().startOf('day')"
 									},
 									"hideOnChildrenHidden": false
 								}],
@@ -3724,7 +3730,7 @@
 					"label": "Previous Insurance Company",
 					"tableView": true,
 					"clearOnHide": false,
-					"key": "pageNaNPanel3ColumnsPanelText",
+					"key": "previousInsuranceCompany",
 					"conditional": {
 						"show": true,
 						"when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
@@ -5118,6 +5124,7 @@
 				"components": [{
 					"label": "Additional Insured",
 					"reorder": false,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -5133,7 +5140,9 @@
 						"zip": "",
 						"businessRelation": "",
 						"businessRelationOther": "",
-						"additionalInformation": ""
+						"additionalInformation": "",
+						"doYouHaveAWrittenContract": "",
+						"additionalInsuredAttachments": []
 					}],
 					"clearOnHide": false,
 					"validate": {
@@ -7127,7 +7136,6 @@
 														"columns": [{
 															"components": [{
 																"label": "From",
-																"labelPosition": "left-left",
 																"tableView": true,
 																"dataFormat": "HH:mm",
 																"key": "ALtime",
@@ -7144,7 +7152,6 @@
 														}, {
 															"components": [{
 																"label": "To",
-																"labelPosition": "left-left",
 																"tableView": true,
 																"dataFormat": "HH:mm",
 																"key": "ALtime1",
@@ -7219,7 +7226,7 @@
 															"components": [{
 																"label": "To",
 																"hideInputLabels": true,
-																"inputsLabelPosition": "left",
+																"inputsLabelPosition": "top",
 																"useLocaleSettings": false,
 																"hideLabel": true,
 																"tableView": false,
@@ -7348,6 +7355,30 @@
 														"input": true,
 														"hideOnChildrenHidden": false
 													}, {
+														"label": "Are diving boards or diving platforms present?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALPooldivingBoardsOrPlatforms",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
 														"label": "asda",
 														"tableView": false,
 														"key": "ALasda",
@@ -7382,7 +7413,6 @@
 															}, {
 																"components": [{
 																	"label": "Height?",
-																	"labelPosition": "left-left",
 																	"mask": false,
 																	"spellcheck": true,
 																	"tableView": false,
@@ -7596,30 +7626,6 @@
 									"type": "columns",
 									"input": false,
 									"path": "pageNaNPanel3Columns2"
-								}, {
-									"label": "Are diving boards or diving platforms present?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "ALPooldivingBoardsOrPlatforms",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
 								}, {
 									"label": "Columns",
 									"input": false,
@@ -8011,9 +8017,10 @@
 													"enableMinDateInput": false,
 													"datePicker": {
 														"disableWeekends": false,
-														"disableWeekdays": false
+														"disableWeekdays": false,
+														"maxDate": "moment().startOf('day')"
 													},
-													"enableMaxDateInput": false,
+													"enableMaxDateInput": true,
 													"enableTime": false,
 													"timePicker": {
 														"showMeridian": false
@@ -8043,7 +8050,7 @@
 														"minDate": null,
 														"disableWeekends": false,
 														"disableWeekdays": false,
-														"maxDate": null
+														"maxDate": "moment().startOf('day')"
 													},
 													"hideOnChildrenHidden": false
 												}],
@@ -9000,7 +9007,7 @@
 															"input": true,
 															"hideOnChildrenHidden": false
 														}, {
-															"label": "If yes, record log maintained?",
+															"label": "Are record logs maintained?",
 															"optionsLabelPosition": "right",
 															"inline": false,
 															"tableView": false,
@@ -9022,7 +9029,7 @@
 															"key": "ALlakeLifeGaurdRecordLog",
 															"conditional": {
 																"show": true,
-																"when": "lakeSafetyExcercises",
+																"when": "ALlakeSafetyExcercises",
 																"eq": "yes"
 															},
 															"type": "radio",
@@ -13032,12 +13039,23 @@
 				"type": "textfield",
 				"input": true
 			}]
+		}, {
+			"label": "Additional Notes",
+			"tableView": true,
+			"key": "additionalNotes",
+			"conditional": {
+				"show": true,
+				"when": "csrApproved",
+				"eq": "approved"
+			},
+			"type": "textfield",
+			"input": true
 		}],
 		"input": false
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 209,
+	"_vid": 217,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13054,6 +13072,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-22T13:44:39.032Z",
+	"modified": "2020-06-23T07:00:33.344Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

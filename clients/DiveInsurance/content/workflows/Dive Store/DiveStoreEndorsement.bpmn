@@ -171,7 +171,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; csrApproved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0x5xsbr" name="CSR Initated Accepted" sourceRef="ExclusiveGateway_02mvq01" targetRef="ServiceTask_1aqfyhm123">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; csrApproved == "accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; csrApproved == "approved"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_184jheh123" name="Yes" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="ServiceTask_1tfyapp">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="accepted"}</bpmn:conditionExpression>

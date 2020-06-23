@@ -137,15 +137,23 @@
 					</p>
 				</div></b>
 			</div>
+
 		<div class="spacing">&nbsp</div>
 
-		<hr></hr>
+		{if isset(excludedOperation)}
+			<div class="section_col1" style="border-style: solid">
+				<p class ="title">SECTION II: EXCLUDED DESIGNATED OPERATION</p>
+			</div>
+			<p class ="exop" style="margin-top:1px;">{$excludedOperation}</p>
+		{/if}
+		
+		<hr class="addIn"></hr>
 		<b><center><p class="addIn">{if !empty($additionalInsured)}
 			Certificate has Additional Insureds (See Attached)
 			{else}
-		Certificate Does Not Have Additional Insured.
+			Certificate Does Not Have Additional Insured.
 			{/if}</p></center></b>
-		<hr></hr>
+		<hr class="addIn"></hr>
 
 		<p  class = "policy_notice">The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688.
 The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description
