@@ -80,8 +80,6 @@ class FileService extends AbstractService
         $fields = $data = $this->cleanData($data);
         $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
         $jsonData = json_encode($data);
-        $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
-
         $data['uuid'] = $uuid;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -112,11 +110,12 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
-            $this->logger->info("Check Fields Data ----- " . print_r($validFields,true));
             $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
             unset($validFields['validFields']['data']);
             unset($validFields['indexedFields']['data']);
-            $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
+            if(is_array($fields)){
+                $data['data'] = json_encode($fields);
+            }
             $data['data'] = $fields;
             $file->exchangeArray($data);
             $this->updateFileData($id, $fields);
@@ -124,7 +123,7 @@ class FileService extends AbstractService
                 $this->logger->info("FILE Validation ----- ");
                 throw new ValidationException("Validation Errors" . json_encode($fields));
             }
-            $this->logger->info("Checking Fields ---- " . print_r($validFields['validFields'],true));
+            $this->logger->info("Checking Fields ---- " . print_r($validFields,true));
             $this->multiInsertOrUpdate('ox_file_attribute', $validFields['validFields']);
             if(count($validFields['indexedFields']) > 0 ){
                 $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
@@ -397,6 +396,9 @@ class FileService extends AbstractService
                 } else {
                     $keyValueFields[$i]['id'] = null;
                 }
+                if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
+                    $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
+                }
                 if ($field['index'] != 0) {
                     $indexedFields[$i]['file_id'] = $fileId;
                     $indexedFields[$i]['field_id'] = $field['id'];  
@@ -419,7 +421,7 @@ class FileService extends AbstractService
                 }
                 $keyValueFields[$i]['file_id'] = $fileId;
                 $keyValueFields[$i]['field_id'] = $field['id'];
-                $fieldvalue = isset($fieldData[$field['name']]) ? (is_array($fieldData[$field['name']]) ? json_encode($fieldData[$field['name']]) : $fieldData[$field['name']]) : null;
+                $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
                 $keyValueFields[$i]['field_value']=$fieldvalue;
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                 $keyValueFields[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
@@ -427,21 +429,20 @@ class FileService extends AbstractService
                 $keyValueFields[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
                 $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
                 $keyValueFields[$i] = array_merge($keyValueFields[$i],$this->generateFieldPayload($field['data_type'],$field,$keyValueFields[$i],$fieldvalue,$entityId,$fileId,$fileArray));
-                if($field['type'] == 'file'){
-                    $keyValueFields['data'][$field['name']] = isset($keyValueFields[$i][$field['name']]) ? $keyValueFields[$i][$field['name']] : array();    
-                }
-
+                $keyValueFields['data'][$field['name']] = $keyValueFields[$i][$field['name']];
                 if( isset($keyValueFields[$i]['childFields']) && count($keyValueFields[$i]['childFields']) > 0){
                     foreach ($keyValueFields[$i]['childFields'] as $childField) {
                         array_push($childFields, $childField);
                     }
                 }
                 if(isset($keyValueFields[$i]['data'])){
-                    $keyValueFields['data'][$field['name']] = $keyValueFields[$i]['data'];
+                    $fieldvalue = json_encode($keyValueFields[$i]['data']);
+                    $keyValueFields['data'][$field['name']] =$fieldvalue;
                     unset($keyValueFields[$i]['data']);
                 }else if(array_key_exists('data',$keyValueFields[$i])){
                      unset($keyValueFields[$i]['data']);
                 }
+                $fieldData[$field['name']] = $fieldvalue;
                 unset($keyValueFields[$i]['childFields']);
                 unset($indexedFields[$i]['childFields']);
                 unset($keyValueFields[$i][$field['name']]);
@@ -458,7 +459,7 @@ class FileService extends AbstractService
                     unset($keyValueFields[$i]['childFields']);
                 }
                 if(isset($keyValueFields[$i]['data'])){
-                    $keyValueFields['data'][$field['name']] = $keyValueFields[$i]['data'];
+                    $keyValueFields['data'][$field['name']] = json_encode($keyValueFields[$i]['data']);
                     unset($keyValueFields[$i]['data']);
                 }else if(array_key_exists('data',$keyValueFields[$i])){
                      unset($keyValueFields[$i]['data']);
@@ -525,7 +526,7 @@ class FileService extends AbstractService
                 $fieldData['field_value_boolean'] = NULL;
                 $fieldData['field_value_date'] = NULL;
                 if($field['type']=='file'){
-                    $attachmentsArray = is_string($fieldvalue) ? json_decode($fieldvalue,true) : $fieldvalue;
+                    $attachmentsArray = json_decode($fieldvalue,true);
                     $finalAttached = array();
                     if(is_array($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
@@ -606,9 +607,12 @@ class FileService extends AbstractService
                         } else {
                             $childFieldsArray[$i]['id'] = null;
                         }
+                        if (isset($value[$field['name']]) && is_array($value[$field['name']])) {
+                            $value[$field['name']] = json_encode($value[$field['name']]);
+                        }
                         $childFieldsArray[$i]['file_id'] = $fileId;
                         $childFieldsArray[$i]['field_id'] = $field['id'];
-                        $val = isset($value[$field['name']]) ? (is_array($value[$field['name']]) ? json_encode($value[$field['name']]) : $value[$field['name']]) : null;
+                        $val = isset($value[$field['name']]) ? $value[$field['name']] : null;
                         $childFieldsArray[$i]['field_value']=$val;
                         $childFieldsArray[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                         $childFieldsArray[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
@@ -623,12 +627,12 @@ class FileService extends AbstractService
                         } else {
                             unset($childFieldsArray[$i]['childFields']);
                         }
-                        $childFieldValues[$field['name']] = isset($value[$field['name']]) ? $value[$field['name']] : null;
-                        if($field['type'] == 'file'){
-                            $childFieldValues[$field['name']] = isset($childFieldsArray[$i][$field['name']]) ? $childFieldsArray[$i][$field['name']] : array();
-                        }
+                        $childFieldValues[$field['name']] = $val;
                         unset($childFieldsArray[$i][$field['name']]);
                         $i++;
+                    }
+                    if(is_array($childFieldValues)){
+                        json_encode($childFieldValues);
                     }
                     $fieldvalue[$k] = $childFieldValues;
                 }
@@ -937,7 +941,7 @@ class FileService extends AbstractService
                 if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
                     //TODO Sort Fixes
                     $sortCount = 0;
-                    $sortTable = "tblf" . $sortCount;
+                    $field = "";
                     $sort = " ORDER BY ";
 
                     foreach ($filterParamsArray[0]['sort'] as $key => $value) {
@@ -947,11 +951,14 @@ class FileService extends AbstractService
                             $sort .= "`of`.date_created ".$value['dir'].",";
                         }else{
                             $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$fieldName.$tablePrefix." on(".$fieldName.$tablePrefix.".id = ".$tablePrefix.".field_id and ". $fieldName.$tablePrefix.".name='".$fieldName."')";
-                            $sort .= " (CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean WHEN ".$tablePrefix.".field_value_type='TEXT' THEN ".$tablePrefix.".field_value_text ELSE (".$tablePrefix.".field_value) END )".$value['dir'].",";
+                            $sort .= " (CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean WHEN ".$tablePrefix.".field_value_type='TEXT' THEN ".$tablePrefix.".field_value_text END )".$value['dir'].",";
                         }
                         $sortCount += 1;
                     }
                     $sort = rtrim($sort, ",");
+                    if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
+                        $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
+                    }
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
@@ -966,7 +973,7 @@ class FileService extends AbstractService
             $where = rtrim($where, " AND ");
             $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS  of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name $fromQuery $where $sort $pageSize $offset";
+                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS  of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name $field $fromQuery $where $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 $countQuery = "SELECT FOUND_ROWS();";
@@ -1423,6 +1430,31 @@ class FileService extends AbstractService
             $this->logger->info("File Deleted- " . json_encode($fileAttachment));
         }
         return $fileAttachment;
+    }
+
+      private function buildSortQuery($sortOptions, &$field)
+    {
+        $sortCount = 0;
+        $sortTable = "tblf" . $sortCount;
+        $sort = " ORDER BY ";
+        foreach ($sortOptions as $key => $value) {
+            if ($value['field'] == 'entity_name') {
+                if ($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " ox_app_entity.name ";
+                $sortCount++;
+                continue;
+            }
+            if ($sortCount == 0) {
+                $sort .= $value['field'] . " " . $value['dir'];
+            } else {
+                $sort .= "," . $value['field'] . " " . $value['dir'];
+            }
+            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $value['field'];
+            $sortCount += 1;
+        }
+        return $sort;
     }
 
 }

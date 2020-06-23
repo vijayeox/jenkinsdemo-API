@@ -85,6 +85,10 @@ entity:
                 name: padi
                 data_type: text
                 index: true
+            -
+                name: product
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
         field:
@@ -115,6 +119,10 @@ entity:
                 index: true
             -
                 name: padi
+                data_type: text
+                index: true
+            -
+                name: product
                 data_type: text
                 index: true
     -
@@ -149,6 +157,10 @@ entity:
                 name: padi
                 data_type: text
                 index: true
+            -
+                name: product
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
         field:
@@ -179,6 +191,10 @@ entity:
                 index: true
             -
                 name: padi
+                data_type: text
+                index: true
+            -
+                name: product
                 data_type: text
                 index: true
     -
@@ -222,6 +238,10 @@ entity:
                 index: true
             -
                 name: padi
+                data_type: text
+                index: true
+            -
+                name: product
                 data_type: text
                 index: true
 pages:
