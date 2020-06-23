@@ -551,6 +551,7 @@ class CommandService extends AbstractService
 
     protected function verifyUser(&$data)
     {
+        // TODO IF IDENTIFIER FIELD IS NOT SET GET IT FROM ox_entity_user_relation LIKE IN setupIdentityField METHOD 
         if (isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])) {
             $appId = UuidUtil::isValidUuid($data['appId'])?$this->getIdFromUuid('ox_app',$data['appId']):$data['appId'];
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
@@ -565,7 +566,7 @@ class CommandService extends AbstractService
             }
         }
         if (isset($data['email'])) {
-            $select = "SELECT * from ox_user where email = :email";
+            $select = "SELECT ox_user.*,oxup.firstname,oxup.lastname,oxup.date_of_birth,oxup.phone,oxup.gender,oxup.signature,oxup.address_id from ox_user inner join ox_user_profile oxup on oxup.id = ox_user.user_profile_id  where oxup.email = :email";
             $selectQuery = array("email" => $data['email']);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) > 0) {
