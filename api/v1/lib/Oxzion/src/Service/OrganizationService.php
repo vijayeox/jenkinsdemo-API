@@ -505,11 +505,11 @@ class OrganizationService extends AbstractService
         $where = "";
         $sort = "ox_user.name";
 
-        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.email,ox_address.address1,ox_address.address2,ox_address.city,ox_address.state,ox_address.country,ox_address.zip,ox_user.designation,
+        $query = "SELECT ox_user.uuid,ox_user.name,oxup.email,ox_address.address1,ox_address.address2,ox_address.city,ox_address.state,ox_address.country,ox_address.zip,oxemp.designation,
         case when (ox_organization.contactid = ox_user.id)
         then 1
         end as is_admin";
-        $from = " FROM ox_user inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id LEFT join ox_address on ox_user.address_id = ox_address.id";
+        $from = " FROM ox_user inner join ox_user_profile oxup on oxup.id = ox_user.user_profile_id inner join ox_employee oxemp on oxemp.user_profile_id = oxup.id inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id LEFT join ox_address on oxup.address_id = ox_address.id";
 
         $cntQuery = "SELECT count(ox_user.id)" . $from;
 
