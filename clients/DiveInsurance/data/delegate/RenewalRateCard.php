@@ -4,6 +4,8 @@ use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\FileTrait;
 use Oxzion\ServiceException;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 require_once __DIR__."/RateCard.php";
 
 class RenewalRateCard extends RateCard
@@ -29,6 +31,12 @@ class RenewalRateCard extends RateCard
         $startYear = date("Y");
         $endYear = date("Y") + 1;
         
+         if (AuthContext::isPrivileged('MANAGE_POLICY_APPROVAL_WRITE')) {
+            $data['form_data']['initiatedByCsr'] = true;
+        }else{
+            $data['form_data']['initiatedByCsr'] = false;
+        }
+
         if($data['form_data']['product'] == 'Dive Boat'){
             // SET DEFAULT DATE FOR DIVE 
             $data['form_data']['workflowId'] = 'bb15e393-11b9-48ea-bc5a-5b7616047cb1';

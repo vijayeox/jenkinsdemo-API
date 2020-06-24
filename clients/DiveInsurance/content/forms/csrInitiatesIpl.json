@@ -257,6 +257,14 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
+						"label": "privileges",
+						"protected": true,
+						"key": "privileges",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
 						"input": true,
 						"tableView": true,
 						"key": "policy_exists",
@@ -2586,7 +2594,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "techRecAttachment",
-				"customConditional": "if (data.privileges){\n    show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}else{  \n    show = false;\n}",
+				"customConditional": "if (data.privileges){\n    show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove') ? true: false;\n}else{  \n    show = false;\n}",
 				"type": "panel",
 				"label": "TecRec Attachments",
 				"input": false,
@@ -2639,7 +2647,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "cylinderInspectorAttachments",
-				"customConditional": "if (data.privileges){\n  show = ((data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\") && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\") ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2744,7 +2752,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "scubaFitAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor') ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Scuba Fit Attachments",
 				"input": false,
@@ -4712,7 +4720,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 458,
+	"_vid": 460,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4733,6 +4741,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-24T08:27:48.452Z",
+	"modified": "2020-06-24T16:03:52.105Z",
 	"machineName": "testdivehub:csrInitiates"
 }

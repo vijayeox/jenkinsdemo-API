@@ -195,7 +195,7 @@ class PadiVerification extends AbstractAppDelegate
             return $returnArray;
         } else {
             $returnArray = array();
-            $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options";
+            $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
             $coverageLevels = $persistenceService->selectQuery($coverageSelect);
             while ($coverageLevels->next()) {
                 $coverage = $coverageLevels->current();

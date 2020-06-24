@@ -35,10 +35,10 @@ class Persistence extends AbstractService
         parent::__construct($config, $adapter);
     }
 
-    public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null){
-        //This api is not allowed to be executed as it does not implement the security required for application specific persistence
-        throw new Exception("Unsupported method");
-    }
+    // public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null){
+    //     //This api is not allowed to be executed as it does not implement the security required for application specific persistence
+    //     throw new Exception("Unsupported method");
+    // }
 
     public function create(&$data, $commit = true){
         //This api is not allowed to be executed as it does not implement the security required for application specific persistence

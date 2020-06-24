@@ -952,7 +952,6 @@ class FileService extends AbstractService
                         if($fieldName == 'date_created'){
                             $sort .= "`of`.date_created ".$value['dir'].",";
                         }else{
-                            $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$fieldName.$tablePrefix." on(".$fieldName.$tablePrefix.".id = ".$tablePrefix.".field_id and ". $fieldName.$tablePrefix.".name='".$fieldName."')";
                             $sort .= " (CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean WHEN ".$tablePrefix.".field_value_type='TEXT' THEN ".$tablePrefix.".field_value_text END )".$value['dir'].",";
                         }
                         $sortCount += 1;

@@ -1,4 +1,5 @@
 {assign var=list value=$groupPL|json_decode:true}
+{assign var=certificateLevel value=array("freediveInstructor" => "Free Diver Instructor","instructor" => "Instructor","nonteachingSupervisoryInstructor" => "Nonteaching / Supervisory Instructor","retiredInstructor" => "Retired Instructor","assistantInstructor"=>"Assistant Instructor","divemasterAssistantInstructorAssistantOnly" => "Divemaster / Assistant Instructor ASSISTING ONLY","divemaster" => "Divemaster","emergencyFirstResponseInstructor" => "Emergency First Response Instructor","swimInstructor" => "Swim Instructor")}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -20,7 +21,7 @@
 	    		<tr>
 	    			<td>{$additional.firstname}&nbsp{$additional.lastname}</td>
 	    			<td>{$additional.padi}</td>
-	    			<td>{$additional.status}</td>
+	    			<td>{$certificateLevel[$additional.status]}</td>
 	    		</tr>
     			{/foreach}
 			</table>

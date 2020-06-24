@@ -313,4 +313,14 @@ abstract class AbstractService extends AbstractBaseService
         }
         return $returnArray;
     }
+
+    public function setSessionProperties($properties){
+        foreach($properties as $key => $value){
+            if(is_string($value['value'])){
+                $value['value'] = "'".$value['value']."'";    
+            }
+            $query = "SET SESSION ".$value['name']." = ".$value['value'];
+            $this->executeQuerywithParams($query);
+        }
+    }
 }

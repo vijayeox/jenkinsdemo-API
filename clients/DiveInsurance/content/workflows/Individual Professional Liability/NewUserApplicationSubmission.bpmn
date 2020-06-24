@@ -210,10 +210,13 @@ if (
 ) {
   result3 = true;
 }
+if((initiatedByCsr == true || initiatedByCsr == "true")){
+  result3 = false;
+}
 
 execution.setVariable("CSRReviewRequired", result3);
 
-if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
+if ((initiatedByCsr == true || initiatedByCsr == "true") &amp;&amp; approved == "rejected") {
   execution.setVariable("RejectedPolicy", true);
 } else {
   execution.setVariable("RejectedPolicy", false);
