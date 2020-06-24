@@ -7,20 +7,21 @@ use Oxzion\Model\Entity;
 class Subscriber extends Entity
 {
     protected $data = array(
-        'id'=>0 ,
-        'user_id' => 0,
-        'file_id' => 0,
-        'org_id' => 0,
-        'created_by' => 0,
+        'id'=>null ,
+        'user_id' => null,
+        'file_id' => null,
+        'org_id' => null,
+        'uuid' => null,
+        'created_by' => null,
         'modified_by' => null,
-        'date_created' => 0,
+        'date_created' => null,
         'date_modified' => null,
     );
     protected $attributes = array();
 
     public function validate()
     {
-        $required = array('user_id');
+        $required = array('user_id', 'uuid');
         $this->validateWithParams($required);
     }
 }
