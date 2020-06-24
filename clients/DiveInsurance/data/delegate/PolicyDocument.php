@@ -459,7 +459,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
 
                 if(isset($this->template[$temp['product']]['AutoLiability']))   {
-                    if(isset($temp['nonOwnedAutoLiabilityPL']) && $temp['nonOwnedAutoLiabilityPL'] != 'no'){
+                    if(isset($temp['doYouWantToApplyForNonOwnerAuto']) && ($temp['doYouWantToApplyForNonOwnerAuto'] == true || $temp['doYouWantToApplyForNonOwnerAuto'] == 'true')){
                         $this->logger->info("DOCUMENT TravelAgentEOFP");
                         $documents['NonOwnedAutoLiability'] = $this->copyDocuments($temp,$dest['relativePath'],'AutoLiability');
                     }
