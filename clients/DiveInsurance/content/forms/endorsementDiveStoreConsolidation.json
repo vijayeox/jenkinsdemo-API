@@ -10227,9 +10227,6 @@
 								"label": "Membership Number",
 								"tableView": true,
 								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
 								"key": "padi",
 								"type": "textfield",
 								"input": true,
@@ -10246,9 +10243,6 @@
 								"label": "First Name",
 								"tableView": true,
 								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
 								"key": "firstname",
 								"type": "textfield",
 								"input": true,
@@ -10265,9 +10259,6 @@
 								"label": "Last Name",
 								"tableView": true,
 								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
 								"key": "lastname",
 								"type": "textfield",
 								"input": true,
@@ -10291,27 +10282,12 @@
 						"columns": [{
 							"components": [{
 								"label": "Certificate Level",
-								"widget": "choicesjs",
 								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{
-										"label": "",
-										"value": ""
-									}],
-									"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
-								},
-								"valueProperty": "value",
-								"selectThreshold": 0.3,
-								"validate": {
-									"required": true
-								},
+								"clearOnHide": false,
 								"key": "status",
-								"type": "select",
-								"indexeddb": {
-									"filter": {}
-								},
+								"type": "textfield",
 								"input": true,
+								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
@@ -10324,9 +10300,6 @@
 								"label": "Name of Training Agency",
 								"tableView": true,
 								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
 								"key": "nameOfInstitution",
 								"type": "textfield",
 								"input": true,
@@ -10398,12 +10371,6 @@
 					}, {
 						"label": "verified",
 						"key": "verified",
-						"type": "hidden",
-						"input": true,
-						"tableView": false
-					}, {
-						"label": "rating",
-						"key": "rating",
 						"type": "hidden",
 						"input": true,
 						"tableView": false
@@ -10492,7 +10459,7 @@
 					"label": "Information for each Additional Insured is required as follows",
 					"input": false,
 					"components": [{
-						"label": "Data Grid",
+						"label": "Group Additional Insured",
 						"reorder": false,
 						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
@@ -10501,7 +10468,21 @@
 						"enableRowGroups": false,
 						"hideLabel": true,
 						"tableView": false,
-						"defaultValue": [{}],
+						"defaultValue": [{
+							"name": "",
+							"country": "",
+							"address": "",
+							"city": "",
+							"state": {},
+							"zip": "",
+							"city1": "",
+							"state1": {},
+							"zip1": "",
+							"businessRelation": "",
+							"additionalInformation1": "",
+							"businessRelationOther": "",
+							"additionalInformation": ""
+						}],
 						"clearOnHide": false,
 						"validate": {
 							"minLength": 1
@@ -10522,9 +10503,6 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
@@ -10534,9 +10512,6 @@
 										"label": "City",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "city",
 										"type": "textfield",
 										"input": true,
@@ -10566,9 +10541,6 @@
 										"template": "<span>{{ item.country }}</span>",
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "country",
 										"properties": {
 											"clear_field": "state"
@@ -10598,7 +10570,6 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
-											"required": true,
 											"customMessage": "State is required"
 										},
 										"key": "state",
@@ -10620,9 +10591,6 @@
 										"label": "Address",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "address",
 										"type": "textfield",
 										"input": true,
@@ -10633,7 +10601,6 @@
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
-											"required": true,
 											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
 										"key": "zip",
@@ -10674,9 +10641,6 @@
 										},
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "businessRelation",
 										"type": "select",
 										"indexeddb": {
@@ -10689,9 +10653,6 @@
 										"label": "Please Mention",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "businessRelationOther",
 										"conditional": {
 											"show": true,
@@ -11013,20 +10974,10 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"label": "Certificate Level",
-									"widget": "choicesjs",
+									"label": "Status",
 									"disabled": true,
 									"tableView": true,
-									"dataSrc": "custom",
-									"data": {
-										"values": [{
-											"label": "",
-											"value": ""
-										}],
-										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
-									},
-									"valueProperty": "value",
-									"selectThreshold": 0.3,
+									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
@@ -11035,7 +10986,7 @@
 										"name": "enable",
 										"trigger": {
 											"type": "javascript",
-											"javascript": "if(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
+											"javascript": "console.log(row.upgradeStatus);\nif(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
 										},
 										"actions": [{
 											"name": "Enable",
@@ -11048,11 +10999,9 @@
 											"state": false
 										}]
 									}],
-									"type": "select",
-									"indexeddb": {
-										"filter": {}
-									},
+									"type": "textfield",
 									"input": true,
+									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
@@ -11123,12 +11072,6 @@
 						}, {
 							"label": "verified",
 							"key": "verified",
-							"type": "hidden",
-							"input": true,
-							"tableView": false
-						}, {
-							"label": "rating",
-							"key": "rating",
 							"type": "hidden",
 							"input": true,
 							"tableView": false
@@ -14436,7 +14379,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 184,
+	"_vid": 186,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14453,6 +14396,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-24T16:55:06.068Z",
+	"modified": "2020-06-24T19:49:12.689Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
