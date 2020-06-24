@@ -1195,7 +1195,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
 						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
@@ -3373,7 +3373,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 266,
+	"_vid": 267,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3394,6 +3394,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-22T20:28:25.428Z",
+	"modified": "2020-06-24T05:16:20.621Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

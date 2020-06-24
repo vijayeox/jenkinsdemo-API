@@ -1194,7 +1194,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
 						"spellcheck": false,
 						"tableView": false,
 						"validate": {
@@ -4712,7 +4712,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 456,
+	"_vid": 457,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4733,6 +4733,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-24T00:23:02.355Z",
+	"modified": "2020-06-24T05:15:47.699Z",
 	"machineName": "testdivehub:csrInitiates"
 }
