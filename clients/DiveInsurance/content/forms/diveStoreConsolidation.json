@@ -10068,6 +10068,14 @@
 		"type": "panel",
 		"title": "Group Professional Liability",
 		"components": [{
+			"label": "certificateLevelList",
+			"protected": true,
+			"calculateValue": "console.log(data.certificateLevelList);",
+			"key": "certificateLevelList",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
 			"autofocus": true,
@@ -10524,13 +10532,26 @@
 						"columns": [{
 							"components": [{
 								"label": "Certificate Level",
+								"widget": "choicesjs",
 								"tableView": true,
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"validate": {
 									"required": true
 								},
 								"key": "status",
-								"type": "textfield",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -10608,6 +10629,12 @@
 					}, {
 						"label": "verified",
 						"key": "verified",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
+					}, {
+						"label": "rating",
+						"key": "rating",
 						"type": "hidden",
 						"input": true,
 						"tableView": false
@@ -11180,16 +11207,28 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"label": "Status",
+									"label": "Certificate Level",
+									"widget": "choicesjs",
 									"tableView": true,
-									"clearOnHide": false,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{
+											"label": "",
+											"value": ""
+										}],
+										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+									},
+									"valueProperty": "value",
+									"selectThreshold": 0.3,
 									"validate": {
 										"required": true
 									},
 									"key": "status",
-									"type": "textfield",
+									"type": "select",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
@@ -11239,6 +11278,12 @@
 						}, {
 							"label": "verified",
 							"key": "verified",
+							"type": "hidden",
+							"input": true,
+							"tableView": false
+						}, {
+							"label": "rating",
+							"key": "rating",
 							"type": "hidden",
 							"input": true,
 							"tableView": false
@@ -13126,7 +13171,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 262,
+	"_vid": 281,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13136,13 +13181,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
+		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
 		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
 	},
 	"name": "diveStoreConsolidation",
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-24T12:04:57.663Z",
+	"modified": "2020-06-24T16:04:59.431Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

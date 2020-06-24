@@ -10291,15 +10291,27 @@
 						"columns": [{
 							"components": [{
 								"label": "Certificate Level",
+								"widget": "choicesjs",
 								"tableView": true,
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
 								"validate": {
 									"required": true
 								},
 								"key": "status",
-								"type": "textfield",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
@@ -10386,6 +10398,12 @@
 					}, {
 						"label": "verified",
 						"key": "verified",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
+					}, {
+						"label": "rating",
+						"key": "rating",
 						"type": "hidden",
 						"input": true,
 						"tableView": false
@@ -10995,10 +11013,20 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"label": "Status",
+									"label": "Certificate Level",
+									"widget": "choicesjs",
 									"disabled": true,
 									"tableView": true,
-									"clearOnHide": false,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{
+											"label": "",
+											"value": ""
+										}],
+										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+									},
+									"valueProperty": "value",
+									"selectThreshold": 0.3,
 									"validate": {
 										"required": true
 									},
@@ -11007,7 +11035,7 @@
 										"name": "enable",
 										"trigger": {
 											"type": "javascript",
-											"javascript": "console.log(row.upgradeStatus);\nif(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
+											"javascript": "if(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
 										},
 										"actions": [{
 											"name": "Enable",
@@ -11020,9 +11048,11 @@
 											"state": false
 										}]
 									}],
-									"type": "textfield",
+									"type": "select",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
@@ -11093,6 +11123,12 @@
 						}, {
 							"label": "verified",
 							"key": "verified",
+							"type": "hidden",
+							"input": true,
+							"tableView": false
+						}, {
+							"label": "rating",
+							"key": "rating",
 							"type": "hidden",
 							"input": true,
 							"tableView": false
@@ -14400,7 +14436,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 182,
+	"_vid": 184,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14410,13 +14446,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveStore\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
+		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveStore\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
 		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
 	},
 	"name": "endorsementDiveStoreConsolidation",
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-24T12:04:09.907Z",
+	"modified": "2020-06-24T16:55:06.068Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
