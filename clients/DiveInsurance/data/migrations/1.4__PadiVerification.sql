@@ -1,3 +1,4 @@
+DROP PROCEDURE IF EXISTS ox_padi_verification;
 CREATE PROCEDURE `ox_padi_verification`(
 _a varchar(100),
 _b varchar(100),

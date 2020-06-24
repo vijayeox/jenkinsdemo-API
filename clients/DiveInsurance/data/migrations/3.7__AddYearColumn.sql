@@ -1,1 +1,1 @@
-ALTER TABLE premium_rate_card ADD COLUMN `year` INT(4) AS (YEAR(end_date));
+ALTER TABLE premium_rate_card ADD COLUMN `year` INT(4);
