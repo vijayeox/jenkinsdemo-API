@@ -142,7 +142,7 @@ content:
                     cell: '<td>{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}</td>'
                 -
                     title: 'Policy Status'
-                    cell: '<td>{moment(item.start_date).isAfter(moment()) ? "Effective From -" + moment(item.start_date).format("MM-DD-YYYY") : item.policyStatus}</td>'
+                    cell: '<td>{moment(item.start_date).isAfter(moment()) ? "Effective From " + moment(item.start_date).format("MM-DD-YYYY") : item.policyStatus}</td>'
                     field: policyStatus
                 -
                     title: 'Policy Effective Period'
