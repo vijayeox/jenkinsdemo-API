@@ -1,4 +1,5 @@
 {assign var=list value=$namedInsureds|json_decode:true}
+{assign var=certificateLevel value=array("freediveInstructor" => "Free Diver Instructor","instructor" => "Instructor","nonteachingSupervisoryInstructor" => "Nonteaching / Supervisory Instructor","retiredInstructor" => "Retired Instructor","assistantInstructor"=>"Assistant Instructor","divemasterAssistantInstructorAssistantOnly" => "Divemaster / Assistant Instructor ASSISTING ONLY","divemaster" => "Divemaster","emergencyFirstResponseInstructor" => "Emergency First Response Instructor","swimInstructor" => "Swim Instructor")}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -13,7 +14,7 @@
 
 			      <div class = "named_div2"><p class ="t_title" style="text-tranform:uppercase;">{$value.firstname}&nbsp{$value.lastname}</p></div>
 
-			      <div class = "named_div3"><p class ="t_title">{$value.status}</p></div>
+			      <div class = "named_div3"><p class ="t_title">{$certificateLevel[$value.status]}</p></div>
 
 			      <div class = "named_div4"><p class ="t_title">{$value.start_date|date_format:"%m/%d/%Y"}</p></div>
 			      <div class = "named_div5"><p class ="t_title">{if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
