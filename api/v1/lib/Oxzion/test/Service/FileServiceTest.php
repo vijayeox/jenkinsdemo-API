@@ -559,15 +559,11 @@ class FileServiceTest extends AbstractServiceTest
             $newQueryResult = $this->runQuery($sqlQuery);
             $sqlQuery2Result = $this->runQuery($sqlQuery2);
             $sqlQuery3Result = $this->runQuery($sqlQuery3);
-            print_r($sqlQuery3Result);
             $entityId = $sqlQuery2Result[0]['entity_id'];
             $finalCount = $newQueryResult[0]['count'];
             $fieldValues = array_column($sqlQuery3Result, 'field_value');
-            print_r($fieldValues);
-            $this->assertEmpty($fieldValues[0]);  //Fields that don't exist
-            $this->assertEmpty($fieldValues[1]);
-            $this->assertEquals(2,$fieldValues[2]); //Fields that exist
-            $this->assertEquals(1,$fieldValues[3]);
+            $this->assertEquals(2,$fieldValues[0]); //Fields that exist
+            $this->assertEquals(1,$fieldValues[1]);
             if(isset($newQueryResult[0]['count'])) {
                 $this->assertEquals(10,$finalCount);
                 $this->assertEquals(1,$entityId);
