@@ -63,7 +63,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9145c', $result['data'][1]['uuid']);
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9145d', $result['data'][2]['uuid']);
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9146d', $result['data'][3]['uuid']);
-        $this->assertEquals(10, $result['total']);
+        $this->assertEquals(9, $result['total']);
     }
 
     public function testGetFileListWithWorkflowButNoUserIdInRoute() {
@@ -121,7 +121,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c91478', $result['data'][1]['uuid']);
         $this->assertEquals('{"firstname" : "brian","email" : "brian@gmail.com"}', $result['data'][2]['data']);
         $this->assertEquals('39bcde37-1c2a-4461-800d-a5ab4b801491', $result['data'][2]['uuid']);
-        $this->assertEquals(4, $result['total']);
+        $this->assertEquals(3, $result['total']);
     }
 
     public function testGetFileListWithAppRegistryCheck() {
@@ -175,7 +175,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals("entity1",$result['data'][0]['entity_name']);
         $this->assertEquals("37d94567-466a-46c1-8bce-9bdd4e0c0d97",$result['data'][6]['uuid']);
         $this->assertEquals("entity1",$result['data'][6]['entity_name']);
-        $this->assertEquals(10,$result['total']);
+        $this->assertEquals(9,$result['total']);
     }
 
     public function testGetFileListWithEntityNameCheckNegative() {
@@ -559,9 +559,11 @@ class FileServiceTest extends AbstractServiceTest
             $newQueryResult = $this->runQuery($sqlQuery);
             $sqlQuery2Result = $this->runQuery($sqlQuery2);
             $sqlQuery3Result = $this->runQuery($sqlQuery3);
+            print_r($sqlQuery3Result);
             $entityId = $sqlQuery2Result[0]['entity_id'];
             $finalCount = $newQueryResult[0]['count'];
             $fieldValues = array_column($sqlQuery3Result, 'field_value');
+            print_r($fieldValues);
             $this->assertEmpty($fieldValues[0]);  //Fields that don't exist
             $this->assertEmpty($fieldValues[1]);
             $this->assertEquals(2,$fieldValues[2]); //Fields that exist
