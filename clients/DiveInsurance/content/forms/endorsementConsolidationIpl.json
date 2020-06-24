@@ -2069,7 +2069,7 @@
 					"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length > 0 && (data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')){show = true;} else {show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "Cylinder Instructor Attachments",
+					"label": "Cylinder Inspection Instructor Attachments",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -3378,7 +3378,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 268,
+	"_vid": 269,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3399,6 +3399,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-24T07:53:31.775Z",
+	"modified": "2020-06-24T08:22:44.889Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
