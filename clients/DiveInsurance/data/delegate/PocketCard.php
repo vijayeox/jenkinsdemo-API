@@ -111,7 +111,7 @@ class PocketCard extends PolicyDocument
                 }
                 
                 if((isset($result)) && !empty($result)){
-                    if(isset($result['data'])){
+                    if(isset($result['data']) && is_array($result['data'])){
                         foreach ($result['data'] as $key => $value) {
                             ++$total;
                             $files['data'][$total] = $value;

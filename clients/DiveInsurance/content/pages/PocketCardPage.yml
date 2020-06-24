@@ -7,6 +7,13 @@ content:
             route: 'pipeline'
             filterable: false
             resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
             urlPostParams:
                commands: 
                     -
