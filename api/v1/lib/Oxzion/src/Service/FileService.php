@@ -417,7 +417,9 @@ class FileService extends AbstractService
                         unset($indexedField['data']);
                     }else if(array_key_exists('data',$indexedField)){
                          unset($indexedField['data']);
-                    }   
+                    }  
+                    unset($indexedField[$field['name']]);
+                    unset($indexedField['childFields']); 
                     $indexedFields[] = $indexedField;
                 }
                 $keyValueFields[$i]['file_id'] = $fileId;
@@ -449,9 +451,7 @@ class FileService extends AbstractService
                      unset($keyValueFields[$i]['data']);
                 }
                 unset($keyValueFields[$i]['childFields']);
-                unset($indexedFields[$i]['childFields']);
                 unset($keyValueFields[$i][$field['name']]);
-                unset($indexedFields[$i][$field['name']]);
                 unset($fieldvalue);
                 unset($fieldvalueIndexed);
                 $i++;

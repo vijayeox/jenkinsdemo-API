@@ -288,7 +288,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
+						"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Dive Boat coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -539,7 +539,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please Select the Entity Type of your Business"
+							"customMessage": "Entity Type is required"
 						},
 						"key": "entity_type",
 						"type": "select",
@@ -1259,7 +1259,7 @@
 								"inputFormat": "plain",
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number",
+									"customMessage": "Please enter a valid mobile phone number",
 									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
@@ -1309,7 +1309,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
 						"tableView": true,
 						"validate": {
 							"required": true,
@@ -1376,6 +1376,7 @@
 						"displayInTimezone": "utc",
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
+						"autofocus": true,
 						"tableView": false,
 						"enableMinDateInput": false,
 						"datePicker": {
@@ -1570,7 +1571,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select the material used for the Building Construction"
+							"customMessage": "Please select the material used for the building construction"
 						},
 						"key": "dspropbuildingconstr",
 						"type": "select",
@@ -1981,7 +1982,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please let us know if you are the owner of the building?"
+							"customMessage": "Please let us know if you are the owner of the building"
 						},
 						"errorLabel": "Building Ownership",
 						"key": "dspropownbuilding",
@@ -2072,9 +2073,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "The year in which the building was built is required"
 								},
-								"errorLabel": "The Year in which the Building was built",
 								"key": "built_year",
 								"type": "select",
 								"indexeddb": {
@@ -2214,6 +2215,7 @@
 				"description": "Except Instructional/Supervisory & Travel Receipts. This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
 				"prefix": "$",
 				"mask": false,
+				"autofocus": true,
 				"spellcheck": true,
 				"tableView": true,
 				"delimiter": true,
@@ -2222,11 +2224,10 @@
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Please enter the Estimated Retail receipts for the past 12 months",
+					"customMessage": "Estimated Retail receipts for the past 12 months is required",
 					"min": null,
 					"max": null
 				},
-				"errorLabel": "Estimated 12 month retail receipts",
 				"key": "dsglestmonthretailreceipt",
 				"type": "number",
 				"input": true,
@@ -2283,7 +2284,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "doyouhaveapoolonpremisesPL1",
@@ -2307,7 +2308,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "criminalBackGroundChecks",
@@ -2331,7 +2332,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "hasApplicantSexualAbuse",
@@ -2355,7 +2356,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "hasApplicantSexualAbuseMolestation",
@@ -2392,10 +2393,34 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "doyouhaveapoolonpremisesPL",
+						"type": "radio",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"key": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+						"conditional": {
+							"show": true,
+							"when": "doyouhaveapoolonpremisesPL",
+							"eq": "yes"
+						},
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false
@@ -2817,6 +2842,9 @@
 												"delimiter": false,
 												"requireDecimal": false,
 												"inputFormat": "plain",
+												"validate": {
+													"customMessage": "Please enter diving boards or diving platforms present"
+												},
 												"key": "divingBoardCount",
 												"type": "number",
 												"input": true,
@@ -2836,6 +2864,9 @@
 												"delimiter": false,
 												"requireDecimal": false,
 												"inputFormat": "plain",
+												"validate": {
+													"customMessage": "Please enter the height of diving boards or diving platforms"
+												},
 												"key": "divingBoardHeight",
 												"type": "number",
 												"input": true,
@@ -3007,7 +3038,8 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"validate": {
-								"required": true
+								"required": true,
+								"customMessage": "Gross receipts from your pool is required"
 							},
 							"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
 							"conditional": {
@@ -3019,30 +3051,6 @@
 							"input": true,
 							"hideOnChildrenHidden": false
 						}],
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
-						"optionsLabelPosition": "right",
-						"inline": false,
-						"tableView": false,
-						"values": [{
-							"label": "Yes",
-							"value": "yes",
-							"shortcut": ""
-						}, {
-							"label": "No",
-							"value": "no",
-							"shortcut": ""
-						}],
-						"clearOnHide": false,
-						"key": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-						"conditional": {
-							"show": true,
-							"when": "doyouhaveapoolonpremisesPL",
-							"eq": "yes"
-						},
-						"type": "radio",
-						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 8,
@@ -3100,7 +3108,8 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Please describe the locations"
 						},
 						"key": "dsglPleasedescribehere",
 						"conditional": {
@@ -3173,7 +3182,8 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Please enter the value to insure"
 						},
 						"key": "dsglvaluetoinsure",
 						"conditional": {
@@ -3818,6 +3828,7 @@
 			"columns": [{
 				"components": [{
 					"label": "Travel Agent E&O",
+					"autofocus": true,
 					"tableView": true,
 					"defaultValue": false,
 					"clearOnHide": false,
@@ -3915,7 +3926,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please Select the Excess Liability Coverage you would like to apply for"
+						"customMessage": "Excess Liability Coverage is required"
 					},
 					"key": "excessLiabilityCoverage",
 					"conditional": {
@@ -4008,7 +4019,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please Choose the Auto Liability Coverage"
+						"customMessage": "NON-Owned Auto Liability is required"
 					},
 					"key": "nonOwnedAutoLiabilityPL",
 					"conditional": {
@@ -5191,6 +5202,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Name",
@@ -5211,6 +5223,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Address of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Address",
@@ -5230,6 +5243,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the City of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured City",
@@ -5270,6 +5284,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please select the Country of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Country",
@@ -5310,6 +5325,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please select the State of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured State",
@@ -5335,6 +5351,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Zip Code of the Additional Insured",
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
@@ -5387,6 +5404,7 @@
 									},
 									"selectThreshold": 0.3,
 									"validate": {
+										"required": true,
 										"customMessage": "Please select the Business Relation with the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Business Relation",
@@ -5403,6 +5421,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please specify the Business Relation"
 									},
 									"errorLabel": "Additonal Insured Business Relation Details",
@@ -6612,7 +6631,6 @@
 												"mask": false,
 												"spellcheck": true,
 												"tableView": true,
-												"defaultValue": 0,
 												"delimiter": true,
 												"requireDecimal": false,
 												"inputFormat": "plain",
@@ -6670,7 +6688,8 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"required": true,
+											"customMessage": "Please let us know if you are the owner of the building"
 										},
 										"key": "additionalLocationDoYouOwntheBuilding",
 										"type": "select",
@@ -6697,7 +6716,8 @@
 												"inputFormat": "plain",
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Please enter the Replacement Value"
 												},
 												"key": "ALBuildingReplacementValue",
 												"type": "number",
@@ -6708,11 +6728,16 @@
 											}, {
 												"label": "What is the square footage of your building?",
 												"suffix": "ft<sup>2</sup>",
+												"mask": false,
 												"spellcheck": true,
 												"tableView": true,
+												"delimiter": false,
+												"requireDecimal": false,
+												"inputFormat": "plain",
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Please enter the area of the building in sq ft"
 												},
 												"key": "squarefootageofyourbuildingAL",
 												"conditional": {
@@ -6724,9 +6749,7 @@
 												"labelMargin": null,
 												"lockKey": true,
 												"hideOnChildrenHidden": false,
-												"mask": false,
-												"inputType": "text",
-												"inputFormat": "plain"
+												"inputType": "text"
 											}],
 											"width": 6,
 											"offset": 0,
@@ -6740,17 +6763,14 @@
 												"tableView": true,
 												"dataSrc": "custom",
 												"data": {
-													"values": [{
-														"label": "",
-														"value": ""
-													}],
 													"custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
 												},
 												"template": "<span>{{ item }}</span>",
 												"selectThreshold": 0.3,
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "The year in which the building was built is required"
 												},
 												"key": "built_year",
 												"type": "select",
@@ -6763,7 +6783,8 @@
 												"label": "Updates on plumbing, electrical, roof, etc.",
 												"tableView": true,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Updates on plumbing,roof,etc. is required"
 												},
 												"key": "updatesOnPlumbingElectricalRoofEtcAL",
 												"conditional": {
@@ -6868,7 +6889,8 @@
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Estimated Retail receipts for the past 12 months is required"
 									},
 									"key": "estimatedMonthlyReceipts",
 									"type": "number",
@@ -6908,7 +6930,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALdoyouhaveapoolonpremisesPL1",
@@ -6932,7 +6954,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALcriminalBackGroundChecks",
@@ -6956,7 +6978,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALhasApplicantSexualAbuse",
@@ -6980,7 +7002,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALhasApplicantSexualAbuseMolestation",
@@ -7017,7 +7039,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALdoyouhaveapoolonpremisesPL",
@@ -7039,6 +7061,9 @@
 												"shortcut": ""
 											}],
 											"clearOnHide": false,
+											"validate": {
+												"customMessage": "Please select an option"
+											},
 											"key": "ALIfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
 											"conditional": {
 												"show": true,
@@ -7639,7 +7664,8 @@
 												"requireDecimal": false,
 												"inputFormat": "plain",
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Gross receipts from your pool is required"
 												},
 												"key": "ALwhatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
 												"conditional": {
@@ -9262,7 +9288,7 @@
 										"clearOnHide": false,
 										"validate": {
 											"required": true,
-											"customMessage": "Please Choose the Auto Liability Coverage"
+											"customMessage": "NON-Owned Auto Liability is required"
 										},
 										"key": "nonOwnedAutoLiabilityPL",
 										"customConditional": "show = (row.doYouWantToApplyForNonOwnerAutoAL == true || row.doYouWantToApplyForNonOwnerAutoAL == \"true\")",
@@ -10109,7 +10135,7 @@
 									"clearOnHide": false,
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter the Amount spent on Annual Instructional Supervision"
+										"customMessage": "Please enter the amount spent on annual instructional supervision"
 									},
 									"errorLabel": "Annual Receipt Instructional Supervision",
 									"key": "annualReceiptInstructionalSupervision",
@@ -10641,7 +10667,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Would you like to add Additional Insureds for your Group Professional Liability?"
+						"customMessage": "Would you like to add additional insureds for your group professional liability"
 					},
 					"errorLabel": "Additional Insured",
 					"key": "additional_insured",
@@ -10966,7 +10992,8 @@
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Named Insureds is required"
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -11490,6 +11517,7 @@
 						"hideLabel": true
 					}, {
 						"label": "Acknowledged",
+						"autofocus": true,
 						"tableView": false,
 						"defaultValue": false,
 						"clearOnHide": false,
@@ -12999,6 +13027,7 @@
 				"input": false
 			}, {
 				"label": "PADI Verified",
+				"autofocus": true,
 				"tableView": false,
 				"defaultValue": false,
 				"validate": {
@@ -13106,7 +13135,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 239,
+	"_vid": 256,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13123,6 +13152,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-24T00:21:57.752Z",
+	"modified": "2020-06-24T06:35:52.419Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
