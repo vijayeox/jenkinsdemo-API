@@ -31,6 +31,7 @@ class TaskCallbackController extends AbstractApiControllerHelper
             $params['projectname'] = isset($params['projectname']) ? $params['projectname'] : null;
             $params['projectdata'] = ($params['projectname']) ? ($params['projectname']) : "No Project to ADD";
             $params['manager_login'] = isset($params['manager_login']) ? $params['manager_login'] : null;
+            $params['parent_identifier'] = isset($params['parent_identifier']) ? $params['parent_identifier'] : null;
             $this->log->info(TaskCallbackController::class . ":Project Data- " . $params['projectdata']);
             $response = $this->taskService->addProjectToTask($params['projectname'], $params['description'], $params['uuid'], $params['parent_identifier'], $params['manager_login']);
             // print_r($response);exit;
@@ -67,6 +68,7 @@ class TaskCallbackController extends AbstractApiControllerHelper
     public function updateProjectAction()
     {
         $params = $this->extractPostData();
+        $params['parent_identifier'] = isset($params['parent_identifier']) ? $params['parent_identifier'] : null;
         $this->log->info(__CLASS__ . "-> Callback - Update project in task - " . json_encode($params, true));
         try {
             $params['projectdata'] = isset($params['new_projectname']) ? ($params['new_projectname']) : "No Project to Update";

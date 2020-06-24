@@ -232,7 +232,11 @@ class UserService extends AbstractService
                 $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
             }
             if (isset($data['preferences'])) {
-                $preferences = json_decode($data['preferences'], true);
+                if(is_string($data['preferences'])){
+                    $preferences = json_decode($data['preferences'], true);
+                } else {
+                    $preferences = $data['preferences'];
+                }
                 $data['timezone'] = $preferences['timezone'];
                 unset($preferences['timezone']);
                 $data['preferences'] = json_encode($preferences);

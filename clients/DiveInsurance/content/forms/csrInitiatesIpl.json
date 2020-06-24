@@ -100,18 +100,15 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
-						"mask": false,
 						"autofocus": true,
-						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
+							"pattern": "[0-9\\s-]*$",
 							"customMessage": "PADI Number is not Valid!",
-							"min": 0
+							"min": 0,
+							"step": "any"
 						},
 						"key": "padi",
 						"logic": [{
@@ -147,10 +144,11 @@
 								"state": true
 							}]
 						}],
-						"type": "number",
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -414,6 +412,14 @@
 						"label": "efrToIPLUpgrade",
 						"customDefaultValue": "value = false;",
 						"key": "efrToIPLUpgrade",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "subject",
+						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+						"key": "subject",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
@@ -1188,7 +1194,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
 						"spellcheck": false,
 						"tableView": false,
 						"validate": {
@@ -1213,6 +1219,19 @@
 								"state": true
 							}]
 						}],
+						"type": "email",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Additional Email",
+						"tableView": true,
+						"multiple": true,
+						"validate": {
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"multiple": true
+						},
+						"key": "additional_email",
 						"type": "email",
 						"input": true,
 						"lockKey": true,
@@ -2460,7 +2479,7 @@
 				"hidden": true,
 				"tableView": true,
 				"key": "techrecPanel",
-				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n  if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInspectionInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}\n}\nelse{\n  show = false;\n}\nshow = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\nshow = false;",
+				"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) && (data.initiatedByCsr != true)) ? true: false;\n  if(data['attachments'] || (data['scubaFit_attachments'] && (data.scubaFit == 'scubaFitInstructor')) || (data['cylinderInstructor_attachments'] && (data.cylinder == 'cylinderInspector' ||data.cylinder == 'cylinderInspectionInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')) || (data['TechRec_attachments'] && data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove')){\n  if((Array.isArray(data.TechRec_attachments) && data.TechRec_attachments.length > 0)){\n    show =true;\n  } else {\n    if(typeof data.TechRec_attachments == \"string\" && data.TechRec_attachments && data.TechRec_attachments !== \"\" && data.TechRec_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInspector_attachments) && data.cylinderInspector_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInspector_attachments && data.cylinderInspector_attachments !== \"\" && data.cylinderInspector_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.cylinderInstructor_attachments) && data.cylinderInstructor_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.cylinderInstructor_attachments == \"string\" && data.cylinderInstructor_attachments && data.cylinderInstructor_attachments !== \"\" && data.cylinderInstructor_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.scubaFit_attachments) && data.scubaFit_attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.scubaFit_attachments == \"string\" && data.scubaFit_attachments && data.scubaFit_attachments !== \"\" && data.scubaFit_attachments != \"[]\"){\n      show = true;\n    }\n  }\n  if((Array.isArray(data.attachments) && data.attachments.length > 0)){\n    show = true;\n  } else {\n    if(typeof data.attachments == \"string\" && data.attachments && data.attachments !== \"\" && data.attachments != \"[]\"){\n      show = true;\n    }\n  }\n} else {\n show = false; \n}\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "User Attachments",
 				"input": false,
@@ -2471,7 +2490,7 @@
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
-					"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && data.TechRec_attachments.length > 0 && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n   show = true;\n } else {\n show = false; \n}",
+					"customConditional": "if(data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && data.TechRec_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){\n   show = true;\n } else {\n show = false; \n}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
 					"label": "TecRec Attachments",
@@ -2487,7 +2506,7 @@
 					"key": "cylinderInspector_attachments1",
 					"calculateValue": "value = (data['cylinderInspector_attachments'])",
 					"dtype": "documentviewer",
-					"customConditional": "if(data.cylinder == 'cylinderInspector'&& data.cylinderInspector_attachments.length > 0 && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n  show = true;\n } else {\n show = false; \n}",
+					"customConditional": "if(data.cylinder == 'cylinderInspector'&& data.cylinderInspector_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){\n  show = true;\n } else {\n show = false; \n}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
@@ -2514,7 +2533,7 @@
 					"inputType": "documentviewer",
 					"input": 1,
 					"tableView": false,
-					"customConditional": "if(data.cylinder === 'cylinderInstructor' && data.cylinderInstructor_attachments.length > 0 && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){\n show = true;\n} else {\n show = false; \n}",
+					"customConditional": "if(data.cylinder === 'cylinderInstructor' && data.cylinderInstructor_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){\n show = true;\n} else {\n show = false; \n}",
 					"protected": true,
 					"persistent": false,
 					"refreshOn": "cylinderInstructor_attachments"
@@ -2524,7 +2543,7 @@
 					"calculateValue": "value = (data['scubaFit_attachments'])",
 					"dtype": "documentviewer",
 					"datype": "documentviewer",
-					"customConditional": "if(data.scubaFit === 'scubaFitInstructor' && data.scubaFit_attachments.length > 0 && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){show = true;\n  } else {\n show = false; \n}",
+					"customConditional": "if(data.scubaFit === 'scubaFitInstructor' && data.scubaFit_attachments.length > 0 && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){show = true;\n  } else {\n show = false; \n}",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
@@ -2541,7 +2560,7 @@
 					"key": "attachments1",
 					"calculateValue": "value = (data['attachments'])",
 					"dtype": "documentviewer",
-					"customConditional": "if(data.attachments && (data.CSRReviewRequired == \"\" || data.CSRReviewRequired ==false || data.CSRReviewRequired == 'false')){show = true;} else { show = false;}",
+					"customConditional": "if(data.attachments && (data.CSRReviewRequired ==true || data.CSRReviewRequired == 'true')){show = true;} else { show = false;}",
 					"datype": "documentviewer",
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
@@ -2567,7 +2586,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "techRecAttachment",
-				"customConditional": "if (data.privileges){\n  show = data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove'? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n    show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}else{  \n    show = false;\n}",
 				"type": "panel",
 				"label": "TecRec Attachments",
 				"input": false,
@@ -2620,7 +2639,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "cylinderInspectorAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\")?true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = ((data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\") && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2725,7 +2744,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "scubaFitAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor') ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Scuba Fit Attachments",
 				"input": false,
@@ -2981,17 +3000,18 @@
 				"input": true,
 				"dataGridLabel": false
 			}, {
-				"key": "page3Panel4Content",
 				"label": "Content",
-				"input": false,
 				"attrs": [{
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>\n<a href=\"https://www.diveinsurance.com/downloads/Exclusions.pdf\" target=\"_blank\">[Read Exclusions] &nbsp; </a></i></li>\n&nbsp\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>",
+				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>\n<a href=\"/apps/DiveInsurance/public/docs/Exclusions.pdf\" target=\"_blank\">[Read Exclusions] &nbsp; </a></i></li>\n&nbsp\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>",
+				"refreshOnChange": false,
+				"tableView": false,
+				"key": "page3Panel4Content",
 				"type": "htmlelement",
-				"hideLabel": true,
-				"tableView": false
+				"input": false,
+				"hideLabel": true
 			}],
 			"type": "panel",
 			"label": "Panel"
@@ -4125,11 +4145,19 @@
 						"inputFormat": "plain",
 						"redrawOn": "amountPayable",
 						"clearOnHide": false,
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
+						"calculateValue": "value = (parseFloat(data.amountPayable)||0).toFixed(2);",
 						"key": "finalAmountPayable",
 						"type": "number",
 						"input": true,
 						"inputType": "text",
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "billing_amount",
+						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
+						"key": "billing_amount",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Would you like to enroll for installment billing?",
@@ -4425,9 +4453,9 @@
 						}, {
 							"type": "convergepay",
 							"key": "creditcardPayment",
-							"amount_field": "finalAmountPayable",
-							"refreshOn": "finalAmountPayable",
-							"redrawOn": "finalAmountPayable",
+							"amount_field": "billing_amount",
+							"refreshOn": "billing_amount",
+							"redrawOn": "billing_amount",
 							"description": "payment_fields",
 							"label": "custom",
 							"input": true,
@@ -4660,6 +4688,17 @@
 					"hideOnChildrenHidden": false
 				}]
 			}]
+		}, {
+			"label": "Additional Notes",
+			"tableView": true,
+			"key": "additionalNotes",
+			"conditional": {
+				"show": true,
+				"when": "approved",
+				"eq": "accepted"
+			},
+			"type": "textfield",
+			"input": true
 		}],
 		"breadcrumbClickable": false,
 		"buttonSettings": {
@@ -4673,7 +4712,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 447,
+	"_vid": 457,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4683,7 +4722,7 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"showCancel": "false",
+		"showCancel": "true",
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
@@ -4694,6 +4733,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-21T19:00:39.700Z",
+	"modified": "2020-06-24T05:15:47.699Z",
 	"machineName": "testdivehub:csrInitiates"
 }

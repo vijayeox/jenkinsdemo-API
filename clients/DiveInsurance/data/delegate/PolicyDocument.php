@@ -67,7 +67,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                         'header' => 'DiveStoreHeader.html',
                         'footer' => 'DiveStoreFooter.html',
-                        'psTemplate' => 'DiveStore_DCPS_template',
+                        'psTemplate' => 'DiveStore_DCPS',
                         'psHeader' => 'DiveStore_DCPS_header.html',
                         'psFooter' => 'DiveStore_DCPS_footer.html',
                         'card' => 'PocketCard',

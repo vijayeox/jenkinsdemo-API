@@ -64,7 +64,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2021.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "panelColumns3Content",
@@ -79,7 +79,7 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2019 through 12:01 AM July 22, 2020  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2020 through 12:01 AM July 22, 2021  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2021.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
 				"refreshOnChange": false,
 				"tableView": false,
 				"key": "panelColumns3Content1",
@@ -634,6 +634,75 @@
 				"size": "md"
 			}],
 			"type": "columns",
+			"hideLabel": true
+		}, {
+			"label": "Columns",
+			"columns": [{
+				"components": [{
+					"label": "Current Insurance Company",
+					"tableView": true,
+					"clearOnHide": false,
+					"validate": {
+						"required": true
+					},
+					"key": "current_insurance_company",
+					"type": "textfield",
+					"input": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}, {
+				"components": [],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}],
+			"tableView": false,
+			"key": "columns12",
+			"type": "columns",
+			"input": false,
+			"hideLabel": true
+		}, {
+			"label": "Columns",
+			"columns": [{
+				"components": [{
+					"label": "Website",
+					"spellcheck": false,
+					"tableView": false,
+					"clearOnHide": false,
+					"validate": {
+						"custom": "if(data['business_website'] && data['business_website'] != ''){\n valid = (data['business_website'].match(/^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$/)) ?  true : 'Please enter a valid URL';\n}"
+					},
+					"key": "business_website",
+					"type": "textfield",
+					"input": true,
+					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}, {
+				"components": [],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}],
+			"tableView": false,
+			"key": "columns13",
+			"type": "columns",
+			"input": false,
 			"hideLabel": true
 		}]
 	}, {
@@ -1436,11 +1505,12 @@
 				}, {
 					"label": "Additional Email",
 					"tableView": true,
+					"multiple": true,
 					"validate": {
-						"customMessage": "Please enter your email address in format: yourname@example.com"
+						"customMessage": "Please enter your email address in format: yourname@example.com",
+						"multiple": true
 					},
 					"key": "additional_email",
-					"customConditional": "show = false;\nif(productName == 'DiveStore'){\n   show =true;\n}",
 					"type": "email",
 					"input": true,
 					"lockKey": true,
@@ -1467,7 +1537,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 117,
+	"_vid": 124,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1481,6 +1551,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-20T12:58:07.386Z",
+	"modified": "2020-06-23T06:46:47.324Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

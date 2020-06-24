@@ -6,8 +6,8 @@ use Oxzion\Analytics\AnalyticsAbstract;
 
 abstract class AnalyticsEngineAPI extends AnalyticsAbstract {
 
-    public function __construct($config,$appDBAdapter,$appConfig) {
-      parent::__construct($config,$appDBAdapter,$appConfig);
+    public function __construct($appDBAdapter,$appConfig) {
+      parent::__construct($appDBAdapter,$appConfig);
 
     }
 

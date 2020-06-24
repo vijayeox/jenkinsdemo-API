@@ -155,8 +155,7 @@
     	
 			<div class="policy_notice_div">
 				<hr class="hrtag"></hr>
-					<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-						to the date that the alleged negligent act, error, or omission occurred.
+					<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day of uninterrupted coverage,whichever is earlier (refer to section VI of the policy). However, in no case will the retro date be prior to 6/30/1992. In the event of a claim which invokes a Retroactive Date prior to {$start_date}, the Certificate Holder must submit proof of uninterrupted insurance coverage dating prior to the date that the alleged negligent act, error, or omission occurred.
 					</p></center>
 					<hr class = "spacing1"></hr>
 					<b><center><p class = "phy_add">Physical Address {if ($sameasmailingaddress == "false" || $sameasmailingaddress == false) && (isset($mailaddress1) && $mailaddress1 != "") }

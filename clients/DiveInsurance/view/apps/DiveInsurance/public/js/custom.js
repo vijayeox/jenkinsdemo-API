@@ -198,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     form.on("submit", function(submission, next) {
       submission.data.app_id = appId;
+      submission.data.preferences = JSON.stringify({timezone:moment.tz.guess()});
       var response = fetch(baseUrl + "register", {
         body: JSON.stringify(submission.data),
         headers: {
@@ -223,7 +224,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
     });
-
     form.on("customEvent", function (event) {
       console.log(event)
       var changed = event.data;

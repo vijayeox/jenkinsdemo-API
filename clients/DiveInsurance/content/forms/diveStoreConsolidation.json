@@ -26,7 +26,7 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2019.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "columnsContent",
@@ -184,18 +184,16 @@
 				}, {
 					"components": [{
 						"label": "PADI Store Number",
-						"mask": false,
 						"autofocus": true,
-						"spellcheck": true,
+						"spellcheck": false,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
+							"pattern": "[0-9\\s-]*$",
 							"customMessage": "Padi Number is required",
-							"min": 0
+							"min": 0,
+							"step": "any"
 						},
 						"key": "padi",
 						"logic": [{
@@ -215,10 +213,11 @@
 								"state": true
 							}]
 						}],
-						"type": "number",
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -289,7 +288,7 @@
 							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 							"attr": "style"
 						}],
-						"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
+						"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Dive Boat coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
@@ -382,6 +381,14 @@
 						"label": "product_email_id",
 						"calculateValue": "value = 'diveboat@diveinsurance.com';",
 						"key": "product_email_id",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "subject",
+						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+						"key": "subject",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
@@ -532,7 +539,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please Select the Entity Type of your Business"
+							"customMessage": "Entity Type is required"
 						},
 						"key": "entity_type",
 						"type": "select",
@@ -1252,7 +1259,7 @@
 								"inputFormat": "plain",
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number",
+									"customMessage": "Please enter a valid mobile phone number",
 									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
@@ -1302,7 +1309,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
 						"tableView": true,
 						"validate": {
 							"required": true,
@@ -1316,8 +1323,10 @@
 					}, {
 						"label": "Additional Email",
 						"tableView": true,
+						"multiple": true,
 						"validate": {
-							"customMessage": "Please enter your email address in format: yourname@example.com"
+							"customMessage": "Please enter your email address in format: yourname@example.com",
+							"multiple": true
 						},
 						"key": "additional_email",
 						"type": "email",
@@ -1367,13 +1376,16 @@
 						"displayInTimezone": "utc",
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
+						"autofocus": true,
 						"tableView": false,
+						"enableMinDateInput": false,
 						"datePicker": {
-							"minDate": "2020-06-15T18:30:00.000Z",
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"datepickerMode": "day"
 						},
+						"enableMaxDateInput": false,
 						"enableTime": false,
 						"timePicker": {
 							"showMeridian": false
@@ -1405,7 +1417,7 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": "2020-06-15T18:30:00.000Z",
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"maxDate": null
@@ -1437,17 +1449,19 @@
 						"format": "MM-dd-yyyy",
 						"disabled": true,
 						"tableView": false,
+						"enableMinDateInput": false,
 						"datePicker": {
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"datepickerMode": "day"
 						},
+						"enableMaxDateInput": false,
 						"enableTime": false,
 						"timePicker": {
 							"showMeridian": false
 						},
 						"clearOnHide": false,
-						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
+						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nvar day = today.date();\nif(month >= 5){\n  if(month==5 && day==30){\n    value = (year + 1) + \"-06-30\";\n  } else if(month ==5 && day < 30){\n    value = (year) + \"-06-30\";\n  } else {\n    value = (year + 1) + \"-06-30\";\n  }\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 						"key": "end_date",
 						"type": "datetime",
 						"input": true,
@@ -1530,28 +1544,6 @@
 			"input": false,
 			"components": [{
 				"label": "Columns",
-				"columns": [{
-					"components": [],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"hideLabel": true,
-				"tableView": false,
-				"key": "page4PanelPanelPanelColumns3",
-				"type": "columns",
-				"input": false
-			}, {
-				"label": "Columns",
 				"input": false,
 				"tableView": false,
 				"key": "pageNaNPanelColumns",
@@ -1579,7 +1571,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select the material used for the Building Construction"
+							"customMessage": "Please select the material used for the building construction"
 						},
 						"key": "dspropbuildingconstr",
 						"type": "select",
@@ -1935,7 +1927,6 @@
 								"mask": false,
 								"spellcheck": true,
 								"tableView": true,
-								"defaultValue": 0,
 								"delimiter": true,
 								"requireDecimal": false,
 								"inputFormat": "plain",
@@ -1991,7 +1982,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please let us know if you are the owner of the building?"
+							"customMessage": "Please let us know if you are the owner of the building"
 						},
 						"errorLabel": "Building Ownership",
 						"key": "dspropownbuilding",
@@ -2082,9 +2073,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "The year in which the building was built is required"
 								},
-								"errorLabel": "The Year in which the Building was built",
 								"key": "built_year",
 								"type": "select",
 								"indexeddb": {
@@ -2224,6 +2215,7 @@
 				"description": "Except Instructional/Supervisory & Travel Receipts. This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
 				"prefix": "$",
 				"mask": false,
+				"autofocus": true,
 				"spellcheck": true,
 				"tableView": true,
 				"delimiter": true,
@@ -2232,11 +2224,10 @@
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Please enter the Estimated Retail receipts for the past 12 months",
+					"customMessage": "Estimated Retail receipts for the past 12 months is required",
 					"min": null,
 					"max": null
 				},
-				"errorLabel": "Estimated 12 month retail receipts",
 				"key": "dsglestmonthretailreceipt",
 				"type": "number",
 				"input": true,
@@ -2245,14 +2236,17 @@
 				"labelMargin": null,
 				"lockKey": true
 			}, {
-				"label": "Actual Retail Receipts for previous 12months",
+				"label": "Actual Retail Receipts for previous 12 months",
 				"prefix": "$",
 				"mask": false,
 				"spellcheck": true,
 				"tableView": false,
-				"delimiter": false,
+				"delimiter": true,
 				"requireDecimal": false,
 				"inputFormat": "plain",
+				"validate": {
+					"required": true
+				},
 				"key": "annualEstimatedReceipts",
 				"type": "number",
 				"input": true,
@@ -2290,7 +2284,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "doyouhaveapoolonpremisesPL1",
@@ -2314,7 +2308,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "criminalBackGroundChecks",
@@ -2338,7 +2332,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "hasApplicantSexualAbuse",
@@ -2362,7 +2356,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "hasApplicantSexualAbuseMolestation",
@@ -2399,7 +2393,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "doyouhaveapoolonpremisesPL",
@@ -2444,7 +2438,7 @@
 						"key": "poolSupplementalForm1",
 						"conditional": {
 							"show": true,
-							"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+							"when": "doyouhaveapoolonpremisesPL",
 							"eq": "yes"
 						},
 						"type": "panel",
@@ -2496,6 +2490,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"validate": {
+											"required": true
+										},
 										"key": "dimensions",
 										"type": "number",
 										"input": true,
@@ -2516,6 +2513,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"validate": {
+											"required": true
+										},
 										"key": "depth",
 										"type": "number",
 										"input": true,
@@ -2529,6 +2529,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"validate": {
+											"required": true
+										},
 										"key": "maxDepth",
 										"type": "number",
 										"input": true,
@@ -2567,9 +2570,11 @@
 									"columns": [{
 										"components": [{
 											"label": "From",
-											"labelPosition": "left-left",
 											"tableView": true,
 											"dataFormat": "HH:mm",
+											"validate": {
+												"required": true
+											},
 											"key": "time",
 											"type": "time",
 											"input": true,
@@ -2584,9 +2589,11 @@
 									}, {
 										"components": [{
 											"label": "To",
-											"labelPosition": "left-left",
 											"tableView": true,
 											"dataFormat": "HH:mm",
+											"validate": {
+												"required": true
+											},
 											"key": "time1",
 											"type": "time",
 											"input": true,
@@ -2638,7 +2645,8 @@
 												},
 												"month": {
 													"placeholder": "From",
-													"hide": false
+													"hide": false,
+													"required": true
 												},
 												"year": {
 													"hide": true
@@ -2676,6 +2684,7 @@
 												}
 											},
 											"defaultValue": "00/00/0000",
+											"errorLabel": "Operating Months",
 											"key": "operationMonthTo",
 											"type": "day",
 											"input": true,
@@ -2833,6 +2842,9 @@
 												"delimiter": false,
 												"requireDecimal": false,
 												"inputFormat": "plain",
+												"validate": {
+													"customMessage": "Please enter diving boards or diving platforms present"
+												},
 												"key": "divingBoardCount",
 												"type": "number",
 												"input": true,
@@ -2846,13 +2858,15 @@
 										}, {
 											"components": [{
 												"label": "Height?",
-												"labelPosition": "left-left",
 												"mask": false,
 												"spellcheck": true,
 												"tableView": false,
 												"delimiter": false,
 												"requireDecimal": false,
 												"inputFormat": "plain",
+												"validate": {
+													"customMessage": "Please enter the height of diving boards or diving platforms"
+												},
 												"key": "divingBoardHeight",
 												"type": "number",
 												"input": true,
@@ -2957,7 +2971,8 @@
 									"key": "pleaseAttachWaiversOfLiability",
 									"conditional": {
 										"show": true,
-										"when": "waiversOfLiability"
+										"when": "waiversOfLiability",
+										"eq": "yes"
 									},
 									"type": "file",
 									"url": "/file/attachments",
@@ -3013,28 +3028,29 @@
 								}]
 							}],
 							"hideOnChildrenHidden": false
+						}, {
+							"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
+							"prefix": "$",
+							"mask": false,
+							"spellcheck": true,
+							"tableView": false,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"validate": {
+								"required": true,
+								"customMessage": "Gross receipts from your pool is required"
+							},
+							"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
+							"conditional": {
+								"show": true,
+								"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+								"eq": "yes"
+							},
+							"type": "number",
+							"input": true,
+							"hideOnChildrenHidden": false
 						}],
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-						"prefix": "$",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": false,
-						"delimiter": true,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"validate": {
-							"required": true
-						},
-						"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
-						"conditional": {
-							"show": true,
-							"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-							"eq": "yes"
-						},
-						"type": "number",
-						"input": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 8,
@@ -3092,7 +3108,8 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Please describe the locations"
 						},
 						"key": "dsglPleasedescribehere",
 						"conditional": {
@@ -3165,7 +3182,8 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Please enter the value to insure"
 						},
 						"key": "dsglvaluetoinsure",
 						"conditional": {
@@ -3523,6 +3541,14 @@
 				"hideLabel": true,
 				"path": "pageNaNPanel3Columns10"
 			}, {
+				"label": "Excluded Operation",
+				"autoExpand": false,
+				"tableView": true,
+				"key": "excludedOperation",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"type": "textarea",
+				"input": true
+			}, {
 				"key": "dsglstoreprop",
 				"input": false,
 				"title": "Claims Information",
@@ -3593,9 +3619,10 @@
 									"enableMinDateInput": false,
 									"datePicker": {
 										"disableWeekends": false,
-										"disableWeekdays": false
+										"disableWeekdays": false,
+										"maxDate": "moment().startOf('day')"
 									},
-									"enableMaxDateInput": false,
+									"enableMaxDateInput": true,
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
@@ -3624,7 +3651,7 @@
 										"minDate": null,
 										"disableWeekends": false,
 										"disableWeekdays": false,
-										"maxDate": null
+										"maxDate": "moment().startOf('day')"
 									},
 									"hideOnChildrenHidden": false
 								}],
@@ -3737,7 +3764,7 @@
 					"label": "Previous Insurance Company",
 					"tableView": true,
 					"clearOnHide": false,
-					"key": "pageNaNPanel3ColumnsPanelText",
+					"key": "previousInsuranceCompany",
 					"conditional": {
 						"show": true,
 						"when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
@@ -3801,6 +3828,7 @@
 			"columns": [{
 				"components": [{
 					"label": "Travel Agent E&O",
+					"autofocus": true,
 					"tableView": true,
 					"defaultValue": false,
 					"clearOnHide": false,
@@ -3856,915 +3884,6 @@
 			"hideLabel": true
 		}, {
 			"label": "Columns",
-			"columns": [{
-				"components": [{
-					"label": "Lake, quarry, pond",
-					"tableView": true,
-					"defaultValue": false,
-					"key": "lakequarrypondContactVicenciaBuckleyforsupplementalformPL",
-					"type": "checkbox",
-					"input": true,
-					"dataGridLabel": false,
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"title": "PADI Lake / Quarry Suppllmental Application",
-					"theme": "primary",
-					"breadcrumbClickable": true,
-					"buttonSettings": {
-						"previous": true,
-						"cancel": true,
-						"next": true
-					},
-					"collapsible": false,
-					"tableView": false,
-					"key": "poolSupplementalForm2",
-					"conditional": {
-						"show": true,
-						"when": "lakequarrypondContactVicenciaBuckleyforsupplementalformPL",
-						"eq": "true"
-					},
-					"type": "panel",
-					"label": "PADI Lake / Quarry Suppllmental Application",
-					"input": false,
-					"components": [{
-						"label": "Applicant's Name",
-						"tableView": true,
-						"key": "applicantsName",
-						"type": "textfield",
-						"input": true
-					}, {
-						"label": "Radio",
-						"optionsLabelPosition": "right",
-						"inline": false,
-						"hideLabel": true,
-						"tableView": false,
-						"values": [{
-							"label": "Lake",
-							"value": "lake",
-							"shortcut": ""
-						}, {
-							"label": "Quarry",
-							"value": "quarry",
-							"shortcut": ""
-						}, {
-							"label": "Other",
-							"value": "other",
-							"shortcut": ""
-						}],
-						"key": "typeOfApplication",
-						"type": "radio",
-						"input": true
-					}, {
-						"label": "poolSupplementalForm",
-						"tableView": false,
-						"key": "poolSupplementalForm3",
-						"type": "well",
-						"input": false,
-						"components": [{
-							"label": "Columns",
-							"columns": [{
-								"components": [{
-									"label": "Dimensions",
-									"mask": false,
-									"spellcheck": true,
-									"tableView": false,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"key": "dimensions1",
-									"type": "number",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 6,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Min Depth",
-									"labelPosition": "left-left",
-									"mask": false,
-									"spellcheck": true,
-									"tableView": false,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"key": "depth1",
-									"type": "number",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Max Depth",
-									"labelPosition": "left-left",
-									"mask": false,
-									"spellcheck": true,
-									"tableView": false,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"key": "maxDepth1",
-									"type": "number",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 6,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}],
-							"tableView": false,
-							"key": "columns24",
-							"type": "columns",
-							"input": false
-						}, {
-							"tableView": false,
-							"key": "fieldSet2",
-							"type": "fieldset",
-							"label": "Field Set",
-							"input": false,
-							"components": [{
-								"label": "Acerage",
-								"tableView": true,
-								"clearOnHide": false,
-								"key": "page4PanelPanelPanelColumnsAverage",
-								"conditional": {
-									"show": true,
-									"when": "lakequarrypondContactVicenciaBuckleyforsupplementalformPL",
-									"eq": "true"
-								},
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "Hours of Operation",
-								"attrs": [{
-									"attr": "",
-									"value": ""
-								}],
-								"content": "Hours of Operation",
-								"refreshOnChange": false,
-								"tableView": false,
-								"key": "LakehoursOfOperation",
-								"type": "htmlelement",
-								"input": false
-							}, {
-								"label": "Columns",
-								"columns": [{
-									"components": [{
-										"label": "From",
-										"labelPosition": "left-left",
-										"tableView": true,
-										"dataFormat": "HH:mm",
-										"key": "time2",
-										"type": "time",
-										"input": true,
-										"inputMask": "99:99",
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [{
-										"label": "To",
-										"labelPosition": "left-left",
-										"tableView": true,
-										"dataFormat": "HH:mm",
-										"key": "time3",
-										"type": "time",
-										"input": true,
-										"inputMask": "99:99",
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}],
-								"tableView": false,
-								"key": "columns25",
-								"type": "columns",
-								"input": false
-							}]
-						}, {
-							"tableView": false,
-							"key": "fieldSet3",
-							"type": "fieldset",
-							"label": "Field Set",
-							"input": false,
-							"components": [{
-								"label": "Hours of Operation",
-								"attrs": [{
-									"attr": "",
-									"value": ""
-								}],
-								"content": "Operating Months",
-								"refreshOnChange": false,
-								"tableView": false,
-								"key": "hoursOfOperation2",
-								"type": "htmlelement",
-								"input": false
-							}, {
-								"tableView": false,
-								"key": "fieldSet4",
-								"type": "fieldset",
-								"label": "Field Set",
-								"input": false,
-								"components": [{
-									"label": "Columns",
-									"columns": [{
-										"components": [{
-											"label": "From",
-											"hideInputLabels": true,
-											"inputsLabelPosition": "left",
-											"useLocaleSettings": false,
-											"hideLabel": true,
-											"tableView": false,
-											"fields": {
-												"day": {
-													"hide": true
-												},
-												"month": {
-													"placeholder": "From",
-													"hide": false
-												},
-												"year": {
-													"hide": true
-												}
-											},
-											"defaultValue": "00/00/0000",
-											"key": "from1",
-											"type": "day",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}],
-										"width": 6,
-										"offset": 0,
-										"push": 0,
-										"pull": 0,
-										"size": "md"
-									}, {
-										"components": [{
-											"label": "To",
-											"hideInputLabels": true,
-											"inputsLabelPosition": "left",
-											"useLocaleSettings": false,
-											"hideLabel": true,
-											"tableView": false,
-											"fields": {
-												"day": {
-													"hide": true
-												},
-												"month": {
-													"placeholder": "To",
-													"hide": false
-												},
-												"year": {
-													"hide": true
-												}
-											},
-											"defaultValue": "00/00/0000",
-											"key": "operationMonthTo1",
-											"type": "day",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}],
-										"width": 6,
-										"offset": 0,
-										"push": 0,
-										"pull": 0,
-										"size": "md"
-									}],
-									"tableView": false,
-									"key": "columns26",
-									"type": "columns",
-									"input": false
-								}, {
-									"label": "Lifeguard to Swimmer Ratio",
-									"attrs": [{
-										"attr": "",
-										"value": ""
-									}],
-									"content": "Lifeguard to Swimmer Ratio",
-									"refreshOnChange": false,
-									"tableView": false,
-									"key": "hoursOfOperation3",
-									"type": "htmlelement",
-									"input": false
-								}, {
-									"label": "Columns",
-									"columns": [{
-										"components": [{
-											"label": "Swimmer Ratio",
-											"hideLabel": true,
-											"mask": false,
-											"spellcheck": true,
-											"tableView": false,
-											"delimiter": false,
-											"requireDecimal": false,
-											"inputFormat": "plain",
-											"key": "swimmerRatio2",
-											"type": "number",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}],
-										"width": 5,
-										"offset": 0,
-										"push": 0,
-										"pull": 0,
-										"size": "md"
-									}, {
-										"components": [{
-											"label": "HTML",
-											"attrs": [{
-												"attr": "",
-												"value": ""
-											}],
-											"content": "To",
-											"refreshOnChange": false,
-											"tableView": false,
-											"key": "html5",
-											"type": "htmlelement",
-											"input": false,
-											"hideOnChildrenHidden": false
-										}],
-										"width": 2,
-										"offset": 0,
-										"push": 0,
-										"pull": 0,
-										"size": "md"
-									}, {
-										"components": [{
-											"label": "Swimmer Ratio",
-											"hideLabel": true,
-											"mask": false,
-											"spellcheck": true,
-											"tableView": false,
-											"delimiter": false,
-											"requireDecimal": false,
-											"inputFormat": "plain",
-											"key": "swimmerRatio3",
-											"type": "number",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}],
-										"size": "md",
-										"width": 5,
-										"offset": 0,
-										"push": 0,
-										"pull": 0
-									}],
-									"tableView": false,
-									"key": "columns27",
-									"type": "columns",
-									"input": false
-								}, {
-									"label": "Please describe your activities",
-									"autoExpand": false,
-									"tableView": true,
-									"key": "LakepleaseDescribeYourActivities",
-									"type": "textarea",
-									"input": true
-								}, {
-									"label": "Are diving boards or diving platforms present?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "lakedivingBoardsOrPlatforms",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "asda",
-									"tableView": false,
-									"key": "asda1",
-									"conditional": {
-										"show": true,
-										"when": "lakedivingBoardsOrPlatforms",
-										"eq": "yes"
-									},
-									"type": "well",
-									"input": false,
-									"components": [{
-										"label": "Columns",
-										"columns": [{
-											"components": [{
-												"label": "How many?",
-												"mask": false,
-												"spellcheck": true,
-												"tableView": false,
-												"delimiter": false,
-												"requireDecimal": false,
-												"inputFormat": "plain",
-												"key": "divingBoardCount1",
-												"type": "number",
-												"input": true,
-												"hideOnChildrenHidden": false
-											}],
-											"width": 6,
-											"offset": 0,
-											"push": 0,
-											"pull": 0,
-											"size": "md"
-										}, {
-											"components": [{
-												"label": "Height?",
-												"mask": false,
-												"spellcheck": true,
-												"tableView": false,
-												"delimiter": false,
-												"requireDecimal": false,
-												"inputFormat": "plain",
-												"key": "divingBoardHeight1",
-												"type": "number",
-												"input": true,
-												"hideOnChildrenHidden": false
-											}],
-											"width": 6,
-											"offset": 0,
-											"push": 0,
-											"pull": 0,
-											"size": "md"
-										}],
-										"tableView": false,
-										"key": "columns28",
-										"type": "columns",
-										"input": false
-									}]
-								}, {
-									"label": "Are there other areas accessible for high diving (over 8ft.)?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "lakeAreasForHighDiving",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Are waivers of liability, signed by swimmers or parents, obtained?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "LakewaiversOfLiability",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Please attach waivers of liability",
-									"tableView": false,
-									"storage": "url",
-									"webcam": true,
-									"fileTypes": [{
-										"label": "",
-										"value": ""
-									}],
-									"multiple": true,
-									"validate": {
-										"multiple": true
-									},
-									"key": "pleaseAttachWaiversOfLiability1",
-									"conditional": {
-										"show": true,
-										"when": "LakewaiversOfLiability",
-										"eq": "yes"
-									},
-									"type": "file",
-									"url": "/file/attachments",
-									"input": true
-								}, {
-									"label": "Is swimming area marked by boundary buoys or rope?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "lakeSwimmingAreaBoundaryBuoysRopes",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Do you sponsor athletic teams?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "lakeSponsorAthleticTeams",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Please Describe",
-									"autoExpand": false,
-									"tableView": true,
-									"key": "lakeAthleticTeamsPleaseDescribe",
-									"conditional": {
-										"show": true,
-										"when": "lakeSponsorAthleticTeams",
-										"eq": "yes"
-									},
-									"type": "textarea",
-									"input": true
-								}, {
-									"label": "Are trampolines used?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "poolTrampolines1",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Are lifeguards present during operating hours?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "lakeLifeGaurdsPresent",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"title": "Lifegaurds",
-									"theme": "primary",
-									"breadcrumbClickable": true,
-									"buttonSettings": {
-										"previous": true,
-										"cancel": true,
-										"next": true
-									},
-									"collapsible": false,
-									"tableView": false,
-									"key": "lifegaurds",
-									"conditional": {
-										"show": true,
-										"when": "lakeLifeGaurdsPresent",
-										"eq": "yes"
-									},
-									"type": "panel",
-									"label": "Lifegaurds",
-									"input": false,
-									"components": [{
-										"label": "Is Certification Required",
-										"optionsLabelPosition": "right",
-										"inline": false,
-										"tableView": false,
-										"values": [{
-											"label": "Yes",
-											"value": "yes",
-											"shortcut": ""
-										}, {
-											"label": "No",
-											"value": "no",
-											"shortcut": ""
-										}],
-										"clearOnHide": false,
-										"validate": {
-											"required": true,
-											"customMessage": "Please select an option"
-										},
-										"errorLabel": "Incidentalal Locations",
-										"key": "lakeLifegaurdCertification",
-										"type": "radio",
-										"input": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "Are all lifeguards American Red Cross (or equivalent) certified?",
-										"optionsLabelPosition": "right",
-										"inline": false,
-										"tableView": false,
-										"values": [{
-											"label": "Yes",
-											"value": "yes",
-											"shortcut": ""
-										}, {
-											"label": "No",
-											"value": "no",
-											"shortcut": ""
-										}],
-										"clearOnHide": false,
-										"validate": {
-											"required": true,
-											"customMessage": "Please select an option"
-										},
-										"errorLabel": "Incidentalal Locations",
-										"key": "lakeLifeGaurds",
-										"type": "radio",
-										"input": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "Are supervised safety exercise drills held periodically?",
-										"optionsLabelPosition": "right",
-										"inline": false,
-										"tableView": false,
-										"values": [{
-											"label": "Yes",
-											"value": "yes",
-											"shortcut": ""
-										}, {
-											"label": "No",
-											"value": "no",
-											"shortcut": ""
-										}],
-										"clearOnHide": false,
-										"validate": {
-											"required": true,
-											"customMessage": "Please select an option"
-										},
-										"errorLabel": "Incidentalal Locations",
-										"key": "lakeSafetyExcercises",
-										"type": "radio",
-										"input": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "If yes, record log maintained?",
-										"optionsLabelPosition": "right",
-										"inline": false,
-										"tableView": false,
-										"values": [{
-											"label": "Yes",
-											"value": "yes",
-											"shortcut": ""
-										}, {
-											"label": "No",
-											"value": "no",
-											"shortcut": ""
-										}],
-										"clearOnHide": false,
-										"validate": {
-											"required": true,
-											"customMessage": "Please select an option"
-										},
-										"errorLabel": "Incidentalal Locations",
-										"key": "lakeLifeGaurdRecordLog",
-										"conditional": {
-											"show": true,
-											"when": "lakeSafetyExcercises",
-											"eq": "yes"
-										},
-										"type": "radio",
-										"input": true,
-										"hideOnChildrenHidden": false
-									}]
-								}]
-							}, {
-								"label": "Is there a Jacuzzi or Whirlpool?",
-								"optionsLabelPosition": "right",
-								"inline": false,
-								"tableView": false,
-								"values": [{
-									"label": "Yes",
-									"value": "yes",
-									"shortcut": ""
-								}, {
-									"label": "No",
-									"value": "no",
-									"shortcut": ""
-								}],
-								"clearOnHide": false,
-								"validate": {
-									"required": true,
-									"customMessage": "Please select an option"
-								},
-								"errorLabel": "Incidentalal Locations",
-								"key": "lakeJacuzziWhirlPool",
-								"type": "radio",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"title": "Jacuzzi / Whirlpool",
-								"theme": "primary",
-								"breadcrumbClickable": true,
-								"buttonSettings": {
-									"previous": true,
-									"cancel": true,
-									"next": true
-								},
-								"collapsible": false,
-								"tableView": false,
-								"key": "jacuzziWhirlpool",
-								"conditional": {
-									"show": true,
-									"when": "lakeJacuzziWhirlPool",
-									"eq": "yes"
-								},
-								"type": "panel",
-								"label": "Jacuzzi / Whirlpool",
-								"input": false,
-								"components": [{
-									"label": "Can temperature be adjusted by anyone?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "lakeTemperatureAdjusted",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Maximum Temperature Setting",
-									"mask": false,
-									"spellcheck": true,
-									"tableView": false,
-									"delimiter": false,
-									"requireDecimal": false,
-									"inputFormat": "plain",
-									"key": "lakeMaximumTemperature",
-									"type": "number",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}, {
-									"label": "Are filtration drains domed and/or are dual grated drains used?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"label": "Yes",
-										"value": "yes",
-										"shortcut": ""
-									}, {
-										"label": "No",
-										"value": "no",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"customMessage": "Please select an option"
-									},
-									"errorLabel": "Incidentalal Locations",
-									"key": "lakeFiltrationDrainsUsed",
-									"type": "radio",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}]
-							}]
-						}, {
-							"label": "Other Activities",
-							"reorder": false,
-							"addAnotherPosition": "bottom",
-							"defaultOpen": false,
-							"layoutFixed": false,
-							"enableRowGroups": false,
-							"tableView": false,
-							"defaultValue": [{}],
-							"key": "lakeOtherActivities",
-							"type": "datagrid",
-							"input": true,
-							"components": [{
-								"label": "Lake Activities",
-								"hideLabel": true,
-								"tableView": true,
-								"key": "lakeActivities",
-								"type": "textfield",
-								"input": true
-							}]
-						}],
-						"hideOnChildrenHidden": false
-					}],
-					"hideOnChildrenHidden": false
-				}],
-				"width": 11,
-				"offset": 0,
-				"push": 0,
-				"pull": 0,
-				"size": "md"
-			}, {
-				"components": [],
-				"width": 1,
-				"offset": 0,
-				"push": 0,
-				"pull": 0,
-				"size": "md"
-			}],
-			"hideLabel": true,
-			"tableView": false,
-			"key": "page4PanelPanelPanelColumns4",
-			"type": "columns",
-			"input": false
-		}, {
-			"label": "Columns",
 			"input": false,
 			"tableView": false,
 			"key": "page4PanelPanelPanelColumns5",
@@ -4807,7 +3926,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please Select the Excess Liability Coverage you would like to apply for"
+						"customMessage": "Excess Liability Coverage is required"
 					},
 					"key": "excessLiabilityCoverage",
 					"conditional": {
@@ -4900,7 +4019,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please Choose the Auto Liability Coverage"
+						"customMessage": "NON-Owned Auto Liability is required"
 					},
 					"key": "nonOwnedAutoLiabilityPL",
 					"conditional": {
@@ -6040,6 +5159,7 @@
 				"components": [{
 					"label": "Additional Insured",
 					"reorder": false,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -6055,7 +5175,9 @@
 						"zip": "",
 						"businessRelation": "",
 						"businessRelationOther": "",
-						"additionalInformation": ""
+						"additionalInformation": "",
+						"doYouHaveAWrittenContract": "",
+						"additionalInsuredAttachments": []
 					}],
 					"clearOnHide": false,
 					"validate": {
@@ -6080,6 +5202,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Name",
@@ -6100,6 +5223,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Address of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Address",
@@ -6119,6 +5243,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the City of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured City",
@@ -6159,6 +5284,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please select the Country of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Country",
@@ -6199,6 +5325,7 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please select the State of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured State",
@@ -6224,6 +5351,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Zip Code of the Additional Insured",
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
@@ -6276,6 +5404,7 @@
 									},
 									"selectThreshold": 0.3,
 									"validate": {
+										"required": true,
 										"customMessage": "Please select the Business Relation with the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Business Relation",
@@ -6292,6 +5421,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please specify the Business Relation"
 									},
 									"errorLabel": "Additonal Insured Business Relation Details",
@@ -6504,25 +5634,6 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "City",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "city",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
 									"label": "Country",
 									"widget": "choicesjs",
 									"tableView": true,
@@ -6542,7 +5653,7 @@
 										"required": true,
 										"customMessage": "Please enter your country."
 									},
-									"key": "country",
+									"key": "country1",
 									"properties": {
 										"clear_field": "state"
 									},
@@ -6553,6 +5664,25 @@
 									"input": true,
 									"lockKey": true,
 									"source": "5d347da33e9be31e15d3b115",
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Address",
+									"tableView": true,
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "address3",
+									"type": "textfield",
+									"input": true,
+									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "State",
@@ -6590,13 +5720,13 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Address",
+									"label": "City",
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
-									"key": "address",
+									"key": "city1",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -6734,25 +5864,6 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "City",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "city",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
 									"label": "Country",
 									"widget": "choicesjs",
 									"tableView": true,
@@ -6783,6 +5894,25 @@
 									"input": true,
 									"lockKey": true,
 									"source": "5d347da33e9be31e15d3b115",
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Address",
+									"tableView": true,
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "address",
+									"type": "textfield",
+									"input": true,
+									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "State",
@@ -6820,13 +5950,13 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Address",
+									"label": "City",
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
-									"key": "address",
+									"key": "city",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -7028,11 +6158,12 @@
 						"components": [{
 							"label": "Please enter the Location's PADI Number",
 							"mask": false,
-							"spellcheck": true,
+							"spellcheck": false,
 							"tableView": false,
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
+							"clearOnHide": false,
 							"key": "padiNumberAL",
 							"type": "number",
 							"input": true
@@ -7500,7 +6631,6 @@
 												"mask": false,
 												"spellcheck": true,
 												"tableView": true,
-												"defaultValue": 0,
 												"delimiter": true,
 												"requireDecimal": false,
 												"inputFormat": "plain",
@@ -7558,7 +6688,8 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"required": true,
+											"customMessage": "Please let us know if you are the owner of the building"
 										},
 										"key": "additionalLocationDoYouOwntheBuilding",
 										"type": "select",
@@ -7585,7 +6716,8 @@
 												"inputFormat": "plain",
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Please enter the Replacement Value"
 												},
 												"key": "ALBuildingReplacementValue",
 												"type": "number",
@@ -7596,11 +6728,16 @@
 											}, {
 												"label": "What is the square footage of your building?",
 												"suffix": "ft<sup>2</sup>",
+												"mask": false,
 												"spellcheck": true,
 												"tableView": true,
+												"delimiter": false,
+												"requireDecimal": false,
+												"inputFormat": "plain",
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Please enter the area of the building in sq ft"
 												},
 												"key": "squarefootageofyourbuildingAL",
 												"conditional": {
@@ -7612,9 +6749,7 @@
 												"labelMargin": null,
 												"lockKey": true,
 												"hideOnChildrenHidden": false,
-												"mask": false,
-												"inputType": "text",
-												"inputFormat": "plain"
+												"inputType": "text"
 											}],
 											"width": 6,
 											"offset": 0,
@@ -7628,17 +6763,14 @@
 												"tableView": true,
 												"dataSrc": "custom",
 												"data": {
-													"values": [{
-														"label": "",
-														"value": ""
-													}],
 													"custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
 												},
 												"template": "<span>{{ item }}</span>",
 												"selectThreshold": 0.3,
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "The year in which the building was built is required"
 												},
 												"key": "built_year",
 												"type": "select",
@@ -7651,7 +6783,8 @@
 												"label": "Updates on plumbing, electrical, roof, etc.",
 												"tableView": true,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Updates on plumbing,roof,etc. is required"
 												},
 												"key": "updatesOnPlumbingElectricalRoofEtcAL",
 												"conditional": {
@@ -7709,17 +6842,41 @@
 							"lockKey": true,
 							"label": "Panel"
 						}, {
-							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2",
-							"input": false,
-							"title": "GENERAL LIABILITY INFORMATION/CLAIMS INFORMATION",
+							"title": "General Liability Information/Claims Information",
 							"theme": "primary",
+							"breadcrumbClickable": true,
+							"buttonSettings": {
+								"previous": true,
+								"cancel": true,
+								"next": true
+							},
+							"collapsible": false,
+							"dataGridLabel": false,
 							"tableView": false,
+							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2",
+							"conditional": {
+								"show": true,
+								"when": "page4PanelSelect"
+							},
+							"type": "panel",
+							"label": "GENERAL LIABILITY INFORMATION/CLAIMS INFORMATION",
+							"input": false,
 							"components": [{
-								"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2Panel",
-								"input": false,
-								"title": "GENERAL LIABILITY INFORMATION",
+								"title": "General Liability Information",
 								"theme": "primary",
+								"breadcrumbClickable": true,
+								"buttonSettings": {
+									"previous": true,
+									"cancel": true,
+									"next": true
+								},
+								"collapsible": false,
+								"dataGridLabel": false,
 								"tableView": false,
+								"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2Panel",
+								"type": "panel",
+								"label": "GENERAL LIABILITY INFORMATION",
+								"input": false,
 								"components": [{
 									"label": "Estimated 12 month retail receipts",
 									"description": "Except Instructional/Supervisory & Travel Receipts.This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
@@ -7732,7 +6889,8 @@
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Estimated Retail receipts for the past 12 months is required"
 									},
 									"key": "estimatedMonthlyReceipts",
 									"type": "number",
@@ -7772,7 +6930,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALdoyouhaveapoolonpremisesPL1",
@@ -7796,7 +6954,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALcriminalBackGroundChecks",
@@ -7820,7 +6978,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALhasApplicantSexualAbuse",
@@ -7844,7 +7002,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALhasApplicantSexualAbuseMolestation",
@@ -7858,7 +7016,7 @@
 											"key": "ALpleaseAdviseDetailsOfTheIncidentTheDateAndTheOutcome",
 											"conditional": {
 												"show": true,
-												"when": "hasApplicantSexualAbuseMolestation",
+												"when": "row.ALhasApplicantSexualAbuseMolestation",
 												"eq": "yes"
 											},
 											"type": "textarea",
@@ -7881,7 +7039,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALdoyouhaveapoolonpremisesPL",
@@ -7903,10 +7061,13 @@
 												"shortcut": ""
 											}],
 											"clearOnHide": false,
+											"validate": {
+												"customMessage": "Please select an option"
+											},
 											"key": "ALIfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
 											"conditional": {
 												"show": true,
-												"when": "doyouhaveapoolonpremisesPL",
+												"when": "ALdoyouhaveapoolonpremisesPL",
 												"eq": "yes"
 											},
 											"type": "radio",
@@ -7926,7 +7087,7 @@
 											"key": "ALpoolSupplementalForm1",
 											"conditional": {
 												"show": true,
-												"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+												"when": "ALIfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
 												"eq": "yes"
 											},
 											"type": "panel",
@@ -8049,7 +7210,6 @@
 														"columns": [{
 															"components": [{
 																"label": "From",
-																"labelPosition": "left-left",
 																"tableView": true,
 																"dataFormat": "HH:mm",
 																"key": "ALtime",
@@ -8066,7 +7226,6 @@
 														}, {
 															"components": [{
 																"label": "To",
-																"labelPosition": "left-left",
 																"tableView": true,
 																"dataFormat": "HH:mm",
 																"key": "ALtime1",
@@ -8141,7 +7300,7 @@
 															"components": [{
 																"label": "To",
 																"hideInputLabels": true,
-																"inputsLabelPosition": "left",
+																"inputsLabelPosition": "top",
 																"useLocaleSettings": false,
 																"hideLabel": true,
 																"tableView": false,
@@ -8289,7 +7448,7 @@
 															"customMessage": "Please select an option"
 														},
 														"errorLabel": "Incidentalal Locations",
-														"key": "ALdivingBoardsOrPlatforms",
+														"key": "ALPooldivingBoardsOrPlatforms",
 														"type": "radio",
 														"input": true,
 														"hideOnChildrenHidden": false
@@ -8299,7 +7458,7 @@
 														"key": "ALasda",
 														"conditional": {
 															"show": true,
-															"when": "divingBoardsOrPlatforms",
+															"when": "ALPooldivingBoardsOrPlatforms",
 															"eq": "yes"
 														},
 														"type": "well",
@@ -8328,7 +7487,6 @@
 															}, {
 																"components": [{
 																	"label": "Height?",
-																	"labelPosition": "left-left",
 																	"mask": false,
 																	"spellcheck": true,
 																	"tableView": false,
@@ -8419,7 +7577,7 @@
 															"customMessage": "Please select an option"
 														},
 														"errorLabel": "Incidentalal Locations",
-														"key": "ALwaiversOfLiability",
+														"key": "ALPoolwaiversOfLiability",
 														"type": "radio",
 														"input": true,
 														"hideOnChildrenHidden": false
@@ -8439,7 +7597,8 @@
 														"key": "ALpleaseAttachWaiversOfLiability",
 														"conditional": {
 															"show": true,
-															"when": "waiversOfLiability"
+															"when": "ALPoolwaiversOfLiability",
+															"eq": "yes"
 														},
 														"type": "file",
 														"url": "/file/attachments",
@@ -8495,28 +7654,29 @@
 													}]
 												}],
 												"hideOnChildrenHidden": false
+											}, {
+												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
+												"prefix": "$",
+												"mask": false,
+												"spellcheck": true,
+												"tableView": false,
+												"delimiter": true,
+												"requireDecimal": false,
+												"inputFormat": "plain",
+												"validate": {
+													"required": true,
+													"customMessage": "Gross receipts from your pool is required"
+												},
+												"key": "ALwhatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
+												"conditional": {
+													"show": true,
+													"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+													"eq": "yes"
+												},
+												"type": "number",
+												"input": true,
+												"hideOnChildrenHidden": false
 											}],
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-											"prefix": "$",
-											"mask": false,
-											"spellcheck": true,
-											"tableView": false,
-											"delimiter": true,
-											"requireDecimal": false,
-											"inputFormat": "plain",
-											"validate": {
-												"required": true
-											},
-											"key": "ALwhatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
-											"conditional": {
-												"show": true,
-												"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-												"eq": "yes"
-											},
-											"type": "number",
-											"input": true,
 											"hideOnChildrenHidden": false
 										}],
 										"width": 8,
@@ -8854,9 +8014,7 @@
 									"type": "columns",
 									"hideLabel": true
 								}],
-								"type": "panel",
-								"inDataGrid": true,
-								"label": "Panel"
+								"inDataGrid": true
 							}, {
 								"title": "Claims Information",
 								"theme": "primary",
@@ -8908,7 +8066,6 @@
 										"dsgldateoftheclaim": ""
 									}],
 									"clearOnHide": false,
-									"calculateValue": "console.log(row);\nconsole.log(row.claimsMade);",
 									"key": "claimsMade",
 									"conditional": {
 										"show": true,
@@ -8933,9 +8090,10 @@
 													"enableMinDateInput": false,
 													"datePicker": {
 														"disableWeekends": false,
-														"disableWeekdays": false
+														"disableWeekdays": false,
+														"maxDate": "moment().startOf('day')"
 													},
-													"enableMaxDateInput": false,
+													"enableMaxDateInput": true,
 													"enableTime": false,
 													"timePicker": {
 														"showMeridian": false
@@ -8965,7 +8123,7 @@
 														"minDate": null,
 														"disableWeekends": false,
 														"disableWeekdays": false,
-														"maxDate": null
+														"maxDate": "moment().startOf('day')"
 													},
 													"hideOnChildrenHidden": false
 												}],
@@ -9072,7 +8230,7 @@
 								}, {
 									"label": "Previous Insurance Company",
 									"tableView": true,
-									"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PreviousInsuranceCompany",
+									"key": "previousInsuranceCompany",
 									"conditional": {
 										"show": true,
 										"when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
@@ -9082,13 +8240,7 @@
 									"input": true
 								}]
 							}],
-							"type": "panel",
-							"conditional": {
-								"show": "true",
-								"when": "page4PanelSelect"
-							},
-							"inDataGrid": true,
-							"label": "Panel"
+							"inDataGrid": true
 						}, {
 							"title": "Optional Coverages",
 							"theme": "primary",
@@ -9196,6 +8348,915 @@
 								"hideLabel": true
 							}, {
 								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "Lake, quarry, pond",
+										"tableView": true,
+										"defaultValue": false,
+										"key": "ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL",
+										"type": "checkbox",
+										"input": true,
+										"dataGridLabel": false,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}, {
+										"title": "PADI Lake / Quarry Suppllmental Application",
+										"theme": "primary",
+										"breadcrumbClickable": true,
+										"buttonSettings": {
+											"previous": true,
+											"cancel": true,
+											"next": true
+										},
+										"collapsible": false,
+										"tableView": false,
+										"key": "ALpoolSupplementalForm2",
+										"conditional": {
+											"show": true,
+											"when": "ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL",
+											"eq": "true"
+										},
+										"type": "panel",
+										"label": "PADI Lake / Quarry Suppllmental Application",
+										"input": false,
+										"components": [{
+											"label": "Applicant's Name",
+											"tableView": true,
+											"key": "ALapplicantsName",
+											"type": "textfield",
+											"input": true
+										}, {
+											"label": "Radio",
+											"optionsLabelPosition": "right",
+											"inline": false,
+											"hideLabel": true,
+											"tableView": false,
+											"values": [{
+												"label": "Lake",
+												"value": "lake",
+												"shortcut": ""
+											}, {
+												"label": "Quarry",
+												"value": "quarry",
+												"shortcut": ""
+											}, {
+												"label": "Other",
+												"value": "other",
+												"shortcut": ""
+											}],
+											"key": "ALtypeOfApplication",
+											"type": "radio",
+											"input": true
+										}, {
+											"label": "Please Specify",
+											"tableView": true,
+											"key": "ALpleaseSpecifyOther",
+											"conditional": {
+												"show": true,
+												"when": "typeOfApplication",
+												"eq": "other"
+											},
+											"type": "textfield",
+											"input": true
+										}, {
+											"label": "poolSupplementalForm",
+											"tableView": false,
+											"key": "ALpoolSupplementalForm3",
+											"type": "well",
+											"input": false,
+											"components": [{
+												"label": "Columns",
+												"columns": [{
+													"components": [{
+														"label": "Dimensions",
+														"mask": false,
+														"spellcheck": true,
+														"tableView": false,
+														"delimiter": false,
+														"requireDecimal": false,
+														"inputFormat": "plain",
+														"key": "ALdimensions1",
+														"type": "number",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}],
+													"width": 6,
+													"offset": 0,
+													"push": 0,
+													"pull": 0,
+													"size": "md"
+												}, {
+													"components": [{
+														"label": "Min Depth",
+														"labelPosition": "left-left",
+														"mask": false,
+														"spellcheck": true,
+														"tableView": false,
+														"delimiter": false,
+														"requireDecimal": false,
+														"inputFormat": "plain",
+														"key": "ALdepth1",
+														"type": "number",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Max Depth",
+														"labelPosition": "left-left",
+														"mask": false,
+														"spellcheck": true,
+														"tableView": false,
+														"delimiter": false,
+														"requireDecimal": false,
+														"inputFormat": "plain",
+														"key": "ALmaxDepth1",
+														"type": "number",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}],
+													"width": 6,
+													"offset": 0,
+													"push": 0,
+													"pull": 0,
+													"size": "md"
+												}],
+												"tableView": false,
+												"key": "ALcolumns24",
+												"type": "columns",
+												"input": false
+											}, {
+												"tableView": false,
+												"key": "ALfieldSet2",
+												"type": "fieldset",
+												"label": "Field Set",
+												"input": false,
+												"components": [{
+													"label": "Hours of Operation",
+													"attrs": [{
+														"attr": "",
+														"value": ""
+													}],
+													"content": "Hours of Operation",
+													"refreshOnChange": false,
+													"tableView": false,
+													"key": "ALLakehoursOfOperation",
+													"type": "htmlelement",
+													"input": false
+												}, {
+													"label": "Columns",
+													"columns": [{
+														"components": [{
+															"label": "From",
+															"labelPosition": "left-left",
+															"tableView": true,
+															"dataFormat": "HH:mm",
+															"key": "ALtime2",
+															"type": "time",
+															"input": true,
+															"inputMask": "99:99",
+															"hideOnChildrenHidden": false
+														}],
+														"width": 6,
+														"offset": 0,
+														"push": 0,
+														"pull": 0,
+														"size": "md"
+													}, {
+														"components": [{
+															"label": "To",
+															"labelPosition": "left-left",
+															"tableView": true,
+															"dataFormat": "HH:mm",
+															"key": "ALtime3",
+															"type": "time",
+															"input": true,
+															"inputMask": "99:99",
+															"hideOnChildrenHidden": false
+														}],
+														"width": 6,
+														"offset": 0,
+														"push": 0,
+														"pull": 0,
+														"size": "md"
+													}],
+													"tableView": false,
+													"key": "ALcolumns25",
+													"type": "columns",
+													"input": false
+												}]
+											}, {
+												"tableView": false,
+												"key": "ALfieldSet3",
+												"type": "fieldset",
+												"label": "Field Set",
+												"input": false,
+												"components": [{
+													"label": "Hours of Operation",
+													"attrs": [{
+														"attr": "",
+														"value": ""
+													}],
+													"content": "Operating Months",
+													"refreshOnChange": false,
+													"tableView": false,
+													"key": "ALhoursOfOperation2",
+													"type": "htmlelement",
+													"input": false
+												}, {
+													"tableView": false,
+													"key": "ALfieldSet4",
+													"type": "fieldset",
+													"label": "Field Set",
+													"input": false,
+													"components": [{
+														"label": "Columns",
+														"columns": [{
+															"components": [{
+																"label": "From",
+																"hideInputLabels": true,
+																"inputsLabelPosition": "left",
+																"useLocaleSettings": false,
+																"hideLabel": true,
+																"tableView": false,
+																"fields": {
+																	"day": {
+																		"hide": true
+																	},
+																	"month": {
+																		"placeholder": "From",
+																		"hide": false
+																	},
+																	"year": {
+																		"hide": true
+																	}
+																},
+																"defaultValue": "00/00/0000",
+																"key": "ALfrom1",
+																"type": "day",
+																"input": true,
+																"hideOnChildrenHidden": false
+															}],
+															"width": 6,
+															"offset": 0,
+															"push": 0,
+															"pull": 0,
+															"size": "md"
+														}, {
+															"components": [{
+																"label": "To",
+																"hideInputLabels": true,
+																"inputsLabelPosition": "left",
+																"useLocaleSettings": false,
+																"hideLabel": true,
+																"tableView": false,
+																"fields": {
+																	"day": {
+																		"hide": true
+																	},
+																	"month": {
+																		"placeholder": "To",
+																		"hide": false
+																	},
+																	"year": {
+																		"hide": true
+																	}
+																},
+																"defaultValue": "00/00/0000",
+																"key": "ALoperationMonthTo1",
+																"type": "day",
+																"input": true,
+																"hideOnChildrenHidden": false
+															}],
+															"width": 6,
+															"offset": 0,
+															"push": 0,
+															"pull": 0,
+															"size": "md"
+														}],
+														"tableView": false,
+														"key": "ALcolumns26",
+														"type": "columns",
+														"input": false
+													}, {
+														"label": "Lifeguard to Swimmer Ratio",
+														"attrs": [{
+															"attr": "",
+															"value": ""
+														}],
+														"content": "Lifeguard to Swimmer Ratio",
+														"refreshOnChange": false,
+														"tableView": false,
+														"key": "ALhoursOfOperation3",
+														"type": "htmlelement",
+														"input": false
+													}, {
+														"label": "Columns",
+														"columns": [{
+															"components": [{
+																"label": "Swimmer Ratio",
+																"hideLabel": true,
+																"mask": false,
+																"spellcheck": true,
+																"tableView": false,
+																"delimiter": false,
+																"requireDecimal": false,
+																"inputFormat": "plain",
+																"key": "ALswimmerRatio2",
+																"type": "number",
+																"input": true,
+																"hideOnChildrenHidden": false
+															}],
+															"width": 5,
+															"offset": 0,
+															"push": 0,
+															"pull": 0,
+															"size": "md"
+														}, {
+															"components": [{
+																"label": "HTML",
+																"attrs": [{
+																	"attr": "",
+																	"value": ""
+																}],
+																"content": "To",
+																"refreshOnChange": false,
+																"tableView": false,
+																"key": "ALhtml5",
+																"type": "htmlelement",
+																"input": false,
+																"hideOnChildrenHidden": false
+															}],
+															"width": 2,
+															"offset": 0,
+															"push": 0,
+															"pull": 0,
+															"size": "md"
+														}, {
+															"components": [{
+																"label": "Swimmer Ratio",
+																"hideLabel": true,
+																"mask": false,
+																"spellcheck": true,
+																"tableView": false,
+																"delimiter": false,
+																"requireDecimal": false,
+																"inputFormat": "plain",
+																"key": "ALswimmerRatio3",
+																"type": "number",
+																"input": true,
+																"hideOnChildrenHidden": false
+															}],
+															"size": "md",
+															"width": 5,
+															"offset": 0,
+															"push": 0,
+															"pull": 0
+														}],
+														"tableView": false,
+														"key": "ALcolumns27",
+														"type": "columns",
+														"input": false
+													}, {
+														"label": "Please describe your activities",
+														"autoExpand": false,
+														"tableView": true,
+														"key": "ALLakepleaseDescribeYourActivities",
+														"type": "textarea",
+														"input": true
+													}, {
+														"label": "Are diving boards or diving platforms present?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALlakedivingBoardsOrPlatforms",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "asda",
+														"tableView": false,
+														"key": "ALasda1",
+														"conditional": {
+															"show": true,
+															"when": "ALlakedivingBoardsOrPlatforms",
+															"eq": "yes"
+														},
+														"type": "well",
+														"input": false,
+														"components": [{
+															"label": "Columns",
+															"columns": [{
+																"components": [{
+																	"label": "How many?",
+																	"mask": false,
+																	"spellcheck": true,
+																	"tableView": false,
+																	"delimiter": false,
+																	"requireDecimal": false,
+																	"inputFormat": "plain",
+																	"key": "ALdivingBoardCount1",
+																	"type": "number",
+																	"input": true,
+																	"hideOnChildrenHidden": false
+																}],
+																"width": 6,
+																"offset": 0,
+																"push": 0,
+																"pull": 0,
+																"size": "md"
+															}, {
+																"components": [{
+																	"label": "Height?",
+																	"mask": false,
+																	"spellcheck": true,
+																	"tableView": false,
+																	"delimiter": false,
+																	"requireDecimal": false,
+																	"inputFormat": "plain",
+																	"key": "ALdivingBoardHeight1",
+																	"type": "number",
+																	"input": true,
+																	"hideOnChildrenHidden": false
+																}],
+																"width": 6,
+																"offset": 0,
+																"push": 0,
+																"pull": 0,
+																"size": "md"
+															}],
+															"tableView": false,
+															"key": "ALcolumns28",
+															"type": "columns",
+															"input": false
+														}]
+													}, {
+														"label": "Are there other areas accessible for high diving (over 8ft.)?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALlakeAreasForHighDiving",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Are waivers of liability, signed by swimmers or parents, obtained?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALLakewaiversOfLiability",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Please attach waivers of liability",
+														"tableView": false,
+														"storage": "url",
+														"webcam": true,
+														"fileTypes": [{
+															"label": "",
+															"value": ""
+														}],
+														"multiple": true,
+														"validate": {
+															"multiple": true
+														},
+														"key": "ALLakepleaseAttachWaiversOfLiability",
+														"conditional": {
+															"show": true,
+															"when": "ALLakewaiversOfLiability",
+															"eq": "yes"
+														},
+														"type": "file",
+														"url": "/file/attachments",
+														"input": true
+													}, {
+														"label": "Is swimming area marked by boundary buoys or rope?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALlakeSwimmingAreaBoundaryBuoysRopes",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Do you sponsor athletic teams?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALlakeSponsorAthleticTeams",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Please Describe",
+														"autoExpand": false,
+														"tableView": true,
+														"key": "ALlakeAthleticTeamsPleaseDescribe",
+														"conditional": {
+															"show": true,
+															"when": "ALlakeSponsorAthleticTeams",
+															"eq": "yes"
+														},
+														"type": "textarea",
+														"input": true
+													}, {
+														"label": "Are trampolines used?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALpoolTrampolines1",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Are lifeguards present during operating hours?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALlakeLifeGaurdsPresent",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"title": "Lifegaurds",
+														"theme": "primary",
+														"breadcrumbClickable": true,
+														"buttonSettings": {
+															"previous": true,
+															"cancel": true,
+															"next": true
+														},
+														"collapsible": false,
+														"tableView": false,
+														"key": "ALlifegaurds",
+														"conditional": {
+															"show": true,
+															"when": "ALlakeLifeGaurdsPresent",
+															"eq": "yes"
+														},
+														"type": "panel",
+														"label": "Lifegaurds",
+														"input": false,
+														"components": [{
+															"label": "Is Certification Required",
+															"optionsLabelPosition": "right",
+															"inline": false,
+															"tableView": false,
+															"values": [{
+																"label": "Yes",
+																"value": "yes",
+																"shortcut": ""
+															}, {
+																"label": "No",
+																"value": "no",
+																"shortcut": ""
+															}],
+															"clearOnHide": false,
+															"validate": {
+																"required": true,
+																"customMessage": "Please select an option"
+															},
+															"errorLabel": "Incidentalal Locations",
+															"key": "ALlakeLifegaurdCertification",
+															"type": "radio",
+															"input": true,
+															"hideOnChildrenHidden": false
+														}, {
+															"label": "Are all lifeguards American Red Cross (or equivalent) certified?",
+															"optionsLabelPosition": "right",
+															"inline": false,
+															"tableView": false,
+															"values": [{
+																"label": "Yes",
+																"value": "yes",
+																"shortcut": ""
+															}, {
+																"label": "No",
+																"value": "no",
+																"shortcut": ""
+															}],
+															"clearOnHide": false,
+															"validate": {
+																"required": true,
+																"customMessage": "Please select an option"
+															},
+															"errorLabel": "Incidentalal Locations",
+															"key": "ALlakeLifeGaurds",
+															"type": "radio",
+															"input": true,
+															"hideOnChildrenHidden": false
+														}, {
+															"label": "Are supervised safety exercise drills held periodically?",
+															"optionsLabelPosition": "right",
+															"inline": false,
+															"tableView": false,
+															"values": [{
+																"label": "Yes",
+																"value": "yes",
+																"shortcut": ""
+															}, {
+																"label": "No",
+																"value": "no",
+																"shortcut": ""
+															}],
+															"clearOnHide": false,
+															"validate": {
+																"required": true,
+																"customMessage": "Please select an option"
+															},
+															"errorLabel": "Incidentalal Locations",
+															"key": "ALlakeSafetyExcercises",
+															"type": "radio",
+															"input": true,
+															"hideOnChildrenHidden": false
+														}, {
+															"label": "Are record logs maintained?",
+															"optionsLabelPosition": "right",
+															"inline": false,
+															"tableView": false,
+															"values": [{
+																"label": "Yes",
+																"value": "yes",
+																"shortcut": ""
+															}, {
+																"label": "No",
+																"value": "no",
+																"shortcut": ""
+															}],
+															"clearOnHide": false,
+															"validate": {
+																"required": true,
+																"customMessage": "Please select an option"
+															},
+															"errorLabel": "Incidentalal Locations",
+															"key": "ALlakeLifeGaurdRecordLog",
+															"conditional": {
+																"show": true,
+																"when": "ALlakeSafetyExcercises",
+																"eq": "yes"
+															},
+															"type": "radio",
+															"input": true,
+															"hideOnChildrenHidden": false
+														}]
+													}]
+												}, {
+													"label": "Is there a Jacuzzi or Whirlpool?",
+													"optionsLabelPosition": "right",
+													"inline": false,
+													"tableView": false,
+													"values": [{
+														"label": "Yes",
+														"value": "yes",
+														"shortcut": ""
+													}, {
+														"label": "No",
+														"value": "no",
+														"shortcut": ""
+													}],
+													"clearOnHide": false,
+													"validate": {
+														"required": true,
+														"customMessage": "Please select an option"
+													},
+													"errorLabel": "Incidentalal Locations",
+													"key": "ALlakeJacuzziWhirlPool",
+													"type": "radio",
+													"input": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"title": "Jacuzzi / Whirlpool",
+													"theme": "primary",
+													"breadcrumbClickable": true,
+													"buttonSettings": {
+														"previous": true,
+														"cancel": true,
+														"next": true
+													},
+													"collapsible": false,
+													"tableView": false,
+													"key": "ALjacuzziWhirlpool",
+													"conditional": {
+														"show": true,
+														"when": "ALlakeJacuzziWhirlPool",
+														"eq": "yes"
+													},
+													"type": "panel",
+													"label": "Jacuzzi / Whirlpool",
+													"input": false,
+													"components": [{
+														"label": "Can temperature be adjusted by anyone?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALlakeTemperatureAdjusted",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Maximum Temperature Setting",
+														"mask": false,
+														"spellcheck": true,
+														"tableView": false,
+														"delimiter": false,
+														"requireDecimal": false,
+														"inputFormat": "plain",
+														"key": "ALlakeMaximumTemperature",
+														"type": "number",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}, {
+														"label": "Are filtration drains domed and/or are dual grated drains used?",
+														"optionsLabelPosition": "right",
+														"inline": false,
+														"tableView": false,
+														"values": [{
+															"label": "Yes",
+															"value": "yes",
+															"shortcut": ""
+														}, {
+															"label": "No",
+															"value": "no",
+															"shortcut": ""
+														}],
+														"clearOnHide": false,
+														"validate": {
+															"required": true,
+															"customMessage": "Please select an option"
+														},
+														"errorLabel": "Incidentalal Locations",
+														"key": "ALlakeFiltrationDrainsUsed",
+														"type": "radio",
+														"input": true,
+														"hideOnChildrenHidden": false
+													}]
+												}]
+											}, {
+												"label": "Other Activities",
+												"reorder": false,
+												"addAnotherPosition": "bottom",
+												"defaultOpen": false,
+												"layoutFixed": false,
+												"enableRowGroups": false,
+												"tableView": false,
+												"defaultValue": [{
+													"ALlakeActivities": ""
+												}],
+												"key": "ALlakeOtherActivities",
+												"type": "datagrid",
+												"input": true,
+												"components": [{
+													"label": "Lake Activities",
+													"hideLabel": true,
+													"tableView": true,
+													"key": "ALlakeActivities",
+													"type": "textfield",
+													"input": true
+												}]
+											}],
+											"hideOnChildrenHidden": false
+										}],
+										"hideOnChildrenHidden": false
+									}],
+									"width": 12,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [],
+									"width": 6,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}],
+								"hideLabel": true,
+								"tableView": false,
+								"key": "ALpage4PanelPanelPanelColumns4",
+								"type": "columns",
+								"input": false
+							}, {
+								"label": "Columns",
 								"input": false,
 								"tableView": false,
 								"key": "page4PanelPanelPanelColumns",
@@ -9227,7 +9288,7 @@
 										"clearOnHide": false,
 										"validate": {
 											"required": true,
-											"customMessage": "Please Choose the Auto Liability Coverage"
+											"customMessage": "NON-Owned Auto Liability is required"
 										},
 										"key": "nonOwnedAutoLiabilityPL",
 										"customConditional": "show = (row.doYouWantToApplyForNonOwnerAutoAL == true || row.doYouWantToApplyForNonOwnerAutoAL == \"true\")",
@@ -9528,7 +9589,6 @@
 														"delimiter": false,
 														"requireDecimal": false,
 														"inputFormat": "plain",
-														"redrawOn": "additionalLocations.ALPropertyCoverageOption",
 														"clearOnHide": false,
 														"calculateValue": "var amount = ((parseFloat(row.additionalLocationPropertyTotal)||0)).toFixed(0);\nvar option = row.ALPropertyCoverageOption;\nif (amount > 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 0 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 0 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
 														"key": "ALContentsFP",
@@ -9540,7 +9600,7 @@
 												}],
 												[{
 													"components": [{
-														"label": "Loss of Bus Income",
+														"label": "Business Income",
 														"prefix": "$",
 														"mask": false,
 														"spellcheck": true,
@@ -9560,17 +9620,21 @@
 												}],
 												[{
 													"components": [{
-														"input": true,
-														"tableView": true,
-														"inputType": "number",
 														"label": "Building Limit",
-														"key": "ALBuildingLimitFP",
 														"prefix": "$",
-														"clearOnHide": false,
-														"type": "number",
+														"mask": false,
+														"spellcheck": true,
 														"disabled": true,
+														"tableView": true,
+														"delimiter": false,
 														"requireDecimal": false,
-														"calculateValue": "var amount = (parseFloat(row.ALBuildingReplacementValue)||0);\nvar option = row.ALPropertyCoverageOption\n\n\nif (\n    amount > 500000 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 500000 &&\n    option == \"cat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 250000 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 250000 &&\n    option == \"cat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 100000 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 100000 &&\n    option == \"cat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount;\n} else if (\n    amount > 0 &&\n    option == \"nonCat\"\n) {\n    value =\n        (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount;\n} else if (\n    amount > 0 &&\n    option == \"cat\"\n) {\n    value = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount;\n} else {\n    value = 0;\n}",
+														"inputFormat": "plain",
+														"clearOnHide": false,
+														"calculateValue": "var amount = (parseFloat(row.ALBuildingReplacementValue)||0).toFixed(0);\nvar option = row.ALPropertyCoverageOption;\n\nif (amount > 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}",
+														"key": "ALBuildingLimitFP",
+														"type": "number",
+														"input": true,
+														"inputType": "number",
 														"lockKey": true
 													}]
 												}]
@@ -10032,7 +10096,7 @@
 			"input": true
 		}, {
 			"label": "groupCoverageSelect",
-			"calculateValue": "if(parseFloat(data['annualReceipt']) >= 0 && parseFloat(data['annualReceipt']) <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']) >= 25001 && parseFloat(data['annualReceipt']) <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']) >= 50001 && parseFloat(data['annualReceipt']) <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']) >= 100001 && parseFloat(data['annualReceipt']) <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']) >= 150001 && parseFloat(data['annualReceipt']) <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']) >= 200001 && parseFloat(data['annualReceipt']) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']) >= 250001 && data['annualReceipt'] <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']) >= 350001 && data['annualReceipt'] <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
+			"calculateValue": "if(parseFloat(data['annualReceipt']).toFixed(0)>= 0 && parseFloat(data['annualReceipt']).toFixed(0)<= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 25001 && parseFloat(data['annualReceipt']).toFixed(0)<= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 50001 && parseFloat(data['annualReceipt']).toFixed(0)<= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 100001 && parseFloat(data['annualReceipt']).toFixed(0)<= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 150001 && parseFloat(data['annualReceipt']).toFixed(0)<= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 200001 && parseFloat(data['annualReceipt']).toFixed(0) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 250001 && parseFloat(data['annualReceipt']).toFixed(0) <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 350001 && parseFloat(data['annualReceipt']).toFixed(0) <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
 			"key": "groupCoverageSelect",
 			"type": "hidden",
 			"input": true,
@@ -10049,88 +10113,6 @@
 			"type": "well",
 			"input": false,
 			"components": [{
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Select Liability Limit",
-						"widget": "choicesjs",
-						"description": "Primary limit $1,000,000.<br>\nExcess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
-						"tableView": true,
-						"data": {
-							"values": [{
-								"label": "No",
-								"value": "no"
-							}, {
-								"value": "groupExcessLiability1M",
-								"label": "1M"
-							}, {
-								"value": "groupExcessLiability2M",
-								"label": "2M"
-							}, {
-								"value": "groupExcessLiability3M",
-								"label": "3M"
-							}, {
-								"value": "groupExcessLiability4M",
-								"label": "4M"
-							}, {
-								"value": "groupExcessLiability9M",
-								"label": "9M"
-							}]
-						},
-						"selectThreshold": 0.3,
-						"clearOnHide": false,
-						"validate": {
-							"required": true
-						},
-						"key": "groupExcessLiabilitySelect",
-						"type": "select",
-						"indexeddb": {
-							"filter": {}
-						},
-						"input": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"label": "Amount",
-						"prefix": "$",
-						"mask": false,
-						"spellcheck": true,
-						"disabled": true,
-						"tableView": true,
-						"delimiter": true,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100\n}",
-						"key": "groupExcessLiability",
-						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
-						"type": "number",
-						"input": true,
-						"inputType": "number",
-						"lockKey": true,
-						"style": {
-							"margin-top": "25px"
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"tableView": false,
-				"key": "columns14",
-				"type": "columns",
-				"input": false
-			}, {
 				"label": "Columns",
 				"columns": [{
 					"components": [{
@@ -10153,7 +10135,7 @@
 									"clearOnHide": false,
 									"validate": {
 										"required": true,
-										"customMessage": "Please enter the Amount spent on Annual Instructional Supervision"
+										"customMessage": "Please enter the amount spent on annual instructional supervision"
 									},
 									"errorLabel": "Annual Receipt Instructional Supervision",
 									"key": "annualReceiptInstructionalSupervision",
@@ -10222,13 +10204,23 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "annualReceipt",
-						"redrawOn": "data",
-						"calculateValue": "value = parseFloat(data.annualReceiptInstructionalSupervision).toFixed(0) + parseFloat(data.annualEstimatedResponseRecieptsGL).toFixed(0)",
-						"key": "annualReceipt",
-						"type": "hidden",
-						"input": true,
+						"hideLabel": true,
+						"mask": false,
+						"spellcheck": false,
 						"tableView": false,
-						"hideOnChildrenHidden": false
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value = parseFloat(data['annualReceiptInstructionalSupervision']+data['annualEstimatedResponseRecieptsGL']).toFixed(0)",
+						"key": "annualReceipt",
+						"attributes": {
+							"style": "display:none;"
+						},
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false,
+						"inputType": "number"
 					}, {
 						"label": "Group Coverage Amount Applicable",
 						"prefix": "$",
@@ -10252,6 +10244,88 @@
 							"margin-top": "25px"
 						},
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Excess Liability",
+								"widget": "choicesjs",
+								"description": "Primary limit $1,000,000.<br>\nExcess Limits of $3,000,000 ,$4,000,000 and $9,000,000 will need to be approved by underwriting",
+								"tableView": true,
+								"data": {
+									"values": [{
+										"label": "No",
+										"value": "no"
+									}, {
+										"value": "groupExcessLiability1M",
+										"label": "1M"
+									}, {
+										"value": "groupExcessLiability2M",
+										"label": "2M"
+									}, {
+										"value": "groupExcessLiability3M",
+										"label": "3M"
+									}, {
+										"value": "groupExcessLiability4M",
+										"label": "4M"
+									}, {
+										"value": "groupExcessLiability9M",
+										"label": "9M"
+									}]
+								},
+								"selectThreshold": 0.3,
+								"clearOnHide": false,
+								"validate": {
+									"required": true
+								},
+								"key": "groupExcessLiabilitySelect",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
+								"input": true,
+								"lockKey": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Amount",
+								"prefix": "$",
+								"mask": false,
+								"spellcheck": true,
+								"disabled": true,
+								"tableView": true,
+								"delimiter": true,
+								"requireDecimal": false,
+								"inputFormat": "plain",
+								"clearOnHide": false,
+								"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = (parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100).toFixed(0)\n} else {\n  value = 0;\n}",
+								"key": "groupExcessLiability",
+								"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
+								"type": "number",
+								"input": true,
+								"inputType": "number",
+								"lockKey": true,
+								"style": {
+									"margin-top": "25px"
+								},
+								"hideOnChildrenHidden": false
+							}],
+							"width": 6,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}],
+						"tableView": false,
+						"key": "columns14",
+						"type": "columns",
+						"input": false
 					}],
 					"width": 12,
 					"offset": 0,
@@ -10284,6 +10358,9 @@
 					"description": "Enter the PADI Membership to Validate",
 					"tableView": true,
 					"clearOnHide": false,
+					"validate": {
+						"pattern": "[0-9\\s-]*$"
+					},
 					"key": "groupPadi",
 					"type": "textfield",
 					"input": true
@@ -10364,7 +10441,7 @@
 					"hideLabel": true,
 					"tableView": false,
 					"templates": {
-						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
 						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
 					"addAnother": "Not a PADI Member?Click here to add external members",
@@ -10372,6 +10449,7 @@
 					"validate": {
 						"custom": "valid = (data.groupPL.length > 0) ? true : \"Please add the members to group\";"
 					},
+					"rowDrafts": false,
 					"key": "groupPL",
 					"type": "editgrid",
 					"input": true,
@@ -10589,7 +10667,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Would you like to add Additional Insureds for your Group Professional Liability?"
+						"customMessage": "Would you like to add additional insureds for your group professional liability"
 					},
 					"errorLabel": "Additional Insured",
 					"key": "additional_insured",
@@ -10914,7 +10992,8 @@
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Named Insureds is required"
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -10947,6 +11026,10 @@
 						"label": "PADI Number?",
 						"description": "Enter the PADI Membership to Validate",
 						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"pattern": "[0-9\\s-]*$"
+						},
 						"key": "namedPadi",
 						"type": "textfield",
 						"input": true
@@ -11015,7 +11098,7 @@
 						"hideLabel": true,
 						"tableView": false,
 						"templates": {
-							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
 							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 						},
 						"addAnother": "Not registered in system?Click here to add external members",
@@ -11023,6 +11106,7 @@
 						"validate": {
 							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";"
 						},
+						"rowDrafts": false,
 						"key": "namedInsureds",
 						"type": "editgrid",
 						"input": true,
@@ -11433,6 +11517,7 @@
 						"hideLabel": true
 					}, {
 						"label": "Acknowledged",
+						"autofocus": true,
 						"tableView": false,
 						"defaultValue": false,
 						"clearOnHide": false,
@@ -11639,20 +11724,6 @@
 			"key": "page5PanelColumns2",
 			"columns": [{
 				"components": [{
-					"key": "page5PanelColumns2LiabilityCoverages",
-					"label": "Liability Coverages",
-					"input": false,
-					"tag": "h3",
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "Liability Coverages",
-					"type": "htmlelement",
-					"hideLabel": true,
-					"hideOnChildrenHidden": false,
-					"tableView": false
-				}, {
 					"label": "Columns",
 					"input": false,
 					"tableView": false,
@@ -11662,59 +11733,19 @@
 							"label": "Coverage",
 							"widget": "choicesjs",
 							"tableView": true,
+							"dataSrc": "custom",
 							"data": {
 								"values": [{
-									"value": "standardCoverageUpTo50000",
-									"label": "Standard Coverage (Up to $50,000)"
-								}, {
-									"value": "standardCoverage50001To100000",
-									"label": "Standard Coverage ($50,001 to $100,000)"
-								}, {
-									"value": "standardCoverage100001To200000",
-									"label": "Standard Coverage ($100,001 to $200,000)"
-								}, {
-									"value": "standardCoverage200001To350000",
-									"label": "Standard Coverage ($200,001 to $350,000)"
-								}, {
-									"value": "standardCoverage350001To500000",
-									"label": "Standard Coverage ($350,001 to $500,000)"
-								}, {
-									"value": "standardCoverage500001To1M",
-									"label": "Standard Coverage ($500,001 to $1M)"
-								}, {
-									"value": "standardCoverage1MAndOver",
-									"label": "Standard Coverage ($1M and Over)"
-								}, {
-									"value": "liabilityOnlyUpTo50000",
-									"label": "Liability Only (Up to $50,000)"
-								}, {
-									"value": "liabilityOnly50001To100000",
-									"label": "Liability Only ($50,001 to $100,000)"
-								}, {
-									"value": "liabilityOnly100001To200000",
-									"label": "Liability Only ($100,001 to $200,000)"
-								}, {
-									"value": "liabilityOnly200001To350000",
-									"label": "Liability Only ($200,001 to $350,000)"
-								}, {
-									"value": "liabilityOnly350001To500000",
-									"label": "Liability Only ($350,001 to $500,000)"
-								}, {
-									"value": "liabilityOnly500001To1M",
-									"label": "Liability Only ($500,001 to $1M)"
-								}, {
-									"value": "liabilityOnly1MAndOver",
-									"label": "Liability Only ($1M and Over)"
-								}, {
-									"value": "discontinuedOperation",
-									"label": "Discontinued Operation"
-								}, {
-									"value": "noCoverageSelected",
-									"label": "No Coverage Selected"
-								}]
+									"label": "",
+									"value": ""
+								}],
+								"custom": "if(data['propertyCoverageSelect'] == 'yes'){\n  values = [{ \"value\": \"standardCoverageUpTo50000\",\"label\": \"Standard Coverage (Up to $50,000)\"},{\"value\": \"standardCoverage50001To100000\",\"label\": \"Standard Coverage ($50,001 to $100,000)\"},{\"value\": \"standardCoverage100001To200000\",\"label\": \"Standard Coverage ($100,001 to $200,000)\"},{\"value\": \"standardCoverage200001To350000\",\"label\": \"Standard Coverage ($200,001 to $350,000)\"},{\"value\": \"standardCoverage350001To500000\",\"label\": \"Standard Coverage ($350,001 to $500,000)\"},{\"value\": \"standardCoverage500001To1M\",\"label\": \"Standard Coverage ($500,001 to $1M)\"},{\"value\": \"standardCoverage1MAndOver\",\"label\": \"Standard Coverage ($1M and Over)\"},{\"value\": \"liabilityOnlyUpTo50000\",\"label\": \"Liability Only (Up to $50,000)\"},{\"value\": \"liabilityOnly50001To100000\",\"label\": \"Liability Only ($50,001 to $100,000)\"},{\"value\": \"liabilityOnly100001To200000\",\"label\": \"Liability Only ($100,001 to $200,000)\"},{\"value\": \"liabilityOnly200001To350000\",\"label\": \"Liability Only ($200,001 to $350,000)\"},{\"value\": \"liabilityOnly350001To500000\",\"label\": \"Liability Only ($350,001 to $500,000)\"},{\"value\": \"liabilityOnly500001To1M\",\"label\": \"Liability Only ($500,001 to $1M)\"},{\"value\": \"liabilityOnly1MAndOver\",\"label\": \"Liability Only ($1M and Over)\"},{\"value\": \"discontinuedOperation\",\"label\": \"Discontinued Operation\"},{\"value\": \"noCoverageSelected\",\"label\": \"No Coverage Selected\"}];\n} else {\n  values = [{\"value\": \"liabilityOnlyUpTo50000\",\"label\": \"Liability Only (Up to $50,000)\"},{\"value\": \"liabilityOnly50001To100000\",\"label\": \"Liability Only ($50,001 to $100,000)\"},{\"value\": \"liabilityOnly100001To200000\",\"label\": \"Liability Only ($100,001 to $200,000)\"},{\"value\": \"liabilityOnly200001To350000\",\"label\": \"Liability Only ($200,001 to $350,000)\"},{\"value\": \"liabilityOnly350001To500000\",\"label\": \"Liability Only ($350,001 to $500,000)\"},{\"value\": \"liabilityOnly500001To1M\",\"label\": \"Liability Only ($500,001 to $1M)\"},{\"value\": \"liabilityOnly1MAndOver\",\"label\": \"Liability Only ($1M and Over)\"},{\"value\": \"discontinuedOperation\",\"label\": \"Discontinued Operation\"},{\"value\": \"noCoverageSelected\",\"label\": \"No Coverage Selected\"}];\n}"
 							},
+							"valueProperty": "value",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"calculateValue": "var receiptsAmount = parseFloat(data['dsglestmonthretailreceipt']).toFixed(0);\nvar properyCoverage = data['propertyCoverageSelect'];\nconsole.log(receiptsAmount)\nif(properyCoverage == 'yes' && receiptsAmount < 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
+							"allowCalculateOverride": true,
 							"validate": {
 								"required": true
 							},
@@ -11734,19 +11765,22 @@
 						"size": "md"
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
-							"inputType": "number",
 							"label": "Coverage",
-							"key": "CoverageFP",
 							"prefix": "$",
-							"defaultValue": "0.00",
-							"clearOnHide": false,
-							"type": "number",
-							"requireDecimal": false,
-							"calculateValue": "value=(data[data[\"liabilityCoverageOption\"]]||0)",
-							"lockKey": true,
+							"mask": false,
+							"spellcheck": true,
 							"disabled": true,
+							"tableView": true,
+							"delimiter": false,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"calculateValue": "if(data['liabilityCoverageOption'] && data[data['liabilityCoverageOption']]){\n  value=parseFloat(data[data[\"liabilityCoverageOption\"]]).toFixed(0);\n} else {\n  value = 0\n}",
+							"key": "CoverageFP",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
@@ -11757,105 +11791,141 @@
 					}],
 					"type": "columns",
 					"hideLabel": true
-				}, {
-					"label": "Non-Diving Pool",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "if((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}",
-					"key": "nonDivingPoolAmount",
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Medical Expense",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": false,
-					"disabled": true,
-					"tableView": false,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
-					"key": "MedicalExpenseFP",
-					"conditional": {
-						"show": true,
-						"when": "medicalExpensePLCheckBox",
-						"eq": "true"
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}, {
+				"components": [],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}],
+			"type": "columns",
+			"hideLabel": true
+		}, {
+			"label": "Columns",
+			"columns": [{
+				"components": [{
+					"title": "Liability Coverages",
+					"theme": "primary",
+					"breadcrumbClickable": true,
+					"buttonSettings": {
+						"previous": true,
+						"cancel": true,
+						"next": true
 					},
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Non-Owned Auto",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)",
-					"key": "Non-OwnedAutoFP",
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Excess Liability",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "value=(data[data[\"excessLiabilityCoverage\"]]||0)",
-					"key": "ExcessLiabilityFP",
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Travel Agent E&O",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
-					"key": "TravelAgentEOFP",
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
+					"collapsible": false,
+					"tableView": false,
+					"key": "liabilityCoverages",
+					"type": "panel",
+					"label": "Panel",
+					"input": false,
+					"components": [{
+						"label": "Non-Diving Pool",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "if((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}",
+						"key": "nonDivingPoolAmount",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Medical Expense",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": false,
+						"disabled": true,
+						"tableView": false,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
+						"key": "MedicalExpenseFP",
+						"conditional": {
+							"show": true,
+							"when": "medicalExpensePLCheckBox",
+							"eq": "true"
+						},
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Non-Owned Auto",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)",
+						"key": "Non-OwnedAutoFP",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Excess Liability",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value=(data[data[\"excessLiabilityCoverage\"]]||0)",
+						"key": "ExcessLiabilityFP",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Travel Agent E&O",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
+						"key": "TravelAgentEOFP",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
 					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
@@ -11865,99 +11935,107 @@
 				"size": "md"
 			}, {
 				"components": [{
-					"key": "page5PanelColumns2PropertyCoverages",
+					"title": "Property Coverages",
+					"theme": "primary",
+					"breadcrumbClickable": true,
+					"buttonSettings": {
+						"previous": true,
+						"cancel": true,
+						"next": true
+					},
+					"collapsible": false,
+					"tableView": false,
+					"key": "propertyCoveragesPanel",
+					"conditional": {
+						"show": true,
+						"when": "propertyCoverageSelect",
+						"eq": "yes"
+					},
+					"type": "panel",
 					"label": "Property Coverages",
 					"input": false,
-					"tag": "h3",
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "Property Coverages",
-					"type": "htmlelement",
-					"hideLabel": true,
-					"hideOnChildrenHidden": false,
-					"tableView": false
-				}, {
-					"input": true,
-					"tableView": true,
-					"label": "Property Coverage",
-					"key": "propertyCoverageOption",
-					"values": [{
-						"value": "nonCat",
-						"label": "NON CAT",
-						"shortcut": ""
+					"components": [{
+						"input": true,
+						"tableView": true,
+						"label": "Property Coverage",
+						"key": "propertyCoverageOption",
+						"values": [{
+							"value": "nonCat",
+							"label": "NON CAT",
+							"shortcut": ""
+						}, {
+							"value": "cat",
+							"label": "CAT",
+							"shortcut": ""
+						}],
+						"defaultValue": "nonCat",
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"type": "radio",
+						"optionsLabelPosition": "right",
+						"inline": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}, {
-						"value": "cat",
-						"label": "CAT",
-						"shortcut": ""
+						"label": "Contents",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
+						"key": "ContentsFP",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Loss of Bus Income",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
+						"key": "LossofBusIncomeFP",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Building Limit",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
+						"key": "BuildingLimitFP",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
 					}],
-					"defaultValue": "nonCat",
-					"clearOnHide": false,
-					"validate": {
-						"required": true
-					},
-					"type": "radio",
-					"optionsLabelPosition": "right",
-					"inline": true,
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Contents",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
-					"key": "ContentsFP",
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Loss of Bus Income",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
-					"key": "LossofBusIncomeFP",
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
-					"label": "Building Limit",
-					"prefix": "$",
-					"mask": false,
-					"spellcheck": true,
-					"disabled": true,
-					"tableView": true,
-					"defaultValue": "0.00",
-					"delimiter": true,
-					"requireDecimal": false,
-					"inputFormat": "plain",
-					"clearOnHide": false,
-					"calculateValue": "if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
-					"key": "BuildingLimitFP",
-					"type": "number",
-					"input": true,
-					"inputType": "number",
-					"lockKey": true,
 					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
@@ -11966,8 +12044,10 @@
 				"pull": 0,
 				"size": "md"
 			}],
+			"tableView": false,
+			"key": "columns24",
 			"type": "columns",
-			"hideLabel": true
+			"input": false
 		}, {
 			"clearOnHide": false,
 			"input": false,
@@ -12109,14 +12189,14 @@
 						"prefix": "%",
 						"mask": false,
 						"spellcheck": true,
-						"disabled": true,
-						"tableView": true,
+						"tableView": false,
 						"defaultValue": "0.00",
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "var selectedDate = new Date(data[\"policyPeriod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
+						"allowCalculateOverride": true,
 						"key": "proRataPercentage",
 						"type": "number",
 						"decimalLimit": 3,
@@ -12928,6 +13008,7 @@
 			"label": "jdsgf",
 			"tableView": false,
 			"key": "jdsgf",
+			"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && (data.privileges &&\n\tdata.privileges['MANAGE_POLICY_APPROVAL_WRITE']));\n\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 			"type": "well",
 			"input": false,
 			"components": [{
@@ -12946,6 +13027,7 @@
 				"input": false
 			}, {
 				"label": "PADI Verified",
+				"autofocus": true,
 				"tableView": false,
 				"defaultValue": false,
 				"validate": {
@@ -13037,12 +13119,23 @@
 				"type": "textfield",
 				"input": true
 			}]
+		}, {
+			"label": "Additional Notes",
+			"tableView": true,
+			"key": "additionalNotes",
+			"conditional": {
+				"show": true,
+				"when": "csrApproved",
+				"eq": "approved"
+			},
+			"type": "textfield",
+			"input": true
 		}],
 		"input": false
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 199,
+	"_vid": 256,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13059,6 +13152,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-20T11:24:10.166Z",
+	"modified": "2020-06-24T06:35:52.419Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

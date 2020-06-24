@@ -64,7 +64,7 @@ ox_announcement:
     org_id: 1
     created_date: "2019-06-26 00:00:00"
     start_date: "1996-12-26 00:00:00"
-    end_date: "2020-06-26 00:00:00"
+    end_date: "2021-06-26 00:00:00"
     created_id: 1
     status: 1
     type: "HOMESCREEN"
@@ -75,7 +75,7 @@ ox_announcement:
     org_id: 1
     created_date: "2019-06-26 00:00:00"
     start_date: "1996-12-26 00:00:00"
-    end_date: "2020-06-26 00:00:00"
+    end_date: "2021-06-26 00:00:00"
     created_id: 1
     status: 1
     type: "HOMESCREEN"
@@ -86,7 +86,7 @@ ox_announcement:
     org_id: 1
     created_date: "2019-06-26 00:00:00"
     start_date: "2030-12-26 00:00:00"
-    end_date: "2020-06-26 00:00:00"
+    end_date: "2021-06-26 00:00:00"
     created_id: 1
     status: 1
     type: "HOMESCREEN"

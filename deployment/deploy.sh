@@ -500,6 +500,10 @@ bridgemed()
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BridgeMed'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/apps/BridgeMed/
+        rm -rf /opt/oxzion/view/apps/BridgeMed/node_modules
+        npm install --unsafe-perm
+        npm run build
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
