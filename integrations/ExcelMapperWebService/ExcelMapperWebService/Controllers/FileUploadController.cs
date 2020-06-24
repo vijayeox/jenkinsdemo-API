@@ -35,16 +35,17 @@ namespace ArrowHeadWebService.Controllers
         public class FileUploadAPI
         {
             public IFormFile files { get; set; }
+            string fileuuid {get ; set ;}
         }
 
         [HttpPost]
-        public async Task<ContentResult> Post([FromForm] FileUploadAPI objFile, [FromForm] string fileuuid)
+        public async Task<ContentResult> Post([FromForm] FileUploadAPI objFile)
         {
             try
             {
-                if (fileuuid == null)
+                if (objFile.fileuuid == null)
                 {
-                    return Content("{\"Status\":\"Failed\",\"Message\":\"No File ID sent\"}", "application/json");
+                    return Content("{\"Status\":0,\"Message\":\"No File ID sent\"}", "application/json");
                 }
                 if (objFile.files !=null)
                 {
@@ -58,7 +59,7 @@ namespace ArrowHeadWebService.Controllers
                         fileStream.Flush();
                     }
                     ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
-                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName, fileuuid); }).Start();                    
+                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName, objFile.fileuuid); }).Start();                    
                     return Content("{\"Status\":1,\"Message\":\"" + objFile.files.FileName+" file Uploaded\"}", "application/json");
                 }
                 else

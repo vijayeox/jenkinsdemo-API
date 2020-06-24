@@ -10,6 +10,7 @@ use Oxzion\Model\Comment;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
+use Oxzion\Utils\UuidUtil;
 use Zend\Db\Sql\Expression;
 use Exception;
 
@@ -39,6 +40,7 @@ class CommentService extends AbstractService
         $data['text'] = isset($data['text']) ? $data['text'] : null;
         $data['file_id'] = $this->getIdFromUuid('ox_file', $fileId);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['uuid'] = UuidUtil::uuid();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -72,7 +74,7 @@ class CommentService extends AbstractService
 
     private function getParentId(&$data, $fileId){
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId));
+        $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
         if(!$obj){
             return 0;
         }
@@ -82,7 +84,7 @@ class CommentService extends AbstractService
     public function updateComment($id, $fileId, $data)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
         if (!$obj) {
             return 0;
         }
@@ -93,10 +95,8 @@ class CommentService extends AbstractService
             }
         }
         $obj = $obj->toArray();
-
         $form = new Comment();
         $data = array_merge($obj, $data); //Merging the data from the db for the ID
-        $data['id'] = $id;
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
@@ -118,7 +118,7 @@ class CommentService extends AbstractService
     public function deleteComment($id, $fileId)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
         if (is_null($obj)) {
             return 0;
         }

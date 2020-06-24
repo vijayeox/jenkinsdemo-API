@@ -1195,7 +1195,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
 						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
@@ -2069,7 +2069,7 @@
 					"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length > 0 && (data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')){show = true;} else {show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "Cylinder Instructor Attachments",
+					"label": "Cylinder Inspection Instructor Attachments",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -2506,8 +2506,24 @@
 			"next": true
 		}
 	}, {
-		"type": "panel",
 		"title": "Additional Insured",
+		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page4",
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_additionalInsured"
+		},
+		"type": "panel",
+		"label": "Additional Insured",
 		"components": [{
 			"label": "AdditionalInsureds",
 			"attrs": [{
@@ -2943,18 +2959,7 @@
 				"lockKey": true
 			}]
 		}],
-		"input": false,
-		"key": "page4",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false
+		"input": false
 	}, {
 		"title": "Payment",
 		"theme": "primary",
@@ -3373,7 +3378,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 266,
+	"_vid": 269,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3394,6 +3399,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-22T20:28:25.428Z",
+	"modified": "2020-06-24T08:22:44.889Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

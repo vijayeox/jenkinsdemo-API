@@ -99,6 +99,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         catch(EntityNotFoundException $e) {
             $this->assertEquals('No workflow found for workflow '.$params['workflowId'],$e->getMessage());
         }
+        $this->assertEquals($result,1);
     }
 
     public function testStartWorkflowWithCorrectAppId() {
@@ -152,7 +153,10 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $result = $this->workflowInstanceService->startWorkflow($params);
         $sqlQuery = 'SELECT * FROM ox_file order by id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals('{"field1":1,"field2":2,"appId":null}',$newQueryResult[0]['data']);
+        $newQuery = json_decode($newQueryResult[0]['data'],true);
+        $this->assertEquals(1, $newQuery['field1']);
+        $this->assertEquals(2, $newQuery['field2']);
+        $this->assertEquals($newQuery['appId'], null);
         $this->assertEquals(1,$newQueryResult[0]['created_by']);
     }
 
@@ -282,7 +286,12 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $result = $this->workflowInstanceService->startWorkflow($params);
         $sqlQuery = 'SELECT data FROM ox_file where id = 18';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals('{"firstname":"brian","email":"brian@gmail.com","field1":1,"field2":2,"appId":null}',$newQueryResult[0]['data']);
+        $newQuery = json_decode($newQueryResult[0]['data'],true);
+        $this->assertEquals($newQuery['firstname'],'brian');
+        $this->assertEquals($newQuery['email'],'brian@gmail.com');
+        $this->assertEquals($newQuery['field1'],1);
+        $this->assertEquals($newQuery['field2'],2);
+        $this->assertEquals($newQuery['appId'], null);
     }
 
     public function testStartWorkflowUpdateWorkflowInstanceScenario(){

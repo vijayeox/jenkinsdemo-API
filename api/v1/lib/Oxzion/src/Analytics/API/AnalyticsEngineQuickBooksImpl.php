@@ -14,7 +14,7 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI
 
   public function __construct($appDBAdapter, $appConfig, QuickBooksService $quickbookService)
   {
-    parent::__construct(null, $appDBAdapter, $appConfig);
+    parent::__construct($appDBAdapter, $appConfig);
     $this->quickbookService = $quickbookService;
   }
 

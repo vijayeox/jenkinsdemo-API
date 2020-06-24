@@ -18,6 +18,7 @@
 				"components": [{
 					"label": "Please select areas you want to modify",
 					"optionsLabelPosition": "right",
+					"autofocus": true,
 					"tableView": true,
 					"defaultValue": {
 						"modify_personalInformation": false,
@@ -361,6 +362,7 @@
 				}, {
 					"components": [{
 						"label": "PADI Store Number",
+						"autofocus": true,
 						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
@@ -666,7 +668,7 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"customMessage": "Please Select the Entity Type of your Business"
+								"customMessage": "Entity Type is required"
 							},
 							"key": "entity_type",
 							"type": "select",
@@ -1255,7 +1257,7 @@
 								"inputFormat": "plain",
 								"validate": {
 									"required": true,
-									"customMessage": "Please enter a valid Mobile Phone number",
+									"customMessage": "Please enter a valid mobile phone number",
 									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
 								},
 								"key": "phone_number",
@@ -1304,7 +1306,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list",
+						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
 						"disabled": true,
 						"tableView": true,
 						"validate": {
@@ -1366,6 +1368,7 @@
 		"components": [{
 			"label": "Do you want to apply Property Coverage?",
 			"widget": "choicesjs",
+			"autofocus": true,
 			"tableView": true,
 			"data": {
 				"values": [{
@@ -1438,7 +1441,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select the material used for the Building Construction"
+							"customMessage": "Please select the material used for the building construction"
 						},
 						"key": "dspropbuildingconstr",
 						"type": "select",
@@ -1483,31 +1486,46 @@
 				"type": "columns",
 				"hideLabel": true
 			}, {
-				"label": "Survey",
-				"hideLabel": true,
-				"tableView": true,
-				"questions": [{
-					"value": "centralStationAlarmPL",
-					"label": "Central Station Alarm (Note:Burglary coverage is afforded only with a working central station alarm)"
-				}, {
-					"value": "fireSprinklersPL",
-					"label": "Fire Sprinklers"
-				}],
+				"label": "Central Station Alarm",
+				"optionsLabelPosition": "right",
+				"description": "(Note:Burglary coverage is afforded only with a working central station alarm)",
+				"inline": false,
+				"tableView": false,
 				"values": [{
+					"label": "Yes",
 					"value": "yes",
-					"label": "Yes"
+					"shortcut": ""
 				}, {
+					"label": "No",
 					"value": "no",
-					"label": "No"
+					"shortcut": ""
 				}],
-				"clearOnHide": false,
 				"validate": {
-					"customMessage": "Please Answer as applicable"
+					"required": true
 				},
-				"key": "dsPropCentralFirePL",
-				"type": "survey",
-				"input": true,
-				"lockKey": true
+				"key": "centralStationAlarm",
+				"type": "radio",
+				"input": true
+			}, {
+				"label": "Fire Sprinklers",
+				"optionsLabelPosition": "right",
+				"inline": false,
+				"tableView": false,
+				"values": [{
+					"label": "Yes",
+					"value": "yes",
+					"shortcut": ""
+				}, {
+					"label": "No",
+					"value": "no",
+					"shortcut": ""
+				}],
+				"validate": {
+					"required": true
+				},
+				"key": "fireSprinklers",
+				"type": "radio",
+				"input": true
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -1789,7 +1807,6 @@
 								"mask": false,
 								"spellcheck": true,
 								"tableView": true,
-								"defaultValue": 0,
 								"delimiter": true,
 								"requireDecimal": false,
 								"inputFormat": "plain",
@@ -1845,7 +1862,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please let us know if you are the owner of the building?"
+							"customMessage": "Please let us know if you are the owner of the building"
 						},
 						"errorLabel": "Building Ownership",
 						"key": "dspropownbuilding",
@@ -1936,9 +1953,9 @@
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "The year in which the building was built is required"
 								},
-								"errorLabel": "The Year in which the Building was built",
 								"key": "built_year",
 								"type": "select",
 								"indexeddb": {
@@ -1952,7 +1969,8 @@
 								"inputFormat": "html",
 								"clearOnHide": false,
 								"validate": {
-									"required": true
+									"required": true,
+									"customMessage": "Updates on plumbing,roof,etc. is required"
 								},
 								"key": "dspropUpdatesonplumbingelectricalroofetc",
 								"type": "textfield",
@@ -2082,6 +2100,7 @@
 				"description": "Except Instructional/Supervisory & Travel Receipts.This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
 				"prefix": "$",
 				"mask": false,
+				"autofocus": true,
 				"spellcheck": true,
 				"tableView": true,
 				"delimiter": true,
@@ -2090,6 +2109,7 @@
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
+					"customMessage": "Estimated Retail receipts for the past 12 months is required",
 					"min": null,
 					"max": null
 				},
@@ -2100,6 +2120,22 @@
 				"labelWidth": null,
 				"labelMargin": null,
 				"lockKey": true
+			}, {
+				"label": "Actual Retail Receipts for previous 12 months",
+				"prefix": "$",
+				"mask": false,
+				"spellcheck": true,
+				"tableView": false,
+				"delimiter": true,
+				"requireDecimal": false,
+				"inputFormat": "plain",
+				"validate": {
+					"required": true
+				},
+				"key": "annualEstimatedReceipts",
+				"type": "number",
+				"input": true,
+				"inputType": "number"
 			}, {
 				"key": "pageNaNPanel3YesNo",
 				"label": "Yes/No",
@@ -2133,7 +2169,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "doyouhaveapoolonpremisesPL1",
@@ -2157,7 +2193,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "criminalBackGroundChecks",
@@ -2181,7 +2217,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "hasApplicantSexualAbuse",
@@ -2205,7 +2241,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "hasApplicantSexualAbuseMolestation",
@@ -2242,34 +2278,10 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"customMessage": "Please select an Option"
+							"customMessage": "Please select an option"
 						},
 						"errorLabel": "Pool Premises",
 						"key": "doyouhaveapoolonpremisesPL",
-						"type": "radio",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
-						"optionsLabelPosition": "right",
-						"inline": false,
-						"tableView": false,
-						"values": [{
-							"label": "Yes",
-							"value": "yes",
-							"shortcut": ""
-						}, {
-							"label": "No",
-							"value": "no",
-							"shortcut": ""
-						}],
-						"clearOnHide": false,
-						"key": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-						"conditional": {
-							"show": true,
-							"when": "doyouhaveapoolonpremisesPL",
-							"eq": "yes"
-						},
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false
@@ -2287,7 +2299,7 @@
 						"key": "poolSupplementalForm1",
 						"conditional": {
 							"show": true,
-							"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+							"when": "doyouhaveapoolonpremisesPL",
 							"eq": "yes"
 						},
 						"type": "panel",
@@ -2676,6 +2688,9 @@
 												"delimiter": false,
 												"requireDecimal": false,
 												"inputFormat": "plain",
+												"validate": {
+													"customMessage": "Please enter diving boards or diving platforms present"
+												},
 												"key": "divingBoardCount",
 												"type": "number",
 												"input": true,
@@ -2689,13 +2704,15 @@
 										}, {
 											"components": [{
 												"label": "Height?",
-												"labelPosition": "left-left",
 												"mask": false,
 												"spellcheck": true,
 												"tableView": false,
 												"delimiter": false,
 												"requireDecimal": false,
 												"inputFormat": "plain",
+												"validate": {
+													"customMessage": "Please enter the height of diving boards or diving platforms"
+												},
 												"key": "divingBoardHeight",
 												"type": "number",
 												"input": true,
@@ -2860,6 +2877,33 @@
 						}],
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"validate": {
+							"customMessage": "Please select an option"
+						},
+						"key": "poolNonDivingActivities",
+						"conditional": {
+							"show": true,
+							"when": "doyouhaveapoolonpremisesPL",
+							"eq": "yes"
+						},
+						"type": "radio",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
 						"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
 						"prefix": "$",
 						"mask": false,
@@ -2869,7 +2913,8 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"validate": {
-							"required": true
+							"required": true,
+							"customMessage": "Gross receipts from your pool is required"
 						},
 						"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
 						"conditional": {
@@ -3400,7 +3445,7 @@
 						"customMessage": "Please let us know if you have had any claims in the last 5 years"
 					},
 					"errorLabel": "Claim Information",
-					"key": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
+					"key": "claimsInLast5YearsSelect",
 					"type": "radio",
 					"input": true,
 					"lockKey": true
@@ -3414,7 +3459,7 @@
 					"enableRowGroups": false,
 					"tableView": true,
 					"defaultValue": [{
-						"dsgldateoftheclaim": "2020-06-15T11:04:20.000Z",
+						"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
 						"claimsInformatio": ""
 					}],
 					"clearOnHide": false,
@@ -3424,7 +3469,7 @@
 					"key": "dsglClaimAmountpaidanyamountsoutstanding",
 					"conditional": {
 						"show": true,
-						"when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
+						"when": "claimsInLast5YearsSelect",
 						"eq": "yes"
 					},
 					"type": "datagrid",
@@ -3444,9 +3489,9 @@
 									"tableView": false,
 									"enableMinDateInput": false,
 									"datePicker": {
+										"maxDate": "moment().startOf('day')",
 										"disableWeekends": false,
-										"disableWeekdays": false,
-										"maxDate": "moment().startOf('day')"
+										"disableWeekdays": false
 									},
 									"enableMaxDateInput": true,
 									"enableTime": false,
@@ -3501,7 +3546,7 @@
 									"validate": {
 										"required": true
 									},
-									"key": "Pleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
+									"key": "claimAmountPaid",
 									"type": "number",
 									"labelWidth": 0,
 									"labelMargin": 3,
@@ -3530,7 +3575,7 @@
 									"validate": {
 										"required": true
 									},
-									"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding3",
+									"key": "claimsAmountOutStanding",
 									"type": "number",
 									"labelWidth": 0,
 									"labelMargin": 3,
@@ -3664,6 +3709,7 @@
 			"columns": [{
 				"components": [{
 					"label": "Travel Agent E&O",
+					"autofocus": true,
 					"tableView": true,
 					"defaultValue": false,
 					"clearOnHide": false,
@@ -4698,7 +4744,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please Select the Excess Liability Coverage you would like to apply for"
+						"customMessage": "Excess Liability Coverage is required"
 					},
 					"key": "excessLiabilityCoverage",
 					"conditional": {
@@ -4738,11 +4784,11 @@
 				"components": [{
 					"label": "Do you want to apply for Non Owner Auto?",
 					"tableView": false,
+					"defaultValue": false,
 					"clearOnHide": false,
 					"key": "doYouWantToApplyForNonOwnerAuto",
 					"type": "checkbox",
 					"input": true,
-					"defaultValue": false,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "NON-Owned Auto Liability",
@@ -4761,7 +4807,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Please Choose the Auto Liability Coverage"
+						"customMessage": "NON-Owned Auto Liability is required"
 					},
 					"key": "nonOwnedAutoLiabilityPL",
 					"conditional": {
@@ -4985,7 +5031,6 @@
 				"components": [{
 					"label": "Additional Insured",
 					"reorder": false,
-					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -5001,9 +5046,7 @@
 						"zip": "",
 						"businessRelation": "",
 						"businessRelationOther": "",
-						"additionalInformation": "",
-						"doYouHaveAWrittenContract": "",
-						"additionalInsuredAttachments": []
+						"additionalInformation": ""
 					}],
 					"clearOnHide": false,
 					"validate": {
@@ -5086,9 +5129,6 @@
 							"hideLabel": true
 						}, {
 							"label": "Columns",
-							"input": false,
-							"tableView": false,
-							"key": "additionalInsuredPanelColumns2",
 							"columns": [{
 								"components": [{
 									"label": "Country",
@@ -5123,7 +5163,7 @@
 									"source": "5d347da33e9be31e15d3b115",
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 4,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
@@ -5160,7 +5200,7 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 4,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
@@ -5182,12 +5222,20 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 4,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
 								"size": "md"
-							}, {
+							}],
+							"hideLabel": true,
+							"tableView": false,
+							"key": "additionalInsuredPanelColumns2",
+							"type": "columns",
+							"input": false
+						}, {
+							"label": "Columns",
+							"columns": [{
 								"components": [{
 									"label": "Business Relation",
 									"widget": "choicesjs",
@@ -5257,27 +5305,37 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Additional Information",
+									"autoExpand": false,
+									"tableView": true,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"validate": {
+										"customMessage": "Please enter Additional Information about the Additional Insured"
+									},
+									"errorLabel": "Additional Insured Additional Information",
+									"key": "additionalInformation",
+									"type": "textarea",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 6,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
 								"size": "md"
 							}],
+							"tableView": false,
+							"key": "columns2",
 							"type": "columns",
-							"hideLabel": true
-						}, {
-							"label": "Additional Information",
-							"autoExpand": false,
-							"tableView": true,
-							"inputFormat": "plain",
-							"clearOnHide": false,
-							"validate": {
-								"customMessage": "Please enter Additional Information about the Additional Insured"
-							},
-							"errorLabel": "Additional Insured Additional Information",
-							"key": "additionalInformation",
-							"type": "textarea",
-							"input": true
+							"input": false
 						}, {
 							"label": "Do you have a Written Contract?",
 							"optionsLabelPosition": "right",
@@ -5407,7 +5465,7 @@
 				"label": "Information for each Additional Named Insureds is required as follows",
 				"input": false,
 				"components": [{
-					"label": "Data Grid",
+					"label": "Additional Named Insured",
 					"reorder": false,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
@@ -5416,7 +5474,16 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": false,
+					"defaultValue": [{
+						"name": "",
+						"country": "",
+						"address": "",
+						"state": {},
+						"city": "",
+						"zip": ""
+					}],
 					"validate": {
+						"customMessage": "Please add an Additional Insured",
 						"minLength": 1
 					},
 					"key": "additionalNamedInsured",
@@ -5435,34 +5502,12 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "City",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "city",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
 									"label": "Country",
 									"widget": "choicesjs",
 									"tableView": true,
@@ -5479,7 +5524,6 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter your country."
 									},
 									"key": "country",
@@ -5493,6 +5537,22 @@
 									"input": true,
 									"lockKey": true,
 									"source": "5d347da33e9be31e15d3b115",
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Address",
+									"tableView": true,
+									"clearOnHide": false,
+									"key": "address",
+									"type": "textfield",
+									"input": true,
+									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "State",
@@ -5511,9 +5571,6 @@
 									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "state",
 									"type": "select",
 									"indexeddb": {
@@ -5530,13 +5587,10 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Address",
+									"label": "City",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "address",
+									"key": "city",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -5546,7 +5600,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"key": "zip",
@@ -5573,8 +5626,7 @@
 						"clearOnHide": false,
 						"hideLabel": true
 					}],
-					"path": "additionalNamedInsured",
-					"defaultValue": [{}]
+					"path": "additionalNamedInsured"
 				}],
 				"lockKey": true,
 				"path": "additional_named_insureds"
@@ -5659,34 +5711,12 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "City",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "city",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
 									"label": "Country",
 									"widget": "choicesjs",
 									"tableView": true,
@@ -5703,7 +5733,6 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter your country."
 									},
 									"key": "country",
@@ -5717,6 +5746,22 @@
 									"input": true,
 									"lockKey": true,
 									"source": "5d347da33e9be31e15d3b115",
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Address",
+									"tableView": true,
+									"clearOnHide": false,
+									"key": "address",
+									"type": "textfield",
+									"input": true,
+									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "State",
@@ -5735,9 +5780,6 @@
 									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "state",
 									"type": "select",
 									"indexeddb": {
@@ -5754,13 +5796,10 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Address",
+									"label": "City",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "address",
+									"key": "city",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -5769,7 +5808,6 @@
 									"label": "Zip Code",
 									"tableView": true,
 									"validate": {
-										"required": true,
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"key": "zip",
@@ -5908,34 +5946,12 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
-										"label": "City",
-										"tableView": true,
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "city",
-										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 4,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [{
 										"label": "Country",
 										"widget": "choicesjs",
 										"tableView": true,
@@ -5952,7 +5968,6 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
-											"required": true,
 											"customMessage": "Please enter your country."
 										},
 										"key": "country",
@@ -5966,6 +5981,22 @@
 										"input": true,
 										"lockKey": true,
 										"source": "5d347da33e9be31e15d3b115",
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Address",
+										"tableView": true,
+										"clearOnHide": false,
+										"key": "address",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
 										"label": "State",
@@ -5984,9 +6015,6 @@
 										"clearOnRefresh": true,
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "state",
 										"type": "select",
 										"indexeddb": {
@@ -6003,13 +6031,10 @@
 									"size": "md"
 								}, {
 									"components": [{
-										"label": "Address",
+										"label": "City",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "address",
+										"key": "city",
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
@@ -6020,7 +6045,6 @@
 										"tableView": false,
 										"clearOnHide": false,
 										"validate": {
-											"required": true,
 											"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
 										"key": "zip",
@@ -6130,28 +6154,46 @@
 								"type": "panel",
 								"label": "Panel"
 							}, {
-								"input": true,
-								"tableView": true,
-								"label": "Survey",
-								"key": "dsPropCentralFireAL",
-								"questions": [{
-									"value": "centralStationAlarmAL",
-									"label": "Central Station Alarm (Note:Burglary coverage is afforded only with a working central station alarm)"
-								}, {
-									"value": "fireSprinklersAL",
-									"label": "Fire Sprinklers"
-								}],
+								"label": "Central Station Alarm",
+								"optionsLabelPosition": "right",
+								"description": "(Note:Burglary coverage is afforded only with a working central station alarm)",
+								"inline": false,
+								"tableView": false,
 								"values": [{
+									"label": "Yes",
 									"value": "yes",
-									"label": "Yes"
+									"shortcut": ""
 								}, {
+									"label": "No",
 									"value": "no",
-									"label": "No"
+									"shortcut": ""
 								}],
-								"type": "survey",
-								"hideLabel": true,
-								"lockKey": true,
-								"clearOnHide": false
+								"validate": {
+									"required": true
+								},
+								"key": "ALcentralStationAlarm",
+								"type": "radio",
+								"input": true
+							}, {
+								"label": "Fire Sprinklers",
+								"optionsLabelPosition": "right",
+								"inline": false,
+								"tableView": false,
+								"values": [{
+									"label": "Yes",
+									"value": "yes",
+									"shortcut": ""
+								}, {
+									"label": "No",
+									"value": "no",
+									"shortcut": ""
+								}],
+								"validate": {
+									"required": true
+								},
+								"key": "ALfireSprinklers",
+								"type": "radio",
+								"input": true
 							}, {
 								"label": "Columns",
 								"input": false,
@@ -6408,7 +6450,8 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"required": true,
+											"customMessage": "Please let us know if you are the owner of the building"
 										},
 										"key": "additionalLocationDoYouOwntheBuilding",
 										"type": "select",
@@ -6435,7 +6478,8 @@
 												"inputFormat": "plain",
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Please enter the Replacement Value"
 												},
 												"key": "ALBuildingReplacementValue",
 												"type": "number",
@@ -6446,11 +6490,16 @@
 											}, {
 												"label": "What is the square footage of your building?",
 												"suffix": "ft<sup>2</sup>",
+												"mask": false,
 												"spellcheck": true,
 												"tableView": true,
+												"delimiter": false,
+												"requireDecimal": false,
+												"inputFormat": "plain",
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Please enter the area of the building in sq ft"
 												},
 												"key": "squarefootageofyourbuildingAL",
 												"conditional": {
@@ -6462,9 +6511,7 @@
 												"labelMargin": null,
 												"lockKey": true,
 												"hideOnChildrenHidden": false,
-												"mask": false,
-												"inputType": "text",
-												"inputFormat": "plain"
+												"inputType": "text"
 											}],
 											"width": 6,
 											"offset": 0,
@@ -6488,7 +6535,8 @@
 												"selectThreshold": 0.3,
 												"clearOnHide": false,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "The year in which the building was built is required"
 												},
 												"key": "built_year",
 												"type": "select",
@@ -6501,7 +6549,8 @@
 												"label": "Updates on plumbing, electrical, roof, etc.",
 												"tableView": true,
 												"validate": {
-													"required": true
+													"required": true,
+													"customMessage": "Updates on plumbing,roof,etc. is required"
 												},
 												"key": "updatesOnPlumbingElectricalRoofEtcAL",
 												"conditional": {
@@ -6565,11 +6614,21 @@
 							"theme": "primary",
 							"tableView": false,
 							"components": [{
-								"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2Panel",
-								"input": false,
-								"title": "GENERAL LIABILITY INFORMATION",
+								"title": "General Liability Information",
 								"theme": "primary",
+								"breadcrumbClickable": true,
+								"buttonSettings": {
+									"previous": true,
+									"cancel": true,
+									"next": true
+								},
+								"collapsible": false,
+								"dataGridLabel": false,
 								"tableView": false,
+								"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2Panel",
+								"type": "panel",
+								"label": "GENERAL LIABILITY INFORMATION",
+								"input": false,
 								"components": [{
 									"label": "Estimated 12 month retail receipts",
 									"description": "Except Instructional/Supervisory & Travel Receipts.This should include all of your dive-related business. PADI Members with multiple locations should include the total receipts for all locations.",
@@ -6582,7 +6641,8 @@
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Estimated Retail receipts for the past 12 months is required"
 									},
 									"key": "estimatedMonthlyReceipts",
 									"type": "number",
@@ -6622,7 +6682,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALdoyouhaveapoolonpremisesPL1",
@@ -6646,7 +6706,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALcriminalBackGroundChecks",
@@ -6670,7 +6730,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALhasApplicantSexualAbuse",
@@ -6694,7 +6754,7 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALhasApplicantSexualAbuseMolestation",
@@ -6731,34 +6791,10 @@
 											"clearOnHide": false,
 											"validate": {
 												"required": true,
-												"customMessage": "Please select an Option"
+												"customMessage": "Please select an option"
 											},
 											"errorLabel": "Pool Premises",
 											"key": "ALdoyouhaveapoolonpremisesPL",
-											"type": "radio",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
-											"optionsLabelPosition": "right",
-											"inline": false,
-											"tableView": false,
-											"values": [{
-												"label": "Yes",
-												"value": "yes",
-												"shortcut": ""
-											}, {
-												"label": "No",
-												"value": "no",
-												"shortcut": ""
-											}],
-											"clearOnHide": false,
-											"key": "ALIfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-											"conditional": {
-												"show": true,
-												"when": "doyouhaveapoolonpremisesPL",
-												"eq": "yes"
-											},
 											"type": "radio",
 											"input": true,
 											"hideOnChildrenHidden": false
@@ -6776,7 +6812,7 @@
 											"key": "ALpoolSupplementalForm1",
 											"conditional": {
 												"show": true,
-												"when": "ALIfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+												"when": "ALdoyouhaveapoolonpremisesPL",
 												"eq": "yes"
 											},
 											"type": "panel",
@@ -6807,7 +6843,7 @@
 												"label": "Please describe your pool use other than for diving, swimming, snorkeling or freediving instruction & supervision",
 												"autoExpand": false,
 												"tableView": true,
-												"key": "ALpleaseDescribeYourPoolUseOtherThanForDivingSwimmingSnorkelingOrFreedivingInstructionSupervision",
+												"key": "ALPoolOtherThanDiving",
 												"type": "textarea",
 												"input": true,
 												"hideOnChildrenHidden": false
@@ -6899,7 +6935,6 @@
 														"columns": [{
 															"components": [{
 																"label": "From",
-																"labelPosition": "left-left",
 																"tableView": true,
 																"dataFormat": "HH:mm",
 																"key": "ALtime",
@@ -6916,7 +6951,6 @@
 														}, {
 															"components": [{
 																"label": "To",
-																"labelPosition": "left-left",
 																"tableView": true,
 																"dataFormat": "HH:mm",
 																"key": "ALtime1",
@@ -6991,7 +7025,7 @@
 															"components": [{
 																"label": "To",
 																"hideInputLabels": true,
-																"inputsLabelPosition": "left",
+																"inputsLabelPosition": "top",
 																"useLocaleSettings": false,
 																"hideLabel": true,
 																"tableView": false,
@@ -7178,7 +7212,6 @@
 															}, {
 																"components": [{
 																	"label": "Height?",
-																	"labelPosition": "left-left",
 																	"mask": false,
 																	"spellcheck": true,
 																	"tableView": false,
@@ -7346,27 +7379,55 @@
 													}]
 												}],
 												"hideOnChildrenHidden": false
+											}, {
+												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
+												"prefix": "$",
+												"mask": false,
+												"spellcheck": true,
+												"tableView": false,
+												"delimiter": true,
+												"requireDecimal": false,
+												"inputFormat": "plain",
+												"validate": {
+													"required": true,
+													"customMessage": "Gross receipts from your pool is required"
+												},
+												"key": "ALpoolGrossReceipts",
+												"conditional": {
+													"show": true,
+													"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+													"eq": "yes"
+												},
+												"type": "number",
+												"input": true,
+												"hideOnChildrenHidden": false
 											}],
 											"hideOnChildrenHidden": false
 										}, {
-											"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-											"prefix": "$",
-											"mask": false,
-											"spellcheck": true,
+											"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
+											"optionsLabelPosition": "right",
+											"inline": false,
 											"tableView": false,
-											"delimiter": true,
-											"requireDecimal": false,
-											"inputFormat": "plain",
+											"values": [{
+												"label": "Yes",
+												"value": "yes",
+												"shortcut": ""
+											}, {
+												"label": "No",
+												"value": "no",
+												"shortcut": ""
+											}],
+											"clearOnHide": false,
 											"validate": {
-												"required": true
+												"customMessage": "Please select an option"
 											},
-											"key": "ALwhatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
+											"key": "ALNonDivingPoolActivities",
 											"conditional": {
 												"show": true,
-												"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+												"when": "ALdoyouhaveapoolonpremisesPL",
 												"eq": "yes"
 											},
-											"type": "number",
+											"type": "radio",
 											"input": true,
 											"hideOnChildrenHidden": false
 										}],
@@ -7524,7 +7585,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentsales",
+											"key": "ALEquipmentSales",
 											"conditional": {
 												"show": true,
 												"when": "otherequipmentsalesAL",
@@ -7575,7 +7636,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentrepairs",
+											"key": "ALDescribeEquipmentRepairs",
 											"conditional": {
 												"show": true,
 												"when": "otherequipmentrepairsAL",
@@ -7626,7 +7687,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentrentals",
+											"key": "ALDescribeEquipmentRenatals",
 											"conditional": {
 												"show": true,
 												"when": "otherequipmentrentalsAL",
@@ -7677,7 +7738,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplainotherbusinessactivity",
+											"key": "ALexplainOtherBusinessActivity",
 											"conditional": {
 												"show": true,
 												"when": "otherbusinessactivityAL",
@@ -7705,9 +7766,7 @@
 									"type": "columns",
 									"hideLabel": true
 								}],
-								"type": "panel",
-								"inDataGrid": true,
-								"label": "Panel"
+								"inDataGrid": true
 							}, {
 								"title": "Claims Information",
 								"theme": "primary",
@@ -7724,10 +7783,10 @@
 								"label": "Claims Information",
 								"input": false,
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Have you had any store property (fire, theft, burglary, theft, etc.) or liability (slip & fall, other in-store liability) claims in the last five (5) years?",
-									"key": "claimsinLast5Years",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -7737,13 +7796,14 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
+									"key": "ALclaimsinLast5Years",
 									"type": "radio",
-									"optionsLabelPosition": "right",
-									"lockKey": true,
-									"clearOnHide": false
+									"input": true,
+									"lockKey": true
 								}, {
 									"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
 									"reorder": false,
@@ -7754,23 +7814,25 @@
 									"enableRowGroups": false,
 									"tableView": true,
 									"defaultValue": [{
-										"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime": "",
-										"claimsInformatio": "",
-										"dsgldateoftheclaim": ""
+										"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
+										"claimsInformatio": ""
 									}],
 									"clearOnHide": false,
-									"key": "claimsMade",
+									"validate": {
+										"minLength": 1
+									},
+									"key": "ALdsglClaimAmountpaidanyamountsoutstanding",
 									"conditional": {
 										"show": true,
-										"when": "claimsinLast5Years",
+										"when": "ALclaimsinLast5Years",
 										"eq": "yes"
 									},
 									"type": "datagrid",
 									"input": true,
 									"components": [{
-										"label": "claimsWellAl",
+										"label": "claimswell",
 										"tableView": false,
-										"key": "claimsWellAl",
+										"key": "ALclaimswell",
 										"type": "well",
 										"input": false,
 										"components": [{
@@ -7782,21 +7844,20 @@
 													"tableView": false,
 													"enableMinDateInput": false,
 													"datePicker": {
+														"maxDate": "moment().startOf('day')",
 														"disableWeekends": false,
-														"disableWeekdays": false,
-														"maxDate": "moment().startOf('day')"
+														"disableWeekdays": false
 													},
 													"enableMaxDateInput": true,
 													"enableTime": false,
 													"timePicker": {
 														"showMeridian": false
 													},
-													"clearOnHide": false,
 													"validate": {
 														"required": true,
 														"custom": "if(row['dsgldateoftheclaim'] && row['dsgldateoftheclaim'] != ''){\n  valid = (moment(row['dsgldateoftheclaim']) < moment()) ? true : 'Please choose the date before '+moment().format('MM-DD-YYYY');\n}"
 													},
-													"key": "dsgldateoftheclaim",
+													"key": "ALdsgldateoftheclaim",
 													"type": "datetime",
 													"input": true,
 													"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
@@ -7831,6 +7892,7 @@
 													"prefix": "$",
 													"mask": false,
 													"spellcheck": true,
+													"dataGridLabel": false,
 													"tableView": true,
 													"delimiter": true,
 													"requireDecimal": false,
@@ -7839,12 +7901,14 @@
 													"validate": {
 														"required": true
 													},
-													"key": "claimAmountPaid",
+													"key": "ALclaimAmountPaid",
 													"type": "number",
+													"labelWidth": 0,
+													"labelMargin": 3,
 													"input": true,
 													"inputType": "number",
-													"hideOnChildrenHidden": false,
-													"lockKey": true
+													"inDataGrid": true,
+													"hideOnChildrenHidden": false
 												}],
 												"width": 4,
 												"offset": 0,
@@ -7857,6 +7921,7 @@
 													"prefix": "$",
 													"mask": false,
 													"spellcheck": true,
+													"dataGridLabel": false,
 													"tableView": true,
 													"delimiter": true,
 													"requireDecimal": false,
@@ -7865,12 +7930,14 @@
 													"validate": {
 														"required": true
 													},
-													"key": "claimAmountOutstanding",
+													"key": "ALclaimsAmountOutStanding",
 													"type": "number",
+													"labelWidth": 0,
+													"labelMargin": 3,
 													"input": true,
 													"inputType": "number",
-													"hideOnChildrenHidden": false,
-													"lockKey": true
+													"inDataGrid": true,
+													"hideOnChildrenHidden": false
 												}],
 												"size": "md",
 												"width": 4,
@@ -7878,11 +7945,11 @@
 												"push": 0,
 												"pull": 0
 											}],
+											"hideLabel": true,
 											"tableView": false,
-											"key": "columns19",
+											"key": "ALcolumns17",
 											"type": "columns",
-											"input": false,
-											"hideLabel": true
+											"input": false
 										}, {
 											"label": "Columns",
 											"columns": [{
@@ -7890,8 +7957,7 @@
 													"label": "Information on Claims",
 													"autoExpand": false,
 													"tableView": true,
-													"clearOnHide": false,
-													"key": "claimsInformatio",
+													"key": "ALclaimsInformatio",
 													"type": "textarea",
 													"input": true,
 													"hideOnChildrenHidden": false
@@ -7911,7 +7977,7 @@
 											}],
 											"hideLabel": true,
 											"tableView": false,
-											"key": "columns18",
+											"key": "ALcolumns18",
 											"type": "columns",
 											"input": false
 										}],
@@ -8985,7 +9051,7 @@
 										"clearOnHide": false,
 										"validate": {
 											"required": true,
-											"customMessage": "Please Choose the Auto Liability Coverage"
+											"customMessage": "NON-Owned Auto Liability is required"
 										},
 										"key": "nonOwnedAutoLiabilityPL",
 										"conditional": {
@@ -9929,7 +9995,8 @@
 									"inputFormat": "plain",
 									"clearOnHide": false,
 									"validate": {
-										"required": true
+										"required": true,
+										"customMessage": "Please enter the amount spent on annual instructional supervision"
 									},
 									"key": "annualReceiptInstructionalSupervision",
 									"type": "number",
@@ -10376,7 +10443,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Would you like to add Additional Insureds for your Group Professional Liability?"
+						"customMessage": "Would you like to add additional insureds for your group professional liability"
 					},
 					"errorLabel": "Additional Insured",
 					"key": "additional_insured",
@@ -10687,7 +10754,8 @@
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"customMessage": "Would you like to add Additional Named Insureds is required"
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -11498,6 +11566,7 @@
 						"tableView": false
 					}, {
 						"label": "Acknowledged",
+						"autofocus": true,
 						"tableView": false,
 						"defaultValue": false,
 						"clearOnHide": false,
@@ -12627,6 +12696,7 @@
 						"components": [{
 							"label": "Coverage",
 							"widget": "choicesjs",
+							"autofocus": true,
 							"tableView": true,
 							"data": {
 								"values": [{
@@ -13527,17 +13597,21 @@
 					}]
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"inputType": "number",
 						"label": "Additional Location Premium",
-						"key": "previous_AddILocPremium",
 						"prefix": "$",
-						"defaultValue": "0.00",
-						"clearOnHide": false,
-						"type": "number",
+						"mask": false,
+						"spellcheck": true,
 						"disabled": true,
+						"tableView": true,
+						"defaultValue": "0.00",
+						"delimiter": false,
 						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"key": "previous_AddILocPremium",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
 						"lockKey": true
 					}]
 				}],
@@ -13601,15 +13675,15 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTableGroupLiability",
-						"label": "Group Professional Liability",
+						"key": "page5PanelPanelTablePaorFee",
+						"label": "PA/OR Fee",
 						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
-						"content": "Group Professional Liability",
+						"content": "PA/OR Fee",
 						"type": "htmlelement",
 						"tableView": false,
 						"hideLabel": true
@@ -13618,19 +13692,18 @@
 					"components": []
 				}, {
 					"components": [{
-						"label": "Group Professional Liability",
+						"label": "PA/OR Fee",
 						"prefix": "$",
 						"mask": false,
-						"spellcheck": true,
+						"spellcheck": false,
 						"disabled": true,
-						"tableView": true,
-						"defaultValue": "0.00",
+						"tableView": false,
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"groupTotalAmount\"])||0)).toFixed(0)",
-						"key": "groupProfessionalLiability",
+						"calculateValue": "var amount=0.00;\nif(data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nvalue = amount",
+						"key": "PAORFee",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -13638,18 +13711,18 @@
 					}]
 				}, {
 					"components": [{
-						"label": "Group Professional Liability",
+						"label": "PA/OR Fee",
 						"prefix": "$",
 						"mask": false,
-						"spellcheck": true,
+						"spellcheck": false,
 						"disabled": true,
-						"tableView": true,
+						"tableView": false,
 						"defaultValue": "0.00",
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"key": "previous_groupProfessionalLiability",
+						"key": "previous_PAORFee",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -13792,15 +13865,15 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTablePaorFee",
-						"label": "PA/OR Fee",
+						"key": "page5PanelPanelTableGroupLiability",
+						"label": "Group Professional Liability",
 						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
-						"content": "PA/OR Fee",
+						"content": "Group Professional Liability",
 						"type": "htmlelement",
 						"tableView": false,
 						"hideLabel": true
@@ -13809,18 +13882,19 @@
 					"components": []
 				}, {
 					"components": [{
-						"label": "PA/OR Fee",
+						"label": "Group Professional Liability",
 						"prefix": "$",
 						"mask": false,
-						"spellcheck": false,
+						"spellcheck": true,
 						"disabled": true,
-						"tableView": false,
+						"tableView": true,
+						"defaultValue": "0.00",
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var amount=0.00;\nif(data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 20.00\n}\nvalue = amount",
-						"key": "PAORFee",
+						"calculateValue": "value = ((parseFloat(data[\"groupTotalAmount\"])||0)).toFixed(0)",
+						"key": "groupProfessionalLiability",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -13828,18 +13902,18 @@
 					}]
 				}, {
 					"components": [{
-						"label": "PA/OR Fee",
+						"label": "Group Professional Liability",
 						"prefix": "$",
 						"mask": false,
-						"spellcheck": false,
+						"spellcheck": true,
 						"disabled": true,
-						"tableView": false,
+						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"key": "previous_PAORFee",
+						"key": "previous_groupProfessionalLiability",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -14253,6 +14327,7 @@
 				"optionsLabelPosition": "right",
 				"inline": true,
 				"hideLabel": true,
+				"autofocus": true,
 				"tableView": true,
 				"values": [{
 					"value": "approved",
@@ -14325,7 +14400,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 165,
+	"_vid": 182,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14342,6 +14417,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-23T07:00:33.306Z",
+	"modified": "2020-06-24T12:04:09.907Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

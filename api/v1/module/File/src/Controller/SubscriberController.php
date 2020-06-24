@@ -9,6 +9,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
+use Exception;
 
 class SubscriberController extends AbstractApiController
 {
@@ -43,15 +44,18 @@ class SubscriberController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         try {
-            $count = $this->subscriberService->createSubscriber($data, $params['fileId']);
+            $response = $this->subscriberService->createSubscriber($data, $params['fileId']);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
+        if ($response == 0) {
             return $this->getErrorResponse("Failed to create a new entity", 404, $data);
         }
-        return $this->getSuccessResponseWithData($data, 201);
+        if ($response == -1) {
+            return $this->getErrorResponse("User does not exist", 404, $data);
+        }
+        return $this->getSuccessResponseWithData($response, 201);
     }
     /**
     * Update Subscriber API
@@ -77,8 +81,9 @@ class SubscriberController extends AbstractApiController
     */
     public function update($id, $data)
     {
+        $params = $this->params()->fromRoute();
         try {
-            $count = $this->subscriberService->updateSubscriber($id, $data);
+            $count = $this->subscriberService->updateSubscriber($id, $params['fileId'], $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -87,7 +92,7 @@ class SubscriberController extends AbstractApiController
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
         if ($count == -1) {
-            return $this->getFailureResponse("User does not exist", $data);
+            return $this->getErrorResponse("User does not exist", 404, $data);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -102,11 +107,35 @@ class SubscriberController extends AbstractApiController
     */
     public function delete($id)
     {
-        $response = $this->subscriberService->deleteSubscriber($id);
+        $params = $this->params()->fromRoute();
+        $response = $this->subscriberService->deleteSubscriber($id, $params['fileId']);
         if ($response == 0) {
             return $this->getErrorResponse("Subscriber not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
+    }
+
+    /**
+    * Get Subscriber API
+    * @api
+    * @link file/:fileId/subscriber/id
+    * @method GET
+    * @param $id ID of Subscriber to GET
+    * @return array success|failure response
+    */
+    public function get($id)
+    {
+        $params = $this->params()->fromRoute();
+        try{
+            $response = $this->subscriberService->getSubscriber($id, $params['fileId']);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
+        }
+        if ($response == 0) {
+            return $this->getErrorResponse("Subscriber not found", 404, ['id' => $id]);
+        }
+        return $this->getSuccessResponseWithData($response);
     }
 
     /**
@@ -130,7 +159,8 @@ class SubscriberController extends AbstractApiController
     */
     public function getList()
     {
-        $result = $this->subscriberService->getSubscribers();
+        $params = $this->params()->fromRoute();
+        $result = $this->subscriberService->getSubscribers($params['fileId']);
         return $this->getSuccessResponseWithData($result);
     }
 }
