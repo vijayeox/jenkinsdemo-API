@@ -510,7 +510,7 @@
       "collapsible": false,
       "tableView": false,
       "key": "paymentApprovalPanel",
-      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data.policyStatus != 'Quote Approval Pending') ? true: false;\n}\nelse{\n  show = false;\n}",
+      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
       "type": "panel",
       "label": "Payment Approval",
       "input": false,
@@ -604,7 +604,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 17,
+  "_vid": 18,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -621,6 +621,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-23T20:26:05.305Z",
+  "modified": "2020-06-24T19:45:39.874Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
