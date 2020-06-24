@@ -34,11 +34,6 @@ class Persistence extends AbstractService
         parent::__construct($config, $adapter);
     }
 
-    //this method is used only for phpunit tests. Not required to be called otherwise
-    public function setAdapter($adapter){
-        $this->dbAdapter = $adapter;
-    }
-
     /**
      * @param $sqlQuery
      * @return \Zend\Db\Adapter\Driver\ResultInterface
