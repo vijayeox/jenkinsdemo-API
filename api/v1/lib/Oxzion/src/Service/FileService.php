@@ -409,7 +409,7 @@ class FileService extends AbstractService
                     $indexedField['date_modified'] = date('Y-m-d H:i:s'); 
                     $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
                     $indexedField = array_merge($indexedField,$this->generateFieldPayload($field['data_type'],$field,$indexedField,$fieldvalue,$entityId,$fileId,$fileArray));
-                    $indexedField['data'][$field['name']] = $indexedField[$field['name']]; 
+                    $indexedFields['data'][$field['name']] = $indexedField[$field['name']]; 
 
                     if(isset($indexedField['data'])){
                         $fieldvalueIndexed = json_encode($indexedField['data']);
