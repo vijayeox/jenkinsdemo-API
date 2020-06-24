@@ -93,10 +93,8 @@ class CommentService extends AbstractService
             }
         }
         $obj = $obj->toArray();
-
         $form = new Comment();
         $data = array_merge($obj, $data); //Merging the data from the db for the ID
-        $data['id'] = $id;
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
