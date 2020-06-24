@@ -72,7 +72,7 @@ class CommentService extends AbstractService
 
     private function getParentId(&$data, $fileId){
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId));
+        $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
         if(!$obj){
             return 0;
         }
@@ -82,7 +82,7 @@ class CommentService extends AbstractService
     public function updateComment($id, $fileId, $data)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
         if (!$obj) {
             return 0;
         }
@@ -118,7 +118,7 @@ class CommentService extends AbstractService
     public function deleteComment($id, $fileId)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
         if (is_null($obj)) {
             return 0;
         }
