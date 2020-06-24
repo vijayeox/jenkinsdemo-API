@@ -416,6 +416,14 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "subject",
+						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+						"key": "subject",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 3,
 					"offset": 0,
@@ -4704,7 +4712,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 455,
+	"_vid": 456,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4725,6 +4733,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-22T20:27:53.035Z",
+	"modified": "2020-06-24T00:23:02.355Z",
 	"machineName": "testdivehub:csrInitiates"
 }

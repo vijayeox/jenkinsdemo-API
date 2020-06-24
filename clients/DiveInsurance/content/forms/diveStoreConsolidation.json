@@ -385,6 +385,14 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "subject",
+						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+						"key": "subject",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -13098,7 +13106,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 238,
+	"_vid": 239,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13115,6 +13123,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-23T23:23:29.848Z",
+	"modified": "2020-06-24T00:21:57.752Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
