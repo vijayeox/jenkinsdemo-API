@@ -10,6 +10,7 @@ use Oxzion\Model\Comment;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
+use Oxzion\Utils\UuidUtil;
 use Zend\Db\Sql\Expression;
 use Exception;
 
@@ -39,6 +40,7 @@ class CommentService extends AbstractService
         $data['text'] = isset($data['text']) ? $data['text'] : null;
         $data['file_id'] = $this->getIdFromUuid('ox_file', $fileId);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['uuid'] = UuidUtil::uuid();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');

@@ -23,7 +23,7 @@ class Comment extends Entity
 
     public function validate()
     {
-        $required = array('text');
+        $required = array('text', 'uuid');
         $this->validateWithParams($required);
     }
 }
