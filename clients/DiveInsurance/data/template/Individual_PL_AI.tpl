@@ -65,7 +65,7 @@
 		    			{elseif $additional.businessRelation == "landlord"}
 		    				Landlord
 		    			{elseif $additional.businessRelation == "governmentEntityPermitRequirement"} 
-		    			    Government Entity – Permit Requirement
+		    			    Government Entity - Permit Requirement
 		    			{elseif $additional.businessRelation == "diveStore"} 
 		    			   Dive Store
 		    			{elseif $additional.businessRelation == "trainingAgency"} 
