@@ -97,7 +97,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
                         'alTemplate' => 'DiveStore_AdditionalLocations',
-                        'blanketForm' => 'DS_AI_Blanket_Endorsement.pdf',
+                        'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
                         'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf',
                         'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'),
