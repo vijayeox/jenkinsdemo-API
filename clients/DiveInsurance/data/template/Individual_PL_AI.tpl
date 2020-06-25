@@ -53,7 +53,7 @@
 	    	<b><p class = "ai_title">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 	    		{foreach from=$list item=$additional}
 		    		<p class = "ai_list">
-		    			{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
+		    			{$additional.name} {if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
 		    			{if $additional.businessRelation == "confinedWaterTrainingLocation"}
 		    			 	Confined Water Training Location 
 		    			{elseif $additional.businessRelation == "openWaterTrainingLocation"} 

@@ -40,8 +40,13 @@
 						${$dspropTotal|number_format}
 					</p>
 					<p></p>
-					<p class = "sec_title2">                        
-                            ${$lossOfBusIncome|number_format}</p>
+					<p class = "sec_title2">
+
+						{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}
+                            ${$lossOfBusIncome|number_format}
+                        {else}
+                            0
+                        {/if}</p>
 					<p class = "sec_title2">
 						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
                             ${$dspropreplacementvalue|number_format}

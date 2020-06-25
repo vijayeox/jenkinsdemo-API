@@ -1379,10 +1379,10 @@
 						"tableView": false,
 						"enableMinDateInput": false,
 						"datePicker": {
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
-							"datepickerMode": "day",
-							"minDate": "2020-06-30T12:00:00+05:30"
+							"datepickerMode": "day"
 						},
 						"enableMaxDateInput": false,
 						"enableTime": false,
@@ -1416,7 +1416,7 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": "2020-06-30T12:00:00+05:30",
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"maxDate": null
@@ -3321,13 +3321,13 @@
 				"key": "pageNaNPanel3Columns6",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Cylinder hydrostatic testing",
-						"dataGridLabel": false,
-						"key": "cylinderhydrostatictestingPL",
+						"tableView": true,
 						"defaultValue": false,
+						"key": "cylinderhydrostatictestingPL",
 						"type": "checkbox",
+						"input": true,
+						"dataGridLabel": false,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -5003,17 +5003,25 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "combinedSingalLimit",
-						"calculateValue": "var limit = '100000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
-						"key": "combinedSingalLimit",
+						"label": "combinedSingleLimit",
+						"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
+						"key": "combinedSingleLimit",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "annualAggregate",
-						"calculateValue": "var limit = '1,00,000';\nvalue = parseFloat(data['primaryCombinedSingalLimit']) + parseFloat(limit);",
+						"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
 						"key": "annualAggregate",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "groupExcessLiabilityLimit",
+						"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
+						"key": "groupExcessLiabilityLimit",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
@@ -6627,11 +6635,6 @@
 													"required": true
 												},
 												"key": "ALLossofBusIncome",
-												"conditional": {
-													"show": true,
-													"when": "ALLossofBusIncomeCheckBox",
-													"eq": "true"
-												},
 												"type": "number",
 												"input": true,
 												"inputType": "number",
@@ -9897,7 +9900,7 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": false,
+											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "value=((parseFloat(row.ALliabilityCoveragesTotal)||0)*(parseFloat(row.ALliabilityTaxPercentage)||0)/100).toFixed(0);",
@@ -9905,7 +9908,8 @@
 											"type": "number",
 											"input": true,
 											"inputType": "number",
-											"lockKey": true
+											"lockKey": true,
+											"decimalLimit": 2
 										}]
 									}],
 									[{
@@ -9955,7 +9959,7 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": false,
+											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "if(data.additionalLocationsSelect=='yes'){\nvalue=((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALPropertyTaxPercentage)||0)/100).toFixed(0);\n} else {\n  value = 0\n}",
@@ -9963,7 +9967,8 @@
 											"type": "number",
 											"input": true,
 											"inputType": "number",
-											"lockKey": true
+											"lockKey": true,
+											"decimalLimit": 2
 										}]
 									}],
 									[{
@@ -9993,7 +9998,7 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": false,
+											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "value=((parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)).toFixed(0);",
@@ -10001,7 +10006,8 @@
 											"type": "number",
 											"input": true,
 											"inputType": "number",
-											"lockKey": true
+											"lockKey": true,
+											"decimalLimit": 2
 										}]
 									}],
 									[{
@@ -10220,7 +10226,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = parseFloat(data['annualReceiptInstructionalSupervision']+data['annualEstimatedResponseRecieptsGL']).toFixed(0)",
+						"calculateValue": "value = parseFloat(data['annualReceiptInstructionalSupervision'])+parseFloat(data['annualEstimatedResponseRecieptsGL'])",
 						"key": "annualReceipt",
 						"attributes": {
 							"style": "display:none;"
@@ -11430,7 +11436,7 @@
 							"disabled": true,
 							"tableView": true,
 							"delimiter": true,
-							"requireDecimal": false,
+							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
@@ -11439,7 +11445,8 @@
 							"type": "number",
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"decimalLimit": 2
 						}]
 					}],
 					[{
@@ -11873,7 +11880,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}",
+						"calculateValue": "if(data.doyouhaveapoolonpremisesPL == 'yes'){\nif((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}\n} else {\n  value = 0;\n}",
 						"key": "nonDivingPoolAmount",
 						"type": "number",
 						"input": true,
@@ -11916,7 +11923,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)",
+						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
 						"key": "Non-OwnedAutoFP",
 						"type": "number",
 						"input": true,
@@ -12226,7 +12233,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"defaultValue": "0.00",
+						"defaultValue": 1,
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
@@ -12383,15 +12390,16 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"propertyProRataPremium\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100).toFixed(0);",
+						"calculateValue": "value = ((parseFloat(data[\"propertyProRataPremium\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100);",
 						"key": "PropTax",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}],
 				[{
@@ -12440,15 +12448,16 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"liabilityProRataPremium\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100).toFixed(0);",
+						"calculateValue": "value = ((parseFloat(data[\"liabilityProRataPremium\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100);",
 						"key": "LiaTax",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}],
 				[{
@@ -12518,7 +12527,7 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray = \"additionalLocations\";\n  var additionalLocationArrayLength = data[additionalLocationArray].length;\n  var value = 0;\n  for (var i = 0; i < additionalLocationArrayLength; i++) {\n    value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n  }\n} else {\n  value = 0;\n}",
@@ -12526,7 +12535,8 @@
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}],
 				[{
@@ -12559,7 +12569,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[\"groupTotalAmount\"])||0)",
+						"calculateValue": "if(data.groupProfessionalLiabilitySelect == 'yes'){\n  value = (parseFloat(data[\"groupTotalAmount\"])||0)\n}",
 						"key": "groupProfessionalLiability",
 						"type": "number",
 						"input": true,
@@ -12730,7 +12740,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) -(parseFloat(data[\"PropDeductibleCredit\"])||0) ;",
+						"calculateValue": "value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) -(parseFloat(data[\"PropDeductibleCredit\"])||0)).toFixed(0) ;",
 						"key": "totalAmount",
 						"type": "number",
 						"input": true,
@@ -13171,7 +13181,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 282,
+	"_vid": 292,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13188,6 +13198,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-24T19:38:27.639Z",
+	"modified": "2020-06-25T08:48:52.066Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
