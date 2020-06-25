@@ -520,26 +520,26 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) || (isset($data['generatePersonalInfo']) && ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true')))){
                         $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     }
-				}else{
-                    if ($temp['product'] == 'Individual Professional Liability') {
-                       $check = $this->endorsementOptionsFlag($temp);
+				}
+            }else{
+                if ($temp['product'] == 'Individual Professional Liability') {
+                 $check = $this->endorsementOptionsFlag($temp);
+             }
+             if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
+                $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                if(is_array($policyDocuments)){
+                    foreach ($policyDocuments as $key => $value) {
+                        $documents[$key] = $value;
                     }
-                    if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
-                        $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-                        if(is_array($policyDocuments)){
-                            foreach ($policyDocuments as $key => $value) {
-                                $documents[$key] = $value;
-                            }
-                        }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
-                            $documents['coi_document']  = array($policyDocuments);
-                        }else if($temp['product'] == 'Dive Store'){ 
-                    		$documents['liability_coi_document']  = $policyDocuments;
-                		}else{
-                    		$documents['coi_document']  = $policyDocuments;
-                		}
-                    }
+                }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
+                    $documents['coi_document']  = array($policyDocuments);
+                }else if($temp['product'] == 'Dive Store'){ 
+                    $documents['liability_coi_document']  = $policyDocuments;
+                }else{
+                    $documents['coi_document']  = $policyDocuments;
                 }
             }
+        }
                 // if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 // {
                 //     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
