@@ -9843,8 +9843,27 @@
 		},
 		"collapsible": false
 	}, {
-		"type": "panel",
 		"title": "Group Professional Liability",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page7",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]"
+		},
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_groupProfessionalLiability"
+		},
+		"type": "panel",
+		"label": "Group Professional Liability",
 		"components": [{
 			"label": "certificateLevelList",
 			"protected": true,
@@ -10302,6 +10321,8 @@
 								},
 								"valueProperty": "value",
 								"selectThreshold": 0.3,
+								"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
+								"allowCalculateOverride": true,
 								"validate": {
 									"required": true
 								},
@@ -11025,6 +11046,8 @@
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
+									"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
+									"allowCalculateOverride": true,
 									"validate": {
 										"required": true
 									},
@@ -11567,23 +11590,7 @@
 			"hideLabel": true
 		}],
 		"input": false,
-		"key": "page7",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Group Professional Liability",
-		"conditional": {
-			"show": true,
-			"when": "endorsement_options",
-			"eq": "modify_groupProfessionalLiability"
-		},
-		"path": "page7",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false
+		"path": "page7"
 	}, {
 		"type": "panel",
 		"title": "Terms & Conditions",
@@ -14467,7 +14474,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 203,
+	"_vid": 206,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14484,6 +14491,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-25T08:48:50.532Z",
+	"modified": "2020-06-25T13:55:54.349Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

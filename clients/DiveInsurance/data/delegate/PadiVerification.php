@@ -107,7 +107,7 @@ class PadiVerification extends AbstractAppDelegate
                             $returnArray['padiNotApplicable'] = true;
                             $returnArray['padiNotFound'] = false;
                         } else {
-                            $coverageSelect = "Select coverage_name,coverage_level FROM coverage_options WHERE padi_rating ='".$response[0]['rating']."'";
+                            $coverageSelect = "Select coverage_name,coverage_level FROM coverage_options WHERE padi_rating ='".$response[0]['rating']."' and category IS NULL";
                             $coverageLevels = $persistenceService->selectQuery($coverageSelect);
                             if($result->count() > 0){
                                 while ($coverageLevels->next()) {

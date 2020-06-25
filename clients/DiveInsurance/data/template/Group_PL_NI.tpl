@@ -21,14 +21,28 @@
 			      Yes{else}No{/if}</p>
 			      </div>
 
-			      <div class = "named_div6"><p class ="t_title">{if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
-			      {if isset($value.update_date) && $value.update_date != ''}{$value.update_date|date_format:"%m/%d/%Y"}{else}&nbsp{/if}
+			      <div class = "named_div6"><p class ="t_title">
+			      {if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
+			      			{if isset($value.update_date) && $value.update_date != ''}
+			      				{$value.update_date|date_format:"%m/%d/%Y"}
+			      			{else}
+			      				&nbsp
+			      			{/if}
+			      {else}
+			      			&nbsp
 			      {/if}
 			      </p>
 			      </div>
 
-			      <div class = "named_div7"><p class ="t_title">{if isset($value.cancel) && ($value.cancel == true || $value.cancel == 'true')}
-			      {if isset($value.cancel_date) && $value.cancel_date != ''}{$value.cancel_date|date_format:"%m/%d/%Y"}{else}&nbsp{/if}
+			      <div class = "named_div7"><p class ="t_title">
+			      {if isset($value.cancel) && ($value.cancel == true || $value.cancel == 'true')}
+			      			{if isset($value.cancel_date) && $value.cancel_date != ''}
+			      				{$value.cancel_date|date_format:"%m/%d/%Y"}
+			      			{else}
+			      				&nbsp
+			      			{/if}
+			      {else}
+			      			&nbsp
 			      {/if}
 			      </p>
 				  </div>
