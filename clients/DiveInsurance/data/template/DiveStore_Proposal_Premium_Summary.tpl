@@ -1,4 +1,3 @@
-{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
 <!DOCTYPE html>
 <html>
 

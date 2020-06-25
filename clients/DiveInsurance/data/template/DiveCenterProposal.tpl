@@ -1,4 +1,3 @@
-{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
 <!DOCTYPE html>
 <html>
 
@@ -28,7 +27,7 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        <td>${((float)$lossOfBusIncome)|number_format}</td>
+                        <td>{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}                           ${$lossOfBusIncome|number_format}{else}$0{/if}</td>
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
@@ -242,7 +241,7 @@
 
             <!-- Alarm Calc -->
             <div style="margin: 2% 0;">
-                {if isset($dspropcentralfire.centralStationAlarmPL) && $dspropcentralfire.centralStationAlarmPL != "yes"}
+                {if isset($centralStationAlarm) && $centralStationAlarm != "yes"}
                 <center>
                     <b>
                         <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>
