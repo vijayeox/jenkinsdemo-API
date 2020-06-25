@@ -74,8 +74,8 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   }
   #floater {
     position: fixed;
-    bottom: 15px;
-    right: 30px;
+    bottom: 12px;
+    right: 15px;
     pointer-events: none;
     img {
       height: 40px;
@@ -86,14 +86,14 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     .helpText {
       position: absolute;
       display: flex;
-      top: 28px;
+      top: 27px;
       width: max-content;
       text-align: center;
-      left: -313px;
+      left: -280px;
       p {
         padding: 3px;
         font-weight: bolder;
-        font-size: 16px;
+        font-size: 14px;
       }
     }
   }
