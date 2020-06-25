@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="IPLEndorsement" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -191,6 +191,7 @@ boolean result4 = false
 boolean result5 = false
 boolean result6 = true
 boolean result7 = false
+boolean result8 = false
 
 if(personalInfo){
     if(country != "United States of America"){
@@ -232,10 +233,10 @@ if(paymentOptions){
 
 
 if(country != "United States of America" &amp;&amp; country != "Mexico" &amp;&amp; country != "The Bahamas" &amp;&amp; country != "Turks and Caicos" &amp;&amp; country != "British Virgin Islands" &amp;&amp; country != "Cayman Islands" &amp;&amp; country != "Jamaica" &amp;&amp; country != "Aruba" &amp;&amp; country != "Curacao" &amp;&amp; country != "Grenada" &amp;&amp; country != "Barbados" &amp;&amp; country != "St Lucia" &amp;&amp; country != "Trinidad and Tobago" &amp;&amp; country != "Belize" &amp;&amp; country != "Costa Rica" &amp;&amp; country != "Dominican Republic" &amp;&amp; country != "Dominica" &amp;&amp; country != "Martinique" &amp;&amp; country != "Anguilla" &amp;&amp; country != "St Kitts and Nevis"){
-	result3 = true;
+	result8 = true;
 }
 
-if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || result8 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)

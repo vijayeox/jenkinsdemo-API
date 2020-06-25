@@ -96,12 +96,14 @@ class RenewalRateCard extends RateCard
                     $response[] = $result->current();
                 }
             }
-            $coverageSelect = "Select coverage_name,coverage_level FROM coverage_options WHERE padi_rating ='".$response[0]['rating']."'";
-            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
-            if($result->count() > 0){
-                while ($coverageLevels->next()) {
-                    $coverage = $coverageLevels->current();
-                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+            if (isset($response) && count($response) > 0) {
+                $coverageSelect = "Select coverage_name,coverage_level FROM coverage_options WHERE padi_rating ='".$response[0]['rating']."'";
+                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                if($coverageLevels->count() > 0){
+                    while ($coverageLevels->next()) {
+                        $coverage = $coverageLevels->current();
+                        $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                    }
                 }
             } else {
                 $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options";
