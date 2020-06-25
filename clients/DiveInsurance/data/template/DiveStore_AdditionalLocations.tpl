@@ -31,8 +31,8 @@
                         <th class = "table_hd">Property Coverages</th>
                         <th class = "table_hd">Limits</th>
                     </tr>
-                    <tr><td   class = "info">Policy issued by {$carrier}</td></tr>
-                    <tr><td   class = "info">Policy #: {$policy_id}</td></tr>
+                    <tr><td   class = "info">Policy issued by {$property_carrier}</td></tr>
+                    <tr><td   class = "info">Policy #: {$property_policy_id}</td></tr>
                     <tr>
                         <td class = "info">Contents Limit:</td>
                         <td class = "info">${$additionalLocationData.additionalLocationPropertyTotal|number_format}</td>
@@ -102,8 +102,8 @@
                         <th class = "table_hd">Liability Coverages</th>
                         <th class = "table_hd">Limits</th>
                     </tr>
-                    <tr><td   class = "info">Policy issued by {$carrier}</td></tr>
-                    <tr><td   class = "info">Policy #: {$policy_id}</td></tr>
+                    <tr><td   class = "info">Policy issued by {$liability_carrier}</td></tr>
+                    <tr><td   class = "info">Policy #: {$liability_policy_id}</td></tr>
                     <tr>
                         <td class = "info">NON-Diving Pool Use:</td>
                         {if isset($additionalLocationData.ALPoolLiability) && (int)$additionalLocationData.ALPoolLiability > 0}

@@ -1462,6 +1462,9 @@
 						"clearOnHide": false,
 						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nvar day = today.date();\nif(month >= 5){\n  if(month==5 && day==30){\n    value = (year + 1) + \"-06-30\";\n  } else if(month ==5 && day < 30){\n    value = (year) + \"-06-30\";\n  } else {\n    value = (year + 1) + \"-06-30\";\n  }\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 						"key": "end_date",
+						"properties": {
+							"data_type": "Date"
+						},
 						"type": "datetime",
 						"input": true,
 						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
@@ -10071,8 +10074,22 @@
 		"tableView": false,
 		"label": "Panel"
 	}, {
-		"type": "panel",
 		"title": "Group Professional Liability",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page7",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]"
+		},
+		"type": "panel",
+		"label": "Group Professional Liability",
 		"components": [{
 			"label": "certificateLevelList",
 			"protected": true,
@@ -10550,6 +10567,8 @@
 								},
 								"valueProperty": "value",
 								"selectThreshold": 0.3,
+								"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
+								"allowCalculateOverride": true,
 								"validate": {
 									"required": true
 								},
@@ -11226,6 +11245,8 @@
 									},
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
+									"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
+									"allowCalculateOverride": true,
 									"validate": {
 										"required": true
 									},
@@ -11421,10 +11442,10 @@
 							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"key": "groupTaxPercentage",
 							"type": "number",
-							"decimalLimit": 3,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"decimalLimit": 2
 						}]
 					}, {
 						"components": [{
@@ -11537,10 +11558,6 @@
 			"hideLabel": true
 		}],
 		"input": false,
-		"key": "page7",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel",
 		"path": "page7"
 	}, {
 		"type": "panel",
@@ -12242,10 +12259,10 @@
 						"allowCalculateOverride": true,
 						"key": "proRataPercentage",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -12375,10 +12392,10 @@
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "propertyTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -12433,10 +12450,10 @@
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "liabilityTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -12650,7 +12667,7 @@
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"decimalLimit": 3
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -13181,7 +13198,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 292,
+	"_vid": 300,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13198,6 +13215,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-25T08:48:52.066Z",
+	"modified": "2020-06-25T14:22:15.523Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

@@ -146,6 +146,7 @@ public function execute(array $data,Persistence $persistenceService)
         $endorsementNonOwnedAutoLiabilityPL = array();
         $endorsementLiabilityCoverageOption = array();
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
+        $data['upgradeStatus'] = true;
        if($data['initiatedByUser'] == false){
             $endorsementCoverage = array();
             $endorsementGroupCoverage = array();
@@ -279,6 +280,7 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($rate);
                 }
             }
+            
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
             $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
@@ -286,6 +288,8 @@ public function execute(array $data,Persistence $persistenceService)
             $data['endorsementNonOwnedAutoLiabilityPL'] = $endorsementNonOwnedAutoLiabilityPL;
             $data['endorsementLiabilityCoverageOption'] = $endorsementLiabilityCoverageOption;
             array_push($data['previous_policy_data'],$policy);
+            $data['initial_combinedSingleLimit'] = $data['previous_policy_data'][0]['previous_combinedSingleLimit'];
+            $data['initial_annualAggregate'] = $data['previous_policy_data'][0]['previous_annualAggregate'];
             $unsetOptions = $this->unsetOptions;
             for($i=0;$i< sizeof($unsetOptions);$i++){
                 if(isset($data[$unsetOptions[$i]])){
@@ -294,6 +298,7 @@ public function execute(array $data,Persistence $persistenceService)
             }
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
         }
+
         if(isset($data['paymentOptions'])){
             unset($data['paymentOptions']);
         }

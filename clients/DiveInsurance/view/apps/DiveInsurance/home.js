@@ -1,4 +1,4 @@
-import {React,ReactDOM,LeftMenuTemplate,FormRender} from "oxziongui";
+import { React, ReactDOM, LeftMenuTemplate, FormRender } from "oxziongui";
 import { appId as application_id } from "./metadata.json";
 import "./index.scss";
 
@@ -7,6 +7,7 @@ class Home extends React.Component {
     super(props);
     this.core = this.props.args;
     this.helper = this.core.make("oxzion/restClient");
+    this.userprofile = this.core.make("oxzion/profile").get().key;
     this.params = this.props.params;
     this.proc = this.props.proc;
     this.state = {
@@ -21,12 +22,12 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.getCacheData().then(cacheResponse => {
+    this.getCacheData().then((cacheResponse) => {
       var cache = cacheResponse.data;
       if (cache) {
         if (cache.workflow_uuid) {
           this.setState({ workflowId: cache.workflow_uuid });
-          this.getFormData(cache.workflow_uuid).then(formResponse => {
+          this.getFormData(cache.workflow_uuid).then((formResponse) => {
             if (formResponse.data) {
               this.setState({
                 formContent: JSON.parse(formResponse.data.template),
@@ -93,8 +94,8 @@ class Home extends React.Component {
     return formData;
   }
 
-  postSubmitCallback = data => {
-    this.deleteCacheData().then(response => {
+  postSubmitCallback = (data) => {
+    this.deleteCacheData().then((response) => {
       if (response.status == "success") {
         this.setState({
           formContent: undefined,
@@ -131,6 +132,12 @@ class Home extends React.Component {
         ) : null}
         <div id="floater">
           <img src="/apps/DiveInsurance/img/poweredby.png"></img>
+          {this.userprofile.privileges.MANAGE_POLICY_APPROVAL_WRITE == true ? (
+            <div className="helpText">
+              <p>Helpline Ph: +1 216-452-0324 |</p>
+              <p>Email: hub-support@eoxvantage.com</p>
+            </div>
+          ) : null}
         </div>
       </div>
     );

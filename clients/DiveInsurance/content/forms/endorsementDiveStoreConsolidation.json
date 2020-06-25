@@ -9843,8 +9843,27 @@
 		},
 		"collapsible": false
 	}, {
-		"type": "panel",
 		"title": "Group Professional Liability",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page7",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]"
+		},
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_groupProfessionalLiability"
+		},
+		"type": "panel",
+		"label": "Group Professional Liability",
 		"components": [{
 			"label": "certificateLevelList",
 			"protected": true,
@@ -10302,6 +10321,8 @@
 								},
 								"valueProperty": "value",
 								"selectThreshold": 0.3,
+								"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
+								"allowCalculateOverride": true,
 								"validate": {
 									"required": true
 								},
@@ -11025,6 +11046,8 @@
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
+									"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
+									"allowCalculateOverride": true,
 									"validate": {
 										"required": true
 									},
@@ -11350,7 +11373,7 @@
 							"disabled": true,
 							"tableView": true,
 							"delimiter": false,
-							"requireDecimal": false,
+							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
@@ -11359,7 +11382,8 @@
 							"type": "number",
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"decimalLimit": 2
 						}]
 					}, {
 						"components": [{
@@ -11371,7 +11395,7 @@
 							"disabled": true,
 							"tableView": true,
 							"delimiter": false,
-							"requireDecimal": false,
+							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
@@ -11381,7 +11405,8 @@
 							"type": "number",
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"decimalLimit": 2
 						}]
 					}],
 					[{
@@ -11567,23 +11592,7 @@
 			"hideLabel": true
 		}],
 		"input": false,
-		"key": "page7",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Group Professional Liability",
-		"conditional": {
-			"show": true,
-			"when": "endorsement_options",
-			"eq": "modify_groupProfessionalLiability"
-		},
-		"path": "page7",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false
+		"path": "page7"
 	}, {
 		"type": "panel",
 		"title": "Terms & Conditions",
@@ -13319,10 +13328,10 @@
 						"calculateValue": "var selectedDate = new Date(data[\"policyPeriod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
 						"key": "proRataPercentage",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -13502,16 +13511,16 @@
 						"tableView": true,
 						"defaultValue": "0",
 						"delimiter": false,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data[\"stateTaxData\"]){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "propertyTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -13578,16 +13587,16 @@
 						"tableView": true,
 						"defaultValue": "0",
 						"delimiter": false,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data[\"stateTaxData\"]){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "liabilityTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -13889,7 +13898,7 @@
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"decimalLimit": 3
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -14467,7 +14476,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 203,
+	"_vid": 207,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14484,6 +14493,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-25T08:48:50.532Z",
+	"modified": "2020-06-25T14:24:03.449Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

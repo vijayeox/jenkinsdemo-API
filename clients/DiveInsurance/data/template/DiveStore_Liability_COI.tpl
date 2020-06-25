@@ -140,7 +140,7 @@
 
 		<div class="spacing">&nbsp</div>
 
-		{if isset(excludedOperation)}
+		{if isset(excludedOperation) && $excludedOperation != ""}
 			<div class="section_col1" style="border-style: solid">
 				<p class ="title">SECTION II: EXCLUDED DESIGNATED OPERATION</p>
 			</div>

@@ -67,6 +67,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                         'header' => 'DiveStoreHeader.html',
                         'footer' => 'DiveStoreFooter.html',
+                        'propertyHeader' => 'DiveStorePropertyHeader.html',
+                        'propertyFooter' => 'DiveStorePropertyFooter.html',
                         'psTemplate' => 'DiveStore_DCPS',
                         'psHeader' => 'DiveStore_DCPS_header.html',
                         'psFooter' => 'DiveStore_DCPS_footer.html',
@@ -499,24 +501,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
 
-            if($this->type != 'quote' && $this->type != 'endorsementQuote'){
-                if(isset($temp['liability'])){
-                    $this->logger->info("DOCUMENT liability_coi_document");
-                    $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
-                    // $this->logger->info("DOCUMENT liability_policy_document");
-                    // $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
-                }
-                if(isset($temp['property'])){
+            if($this->type == 'policy' && $data['product'] == 'Dive Store'){
+                $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+                if($temp['propertyCoverageSelect'] == 'yes'){
                     $this->logger->info("DOCUMENT property_coi_document");
-                    $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
+                    $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
                     // $this->logger->info("DOCUMENT property_policy_document");
                     // $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 }
-            }
-
-            if(!isset($documents['property_coi_document']) && !isset($documents['liability_coi_document'])){
-                $this->logger->info("DOCUMENT coi_document");
-                $this->logger->info("Policy Document Generation");
+            }else if($data['product'] == 'Dive Boat' && ($this->type == 'endorsement' || $this->type == 'endorsementQuote')){
                 if($this->type == 'endorsement'){
                     if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) || ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true'))){
                         $documents['endorsement_coi_document'] = isset($documents['endorsement_coi_document']) ? $documents['endorsement_coi_document'] : array();
@@ -527,16 +520,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) || (isset($data['generatePersonalInfo']) && ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true')))){
                         $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     }
-                }else{
-                    $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-                    if(is_array($policyDocuments)){
-                        foreach ($policyDocuments as $key => $value) {
-                            $documents[$key] = $value;
-                        }
-                    }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
-                        $documents['coi_document']  = array($policyDocuments);
-                    }else{
-                        $documents['coi_document']  = $policyDocuments;
+				}else{
+                    if ($temp['product'] == 'Individual Professional Liability') {
+                       $check = $this->endorsementOptionsFlag($temp);
+                    }
+                    if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
+                        $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                        if(is_array($policyDocuments)){
+                            foreach ($policyDocuments as $key => $value) {
+                                $documents[$key] = $value;
+                            }
+                        }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
+                            $documents['coi_document']  = array($policyDocuments);
+                        }else if($temp['product'] == 'Dive Store'){ 
+                    		$documents['liability_coi_document']  = $policyDocuments;
+                		}else{
+                    		$documents['coi_document']  = $policyDocuments;
+                		}
                     }
                 }
                 // if($this->type != 'quote' && $this->type != 'endorsementQuote')
@@ -550,7 +550,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 //         $documents['policy_document'] = $policyDocuments;
                 //     }
                 // }
-            }
             if($this->type == 'lapse'){
                 $this->logger->info("DOCUMENT lapse");
                 return $this->generateDocuments($data,$dest,$options,'ltemplate','lheader','lfooter');
@@ -582,45 +581,29 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $data['documents'] = array();
                     $docs = $data['documents'];
                 }
-                $optionSetCheck = 0;
-                $personalOptionSetCheck = 0;
-                if(isset($data['endorsement_options'])){
-                    if(is_array($data['endorsement_options'])){
-                        if($data['endorsement_options']['modify_additionalInsured'] == true)
-                            $optionSetCheck = 1;
-                        if($data['endorsement_options']['modify_personalInformation'] == true || $data['endorsement_options']['modify_coverage'] == true)
-                            $personalOptionSetCheck = 1;
-                        $this->logger->info("array endorsement_options check value =".print_r($data['endorsement_options'],true));
-                    }
-                    if(is_string($data['endorsement_options']))
-                    {
-                        $endorsementOptions = json_decode($data['endorsement_options'],true);
-                        if($endorsementOptions['modify_additionalInsured'] == true){
-                            $optionSetCheck = 1;
-                        }
-                        if($endorsementOptions['modify_personalInformation'] == true || $endorsementOptions['modify_coverage'] == true){
-                            $personalOptionSetCheck = 1;
-                        }
-                        $this->logger->info("string endorsement_options check value =".$data['endorsement_options']);
-                    }
+                $checkFlag = $this->endorsementOptionsFlag($temp);
+                 if(!isset($documents['coi_document'])){
+                    $documents['coi_document'] = array();
                 }
-                if(isset($docs['coi_document']) && isset($documents['coi_document'][0])){
-                    if($personalOptionSetCheck == 1){
+                if(isset($docs['coi_document'])){
+                    if($checkFlag['pACCheck'] == 1 && isset($documents['coi_document'][0])){
                         $destinationForWatermark = $dest['absolutePath'].'../../../'.$docs['coi_document'][0];
                         $this->addWaterMark($destinationForWatermark,"INVALID");
-                        foreach ($docs['coi_document'] as $key => $value) {
-                            array_push($documents['coi_document'],$docs['coi_document'][$key]);
-                        }
+                    }
+                    foreach ($docs['coi_document'] as $key => $value) {
+                        array_push($documents['coi_document'],$docs['coi_document'][$key]);
                     }
                 }
-                if(isset($docs['additionalInsured_document']) && isset($documents['additionalInsured_document'][0])){
-                    if($optionSetCheck == 1){
-                        $destinationForWatermark = $dest['absolutePath'].'../../../'.$docs['additionalInsured_document'][0];
-                        $this->addWaterMark($destinationForWatermark,"INVALID");
-                        foreach ($docs['additionalInsured_document'] as $key => $value) {
+
+                if(!isset($documents['additionalInsured_document']) && isset($docs['additionalInsured_document'])){
+                    $documents['additionalInsured_document'] = array();
+                }
+                if($checkFlag['aICheck'] == 1 && isset($docs['additionalInsured_document'][0])){
+                    $destinationForWatermark = $dest['absolutePath'].'../../../'.$docs['additionalInsured_document'][0];
+                    $this->addWaterMark($destinationForWatermark,"INVALID");  
+                    foreach ($docs['additionalInsured_document'] as $key => $value) {
                             array_push($documents['additionalInsured_document'],$docs['additionalInsured_document'][$key]);
-                        }
-                    }
+                    }                      
                 }
                 $data['documents'] = $documents;
             }else if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
@@ -719,7 +702,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($this->type != "quote" && $this->type != "lapse" && $this->type != 'endorsementQuote'){
                     $coi_number = $this->generateCOINumber($data,$persistenceService);
                     if($this->type == 'endorsement'){
-                        if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
+                        if($data['product'] == 'Dive Store'){
+                            if(isset($data['documents']['endorsement_coi_document'])){
+                                $length = sizeof($data['documents']['endorsement_coi_document']) + 1;
+                            }else{
+                                $length = 1;
+                            }
+                            $data['certificate_no'] = $data['certificate_no'].' - '.$length;
+                        }else if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
                             if(isset($data['documents']['endorsement_coi_document'])){
                                 $length = sizeof($data['documents']['endorsement_coi_document']) + 1;
                             }else{
@@ -727,6 +717,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }
                             $data['certificate_no'] = $data['certificate_no'].' - '.$length;
                         }
+
                         if($endorsementOptions['modify_groupProfessionalLiability'] == true){  
 
                             if(isset($data['groupPL'])){
@@ -746,7 +737,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 }else{
                                     $length = 1;
                                 }
-                                $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;
+                                if(isset($data['group_certificate_no'])){
+                                    $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;    
+                                }else{
+                                    $data['group_certificate_no'] = 'S'.$data['certificate_no'];
+                                }
                              }
                             }  
                         }
@@ -805,6 +800,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if($data['groupProfessionalLiabilitySelect'] == 'yes'){
                             $groupVal = true;
                         }
+                        $propertyPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'PROPERTY');
+                        if($propertyPolicyDetails){
+                            $data['property_policy_id'] = $propertyPolicyDetails['policy_number'];
+                            $data['property_carrier'] = $propertyPolicyDetails['carrier'];
+                        }  
+                        
+                        $liabilityPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'LIABILITY');
+                        if($liabilityPolicyDetails){
+                            $data['liability_policy_id'] = $liabilityPolicyDetails['policy_number'];
+                            $data['liability_carrier'] = $liabilityPolicyDetails['carrier'];
+                        }  
                     }
                     if($groupVal == true){
                         $product = 'Group Professional Liability';
@@ -887,12 +893,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return $stateLicenseDetails[0]['license_number'];
             }
         }
-        private function getPolicyDetails($data,$persistenceService,$product = null)
+        private function getPolicyDetails($data,$persistenceService,$product = null,$category = null)
         {  
+            $andClause = " ";
             if(!isset($product)){
                 $product = $data['product'];
             }
-            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' AND now() BETWEEN start_date AND end_date;";
+            if(isset($category) && $product == 'Dive Store'){
+                $andClause = " AND category = '".$category."' ";
+            }else if($product == 'Individual Professional Liability' && $data['state'] == 'Guam'){
+                $andClause = " AND state = 'Guam' ";
+            }
+            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' ".$andClause." AND now() BETWEEN start_date AND end_date;";
             $resultQuery = $persistenceService->selectQuery($selectQuery); 
             while ($resultQuery->next()) {
                 $policyDetails[] = $resultQuery->current();
@@ -1118,6 +1130,35 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['previous_policy_data'][0] = array_merge($data['previous_policy_data'][0],$upgrade);
         }
      }
+
+     private function endorsementOptionsFlag($data){
+        $endorsement = 0;
+        $endorsementOptionsAICheck = 0;
+        $endorsementOptionsPACCheck = 0;
+        if(isset($data['endorsement_options'])){
+            $endorsement = 1;
+            if(is_array($data['endorsement_options'])){
+                if($data['endorsement_options']['modify_additionalInsured'] == true)
+                    $endorsementOptionsAICheck = 1;
+                if($data['endorsement_options']['modify_personalInformation'] == true || $data['endorsement_options']['modify_coverage'] == true)
+                    $endorsementOptionsPACCheck = 1;
+                $this->logger->info("array endorsement_options check value =".print_r($data['endorsement_options'],true));
+            }
+            if(is_string($data['endorsement_options']))
+            {
+                $endorsementOptions = json_decode($data['endorsement_options'],true);
+                if($endorsementOptions['modify_additionalInsured'] == true){
+                    $endorsementOptionsAICheck = 1;
+                }
+                if($endorsementOptions['modify_personalInformation'] == true || $endorsementOptions['modify_coverage'] == true){
+                    $endorsementOptionsPACCheck = 1;
+                }
+                $this->logger->info("string endorsement_options check value =".$data['endorsement_options']);
+            }
+            }
+            return array('endorsement' => $endorsement,'aICheck' => $endorsementOptionsAICheck, 'pACCheck' => $endorsementOptionsPACCheck);
+
+         }
 
     
 }
