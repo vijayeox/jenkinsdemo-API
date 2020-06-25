@@ -11442,10 +11442,10 @@
 							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"key": "groupTaxPercentage",
 							"type": "number",
-							"decimalLimit": 3,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true
+							"lockKey": true,
+							"decimalLimit": 2
 						}]
 					}, {
 						"components": [{
@@ -12259,10 +12259,10 @@
 						"allowCalculateOverride": true,
 						"key": "proRataPercentage",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -12392,10 +12392,10 @@
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "propertyTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -12450,10 +12450,10 @@
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "liabilityTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -12667,7 +12667,7 @@
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"decimalLimit": 3
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -13198,7 +13198,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 299,
+	"_vid": 300,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13215,6 +13215,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-25T13:56:03.760Z",
+	"modified": "2020-06-25T14:22:15.523Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
