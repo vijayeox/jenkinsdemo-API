@@ -57,7 +57,7 @@ class EndorsementDocument extends PolicyDocument
              'nTemplate' => 'Group_PL_NI',
              'nheader' => 'Group_Endo_NI_header.html',
              'nfooter' => 'Group_NI_footer.html',
-             'blanketForm' => 'DS_AI_Blanket_Endorsement.pdf',
+             'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
              'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
              'groupExclusions' => 'Group_Exclusions.pdf',
              'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'
