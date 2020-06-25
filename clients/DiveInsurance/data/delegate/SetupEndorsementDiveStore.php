@@ -176,8 +176,8 @@ public function execute(array $data,Persistence $persistenceService)
             $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
             $policy['previous_propertyCoveragesTotalPL'] = $data['propertyCoveragesTotalPL'];
             $policy['previous_liabilityPropertyCoveragesTotalPL'] = $data['liabilityPropertyCoveragesTotalPL'];
-            $policy['previous_liabilityProRataPremium'] = $data['liabilityProRataPremium'];
-            $policy['previous_propertyProRataPremium'] = $data['propertyProRataPremium'];
+            $policy['previous_liabilityProRataPremium'] = isset($data['liabilityProRataPremium'])?$data['liabilityProRataPremium']:0;
+            $policy['previous_propertyProRataPremium'] = isset($data['propertyProRataPremium'])?$data['propertyProRataPremium']:0;
             $policy['previous_ProRataPremium'] = $data['ProRataPremium'];
             $policy['previous_PropTax'] = $data['PropTax'];
             $policy['previous_LiaTax'] = $data['LiaTax'];

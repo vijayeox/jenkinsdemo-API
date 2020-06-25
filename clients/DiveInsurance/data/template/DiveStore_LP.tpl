@@ -6,6 +6,7 @@
 
 </head>
 <body>
+<br>
 	<div class ="body_div_lp">
 		<b><p class ="lp_name">Name & Address</p></b>
 			{foreach from=$list item=$additional}
