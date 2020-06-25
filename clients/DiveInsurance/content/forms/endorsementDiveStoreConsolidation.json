@@ -9846,6 +9846,14 @@
 		"type": "panel",
 		"title": "Group Professional Liability",
 		"components": [{
+			"label": "certificateLevelList",
+			"protected": true,
+			"calculateValue": "console.log(data.certificateLevelList);",
+			"key": "certificateLevelList",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
 			"autofocus": true,
@@ -10282,12 +10290,27 @@
 						"columns": [{
 							"components": [{
 								"label": "Certificate Level",
+								"widget": "choicesjs",
 								"tableView": true,
-								"clearOnHide": false,
+								"dataSrc": "custom",
+								"data": {
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
+									"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+								},
+								"valueProperty": "value",
+								"selectThreshold": 0.3,
+								"validate": {
+									"required": true
+								},
 								"key": "status",
-								"type": "textfield",
+								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
@@ -10371,6 +10394,12 @@
 					}, {
 						"label": "verified",
 						"key": "verified",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
+					}, {
+						"label": "rating",
+						"key": "rating",
 						"type": "hidden",
 						"input": true,
 						"tableView": false
@@ -10718,6 +10747,13 @@
 				"label": "Additional Named Insureds",
 				"input": false,
 				"components": [{
+					"label": "update_date",
+					"calculateValue": "value = \"2020-07-26\"",
+					"key": "update_date",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
 					"label": "Would you like to add Additional Named Insureds?",
 					"widget": "choicesjs",
 					"tableView": true,
@@ -10839,8 +10875,8 @@
 						"hideLabel": true,
 						"tableView": false,
 						"templates": {
-							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n     {% console.log(row.start_date); console.log(data.update_date); if(moment(row.start_date) >= moment(data.update_date)) { %}\n       <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n     {% } %}\n     </div>\n    </div>\n  {% } %}\n</div>"
+							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" && component.hidden != true) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
+							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\" && component.hidden != true) { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n     {% console.log(row.start_date); console.log(data.update_date); if(moment(row.start_date) >= moment(data.update_date)) { %}\n       <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n     {% } %}\n     </div>\n    </div>\n  {% } %}\n</div>"
 						},
 						"addAnother": "Not registered in system?Click here to add external members",
 						"clearOnHide": false,
@@ -10974,19 +11010,30 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
-									"label": "Status",
+									"label": "Certificate Level",
+									"widget": "choicesjs",
 									"disabled": true,
 									"tableView": true,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{
+											"label": "",
+											"value": ""
+										}],
+										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nconsole.log(padiRating);\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+									},
+									"valueProperty": "value",
+									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
 									"key": "status",
 									"logic": [{
-										"name": "enable",
+										"name": "Enable",
 										"trigger": {
 											"type": "javascript",
-											"javascript": "console.log(row.upgradeStatus);\nif(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
+											"javascript": "if(row.upgradeStatus && row.upgradeStatus == true){\n  result = true;\n}else if(moment(row.start_date) >= moment(data.update_date)){\n  result = true;\n}else{\n  result = false;\n}"
 										},
 										"actions": [{
 											"name": "Enable",
@@ -10999,9 +11046,11 @@
 											"state": false
 										}]
 									}],
-									"type": "textfield",
+									"type": "select",
+									"indexeddb": {
+										"filter": {}
+									},
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
@@ -11048,14 +11097,18 @@
 							}, {
 								"components": [{
 									"label": "start_date",
+									"placeholder": "start_date",
+									"hidden": true,
+									"hideLabel": true,
+									"tableView": true,
+									"clearOnHide": false,
 									"calculateValue": "if(!row.start_date || row.start_date == \"\"){\n  value = data.update_date;\n}",
 									"key": "start_date",
 									"properties": {
 										"data_type": "Date"
 									},
-									"type": "hidden",
+									"type": "textfield",
 									"input": true,
-									"tableView": false,
 									"hideOnChildrenHidden": false
 								}],
 								"size": "md",
@@ -11070,11 +11123,25 @@
 							"input": false,
 							"hideLabel": true
 						}, {
-							"label": "verified",
+							"label": "Verified",
+							"placeholder": "Verified",
+							"hidden": true,
+							"hideLabel": true,
+							"tableView": true,
+							"clearOnHide": false,
 							"key": "verified",
-							"type": "hidden",
-							"input": true,
-							"tableView": false
+							"type": "textfield",
+							"input": true
+						}, {
+							"label": "Rating",
+							"placeholder": "Rating",
+							"hidden": true,
+							"hideLabel": true,
+							"tableView": true,
+							"clearOnHide": false,
+							"key": "rating",
+							"type": "textfield",
+							"input": true
 						}, {
 							"label": "Columns",
 							"columns": [{
@@ -11093,25 +11160,24 @@
 									"label": "Upgrade Date",
 									"format": "MM-dd-yyyy",
 									"tableView": false,
+									"enableMinDateInput": false,
 									"datePicker": {
 										"minDate": "2020-04-14T18:30:00.000Z",
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"datepickerMode": "day"
 									},
+									"enableMaxDateInput": false,
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
 									},
+									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
 									"key": "update_date",
-									"conditional": {
-										"show": true,
-										"when": "upgradeStatus",
-										"eq": "true"
-									},
+									"customConditional": "if(row.upgradeStatus == true || row.upgradeStatus == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
 									"type": "datetime",
 									"input": true,
 									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
@@ -11156,25 +11222,24 @@
 									"label": "Cancel Date",
 									"format": "MM-dd-yyyy",
 									"tableView": false,
+									"enableMinDateInput": false,
 									"datePicker": {
 										"minDate": "2020-04-14T18:30:00.000Z",
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"datepickerMode": "day"
 									},
+									"enableMaxDateInput": false,
 									"enableTime": false,
 									"timePicker": {
 										"showMeridian": false
 									},
+									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
 									"key": "cancel_date",
-									"conditional": {
-										"show": true,
-										"when": "cancel",
-										"eq": "true"
-									},
+									"customConditional": "if(row.cancel == true || row.cancel == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
 									"type": "datetime",
 									"input": true,
 									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
@@ -12556,6 +12621,30 @@
 						"label": "groupExcessLiability3M",
 						"type": "hidden",
 						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "groupExcessLiabilityLimit",
+						"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
+						"key": "groupExcessLiabilityLimit",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annualAggregate",
+						"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
+						"key": "annualAggregate",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "combinedSingleLimit",
+						"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
+						"key": "combinedSingleLimit",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
@@ -14130,7 +14219,6 @@
 							"shortcut": ""
 						}],
 						"validate": {
-							"required": true,
 							"customMessage": "Please select any one of the option",
 							"minSelectedCount": 1
 						},
@@ -14379,7 +14467,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 186,
+	"_vid": 203,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14396,6 +14484,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-24T19:49:12.689Z",
+	"modified": "2020-06-25T08:48:50.532Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
