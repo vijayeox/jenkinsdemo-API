@@ -539,6 +539,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 		}
                     }
                 }
+            }
                 // if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 // {
                 //     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');

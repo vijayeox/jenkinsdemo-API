@@ -34,7 +34,7 @@ content:
                                 url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                     -
                         name: 'Dive Boat'
-                        rule: 'true'
+                        rule: 'profile.privileges.MANAGE_ADMIN_WRITE==true'
                         details:
                             -
                                 type: Form
