@@ -53,6 +53,21 @@
 		"tableView": true,
 		"lockKey": true
 	}, {
+		"label": "policyStartYear",
+		"protected": true,
+		"calculateValue": "var presentYear = moment().format('YYYY');\nvar presentMonth = moment().month();\nvar presentDate = moment().format('DD');\nif(productName != 'DiveBoat'){\n  if(presentMonth == 5 && presentDate <= 30 && presentYear == 2020){\n\t  value = presentYear;\n  }else if(presentMonth == 5 && presentDate == 30){\n    value = presentYear;\n  }else if(presentMonth > 5 && presentMonth <= 11){\n\t  value = presentYear;\n  }else if(presentMonth <= 5){\n\t  value = presentYear - 1;\n  }  \n}else{\n  if(presentMonth == 6 && presentDate <= 22 && presentYear == 2020){\n\t  value = presentYear;\n  }else if(presentMonth == 6 && presentDate >= 22){\n    value = presentYear;\n  }else if(presentMonth > 6 && presentMonth <= 11){\n\t  value = presentYear;\n  }else if(presentMonth <= 6){\n\t  value = presentYear - 1;\n  }  \n}",
+		"key": "policyStartYear",
+		"type": "hidden",
+		"input": true,
+		"tableView": false
+	}, {
+		"label": "policyEndYear",
+		"calculateValue": "value = parseInt(data.policyStartYear) + 1;",
+		"key": "policyEndYear",
+		"type": "hidden",
+		"input": true,
+		"tableView": false
+	}, {
 		"label": "Columns",
 		"input": false,
 		"tableView": false,
@@ -64,8 +79,8 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2021.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-				"refreshOnChange": false,
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, {{data.policyStartYear}} through 12:01 AM June 30, {{data.policyEndYear}}</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, {{data.policyEndYear}}.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"refreshOnChange": true,
 				"tableView": false,
 				"key": "panelColumns3Content",
 				"customConditional": "show = false;\nif(productName == 'IPLRegister' || productName == 'EFR' || productName == 'DiveStore'){\n   show =true;\n}",
@@ -79,8 +94,8 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2020 through 12:01 AM July 22, 2021  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2021.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-				"refreshOnChange": false,
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, {{data.policyStartYear}} through 12:01 AM July 22, {{data.policyEndYear}}  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, {{data.policyEndYear}}.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"refreshOnChange": true,
 				"tableView": false,
 				"key": "panelColumns3Content1",
 				"customConditional": "show = false;\nif(productName == 'DiveBoat'){\n   show =true;\n}",
@@ -1537,7 +1552,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 124,
+	"_vid": 146,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1551,6 +1566,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-23T06:46:47.324Z",
+	"modified": "2020-06-26T07:39:18.635Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

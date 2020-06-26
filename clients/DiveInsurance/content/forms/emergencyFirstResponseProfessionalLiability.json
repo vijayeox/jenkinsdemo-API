@@ -10,6 +10,21 @@
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
+			"label": "policyStartYear",
+			"protected": true,
+			"calculateValue": "var presentYear = moment().format('YYYY');\nvar presentMonth = moment().month();\nvar presentDate = moment().format('DD');\nif(presentMonth == 5 && presentDate <= 30 && presentYear == 2020){\n  value = presentYear;\n}else if(presentMonth == 5 && presentDate == 30){\n  value = presentYear;\n}else if(presentMonth > 5 && presentMonth <= 11){\n  value = presentYear;\n}else if(presentMonth <= 5){\n  value = presentYear - 1;\n}",
+			"key": "policyStartYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "policyEndYear",
+			"calculateValue": "value = parseInt(data.policyStartYear) + 1;",
+			"key": "policyEndYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Columns",
 			"columns": [{
 				"components": [{
@@ -18,8 +33,8 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020  \t</font></b></center>\n</br>\n<br/>\n<center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2019.\n   THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> \n</center>\n</br>\n<br/>\n</br>\n<center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-					"refreshOnChange": false,
+					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, {{data.policyStartYear}} through 12:01 AM June 30, {{data.policyEndYear}}  \t</font></b></center>\n</br>\n<br/>\n<center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, {{data.policyEndYear}}.\n   THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> \n</center>\n</br>\n<br/>\n</br>\n<center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"refreshOnChange": true,
 					"tableView": false,
 					"key": "panelColumns4ColumnsContent",
 					"type": "htmlelement",
@@ -3629,7 +3644,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 587,
+	"_vid": 589,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3713,7 +3728,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-26T03:02:51.782Z",
+	"modified": "2020-06-26T07:50:16.608Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

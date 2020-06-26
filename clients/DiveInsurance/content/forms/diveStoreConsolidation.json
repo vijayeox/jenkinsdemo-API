@@ -18,6 +18,21 @@
 		"type": "panel",
 		"label": "Primary Contact",
 		"components": [{
+			"label": "policyStartYear",
+			"protected": true,
+			"calculateValue": "var presentYear = moment().format('YYYY');\nvar presentMonth = moment().month();\nvar presentDate = moment().format('DD');\nif(presentMonth == 5 && presentDate <= 30 && presentYear == 2020){\n  value = presentYear;\n}else if(presentMonth == 5 && presentDate == 30){\n  value = presentYear;\n}else if(presentMonth > 5 && presentMonth <= 11){\n  value = presentYear;\n}else if(presentMonth <= 5){\n  value = presentYear - 1;\n}",
+			"key": "policyStartYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "policyEndYear",
+			"calculateValue": "value = parseInt(data.policyStartYear) + 1;",
+			"key": "policyEndYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Columns",
 			"columns": [{
 				"components": [{
@@ -26,8 +41,8 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-					"refreshOnChange": false,
+					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, {{data.policyStartYear}} through 12:01 AM June 30, {{data.policyEndYear}}  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, {{data.policyEndYear}}.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"refreshOnChange": true,
 					"tableView": false,
 					"key": "columnsContent",
 					"type": "htmlelement",
@@ -13220,7 +13235,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 309,
+	"_vid": 311,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13237,6 +13252,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-25T20:53:03.719Z",
+	"modified": "2020-06-26T07:57:44.378Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
