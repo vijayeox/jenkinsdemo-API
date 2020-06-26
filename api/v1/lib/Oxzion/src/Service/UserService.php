@@ -265,12 +265,20 @@ class UserService extends AbstractService
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
             $orgid = $this->getUuidFromId('ox_organization', $data['orgid']); //Template Service
+            $bcc = " ";
+            if(isset($this->config['emailConfig'])){
+                $emailConfig = $this->config['emailConfig'];
+                if(isset($emailConfig['loginPassword'])){
+                    $bcc = isset($emailConfig['loginPassword']['bcc']) ? $emailConfig['loginPassword']['bcc'] : " ";
+                }
+            }
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
                 'email' => $data['email'],
                 'orgId' => $orgid,
+                'bcc' => $bcc,
                 'password' => $password,
                 'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
@@ -1115,20 +1123,31 @@ class UserService extends AbstractService
         try {
             $userDetails = $this->getUserBaseProfile($username);
             if ($username === $userDetails['username']) {
+                $userReset['username'] = $userDetails['username'];
                 $userReset['email'] = $userDetails['email'];
                 $userReset['firstname'] = $userDetails['firstname'];
                 $userReset['lastname'] = $userDetails['lastname'];
                 $userReset['url'] = $this->config['applicationUrl'] . "/?resetpassword=" . $resetPasswordCode;
                 $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
-                $userReset['orgid'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
+                $userReset['orgId'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
                 $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
                 $userDetails['password_reset_code'] = $resetPasswordCode;
                 //Code to update the password reset and expiration time
                 $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);
                 if ($userUpdate) {
+                    $subject = $userReset['firstname'] . ', You login details for EOX vantage!';
+                    $bcc = " ";
+                    if(isset($this->config['emailConfig'])){
+                        $emailConfig = $this->config['emailConfig'];
+                        if(isset($emailConfig['resetPassword'])){
+                            $subject = isset($emailConfig['resetPassword']['subject']) ? $userReset['firstname'].', '.$emailConfig['resetPassword']['subject'] : $userReset['firstname'] . ', You login details for EOX vantage!';
+                            $bcc = isset($emailConfig['resetPassword']['bcc']) ? $emailConfig['resetPassword']['bcc'] : " ";
+                        }
+                    }
                     $this->messageProducer->sendQueue(json_encode(array(
                         'to' => $userReset['email'],
-                        'subject' => $userReset['firstname'] . ', You login details for EOX vantage!',
+                        'subject' => $subject,
+                        'bcc' => $bcc,
                         'body' => $this->templateService->getContent('resetPassword', $userReset),
                     )), 'mail');
                     return $userReset;

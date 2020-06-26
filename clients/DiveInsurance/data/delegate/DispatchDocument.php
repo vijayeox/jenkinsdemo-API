@@ -30,6 +30,7 @@ abstract class DispatchDocument extends MailDelegate
             $mailOptions['attachments'] = $data['document'];
             unset($data['document']);
         }
+        $mailOptions['bcc'] = 'padi-professional@hubinternational.com';
         $this->logger->info("ATTACHMENTS LIST ".print_r($mailOptions,true));
         if(isset($data['template'])){
             $template = $data['template'];
