@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1xeg1wy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1xeg1wy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="DSReInstate" name="Reinstate Policy Dive Store" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Reinstate Policy" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -29,7 +29,7 @@ if(confirmRP == 'yes'){
     <bpmn:sequenceFlow id="SequenceFlow_12ppmoc" name="no" sourceRef="ExclusiveGateway_135jvfh" targetRef="EndEvent_1qyif06">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${confirmReinstatePolicy=="no"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_045vqww" name="yes" sourceRef="ExclusiveGateway_135jvfh" targetRef="Task_1x342yy">
+    <bpmn:sequenceFlow id="SequenceFlow_045vqww" name="yes" sourceRef="ExclusiveGateway_135jvfh" targetRef="Task_0e4xhcl">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${confirmReinstatePolicy=="yes" &amp;&amp; automatic_renewal=="true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Task_0e4xhcl" name="Send Reinstated Policy Mail" camunda:expression="0">
@@ -43,8 +43,8 @@ if(confirmRP == 'yes'){
           </camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_1lndtj2</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_00ep7uq</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_045vqww</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ia7z9k</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="EndEvent_053i92a" name="Reinstated Policy">
@@ -52,30 +52,6 @@ if(confirmRP == 'yes'){
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0ia7z9k" sourceRef="Task_0e4xhcl" targetRef="EndEvent_053i92a" />
     <bpmn:sequenceFlow id="SequenceFlow_1rquzd5" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_135jvfh" />
-    <bpmn:sequenceFlow id="SequenceFlow_1lndtj2" sourceRef="Task_1x342yy" targetRef="Task_0e4xhcl" />
-    <bpmn:serviceTask id="Task_1x342yy" name="Schedule Job" camunda:expression="0">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="command">schedule</camunda:inputParameter>
-          <camunda:inputParameter name="jobUrl">
-            <camunda:script scriptFormat="groovy">def jobUrl = '/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6'</camunda:script>
-          </camunda:inputParameter>
-          <camunda:inputParameter name="cron">
-            <camunda:script scriptFormat="groovy">Calendar calendar = Calendar.getInstance();
-def day = calendar.get(Calendar.DAY_OF_MONTH); 
-def hour = calendar.get(Calendar.HOUR_OF_DAY);
-def minute = calendar.get(Calendar.MINUTE);
-minute = minute+3
-hour = minute &gt; 59 ? hour+1 : hour
-minute = minute &gt; 59 ? minute - 60 : minute
-def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
-          </camunda:inputParameter>
-          <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_045vqww</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1lndtj2</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_00ep7uq" sourceRef="ExclusiveGateway_135jvfh" targetRef="Task_0e4xhcl" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -104,9 +80,9 @@ def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_045vqww_di" bpmnElement="SequenceFlow_045vqww">
         <di:waypoint x="365" y="187" />
-        <di:waypoint x="400" y="187" />
+        <di:waypoint x="550" y="187" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="362" y="169" width="18" height="14" />
+          <dc:Bounds x="378" y="169" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_00zfig6_di" bpmnElement="Task_0e4xhcl">
@@ -126,13 +102,6 @@ def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
         <di:waypoint x="215" y="187" />
         <di:waypoint x="315" y="187" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1lndtj2_di" bpmnElement="SequenceFlow_1lndtj2">
-        <di:waypoint x="500" y="187" />
-        <di:waypoint x="550" y="187" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_0snwkhe_di" bpmnElement="Task_1x342yy">
-        <dc:Bounds x="400" y="147" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_00ep7uq_di" bpmnElement="SequenceFlow_00ep7uq">
         <di:waypoint x="340" y="162" />
         <di:waypoint x="340" y="80" />

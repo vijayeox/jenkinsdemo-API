@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="IPLNewPolicy" isExecutable="true">
     <bpmn:extensionElements>
       <camunda:executionListener expression="0" event="start" />
@@ -60,14 +60,19 @@
             <camunda:script scriptFormat="groovy">def jobUrl = '/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6'</camunda:script>
           </camunda:inputParameter>
           <camunda:inputParameter name="cron">
-            <camunda:script scriptFormat="groovy">Calendar calendar = Calendar.getInstance();
-def day = calendar.get(Calendar.DAY_OF_MONTH); 
-def hour = calendar.get(Calendar.HOUR_OF_DAY);
-def minute = calendar.get(Calendar.MINUTE);
-minute = minute+30
-hour = minute &gt; 59 ? hour+1 : hour
-minute = minute &gt; 59 ? minute - 60 : minute
-def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
+            <camunda:script scriptFormat="groovy">def end_date = execution.getVariable('end_date');
+
+end_date = Date.parse("yyyy-MM-dd",end_date)
+
+end_date = end_date.minus(30)
+
+
+def year = end_date.getAt(Calendar.YEAR);
+def month = end_date.getAt(Calendar.MONTH);
+def day = end_date.getAt(Calendar.DAY_OF_MONTH); 
+def month1 = new java.text.DateFormatSymbols().months[ month ];
+month1 = month1.take(3)
+def cron = '0 0 0 '+day+' '+month1+' ? '+year</camunda:script>
           </camunda:inputParameter>
           <camunda:inputParameter name="send_reminder">true</camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>

@@ -14,6 +14,7 @@ class Module
     private static $logInitialized = false;
     public function init(ModuleManager $moduleManager)
     {
+        ini_set('max_execution_time', 100); 
         $events = $moduleManager->getEventManager();
         // Registering a listener at default priority, 1, which will trigger
         // after the ConfigListener merges config.
