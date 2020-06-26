@@ -16,11 +16,11 @@ content:
                     - 20
                     - 50
                 info: true
+            actionsWidth: 260px
             actions:
                 -
-                    name: 'View Policy'
+                    name: 'View'
                     rule: '''{{policyStatus}}'' == ''In Force'''
-                    icon: 'fa fa-envelope-open'
                     details:
                         -
                             type: Document
@@ -48,46 +48,40 @@ content:
                                     -
                                         command: delegate
                                         delegate: EFRToIPLUpgrade
-                    icon: 'fa fa-arrow-circle-up'
                 -
-                    name: Endorsement
+                    name: Endorse
                     rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
                     details:
                         -
                             type: Form
                             url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    icon: 'fa fa-pencil'
                 -
-                    name: Endorsement
+                    name: Endorse
                     rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
                     details:
                         -
                             type: Form
                             url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    icon: 'fa fa-pencil'
                 -
-                    name: Endorsement
+                    name: Endorse
                     rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
                     details:
                         -
                             type: Form
                             url: workflow/2bc1caaa-9628-486d-8b42-104534625993/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    icon: 'fa fa-pencil'
                 -
-                    name: Endorsement
+                    name: Endorse
                     rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
                     details:
                         -
                             type: Form
                             url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    icon: 'fa fa-pencil'
                 -
-                    name: 'Cancel Policy'
-                    icon: 'fa fa-ban'
+                    name: 'Cancel'
                     rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     details:
                         -
@@ -95,8 +89,7 @@ content:
                             url: workflow/91cb9e10-5845-4379-97c9-f9486b702bda/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
-                    name: 'Cancel Policy'
-                    icon: 'fa fa-ban'
+                    name: 'Cancel'
                     rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     details:
                         -
@@ -104,7 +97,7 @@ content:
                             url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
-                    name: 'Renew Policy'
+                    name: 'Renew'
                     rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
@@ -122,9 +115,8 @@ content:
                                         delegate: RenewalRateCard
                                     -
                                         command: startform
-                    icon: 'fa fa-refresh'
                 -
-                    name: 'Renew Policy'
+                    name: 'Renew'
                     rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
@@ -142,9 +134,8 @@ content:
                                         delegate: RenewalRateCard
                                     -
                                         command: startform
-                    icon: 'fa fa-refresh'
                 -
-                    name: 'Renew Policy'
+                    name: 'Renew'
                     rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
@@ -162,9 +153,8 @@ content:
                                         delegate: RenewalRateCard
                                     -
                                         command: startform
-                    icon: 'fa fa-refresh'
                 -
-                    name: 'Renew Policy'
+                    name: 'Renew'
                     rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
@@ -182,7 +172,6 @@ content:
                                         delegate: RenewalRateCard
                                     -
                                         command: startform
-                    icon: 'fa fa-refresh'
             toolbarTemplate: '<h4>List of all policies</h4>'
             operations:
                 title: 'Get Policy'
