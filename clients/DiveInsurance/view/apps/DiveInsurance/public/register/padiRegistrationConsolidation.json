@@ -301,11 +301,12 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "Content",
+					"tag": "div",
 					"attrs": [{
 						"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 						"attr": "style"
 					}],
-					"content": "PADI number already Registered! Please proceed to Login page.",
+					"content": "<div>PADI number already Registered!</div> <div>Please proceed to Login page.</div>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "panelColumnsContent3",
@@ -1552,7 +1553,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 148,
+	"_vid": 149,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1566,6 +1567,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-26T15:25:03.649Z",
+	"modified": "2020-06-26T15:30:41.165Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
