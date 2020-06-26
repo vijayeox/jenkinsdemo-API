@@ -9640,7 +9640,7 @@
 														"requireDecimal": false,
 														"inputFormat": "plain",
 														"clearOnHide": false,
-														"calculateValue": "var amount = ((parseFloat(row.additionalLocationPropertyTotal)||0)).toFixed(0);\nvar total = ((parseFloat(row.ALBuildingReplacementValue)||0)).toFixed(0) + amount;\nvar option = row.ALPropertyCoverageOption;\nif (total > 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
+														"calculateValue": "var amount = (parseFloat(row.additionalLocationPropertyTotal)||0).toFixed(0);\nvar total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(amount);\nvar option = row.ALPropertyCoverageOption;\nif (total > 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
 														"key": "ALContentsFP",
 														"type": "number",
 														"input": true,
@@ -9680,7 +9680,7 @@
 														"requireDecimal": false,
 														"inputFormat": "plain",
 														"clearOnHide": false,
-														"calculateValue": "var amount = (parseFloat(row.ALBuildingReplacementValue)||0).toFixed(0);\nvar option = row.ALPropertyCoverageOption;\nvar total = ((parseFloat(row.additionalLocationPropertyTotal)||0)).toFixed(0) + amount;\nif (total > 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}",
+														"calculateValue": "var amount = (parseFloat(row.ALBuildingReplacementValue)||0).toFixed(0);\nvar option = row.ALPropertyCoverageOption;\nvar total = parseFloat(row.additionalLocationPropertyTotal) + parseFloat(amount);\nif (total > 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}",
 														"key": "ALBuildingLimitFP",
 														"type": "number",
 														"input": true,
@@ -13220,7 +13220,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 306,
+	"_vid": 309,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13237,6 +13237,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-25T19:29:08.295Z",
+	"modified": "2020-06-25T20:53:03.719Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

@@ -481,6 +481,26 @@
 			}],
 			"type": "panel",
 			"label": "Panel"
+		}, {
+			"label": "single_limit",
+			"defaultValue": "$1,000,000",
+			"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
+			"key": "single_limit",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "annual_aggregate",
+			"defaultValue": "$2,000,000",
+			"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+			"key": "annual_aggregate",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
 		}],
 		"input": false,
 		"path": "pageNaN",
@@ -1793,26 +1813,6 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
-							}, {
-								"label": "single_limit",
-								"defaultValue": "$1,000,000",
-								"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
-								"key": "single_limit",
-								"type": "hidden",
-								"input": true,
-								"tableView": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "annual_aggregate",
-								"defaultValue": "$2,000,000",
-								"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
-								"key": "annual_aggregate",
-								"type": "hidden",
-								"input": true,
-								"tableView": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -3005,7 +3005,7 @@
 			"tableView": false
 		}, {
 			"label": "payment_fields",
-			"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":\"Not Applicable\",\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":0,\"total_amount\":data.amount});",
+			"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":\"Not Applicable\",\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":0,\"total_amount\":data.amount});",
 			"key": "payment_fields",
 			"type": "hidden",
 			"input": true,
@@ -3378,7 +3378,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 269,
+	"_vid": 271,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3399,6 +3399,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-24T08:22:44.889Z",
+	"modified": "2020-06-26T03:13:41.072Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

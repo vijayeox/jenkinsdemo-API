@@ -3041,7 +3041,7 @@
 				"tableView": false
 			}, {
 				"label": "payment_fields",
-				"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinance,\"policy_type\":\"New\",\"installment_amount\":data.installmentAmount,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.amountPayable});",
+				"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinance,\"policy_type\":\"New\",\"installment_amount\":data.installmentAmount,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.amountPayable});",
 				"key": "payment_fields",
 				"type": "hidden",
 				"input": true,
@@ -3629,7 +3629,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 586,
+	"_vid": 587,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3713,7 +3713,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-25T22:45:33.334Z",
+	"modified": "2020-06-26T03:02:51.782Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
