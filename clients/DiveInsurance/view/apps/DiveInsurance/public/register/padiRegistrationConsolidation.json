@@ -305,7 +305,7 @@
 						"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 						"attr": "style"
 					}],
-					"content": "PADI number already Registered!",
+					"content": "PADI number already Registered! Please proceed to Login page.",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "panelColumnsContent3",
@@ -514,7 +514,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "businessInformation",
-		"customConditional": "if ((data[\"verified\"] === true && (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\")) && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")) {\n  if(data['product'] == 'Dive Store' || data['product'] == 'Dive Boat'){\n  if(data.businessPadiVerified===true||data.businessPadiVerified==\"true\"){\n    show =true;\n  } else {\n    console.log(data);\n    if(data['product'] == 'Dive Store'){\n      if((data.padiNotFound == \"true\" || data.padiNotFound == true)||(data.businessPadiNotFound == \"true\" || data.businessPadiNotFound == true)){\n        show = true;\n      } else {\n        show = false;\n      }\n    } else {\n      show = false;\n    }\n  }\n} else {\n  show = false;\n}\n} else {\n  show = false;\n}",
+		"customConditional": "if ((data[\"verified\"] === true && (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\")) && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")) {\n  if(data['product'] == 'Dive Store' || data['product'] == 'Dive Boat'){\n  if(data.businessPadiVerified===true||data.businessPadiVerified==\"true\"){\n    show =true;\n  } else {\n    if(data['product'] == 'Dive Store'){\n      if((data.padiNotFound == \"true\" || data.padiNotFound == true)||(data.businessPadiNotFound == \"true\" || data.businessPadiNotFound == true)){\n        show = true;\n      } else {\n        show = false;\n      }\n    } else {\n      show = false;\n    }\n  }\n} else {\n  show = false;\n}\n} else {\n  show = false;\n}",
 		"type": "panel",
 		"label": "Business Information",
 		"input": false,
@@ -1552,7 +1552,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 146,
+	"_vid": 148,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1566,6 +1566,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-26T07:39:18.635Z",
+	"modified": "2020-06-26T15:25:03.649Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
