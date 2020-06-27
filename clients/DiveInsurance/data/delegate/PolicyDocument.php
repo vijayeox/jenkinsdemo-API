@@ -791,6 +791,21 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     } 
                 }
 
+                if($data['product'] == 'Dive Store'){
+                    $liabilityPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'LIABILITY');
+                    if($liabilityPolicyDetails){
+                        $data['liability_policy_id'] = $liabilityPolicyDetails['policy_number'];
+                        $data['liability_carrier'] = $liabilityPolicyDetails['carrier'];
+                    } 
+
+                    $propertyPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'PROPERTY');
+                    if($propertyPolicyDetails){
+                        $data['property_policy_id'] = $propertyPolicyDetails['policy_number'];
+                        $data['property_carrier'] = $propertyPolicyDetails['carrier'];
+                    }  
+                }
+
+
                 if(isset($data['groupPL'])){
                     $groupVal = false;
                     if($data['product'] == 'Dive Boat'){
@@ -800,18 +815,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }else if($data['product'] == 'Dive Store'){
                         if($data['groupProfessionalLiabilitySelect'] == 'yes'){
                             $groupVal = true;
-                        }
-                        $propertyPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'PROPERTY');
-                        if($propertyPolicyDetails){
-                            $data['property_policy_id'] = $propertyPolicyDetails['policy_number'];
-                            $data['property_carrier'] = $propertyPolicyDetails['carrier'];
-                        }  
-                        
-                        $liabilityPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'LIABILITY');
-                        if($liabilityPolicyDetails){
-                            $data['liability_policy_id'] = $liabilityPolicyDetails['policy_number'];
-                            $data['liability_carrier'] = $liabilityPolicyDetails['carrier'];
-                        }  
+                        } 
                     }
                     if($groupVal == true){
                         $product = 'Group Professional Liability';
@@ -822,6 +826,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }     
                     }
                 }
+
+                
                 $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
 
                 if(!is_null($endorsementOptions)){
@@ -896,7 +902,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         private function getPolicyDetails($data,$persistenceService,$product = null,$category = null)
         {  
-            $andClause = " ";
+            $andClause = " AND category IS NULL AND state is NULL ";
             if(!isset($product)){
                 $product = $data['product'];
             }
@@ -905,7 +911,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else if($product == 'Individual Professional Liability' && $data['state'] == 'Guam'){
                 $andClause = " AND state = 'Guam' ";
             }
-            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' ".$andClause." AND now() BETWEEN start_date AND end_date;";
+            $endDate = date_format(date_create($data['end_date']),"Y-m-d");
+            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' ".$andClause." AND `year` = YEAR('".$endDate."') - 1;";
+            $this->logger->info("Carrier Policy Query : $selectQuery");
             $resultQuery = $persistenceService->selectQuery($selectQuery); 
             while ($resultQuery->next()) {
                 $policyDetails[] = $resultQuery->current();
