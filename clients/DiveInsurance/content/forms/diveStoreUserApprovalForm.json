@@ -297,7 +297,8 @@
             }],
             "clearOnHide": false,
             "validate": {
-              "required": true
+              "required": true,
+              "custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
             },
             "key": "paymentOptions",
             "properties": {
@@ -612,7 +613,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 21,
+  "_vid": 22,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -629,6 +630,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-26T03:15:33.583Z",
+  "modified": "2020-06-27T00:27:54.779Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

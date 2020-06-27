@@ -2046,7 +2046,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "equipmentDownPayment",
-							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayment']){\n  value = data[data['equipment']+'_downpayment'];\n}",
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayment']){\n  value = data[data['equipment']+'_downpayment'];\n} else {\n  value = 0;\n}",
 							"key": "equipmentDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -4063,8 +4063,20 @@
 		},
 		"collapsible": false
 	}, {
-		"type": "panel",
 		"title": "Payment Information",
+		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page6",
+		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}",
+		"type": "panel",
+		"label": "Payment Information",
 		"components": [{
 			"key": "page6Panel",
 			"input": false,
@@ -4351,7 +4363,8 @@
 						}],
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -4549,19 +4562,7 @@
 			"breadcrumb": "none",
 			"label": "Panel"
 		}],
-		"input": false,
-		"key": "page6",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Payment Information",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false,
-		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}"
+		"input": false
 	}, {
 		"input": false,
 		"label": "Approval",
@@ -4735,7 +4736,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 465,
+	"_vid": 471,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4756,6 +4757,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-26T07:50:15.644Z",
+	"modified": "2020-06-26T20:50:18.114Z",
 	"machineName": "testdivehub:csrInitiates"
 }
