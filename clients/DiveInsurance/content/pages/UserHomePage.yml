@@ -49,38 +49,6 @@ content:
                                         command: delegate
                                         delegate: EFRToIPLUpgrade
                 -
-                    name: Endorse
-                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
-                    details:
-                        -
-                            type: Form
-                            url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
-                            workflowInstanceId: '{{workflowInstanceId}}'
-                -
-                    name: Endorse
-                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
-                    details:
-                        -
-                            type: Form
-                            url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
-                            workflowInstanceId: '{{workflowInstanceId}}'
-                -
-                    name: Endorse
-                    rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
-                    details:
-                        -
-                            type: Form
-                            url: workflow/2bc1caaa-9628-486d-8b42-104534625993/startform
-                            workflowInstanceId: '{{workflowInstanceId}}'
-                -
-                    name: Endorse
-                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
-                    details:
-                        -
-                            type: Form
-                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
-                            workflowInstanceId: '{{workflowInstanceId}}'
-                -
                     name: 'Cancel'
                     rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     details:
@@ -98,7 +66,7 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
+                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
                             type: Form
@@ -117,7 +85,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
                             type: Form
