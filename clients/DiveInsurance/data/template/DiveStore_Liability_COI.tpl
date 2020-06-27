@@ -34,7 +34,7 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == ""}
+						{if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
                             $1,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $2,000,000
