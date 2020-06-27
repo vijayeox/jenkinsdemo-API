@@ -424,6 +424,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                 }
 
+                if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                    if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
+                        $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                    }
+                }
                 if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
                     $this->logger->info("DOCUMENT lossPayees");
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
@@ -436,7 +441,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($this->type == 'policy'){
                     $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
                 }
-
                 if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
                     if(is_string($temp['additionalLocations'])){
                         $additionalLocations = json_decode($temp['additionalLocations'],true);
