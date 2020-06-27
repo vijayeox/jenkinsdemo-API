@@ -1813,6 +1813,9 @@
 							"value": "no",
 							"shortcut": ""
 						}],
+						"validate": {
+							"required": true
+						},
 						"key": "doYouHaveAWrittenContract",
 						"type": "radio",
 						"input": true
@@ -1933,7 +1936,7 @@
 			"tableView": false
 		}, {
 			"label": "payment_fields",
-			"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":\"Not Applicable\",\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":0,\"total_amount\":data.amount});",
+			"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":\"Not Applicable\",\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":0,\"total_amount\":data.amount});",
 			"key": "payment_fields",
 			"type": "hidden",
 			"input": true,
@@ -2272,7 +2275,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 199,
+	"_vid": 201,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2293,7 +2296,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-24T05:17:41.123Z",
+	"modified": "2020-06-27T00:09:09.853Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

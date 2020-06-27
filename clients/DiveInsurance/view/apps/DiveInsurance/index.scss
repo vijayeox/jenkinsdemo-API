@@ -22,6 +22,13 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   padding: 0px;
 }
 
+.gridActions .manage-btn{
+  // width: 70px!important;
+  border-radius: 7px!important;
+  font-weight: unset!important;
+  font-family: inherit!important;
+}
+
 .osjs-window[data-id="Window_DiveInsurance"] {
   $primary-color: #053b6d !important;
 
@@ -72,6 +79,18 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     background-color: $primary-color;
     color: white;
   }
+
+
+  .iframeDoc {
+    height: 100% !important;
+    min-height: 650px !important;
+    width: 100% !important;
+    height: -moz-available;
+    height: fill-available;
+    width: -webkit-fill-available;
+    width: -moz-available;
+  }
+  
   #floater {
     position: fixed;
     bottom: 12px;

@@ -74,19 +74,61 @@
 					"input": true,
 					"lockKey": true
 				}, {
-					"label": "Could you let us know the Reason for Rejecting the Quote?",
-					"autoExpand": false,
+					"label": "Rejection Reason",
+					"reorder": false,
+					"addAnotherPosition": "bottom",
+					"defaultOpen": false,
+					"layoutFixed": false,
+					"enableRowGroups": false,
+					"hideLabel": true,
 					"tableView": true,
+					"defaultValue": [{
+						"reason": ""
+					}],
+					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"minLength": 1
 					},
-					"key": "userRejectionReason",
+					"key": "rejectionReason",
 					"conditional": {
 						"show": true,
-						"when": "userApproved",
-						"eq": "false"
+						"when": "approved",
+						"eq": "rejected"
 					},
-					"type": "textarea",
+					"type": "datagrid",
+					"input": true,
+					"components": [{
+						"label": "",
+						"tableView": true,
+						"key": "rejectionReasonssswell",
+						"type": "well",
+						"input": false,
+						"components": [{
+							"label": "Reason for Rejection",
+							"spellcheck": false,
+							"tableView": false,
+							"case": "mixed",
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Rejection reason is required"
+							},
+							"key": "reason",
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}]
+					}]
+				}, {
+					"label": "Additional Notes",
+					"tableView": true,
+					"key": "additionalNotes",
+					"conditional": {
+						"show": true,
+						"when": "approved",
+						"eq": "accepted"
+					},
+					"type": "textfield",
 					"input": true
 				}],
 				"path": "well4",
@@ -210,6 +252,7 @@
 						"optionsLabelPosition": "right",
 						"inline": false,
 						"tableView": false,
+						"defaultValue": "creditCard",
 						"values": [{
 							"label": "Money Order",
 							"value": "moneyOrder",
@@ -229,7 +272,8 @@
 						}],
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -241,7 +285,8 @@
 								"type": "simple",
 								"simple": {
 									"when": "premiumFinanceSelect",
-									"eq": "yes"
+									"eq": "yes",
+									"show": true
 								}
 							},
 							"actions": [{
@@ -261,8 +306,7 @@
 						}],
 						"type": "radio",
 						"input": true,
-						"hideOnChildrenHidden": false,
-						"defaultValue": "creditCard"
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -524,7 +568,7 @@
 	"controller": "",
 	"revisions": "",
 	"_vid": 0,
-	"title": "endorsementDiveStoreUserApproval",
+	"title": "Endorsement DiveStore User Approval",
 	"display": "form",
 	"access": [{
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
@@ -540,6 +584,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-06-23T12:36:44.841Z",
+	"modified": "2020-06-27T00:27:17.459Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

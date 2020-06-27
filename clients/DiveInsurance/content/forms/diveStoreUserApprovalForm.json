@@ -184,6 +184,13 @@
         "input": true,
         "tableView": false
       }, {
+        "label": "payment_fields",
+        "calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinance,\"policy_type\":\"New\",\"installment_amount\":0,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.finalAmountPayable});",
+        "key": "payment_fields",
+        "type": "hidden",
+        "input": true,
+        "tableView": false
+      }, {
         "label": "Columns",
         "columns": [{
           "components": [{
@@ -290,7 +297,8 @@
             }],
             "clearOnHide": false,
             "validate": {
-              "required": true
+              "required": true,
+              "custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
             },
             "key": "paymentOptions",
             "properties": {
@@ -423,6 +431,7 @@
               "type": "convergepay",
               "key": "creditcardPayment",
               "amount_field": "billing_amount",
+              "description": "payment_fields",
               "label": "custom",
               "input": true,
               "tableView": false,
@@ -604,7 +613,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 18,
+  "_vid": 22,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -621,6 +630,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-24T19:45:39.874Z",
+  "modified": "2020-06-27T00:27:54.779Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
