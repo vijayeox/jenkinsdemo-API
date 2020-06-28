@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_18i6ekd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_18i6ekd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="Process_0mek3rd" name="Dive Store Application" isExecutable="true">
     <bpmn:userTask id="UserTask_1vfu0fp" name="CSR Rating and Quoating" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
@@ -29,12 +29,11 @@
       <bpmn:outgoing>SequenceFlow_1lnz46n</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0am14xf</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="ServiceTask_0xam12g" name="Generate Quote Document" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_0xam12g" name="File Save" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate":"QuoteDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>

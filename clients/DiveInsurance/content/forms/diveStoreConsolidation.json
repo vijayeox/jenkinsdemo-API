@@ -10148,9 +10148,11 @@
 		"label": "Group Professional Liability",
 		"components": [{
 			"label": "certificateLevelList",
-			"protected": true,
 			"calculateValue": "console.log(data.certificateLevelList);",
 			"key": "certificateLevelList",
+			"properties": {
+				"data_type": "list"
+			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -13084,6 +13086,47 @@
 			"next": true
 		}
 	}, {
+		"title": "Quote Documents",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page10",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"QuoteDocument\"}]"
+		},
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"type": "panel",
+		"label": "Quote Document",
+		"input": false,
+		"components": [{
+			"label": "previewDocuments",
+			"protected": true,
+			"redrawOn": "data",
+			"calculateValue": "value = {};\nif(data.previewDocuments)\n{\n  if(typeof data.previewDocuments === 'object'){\n    value = data.previewDocuments;  \n  }else{\n    var documents = {};\n    data.previewDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
+			"key": "previewDocuments",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"type": "documentviewer",
+			"key": "documents1",
+			"label": "Quote Information",
+			"calculateValue": "value = (data['previewDocuments'])",
+			"hideLabel": true,
+			"inputType": "documentviewer",
+			"input": 1,
+			"refreshOn": "previewDocuments",
+			"tableView": false,
+			"protected": true,
+			"persistent": false
+		}]
+	}, {
 		"input": true,
 		"label": "Submit",
 		"tableView": false,
@@ -13236,7 +13279,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 314,
+	"_vid": 325,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13253,6 +13296,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-27T00:06:34.252Z",
+	"modified": "2020-06-28T14:20:35.204Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

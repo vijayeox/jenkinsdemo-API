@@ -20,6 +20,15 @@
 		"label": "Rate Car",
 		"input": false,
 		"components": [{
+			"label": "documents",
+			"key": "documents",
+			"properties": {
+				"data_type": "list"
+			},
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"type": "documentviewer",
 			"key": "documents1",
 			"label": "Quote Information",
@@ -27,6 +36,7 @@
 			"hideLabel": true,
 			"inputType": "documentviewer",
 			"input": 1,
+			"refreshOn": "documents",
 			"tableView": false,
 			"protected": true,
 			"persistent": false
@@ -584,6 +594,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-06-27T00:27:17.459Z",
+	"modified": "2020-06-28T14:37:39.046Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

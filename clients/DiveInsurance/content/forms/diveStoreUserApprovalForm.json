@@ -20,6 +20,15 @@
     "label": "Rate Car",
     "input": false,
     "components": [{
+      "label": "documents",
+      "key": "documents",
+      "properties": {
+        "data_type": "list"
+      },
+      "type": "hidden",
+      "input": true,
+      "tableView": false
+    }, {
       "type": "documentviewer",
       "key": "documents1",
       "label": "Quote Information",
@@ -27,6 +36,7 @@
       "hideLabel": true,
       "inputType": "documentviewer",
       "input": 1,
+      "refreshOn": "documents",
       "tableView": false,
       "protected": true,
       "persistent": false
@@ -613,7 +623,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 22,
+  "_vid": 23,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -630,6 +640,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-27T00:27:54.779Z",
+  "modified": "2020-06-28T14:33:55.942Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
