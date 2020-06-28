@@ -164,6 +164,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->setPolicyInfo($data,$persistenceService,$endorsementOptions);
             $dest = $data['dest'];
             if($this->type == 'quote' || $this->type == 'endorsementQuote'){
+                FileUtils::deleteDirectoryContents($dest['absolutePath'].'Quote/');
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
