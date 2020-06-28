@@ -1,4 +1,3 @@
-{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -109,11 +108,7 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        {if $additionalLossofBusinessIncomePL != "false"}
-                            <td>${$lossOfBusIncome|number_format}</td>
-                        {else}
-                            <td>$0</td>
-                        {/if}
+                        {if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}                           ${$lossOfBusIncome|number_format}{else}$0{/if}
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
@@ -174,7 +169,7 @@
                 </tbody>
             </table>
             <div style="margin: 2% 0;">
-                {if $dspropcentralfire.centralStationAlarmPL != "yes"}
+                {if isset($centralStationAlarm) && $centralStationAlarm != "yes"}
                 <center>
                     <b>
                         <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>
