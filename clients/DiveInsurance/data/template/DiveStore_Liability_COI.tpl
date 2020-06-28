@@ -103,10 +103,12 @@
                             <td>Excluded</td>{/if}
                         </p>
 					<p class = "sec_title2">                        
-                        {if $nonOwnedAutoLiabilityPL == "no"}
-                            <td>Excluded</td>
+                        {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+                            <td>$100,000</td>
+                        {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+                            <td>$1,000,000</td>
                         {else}
-                            <td>Included</td>
+                            <td>Not Included</td>
                         {/if}
 					</p>
 					<p class = "sec_title2">

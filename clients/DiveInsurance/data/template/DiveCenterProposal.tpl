@@ -164,10 +164,12 @@
                     </tr>
                     <tr>
                         <td>NON-Owned Auto:</td>
-                        {if $nonOwnedAutoLiabilityPL == "no"}
-                            <td>Not Included</td>
+                        {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+                            <td>$100,000</td>
+                        {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+                            <td>$1,000,000</td>
                         {else}
-                            <td>Included</td>
+                            <td>Not Included</td>
                         {/if}
                     </tr>
                     <tr>
