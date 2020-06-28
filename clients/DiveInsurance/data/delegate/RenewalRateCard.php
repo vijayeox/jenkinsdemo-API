@@ -3,7 +3,7 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\FileTrait;
-use Oxzion\ServiceException;
+use Oxzion\DelegateException;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 require_once __DIR__."/RateCard.php";
@@ -27,7 +27,7 @@ class RenewalRateCard extends RateCard
                 $data['form_data'] = json_decode($data['data'],true);
             }
         }
-        //Set Date Period
+        //Set Date PERIOD
         $startYear = date("Y");
         $endYear = date("Y") + 1;
         
@@ -63,28 +63,20 @@ class RenewalRateCard extends RateCard
         }
         if($data['form_data']['product']=='Emergency First Response'){
             $data['form_data']['workflowId'] = 'cb74d176-225a-11ea-978f-2e728ce88125';
+            $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['padi']."' AND rating = 'EFR'";
+            $result = $persistenceService->selectQuery($select);
+            $coverageOptions = array();
+            if($result->count() > 0){
+                $response = array();
+                while ($result->next()) {
+                    $response[] = $result->current();
+                }
+                $data['form_data']['padiNotApplicable'] = false;
+            } else {
+                $data['form_data']['padiNotApplicable'] = true;
+                $data['form_data']['padiNotFound'] = true;
+            }
         }
-        // $filterParams = array();
-        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
-        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
-        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
-        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
-        // $policyList = $this->getFileList(null,$filterParams);
-        // if(count($policyList['data']) > 0){
-        //     $policy_exists = true;
-        // } else {
-        //     $policy_exists = false;
-        // }
-
-        // if($policy_exists == true){
-        //     if(isset($data['form_data']['policyPeriod'])){
-        //         throw new ServiceException("Renewal Process has already been initiated for this PADI Number for the Policy Period(".$data['form_data']['policyPeriod']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
-        //     } else {
-        //         if(isset($data['form_data']['start_date'])){
-        //             throw new ServiceException("Renewal Process has already been initiated for this PADI Number for the Policy Period(".$data['form_data']['start_date']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
-        //         }
-        //     }
-        // }
         if($data['form_data']['product']=='Individual Professional Liability'){
             $data['form_data']['workflowId'] = 'f0efea9e-7863-4368-a9b2-baa1a1603067';
             $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['padi']."'";
@@ -118,6 +110,27 @@ class RenewalRateCard extends RateCard
                 $data['form_data']['padiNotApplicable'] = true;
             }
             $data['form_data']['careerCoverageOptions'] = $coverageOptions;
+        }
+        $filterParams = array();
+        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
+        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
+        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
+        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
+        $policyList = $this->getFileList(null,$filterParams);
+        if(count($policyList['data']) > 0){
+            $policy_exists = true;
+        } else {
+            $policy_exists = false;
+        }
+
+        if($policy_exists == true){
+            if(isset($data['form_data']['policyPeriod'])){
+                throw new DelegateException("Renewal Process has already been initiated for this PADI Number for the Policy Period ".$data['form_data']['policyPeriod']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
+            } else {
+                if(isset($data['form_data']['start_date'])){
+                    throw new DelegateException("Renewal Process has already been initiated for this PADI Number for the Policy Period(".$data['form_data']['start_date']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
+                }
+            }
         }
         
         //END DATE PERIOD SELECTION
@@ -156,13 +169,15 @@ class RenewalRateCard extends RateCard
         $product = $data['product'];
         if(isset($this->coverages[$product])){
             foreach ($this->coverages[$product] as $key => $value) {
-                if(isset($data[$data[$value]])){
+                if(isset($data[$data[$value]]) && $data[$value]){
                     $data[$key] = $data[$data[$value]];
                 }
             }
             $data['amount'] = 0;
-            foreach ($this->coverages[$data['product']] as $key => $value) {
-                $data['amount'] = (float) $data['amount'] + (float) $data[$key];
+            if(isset($this->coverages[$data['product']])){
+                foreach ($this->coverages[$data['product']] as $key => $value) {
+                    $data['amount'] = (float) $data['amount'] + (float) $data[$key];
+                }
             }
         }
         return $data;
