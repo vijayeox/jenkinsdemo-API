@@ -9869,9 +9869,11 @@
 		"label": "Group Professional Liability",
 		"components": [{
 			"label": "certificateLevelList",
-			"protected": true,
 			"calculateValue": "console.log(data.certificateLevelList);",
 			"key": "certificateLevelList",
+			"properties": {
+				"data_type": "list"
+			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -14376,6 +14378,48 @@
 			"next": true
 		}
 	}, {
+		"title": "Quote Documents",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page10",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\", \"delegate\":\"DiveStoreEndorsementPremiumCalculation\"},{\"command\" : \"delegate\",\"delegate\":\"EndorsementQuote\"}]",
+			"post_delegate_refresh": "documents1"
+		},
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"type": "panel",
+		"label": "Quote Documents",
+		"input": false,
+		"components": [{
+			"label": "previewDocuments",
+			"protected": true,
+			"redrawOn": "data",
+			"calculateValue": "value = {};\nif(data.previewDocuments)\n{\n  if(typeof data.previewDocuments === 'object'){\n    value = data.previewDocuments;  \n  }else{\n    var documents = {};\n    data.previewDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
+			"key": "previewDocuments",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"type": "documentviewer",
+			"key": "documents1",
+			"label": "Quote Information",
+			"calculateValue": "value = (data['previewDocuments'])",
+			"hideLabel": true,
+			"inputType": "documentviewer",
+			"input": 1,
+			"refreshOn": "previewDocuments",
+			"tableView": false,
+			"protected": true,
+			"persistent": false
+		}]
+	}, {
 		"title": "Approval",
 		"theme": "primary",
 		"breadcrumbClickable": true,
@@ -14483,7 +14527,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 208,
+	"_vid": 233,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -14500,6 +14544,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-26T03:26:25.585Z",
+	"modified": "2020-06-28T14:20:59.637Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

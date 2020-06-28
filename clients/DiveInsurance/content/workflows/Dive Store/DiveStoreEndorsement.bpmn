@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0i0wmro" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0i0wmro" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="Process_1beehty123" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0hls0q4123" name="Start Endorsement" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -77,13 +77,11 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_074ybay123" sourceRef="StartEvent_0hls0q4123" targetRef="ExclusiveGateway_02mvq01" />
     <bpmn:sequenceFlow id="SequenceFlow_11rkvpz123" sourceRef="ServiceTask_1e9s1xq123" targetRef="ServiceTask_0kfeda1123" />
     <bpmn:sequenceFlow id="SequenceFlow_0191gsl123" sourceRef="ServiceTask_0kfeda1123" targetRef="EndEvent_0wnid44123" />
-    <bpmn:serviceTask id="ServiceTask_1aqfyhm123" name="Generate Quote Document" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_1aqfyhm123" name="File Save" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate":"DiveStoreEndorsementPremiumCalculation"}</camunda:value>
-              <camunda:value>{"command" : "delegate", "delegate":"EndorsementQuote"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
