@@ -50,6 +50,33 @@ class RenewalRateCard extends RateCard
             $data['form_data']['end_date'] = $endYear."-06-30";
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
+            $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['padi']."'";
+            $result = $persistenceService->selectQuery($select);
+            $coverageOptions = array();
+            if($result->count() > 0){
+                $response = array();
+                while ($result->next()) {
+                    $response[] = $result->current();
+                }
+                if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
+                    $data['form_data']['padiVerified'] = false;
+                    $data['form_data']['businessPadiVerified'] = true;
+                    $data['form_data']['padiNotFound'] = false;
+                } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
+                    $data['form_data']['padiVerified'] = false;
+                    $data['form_data']['businessPadiVerified'] = false;
+                    $data['form_data']['padiNotApplicable'] = true;
+                    $data['form_data']['padiNotFound'] = false;
+                } else {
+                    $data['form_data']['padiVerified'] = false;
+                    $data['form_data']['businessPadiVerified'] = false;
+                    $data['form_data']['padiNotFound'] = true;
+                }
+            } else {
+                $data['form_data']['padiVerified'] = false;
+                $data['form_data']['padiNotApplicable'] = true;
+                $data['form_data']['padiNotFound'] = true;
+            }
         }
         else{
             // UPDATE YEAR + 1
