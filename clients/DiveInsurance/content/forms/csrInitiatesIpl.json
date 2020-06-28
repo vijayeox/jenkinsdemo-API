@@ -4004,6 +4004,9 @@
 							"value": "no",
 							"shortcut": ""
 						}],
+						"validate": {
+							"required": true
+						},
 						"key": "doYouHaveAWrittenContract",
 						"type": "radio",
 						"input": true
@@ -4160,7 +4163,7 @@
 				"tableView": false
 			}, {
 				"label": "payment_fields",
-				"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinance,\"policy_type\":\"New\",\"installment_amount\":data.installmentAmount,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.amountPayable});",
+				"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinanceSelect,\"policy_type\":\"New\",\"installment_amount\":data.installmentAmount,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.amountPayable});",
 				"key": "payment_fields",
 				"type": "hidden",
 				"input": true,
@@ -4736,7 +4739,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 471,
+	"_vid": 472,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4757,6 +4760,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-26T20:50:18.114Z",
+	"modified": "2020-06-26T22:37:39.532Z",
 	"machineName": "testdivehub:csrInitiates"
 }

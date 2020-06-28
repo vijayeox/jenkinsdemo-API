@@ -34,7 +34,7 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == ""}
+						{if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
                             $1,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $2,000,000
@@ -94,19 +94,7 @@
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
                             $1,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
-                            $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
-                            $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
-                            $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
-                            $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
-                            $10,000,000
-                        {/if}
 					</p>
 					<p class = "sec_title2">
 					{if isset($medicalPayment) && ($medicalPayment == "true"||$medicalPayment == true)}

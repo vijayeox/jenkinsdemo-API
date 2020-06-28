@@ -77,6 +77,7 @@ class FileService extends AbstractService
             }
         }
         unset($data['uuid']);
+        $oldData = $data;
         $fields = $data = $this->cleanData($data);
         $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
         $jsonData = json_encode($data);
@@ -91,6 +92,7 @@ class FileService extends AbstractService
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
         $data['data'] = $jsonData;
+        $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File();
         $file->exchangeArray($data);
         $this->logger->info("Data From Fileservice - " . print_r($data, true));
@@ -163,7 +165,7 @@ class FileService extends AbstractService
      */
     public function updateFile(&$data, $id)
     {
-        // print_r($data['workflow_instance_id']);exit;
+        $this->logger->info("FILE DATA -------" . print_r($data,true) . "\n");
         $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         if (isset($data['workflow_instance_id'])) {
             $select = "SELECT ox_file.* from ox_file join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where ox_workflow_instance.id = " . $data['workflow_instance_id'];
@@ -217,6 +219,9 @@ class FileService extends AbstractService
         $fileObject['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
+        if (isset($data['last_workflow_instance_id'])) {
+           $fileObject['last_workflow_instance_id'] = $data['last_workflow_instance_id'];
+        }
         $this->beginTransaction();
         try {
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
@@ -1195,6 +1200,7 @@ class FileService extends AbstractService
         unset($params['access']);
         unset($params['uuid']);
         unset($params['commands']);
+        unset($params['last_workflow_instance_id']);
         return $params;
     }
 

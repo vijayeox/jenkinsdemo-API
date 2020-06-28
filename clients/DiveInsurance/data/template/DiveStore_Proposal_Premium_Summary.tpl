@@ -11,7 +11,7 @@
     <p></p>
     <div class="main" style="margin-top: 3%;">
             <div class="value_main">
-                <p>${$liabilityProRataPremium|number_format}</p>
+                <p>${if isset($liabilityProRataPremium)} {$liabilityProRataPremium|number_format} {else} $0 {/if}</p>
                 <p>&nbsp;</p>
                 <p>${$propertyProRataPremium|number_format}</p>
                 <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format}</p>
