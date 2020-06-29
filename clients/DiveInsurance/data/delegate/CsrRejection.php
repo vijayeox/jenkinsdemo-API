@@ -24,6 +24,7 @@ class CsrRejection extends DispatchNotification {
         $this->logger->info("Rejection Policy Notification");
         $data['template'] = $this->template[$data['product']];
         if($data['product'] == 'Dive Store'){
+            return $response;//Temporary fix not to send the rejection email until the UNDO is properly verified
             $subject = 'Dive Store Insurance Application on Hold - '.$data['padi'];
             $data['productType'] = 'Dive Store';
         }else if($data['product'] == 'Dive Boat'){
