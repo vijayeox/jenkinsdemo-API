@@ -861,7 +861,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $year = date('Y', strtotime($data['end_date']));
                 $persistenceService->beginTransaction();
                 try{ 
-                    $select1 = "Select * FROM certificate_of_insurance_number WHERE product ='".$data['product']."' AND year = $year FOR UPDATE";
+                    if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
+                        $product = 'Individual Professional Liability';
+                    }else{
+                        $product = $data['product'];
+                    }
+                    $select1 = "Select * FROM certificate_of_insurance_number WHERE product ='".$product."' AND year = $year FOR UPDATE";
                     $this->logger->info("QUERY POLICY - ".print_r($select1,true));
                     $result1 = $persistenceService->selectQuery($select1); 
                     while ($result1->next()) {
@@ -869,12 +874,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                     if($result1->count() == 0){
                         $sequence ++;
-                        $select2 = "INSERT INTO certificate_of_insurance_number (`product`,`year`,`sequence`) VALUES ('".$data['product']."', $year, $sequence)";
+                        $select2 = "INSERT INTO certificate_of_insurance_number (`product`,`year`,`sequence`) VALUES ('".$product."', $year, $sequence)";
                         $result2 = $persistenceService->insertQuery($select2);
                     }else{ 
                         $sequence = $details[0]['sequence'];
                         $sequence ++;
-                        $select3 = "UPDATE `certificate_of_insurance_number` SET `sequence` = $sequence WHERE product ='".$data['product']."' AND year = $year";
+                        $select3 = "UPDATE `certificate_of_insurance_number` SET `sequence` = $sequence WHERE product ='".$product."' AND year = $year";
                         $result3 = $persistenceService->updateQuery($select3);
                     }
                     $persistenceService->commit();
@@ -916,17 +921,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         private function getPolicyDetails($data,$persistenceService,$product = null,$category = null)
         {  
-            $andClause = " AND category IS NULL AND state is NULL ";
             if(!isset($product)){
                 $product = $data['product'];
             }
-            if(isset($category) && $product == 'Dive Store'){
-                $andClause = " AND category = '".$category."' ";
-            }else if($product == 'Individual Professional Liability' && $data['state'] == 'Guam'){
-                $andClause = " AND state = 'Guam' ";
-            }
             $endDate = date_format(date_create($data['end_date']),"Y-m-d");
-            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' ".$andClause." AND `year` = YEAR('".$endDate."') - 1;";
+            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' AND state = '".$data['state']."' AND `year` = YEAR('".$endDate."') - 1;";
             $this->logger->info("Carrier Policy Query : $selectQuery");
             $resultQuery = $persistenceService->selectQuery($selectQuery); 
             while ($resultQuery->next()) {
@@ -934,6 +933,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             if($resultQuery->count()!=0){
                 return $policyDetails[0];
+            }else{
+                $andClause = " AND category IS NULL AND state is NULL ";
+                if(isset($category) && $product == 'Dive Store'){
+                    $andClause = " AND category = '".$category."' ";
+                }
+                $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' ".$andClause." AND `year` = YEAR('".$endDate."') - 1;";
+                $this->logger->info("Carrier Policy Query : $selectQuery");
+                $resultQuery = $persistenceService->selectQuery($selectQuery); 
+                while ($resultQuery->next()) {
+                    $policyDetails[] = $resultQuery->current();
+                }
+                if($resultQuery->count()!=0){
+                    return $policyDetails[0];
+                }
             }
             return NULL;
         }
