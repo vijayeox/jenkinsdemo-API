@@ -6,6 +6,11 @@
                 <p>Attached are your PADI Endorsed Insurance Documents for your dive store policy. Please review carefully and advise of any changes needed.
 				</p>
 			 <br/>
+			 <br/>
+			 {if isset($additionalNotes)} {$additionalNotes}
+			 <br/>
+			 <br/>
+			 <br/>{/if}
 
             </div>
 

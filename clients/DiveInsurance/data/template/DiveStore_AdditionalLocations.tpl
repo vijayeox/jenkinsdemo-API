@@ -1,5 +1,4 @@
 {assign var=additionalLocationData value=$additionalLocationData|json_decode:true}
-{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
 <!DOCTYPE html>
 <html>
 
@@ -106,10 +105,15 @@
                     <tr><td   class = "info">Policy #: {$liability_policy_id}</td></tr>
                     <tr>
                         <td class = "info">NON-Diving Pool Use:</td>
-                        {if isset($additionalLocationData.ALPoolLiability) && (int)$additionalLocationData.ALPoolLiability > 0}
-                            <td class = "info">$1,000,000</td>
+
+                        {if isset($additionalLocationData.nonOwnedAutoLiabilityPL)}
+                        {if $additionalLocationData.nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+                            <td>$100,000</td>
+                        {else if $additionalLocationData.nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+                            <td>$1,000,000</td>
                         {else}
-                            <td class = "info">Not Included</td>
+                            <td>Not Included</td>
+                        {/if}
                         {/if}
                     </tr>
                     <tr>
@@ -135,7 +139,7 @@
 
             <!-- Alarm Calc -->
             
-                {if $dspropcentralfire.centralStationAlarmPL != "yes"}
+                {if $ALcentralStationAlarm != "yes"}
                     <hr class="line_divide"></hr>
               <div style="margin-top: 2% 0;">
                 <center>

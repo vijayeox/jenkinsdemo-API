@@ -11,7 +11,7 @@
 				<br/>
 				<p>Your application for the PADI {$productType} Insurance is on hold, pending additional information from you.  Please provide us with the following additional information.<br/></p>
 				<br/>
-				{if isset($rejectionReason)}{
+				{if isset($rejectionReason)}
 					<center>{assign var=reasons value=$rejectionReason|json_decode:true}
 					{assign var=count value=$reasons|@sizeof}
 					{assign var=count1 value=$count}
