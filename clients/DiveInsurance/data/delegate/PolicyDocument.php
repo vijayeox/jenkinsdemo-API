@@ -86,7 +86,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'lpheader' => 'DiveStore_LP_header.html',
                         'lpfooter' => 'DiveStore_LP_footer.html',
                         'nTemplate' => 'Group_PL_NI',
-                        'nheader' => 'Group_NI_header.html',
+                        'nheader' => 'Group_DS_NI_header.html',
                         'nfooter' => 'Group_NI_footer.html',
                         'aniTemplate' => 'DiveStore_ANI',
                         'aniheader' => 'DS_Quote_ANI_header.html',

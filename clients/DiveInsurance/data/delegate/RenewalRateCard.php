@@ -152,10 +152,10 @@ class RenewalRateCard extends RateCard
 
         if($policy_exists == true){
             if(isset($data['form_data']['policyPeriod'])){
-                throw new DelegateException("Renewal Process has already been initiated for this PADI Number for the Policy Period ".$data['form_data']['policyPeriod']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
+                throw new DelegateException("Policy exists for the Policy Period ".$data['form_data']['policyPeriod']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
             } else {
                 if(isset($data['form_data']['start_date'])){
-                    throw new DelegateException("Renewal Process has already been initiated for this PADI Number for the Policy Period ".$data['form_data']['start_date']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
+                    throw new DelegateException("Policy exists for the for the Policy Period ".$data['form_data']['start_date']." - ".date_format(date_create($data['form_data']['end_date']),"m-d-Y"), "policy_initiated");
                 }
             }
         }
