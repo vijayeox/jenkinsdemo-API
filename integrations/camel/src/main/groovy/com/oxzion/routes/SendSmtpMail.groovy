@@ -10,6 +10,7 @@ import org.apache.camel.component.properties.PropertiesComponent
 import org.apache.camel.impl.DefaultCamelContext
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
+import org.apache.activemq.command.ActiveMQTextMessage
 
 import javax.activation.DataHandler
 import javax.activation.FileDataSource
@@ -113,8 +114,18 @@ public class SendSmtpMail extends RouteBuilder {
                         def params = [to: 'mail']
                         def jsonparams = new JsonBuilder(params).toPrettyString()
                         def stackTrace = new JsonBuilder(exception).toPrettyString()
-                        ErrorLog.log('activemq_queue',stackTrace,exchange.getMessage().toString(),jsonparams)
-                        System.out.println("handling ex")
+                        logger.info("Processing Email with payload ${exchange.getMessage().getJmsMessage()}")
+                        def message = exchange.getMessage().getJmsMessage();
+                        if (message instanceof ActiveMQTextMessage) {
+                            ActiveMQTextMessage textMessage = (ActiveMQTextMessage) message;
+                            try {
+                                String json = message.getText();
+                                logger.info(json)
+                                ErrorLog.log('activemq_queue',stackTrace,json,jsonparams)
+                            } catch (Exception e) {
+                                logger.info("Could not extract data to log from TextMessage - ${e}")
+                            }
+                        }
                     }
                 })
             }
