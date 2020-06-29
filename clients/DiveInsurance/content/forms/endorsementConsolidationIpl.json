@@ -3297,6 +3297,10 @@
 					"label": "Rejected",
 					"value": "rejected",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"validate": {
 					"required": true,
@@ -3330,6 +3334,7 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
+			"customConditional": "show = (data.approved == \"rejected\" || data.approved == \"onHold\")",
 			"type": "datagrid",
 			"input": true,
 			"components": [{
@@ -3339,7 +3344,7 @@
 				"type": "well",
 				"input": false,
 				"components": [{
-					"label": "Reason for Rejection",
+					"label": "Reason for Rejection / On Hold",
 					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
@@ -3382,7 +3387,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 280,
+	"_vid": 283,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3403,6 +3408,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-27T00:36:11.081Z",
+	"modified": "2020-06-29T01:25:15.837Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
