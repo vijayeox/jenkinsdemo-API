@@ -92,9 +92,7 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        {if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            <td>$1,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$2,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$3,000,000</td>
@@ -104,13 +102,13 @@
                             <td>$5,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$10,000,000</td>
+                        {else}
+                            <td>$1,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        {if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            <td>$1,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$2,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$3,000,000</td>
@@ -120,13 +118,13 @@
                             <td>$5,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$10,000,000</td>
+                        {else}
+                            <td>$1,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        {if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$3,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$4,000,000</td>
@@ -136,13 +134,13 @@
                             <td>$6,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$11,000,000</td>
+                        {else}
+                            <td>$2,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        {if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             <td>$3,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             <td>$4,000,000</td>
@@ -152,6 +150,8 @@
                             <td>$6,000,000</td>
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             <td>$11,000,000</td>
+                        {else}
+                            <td>$2,000,000</td>
                         {/if}
                     </tr>
                     <tr>
@@ -164,10 +164,12 @@
                     </tr>
                     <tr>
                         <td>NON-Owned Auto:</td>
-                        {if $nonOwnedAutoLiabilityPL == "no"}
-                            <td>Not Included</td>
+                        {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+                            <td>$100,000</td>
+                        {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+                            <td>$1,000,000</td>
                         {else}
-                            <td>Included</td>
+                            <td>Not Included</td>
                         {/if}
                     </tr>
                     <tr>

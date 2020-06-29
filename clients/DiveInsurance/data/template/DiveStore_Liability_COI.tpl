@@ -34,9 +34,7 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            $1,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $2,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $3,000,000
@@ -46,12 +44,12 @@
                             $5,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $10,000,000
+                        {else}
+                            $1,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            $1,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $2,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $3,000,000
@@ -61,12 +59,12 @@
                             $5,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $10,000,000
+                        {else}
+                            $1,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $3,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $4,000,000
@@ -76,12 +74,12 @@
                             $6,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $11,000,000
+                        {else}
+                            $2,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == "" || $excessLiabilityCoverage == "excessLiabilityCoverageDeclined"}
-                            $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
                             $3,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
                             $4,000,000
@@ -91,6 +89,8 @@
                             $6,000,000
                         {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
                             $11,000,000
+                         {else}
+                            $2,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
@@ -103,10 +103,12 @@
                             <td>Excluded</td>{/if}
                         </p>
 					<p class = "sec_title2">                        
-                        {if $nonOwnedAutoLiabilityPL == "no"}
-                            <td>Excluded</td>
+                        {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+                            <td>$100,000</td>
+                        {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+                            <td>$1,000,000</td>
                         {else}
-                            <td>Included</td>
+                            <td>Not Included</td>
                         {/if}
 					</p>
 					<p class = "sec_title2">

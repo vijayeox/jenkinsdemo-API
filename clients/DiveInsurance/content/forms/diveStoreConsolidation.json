@@ -408,6 +408,14 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "initiatedByCsr",
+						"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
+						"key": "initiatedByCsr",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -13279,7 +13287,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 325,
+	"_vid": 326,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13296,6 +13304,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-28T14:20:35.204Z",
+	"modified": "2020-06-28T23:03:39.583Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

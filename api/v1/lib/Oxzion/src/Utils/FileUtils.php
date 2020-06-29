@@ -106,8 +106,10 @@ class FileUtils
                 self::deleteDirectoryContents( $dir.'/'.$file );
             }
             rmdir( $dir );
-        } else {
+        } else if(file_exists($dir)){
             unlink( $dir );
+        } else {
+            return;
         }
     }
     public static function getFiles($directory)

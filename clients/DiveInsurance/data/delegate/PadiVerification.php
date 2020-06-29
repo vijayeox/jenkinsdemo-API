@@ -107,7 +107,10 @@ class PadiVerification extends AbstractAppDelegate
                             $returnArray['padiNotApplicable'] = true;
                             $returnArray['padiNotFound'] = false;
                         } else {
-                            $coverageSelect = "Select coverage_name,coverage_level FROM coverage_options WHERE padi_rating ='".$response[0]['rating']."' and category IS NULL";
+                            $ratingApplicable = implode('","',array_column($response, 'rating'));
+                            $returnArray['rating'] = $ratingApplicable;
+                            $coverageSelect = 'Select DISTINCT coverage_level,coverage_name FROM coverage_options WHERE padi_rating  in ("'.$ratingApplicable.'") and category IS NULL';
+                            $this->logger->info("coverage select".$coverageSelect);
                             $coverageLevels = $persistenceService->selectQuery($coverageSelect);
                             if($result->count() > 0){
                                 while ($coverageLevels->next()) {
@@ -115,7 +118,7 @@ class PadiVerification extends AbstractAppDelegate
                                     $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
                                 }
                             } else {
-                                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options";
+                                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options and category IS NULL";
                                 $coverageLevels = $persistenceService->selectQuery($coverageSelect);
                                 while ($coverageLevels->next()) {
                                     $coverage = $coverageLevels->current();
