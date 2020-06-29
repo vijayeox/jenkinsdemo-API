@@ -24,7 +24,7 @@
                 <p>${$liabilityProRataPremium|number_format}</p>
                 <p>&nbsp;</p>
                 <p>${$propertyProRataPremium|number_format}</p>
-                <p>${((float)$PropTax+$LiaTax+$AddILocTax)|string_format:"%.2f"}</p>
+                <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format:2}</p>
                 <p>${(float)$AddILocPremium|number_format}</p>
                 <p>${(float)$padiFee|number_format}</p>
             </div>
@@ -41,7 +41,7 @@
         <div class="clearfix"></div>
         <div class="total_main">
             <div class="value_main">
-                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFee)|string_format:"%.2f"}</p>
+                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFee)|number_format:2}</p>
             </div>
             <div class="sub_main">
                 <p>Total Store Premium:</p>
@@ -56,7 +56,7 @@
             <div class="value_main">
                 <p>{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>{if isset($groupTaxAmount)}${(float)$groupTaxAmount|string_format:"%.2f"}{else}$0.00{/if}</p>
+                <p>{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2}{else}$0.00{/if}</p>
                 <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
@@ -71,7 +71,7 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-               <p>{if isset($groupTotalAmount)}${$groupTotalAmount|string_format:"%.2f"}{else}$0.00{/if}</p>
+               <p>{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>
