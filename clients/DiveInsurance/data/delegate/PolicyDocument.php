@@ -673,7 +673,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             $this->processAttachments($data);
             $data['CSRReviewRequired'] = "";
-            $data['rejectionReason'] = "";
             if($this->type == 'quote' || $this->type == 'endorsementQuote'){
                 $data['policyStatus'] = "Quote Approval Pending";
             } else if($this->type == 'lapse'){
@@ -704,8 +703,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['userApproved'])){
                 $data['userApproved'] = "";
             }
-            if(isset($data['rejectionReason'])){
-                $data['rejectionReason'] = array();
+            if(!$this->type == 'quote' || !$this->type == 'endorsementQuote'){
+                $data['rejectionReason'] = "";
+                if(isset($data['rejectionReason'])){
+                    $data['rejectionReason'] = array();
+                }
             }
                
             $this->logger->info("Policy Document Generation",print_r($data,true));
