@@ -43,19 +43,21 @@ public class SendSmtpMail extends RouteBuilder {
                         logger.info("Processing Email with payload ${object}")
                     
                         if(object.to){
-                            def toList = setMessageHeader(object.to)
+                            def toList = ""
+                            toList = setMessageHeader(object.to)
                             messageIn.setHeader("To", toList)
                         }
-                     
                         if(object.cc){
-                            def ccList = setMessageHeader(object.cc)
+                            def ccList = ""
+                            ccList = setMessageHeader(object.cc)
                             messageIn.setHeader("Cc", ccList)
                         }
 
+                        def smtpBccList = ""
                         try {
-                            def smtpBccList = getContext().resolvePropertyPlaceholders("{{smtp.bcc.email}}")
+                            smtpBccList = getContext().resolvePropertyPlaceholders("{{smtp.bcc.email}}")
                         } catch(Exception ex) {
-                            def smtpBccList = ""
+                            smtpBccList = ""
                         }
                         def bccList = ""
                         if(object.bcc){

@@ -13557,10 +13557,6 @@
 					"value": "rejected",
 					"label": "Rejected",
 					"shortcut": ""
-				}, {
-					"label": "On Hold",
-					"value": "onHold",
-					"shortcut": ""
 				}],
 				"clearOnHide": false,
 				"validate": {
@@ -13626,7 +13622,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 238,
+	"_vid": 239,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13643,6 +13639,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-29T09:10:06.309Z",
+	"modified": "2020-06-29T09:44:47.924Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
