@@ -832,6 +832,9 @@ class FileService extends AbstractService
                     $queryParams['fieldName'] = $getIdentifier[0]['identifier_name'];
                     $queryParams['identifier'] = $getIdentifier[0]['identifier'];
                     $whereQuery = " ofa.field_value_text = :identifier AND ";
+                }else{
+                    $this->logger->warn("User id mapping not found so returning no records");
+                    return array('data' => [], 'total' => 0);
                 }
             } else {
                 $whereQuery = "";
