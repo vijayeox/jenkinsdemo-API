@@ -265,20 +265,12 @@ class UserService extends AbstractService
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
             $orgid = $this->getUuidFromId('ox_organization', $data['orgid']); //Template Service
-            $bcc = " ";
-            if(isset($this->config['emailConfig'])){
-                $emailConfig = $this->config['emailConfig'];
-                if(isset($emailConfig['loginPassword'])){
-                    $bcc = isset($emailConfig['loginPassword']['bcc']) ? $emailConfig['loginPassword']['bcc'] : " ";
-                }
-            }
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
                 'email' => $data['email'],
                 'orgId' => $orgid,
-                'bcc' => $bcc,
                 'password' => $password,
                 'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
@@ -1141,13 +1133,11 @@ class UserService extends AbstractService
                         $emailConfig = $this->config['emailConfig'];
                         if(isset($emailConfig['resetPassword'])){
                             $subject = isset($emailConfig['resetPassword']['subject']) ? $userReset['firstname'].', '.$emailConfig['resetPassword']['subject'] : $userReset['firstname'] . ', You login details for EOX vantage!';
-                            $bcc = isset($emailConfig['resetPassword']['bcc']) ? $emailConfig['resetPassword']['bcc'] : " ";
                         }
                     }
                     $this->messageProducer->sendQueue(json_encode(array(
                         'to' => $userReset['email'],
                         'subject' => $subject,
-                        'bcc' => $bcc,
                         'body' => $this->templateService->getContent('resetPassword', $userReset),
                     )), 'mail');
                     return $userReset;

@@ -31,7 +31,6 @@ public class SendSmtpMail extends RouteBuilder {
     void configure() throws Exception {
         CamelContext context = new DefaultCamelContext()
         PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class)
-        pc.setLocation("classpath:mail.properties")
         context.addComponent("properties", pc)
         context.addRoutes(new RouteBuilder() {
             @Override
@@ -42,45 +41,35 @@ public class SendSmtpMail extends RouteBuilder {
                         def messageIn  = exchange.getIn()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
                         logger.info("Processing Email with payload ${object}")
-                        def toList = ""
+                    
                         if(object.to){
-                            def recepientList = object.to instanceof String ? [object.to] : object.to as ArrayList
-                            for (int i=0;i<recepientList.size();i++){
-                                def recepient = recepientList.get(i)
-                                if(i<recepientList.size()-1){
-                                    toList += recepient+","
-                                } else {
-                                    toList += recepient
-                                }
-                            }
+                            def toList = setMessageHeader(object.to)
                             messageIn.setHeader("To", toList)
                         }
+                     
                         if(object.cc){
-                            def ccList = ""
-                            def recepientList = object.cc instanceof String ? [object.cc] : object.cc as ArrayList
-                            for (int i=0;i<recepientList.size();i++){
-                                def recepient = recepientList.get(i)
-                                if(i<recepientList.size()-1){
-                                    ccList += recepient+","
-                                } else {
-                                    ccList += recepient
-                                }
-                            }
+                            def ccList = setMessageHeader(object.cc)
                             messageIn.setHeader("Cc", ccList)
                         }
-                        if(object.bcc){
-                            def bccList = ""
-                            def recepientList = object.bcc instanceof String ? [object.bcc] : object.bcc as ArrayList
-                            for (int i=0;i<recepientList.size();i++){
-                                def recepient = recepientList.get(i)
-                                if(i<recepientList.size()-1){
-                                    bccList += recepient+","
-                                } else {
-                                    bccList += recepient
-                                }
-                            }
-                            messageIn.setHeader("Bcc", bccList)
+
+                        try {
+                            def smtpBccList = getContext().resolvePropertyPlaceholders("{{smtp.bcc.email}}")
+                        } catch(Exception ex) {
+                            def smtpBccList = ""
                         }
+                        def bccList = ""
+                        if(object.bcc){
+                            bccList = setMessageHeader(object.bcc)
+                            if(smtpBccList){
+                                smtpBccList += ","+bccList    
+                            }else{
+                                smtpBccList += bccList
+                            }
+                        }
+                        if(smtpBccList){
+                             messageIn.setHeader("Bcc", smtpBccList)    
+                        }
+                       
                         if(object.from){
                             messageIn.setHeader("From", object.from as String)
                         } else {
@@ -97,6 +86,7 @@ public class SendSmtpMail extends RouteBuilder {
                             messageIn.setBody('')
                         }
                         messageIn.setHeader("Content-Type", "text/html")
+                        logger.info("Mail Headers" + messageIn.getHeaders() as String)
                         if(object.attachments){
                             if(object.attachments.size()>0){
                                 def attachmentList = object.attachments as ArrayList
@@ -131,5 +121,19 @@ public class SendSmtpMail extends RouteBuilder {
             }
         })
         context.start()
+    }
+
+    def setMessageHeader(header){
+        def list = ""
+        def recepientList = header instanceof String ? [header] : header as ArrayList
+        for (int i=0;i<recepientList.size();i++){
+            def recepient = recepientList.get(i)
+            if(i<recepientList.size()-1){
+                list += recepient+","
+            } else {
+                list += recepient
+            }
+        }
+       return list
     }
 }
