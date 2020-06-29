@@ -9,7 +9,7 @@
 	<div class ="body_div_ai">
 	    	{foreach from=$list item=$additional}
 	    		<p class = "ai_list">
-	    			&nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state},{$additional.zip}
+	    			&nbsp&nbsp&nbsp {if isset($additional.name)}{$additional.name}{/if},{if isset($additional.address)}{$additional.address}{/if},{if isset($additional.city)}{$additional.city}{/if},{if isset($additional.state)}{$additional.state}{/if},{if isset($additional.zip)}{$additional.zip}{/if}
 	    		</p>
     		{/foreach}
 	</div>

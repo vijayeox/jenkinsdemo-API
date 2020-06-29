@@ -1329,7 +1329,6 @@
 					"components": [{
 						"label": "Fax",
 						"placeholder": " ",
-						"inputMask": "(999) 999-999",
 						"tableView": true,
 						"validate": {
 							"customMessage": "Please enter a valid Fax number"
@@ -13059,6 +13058,19 @@
 			"label": "Panel",
 			"path": "page5Panel4"
 		}, {
+			"type": "document",
+			"key": "documents",
+			"dtype": "document",
+			"datype": "document",
+			"dattype": "document",
+			"datatype": "document",
+			"data_type": "document",
+			"label": "Documents",
+			"hideLabel": true,
+			"inputType": "document",
+			"input": 1,
+			"tableView": false
+		}, {
 			"title": "Attachments",
 			"theme": "primary",
 			"breadcrumbClickable": true,
@@ -13298,7 +13310,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 339,
+	"_vid": 341,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13315,6 +13327,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-29T09:44:01.378Z",
+	"modified": "2020-06-29T12:02:17.459Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
