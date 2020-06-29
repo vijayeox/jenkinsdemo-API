@@ -51,35 +51,67 @@
                     </tr>
                     <tr>
                         <td>Business Income from dependant properties:</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$5,000</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Inside):</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$2,500</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Outside):</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$2,500</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Transit Coverage (Locked Vehicle):</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$10,000</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>EmployeeTheft Limit:</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$5,000</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Property of Others:</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$25,000</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Off premises:</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$10,000</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Glass:</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>$5,000</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                 </tbody>
             </table>

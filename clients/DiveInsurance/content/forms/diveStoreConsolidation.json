@@ -125,6 +125,14 @@
 						"calculateValue": "value = data['padi'];",
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "automatic_renewal",
+						"customDefaultValue": "value = false;",
+						"key": "automatic_renewal",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
 						"input": true,
 						"tableView": true,
 						"key": "verified1",
@@ -1689,7 +1697,7 @@
 				"key": "pageNaNColumns",
 				"columns": [{
 					"components": [{
-						"label": "Distance from Ocean/Golf",
+						"label": "Distance from Ocean/Gulf",
 						"suffix": "Miles",
 						"mask": false,
 						"spellcheck": false,
@@ -4029,13 +4037,13 @@
 			"key": "page4PanelPanelPanelColumns",
 			"columns": [{
 				"components": [{
-					"label": "Do you want to apply for Non Owner Auto?",
+					"label": "Do you want to apply for Non Owned Auto?",
 					"tableView": false,
+					"defaultValue": false,
 					"clearOnHide": false,
 					"key": "doYouWantToApplyForNonOwnerAuto",
 					"type": "checkbox",
 					"input": true,
-					"defaultValue": false,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "NON-Owned Auto Liability",
@@ -10633,7 +10641,7 @@
 										"label": "",
 										"value": ""
 									}],
-									"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+									"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  var ratingValues = padiRating.split(\",\");\n  var certificateValues = [];\n  ratingValues.forEach(function(item, index) {\n    for(var j=0;j<certificateLevel[item].length;j++){\n      certificateValues.push(certificateLevel[item][j])\n    }\n  });\n  \tvalues = certificateValues;\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
 								},
 								"valueProperty": "value",
 								"selectThreshold": 0.3,
@@ -11196,7 +11204,7 @@
 						"type": "columns",
 						"input": false
 					}, {
-						"label": "Edit Grid",
+						"label": "Additional Named Insured",
 						"hideLabel": true,
 						"tableView": false,
 						"templates": {
@@ -11291,7 +11299,7 @@
 											"label": "",
 											"value": ""
 										}],
-										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalues = certificateLevel[padiRating];\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  var ratingValues = padiRating.split(\",\");\n  var certificateValues =[];\n  ratingValues.forEach(function(item, index) {\n    for(var j=0;j<certificateLevel[item].length;j++){\n      certificateValues.push(certificateLevel[item][j])\n    }\n  });\n  \tvalues = certificateValues;\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
 									},
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
@@ -13225,6 +13233,10 @@
 					"value": "rejected",
 					"label": "Rejected",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"clearOnHide": false,
 				"validate": {
@@ -13237,7 +13249,7 @@
 			}],
 			"path": "page77Panel"
 		}, {
-			"label": "Rejection Reason",
+			"label": "Rejection Reason / On Hold",
 			"reorder": false,
 			"addAnother": "Add More",
 			"addAnotherPosition": "bottom",
@@ -13248,6 +13260,7 @@
 			"defaultValue": [{
 				"reason": ""
 			}],
+			"clearOnHide": false,
 			"validate": {
 				"minLength": 1
 			},
@@ -13257,12 +13270,14 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
+			"customConditional": "show = (data.csrApproved == \"rejected\" || data.csrApproved == \"onHold\")",
 			"type": "datagrid",
 			"input": true,
 			"components": [{
 				"label": "Text Field",
 				"hideLabel": true,
 				"tableView": true,
+				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Rejection reason is required"
@@ -13287,7 +13302,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 326,
+	"_vid": 338,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13304,6 +13319,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-28T23:03:39.583Z",
+	"modified": "2020-06-29T09:10:54.293Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

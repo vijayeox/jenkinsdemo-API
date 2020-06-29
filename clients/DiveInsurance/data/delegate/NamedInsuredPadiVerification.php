@@ -43,6 +43,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
                 $response[0]['rating'] = " ";
             }
             $returnArray = array_merge($data,$response[0]);
+            $returnArray['rating'] = "";
             $returnArray['namedInsuredPadiVerified'] = true;
             return $returnArray;
         } else {
