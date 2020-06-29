@@ -4659,6 +4659,10 @@
 					"label": "Rejected",
 					"value": "rejected",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"validate": {
 					"required": true,
@@ -4691,6 +4695,7 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
+			"customConditional": "show = (data.approved == \"rejected\" || data.approved == \"onHold\")",
 			"type": "datagrid",
 			"input": true,
 			"components": [{
@@ -4700,7 +4705,7 @@
 				"type": "well",
 				"input": false,
 				"components": [{
-					"label": "Reason for Rejection",
+					"label": "Reason for Rejection / On Hold",
 					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
@@ -4739,7 +4744,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 472,
+	"_vid": 479,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4760,6 +4765,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-26T22:37:39.532Z",
+	"modified": "2020-06-29T01:22:27.829Z",
 	"machineName": "testdivehub:csrInitiates"
 }

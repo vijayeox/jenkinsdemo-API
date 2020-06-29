@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="IPLEndorsement" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -98,6 +98,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_16l2dji</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_11738jy</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1yna7t6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0isa8vl</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_12e5vo3</bpmn:outgoing>
     </bpmn:userTask>
@@ -116,7 +117,7 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_183776b" sourceRef="ServiceTask_1j9vqhf" targetRef="ServiceTask_1nlbeez" />
     <bpmn:sequenceFlow id="SequenceFlow_1qz971h" sourceRef="ServiceTask_1nlbeez" targetRef="EndEvent_1ki3ogb" />
     <bpmn:sequenceFlow id="SequenceFlow_12e5vo3" sourceRef="UserTask_14i3m9l" targetRef="Task_037h9gn">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved=="rejected"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected" or approved== "onHold"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="ExclusiveGateway_1uh392h" camunda:asyncAfter="true">
       <bpmn:incoming>SequenceFlow_1gaibuf</bpmn:incoming>
@@ -130,16 +131,21 @@ execution.setVariable("process_reminder",false)</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_09bil4y" name="Auto renewal(True)" sourceRef="ExclusiveGateway_1uh392h" targetRef="ServiceTask_1j9vqhf">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(automatic_renewal==true or automatic_renewal=="true") and (autoRenewalJob == null or autoRenewalJob == "")}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Task_037h9gn" name="CSR Cancel policy Mail" camunda:expression="0">
+    <bpmn:serviceTask id="Task_037h9gn" name="CSR Rejection or OnHold" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable("policyStatus","Rejected")</camunda:script>
+          <camunda:script scriptFormat="groovy">def status = execution.getVariable('approved')
+if(status == "rejected"){
+	execution.setVariable("policyStatus","Rejected")	
+}
+if(status == "onHold"){
+	execution.setVariable("policyStatus","On Hold")
+}</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
-              <camunda:value>{"command" : "delegate", "delegate" : "CsrRejection"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
@@ -147,8 +153,11 @@ execution.setVariable("process_reminder",false)</camunda:script>
       <bpmn:incoming>SequenceFlow_12e5vo3</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1v1dk1z</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_16l2dji</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0bb7law</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_16l2dji" sourceRef="Task_037h9gn" targetRef="UserTask_14i3m9l" />
+    <bpmn:sequenceFlow id="SequenceFlow_16l2dji" sourceRef="Task_037h9gn" targetRef="UserTask_14i3m9l">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "onHold"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1gqukt1" sourceRef="Task_08p2msc" targetRef="ServiceTask_1nlbeez" />
     <bpmn:serviceTask id="Task_08p2msc" name="Cancel Autorenewal Job" camunda:expression="0">
       <bpmn:extensionElements>
@@ -254,7 +263,7 @@ if(result3){
 if(!autoRenewalJob){
 	execution.setVariable('autoRenewalJob', "")
 }	
-if(initiatedByCsr == true &amp;&amp; approved == "rejected"){	
+if(initiatedByCsr == true &amp;&amp; (approved == "rejected" || approved == "onHold")){	
   execution.setVariable('RejectedPolicy', true)	
 }else{  	
   execution.setVariable('RejectedPolicy', false)
@@ -277,6 +286,28 @@ if(initiatedByCsr == true &amp;&amp; approved == "rejected"){
     <bpmn:sequenceFlow id="SequenceFlow_1v1dk1z" sourceRef="ExclusiveGateway_0spajg7" targetRef="Task_037h9gn">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${RejectedPolicy == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1t3bugk">
+      <bpmn:incoming>SequenceFlow_0bb7law</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1r8i61y</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0bb7law" sourceRef="Task_037h9gn" targetRef="ExclusiveGateway_1t3bugk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1r8i61y" sourceRef="ExclusiveGateway_1t3bugk" targetRef="Task_00721gd" />
+    <bpmn:serviceTask id="Task_00721gd" name="CSR Cancel policy Mail" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate" : "CsrRejection"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1r8i61y</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1yna7t6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1yna7t6" sourceRef="Task_00721gd" targetRef="UserTask_14i3m9l" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="IPLEndorsement">
@@ -424,6 +455,27 @@ if(initiatedByCsr == true &amp;&amp; approved == "rejected"){
       <bpmndi:BPMNShape id="ServiceTask_0ptuo61_di" bpmnElement="Task_1jrn5e5">
         <dc:Bounds x="367" y="300" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1t3bugk_di" bpmnElement="ExclusiveGateway_1t3bugk" isMarkerVisible="true">
+        <dc:Bounds x="667" y="831" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bb7law_di" bpmnElement="SequenceFlow_0bb7law">
+        <di:waypoint x="654" y="745" />
+        <di:waypoint x="692" y="745" />
+        <di:waypoint x="692" y="831" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1r8i61y_di" bpmnElement="SequenceFlow_1r8i61y">
+        <di:waypoint x="692" y="881" />
+        <di:waypoint x="692" y="946" />
+        <di:waypoint x="497" y="946" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1cmtn65_di" bpmnElement="Task_00721gd">
+        <dc:Bounds x="397" y="906" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1yna7t6_di" bpmnElement="SequenceFlow_1yna7t6">
+        <di:waypoint x="447" y="906" />
+        <di:waypoint x="447" y="584" />
+        <di:waypoint x="554" y="584" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
