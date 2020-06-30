@@ -308,7 +308,7 @@
             "clearOnHide": false,
             "validate": {
               "required": true,
-              "custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+              "custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"formio-component-submit\")[0] && data.privileges) ){\n    document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"none\";\n    if( data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] = true ||  data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n      document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"block\";\n    }\n  }else{\n    document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"block\";\n}"
             },
             "key": "paymentOptions",
             "properties": {
@@ -623,7 +623,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 23,
+  "_vid": 25,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -640,6 +640,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-28T14:33:55.942Z",
+  "modified": "2020-06-30T10:13:34.198Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

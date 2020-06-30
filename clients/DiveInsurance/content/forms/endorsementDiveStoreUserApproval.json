@@ -262,7 +262,6 @@
 						"optionsLabelPosition": "right",
 						"inline": false,
 						"tableView": false,
-						"defaultValue": "creditCard",
 						"values": [{
 							"label": "Money Order",
 							"value": "moneyOrder",
@@ -283,7 +282,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"formio-component-submit\")[0] && data.privileges) ){\n    document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"none\";\n    if( data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] = true ||  data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n      document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"block\";\n    }\n  }else{\n    document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"formio-component-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -312,6 +311,26 @@
 									"type": "boolean"
 								},
 								"state": true
+							}]
+						}, {
+							"name": "Enable on Premium Finance",
+							"trigger": {
+								"type": "simple",
+								"simple": {
+									"when": "premiumFinanceSelect",
+									"eq": "no",
+									"show": true
+								}
+							},
+							"actions": [{
+								"name": "Enable All fields",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": false
 							}]
 						}],
 						"type": "radio",
@@ -594,6 +613,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-06-28T14:37:39.046Z",
+	"modified": "2020-06-30T10:15:47.944Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
