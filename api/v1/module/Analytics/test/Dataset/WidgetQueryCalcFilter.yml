@@ -89,3 +89,13 @@ ox_widget_query:
     ox_widget_id: 121
     sequence: 1
     configuration: ''
+  -
+    ox_query_id: 120
+    ox_widget_id: 122
+    sequence: 1
+    configuration: ''
+  -
+    ox_query_id: 121
+    ox_widget_id: 123
+    sequence: 1
+    configuration: ''

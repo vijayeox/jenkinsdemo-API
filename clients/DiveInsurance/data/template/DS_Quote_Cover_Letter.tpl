@@ -23,7 +23,7 @@
 			<li>No coinsurance penalty on property coverage.</li>
 			<li>Accidental Compressor Breakdown (excluding wear and tear and normal maintenance).</li>
 			<li>Optional Group Professional Liability.</li>
-			<li>U.S. A XV rated insurer.</li>
+			<li>U.S. A++ XV rated insurer.</li>
 			<li>Unlimited defense costs for covered claims.</li>
 			<li>Non-motorized watercraft less than 20 feet in length.</li>
 			<li>No liability deductible.</li>

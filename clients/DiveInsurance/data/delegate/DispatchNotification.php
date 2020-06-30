@@ -19,7 +19,6 @@ abstract class DispatchNotification extends MailDelegate
         $this->logger->info("DISPATCH DATA" . print_r($data, true));
         $mailOptions = array();
         $mailOptions['to'] = $data['email'];
-        $mailOptions['bcc'] = 'padi-professional@hubinternational.com';
         $mailOptions['subject'] = $data['subject'];
         $template = $data['template'];
         $response = $this->sendMail($data, $template, $mailOptions);

@@ -138,6 +138,10 @@ document.addEventListener("DOMContentLoaded", function() {
           body: formData
         })
           .then(response => {
+            if (response.status == 417) {
+              Swal.showValidationMessage(`We do not have an email on your account.<br/>Contact Us:Helpline Ph: +1 216-452-0324 | Email: padi-professionals@hubinternational.com`);
+              return;
+            }
             if (!response.ok) {
               throw new Error(response.statusText);
             }
@@ -152,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function() {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Verification Mail has been sent",
+          title: "Verification Mail has been sent to " + result.value.data.email,
           showConfirmButton: false,
           timer: 2100
         });
