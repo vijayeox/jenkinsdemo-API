@@ -13245,6 +13245,10 @@
 					"value": "rejected",
 					"label": "Rejected",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"clearOnHide": false,
 				"validate": {
@@ -13310,7 +13314,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 341,
+	"_vid": 349,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13327,6 +13331,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-29T12:02:17.459Z",
+	"modified": "2020-06-30T02:50:46.999Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
