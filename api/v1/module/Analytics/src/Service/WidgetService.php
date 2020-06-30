@@ -391,13 +391,13 @@ class WidgetService extends AbstractService
                     $data = $this->evaluteExpression($data, $expression);
                 }
             }
-            if (isset($data[0]['calculated']) && count($data)==1) { 
+            if (isset($data[0]['calculated']) && count($data) == 1) {
                 //Send only the calculated value if left oprand not specified and aggregate values
-                $response['widget']['data'] = $data[0]['calculated'];    
+                $response['widget']['data'] = $data[0]['calculated'];
             } else {
                 $response['widget']['data'] = $data;
             }
-            
+
         }
         return $response;
     }
@@ -438,7 +438,6 @@ class WidgetService extends AbstractService
         $where .= empty($where) ? "WHERE ${widgetConditions}" : " AND ${widgetConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY w.' . $paginateOptions['sort']) : '';
         $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' OFFSET ' . $paginateOptions['offset'];
-
         $countQuery = "SELECT COUNT(id) as 'count' FROM ox_widget w ${where}";
         try {
             $resultSet = $this->executeQuerywithParams($countQuery);
@@ -449,7 +448,6 @@ class WidgetService extends AbstractService
             return 0;
         }
         $count = $resultSet->toArray()[0]['count'];
-
         if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
             $query = 'SELECT w.name, w.uuid, w.version,IF(w.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, w.ispublic, w.isdeleted, v.type, v.renderer FROM ox_widget w JOIN ox_visualization v ON w.visualization_id = v.id ' . $where . ' ' . $sort . ' ' . $limit;
         } else {
@@ -464,7 +462,6 @@ class WidgetService extends AbstractService
             return 0;
         }
         $result = $resultSet->toArray();
-
         return array('data' => $result,
             'total' => $count);
     }
@@ -483,7 +480,7 @@ class WidgetService extends AbstractService
             'uuid' => $widgetUuid,
         ];
         try {
-            $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
+            $this->logger->info("Executing query - $query with params - " . json_encode($queryParams));
             $resultGet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultGet) == 0) {
                 throw new Exception("Given wiget id ${widgetUuid} either does not exist OR user has no permission to read the widget.");

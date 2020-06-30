@@ -112,7 +112,7 @@
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
-                        {if $dspropownbuilding != "no"}
+                        {if $dspropownbuilding != "no" && $dspropownbuilding != ""}
                             <td>${$dspropreplacementvalue|number_format}</td>
                         {else}
                             <td>Not Included</td>
