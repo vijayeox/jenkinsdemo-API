@@ -3,10 +3,10 @@
 namespace Analytics\Controller;
 
 use Analytics\Model\Widget;
+use Exception;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
-use Exception;
 
 class WidgetController extends AbstractApiController
 {
@@ -147,7 +147,21 @@ class WidgetController extends AbstractApiController
     public function getList()
     {
         $params = $this->params()->fromQuery();
+        if (array_key_exists("filter", $params)) {
+            $filterParams = json_decode($params['filter'], true);
+            $filterArray = $filterParams[0]['filter']['filters'];
+            foreach ($filterArray as $key => $val) {
+                $filterVal = "w." . $val['field'];
+                $filterParams[0]['filter']['filters'][$key]['field'] = $filterVal;
+                $filterParams[0]['filter']['filters'][$key]['operator'] = $val['operator'];
+                $filterParams[0]['filter']['filters'][$key]['value'] = $val['value'];
+                $params['filter'] = json_encode($filterParams);
+            }
+        }
         $result = $this->widgetService->getWidgetList($params);
+        if ($result == 0) {
+            return $this->getErrorResponse("Widgets not found", 404, ['params' => $params]);
+        }
         return $this->getSuccessResponseWithData($result);
     }
 
@@ -176,8 +190,7 @@ class WidgetController extends AbstractApiController
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse('Validation Errors', 404, $response);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $response = ['data' => $data, 'message' => $e->getMessage()];
             return $this->getErrorResponse('Exception occured', 404, $response);
         }
