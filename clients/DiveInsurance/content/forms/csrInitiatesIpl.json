@@ -280,6 +280,14 @@
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "isRenewalFlow",
+						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
+						"key": "isRenewalFlow",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
 						"input": true,
 						"tableView": true,
 						"key": "policy_exists",
@@ -1305,7 +1313,7 @@
 						"value": "",
 						"label": ""
 					}],
-					"custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n\t        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}\nif(moment().year() == 2020 && moment().month() == 5 && moment().date() != 30){\nvalues.shift();\n}"
+					"custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n\t        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}\nif(moment().year() == 2020 && moment().month() == 5 && moment().date() <= 30){\nvalues.shift();\n}"
 				},
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
@@ -1327,7 +1335,7 @@
 			}, {
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
+				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif(today.format(\"YYYY-MM-DD\") <= '2020-07-13')\n{\n  value = startRange.format(\"YYYY-MM-DD\");\n}else{\n  value = moment.max(today,startRange).format(\"YYYY-MM-DD\");\n}",
 				"key": "start_date",
 				"properties": {
 					"data_type": " Date"
@@ -4744,7 +4752,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 479,
+	"_vid": 483,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4765,6 +4773,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-29T01:22:27.829Z",
+	"modified": "2020-06-30T11:48:02.745Z",
 	"machineName": "testdivehub:csrInitiates"
 }
