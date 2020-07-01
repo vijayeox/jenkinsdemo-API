@@ -9,7 +9,7 @@
 	<div class ="body_div_ai">
 <br/>
 
-		<b><p class ="grp_add">Additional Insured >Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
+		<b><p class ="grp_add">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 <br/>
 	    	{foreach $list as $additional}
 	    		<p class = "ai_list">
