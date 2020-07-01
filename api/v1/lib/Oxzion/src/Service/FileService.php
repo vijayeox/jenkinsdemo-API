@@ -114,7 +114,7 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
-            $this->logger->info("Check Fields Data ----- " . print_r($validFields,true));
+            $this->logger->debug("Check Fields Data ----- " . print_r($validFields,true));
             $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
             unset($validFields['validFields']['data']);
             unset($validFields['indexedFields']['data']);
@@ -368,7 +368,7 @@ class FileService extends AbstractService
      */
     protected function checkFields($entityId, &$fieldData, $fileId)
     {
-        $this->logger->info("Entering into checkFields method---EntityId : " . $entityId);
+        $this->logger->debug("Entering into checkFields method---EntityId : " . $entityId);
         $required = array();
         if (isset($entityId)) {
             $query = "SELECT ox_field.*,group_concat(childFieldsTable.name order by childFieldsTable.name separator ',') child_fields from ox_field
@@ -377,18 +377,18 @@ class FileService extends AbstractService
             where ox_app_entity.id=? and ox_field.parent_id is NULL group by ox_field.id;";
            
             $where = array($entityId);
-            $this->logger->info("Executing query - $query with  params" . json_encode($where));
+            $this->logger->debug("Executing query - $query with  params" . json_encode($where));
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
-            $this->logger->info("Query result got " . count($fields) . " fields");
+            $this->logger->debug("Query result got " . count($fields) . " fields");
         } else {
-            $this->logger->info("No Entity ID");
+            $this->logger->debug("No Entity ID");
             return 0;
         }
         $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=?";
         $whereParams = array($fileId);
-        $this->logger->info("Executing query - $sqlQuery with  params" . json_encode($whereParams));
+        $this->logger->debug("Executing query - $sqlQuery with  params" . json_encode($whereParams));
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery, $whereParams)->toArray();
-        $this->logger->info("Query result got " . count($fileArray) . " records");
+        $this->logger->debug("Query result got " . count($fileArray) . " records");
         $keyValueFields = array();
         $i = 0;
         $childFields = array();
@@ -414,6 +414,9 @@ class FileService extends AbstractService
                     $indexedField['date_modified'] = date('Y-m-d H:i:s'); 
                     $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
                     $indexedField = array_merge($indexedField,$this->generateFieldPayload($field['data_type'],$field,$indexedField,$fieldvalue,$entityId,$fileId,$fileArray));
+                    if ($indexedField['field_value_type'] == 'OTHER') {
+                       throw new ServiceException("Unsupported data type for indexing for field - ".$field['name']." with dataType -".$field['data_type'],"invalid.datatype");                       
+                    }
                     $indexedField['data'][$field['name']] = $indexedField[$field['name']]; 
 
                     if(isset($indexedField['data'])){
@@ -477,8 +480,8 @@ class FileService extends AbstractService
                 $i++;
             }
         }
-        $this->logger->info("Key Values - " . json_encode($keyValueFields));
-        $this->logger->info("Indexed Values - " . json_encode($indexedFields));
+        $this->logger->debug("Key Values - " . json_encode($keyValueFields));
+        $this->logger->debug("Indexed Values - " . json_encode($indexedFields));
         return array('validFields' => $keyValueFields,'indexedFields' => $indexedFields);
     }
 

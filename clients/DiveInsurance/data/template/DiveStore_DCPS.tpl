@@ -21,16 +21,16 @@
         <!-- First Section -->
         <div class="main">
             <div class="value_main">
-                <p>${$liabilityProRataPremium|number_format}</p>
+                <p>${$liabilityProRataPremium|number_format:2}</p>
                 <p>&nbsp;</p>
-                <p>${$propertyProRataPremium|number_format}</p>
+                <p>${$propertyProRataPremium|number_format:2}</p>
                 <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format:2}</p>
-                <p>${(float)$AddILocPremium|number_format}</p>
-                <p>${(float)$padiFee|number_format}</p>
+                <p>${(float)$AddILocPremium|number_format:2}</p>
+                <p>${(float)$padiFee|number_format:2}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${if isset($dsglestmonthretailreceipt) &&  $dsglestmonthretailreceipt}{(float)$dsglestmonthretailreceipt|number_format}{else}0{/if})</p>
+                <p>(Based on estimated annual receipts of ${if isset($dsglestmonthretailreceipt) &&  $dsglestmonthretailreceipt}{(float)$dsglestmonthretailreceipt|number_format:2}{else}0{/if})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
                 <p>Dive Center PADI Administration Fee:</p>
@@ -55,10 +55,10 @@
         <div class="main">
             <div class="value_main">
                 <p>
-                {if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format}{else}$0.00{/if}{else}$0.00{/if}</p>
+                {if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
                 <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
-                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format}{else}$0.00{/if}{else}$0.00{/if}</p>
+                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>

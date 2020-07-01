@@ -43,6 +43,7 @@ class RenewalRateCard extends RateCard
         $startYear = date("Y");
         $endYear = date("Y") + 1;
         
+        $data['form_data']['isRenewalFlow'] = true;
          if (AuthContext::isPrivileged('MANAGE_POLICY_APPROVAL_WRITE')) {
             $data['form_data']['initiatedByCsr'] = true;
         }else{
@@ -155,6 +156,7 @@ class RenewalRateCard extends RateCard
         // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
+        // print_r($filterParams);
         $policyList = $this->getFileList(null,$filterParams);
         if(count($policyList['data']) > 0){
             $policy_exists = true;
