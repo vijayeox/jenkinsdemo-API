@@ -10142,9 +10142,6 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "page7",
-		"properties": {
-			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]"
-		},
 		"type": "panel",
 		"label": "Group Professional Liability",
 		"components": [{
@@ -10185,7 +10182,8 @@
 			"input": true
 		}, {
 			"label": "groupCoverageSelect",
-			"calculateValue": "if(parseFloat(data['annualReceipt']).toFixed(0)> 0 && parseFloat(data['annualReceipt']).toFixed(0)<= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 25001 && parseFloat(data['annualReceipt']).toFixed(0)<= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 50001 && parseFloat(data['annualReceipt']).toFixed(0)<= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 100001 && parseFloat(data['annualReceipt']).toFixed(0)<= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 150001 && parseFloat(data['annualReceipt']).toFixed(0)<= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 200001 && parseFloat(data['annualReceipt']).toFixed(0) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 250001 && parseFloat(data['annualReceipt']).toFixed(0) <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 350001 && parseFloat(data['annualReceipt']).toFixed(0) <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n} else {\n  value = 0;\n}",
+			"redrawOn": "data",
+			"calculateValue": "var groupVal = parseFloat(data['annualEstimatedResponseRecieptsGL']).toFixed(0);\nif(groupVal > 0 && groupVal <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(groupVal >= 25001 && groupVal <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(groupVal >= 50001 && groupVal <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(groupVal >= 100001 && groupVal <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(groupVal >= 150001 && groupVal <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(groupVal >= 200001 && groupVal <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(groupVal >= 250001 && groupVal <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(groupVal >= 350001 && groupVal <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(groupVal >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
 			"key": "groupCoverageSelect",
 			"type": "hidden",
 			"input": true,
@@ -10231,8 +10229,7 @@
 									"type": "number",
 									"input": true,
 									"hideOnChildrenHidden": false,
-									"inputType": "number",
-									"defaultValue": 0
+									"inputType": "number"
 								}]
 							}, {
 								"components": [{
@@ -10241,10 +10238,10 @@
 									"mask": false,
 									"spellcheck": true,
 									"tableView": true,
-									"defaultValue": 0,
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
+									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
@@ -10325,8 +10322,9 @@
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if(data[data[\"groupCoverageSelect\"]]){\n  value = data[data[\"groupCoverageSelect\"]]\n} else {\n  value = 0;\n}",
+						"calculateValue": "if(data[data[\"groupCoverageSelect\"]]){\n  value = parseFloat(data[data[\"groupCoverageSelect\"]]).toFixed(0);\n} else {\n  value = 0;\n}",
 						"allowCalculateOverride": true,
 						"key": "groupCoverage",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
@@ -11557,6 +11555,9 @@
 							"clearOnHide": false,
 							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"allowCalculateOverride": true,
+							"validate": {
+								"max": 100
+							},
 							"key": "groupTaxPercentage",
 							"type": "number",
 							"decimalLimit": 2,
@@ -13376,7 +13377,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 418,
+	"_vid": 427,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13393,6 +13394,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-01T08:45:33.537Z",
+	"modified": "2020-07-01T09:39:02.255Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
