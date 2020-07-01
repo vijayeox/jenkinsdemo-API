@@ -48,7 +48,11 @@ html {
     height: 44px;
 }
 
-.osjs-panel-item[data-name=logout] > div > img{
+.osjs-panel-logout {
+  margin-right: 0;
+  vertical-align: middle;
+  height: 24px;
+  width: 24px;
   content: url('./src/images/logout.svg');
 }
 
