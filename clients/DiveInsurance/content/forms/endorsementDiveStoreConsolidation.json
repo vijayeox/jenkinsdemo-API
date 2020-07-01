@@ -9346,6 +9346,7 @@
 				}, {
 					"label": "Data Grid",
 					"reorder": false,
+					"addAnother": "Not a PADI Member?Click here to add external members",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -9363,9 +9364,14 @@
 						"documentattach": [],
 						"verified": "",
 						"rating": "",
-						"update_date": ""
+						"update_date": "",
+						"upgradeStatus": false,
+						"cancel": false,
+						"cancel_date": "",
+						"document1": []
 					}],
-					"calculateValue": "if(value && value.length > 1 && value[0]['padi'] == \"\"){\n  value.shift();\n}",
+					"clearOnHide": false,
+					"calculateValue": "if(value && value.length > 1){\n  var length = value.length - 1;\n  if(value[length]['padi'] == \"\"){\n    value.pop(); \n  }\n}",
 					"key": "groupPL",
 					"type": "datagrid",
 					"input": true,
@@ -13676,7 +13682,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 256,
+	"_vid": 260,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13693,6 +13699,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-01T03:43:17.980Z",
+	"modified": "2020-07-01T07:46:56.505Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

@@ -1413,10 +1413,10 @@
 						"tableView": false,
 						"enableMinDateInput": true,
 						"datePicker": {
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
-							"datepickerMode": "day",
-							"minDate": "(moment().format('YYYY-MM-DD') <= '2020-07-13') ? '2020-06-30':moment().format('YYYY-MM-DD')"
+							"datepickerMode": "day"
 						},
 						"enableMaxDateInput": false,
 						"enableTime": false,
@@ -1450,7 +1450,7 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": "(moment().format('YYYY-MM-DD') <= '2020-07-13') ? '2020-06-30':moment().format('YYYY-MM-DD')",
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"maxDate": null
@@ -10538,6 +10538,7 @@
 				}, {
 					"label": "Group Members",
 					"reorder": false,
+					"addAnother": "Not a PADI Member?Click here to add external members",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -10558,7 +10559,7 @@
 						"document1": []
 					}],
 					"clearOnHide": false,
-					"calculateValue": "if(value && value.length > 1 && value[0]['padi'] == \"\"){\n  value.shift();\n}",
+					"calculateValue": "if(value && value.length > 1){\n  var length = value.length - 1;\n  if(value[length]['padi'] == \"\"){\n    value.pop(); \n  }\n}",
 					"key": "groupPL",
 					"type": "datagrid",
 					"input": true,
@@ -10834,6 +10835,7 @@
 					"components": [{
 						"label": "Group Additional Insured",
 						"reorder": false,
+						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
@@ -13309,6 +13311,10 @@
 					"label": "On Hold",
 					"value": "onHold",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"clearOnHide": false,
 				"validate": {
@@ -13374,7 +13380,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 409,
+	"_vid": 416,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13391,6 +13397,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-01T04:29:08.420Z",
+	"modified": "2020-07-01T07:46:26.032Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

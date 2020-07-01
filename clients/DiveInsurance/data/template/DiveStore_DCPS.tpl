@@ -62,7 +62,7 @@
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
-                 <p>(Based on estimated annual group receipts of {if isset($groupReceipts)}${(float)$groupReceipts|number_format}{else}$0.00{/if})</p>
+                <p>(Based on estimated annual group receipts of {if isset($annualEstimatedResponseRecieptsGL)}${$annualEstimatedResponseRecieptsGL|number_format:2}{else}$0.00{/if})</p>
                 <p>Dive Center Group Instructional Program Surplus Lines Tax:</p>
                 <p>Dive Center Group Instructional Program PADI Administration Fee:</p>
             </div>

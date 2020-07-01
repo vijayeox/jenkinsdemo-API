@@ -19,7 +19,7 @@
           }
       }
     
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','business_padi','end_date','group_policy_id','address1','address2','state_in_short','padi','group_carrier'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','state_in_short','padi','group_carrier'];
        for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -56,7 +56,7 @@
           <center><div class="title1"><b>GROUP PROFESSIONAL CERTIFICATE OF INSURANCE</b></div></center>
          <div class="title2">
             <div class = "claims_title">
-               <p class ="claims"><b>NAMED INSUREDS</b></p>
+               <p class ="claims"><b>ADDITIONAL NAMED INSUREDS</b></p>
             </div>
             <div class = "page_value">
                <p class ="page_no">Page <span class="page"></span> of <span class="topage"></span></p>
@@ -73,17 +73,17 @@
           <div class = "caption1">
             <p class ="info_ni" id="nameVal"></p>
             <p class ="info_ni1" id="addressLineVal"></p>
-						<p class ="info" id = "addressLine2Val"></p>
+            <p class ="info" id = "addressLine2Val"></p>
             <p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
             <p class ="info" style="margin-bottom:2px;" id ="phone2Val"></p>
             <p class = "info">License#: <span class = "license_number"></span></p>
           </div>
           <b class = "caption2">Named Insured and Mailing Address:</b>
           <p class = "details"><span class ="business_name"></span></p>
-          <p class = "details"><span class ="address1"></span></p>
-          <p class = "details"><span class ="address2"></span></p>
-          <p class = "details"><span class ="city"></span>, <span class ="state_in_short"></span> <span class ="zip"></span></p>
-          <p class = "details"><span class ="country"></span></p>
+          <p class = "details"><span class ="business_address1"></span></p>
+          <p class = "details"><span class ="business_address2"></span></p>
+          <p class = "details"><span class ="business_city"></span>, <span class ="state_in_short"></span> <span class ="business_zip"></span></p>
+          <p class = "details"><span class ="business_country"></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -108,17 +108,6 @@
     </div>
     <hr class="grp_hr_value"></hr>
     <div class = "div_spacing">
-      <hr></hr>
-    <b><p>NAMED INSURED IS HEREBY AMENDED TO INCLUDE:</p></b>
-     <b> <div class = "named_div">
-      <div class = "named_div1"><p class ="t_title1">Member #</p></div>
-      <div class = "named_div2"><p class ="t_title1">Name<p></div>
-      <div class = "named_div3"><p class ="t_title1">Status<p></div>
-      <div class = "named_div4"><p class ="t_title1">Eff.Date<p></div>
-      <div class = "named_div5"><p class ="t_title1">Upg<p></div>
-      <div class = "named_div6"><p class ="t_title1">Upg Eff Date<p></div>
-      <div class = "named_div7"><p class ="t_title1">Cancel Date<p></div>
-    </div></b>
   </div>
     <hr></hr>
   </div>
