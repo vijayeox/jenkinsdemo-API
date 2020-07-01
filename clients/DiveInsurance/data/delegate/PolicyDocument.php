@@ -94,6 +94,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'gtemplate' => 'Group_PL_COI_DS',
                         'gheader' => 'Group_header_DS.html',
                         'gfooter' => 'Group_footer.html',
+                        'ganiTemplate' => 'Group_ANI',
+                        'ganiheader' => 'Group_DS_ANI_header.html',
+                        'ganifooter' => 'Group_ANI_footer.html',
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
                         'alTemplate' => 'DiveStore_AdditionalLocations',
@@ -1139,22 +1142,29 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
                     array_push($documents['endorsement_group_coi_document'], $endorsementDoc);
 
-                    if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
-                        $documents['endorsement_group_ni_document'] = isset($documents['endorsement_group_ni_document']) ? $documents['endorsement_group_ni_document'] : array();
+                    $documents['endorsement_group_ni_document'] = isset($documents['endorsement_group_ni_document']) ? $documents['endorsement_group_ni_document'] : array();
+                    $endorsementNIDoc = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+                    array_push($documents['endorsement_group_ni_document'], $endorsementNIDoc);
+
+                    if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
+                        $documents['endorsement_group_ani_document'] = isset($documents['endorsement_group_ani_document']) ? $documents['endorsement_group_ani_document'] : array();
                         $this->logger->info("DOCUMENT namedInsured");
-                        $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
-                        array_push($documents['endorsement_group_ni_document'], $endorsementDoc);
+                        $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
+                        array_push($documents['endorsement_group_ani_document'], $endorsementDoc);
                     }
                     $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
                 }
             }else{
                 $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
 
-                if(isset($temp['namedInsureds']) && $temp['named_insureds'] == 'yes'){
-                $this->logger->info("DOCUMENT namedInsured");
-                $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
-                $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
+                $documents['group_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+
+                if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
+                    $this->logger->info("DOCUMENT Group Additional Named Insured");
+                    $documents['group_additional_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
                 }
+
+                $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
             }
         }
     }
