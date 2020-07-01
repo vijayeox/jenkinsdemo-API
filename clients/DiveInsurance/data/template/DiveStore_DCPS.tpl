@@ -30,7 +30,7 @@
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${if isset($estimatedAnnualReceipts) &&  $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format}{else}0{/if})</p>
+                <p>(Based on estimated annual receipts of ${if isset($dsglestmonthretailreceipt) &&  $dsglestmonthretailreceipt}{(float)$dsglestmonthretailreceipt|number_format}{else}0{/if})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
                 <p>Dive Center PADI Administration Fee:</p>
@@ -54,14 +54,15 @@
         <!-- second section -->
         <div class="main">
             <div class="value_main">
-                <p>{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format}{else}$0.00{/if}</p>
+                <p>
+                {if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format}{else}$0.00{/if}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2}{else}$0.00{/if}</p>
-                <p>{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format}{else}$0.00{/if}</p>
+                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
+                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupPadiFeeAmount)}${(float)$groupPadiFeeAmount|number_format}{else}$0.00{/if}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
-                 <p>(Based on estimated annual group receipts of {if isset($groupReceipts)}${(float)$groupReceipts|number_format}}.{else}$0.00{/if})</p>
+                 <p>(Based on estimated annual group receipts of {if isset($groupReceipts)}${(float)$groupReceipts|number_format}{else}$0.00{/if})</p>
                 <p>Dive Center Group Instructional Program Surplus Lines Tax:</p>
                 <p>Dive Center Group Instructional Program PADI Administration Fee:</p>
             </div>
@@ -81,7 +82,7 @@
         <p class="hrtag" style="margin-top: 2px;"></p>
         <div class="total_main">
             <div class="value_main">
-                 <p>${$totalAmount|number_format}</p>
+                 <p>${$totalAmount|number_format:2}</p>
             </div>
             <div class="sub_main">
                  <p>Amount due in full:</p>

@@ -9,9 +9,11 @@
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
 			<p class="name1">{$business_name}</p>
-			<p class="name1">{if isset($dba)}
+			<p class="name1">{if isset($dba) && $dba !=""}
 								DBA : {$dba} 
-							{/if}#{$padi}</p>
+							{/if}</p>
+					<p class = "name1">{$address1},{$address2}</p>
+					<p class = "name1">{$city}, {$state_in_short} {$zip}</p>
 		</div>
 
 		<p>Dear <span class ="rgaard1">{$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}</span></p>
@@ -55,7 +57,7 @@
 </div>
 		<p>Sincerely,</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
-		<p class ="footer_line">{$approverName},CISR, {$approverDesignation}</p>
+		<p class ="footer_line">{$approverName}, {$approverDesignation}</p>
 		<p class ="footer_line">(800) 223-9998 or (714) 739-3176</p>
 		<p class ="footer_line">{$approverEmailId}</p>
 	</div>

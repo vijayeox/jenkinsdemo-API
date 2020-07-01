@@ -192,7 +192,10 @@
                     </tr>
                     <tr>
                         <td>Medical Expense:</td>
-                        <td>$5,000</td>
+                        {if isset($medicalPayment) && ($medicalPayment == "true"||$medicalPayment == true)}
+                            <td>$5000</td>
+                        {else}
+                            <td>Excluded</td>{/if}
                     </tr>
                     <tr>
                         <td>NON-Owned Auto:</td>
@@ -222,20 +225,37 @@
                             <td>Not Included</td>
                         {/if}
                     </tr>
+                    
                     <tr>
                         <td>Group Professional Liability:</td>
-                        {if isset($groupProfessionalLiability) && (int)$groupProfessionalLiability > 0}
+                        {if $groupProfessionalLiability && $groupExcessLiabilitySelect == "no"}
                             <td>$1,000,000</td>
-                        {else}
-                            <td>Not Included</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability1M"}
+                            <td>$2,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability2M"}
+                            <td>$3,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability3M"}
+                            <td>$4,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability4M"}
+                            <td>$5,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability9M"}
+                            <td>$10,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Group Professional Liability Aggregate:</td>
-                        {if isset($groupProfessionalLiability) && (int)$groupProfessionalLiability > 0}
+                        {if $groupProfessionalLiability && $groupExcessLiabilitySelect == "no"}
                             <td>$2,000,000</td>
-                        {else}
-                            <td>Not Included</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability1M"}
+                            <td>$3,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability2M"}
+                            <td>$4,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability3M"}
+                            <td>$5,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability4M"}
+                            <td>$6,000,000</td>
+                        {elseif $groupExcessLiabilitySelect == "groupExcessLiability9M"}
+                            <td>$11,000,000</td>
                         {/if}
                     </tr>
                 </tbody>
@@ -600,7 +620,11 @@
 
         <!-- Second Page -->
     </div>
-
+        {if isset(excludedOperation) && $excludedOperation != ""}
+            <center>
+            <p class ="exop notice" style="margin-top:1px;color:red;""><b>{$excludedOperation}</b></p>
+            </center>
+        {/if}
 </body>
 
 </html>
