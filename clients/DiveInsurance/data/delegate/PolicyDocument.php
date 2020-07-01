@@ -1217,9 +1217,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
             }
 
-
-            if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
-                $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+            if(isset($temp['propertyCoverageSelect']) && $temp['propertyCoverageSelect'] == 'yes'){
+                if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
+                    $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+                }
             }
 
 
@@ -1252,6 +1253,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
+                if(isset($this->template[$temp['product']]['blanketForm'])){
+                    $this->logger->info("DOCUMENT blanketForm");
+                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                }
             }
 
             $data['previewDocuments'] = $documents;

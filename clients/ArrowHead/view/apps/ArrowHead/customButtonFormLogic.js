@@ -8,7 +8,7 @@ s.onload = function (e) {
   var appendCustomButtonTimer = setInterval(() => {
     if (
       document.getElementById(
-        "formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7"
+        "formio_loader_e980dac2-2ef7-467a-8e0d-863078c458e0"
       )
     ) {
       if (!document.getElementById("saveDraftCustomButton")) {
@@ -29,7 +29,7 @@ s.onload = function (e) {
           });
           document
             .getElementById(
-              "formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7"
+              "formio_loader_e980dac2-2ef7-467a-8e0d-863078c458e0"
             )
             .dispatchEvent(ev);
         };

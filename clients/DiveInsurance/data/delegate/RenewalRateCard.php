@@ -25,6 +25,18 @@ class RenewalRateCard extends RateCard
         if(isset($data['data'])){
             if(is_string($data['data'])){
                 $data['form_data'] = json_decode($data['data'],true);
+                foreach ($data['form_data'] as $key => $value) {
+                    if(is_string($data['form_data'][$key])){
+                        try {
+                            $data['form_data'][$key]  = json_decode($value, true);
+                            if (is_null($data['form_data'][$key])) {
+                                $data['form_data'][$key]  = $value;
+                            }
+                            } catch (Exception $e) { 
+                              $data['form_data'][$key]  = $value;
+                            }
+                    }
+                }
             }
         }
         //Set Date PERIOD
@@ -139,8 +151,8 @@ class RenewalRateCard extends RateCard
             $data['form_data']['careerCoverageOptions'] = $coverageOptions;
         }
         $filterParams = array();
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
+        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['end_date']);
+        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
         $policyList = $this->getFileList(null,$filterParams);

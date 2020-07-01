@@ -9380,13 +9380,30 @@
 							"columns": [{
 								"components": [{
 									"label": "Membership Number",
+									"disabled": true,
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
 									"key": "padi",
+									"logic": [{
+										"name": "enable",
+										"trigger": {
+											"type": "javascript",
+											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
+										},
+										"actions": [{
+											"name": "enable",
+											"type": "property",
+											"property": {
+												"label": "Disabled",
+												"value": "disabled",
+												"type": "boolean"
+											},
+											"state": false
+										}]
+									}],
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -9400,13 +9417,30 @@
 							}, {
 								"components": [{
 									"label": "First Name",
+									"disabled": true,
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
 									"key": "firstname",
+									"logic": [{
+										"name": "enable",
+										"trigger": {
+											"type": "javascript",
+											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
+										},
+										"actions": [{
+											"name": "enable",
+											"type": "property",
+											"property": {
+												"label": "Disabled",
+												"value": "disabled",
+												"type": "boolean"
+											},
+											"state": false
+										}]
+									}],
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -9420,13 +9454,30 @@
 							}, {
 								"components": [{
 									"label": "Last Name",
+									"disabled": true,
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
 									"key": "lastname",
+									"logic": [{
+										"name": "enable",
+										"trigger": {
+											"type": "javascript",
+											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
+										},
+										"actions": [{
+											"name": "enable",
+											"type": "property",
+											"property": {
+												"label": "Disabled",
+												"value": "disabled",
+												"type": "boolean"
+											},
+											"state": false
+										}]
+									}],
 									"type": "textfield",
 									"input": true,
 									"hideOnChildrenHidden": false
@@ -9448,6 +9499,7 @@
 								"components": [{
 									"label": "Certificate Level",
 									"widget": "choicesjs",
+									"disabled": true,
 									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
@@ -9459,11 +9511,30 @@
 									},
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
+									"clearOnHide": false,
+									"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true
 									},
 									"key": "status",
+									"logic": [{
+										"name": "Enable",
+										"trigger": {
+											"type": "javascript",
+											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
+										},
+										"actions": [{
+											"name": "Enable",
+											"type": "property",
+											"property": {
+												"label": "Disabled",
+												"value": "disabled",
+												"type": "boolean"
+											},
+											"state": false
+										}]
+									}],
 									"type": "select",
 									"indexeddb": {
 										"filter": {}
@@ -9479,13 +9550,30 @@
 							}, {
 								"components": [{
 									"label": "Name of Training Agency",
+									"disabled": true,
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
 									"key": "nameOfInstitution",
+									"logic": [{
+										"name": "enable",
+										"trigger": {
+											"type": "javascript",
+											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
+										},
+										"actions": [{
+											"name": "enable",
+											"type": "property",
+											"property": {
+												"label": "Disabled",
+												"value": "disabled",
+												"type": "boolean"
+											},
+											"state": false
+										}]
+									}],
 									"type": "textfield",
 									"input": true,
 									"hideOnChildrenHidden": false
@@ -9511,16 +9599,8 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "start_date",
-							"calculateValue": "if(!row.start_date && row.start_date == \"\"){\n  value = data.update_date;\n}",
+							"calculateValue": "if((!row.start_date || row.start_date == \"\") && row.padi != \"\"){\n  value = data.update_date;\n}",
 							"key": "start_date",
-							"type": "hidden",
-							"input": true,
-							"tableView": false,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "update_date",
-							"calculateValue": "value = data.update_date;",
-							"key": "update_date",
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
@@ -9537,6 +9617,139 @@
 							"type": "hidden",
 							"input": true,
 							"tableView": false
+						}, {
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Upgrade ",
+									"tableView": false,
+									"defaultValue": false,
+									"clearOnHide": false,
+									"customDefaultValue": "value = false;",
+									"key": "upgradeStatus",
+									"type": "checkbox",
+									"input": true,
+									"hideOnChildrenHidden": false,
+									"dataGridLabel": false
+								}, {
+									"label": "Upgrade Date",
+									"format": "MM-dd-yyyy",
+									"tableView": false,
+									"enableMinDateInput": false,
+									"datePicker": {
+										"minDate": "2020-04-14T18:30:00.000Z",
+										"disableWeekends": false,
+										"disableWeekdays": false,
+										"datepickerMode": "day"
+									},
+									"enableMaxDateInput": false,
+									"enableTime": false,
+									"timePicker": {
+										"showMeridian": false
+									},
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "update_date",
+									"customConditional": "if(row.upgradeStatus == true || row.upgradeStatus == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
+									"type": "datetime",
+									"input": true,
+									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+									"widget": {
+										"type": "calendar",
+										"displayInTimezone": "viewer",
+										"language": "en",
+										"useLocaleSettings": false,
+										"allowInput": true,
+										"mode": "single",
+										"enableTime": false,
+										"noCalendar": false,
+										"format": "MM-dd-yyyy",
+										"hourIncrement": 1,
+										"minuteIncrement": 1,
+										"time_24hr": true,
+										"minDate": "2020-04-14T18:30:00.000Z",
+										"disableWeekends": false,
+										"disableWeekdays": false,
+										"maxDate": null
+									},
+									"hideOnChildrenHidden": false
+								}],
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Cancel ",
+									"tableView": false,
+									"defaultValue": false,
+									"clearOnHide": false,
+									"customDefaultValue": "value = false;",
+									"key": "cancel",
+									"type": "checkbox",
+									"input": true,
+									"hideOnChildrenHidden": false,
+									"dataGridLabel": false
+								}, {
+									"label": "Cancel Date",
+									"format": "MM-dd-yyyy",
+									"tableView": false,
+									"enableMinDateInput": false,
+									"datePicker": {
+										"minDate": "2020-04-14T18:30:00.000Z",
+										"disableWeekends": false,
+										"disableWeekdays": false,
+										"datepickerMode": "day"
+									},
+									"enableMaxDateInput": false,
+									"enableTime": false,
+									"timePicker": {
+										"showMeridian": false
+									},
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "cancel_date",
+									"customConditional": "if(row.cancel == true || row.cancel == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
+									"type": "datetime",
+									"input": true,
+									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
+									"widget": {
+										"type": "calendar",
+										"displayInTimezone": "viewer",
+										"language": "en",
+										"useLocaleSettings": false,
+										"allowInput": true,
+										"mode": "single",
+										"enableTime": false,
+										"noCalendar": false,
+										"format": "MM-dd-yyyy",
+										"hourIncrement": 1,
+										"minuteIncrement": 1,
+										"time_24hr": true,
+										"minDate": "2020-04-14T18:30:00.000Z",
+										"disableWeekends": false,
+										"disableWeekdays": false,
+										"maxDate": null
+									},
+									"hideOnChildrenHidden": false
+								}],
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}],
+							"tableView": false,
+							"key": "columns9",
+							"customConditional": "if(moment(row.start_date) < moment(data.update_date)){\n  show = true;\n}else{\n  show = false;\n}",
+							"type": "columns",
+							"input": false,
+							"hideLabel": true
 						}, {
 							"label": "Document",
 							"hideLabel": true,
@@ -9648,7 +9861,6 @@
 					"components": [{
 						"label": "Group Additional Insured",
 						"reorder": false,
-						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
@@ -9657,113 +9869,44 @@
 						"tableView": false,
 						"defaultValue": [{
 							"name": "",
-							"country": "",
 							"address": "",
 							"city": "",
+							"country": "",
 							"state": {},
 							"zip": "",
-							"city1": "",
-							"state1": {},
-							"zip1": "",
 							"businessRelation": "",
-							"additionalInformation1": "",
 							"businessRelationOther": "",
-							"additionalInformation": ""
+							"additionalInformation": "",
+							"doYouHaveAWrittenContract": "",
+							"additionalInsuredAttachments": []
 						}],
-						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"minLength": 1
 						},
 						"key": "groupAdditionalInsured",
 						"type": "datagrid",
 						"input": true,
 						"components": [{
-							"label": "well",
-							"tableView": false,
-							"key": "well1",
-							"type": "well",
+							"clearOnHide": false,
+							"key": "page4PanelPanelWell",
 							"input": false,
 							"components": [{
 								"label": "Columns",
+								"input": false,
+								"tableView": false,
+								"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
 								"columns": [{
 									"components": [{
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter the Name of the Additional Insured"
+										},
+										"errorLabel": "Additional Insured Name",
 										"key": "name",
 										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "City",
-										"tableView": true,
-										"clearOnHide": false,
-										"key": "city",
-										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 4,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [{
-										"label": "Country",
-										"widget": "choicesjs",
-										"tableView": true,
-										"dataSrc": "custom",
-										"data": {
-											"values": [{
-												"value": "",
-												"label": ""
-											}],
-											"custom": "values = data['countryList'];"
-										},
-										"valueProperty": "country",
-										"dataType": "string",
-										"template": "<span>{{ item.country }}</span>",
-										"selectThreshold": 0.3,
-										"clearOnHide": false,
-										"key": "country",
-										"properties": {
-											"clear_field": "state"
-										},
-										"type": "select",
-										"indexeddb": {
-											"filter": {}
-										},
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "State",
-										"widget": "choicesjs",
-										"tableView": true,
-										"dataSrc": "custom",
-										"data": {
-											"values": [{
-												"value": "",
-												"label": ""
-											}],
-											"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
-										},
-										"template": "<span>{{ item }}</span>",
-										"refreshOn": "country",
-										"clearOnRefresh": true,
-										"selectThreshold": 0.3,
-										"clearOnHide": false,
-										"validate": {
-											"customMessage": "State is required"
-										},
-										"key": "state",
-										"type": "select",
-										"indexeddb": {
-											"filter": {}
-										},
 										"input": true,
 										"lockKey": true,
 										"hideOnChildrenHidden": false
@@ -9778,19 +9921,11 @@
 										"label": "Address",
 										"tableView": true,
 										"clearOnHide": false,
-										"key": "address",
-										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "Zip Code",
-										"tableView": true,
-										"clearOnHide": false,
 										"validate": {
-											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+											"customMessage": "Please enter the Address of the Additional Insured"
 										},
-										"key": "zip",
+										"errorLabel": "Additional Insured Address",
+										"key": "address",
 										"type": "textfield",
 										"input": true,
 										"hideOnChildrenHidden": false
@@ -9802,32 +9937,176 @@
 									"size": "md"
 								}, {
 									"components": [{
-										"label": "Business Relation",
+										"label": "City",
+										"tableView": true,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter the City of the Additional Insured"
+										},
+										"errorLabel": "Additional Insured City",
+										"key": "city",
+										"type": "textfield",
+										"input": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}],
+								"type": "columns",
+								"inDataGrid": true,
+								"hideLabel": true
+							}, {
+								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "Country",
 										"widget": "choicesjs",
 										"tableView": true,
+										"dataSrc": "custom",
 										"data": {
 											"values": [{
-												"value": "diveStoreOwner",
-												"label": "Dive Store Owner"
+												"value": "",
+												"label": ""
+											}],
+											"custom": "values = data['countryList'];"
+										},
+										"valueProperty": "country",
+										"template": "<span>{{ item.country }}</span>",
+										"selectThreshold": 0.3,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please select the Country of the Additional Insured"
+										},
+										"errorLabel": "Additional Insured Country",
+										"key": "country",
+										"properties": {
+											"clear_field": "state"
+										},
+										"type": "select",
+										"indexeddb": {
+											"filter": {}
+										},
+										"input": true,
+										"lockKey": true,
+										"source": "5d347da33e9be31e15d3b115",
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "State",
+										"widget": "choicesjs",
+										"tableView": true,
+										"dataSrc": "custom",
+										"data": {
+											"values": [{
+												"label": "",
+												"value": ""
+											}],
+											"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
+										},
+										"template": "<span>{{ item }}</span>",
+										"refreshOn": "row.country",
+										"clearOnRefresh": true,
+										"selectThreshold": 0.3,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please select the State of the Additional Insured"
+										},
+										"errorLabel": "Additional Insured State",
+										"key": "state",
+										"customConditional": "show = (row.country)",
+										"type": "select",
+										"indexeddb": {
+											"filter": {}
+										},
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Zip Code",
+										"spellcheck": false,
+										"tableView": true,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter the Zip Code of the Additional Insured",
+											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+										},
+										"errorLabel": "Additional Insured Zip Code",
+										"key": "zip",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}],
+								"hideLabel": true,
+								"tableView": false,
+								"key": "additionalInsuredPanelColumns2",
+								"type": "columns",
+								"input": false
+							}, {
+								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "Business Relation",
+										"widget": "choicesjs",
+										"tableView": false,
+										"data": {
+											"values": [{
+												"value": "confinedWaterTrainingLocation",
+												"label": "Confined Water Training Location"
 											}, {
-												"value": "diveBoatOwner",
-												"label": "Dive Boat Owner"
+												"value": "openWaterTrainingLocation",
+												"label": " Open Water Training Location"
 											}, {
-												"value": "hotelResortOwner",
-												"label": "Hotel/Resort Owner"
+												"label": "Dive Boat Owner",
+												"value": "diveBoatOwner"
 											}, {
-												"value": "poolQuarryLakeOwner",
-												"label": "Pool/Quarry/Lake Owner"
+												"label": "Mortgagee / Loss Payee",
+												"value": "mortgageeLossPayee"
 											}, {
-												"value": "governmentEntity",
-												"label": "Government Entity"
+												"label": "Landlord",
+												"value": "landlord"
+											}, {
+												"label": " Government Entity – Permit Requirement",
+												"value": "governmentEntityPermitRequirement"
+											}, {
+												"label": "Dive Store",
+												"value": "diveStore"
+											}, {
+												"label": "Training Agency",
+												"value": "trainingAgency"
 											}, {
 												"value": "other",
 												"label": "Other"
 											}]
 										},
 										"selectThreshold": 0.3,
-										"clearOnHide": false,
+										"validate": {
+											"required": true,
+											"customMessage": "Please select the Business Relation with the Additional Insured"
+										},
+										"errorLabel": "Additional Insured Business Relation",
 										"key": "businessRelation",
 										"type": "select",
 										"indexeddb": {
@@ -9837,9 +10116,13 @@
 										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
-										"label": "Please Mention",
+										"label": "Provide description to be reviewed by underwriting",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please specify the Business Relation"
+										},
+										"errorLabel": "Additonal Insured Business Relation Details",
 										"key": "businessRelationOther",
 										"conditional": {
 											"show": true,
@@ -9848,42 +10131,104 @@
 										},
 										"type": "textfield",
 										"input": true,
+										"style": {
+											"margin-top": "4px"
+										},
+										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}],
-									"size": "md",
-									"width": 4,
+									"width": 6,
 									"offset": 0,
 									"push": 0,
-									"pull": 0
+									"pull": 0,
+									"size": "md"
 								}, {
 									"components": [{
 										"label": "Additional Information",
 										"autoExpand": false,
 										"tableView": true,
+										"inputFormat": "plain",
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter Additional Information about the Additional Insured"
+										},
+										"errorLabel": "Additional Insured Additional Information",
 										"key": "additionalInformation",
 										"type": "textarea",
 										"input": true,
 										"hideOnChildrenHidden": false
 									}],
-									"size": "md",
-									"width": 8,
+									"width": 6,
 									"offset": 0,
 									"push": 0,
-									"pull": 0
+									"pull": 0,
+									"size": "md"
 								}],
-								"hideLabel": true,
-								"dataGridLabel": false,
 								"tableView": false,
-								"key": "groupAdditionalInsuredsColumns",
+								"key": "columns2",
 								"type": "columns",
+								"input": false
+							}, {
+								"label": "Do you have a Written Contract?",
+								"optionsLabelPosition": "right",
+								"inline": false,
+								"tableView": false,
+								"values": [{
+									"label": "Yes",
+									"value": "yes",
+									"shortcut": ""
+								}, {
+									"label": "No",
+									"value": "no",
+									"shortcut": ""
+								}],
+								"key": "doYouHaveAWrittenContract",
+								"type": "radio",
+								"input": true,
+								"validate": {
+									"required": true
+								}
+							}, {
+								"label": "Content",
+								"attrs": [{
+									"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
+									"attr": "style"
+								}],
+								"content": "Additional Insureds can only be added when required by written contract",
+								"refreshOnChange": false,
+								"tableView": false,
+								"key": "panelColumnsContent5",
+								"customConditional": "show = (row['doYouHaveAWrittenContract']=='no')?true:false",
+								"type": "htmlelement",
 								"input": false,
-								"inDataGrid": true
+								"hideLabel": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Additional Insured Attachments",
+								"tableView": false,
+								"storage": "url",
+								"webcam": false,
+								"fileTypes": [{
+									"label": "",
+									"value": ""
+								}],
+								"multiple": true,
+								"clearOnHide": false,
+								"validate": {
+									"multiple": true
+								},
+								"key": "additionalInsuredAttachments",
+								"type": "file",
+								"url": "/file/attachment",
+								"input": true
 							}],
+							"tableView": false,
+							"type": "well",
 							"inDataGrid": true,
-							"clearOnHide": false,
-							"hideLabel": true
+							"hideLabel": true,
+							"label": ""
 						}],
-						"path": "groupAdditionalInsured"
+						"lockKey": true
 					}],
 					"lockKey": true,
 					"path": "additional_insureds"
@@ -9948,82 +10293,12 @@
 						"eq": "yes"
 					},
 					"type": "panel",
-					"label": "Named Insureds",
+					"label": "Information for each Named Insureds is required as follows",
 					"input": false,
 					"components": [{
-						"label": "PADI Number?",
-						"description": "Enter the PADI Membership to Validate",
-						"tableView": true,
-						"clearOnHide": false,
-						"validate": {
-							"pattern": "[0-9\\s-]*$"
-						},
-						"key": "namedPadi",
-						"type": "textfield",
-						"input": true
-					}, {
-						"label": "Validate and Add Named Insureds",
-						"action": "event",
-						"showValidations": false,
-						"theme": "success",
-						"tableView": false,
-						"key": "validatePadiNI",
-						"properties": {
-							"delegate": "NamedInsuredPadiVerification",
-							"sourceDataKey": "namedPadi",
-							"destinationDataKey": "namedInsureds",
-							"valueKey": "padi",
-							"validationKey": "namedInsuredPadiVerified",
-							"cleanSource": "true"
-						},
-						"type": "button",
-						"event": "callDelegate",
-						"input": true
-					}, {
-						"label": "Columns",
-						"columns": [{
-							"components": [{
-								"label": "HTML",
-								"attrs": [{
-									"attr": "style",
-									"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
-								}],
-								"content": "PADI Membership not found",
-								"refreshOnChange": false,
-								"tableView": false,
-								"key": "html3",
-								"customConditional": "if(data.namedInsuredPadiVerified == 'false' || data.namedInsuredPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.namedInsuredPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
-								"type": "htmlelement",
-								"input": false,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "namedInsuredPadiVerified",
-								"key": "namedInsuredPadiVerified",
-								"type": "hidden",
-								"input": true,
-								"tableView": false,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"tableView": false,
-						"key": "columns15",
-						"type": "columns",
-						"input": false
-					}, {
-						"label": "Data Grid",
+						"label": "Additional Named Insured",
 						"reorder": false,
+						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
@@ -10031,157 +10306,88 @@
 						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": [{
-							"padi": "",
-							"firstname": "",
-							"lastname": "",
-							"status": "",
-							"nameOfInstitution": "",
-							"start_date": "",
-							"verified": "",
-							"rating": "",
-							"upgradeStatus": false,
-							"update_date": "",
-							"cancel": false,
-							"cancel_date": ""
+							"name": "",
+							"country": "",
+							"address": "",
+							"state": {},
+							"city": "",
+							"zip": ""
 						}],
-						"clearOnHide": false,
-						"calculateValue": "if(value && value.length > 1 && value[0]['padi'] == \"\"){\n  value.shift();\n}",
-						"key": "namedInsureds",
+						"validate": {
+							"customMessage": "Please add an Additional Insured",
+							"minLength": 1
+						},
+						"key": "groupAdditionalNamedInsured",
 						"type": "datagrid",
 						"input": true,
 						"components": [{
-							"label": "fdhfgh",
+							"label": "well",
 							"tableView": false,
-							"key": "fdhfgh",
+							"key": "well1",
 							"type": "well",
 							"input": false,
 							"components": [{
 								"label": "Columns",
 								"columns": [{
 									"components": [{
-										"label": "Membership Number",
-										"disabled": true,
+										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "padi",
-										"logic": [{
-											"name": "enable",
-											"trigger": {
-												"type": "javascript",
-												"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
-											},
-											"actions": [{
-												"name": "enable",
-												"type": "property",
-												"property": {
-													"label": "Disabled",
-													"value": "disabled",
-													"type": "boolean"
-												},
-												"state": false
-											}]
-										}],
+										"key": "name",
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
 										"hideOnChildrenHidden": false
-									}],
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md",
-									"width": 4
-								}, {
-									"components": [{
-										"label": "First Name",
-										"disabled": true,
-										"tableView": true,
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "firstname",
-										"logic": [{
-											"name": "enable",
-											"trigger": {
-												"type": "javascript",
-												"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
-											},
-											"actions": [{
-												"name": "enable",
-												"type": "property",
-												"property": {
-													"label": "Disabled",
-													"value": "disabled",
-													"type": "boolean"
-												},
-												"state": false
-											}]
-										}],
-										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md",
-									"width": 4
-								}, {
-									"components": [{
-										"label": "Last Name",
-										"disabled": true,
-										"tableView": true,
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "lastname",
-										"logic": [{
-											"name": "enable",
-											"trigger": {
-												"type": "javascript",
-												"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
-											},
-											"actions": [{
-												"name": "enable",
-												"type": "property",
-												"property": {
-													"label": "Disabled",
-													"value": "disabled",
-													"type": "boolean"
-												},
-												"state": false
-											}]
-										}],
-										"type": "textfield",
-										"input": true,
-										"hideOnChildrenHidden": false
-									}],
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md",
-									"width": 4
-								}],
-								"hideLabel": true,
-								"dataGridLabel": false,
-								"tableView": false,
-								"key": "additionalNamedInsuredsColumns",
-								"type": "columns",
-								"input": false,
-								"inDataGrid": true
-							}, {
-								"label": "Columns",
-								"columns": [{
-									"components": [{
-										"label": "Certificate Level",
+									}, {
+										"label": "Country",
 										"widget": "choicesjs",
-										"disabled": true,
+										"tableView": true,
+										"dataSrc": "custom",
+										"data": {
+											"values": [{
+												"value": "",
+												"label": ""
+											}],
+											"custom": "values = data['countryList'];"
+										},
+										"valueProperty": "country",
+										"template": "<span>{{ item.country }}</span>",
+										"selectThreshold": 0.3,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter your country."
+										},
+										"key": "country",
+										"properties": {
+											"clear_field": "state"
+										},
+										"type": "select",
+										"indexeddb": {
+											"filter": {}
+										},
+										"input": true,
+										"lockKey": true,
+										"source": "5d347da33e9be31e15d3b115",
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Address",
+										"tableView": true,
+										"clearOnHide": false,
+										"key": "address",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}, {
+										"label": "State",
+										"widget": "choicesjs",
 										"tableView": true,
 										"dataSrc": "custom",
 										"data": {
@@ -10189,261 +10395,69 @@
 												"label": "",
 												"value": ""
 											}],
-											"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  var ratingValues = padiRating.split(\",\");\n  var certificateValues = [];\n  ratingValues.forEach(function(item, index) {\n    for(var j=0;j<certificateLevel[item].length;j++){\n      certificateValues.push(certificateLevel[item][j])\n    }\n  });\n  \tvalues = certificateValues;\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+											"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
 										},
-										"valueProperty": "value",
+										"template": "<span>{{ item }}</span>",
+										"refreshOn": "row.country",
+										"clearOnRefresh": true,
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
-										"calculateValue": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  \tvalue = certificateLevel[padiRating][0].value;\n}else{\n  \tvalue = certificateLevel['ratingList'][0].value;\n}",
-										"allowCalculateOverride": true,
-										"validate": {
-											"required": true
-										},
-										"key": "status",
-										"logic": [{
-											"name": "Enable",
-											"trigger": {
-												"type": "javascript",
-												"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
-											},
-											"actions": [{
-												"name": "Enable",
-												"type": "property",
-												"property": {
-													"label": "Disabled",
-													"value": "disabled",
-													"type": "boolean"
-												},
-												"state": false
-											}]
-										}],
+										"key": "state",
 										"type": "select",
 										"indexeddb": {
 											"filter": {}
 										},
 										"input": true,
+										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}],
+									"width": 4,
 									"offset": 0,
 									"push": 0,
 									"pull": 0,
-									"size": "md",
-									"width": 8
+									"size": "md"
 								}, {
 									"components": [{
-										"label": "Name of Training Agency",
-										"disabled": true,
+										"label": "City",
+										"tableView": true,
+										"clearOnHide": false,
+										"key": "city",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}, {
+										"label": "Zip",
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
-										"key": "nameOfInstitution",
-										"logic": [{
-											"name": "enable",
-											"trigger": {
-												"type": "javascript",
-												"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
-											},
-											"actions": [{
-												"name": "enable",
-												"type": "property",
-												"property": {
-													"label": "Disabled",
-													"value": "disabled",
-													"type": "boolean"
-												},
-												"state": false
-											}]
-										}],
+										"key": "zip",
 										"type": "textfield",
 										"input": true,
+										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}],
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md",
-									"width": 4
-								}],
-								"hideLabel": true,
-								"tableView": false,
-								"key": "columns",
-								"type": "columns",
-								"input": false
-							}, {
-								"label": "start_date",
-								"placeholder": "start_date",
-								"hidden": true,
-								"hideLabel": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"calculateValue": "if((!row.start_date || row.start_date == \"\") && row.padi != \"\"){\n  value = data.update_date;\n}",
-								"key": "start_date",
-								"properties": {
-									"data_type": "Date"
-								},
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "Verified",
-								"placeholder": "Verified",
-								"hidden": true,
-								"hideLabel": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"key": "verified",
-								"type": "textfield",
-								"input": true
-							}, {
-								"label": "Rating",
-								"placeholder": "Rating",
-								"hidden": true,
-								"hideLabel": true,
-								"tableView": true,
-								"clearOnHide": false,
-								"key": "rating",
-								"type": "textfield",
-								"input": true
-							}, {
-								"label": "Columns",
-								"columns": [{
-									"components": [{
-										"label": "Upgrade ",
-										"tableView": false,
-										"defaultValue": false,
-										"clearOnHide": false,
-										"customDefaultValue": "value = false;",
-										"key": "upgradeStatus",
-										"type": "checkbox",
-										"input": true,
-										"hideOnChildrenHidden": false,
-										"dataGridLabel": false
-									}, {
-										"label": "Upgrade Date",
-										"format": "MM-dd-yyyy",
-										"tableView": false,
-										"enableMinDateInput": false,
-										"datePicker": {
-											"minDate": "2020-04-14T18:30:00.000Z",
-											"disableWeekends": false,
-											"disableWeekdays": false,
-											"datepickerMode": "day"
-										},
-										"enableMaxDateInput": false,
-										"enableTime": false,
-										"timePicker": {
-											"showMeridian": false
-										},
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "update_date",
-										"customConditional": "if(row.upgradeStatus == true || row.upgradeStatus == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
-										"type": "datetime",
-										"input": true,
-										"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-										"widget": {
-											"type": "calendar",
-											"displayInTimezone": "viewer",
-											"language": "en",
-											"useLocaleSettings": false,
-											"allowInput": true,
-											"mode": "single",
-											"enableTime": false,
-											"noCalendar": false,
-											"format": "MM-dd-yyyy",
-											"hourIncrement": 1,
-											"minuteIncrement": 1,
-											"time_24hr": true,
-											"minDate": "2020-04-14T18:30:00.000Z",
-											"disableWeekends": false,
-											"disableWeekdays": false,
-											"maxDate": null
-										},
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [{
-										"label": "Cancel ",
-										"tableView": false,
-										"defaultValue": false,
-										"clearOnHide": false,
-										"customDefaultValue": "value = false;",
-										"key": "cancel",
-										"type": "checkbox",
-										"input": true,
-										"hideOnChildrenHidden": false,
-										"dataGridLabel": false
-									}, {
-										"label": "Cancel Date",
-										"format": "MM-dd-yyyy",
-										"tableView": false,
-										"enableMinDateInput": false,
-										"datePicker": {
-											"minDate": "2020-04-14T18:30:00.000Z",
-											"disableWeekends": false,
-											"disableWeekdays": false,
-											"datepickerMode": "day"
-										},
-										"enableMaxDateInput": false,
-										"enableTime": false,
-										"timePicker": {
-											"showMeridian": false
-										},
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "cancel_date",
-										"customConditional": "if(row.cancel == true || row.cancel == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
-										"type": "datetime",
-										"input": true,
-										"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
-										"widget": {
-											"type": "calendar",
-											"displayInTimezone": "viewer",
-											"language": "en",
-											"useLocaleSettings": false,
-											"allowInput": true,
-											"mode": "single",
-											"enableTime": false,
-											"noCalendar": false,
-											"format": "MM-dd-yyyy",
-											"hourIncrement": 1,
-											"minuteIncrement": 1,
-											"time_24hr": true,
-											"minDate": "2020-04-14T18:30:00.000Z",
-											"disableWeekends": false,
-											"disableWeekdays": false,
-											"maxDate": null
-										},
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
+									"width": 4,
 									"offset": 0,
 									"push": 0,
 									"pull": 0,
 									"size": "md"
 								}],
+								"hideLabel": true,
+								"dataGridLabel": false,
 								"tableView": false,
-								"key": "columns9",
-								"customConditional": "if(moment(row.start_date) < moment(data.update_date)){\n  show = true;\n}else{\n  show = false;\n}",
+								"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
 								"type": "columns",
 								"input": false,
-								"hideLabel": true
+								"inDataGrid": true
 							}],
 							"inDataGrid": true,
 							"clearOnHide": false,
 							"hideLabel": true
-						}]
+						}],
+						"path": "additionalNamedInsured"
 					}],
 					"path": "page7Panel"
 				}]
@@ -13662,7 +13676,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 255,
+	"_vid": 256,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13679,6 +13693,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-06-30T11:29:34.181Z",
+	"modified": "2020-07-01T03:43:17.980Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
