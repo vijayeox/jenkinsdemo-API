@@ -150,13 +150,16 @@ class WidgetController extends AbstractApiController
         if (array_key_exists("filter", $params)) {
             $filterParams = json_decode($params['filter'], true);
             $filterArray = $filterParams[0]['filter']['filters'];
-            foreach ($filterArray as $key => $val) {
-                $filterVal = "w." . $val['field'];
-                $filterParams[0]['filter']['filters'][$key]['field'] = $filterVal;
-                $filterParams[0]['filter']['filters'][$key]['operator'] = $val['operator'];
-                $filterParams[0]['filter']['filters'][$key]['value'] = $val['value'];
-                $params['filter'] = json_encode($filterParams);
+            if (!empty($filterArray)) {
+                foreach ($filterArray as $key => $val) {
+                    $filterVal = "w." . $val['field'];
+                    $filterParams[0]['filter']['filters'][$key]['field'] = $filterVal;
+                    $filterParams[0]['filter']['filters'][$key]['operator'] = $val['operator'];
+                    $filterParams[0]['filter']['filters'][$key]['value'] = $val['value'];
+                    $params['filter'] = json_encode($filterParams);
+                }
             }
+
         }
         $result = $this->widgetService->getWidgetList($params);
         if ($result == 0) {
