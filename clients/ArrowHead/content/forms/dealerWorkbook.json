@@ -431,20 +431,16 @@
                       "components": [
                         {
                           "label": "Business Phone",
-                          "mask": false,
-                          "spellcheck": true,
-                          "tableView": false,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
+                          "placeholder": " ",
+                          "tableView": true,
                           "validate": {
                             "required": true,
-                            "customMessage": "Please enter Business Phone",
-                            "max": 9999999999
+                            "customMessage": "Please enter a valid Business Phone"
                           },
                           "key": "businessPhone",
-                          "type": "number",
+                          "type": "phoneNumber",
                           "input": true,
+                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -458,20 +454,15 @@
                       "components": [
                         {
                           "label": "Business Fax",
-                          "mask": false,
-                          "spellcheck": true,
+                          "placeholder": " ",
                           "tableView": true,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
                           "validate": {
-                            "customMessage": "Please enter Business Fax",
-                            "max": 9999999999
+                            "customMessage": "Please enter a valid Fax number"
                           },
                           "key": "businessFax",
-                          "type": "number",
+                          "type": "phoneNumber",
                           "input": true,
-                          "inputType": "number",
+                          "lockKey": true,
                           "hideOnChildrenHidden": false
                         }
                       ],
@@ -681,19 +672,15 @@
                           "components": [
                             {
                               "label": "Phone",
-                              "mask": false,
-                              "spellcheck": true,
-                              "tableView": false,
-                              "delimiter": false,
-                              "requireDecimal": false,
-                              "inputFormat": "plain",
+                              "placeholder": " ",
+                              "tableView": true,
                               "validate": {
-                                "customMessage": "Please enter valid Phone",
-                                "max": 9999999999
+                                "customMessage": "Please enter a valid Phone"
                               },
                               "key": "phone",
-                              "type": "number",
+                              "type": "phoneNumber",
                               "input": true,
+                              "lockKey": true,
                               "hideOnChildrenHidden": false
                             }
                           ],
@@ -2307,7 +2294,7 @@
                                               "components": [
                                                 {
                                                   "label": "Building Size",
-                                                  "suffix": "Square Foot",
+                                                  "suffix": "Square Feet",
                                                   "mask": false,
                                                   "spellcheck": true,
                                                   "tableView": false,
@@ -2842,6 +2829,482 @@
                                                   "defaultValue": "replacementCost"
                                                 },
                                                 {
+                                                  "label": "Columns",
+                                                  "columns": [
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Blanket Coverage",
+                                                          "optionsLabelPosition": "right",
+                                                          "inline": true,
+                                                          "tableView": true,
+                                                          "values": [
+                                                            {
+                                                              "value": "yes",
+                                                              "label": "Yes",
+                                                              "shortcut": ""
+                                                            },
+                                                            {
+                                                              "value": "no",
+                                                              "label": "No",
+                                                              "shortcut": ""
+                                                            }
+                                                          ],
+                                                          "validate": {
+                                                            "required": true
+                                                          },
+                                                          "key": "blanketcoverage1",
+                                                          "type": "radio",
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false,
+                                                          "lockKey": true
+                                                        }
+                                                      ],
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md",
+                                                      "width": 6
+                                                    },
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Blanket Coverage Building",
+                                                          "optionsLabelPosition": "right",
+                                                          "inline": true,
+                                                          "tableView": true,
+                                                          "values": [
+                                                            {
+                                                              "value": "yes",
+                                                              "label": "Yes",
+                                                              "shortcut": ""
+                                                            },
+                                                            {
+                                                              "value": "no",
+                                                              "label": "No",
+                                                              "shortcut": ""
+                                                            }
+                                                          ],
+                                                          "key": "blanketcoveragebuilding1",
+                                                          "conditional": {
+                                                            "show": true,
+                                                            "when": "blanketcoverage",
+                                                            "eq": "yes"
+                                                          },
+                                                          "type": "radio",
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false,
+                                                          "lockKey": true
+                                                        }
+                                                      ],
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md",
+                                                      "width": 6
+                                                    }
+                                                  ],
+                                                  "hideLabel": true,
+                                                  "tableView": false,
+                                                  "key": "page2Columns7",
+                                                  "type": "columns",
+                                                  "input": false
+                                                },
+                                                {
+                                                  "label": "Columns",
+                                                  "columns": [
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Blanket Coverage BPP",
+                                                          "optionsLabelPosition": "right",
+                                                          "inline": true,
+                                                          "tableView": true,
+                                                          "values": [
+                                                            {
+                                                              "value": "yes",
+                                                              "label": "Yes",
+                                                              "shortcut": ""
+                                                            },
+                                                            {
+                                                              "value": "no",
+                                                              "label": "No",
+                                                              "shortcut": ""
+                                                            }
+                                                          ],
+                                                          "key": "blanketcoveragebpp1",
+                                                          "conditional": {
+                                                            "show": true,
+                                                            "when": "blanketcoverage",
+                                                            "eq": "yes"
+                                                          },
+                                                          "type": "radio",
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false,
+                                                          "lockKey": true
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    },
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Blanket Coverage Business Income",
+                                                          "optionsLabelPosition": "right",
+                                                          "inline": true,
+                                                          "tableView": true,
+                                                          "values": [
+                                                            {
+                                                              "value": "yes",
+                                                              "label": "Yes",
+                                                              "shortcut": ""
+                                                            },
+                                                            {
+                                                              "value": "no",
+                                                              "label": "No",
+                                                              "shortcut": ""
+                                                            }
+                                                          ],
+                                                          "key": "income1",
+                                                          "conditional": {
+                                                            "show": true,
+                                                            "when": "blanketcoverage",
+                                                            "eq": "yes"
+                                                          },
+                                                          "type": "radio",
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false,
+                                                          "lockKey": true
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    }
+                                                  ],
+                                                  "tableView": false,
+                                                  "key": "columns35",
+                                                  "type": "columns",
+                                                  "input": false
+                                                },
+                                                {
+                                                  "label": "Columns",
+                                                  "columns": [
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Equipment Breakdown",
+                                                          "optionsLabelPosition": "right",
+                                                          "inline": true,
+                                                          "tableView": true,
+                                                          "values": [
+                                                            {
+                                                              "value": "yes",
+                                                              "label": "Yes",
+                                                              "shortcut": ""
+                                                            },
+                                                            {
+                                                              "value": "no",
+                                                              "label": "No",
+                                                              "shortcut": ""
+                                                            }
+                                                          ],
+                                                          "validate": {
+                                                            "required": true
+                                                          },
+                                                          "key": "equipment1",
+                                                          "type": "radio",
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false,
+                                                          "lockKey": true
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    },
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Utilities Options",
+                                                          "widget": "choicesjs",
+                                                          "placeholder": "Please Choose all that apply",
+                                                          "tableView": true,
+                                                          "multiple": true,
+                                                          "data": {
+                                                            "values": [
+                                                              {
+                                                                "label": " Water Supply",
+                                                                "value": "waterSupply"
+                                                              },
+                                                              {
+                                                                "label": "Communication Supply",
+                                                                "value": "communicationSupply"
+                                                              },
+                                                              {
+                                                                "label": "Communication Lines",
+                                                                "value": "communicationLines"
+                                                              },
+                                                              {
+                                                                "label": "Power Supply",
+                                                                "value": "powerSupply"
+                                                              },
+                                                              {
+                                                                "label": "Overhead Power Lines",
+                                                                "value": "overheadPowerLines"
+                                                              }
+                                                            ]
+                                                          },
+                                                          "selectThreshold": 0.3,
+                                                          "validate": {
+                                                            "required": true,
+                                                            "multiple": true
+                                                          },
+                                                          "key": "utilityoptions1",
+                                                          "type": "select",
+                                                          "indexeddb": {
+                                                            "filter": {}
+                                                          },
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    }
+                                                  ],
+                                                  "hideLabel": true,
+                                                  "tableView": false,
+                                                  "key": "page2Columns8",
+                                                  "type": "columns",
+                                                  "input": false
+                                                },
+                                                {
+                                                  "label": "Columns",
+                                                  "columns": [
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Wind Deductible",
+                                                          "widget": "choicesjs",
+                                                          "placeholder": "Please Select",
+                                                          "tableView": true,
+                                                          "data": {
+                                                            "values": [
+                                                              {
+                                                                "label": "None",
+                                                                "value": "none"
+                                                              },
+                                                              {
+                                                                "label": "1%",
+                                                                "value": "1"
+                                                              },
+                                                              {
+                                                                "label": "2%",
+                                                                "value": "2"
+                                                              },
+                                                              {
+                                                                "label": "5%",
+                                                                "value": "5"
+                                                              },
+                                                              {
+                                                                "label": "7.50%",
+                                                                "value": "750"
+                                                              },
+                                                              {
+                                                                "label": "10%",
+                                                                "value": "10"
+                                                              },
+                                                              {
+                                                                "label": "Exclude",
+                                                                "value": "exclude"
+                                                              },
+                                                              {
+                                                                "label": "Flat $:____",
+                                                                "value": "flat"
+                                                              }
+                                                            ]
+                                                          },
+                                                          "selectThreshold": 0.3,
+                                                          "validate": {
+                                                            "required": true
+                                                          },
+                                                          "key": "winddeductible1",
+                                                          "type": "select",
+                                                          "indexeddb": {
+                                                            "filter": {}
+                                                          },
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    },
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Flat $",
+                                                          "prefix": "$",
+                                                          "mask": false,
+                                                          "spellcheck": true,
+                                                          "tableView": false,
+                                                          "delimiter": false,
+                                                          "requireDecimal": false,
+                                                          "inputFormat": "plain",
+                                                          "validate": {
+                                                            "required": true
+                                                          },
+                                                          "key": "flatamount1",
+                                                          "conditional": {
+                                                            "show": true,
+                                                            "when": "winddeductible",
+                                                            "eq": "flat"
+                                                          },
+                                                          "type": "number",
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    }
+                                                  ],
+                                                  "tableView": false,
+                                                  "key": "columns36",
+                                                  "type": "columns",
+                                                  "input": false
+                                                },
+                                                {
+                                                  "label": "Columns",
+                                                  "columns": [
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Earthquake Coverage",
+                                                          "optionsLabelPosition": "right",
+                                                          "inline": true,
+                                                          "tableView": true,
+                                                          "values": [
+                                                            {
+                                                              "value": "yes",
+                                                              "label": "Yes",
+                                                              "shortcut": ""
+                                                            },
+                                                            {
+                                                              "value": "no",
+                                                              "label": "No",
+                                                              "shortcut": ""
+                                                            }
+                                                          ],
+                                                          "validate": {
+                                                            "required": true
+                                                          },
+                                                          "key": "earthquakecoverage1",
+                                                          "type": "radio",
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false,
+                                                          "lockKey": true
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    },
+                                                    {
+                                                      "components": [
+                                                        {
+                                                          "label": "Earthquake Deductibles",
+                                                          "widget": "choicesjs",
+                                                          "placeholder": "Please Select",
+                                                          "tableView": true,
+                                                          "data": {
+                                                            "values": [
+                                                              {
+                                                                "label": "None",
+                                                                "value": "none"
+                                                              },
+                                                              {
+                                                                "label": "10%",
+                                                                "value": "10"
+                                                              },
+                                                              {
+                                                                "label": "15%",
+                                                                "value": "15"
+                                                              },
+                                                              {
+                                                                "label": "20%",
+                                                                "value": "20"
+                                                              },
+                                                              {
+                                                                "label": "25%",
+                                                                "value": "25"
+                                                              },
+                                                              {
+                                                                "label": "30%",
+                                                                "value": "30"
+                                                              },
+                                                              {
+                                                                "label": "35%",
+                                                                "value": "35"
+                                                              },
+                                                              {
+                                                                "label": "40%",
+                                                                "value": "40"
+                                                              }
+                                                            ]
+                                                          },
+                                                          "selectThreshold": 0.3,
+                                                          "validate": {
+                                                            "required": true
+                                                          },
+                                                          "key": "earthquakedeductibles1",
+                                                          "conditional": {
+                                                            "show": true,
+                                                            "when": "earthquakecoverage",
+                                                            "eq": "yes"
+                                                          },
+                                                          "type": "select",
+                                                          "indexeddb": {
+                                                            "filter": {}
+                                                          },
+                                                          "input": true,
+                                                          "hideOnChildrenHidden": false
+                                                        }
+                                                      ],
+                                                      "width": 6,
+                                                      "offset": 0,
+                                                      "push": 0,
+                                                      "pull": 0,
+                                                      "size": "md"
+                                                    }
+                                                  ],
+                                                  "hideLabel": true,
+                                                  "tableView": false,
+                                                  "key": "page2Columns9",
+                                                  "type": "columns",
+                                                  "input": false
+                                                },
+                                                {
                                                   "label": "HTML",
                                                   "attrs": [
                                                     {
@@ -3049,13 +3512,13 @@
                                                           "prefix": "$",
                                                           "mask": false,
                                                           "spellcheck": true,
-                                                          "disabled": true,
                                                           "tableView": false,
                                                           "defaultValue": 0,
                                                           "delimiter": true,
                                                           "requireDecimal": true,
                                                           "inputFormat": "plain",
                                                           "calculateValue": "value = row.ytdtotaldealershipcarsales / row.financialstatement ? \n        row.ytdtotaldealershipcarsales / row.financialstatement: 0;",
+                                                          "allowCalculateOverride": true,
                                                           "key": "monthlygrossprofit",
                                                           "type": "number",
                                                           "decimalLimit": 2,
@@ -5070,8 +5533,12 @@
                                   "components": [
                                     {
                                       "label": "HTML",
-                                      "tag": "h4",
-                                      "attrs": [{ "attr": "", "value": "" }],
+                                      "attrs": [
+                                        {
+                                          "attr": "style",
+                                          "value": "font-weight: bold;font-size:16px;"
+                                        }
+                                      ],
                                       "content": "Premises Lot Protection - identify all applicable protection measures",
                                       "refreshOnChange": false,
                                       "tableView": false,
@@ -6847,348 +7314,372 @@
               "input": false
             },
             {
-              "label": "Columns",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Blanket Coverage",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "validate": { "required": true },
-                      "key": "blanketcoverage",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 3,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Blanket Coverage Building",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "key": "blanketcoveragebuilding",
-                      "conditional": {
-                        "show": true,
-                        "when": "blanketcoverage",
-                        "eq": "yes"
-                      },
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 3,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Blanket Coverage BPP",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "key": "blanketcoveragebpp",
-                      "conditional": {
-                        "show": true,
-                        "when": "blanketcoverage",
-                        "eq": "yes"
-                      },
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "size": "md",
-                  "width": 3,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Blanket Coverage Business Income",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "key": "income",
-                      "conditional": {
-                        "show": true,
-                        "when": "blanketcoverage",
-                        "eq": "yes"
-                      },
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "size": "md",
-                  "width": 3,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0
-                }
-              ],
-              "hideLabel": true,
+              "label": "property limits",
               "tableView": false,
-              "key": "page2Columns2",
-              "type": "columns",
-              "input": false
-            },
-            {
-              "label": "Columns",
-              "columns": [
+              "key": "propertyLimits1",
+              "type": "well",
+              "input": false,
+              "components": [
                 {
-                  "components": [
+                  "label": "Columns",
+                  "columns": [
                     {
-                      "label": "Equipment Breakdown",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
+                      "components": [
+                        {
+                          "label": "Blanket Coverage",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "validate": { "required": true },
+                          "key": "blanketcoverage",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
                       ],
-                      "validate": { "required": true },
-                      "key": "equipment",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md",
+                      "width": 6
+                    },
                     {
-                      "label": "Utilities Options",
-                      "widget": "choicesjs",
-                      "placeholder": "Please Choose all that apply",
-                      "tableView": true,
-                      "multiple": true,
-                      "data": {
-                        "values": [
-                          { "label": " Water Supply", "value": "waterSupply" },
-                          {
-                            "label": "Communication Supply",
-                            "value": "communicationSupply"
+                      "components": [
+                        {
+                          "label": "Blanket Coverage Building",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "key": "blanketcoveragebuilding",
+                          "conditional": {
+                            "show": true,
+                            "when": "blanketcoverage",
+                            "eq": "yes"
                           },
-                          {
-                            "label": "Communication Lines",
-                            "value": "communicationLines"
-                          },
-                          { "label": "Power Supply", "value": "powerSupply" },
-                          {
-                            "label": "Overhead Power Lines",
-                            "value": "overheadPowerLines"
-                          }
-                        ]
-                      },
-                      "selectThreshold": 0.3,
-                      "validate": { "required": true, "multiple": true },
-                      "key": "utilityoptions",
-                      "type": "select",
-                      "indexeddb": { "filter": {} },
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "hideLabel": true,
-              "tableView": false,
-              "key": "page2Columns4",
-              "type": "columns",
-              "input": false
-            },
-            {
-              "label": "Columns",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Wind Deductible",
-                      "widget": "choicesjs",
-                      "placeholder": "Please Select",
-                      "tableView": true,
-                      "data": {
-                        "values": [
-                          { "label": "None", "value": "none" },
-                          { "label": "1%", "value": "1" },
-                          { "label": "2%", "value": "2" },
-                          { "label": "5%", "value": "5" },
-                          { "label": "7.50%", "value": "750" },
-                          { "label": "10%", "value": "10" },
-                          { "label": "Exclude", "value": "exclude" },
-                          { "label": "Flat $:____", "value": "flat" }
-                        ]
-                      },
-                      "selectThreshold": 0.3,
-                      "validate": { "required": true },
-                      "key": "winddeductible",
-                      "type": "select",
-                      "indexeddb": { "filter": {} },
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Flat $",
-                      "prefix": "$",
-                      "mask": false,
-                      "spellcheck": true,
-                      "tableView": false,
-                      "delimiter": false,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "validate": { "required": true },
-                      "key": "flatamount",
-                      "conditional": {
-                        "show": true,
-                        "when": "winddeductible",
-                        "eq": "flat"
-                      },
-                      "type": "number",
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "tableView": false,
-              "key": "columns7",
-              "type": "columns",
-              "input": false
-            },
-            {
-              "label": "Columns",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Earthquake Coverage",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
                       ],
-                      "validate": { "required": true },
-                      "key": "earthquakecoverage",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md",
+                      "width": 6
                     }
                   ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
+                  "hideLabel": true,
+                  "tableView": false,
+                  "key": "page2Columns6",
+                  "type": "columns",
+                  "input": false
                 },
                 {
-                  "components": [
+                  "label": "Columns",
+                  "columns": [
                     {
-                      "label": "Earthquake Deductibles",
-                      "widget": "choicesjs",
-                      "placeholder": "Please Select",
-                      "tableView": true,
-                      "data": {
-                        "values": [
-                          { "label": "None", "value": "none" },
-                          { "label": "10%", "value": "10" },
-                          { "label": "15%", "value": "15" },
-                          { "label": "20%", "value": "20" },
-                          { "label": "25%", "value": "25" },
-                          { "label": "30%", "value": "30" },
-                          { "label": "35%", "value": "35" },
-                          { "label": "40%", "value": "40" }
-                        ]
-                      },
-                      "selectThreshold": 0.3,
-                      "validate": { "required": true },
-                      "key": "earthquakedeductibles",
-                      "conditional": {
-                        "show": true,
-                        "when": "earthquakecoverage",
-                        "eq": "yes"
-                      },
-                      "type": "select",
-                      "indexeddb": { "filter": {} },
-                      "input": true,
-                      "hideOnChildrenHidden": false
+                      "components": [
+                        {
+                          "label": "Blanket Coverage BPP",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "key": "blanketcoveragebpp",
+                          "conditional": {
+                            "show": true,
+                            "when": "blanketcoverage",
+                            "eq": "yes"
+                          },
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "Blanket Coverage Business Income",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "key": "income",
+                          "conditional": {
+                            "show": true,
+                            "when": "blanketcoverage",
+                            "eq": "yes"
+                          },
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
                     }
                   ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
+                  "tableView": false,
+                  "key": "columns31",
+                  "type": "columns",
+                  "input": false
+                },
+                {
+                  "label": "Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Equipment Breakdown",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "validate": { "required": true },
+                          "key": "equipment",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "Utilities Options",
+                          "widget": "choicesjs",
+                          "placeholder": "Please Choose all that apply",
+                          "tableView": true,
+                          "multiple": true,
+                          "data": {
+                            "values": [
+                              {
+                                "label": " Water Supply",
+                                "value": "waterSupply"
+                              },
+                              {
+                                "label": "Communication Supply",
+                                "value": "communicationSupply"
+                              },
+                              {
+                                "label": "Communication Lines",
+                                "value": "communicationLines"
+                              },
+                              {
+                                "label": "Power Supply",
+                                "value": "powerSupply"
+                              },
+                              {
+                                "label": "Overhead Power Lines",
+                                "value": "overheadPowerLines"
+                              }
+                            ]
+                          },
+                          "selectThreshold": 0.3,
+                          "validate": { "required": true, "multiple": true },
+                          "key": "utilityoptions",
+                          "type": "select",
+                          "indexeddb": { "filter": {} },
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "hideLabel": true,
+                  "tableView": false,
+                  "key": "page2Columns4",
+                  "type": "columns",
+                  "input": false
+                },
+                {
+                  "label": "Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Wind Deductible",
+                          "widget": "choicesjs",
+                          "placeholder": "Please Select",
+                          "tableView": true,
+                          "data": {
+                            "values": [
+                              { "label": "None", "value": "none" },
+                              { "label": "1%", "value": "1" },
+                              { "label": "2%", "value": "2" },
+                              { "label": "5%", "value": "5" },
+                              { "label": "7.50%", "value": "750" },
+                              { "label": "10%", "value": "10" },
+                              { "label": "Exclude", "value": "exclude" },
+                              { "label": "Flat $:____", "value": "flat" }
+                            ]
+                          },
+                          "selectThreshold": 0.3,
+                          "validate": { "required": true },
+                          "key": "winddeductible",
+                          "type": "select",
+                          "indexeddb": { "filter": {} },
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "Flat $",
+                          "prefix": "$",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "validate": { "required": true },
+                          "key": "flatamount",
+                          "conditional": {
+                            "show": true,
+                            "when": "winddeductible",
+                            "eq": "flat"
+                          },
+                          "type": "number",
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "tableView": false,
+                  "key": "columns7",
+                  "type": "columns",
+                  "input": false
+                },
+                {
+                  "label": "Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Earthquake Coverage",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "validate": { "required": true },
+                          "key": "earthquakecoverage",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "Earthquake Deductibles",
+                          "widget": "choicesjs",
+                          "placeholder": "Please Select",
+                          "tableView": true,
+                          "data": {
+                            "values": [
+                              { "label": "None", "value": "none" },
+                              { "label": "10%", "value": "10" },
+                              { "label": "15%", "value": "15" },
+                              { "label": "20%", "value": "20" },
+                              { "label": "25%", "value": "25" },
+                              { "label": "30%", "value": "30" },
+                              { "label": "35%", "value": "35" },
+                              { "label": "40%", "value": "40" }
+                            ]
+                          },
+                          "selectThreshold": 0.3,
+                          "validate": { "required": true },
+                          "key": "earthquakedeductibles",
+                          "conditional": {
+                            "show": true,
+                            "when": "earthquakecoverage",
+                            "eq": "yes"
+                          },
+                          "type": "select",
+                          "indexeddb": { "filter": {} },
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "hideLabel": true,
+                  "tableView": false,
+                  "key": "page2Columns5",
+                  "type": "columns",
+                  "input": false
                 }
-              ],
-              "hideLabel": true,
-              "tableView": false,
-              "key": "page2Columns5",
-              "type": "columns",
-              "input": false
+              ]
             }
           ],
           "input": false
@@ -9060,7 +9551,7 @@
                 {
                   "components": [
                     {
-                      "label": "# of Trustees/Emps Handling Plan Asse",
+                      "label": "# of Trustees/Emps Handling Plan Asset",
                       "mask": false,
                       "spellcheck": true,
                       "tableView": false,
@@ -9070,9 +9561,9 @@
                       "validate": { "min": 0 },
                       "key": "trusteesemps",
                       "type": "number",
+                      "decimalLimit": 0,
                       "input": true,
-                      "hideOnChildrenHidden": false,
-                      "decimalLimit": 0
+                      "hideOnChildrenHidden": false
                     }
                   ],
                   "width": 6,
@@ -10392,6 +10883,7 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
+                      "validate": { "required": true },
                       "key": "minutesfromlastmeeting",
                       "conditional": {
                         "show": true,
@@ -10938,96 +11430,8 @@
               ],
               "type": "columns",
               "hideLabel": true
-            },
-            {
-              "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "pageNaNColumns39",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "# of Dealer Plates",
-                      "mask": false,
-                      "spellcheck": true,
-                      "tableView": false,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "validate": { "required": true, "min": 0 },
-                      "key": "numberofdealerplates",
-                      "conditional": {
-                        "show": true,
-                        "when": "minmaxagereqs",
-                        "eq": "yes"
-                      },
-                      "type": "number",
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "type": "columns",
-              "hideLabel": true
             }
           ],
-          "input": false
-        },
-        {
-          "label": "Columns",
-          "columns": [
-            {
-              "components": [
-                {
-                  "label": "Customer Service Loaner Rental Program?",
-                  "optionsLabelPosition": "right",
-                  "inline": true,
-                  "tableView": true,
-                  "values": [
-                    { "value": "yes", "label": "Yes", "shortcut": "" },
-                    { "value": "no", "label": "No", "shortcut": "" }
-                  ],
-                  "validate": { "required": true },
-                  "key": "customerserviceloanerrentalprogram",
-                  "type": "radio",
-                  "input": true,
-                  "hideOnChildrenHidden": false,
-                  "lockKey": true
-                }
-              ],
-              "width": 6,
-              "offset": 0,
-              "push": 0,
-              "pull": 0,
-              "size": "md"
-            },
-            {
-              "components": [],
-              "width": 6,
-              "offset": 0,
-              "push": 0,
-              "pull": 0,
-              "size": "md"
-            }
-          ],
-          "tableView": false,
-          "key": "columns4",
-          "type": "columns",
           "input": false
         },
         {
@@ -11038,118 +11442,16 @@
           "collapsible": false,
           "tableView": false,
           "key": "page6",
-          "conditional": {
-            "show": true,
-            "when": "customerserviceloanerrentalprogram",
-            "eq": "yes"
-          },
           "type": "panel",
           "label": "Service Loaner",
           "components": [
             {
               "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "page6Columns",
               "columns": [
                 {
                   "components": [
                     {
-                      "label": "If Factory, identify program(s) involved",
-                      "tableView": true,
-                      "validate": {
-                        "required": true,
-                        "customMessage": "Please enter the identify program(s) involved"
-                      },
-                      "key": "iffactoryidentifyprograms",
-                      "type": "textfield",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "type": "columns",
-              "hideLabel": true
-            },
-            {
-              "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "page6Columns2",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Number of vehicles in fleet?",
-                      "mask": false,
-                      "spellcheck": true,
-                      "tableView": false,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "validate": { "required": true, "min": 0 },
-                      "key": "numberofvehiclesinfleet",
-                      "type": "number",
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "If in house program, insured elsewhere?",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "key": "inhouseprograminsuredelsewhere",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "type": "columns",
-              "hideLabel": true
-            },
-            {
-              "label": "Columns",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Is a Loaner  or Rental contract used?",
+                      "label": "Customer Service Loaner Rental Program?",
                       "optionsLabelPosition": "right",
                       "inline": true,
                       "tableView": true,
@@ -11158,129 +11460,7 @@
                         { "value": "no", "label": "No", "shortcut": "" }
                       ],
                       "validate": { "required": true },
-                      "key": "loanerrentalcontractused",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md",
-                  "width": 6
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Copy of contract used",
-                      "description": "Please include a copy of contract used",
-                      "tableView": false,
-                      "storage": "url",
-                      "webcam": false,
-                      "fileTypes": [{ "label": "", "value": "" }],
-                      "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
-                      "fileMaxSize": "10MB",
-                      "key": "copyOfContractUsed",
-                      "conditional": {
-                        "show": true,
-                        "when": "loanerrentalcontractused",
-                        "eq": "yes"
-                      },
-                      "type": "file",
-                      "url": "/file/attachment",
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "hideLabel": true,
-              "tableView": false,
-              "key": "page6Columns3",
-              "type": "columns",
-              "input": false
-            },
-            {
-              "label": "Columns",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Minimum age to provide loaners?",
-                      "mask": false,
-                      "spellcheck": true,
-                      "tableView": false,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "validate": { "required": true, "min": 0 },
-                      "key": "minimumagetoprovideloaners",
-                      "type": "number",
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Customer agreement",
-                      "description": "Please attach a customer agreement",
-                      "tableView": false,
-                      "storage": "url",
-                      "fileNameTemplate": "Customer Agreement",
-                      "webcam": false,
-                      "fileTypes": [{ "label": "", "value": "" }],
-                      "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
-                      "fileMaxSize": "10MB",
-                      "key": "customeragreement",
-                      "customConditional": "show = data.minimumagetoprovideloaners > 0;",
-                      "type": "file",
-                      "url": "/file/attachment",
-                      "input": true,
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "tableView": false,
-              "key": "columns5",
-              "type": "columns",
-              "input": false
-            },
-            {
-              "label": "Columns",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Are Drivers License and Insurance verified?",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "validate": { "required": true },
-                      "key": "aredriverslicenseinsuredverified",
+                      "key": "customerserviceloanerrentalprogram",
                       "type": "radio",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -11303,10 +11483,285 @@
                 }
               ],
               "tableView": false,
-              "key": "columns2",
+              "key": "columns4",
               "type": "columns",
+              "input": false
+            },
+            {
+              "label": "service loaners",
+              "tableView": false,
+              "key": "serviceLoaners",
+              "conditional": {
+                "show": true,
+                "when": "customerserviceloanerrentalprogram",
+                "eq": "yes"
+              },
+              "type": "well",
               "input": false,
-              "hideLabel": true
+              "components": [
+                {
+                  "label": "Columns",
+                  "input": false,
+                  "tableView": false,
+                  "key": "page6Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "If Factory, identify program(s) involved",
+                          "tableView": true,
+                          "validate": {
+                            "required": true,
+                            "customMessage": "Please enter the identify program(s) involved"
+                          },
+                          "key": "iffactoryidentifyprograms",
+                          "type": "textfield",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "type": "columns",
+                  "hideLabel": true
+                },
+                {
+                  "label": "Columns",
+                  "input": false,
+                  "tableView": false,
+                  "key": "page6Columns2",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Number of vehicles in fleet?",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": true,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "validate": { "required": true, "min": 0 },
+                          "key": "numberofvehiclesinfleet",
+                          "type": "number",
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "If in house program, insured elsewhere?",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "key": "inhouseprograminsuredelsewhere",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "type": "columns",
+                  "hideLabel": true
+                },
+                {
+                  "label": "Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Is a Loaner  or Rental contract used?",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "validate": { "required": true },
+                          "key": "loanerrentalcontractused",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md",
+                      "width": 6
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "Copy of contract used",
+                          "description": "Please include a copy of contract used",
+                          "tableView": false,
+                          "storage": "url",
+                          "webcam": false,
+                          "fileTypes": [{ "label": "", "value": "" }],
+                          "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                          "fileMaxSize": "10MB",
+                          "key": "copyOfContractUsed",
+                          "conditional": {
+                            "show": true,
+                            "when": "loanerrentalcontractused",
+                            "eq": "yes"
+                          },
+                          "type": "file",
+                          "url": "/file/attachment",
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "hideLabel": true,
+                  "tableView": false,
+                  "key": "page6Columns3",
+                  "type": "columns",
+                  "input": false
+                },
+                {
+                  "label": "Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Minimum age to provide loaners?",
+                          "mask": false,
+                          "spellcheck": true,
+                          "tableView": false,
+                          "delimiter": true,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "validate": { "required": true, "min": 0 },
+                          "key": "minimumagetoprovideloaners",
+                          "type": "number",
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "Customer agreement",
+                          "description": "Please attach a customer agreement",
+                          "tableView": false,
+                          "storage": "url",
+                          "fileNameTemplate": "Customer Agreement",
+                          "webcam": false,
+                          "fileTypes": [{ "label": "", "value": "" }],
+                          "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                          "fileMaxSize": "10MB",
+                          "key": "customeragreement",
+                          "customConditional": "show = data.minimumagetoprovideloaners > 0;",
+                          "type": "file",
+                          "url": "/file/attachment",
+                          "input": true,
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "tableView": false,
+                  "key": "columns5",
+                  "type": "columns",
+                  "input": false
+                },
+                {
+                  "label": "Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Are Drivers License and Insurance verified?",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "validate": { "required": true },
+                          "key": "aredriverslicenseinsuredverified",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "tableView": false,
+                  "key": "columns2",
+                  "type": "columns",
+                  "input": false,
+                  "hideLabel": true
+                }
+              ]
             }
           ],
           "input": false
@@ -12716,20 +13171,6 @@
           "input": false
         },
         {
-          "label": "Garage Keepers Coverage?",
-          "optionsLabelPosition": "right",
-          "inline": true,
-          "tableView": false,
-          "values": [
-            { "label": "Yes", "value": "yes", "shortcut": "" },
-            { "label": "No", "value": "no", "shortcut": "" }
-          ],
-          "validate": { "required": true },
-          "key": "garageKeepersCoverage",
-          "type": "radio",
-          "input": true
-        },
-        {
           "title": "Garagekeepers Underwriting Information",
           "theme": "primary",
           "breadcrumbClickable": true,
@@ -12737,55 +13178,27 @@
           "collapsible": false,
           "tableView": false,
           "key": "pageNaN",
-          "conditional": {
-            "show": true,
-            "when": "garageKeepersCoverage",
-            "eq": "yes"
-          },
           "type": "panel",
           "label": "Garagekeepers Underwriting Information",
           "components": [
             {
               "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "pageNaNColumns36",
               "columns": [
                 {
                   "components": [
                     {
-                      "label": "Key Control",
+                      "label": "Garage Keepers Coverage?",
                       "optionsLabelPosition": "right",
+                      "inline": true,
                       "tableView": false,
                       "values": [
-                        { "label": "None", "value": "none", "shortcut": "" },
-                        {
-                          "label": "Key Machine",
-                          "value": "keyMachine",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "Key Board",
-                          "value": "keyBoard",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "Lock Boxes",
-                          "value": "lockBoxes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "Keys in Cars",
-                          "value": "keysInCars",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "validate": { "required": true },
-                      "key": "keycontrol",
-                      "type": "selectboxes",
+                      "key": "garageKeepersCoverage",
+                      "type": "radio",
                       "input": true,
-                      "inputType": "checkbox",
-                      "defaultValue": { "": false },
                       "hideOnChildrenHidden": false
                     }
                   ],
@@ -12796,48 +13209,7 @@
                   "size": "md"
                 },
                 {
-                  "components": [
-                    {
-                      "label": "Lot Protection",
-                      "optionsLabelPosition": "right",
-                      "tableView": false,
-                      "values": [
-                        { "label": "None", "value": "none", "shortcut": "" },
-                        {
-                          "label": "Fenced",
-                          "value": "fenced",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "Post & Chains",
-                          "value": "postChains",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "Security Lighting",
-                          "value": "securityLighting",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "Video Surveillance",
-                          "value": "videoSurveillance",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "Night Watchman",
-                          "value": "nightWatchman",
-                          "shortcut": ""
-                        }
-                      ],
-                      "validate": { "required": true },
-                      "key": "lotprotection",
-                      "type": "selectboxes",
-                      "input": true,
-                      "inputType": "checkbox",
-                      "defaultValue": { "": false },
-                      "hideOnChildrenHidden": false
-                    }
-                  ],
+                  "components": [],
                   "width": 6,
                   "offset": 0,
                   "push": 0,
@@ -12845,24 +13217,177 @@
                   "size": "md"
                 }
               ],
+              "tableView": false,
+              "key": "columns37",
               "type": "columns",
-              "hideLabel": true
+              "input": false
             },
             {
-              "label": "Applicant works on or stores customer vehicles that are valued over $100,000?",
-              "optionsLabelPosition": "right",
-              "inline": true,
-              "tableView": true,
-              "values": [
-                { "value": "yes", "label": "Yes", "shortcut": "" },
-                { "value": "no", "label": "No", "shortcut": "" }
-              ],
-              "validate": { "required": true },
-              "key": "dolapplicantworkscustomer",
-              "type": "radio",
-              "input": true,
-              "hideOnChildrenHidden": false,
-              "lockKey": true
+              "label": "garage underwriting detail",
+              "tableView": false,
+              "key": "garageUnderwritingDetail",
+              "conditional": {
+                "show": true,
+                "when": "garageKeepersCoverage",
+                "eq": "yes"
+              },
+              "type": "well",
+              "input": false,
+              "components": [
+                {
+                  "label": "Columns",
+                  "input": false,
+                  "tableView": false,
+                  "key": "pageNaNColumns36",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Key Control",
+                          "optionsLabelPosition": "right",
+                          "tableView": false,
+                          "values": [
+                            {
+                              "label": "None",
+                              "value": "none",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Key Machine",
+                              "value": "keyMachine",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Key Board",
+                              "value": "keyBoard",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Lock Boxes",
+                              "value": "lockBoxes",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Keys in Cars",
+                              "value": "keysInCars",
+                              "shortcut": ""
+                            }
+                          ],
+                          "validate": { "required": true },
+                          "key": "keycontrol",
+                          "type": "selectboxes",
+                          "input": true,
+                          "inputType": "checkbox",
+                          "defaultValue": { "": false },
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [
+                        {
+                          "label": "Lot Protection",
+                          "optionsLabelPosition": "right",
+                          "tableView": false,
+                          "values": [
+                            {
+                              "label": "None",
+                              "value": "none",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Fenced",
+                              "value": "fenced",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Post & Chains",
+                              "value": "postChains",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Security Lighting",
+                              "value": "securityLighting",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Video Surveillance",
+                              "value": "videoSurveillance",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "Night Watchman",
+                              "value": "nightWatchman",
+                              "shortcut": ""
+                            }
+                          ],
+                          "validate": { "required": true },
+                          "key": "lotprotection",
+                          "type": "selectboxes",
+                          "input": true,
+                          "inputType": "checkbox",
+                          "defaultValue": { "": false },
+                          "hideOnChildrenHidden": false
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "type": "columns",
+                  "hideLabel": true
+                },
+                {
+                  "label": "Columns",
+                  "columns": [
+                    {
+                      "components": [
+                        {
+                          "label": "Applicant works on or stores customer vehicles that are valued over $100,000?",
+                          "optionsLabelPosition": "right",
+                          "inline": true,
+                          "tableView": true,
+                          "values": [
+                            { "value": "yes", "label": "Yes", "shortcut": "" },
+                            { "value": "no", "label": "No", "shortcut": "" }
+                          ],
+                          "validate": { "required": true },
+                          "key": "dolapplicantworkscustomer",
+                          "type": "radio",
+                          "input": true,
+                          "hideOnChildrenHidden": false,
+                          "lockKey": true
+                        }
+                      ],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    },
+                    {
+                      "components": [],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }
+                  ],
+                  "tableView": false,
+                  "key": "columns38",
+                  "type": "columns",
+                  "input": false
+                }
+              ]
             }
           ],
           "input": false
@@ -13960,6 +14485,7 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
+                      "validate": { "required": true },
                       "key": "proposalform",
                       "conditional": {
                         "show": true,
@@ -14069,6 +14595,7 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
+                      "validate": { "required": true },
                       "key": "attachedproposalform",
                       "conditional": {
                         "show": true,
@@ -14178,6 +14705,7 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
+                      "validate": { "required": true },
                       "key": "companypolicy",
                       "conditional": {
                         "show": true,
@@ -14244,6 +14772,7 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
+                      "validate": { "required": true },
                       "key": "hrproposalform",
                       "conditional": {
                         "show": true,
@@ -14767,7 +15296,7 @@
                     {
                       "components": [
                         {
-                          "label": "(a) The  Company or its Subsidiaries?",
+                          "label": "The  Company or its Subsidiaries?",
                           "optionsLabelPosition": "right",
                           "inline": true,
                           "tableView": true,
@@ -14801,6 +15330,7 @@
                           "fileTypes": [{ "label": "", "value": "" }],
                           "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                           "fileMaxSize": "10MB",
+                          "validate": { "required": true },
                           "key": "casesAgainstCompanyorSubsidiaries",
                           "conditional": {
                             "show": true,
@@ -14830,7 +15360,7 @@
                     {
                       "components": [
                         {
-                          "label": "(b) Any person proposed for this insurance in their capacity as either Director, Officer, or employee of the Company or its Subsidiaries?",
+                          "label": "Any person proposed for this insurance in their capacity as either Director, Officer, or employee of the Company or its Subsidiaries?",
                           "optionsLabelPosition": "right",
                           "inline": true,
                           "tableView": true,
@@ -14942,7 +15472,7 @@
               "lockKey": true
             },
             {
-              "label": "Company or its Subsidiaries",
+              "label": "Any future Employee Practices Claim",
               "description": "If \"\"yes\"\", please provide details in an attachment to this Proposal Form",
               "tableView": true,
               "storage": "url",
@@ -14951,6 +15481,7 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
+              "validate": { "required": true },
               "key": "empclaimproposalform",
               "conditional": {
                 "show": true,
@@ -14958,9 +15489,9 @@
                 "eq": "yes"
               },
               "type": "file",
+              "url": "/file/attachment",
               "input": true,
-              "lockKey": true,
-              "url": "/file/attachment"
+              "lockKey": true
             },
             {
               "label": "Des the applicant currently have any insurance coverage for EPLI Coverage ?",
@@ -15190,6 +15721,7 @@
                       "storage": "url",
                       "webcam": false,
                       "fileTypes": [{ "label": "", "value": "" }],
+                      "validate": { "required": true },
                       "key": "claimornoticetoinsurer",
                       "conditional": {
                         "show": true,
@@ -15262,6 +15794,7 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
+                      "validate": { "required": true },
                       "key": "liabilityinsuranceform",
                       "conditional": {
                         "show": true,
@@ -17418,7 +17951,7 @@
                       "delimiter": true,
                       "requireDecimal": false,
                       "inputFormat": "plain",
-                      "calculateValue": "if (data.dolmaxvalpervehicle > 25000){\n  value = data.dolmaxvalpervehicle * 1.3;\n  value =  Math.ceil(value / 25000) * 25000; \n}",
+                      "calculateValue": "if (data.dolmaxvalpervehicle > 25000){\n  value = data.dolmaxvalpervehicle * 1.3;\n  value =  Math.ceil(value / 25000) * 25000; \n}\nelse {\n  value = 25000;\n}",
                       "validate": { "required": true, "min": 0 },
                       "key": "falsePretenseNumber",
                       "type": "number",
@@ -19214,7 +19747,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_e980dac2-2ef7-467a-8e0d-863078c458e0\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: true\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_e980dac2-2ef7-467a-8e0d-863078c458e0\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n\nfetch(\"https://api.npoint.io/ac5a62e2a6c18c0dbb6c\")\n  .then((response) => response.json())\n  .then((jsondata) => {\n    setTimeout(() => {\n      for (item in jsondata) {\n        data[item] = jsondata[item];\n      }\n    }, 2000);\n  });",
   "revisions": "original",
-  "_vid": 228,
+  "_vid": 244,
   "title": "Dealer Workbook",
   "display": "wizard",
   "access": [
@@ -19262,6 +19795,6 @@
   "path": "dealerworkbook",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-06-25T07:04:35.147Z",
-  "modified": "2020-06-30T18:08:04.394Z",
+  "modified": "2020-07-01T11:09:29.020Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
