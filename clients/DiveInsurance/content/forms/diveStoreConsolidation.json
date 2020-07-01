@@ -10324,7 +10324,7 @@
 						"inputFormat": "plain",
 						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if(data[data[\"groupCoverageSelect\"]]){\n  value = parseFloat(data[data[\"groupCoverageSelect\"]]).toFixed(0);\n} else {\n  value = 0;\n}",
+						"calculateValue": "if(data[\"groupCoverageSelect\"]){\n  value = parseFloat(data[data[\"groupCoverageSelect\"]]).toFixed(0);\n} else {\n  value = 0;\n}",
 						"allowCalculateOverride": true,
 						"key": "groupCoverage",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
@@ -13377,7 +13377,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 427,
+	"_vid": 428,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13394,6 +13394,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-01T09:39:02.255Z",
+	"modified": "2020-07-01T10:40:27.126Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
