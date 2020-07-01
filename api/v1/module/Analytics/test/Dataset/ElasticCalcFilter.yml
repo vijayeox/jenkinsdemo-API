@@ -121,8 +121,8 @@ ox_elastic:
     customerAssociation: null
     source: 'demand_generation'
     source_name: 'Demand Generation'
-    status: 'new'
-    status_name: 'New'
+    status: 'closed'
+    status_name: 'Closed'
     budget_amount: 3000
     actual_amount: 2800
   -
@@ -205,7 +205,7 @@ ox_elastic:
     customerAssociation: null
     source: 'demand_generation'
     source_name: 'Demand Generation'
-    status: 'new'
-    status_name: 'New'
+    status: 'closed'
+    status_name: 'Closed'
     budget_amount: 5000
     actual_amount: 5000

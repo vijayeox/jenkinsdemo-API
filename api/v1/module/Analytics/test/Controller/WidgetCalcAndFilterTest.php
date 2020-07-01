@@ -295,7 +295,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
-        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":6000,"actual_amount":2300}]');
+        $this->assertEquals($jsoncontent, '[{"owner_username":"mark","budget_amount":6000},{"owner_username":"john","actual_amount":2300}]');
     }
 
     public function testGetWithOverridingMultiLevel() {
@@ -343,6 +343,23 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":1500},{"owner_username":"mark","budget_amount":3000},{"owner_username":"jane","budget_amount":5000}]');
     }
+
+    public function testCombineWithMultiCount() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/667781c3-344d-4400-1195-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","count":2},{"owner_username":"mark","count":1,"count2":1},{"owner_username":"jane","count2":1}]');
+    }
+
+    
 
     public function testSessionUserName() {
         
