@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
   <bpmn:process id="IPLNewPolicy" isExecutable="true">
     <bpmn:extensionElements>
       <camunda:executionListener expression="0" event="start" />
@@ -148,10 +148,6 @@ boolean result9 = false
 boolean result10 = false
 boolean result11 = false
 
-if((renewalFlow == true || renewalFlow == "true") &amp;&amp; (new Date().format( 'yyyy-MM-dd' ) &lt;= '2020-07-13')){
-  result10 = true
-}
-
 if(startDate &gt; '2020-06-30'){
   result11 = true
 }
@@ -224,7 +220,6 @@ if (
     efrToIPLUpgrade == true || efrToIPLUpgrade == "true" ||
     scubaFit == "scubaFitInstructor" ||
     result5 ||
-    result10 ||
     result11 ||
     padiNotFoundCsrReview == "true" ||
     padiNotFoundCsrReview == true)
@@ -349,6 +344,20 @@ if(status == "onHold"){
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="IPLNewPolicy">
+      <bpmndi:BPMNEdge id="SequenceFlow_1r1a5vu_di" bpmnElement="SequenceFlow_1r1a5vu">
+        <di:waypoint x="910" y="539" />
+        <di:waypoint x="664" y="539" />
+        <di:waypoint x="664" y="340" />
+        <di:waypoint x="664" y="292" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1i8eylg_di" bpmnElement="SequenceFlow_1i8eylg">
+        <di:waypoint x="960" y="421" />
+        <di:waypoint x="960" y="499" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_177n7jz_di" bpmnElement="SequenceFlow_177n7jz">
+        <di:waypoint x="893" y="396" />
+        <di:waypoint x="935" y="396" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1rq996b_di" bpmnElement="SequenceFlow_1rq996b">
         <di:waypoint x="1120" y="120" />
         <di:waypoint x="1191" y="120" />
@@ -481,20 +490,6 @@ if(status == "onHold"){
       <bpmndi:BPMNShape id="ExclusiveGateway_17ldnvw_di" bpmnElement="ExclusiveGateway_17ldnvw" isMarkerVisible="true">
         <dc:Bounds x="935" y="371" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_177n7jz_di" bpmnElement="SequenceFlow_177n7jz">
-        <di:waypoint x="893" y="396" />
-        <di:waypoint x="935" y="396" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1i8eylg_di" bpmnElement="SequenceFlow_1i8eylg">
-        <di:waypoint x="960" y="421" />
-        <di:waypoint x="960" y="499" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1r1a5vu_di" bpmnElement="SequenceFlow_1r1a5vu">
-        <di:waypoint x="910" y="539" />
-        <di:waypoint x="664" y="539" />
-        <di:waypoint x="664" y="340" />
-        <di:waypoint x="664" y="292" />
-      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
