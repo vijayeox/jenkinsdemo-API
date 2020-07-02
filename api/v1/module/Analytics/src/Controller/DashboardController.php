@@ -153,7 +153,6 @@ class DashboardController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dashboardService->getDashboardList($params);
-        // print_r($result);exit;
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }
