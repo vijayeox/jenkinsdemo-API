@@ -9,7 +9,6 @@
 	  <hr class = "s_hrtag"></hr>
       <center><b>Store Location:&nbsp<span class ="store_location"> {$address1},{$address2},{$city},{$state},{$country},{$zip}</span></b></center>
       <hr class = "s_hrtag"></hr>
-      <br/>
 		<div class="section_col">
 			<div class ="sec1">
 				<p class ="title">Propery Coverages</p>
@@ -91,7 +90,6 @@ certificate.</p>
 
 <p  class = "policy_notice">Notice of cancelation: If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of
 premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.</p>
-
 {if $state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/AK.tpl"}</b>

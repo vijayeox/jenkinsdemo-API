@@ -17,12 +17,12 @@
     <p class = "info"><b>Additional Named Insured:</b></p>
     {foreach from=$list item=$additional}
         <p class = "ai_list info">
-            &nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.country},{$additional.city},{$additional.state},{$additional.zip}
+            &nbsp&nbsp&nbsp {if isset($additional.name) && is_string($additional.name)}{$additional.name}{/if}{if isset($additional.address) && is_string($additional.address) && $additional.address !=""},{$additional.address}{/if}{if isset($additional.city)  && is_string($additional.city) && $additional.city !=""},{$additional.city}{/if}{if isset($additional.state) && is_string($additional.state)},{$additional.state}{/if}{if isset($additional.zip) && is_string($additional.zip) && $additional.city !=""}{$additional.zip}{/if}
         </p>
     {/foreach}
     {/if}
-    <p  class = "info"><b>Location Address: </b>{$additionalLocationData.address},<br>
-    {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.state} - {$additionalLocationData.zip}</p>
+    <p  class = "info"><b>Location Address: </b>{if isset($additionalLocationData.address) && is_string($additionalLocationData.address) && $additionalLocationData.address !=""},{$additionalLocationData.country}{/if}<br>
+    {if isset($additionalLocationData.country) && is_string($additionalLocationData.country) && $additionalLocationData.country !=""},{$additionalLocationData.country}{/if}{if isset($additionalLocationData.city)  && is_string($additionalLocationData.city) && $additionalLocationData.city !=""},{$additionalLocationData.city}{/if}{if isset($additionalLocationData.state) && is_string($additionalLocationData.state)},{$additionalLocationData.state}{/if}{if isset($additionalLocationData.zip) && is_string($additionalLocationData.zip) && $additionalLocationData.zip !=""}{$additional.zip}{/if}</p>
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>
@@ -139,7 +139,7 @@
 
             <!-- Alarm Calc -->
             
-                {if $ALcentralStationAlarm != "yes"}
+                {if isset($ALcentralStationAlarm) && $ALcentralStationAlarm != "yes"}
                     <hr class="line_divide"></hr>
               <div style="margin-top: 2% 0;">
                 <center>

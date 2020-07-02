@@ -12,8 +12,10 @@
 			<p class="name1">{if isset($dba) && $dba !=""}
 								DBA : {$dba} 
 							{/if}</p>
-					<p class = "name1">{$address1},{$address2}</p>
-					<p class = "name1">{$city}, {$state_in_short} {$zip}</p>
+			<p class="name">{$address1}</p>
+			<p class="name">{$address2}</p>
+			<p class="name">{$city}, {$state} {$zip}</p>
+			<p class="name">{$country}</p>
 		</div>
 
 		<p>Dear <span class ="rgaard1">{$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}</span></p>
