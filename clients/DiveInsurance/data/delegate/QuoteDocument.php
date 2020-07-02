@@ -55,7 +55,7 @@ class QuoteDocument extends PolicyDocument
                      'nheader' => 'Group_NI_header.html',
                      'nfooter' => 'Group_NI_footer.html',
                      'lpTemplate' => 'DiveStore_LP',
-                     'lpheader' => 'DiveStore_LP_header.html',
+                     'lpheader' => 'DiveStore_Quote_LP_header.html',
                      'lpfooter' => 'DiveStore_LP_footer.html',
                      'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
                      'gtemplate' => 'Group_PL_COI',
