@@ -1410,7 +1410,6 @@
 						"label": "Policy Start Date",
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
-						"autofocus": true,
 						"tableView": false,
 						"enableMinDateInput": true,
 						"datePicker": {
@@ -1479,6 +1478,7 @@
 				}, {
 					"components": [{
 						"label": "Policy End Date",
+						"useLocaleSettings": true,
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"disabled": true,
@@ -1507,7 +1507,7 @@
 							"type": "calendar",
 							"displayInTimezone": "viewer",
 							"language": "en",
-							"useLocaleSettings": false,
+							"useLocaleSettings": true,
 							"allowInput": false,
 							"mode": "single",
 							"enableTime": false,
@@ -9411,7 +9411,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = ((parseInt(data[\"ALExcessLiabilityFP\"])||0)/10).toFixed(0);",
+													"calculateValue": "value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(0);",
 													"key": "ALExcessLiabilityFP",
 													"type": "number",
 													"input": true,
@@ -9803,7 +9803,6 @@
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == row.state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-											"allowCalculateOverride": true,
 											"validate": {
 												"max": 100
 											},
@@ -9866,7 +9865,6 @@
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-											"allowCalculateOverride": true,
 											"validate": {
 												"max": 100
 											},
@@ -11826,7 +11824,7 @@
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateValue": "var receiptsAmount = parseFloat(data['dsglestmonthretailreceipt']).toFixed(0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = receiptsAmount + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
+							"calculateValue": "var receiptsAmount = parseFloat(data['dsglestmonthretailreceipt']).toFixed(0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
 							"validate": {
 								"required": true
 							},
@@ -13280,7 +13278,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 437,
+	"_vid": 440,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13297,6 +13295,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-02T00:30:08.351Z",
+	"modified": "2020-07-02T03:34:33.443Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
