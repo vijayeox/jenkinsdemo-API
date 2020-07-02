@@ -308,11 +308,58 @@ class QueryService extends AbstractService
         return $data;
     }
 
+    function mergeArrays($a, $b, $oldkey, $newkey,$keys)
+    {
+        $c = array();
+        foreach ($a as $row1) {
+            $found = 0;
+            $tmprow1 = array_intersect_key($row1, array_flip($keys));
+            foreach ($b as $key => $row2) {
+                $tmprow2 = array_intersect_key($row2, array_flip($keys));
+                if ($tmprow1 == $tmprow2) {
+                    $mergevalue = ($oldkey==$newkey) ? [$oldkey=>$row2[$oldkey]]:[$newkey=>$row2[$oldkey]];
+                    $c[] = array_merge($row1, $mergevalue);
+                    unset($b[$key]);
+                    $found = 1;
+                    break;
+                }
+            }
+            if (!$found) {
+                $c[] = $row1;
+            }
+        }
+        foreach($b as $row) {
+            if ($oldkey!=$newkey) {
+                $row[$newkey]=$row[$oldkey];
+                unset($row[$oldkey]);
+            }
+            $c[] = $row;
+        }        
+        return ($c);
+    }
+
+    function mergeData($data1, $data2, $index)
+    {
+        $arrykeys1 = array_keys($data1[0]);
+        $arrykeys2 = array_keys($data2[0]);
+		$oldkey = $arrykeys2[count($arrykeys2) - 1];
+        array_pop($arrykeys2);
+        if (in_array($oldkey, $arrykeys1)) {
+            $newkey = $oldkey . $index;
+        } else {
+            $newkey = $oldkey;
+        }
+
+        $data = $this->mergeArrays($data1, $data2, $oldkey, $newkey,$arrykeys2);
+        return $data;
+    }
+
     public function runMultipleQueries($uuidList, $overRides = null)
     {
         $aggCheck    = 0;
         $data        = array();
         $resultCount = count($uuidList);
+        $index = 1;
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -" . $value);
             $queryData = $this->executeAnalyticsQuery($value, $overRides);
@@ -329,7 +376,7 @@ class QueryService extends AbstractService
             if (!empty($data) && isset($queryData['data']) && is_array($queryData['data'])) {
                 if ($aggCheck == 1) {
                     if (!empty($queryData['meta']['aggregates'])) {
-                        $data = array_replace_recursive($data, $queryData['data']);
+                        $data = $this->mergeData($data,$queryData['data'],$index);
                     } else {
                         throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
                     }
@@ -338,7 +385,7 @@ class QueryService extends AbstractService
                     if (!empty($queryData['meta']['aggregates'])) {
                         throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);
                     } else {
-                        $data = array_replace_recursive($data, $queryData['data']);
+                        $data = $this->mergeData($data,$queryData['data'],$index);
                     }
 
                 }
@@ -351,6 +398,7 @@ class QueryService extends AbstractService
                     }
                 }
             }
+            $index++;
         }
         return $data;
     }

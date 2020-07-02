@@ -66,7 +66,7 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && ((''{{current_date}}'' <= ''moment("2020-07-13")'' && ''{{end_date}}'' < ''{{current_date}}'' ) || (''{{current_date}}'' >= ''moment("{{end_date}}").add(-30, "days")''))'
+                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
                             type: Form
@@ -85,7 +85,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && ((''{{current_date}}'' <= ''moment("2020-07-13")'' && ''{{end_date}}'' < ''{{current_date}}'' ) || (''{{current_date}}'' >= ''moment("{{end_date}}").add(-30, "days")''))'
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
                             type: Form
@@ -104,7 +104,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Dive Store'') && ((''{{current_date}}'' <= ''moment("2020-07-13")'' && ''{{end_date}}'' < ''{{current_date}}'' ) || (''{{current_date}}'' >= ''moment("{{end_date}}").add(-30, "days")''))'
+                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
                     details:
                         -
                             type: Form
