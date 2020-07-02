@@ -10,8 +10,8 @@
 <body>
     <p></p>
     <div>
-    <p class = "info"><b>Store/Location Description : </b>{$additionalLocationData.address}</p>
-    <p class = "info"><b>Store/Location Number: </b>{$padi}</p>
+    {if isset($additionalLocationData.name) && $additionalLocationData.name != ""} <p class = "info"><b>Store/Location Description : </b>{$additionalLocationData.name}</p>{/if}
+    {if isset($additionalLocationData.padiNumberAL) && $additionalLocationData.padiNumberAL != "" && $additionalLocationData.padiNumberAL != null} <p class = "info"><b>Store/Location Number: </b>{$additionalLocationData.padiNumberAL}</p>{/if}
     {assign var=list value=$additionalNamedInsured|json_decode:true}
     {if isset($additional_named_insureds_option) && $additional_named_insureds_option =='yes'}
     <p class = "info"><b>Additional Named Insured:</b></p>
@@ -21,8 +21,14 @@
         </p>
     {/foreach}
     {/if}
-    <p  class = "info"><b>Location Address: </b>{if isset($additionalLocationData.address) && is_string($additionalLocationData.address) && $additionalLocationData.address !=""},{$additionalLocationData.country}{/if}<br>
-    {if isset($additionalLocationData.country) && is_string($additionalLocationData.country) && $additionalLocationData.country !=""},{$additionalLocationData.country}{/if}{if isset($additionalLocationData.city)  && is_string($additionalLocationData.city) && $additionalLocationData.city !=""},{$additionalLocationData.city}{/if}{if isset($additionalLocationData.state) && is_string($additionalLocationData.state)},{$additionalLocationData.state}{/if}{if isset($additionalLocationData.zip) && is_string($additionalLocationData.zip) && $additionalLocationData.zip !=""}{$additional.zip}{/if}</p>
+    {if (isset($additionalLocationData.address) && $additionalLocationData.address != "") || 
+    (isset($additionalLocationData.country) && $additionalLocationData.country != "") || 
+    ( isset($additionalLocationData.city)  && $additionalLocationData.city != "" ) || 
+    (isset($additionalLocationData.state) && $additionalLocationData.state != "" && is_string($additionalLocationData.state)) || 
+    (isset($additionalLocationData.zip) && $additionalLocationData.zip != "")}<p  class = "info"><b>
+    Location Address: </b>{if isset($additionalLocationData.address) && is_string($additionalLocationData.address) && $additionalLocationData.address !=""},{$additionalLocationData.country}{/if}<br>
+    {if isset($additionalLocationData.country) && is_string($additionalLocationData.country) && $additionalLocationData.country !=""},{$additionalLocationData.country}{/if}{if isset($additionalLocationData.city)  && is_string($additionalLocationData.city) && $additionalLocationData.city !=""},{$additionalLocationData.city}{/if}{if isset($additionalLocationData.state) && is_string($additionalLocationData.state)},{$additionalLocationData.state}{/if}{if isset($additionalLocationData.zip) && is_string($additionalLocationData.zip) && $additionalLocationData.zip !=""}{$additionalLocationData.zip}{/if}</p>
+    {/if}
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>

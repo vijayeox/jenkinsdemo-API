@@ -500,17 +500,11 @@ body {
   margin-top: 10%;
 }
 .t_title {
-  float: left;
-  margin-top: 1px;
-  margin-bottom: 1px;
   font-size: 13px;
 }
 
 .t_title1 {
-  float: left;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /* footer */

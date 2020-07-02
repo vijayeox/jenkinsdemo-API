@@ -8,21 +8,27 @@
 </head>
 <body>
 	<div class ="body_div_lp">
+		<b><p style = "font-size: 15px">NAMED INSURED IS HEREBY AMENDED TO INCLUDE:</p></b>
+		<table style = "width:100%">
+		<tr>
+			<th class = 't_title1' align = "left">Member#&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+			<th class = 't_title1' align = "left">Name&nbsp&nbsp</th>
+			<th class = 't_title1' align = "left">Status&nbsp&nbsp&nbsp</th>
+			<th class = 't_title1' align = "left">Eff.Date&nbsp&nbsp&nbsp</th>
+			<th class = 't_title1' align = "left">Upg </th>
+			<th class = 't_title1' align = "left">Upg Eff Date&nbsp</th>
+			<th class = 't_title1' align = "left">Cancel Date&nbsp&nbsp<th>
+		</tr>
 		{foreach from=$list item=$value}
-			<div class = "named_div">
-			      <div class = "named_div1"><p class ="t_title">{$value.padi}</p></div>
-
-			      <div class = "named_div2"><p class ="t_title" style="text-tranform:uppercase;">{$value.firstname}&nbsp{$value.lastname}</p></div>
-
-			      <div class = "named_div3"><p class ="t_title">{$certificateLevel[$value.status]}</p></div>
-
-			      <div class = "named_div4"><p class ="t_title">{$value.start_date|date_format:"%m/%d/%Y"}</p></div>
-			      <div class = "named_div5"><p class ="t_title">{if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
-			      Yes{else}No{/if}</p>
-			      </div>
-
-			      <div class = "named_div6"><p class ="t_title">
-			      {if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
+			<tr>
+				<td class = 't_title' align = "left">{$value.padi}</td>
+				<td class = 't_title' align = "left">{$value.firstname}&nbsp{$value.lastname}</td>
+				<td class = 't_title' align = "left">{$certificateLevel[$value.status]}</td>
+				<td class = 't_title' align = "left">{$value.start_date|date_format:"%m/%d/%Y"}</td>
+				<td class = 't_title' align = "left">{if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
+			      Yes{else}No{/if}</td>
+			    <td class = 't_title' align = "left">
+			    {if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
 			      			{if isset($value.update_date) && $value.update_date != ''}
 			      				{$value.update_date|date_format:"%m/%d/%Y"}
 			      			{else}
@@ -31,10 +37,8 @@
 			      {else}
 			      			&nbsp
 			      {/if}
-			      </p>
-			      </div>
-
-			      <div class = "named_div7"><p class ="t_title">
+			      </td>
+			      <td class = 't_title' align = "left">
 			      {if isset($value.cancel) && ($value.cancel == true || $value.cancel == 'true')}
 			      			{if isset($value.cancel_date) && $value.cancel_date != ''}
 			      				{$value.cancel_date|date_format:"%m/%d/%Y"}
@@ -44,10 +48,11 @@
 			      {else}
 			      			&nbsp
 			      {/if}
-			      </p>
-				  </div>
-			</div>
-	    {/foreach}
+			      </td>
+			</tr>
+			{/foreach}
+		</table>
+
 	</div>
 </body>
 </html>

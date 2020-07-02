@@ -11,7 +11,7 @@
 
     <div class="body_div">
         <!-- header Line -->
-        <div class="spacer"></div>
+        <div class="spacer" style="margin-top: 3%"></div>
         <center>
             <b>
                 <p style="margin-top: 5px;" class="info">Store Location: <span class="storeLocation uppercase">{$address1}, {$address2}, {$city}, {$state},

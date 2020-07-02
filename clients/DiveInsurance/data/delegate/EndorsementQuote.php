@@ -42,7 +42,7 @@ class EndorsementQuote extends PolicyDocument
              'aiTemplate' => 'DiveStore_AI',
              'aiheader' => 'DiveStore_AI_header.html',
              'lpTemplate' => 'DiveStore_LP',
-             'lpheader' => 'DiveStore_LP_header.html',
+             'lpheader' => 'DiveStore_Quote_LP_header.html',
              'lpfooter' => 'DiveStore_LP_footer.html',
              'aifooter' => 'DiveStore_AI_footer.html',
              'lheader' => 'letter_header.html',
