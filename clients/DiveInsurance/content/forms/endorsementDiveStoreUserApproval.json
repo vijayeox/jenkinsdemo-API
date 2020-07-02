@@ -572,6 +572,9 @@
 					"shortcut": ""
 				}],
 				"clearOnHide": false,
+				"validate": {
+					"required": true
+				},
 				"key": "paymentVerified",
 				"type": "radio",
 				"input": true
@@ -613,6 +616,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-06-30T10:15:47.944Z",
+	"modified": "2020-07-02T10:44:47.975Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
