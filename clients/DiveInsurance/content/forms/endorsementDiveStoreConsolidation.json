@@ -2493,7 +2493,8 @@
 												},
 												"month": {
 													"placeholder": "From",
-													"hide": false
+													"hide": false,
+													"required": true
 												},
 												"year": {
 													"hide": true
@@ -2524,7 +2525,8 @@
 												},
 												"month": {
 													"placeholder": "To",
-													"hide": false
+													"hide": false,
+													"required": true
 												},
 												"year": {
 													"hide": true
@@ -6113,7 +6115,8 @@
 																	},
 																	"month": {
 																		"placeholder": "From",
-																		"hide": false
+																		"hide": false,
+																		"required": true
 																	},
 																	"year": {
 																		"hide": true
@@ -6144,7 +6147,8 @@
 																	},
 																	"month": {
 																		"placeholder": "To",
-																		"hide": false
+																		"hide": false,
+																		"required": true
 																	},
 																	"year": {
 																		"hide": true
@@ -8510,8 +8514,7 @@
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
-											"spellcheck": true,
-											"disabled": true,
+											"spellcheck": false,
 											"tableView": true,
 											"delimiter": true,
 											"requireDecimal": true,
@@ -8523,7 +8526,8 @@
 											"decimalLimit": 3,
 											"input": true,
 											"inputType": "number",
-											"lockKey": true
+											"lockKey": true,
+											"defaultValue": 0
 										}]
 									}, {
 										"components": [{
@@ -8567,8 +8571,7 @@
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
-											"spellcheck": true,
-											"disabled": true,
+											"spellcheck": false,
 											"tableView": true,
 											"defaultValue": "0",
 											"delimiter": false,
@@ -8625,8 +8628,7 @@
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
-											"spellcheck": true,
-											"disabled": true,
+											"spellcheck": false,
 											"tableView": true,
 											"defaultValue": "0",
 											"delimiter": false,
@@ -13506,7 +13508,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 264,
+	"_vid": 267,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13523,6 +13525,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-02T00:29:17.436Z",
+	"modified": "2020-07-02T11:25:18.507Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

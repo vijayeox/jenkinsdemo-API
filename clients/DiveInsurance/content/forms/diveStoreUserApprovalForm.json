@@ -113,7 +113,6 @@
       "collapsible": false,
       "tableView": false,
       "key": "csrAttachmentsPanel",
-      "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
       "type": "panel",
       "label": "Attachments",
       "input": false,
@@ -136,10 +135,9 @@
           "multiple": true
         },
         "key": "csrApprovalAttachments",
-        "customConditional": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
         "type": "file",
-        "input": true,
-        "url": "/file/attachment"
+        "url": "/file/attachment",
+        "input": true
       }]
     }, {
       "title": "Payment Information",
@@ -189,7 +187,7 @@
         "tableView": false
       }, {
         "label": "transaction_reference_number",
-        "key": "transactionReferenceNumber",
+        "key": "transaction_reference_number",
         "type": "hidden",
         "input": true,
         "tableView": false
@@ -211,13 +209,13 @@
             "disabled": true,
             "tableView": false,
             "delimiter": true,
-            "requireDecimal": false,
+            "requireDecimal": true,
             "inputFormat": "plain",
             "clearOnHide": false,
-            "calculateValue": "value = data.amount",
+            "calculateValue": "value = data.amount.toFixed(2)",
             "key": "finalAmountPayable",
             "type": "number",
-            "decimalLimit": 0,
+            "decimalLimit": 2,
             "input": true,
             "inputType": "text",
             "hideOnChildrenHidden": false
@@ -276,7 +274,7 @@
               "requireDecimal": false,
               "inputFormat": "plain",
               "clearOnHide": false,
-              "calculateValue": "value = parseFloat(25 * data.amountPayable / 100).toFixed(0);",
+              "calculateValue": "value = parseFloat(25 * data.amountPayable / 100).toFixed(2);",
               "key": "downPayment",
               "type": "number",
               "input": true,
@@ -433,8 +431,8 @@
               "tableView": false,
               "clearOnHide": false,
               "calculateValue": "value = data.transaction_reference_number",
-              "key": "transactionId",
-              "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+              "key": "transactionReferenceNumber",
+              "customConditional": "if (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  show = true;\n} else {\n  show = false;\n}",
               "type": "textfield",
               "input": true
             }, {
@@ -599,6 +597,9 @@
           "shortcut": ""
         }],
         "clearOnHide": false,
+        "validate": {
+          "required": true
+        },
         "key": "paymentVerified",
         "type": "radio",
         "input": true
@@ -623,7 +624,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 25,
+  "_vid": 31,
   "title": "Dive Store User Approval Form",
   "display": "form",
   "access": [{
@@ -640,6 +641,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-06-30T10:13:34.198Z",
+  "modified": "2020-07-02T10:44:49.634Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

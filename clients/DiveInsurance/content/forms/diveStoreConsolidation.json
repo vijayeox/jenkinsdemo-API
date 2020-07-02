@@ -2699,7 +2699,8 @@
 												},
 												"month": {
 													"placeholder": "To",
-													"hide": false
+													"hide": false,
+													"required": true
 												},
 												"year": {
 													"hide": true
@@ -7344,7 +7345,8 @@
 																	},
 																	"month": {
 																		"placeholder": "From",
-																		"hide": false
+																		"hide": false,
+																		"required": true
 																	},
 																	"year": {
 																		"hide": true
@@ -7375,7 +7377,8 @@
 																	},
 																	"month": {
 																		"placeholder": "To",
-																		"hide": false
+																		"hide": false,
+																		"required": true
 																	},
 																	"year": {
 																		"hide": true
@@ -9750,7 +9753,8 @@
 											"decimalLimit": 3,
 											"input": true,
 											"inputType": "number",
-											"lockKey": true
+											"lockKey": true,
+											"defaultValue": 0
 										}]
 									}, {
 										"components": [{
@@ -9795,7 +9799,6 @@
 											"hideLabel": true,
 											"mask": false,
 											"spellcheck": false,
-											"disabled": true,
 											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
@@ -9857,7 +9860,6 @@
 											"hideLabel": true,
 											"mask": false,
 											"spellcheck": false,
-											"disabled": true,
 											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
@@ -13278,7 +13280,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 440,
+	"_vid": 444,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13295,6 +13297,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-02T03:34:33.443Z",
+	"modified": "2020-07-02T11:27:25.696Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

@@ -57,11 +57,13 @@
 		
 		<p class = "line_end">Thank you for your support of the PADI Endorsed Insurance Program, if you have any questions, please call or email me if you have any questions.</p>
 </div>
+<div>
 		<p>Sincerely,</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
 		<p class ="footer_line">{$approverName}, {$approverDesignation}</p>
 		<p class ="footer_line">(800) 223-9998 or (714) 739-3176</p>
 		<p class ="footer_line">{$approverEmailId}</p>
+</div>
 	</div>
 </body>
 </html>
