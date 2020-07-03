@@ -128,13 +128,13 @@
 				"key": "panelColumns",
 				"columns": [{
 					"components": [{
+						"label": "Username",
+						"calculateValue": "if(data.businessPadiVerified == 'true' || data.businessPadiVerified === true){\n  value = 'S'+data.padi;  \n}else{\n  value = 'PL'+data.padi;\n}",
+						"key": "username",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "username",
-						"label": "Username",
-						"type": "hidden",
 						"lockKey": true,
-						"calculateValue": "value = data['padi'];",
 						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
@@ -145,12 +145,13 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "identifier_field",
+						"defaultValue": "padi",
+						"calculateValue": "if(data.businessPadiVerified == 'true' || data.businessPadiVerified === true){\n    value = 'business_padi';  \n}else{\n    value = 'padi';\n}",
+						"key": "identifier_field",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "identifier_field",
-						"label": "identifier_field",
-						"type": "hidden",
-						"defaultValue": "padi",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -8444,7 +8445,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 600,
+	"_vid": 603,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8462,6 +8463,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-06-26T07:57:00.020Z",
+	"modified": "2020-07-03T09:27:35.391Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
