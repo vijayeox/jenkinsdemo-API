@@ -6817,11 +6817,7 @@
 													"customMessage": "Please enter the Replacement Value"
 												},
 												"key": "ALBuildingReplacementValue",
-												"conditional": {
-													"show": true,
-													"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
-													"eq": "yes"
-												},
+												"customConditional": "if(row['additionalLocationDoYouOwntheBuilding'] == \"yes\") {\n  show = true;\n}",
 												"type": "number",
 												"input": true,
 												"inputType": "number",
@@ -6842,11 +6838,7 @@
 													"customMessage": "Please enter the area of the building in sq ft"
 												},
 												"key": "squarefootageofyourbuildingAL",
-												"conditional": {
-													"show": true,
-													"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
-													"eq": "yes"
-												},
+												"customConditional": "if(row['additionalLocationDoYouOwntheBuilding'] == \"yes\") {\n  show = true;\n}",
 												"type": "number",
 												"input": true,
 												"labelWidth": null,
@@ -6882,11 +6874,7 @@
 												},
 												"errorLabel": "Year built of building",
 												"key": "built_year",
-												"conditional": {
-													"show": true,
-													"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
-													"eq": "yes"
-												},
+												"customConditional": "if(row['additionalLocationDoYouOwntheBuilding'] == \"yes\") {\n  show = true;\n}",
 												"type": "select",
 												"indexeddb": {
 													"filter": {}
@@ -6901,11 +6889,7 @@
 													"customMessage": "Updates on plumbing,roof,etc. is required"
 												},
 												"key": "updatesOnPlumbingElectricalRoofEtcAL",
-												"conditional": {
-													"show": true,
-													"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
-													"eq": "yes"
-												},
+												"customConditional": "console.log(row['additionalLocationDoYouOwntheBuilding']);\nif(row['additionalLocationDoYouOwntheBuilding'] == \"yes\") {\n  show = true;\n}",
 												"type": "textfield",
 												"input": true,
 												"lockKey": true,
@@ -13104,11 +13088,10 @@
 		"label": "Quote Document",
 		"input": false,
 		"components": [{
-			"label": "previewDocuments",
-			"protected": true,
+			"label": "quoteDocuments",
 			"redrawOn": "data",
-			"calculateValue": "value = {};\nif(data.previewDocuments)\n{\n  if(typeof data.previewDocuments === 'object'){\n    value = data.previewDocuments;  \n  }else{\n    var documents = {};\n    data.previewDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
-			"key": "previewDocuments",
+			"calculateValue": "value = {};\nif(data.quoteDocuments)\n{\n  if(typeof data.quoteDocuments === 'object'){\n    value = data.quoteDocuments;  \n  }else{\n    var documents = {};\n    data.quoteDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
+			"key": "quoteDocuments",
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -13120,7 +13103,7 @@
 			"hideLabel": true,
 			"inputType": "documentviewer",
 			"input": 1,
-			"refreshOn": "previewDocuments",
+			"refreshOn": "quoteDocuments",
 			"tableView": false,
 			"protected": true,
 			"persistent": false
@@ -13285,7 +13268,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 449,
+	"_vid": 456,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13302,6 +13285,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-03T09:27:17.660Z",
+	"modified": "2020-07-03T12:18:03.826Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

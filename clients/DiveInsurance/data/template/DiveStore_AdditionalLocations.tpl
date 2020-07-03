@@ -12,8 +12,9 @@
     <div>
     {if isset($additionalLocationData.name) && $additionalLocationData.name != ""} <p class = "info"><b>Store/Location Description : </b>{$additionalLocationData.name}</p>{/if}
     {if isset($additionalLocationData.padiNumberAL) && $additionalLocationData.padiNumberAL != "" && $additionalLocationData.padiNumberAL != null} <p class = "info"><b>Store/Location Number: </b>{$additionalLocationData.padiNumberAL}</p>{/if}
-    {assign var=list value=$additionalNamedInsured|json_decode:true}
+    
     {if isset($additional_named_insureds_option) && $additional_named_insureds_option =='yes'}
+    {assign var=list value=$additionalNamedInsured|json_decode:true}
     <p class = "info"><b>Additional Named Insured:</b></p>
     {foreach from=$list item=$additional}
         <p class = "ai_list info">
