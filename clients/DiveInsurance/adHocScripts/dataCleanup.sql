@@ -28,6 +28,10 @@ UPDATE ox_file SET `data` = REPLACE(`data`, '"careerCoverage":"TecRec Internatio
 UPDATE ox_file SET `data` = REPLACE(`data`, '"careerCoverage":"TecRec International Divemaster",', '"careerCoverage":"internationalDivemaster",');
 UPDATE ox_file SET `data` = REPLACE(`data`, '"careerCoverage":"No Coverage Selected",', '"careerCoverage":"instructor",');
 
+UPDATE ox_file SET `data` = REPLACE(`data`, '"groupExcessLiabilitySelect":[],', '"groupExcessLiabilitySelect":"no",');
+
+UPDATE ox_file SET `data` = REPLACE(`data`, '"medicalPayment":"Yes",', '"medicalPayment":true,');
+
 UPDATE ox_file SET `data` = REPLACE(`data`, '"tecRecEndorsment":"withTecRecEndorsementForSelectionAboveDeclined",', '"tecRecEndorsment":"tecRecDeclined",');
 UPDATE ox_file SET `data` = REPLACE(`data`, '"tecRecEndorsment":[],', '"tecRecEndorsment":"tecRecDeclined",');
 
