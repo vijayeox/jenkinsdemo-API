@@ -17,7 +17,7 @@
     "tableView": false,
     "key": "page5Panel",
     "type": "panel",
-    "label": "Rate Car",
+    "label": "Quote Information",
     "input": false,
     "components": [{
       "label": "documents",
@@ -31,7 +31,7 @@
     }, {
       "type": "documentviewer",
       "key": "quoteDocuments",
-      "label": "Store Documents",
+      "label": "Quote Documents",
       "calculateValue": "value = (data['documents'])",
       "hideLabel": true,
       "inputType": "documentviewer",
@@ -322,7 +322,7 @@
             "clearOnHide": false,
             "validate": {
               "required": true,
-              "custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0] && data.privileges) ){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n    if( data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] = true ||  data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n      document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n    }\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+              "custom": "if(data.paymentOptions == \"creditCard\" && data.privileges && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
             },
             "key": "paymentOptions",
             "properties": {
@@ -552,7 +552,7 @@
     "tableView": false,
     "key": "paymentApprovalPanel",
     "properties": {
-      "commands": "[{\"command\" : \"delegate\",\"delegate\":\"PolicyDocument\"}]"
+      "commands": "[{\"command\" : \"delegate\",\"delegate\":\"StorePreviewDocument\"}]"
     },
     "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
     "type": "panel",
@@ -574,18 +574,18 @@
       "label": "Document Preview",
       "input": false,
       "components": [{
-        "label": "previewDocuments",
+        "label": "finalDocuments",
         "persistent": false,
         "protected": true,
         "calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}",
-        "key": "previewDocuments",
+        "key": "finalDocuments",
         "type": "hidden",
         "input": true,
         "tableView": false
       }, {
         "type": "documentviewer",
         "key": "documents1",
-        "label": "Quote Information",
+        "label": "Store Documents",
         "calculateValue": "value = (data['finalDocuments'])",
         "hideLabel": true,
         "inputType": "documentviewer",
@@ -665,7 +665,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 36,
+  "_vid": 44,
   "title": "Dive Store User Approval Form",
   "display": "wizard",
   "access": [{
@@ -682,6 +682,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-07-03T03:44:36.163Z",
+  "modified": "2020-07-03T12:46:18.571Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }

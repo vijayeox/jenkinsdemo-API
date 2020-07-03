@@ -137,11 +137,6 @@ entity:
                 index: true
     -
         name: 'Dive Boat'
-        identifiers:
-            -
-                identifier: padi
-            -
-                identifier: business_padi
         field:
             -
                 name: policyStatus

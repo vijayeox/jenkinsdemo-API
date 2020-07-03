@@ -282,7 +282,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0] && data.privileges) ){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n    if( data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] = true ||  data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n      document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n    }\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -510,9 +510,6 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "paymentApprovalPanel",
-		"properties": {
-			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"PolicyDocument\"}]"
-		},
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
 		"label": "Payment Approval",
@@ -527,6 +524,7 @@
 				"next": true
 			},
 			"collapsible": false,
+			"hidden": true,
 			"tableView": false,
 			"key": "page10",
 			"type": "panel",
@@ -641,6 +639,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-07-03T03:48:22.077Z",
+	"modified": "2020-07-03T12:18:01.585Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
