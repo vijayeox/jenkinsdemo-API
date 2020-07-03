@@ -926,7 +926,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return $stateLicenseDetails[0]['license_number'];
             }
         }
-        private function getPolicyDetails($data,$persistenceService,$product = null,$category = null)
+        protected function getPolicyDetails($data,$persistenceService,$product = null,$category = null)
         {  
             if(!isset($product)){
                 $product = $data['product'];
@@ -1014,7 +1014,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     return $dest['relativePath'].$template.'.pdf';
                 } 
         }
-        private function copyDocuments(&$data,$dest,$fileKey,$indexKey =null){
+        protected function copyDocuments(&$data,$dest,$fileKey,$indexKey =null){
             if(isset($indexKey)){
                 $file =  $this->template[$data['product']][$fileKey][$indexKey];
             }else{
@@ -1112,7 +1112,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
 
 
-    private function generateGroupDocuments(&$data,&$temp,&$documents,$previous_data,$endorsementOptions,$dest,$options,$length){
+    protected function generateGroupDocuments(&$data,&$temp,&$documents,$previous_data,$endorsementOptions,$dest,$options,$length){
         if($this->type == 'quote' || $this->type == 'endorsementQuote'){
              $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter'); 
              $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
@@ -1137,9 +1137,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         array_push($data['upgradeGroupLiability'], $upgrade);
                     }
                     $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);
-
-
-
                     $documents['endorsement_group_coi_document'] = isset($documents['endorsement_group_coi_document']) ? $documents['endorsement_group_coi_document'] : array();
                     $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
                     array_push($documents['endorsement_group_coi_document'], $endorsementDoc);
@@ -1157,10 +1154,31 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
                 }
             }else{
+                if ($data['groupExcessLiabilitySelect'] == "no"){
+                    $temp['groupCombinedSingleLimit'] = "$1,000,000";
+                    $temp['groupAnnualAggregate'] = "$2,000,000";
+                } else if ($data['groupExcessLiabilitySelect'] == "groupExcessLiability1M"){
+                    $temp['groupCombinedSingleLimit'] = "$2,000,000";
+                    $temp['groupAnnualAggregate'] = "$3,000,000";
+                } else if ($data['groupExcessLiabilitySelect'] == "groupExcessLiability2M"){
+                    $temp['groupCombinedSingleLimit'] = "$3,000,000";
+                    $temp['groupAnnualAggregate'] = "$4,000,000";
+                } else if ($data['groupExcessLiabilitySelect'] == "groupExcessLiability3M"){  
+                    $temp['groupCombinedSingleLimit'] = "$4,000,000";
+                    $temp['groupAnnualAggregate'] = "$5,000,000";
+                } else if ($data['groupExcessLiabilitySelect'] == "groupExcessLiability4M"){  
+                    $temp['groupCombinedSingleLimit'] = "$5,000,000";
+                    $temp['groupAnnualAggregate'] = "$6,000,000";
+                } else if ($data['groupExcessLiabilitySelect'] == "groupExcessLiability9M"){  
+                    $temp['groupCombinedSingleLimit'] = "$10,000,000";
+                    $temp['groupAnnualAggregate'] = "$11,000,000";
+                } else {
+                    $temp['groupCombinedSingleLimit'] = "$1,000,000";
+                    $temp['groupAnnualAggregate'] = "$2,000,000";
+                }
                 $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
 
                 $documents['group_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
-
                 if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
                     $this->logger->info("DOCUMENT Group Additional Named Insured");
                     $documents['group_additional_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
@@ -1208,19 +1226,19 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          }  
 
         private function diveStoreEnorsementQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
-            $data['previewDocuments'] = array();
+            $data['quoteDocuments'] = array();
             $documents = array();
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
             $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
             }
-            $data['previewDocuments'] = $documents;
+            $data['quoteDocuments'] = $documents;
          }  
 
 
          private function diveStoreQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
-            $data['previewDocuments'] = array();
+            $data['quoteDocuments'] = array();
             $documents = array();
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
             $documents['coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
@@ -1271,6 +1289,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
 
-            $data['previewDocuments'] = $documents;
+            $data['quoteDocuments'] = $documents;
          }
 }

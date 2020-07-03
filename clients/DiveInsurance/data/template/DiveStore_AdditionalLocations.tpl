@@ -26,8 +26,8 @@
     ( isset($additionalLocationData.city)  && $additionalLocationData.city != "" ) || 
     (isset($additionalLocationData.state) && $additionalLocationData.state != "" && is_string($additionalLocationData.state)) || 
     (isset($additionalLocationData.zip) && $additionalLocationData.zip != "")}<p  class = "info"><b>
-    Location Address: </b>{if isset($additionalLocationData.address) && is_string($additionalLocationData.address) && $additionalLocationData.address !=""},{$additionalLocationData.country}{/if}<br>
-    {if isset($additionalLocationData.country) && is_string($additionalLocationData.country) && $additionalLocationData.country !=""},{$additionalLocationData.country}{/if}{if isset($additionalLocationData.city)  && is_string($additionalLocationData.city) && $additionalLocationData.city !=""},{$additionalLocationData.city}{/if}{if isset($additionalLocationData.state) && is_string($additionalLocationData.state)},{$additionalLocationData.state}{/if}{if isset($additionalLocationData.zip) && is_string($additionalLocationData.zip) && $additionalLocationData.zip !=""}{$additionalLocationData.zip}{/if}</p>
+    Location Address: </b>{if isset($additionalLocationData.address) && is_string($additionalLocationData.address) && $additionalLocationData.address !=""}{$additionalLocationData.address}{/if}<br>
+    {if isset($additionalLocationData.country) && is_string($additionalLocationData.country) && $additionalLocationData.country !=""}{$additionalLocationData.country},{/if}{if isset($additionalLocationData.city)  && is_string($additionalLocationData.city) && $additionalLocationData.city !=""},{$additionalLocationData.city}{/if}{if isset($additionalLocationData.state) && is_string($additionalLocationData.state)},{$additionalLocationData.state}{/if}{if isset($additionalLocationData.zip) && is_string($additionalLocationData.zip) && $additionalLocationData.zip !=""}{$additionalLocationData.zip}{/if}</p>
     {/if}
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">

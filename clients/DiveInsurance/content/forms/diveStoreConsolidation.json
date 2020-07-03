@@ -1436,7 +1436,6 @@
 						},
 						"type": "datetime",
 						"input": true,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 						"widget": {
 							"type": "calendar",
 							"displayInTimezone": "viewer",
@@ -1502,7 +1501,6 @@
 						},
 						"type": "datetime",
 						"input": true,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 						"widget": {
 							"type": "calendar",
 							"displayInTimezone": "viewer",
@@ -3686,7 +3684,6 @@
 									"key": "dsgldateoftheclaim",
 									"type": "datetime",
 									"input": true,
-									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 									"widget": {
 										"type": "calendar",
 										"displayInTimezone": "viewer",
@@ -6795,9 +6792,6 @@
 										"hideOnChildrenHidden": false
 									}, {
 										"label": "Columns",
-										"input": false,
-										"tableView": false,
-										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"columns": [{
 											"components": [{
 												"label": "What is the replacement value?",
@@ -6902,13 +6896,16 @@
 											"pull": 0,
 											"size": "md"
 										}],
-										"type": "columns",
 										"hideLabel": true,
+										"tableView": false,
+										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"conditional": {
-											"show": "true",
-											"when": "additionalLocationDoYouOwntheBuilding",
+											"show": true,
+											"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
 											"eq": "yes"
-										}
+										},
+										"type": "columns",
+										"input": false
 									}, {
 										"label": "Please explain location",
 										"tableView": true,
@@ -8203,7 +8200,6 @@
 													"key": "ALdsgldateoftheclaim",
 													"type": "datetime",
 													"input": true,
-													"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 													"widget": {
 														"type": "calendar",
 														"displayInTimezone": "viewer",
@@ -9310,7 +9306,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALCoverageCheckBox == \"true\" || row.ALCoverageCheckBox === true){\n  var coverageFp = parseFloat(data[\"CoverageFP\"]);\n  value=(coverageFp/10).toFixed(0);\n} else {\n  value = 0;\n}",
+													"calculateValue": "var coverageFp = parseFloat(data[\"CoverageFP\"]);\nvalue=(coverageFp/10).toFixed(0);",
 													"key": "ALCoverageFP",
 													"type": "number",
 													"input": true,
@@ -9349,9 +9345,6 @@
 													"clearOnHide": false,
 													"calculateValue": "value = parseFloat(data['TravelAgentEOFP']/10).toFixed(0);",
 													"key": "ALTravelAgentEOFP",
-													"conditional": {
-														"show": true
-													},
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -9370,11 +9363,6 @@
 													"clearOnHide": false,
 													"calculateValue": "value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);",
 													"key": "ALMedicalExpenseFP",
-													"conditional": {
-														"show": true,
-														"when": "ALMedicalExpenseCheckBox",
-														"eq": "true"
-													},
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -9393,11 +9381,6 @@
 													"clearOnHide": false,
 													"calculateValue": "value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);",
 													"key": "ALNonOwnedAutoFP",
-													"conditional": {
-														"show": true,
-														"when": "ALNonOwnedAutoCheckBox",
-														"eq": "true"
-													},
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -12847,7 +12830,6 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 						"widget": {
 							"type": "calendar",
 							"displayInTimezone": "viewer",
@@ -13111,7 +13093,7 @@
 			"type": "documentviewer",
 			"key": "documents1",
 			"label": "Quote Information",
-			"calculateValue": "value = (data['previewDocuments'])",
+			"calculateValue": "value = (data['quoteDocuments'])",
 			"hideLabel": true,
 			"inputType": "documentviewer",
 			"input": 1,
@@ -13280,7 +13262,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 444,
+	"_vid": 446,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13297,6 +13279,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-02T11:27:25.696Z",
+	"modified": "2020-07-03T00:52:50.536Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

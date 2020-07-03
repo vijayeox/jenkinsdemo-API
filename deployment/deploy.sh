@@ -373,7 +373,9 @@ diveinsurance()
         cd /opt/oxzion/view/apps/DiveInsurance/
         rm -rf /opt/oxzion/view/apps/DiveInsurance/node_modules
         npm install --unsafe-perm
-        npm run build
+        cd /opt/oxzion/view/gui/
+        rm -rf /opt/oxzion/view/gui/node_modules
+        npm install --unsafe-perm
         cd /opt/oxzion/view/themes/VicenciaAndBuckleyTheme/
         rm -rf /opt/oxzion/view/themes/VicenciaAndBuckleyTheme/node_modules
         npm install --unsafe-perm

@@ -1273,12 +1273,14 @@ class FileService extends AbstractService
             foreach($gridResult as $parentName => $data){
                 $initialDataset = $data['initial'];
                 $submissionDataset = $data['submission'];
-                $count = max(count($initialDataset), count($submissionDataset));
-                for($i = 0; $i < $count; $i++) {
-                    $initialRowData = isset($initialDataset[$i]) ? $initialDataset[$i] : array();
-                    $submissionRowData = isset($submissionDataset[$i]) ? $submissionDataset[$i] : array();
-                    foreach($data['fields'] as $key => $field) {
-                        $this->buildChangeLog($initialRowData, $submissionRowData, $field, $labelMapping, $resultData,$i+1);
+                if(is_array($initialDataset) && is_array($submissionDataset)){
+                    $count = max(count($initialDataset), count($submissionDataset));
+                    for($i = 0; $i < $count; $i++) {
+                        $initialRowData = isset($initialDataset[$i]) ? $initialDataset[$i] : array();
+                        $submissionRowData = isset($submissionDataset[$i]) ? $submissionDataset[$i] : array();
+                        foreach($data['fields'] as $key => $field) {
+                            $this->buildChangeLog($initialRowData, $submissionRowData, $field, $labelMapping, $resultData,$i+1);
+                        }
                     }
                 }
             }

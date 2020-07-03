@@ -112,7 +112,7 @@
                         {/if}
 					</p>
 					<p class = "sec_title2">
-					    {if isset($poolLiability) && (int)$poolLiability > 0}
+					    {if isset($nonDivingPoolAmount) && (int)$nonDivingPoolAmount > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Excluded</td>
