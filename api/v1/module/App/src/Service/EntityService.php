@@ -152,4 +152,25 @@ class EntityService extends AbstractService
             throw $e;
         }
     }
+
+    public function saveIdentifiers($entityId,$identifiers){
+        $this->logger->info("Save Entity Identifiers - $entityId ".print_r($identifiers,true));
+        try{
+            $this->beginTransaction();
+            $delete = "DELETE FROM ox_entity_identifier WHERE entity_id= :entityId";
+            $params = array("entityId" => $entityId);
+            $result = $this->executeUpdateWithBindParameters($delete, $params);
+            foreach ($identifiers as $value) {
+                $insert = "INSERT INTO ox_entity_identifier(`entity_id`,`identifier`) 
+                            VALUES (:entityId,:identifier)";
+                $params["identifier"] = $value['identifier'];
+                $result = $this->executeQueryWithBindParameters($insert, $params);
+            }
+            $this->commit();
+        }
+        catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+    }
 }

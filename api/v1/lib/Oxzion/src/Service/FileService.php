@@ -831,7 +831,8 @@ class FileService extends AbstractService
                 $identifierParams = array('userId'=>$userId,'appId'=>$appId);
                 $getIdentifier = $this->executeQueryWithBindParameters($identifierQuery, $identifierParams)->toArray();
                 if(isset($getIdentifier) && count($getIdentifier)>0){
-                    $fromQuery .= " INNER JOIN ox_indexed_file_attribute ofa on (ofa.file_id = of.id) inner join ox_field as d on (ofa.field_id = d.id and d.name= :fieldName)  ";
+                    $fromQuery .= " INNER JOIN ox_indexed_file_attribute ofa on (ofa.file_id = of.id) inner join ox_field as d on (ofa.field_id = d.id and d.name= :fieldName)
+                        INNER join ox_entity_identifier as oei on oei.identifier = '".$getIdentifier[0]['identifier_name']."' AND oei.entity_id = en.id ";
                     $queryParams['fieldName'] = $getIdentifier[0]['identifier_name'];
                     $queryParams['identifier'] = $getIdentifier[0]['identifier'];
                     $whereQuery = " ofa.field_value_text = :identifier AND ";
