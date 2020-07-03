@@ -17,7 +17,7 @@
     "tableView": false,
     "key": "page5Panel",
     "type": "panel",
-    "label": "Rate Car",
+    "label": "Quote Information",
     "input": false,
     "components": [{
       "label": "documents",
@@ -31,7 +31,7 @@
     }, {
       "type": "documentviewer",
       "key": "quoteDocuments",
-      "label": "Store Documents",
+      "label": "Quote Documents",
       "calculateValue": "value = (data['documents'])",
       "hideLabel": true,
       "inputType": "documentviewer",
@@ -551,6 +551,9 @@
     "collapsible": false,
     "tableView": false,
     "key": "paymentApprovalPanel",
+    "properties": {
+      "commands": "[{\"command\" : \"delegate\",\"delegate\":\"StorePreviewDocument\"}]"
+    },
     "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
     "type": "panel",
     "label": "Payment Approval",
@@ -565,7 +568,6 @@
         "next": true
       },
       "collapsible": false,
-      "hidden": true,
       "tableView": false,
       "key": "page10",
       "type": "panel",
@@ -583,7 +585,7 @@
       }, {
         "type": "documentviewer",
         "key": "documents1",
-        "label": "Quote Information",
+        "label": "Store Documents",
         "calculateValue": "value = (data['finalDocuments'])",
         "hideLabel": true,
         "inputType": "documentviewer",
@@ -663,7 +665,7 @@
   }],
   "controller": "",
   "revisions": "current",
-  "_vid": 41,
+  "_vid": 44,
   "title": "Dive Store User Approval Form",
   "display": "wizard",
   "access": [{
@@ -680,6 +682,6 @@
   "path": "divestoreuserapprovalform",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-02-05T11:46:51.316Z",
-  "modified": "2020-07-03T12:18:21.964Z",
+  "modified": "2020-07-03T12:46:18.571Z",
   "machineName": "testdivehub:diveStoreUserApprovalForm"
 }
