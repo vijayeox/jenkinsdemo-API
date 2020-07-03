@@ -129,7 +129,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Username",
-						"calculateValue": "if(data.businessPadiVerified == 'true' || data.businessPadiVerified === true){\n  value = 'S'+data.padi;  \n}else{\n  value = 'PL'+data.padi;\n}",
+						"calculateValue": "value = data.padi;",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -147,7 +147,6 @@
 					}, {
 						"label": "identifier_field",
 						"defaultValue": "padi",
-						"calculateValue": "if(data.businessPadiVerified == 'true' || data.businessPadiVerified === true){\n    value = 'business_padi';  \n}else{\n    value = 'padi';\n}",
 						"key": "identifier_field",
 						"type": "hidden",
 						"input": true,
@@ -8445,7 +8444,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 603,
+	"_vid": 604,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8463,6 +8462,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-07-03T09:27:35.391Z",
+	"modified": "2020-07-03T13:18:14.814Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }
