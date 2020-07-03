@@ -136,10 +136,10 @@ mattermost()
     then
         echo -e "${RED}MATTERMOST was not packaged so skipping it\n${RESET}"
     else
-    	echo -e "${YELLOW}Backing up current configurations${RESET}"
-    	cp /opt/oxzion/mattermost/config/config.json ${TEMP}/integrations/mattermost/config/config.json
-    	cp /opt/oxzion/mattermost/config/config.json /home/ubuntu/env/integrations/mattermost/mattermost-server/config/config.json
-    	echo -e "${GREEN}Backing up current configurations completed${RESET}"
+        echo -e "${YELLOW}Backing up current configurations${RESET}"
+        cp /opt/oxzion/mattermost/config/config.json ${TEMP}/integrations/mattermost/config/config.json
+        cp /opt/oxzion/mattermost/config/config.json /home/ubuntu/env/integrations/mattermost/mattermost-server/config/config.json
+        echo -e "${GREEN}Backing up current configurations completed${RESET}"
         echo -e "${GREEN}Stopping Mattermost service${RESET}"
         systemctl stop mattermost
         echo -e "${YELLOW}Stopped!${RESET}"
@@ -373,9 +373,7 @@ diveinsurance()
         cd /opt/oxzion/view/apps/DiveInsurance/
         rm -rf /opt/oxzion/view/apps/DiveInsurance/node_modules
         npm install --unsafe-perm
-        cd /opt/oxzion/view/gui/
-        rm -rf /opt/oxzion/view/gui/node_modules
-        npm install --unsafe-perm
+        npm run build
         cd /opt/oxzion/view/themes/VicenciaAndBuckleyTheme/
         rm -rf /opt/oxzion/view/themes/VicenciaAndBuckleyTheme/node_modules
         npm install --unsafe-perm
