@@ -55,6 +55,9 @@ role:
 entity:
     -
         name: 'Individual Professional Liability'
+        identifiers:
+            -
+                identifier: padi
         field:
             -
                 name: policyStatus
@@ -91,6 +94,9 @@ entity:
                 index: true
     -
         name: 'Dive Store'
+        identifiers:
+            -
+                identifier: business_padi
         field:
             -
                 name: policyStatus
@@ -123,10 +129,19 @@ entity:
                 index: true
             -
                 name: product
+                data_type: text
+                index: true
+            -
+                name: business_padi
                 data_type: text
                 index: true
     -
         name: 'Dive Boat'
+        identifiers:
+            -
+                identifier: padi
+            -
+                identifier: business_padi
         field:
             -
                 name: policyStatus
@@ -161,8 +176,15 @@ entity:
                 name: product
                 data_type: text
                 index: true
+            -
+                name: business_padi
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
+        identifiers:
+            -
+                identifier: padi
         field:
             -
                 name: policyStatus
