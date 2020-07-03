@@ -529,7 +529,11 @@ class FileService extends AbstractService
                 $fieldData['field_value_text'] = NULL;
                 $fieldData['field_value_numeric'] = NULL;
                 $fieldData['field_value_boolean'] = NULL;
-                $fieldData['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
+                if(is_string($fieldvalue) && date_create($fieldvalue)){
+                    $fieldData['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
+                } else {
+                    $fieldData['field_value_date'] = date_format(date_create(),'Y-m-d H:i:s');;
+                }
                 $fieldData[$field['name']] = $fieldData['field_value_date'];
                 break;
             case 'list':

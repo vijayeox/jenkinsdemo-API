@@ -7,6 +7,7 @@
 	<div>
 		{if isset($upgradeStatus)}
 		{if $upgradeStatus == true || $upgradeStatus == 'true' }
+		{if isset($upgradeGroupLiability)}
 			{assign var=list value=$upgradeGroupLiability|json_decode:true}
 			{if isset($upgradeData)}
 			{foreach from=$list item=$upgradeData}
@@ -16,6 +17,7 @@
 		    {/foreach}
 		    {/if}
 		{/if}
+		    {/if}
 	{/if}
 	<div class = "second_content">
 		<hr class = "spacing1"></hr>
