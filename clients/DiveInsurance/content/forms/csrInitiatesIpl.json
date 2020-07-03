@@ -408,7 +408,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Username",
-						"calculateValue": "value = 'PL'+data['padi'];",
+						"calculateValue": "value = data['padi'];",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -1360,9 +1360,9 @@
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"tableView": false,
-						"enableMinDateInput": true,
+						"enableMinDateInput": false,
 						"datePicker": {
-							"minDate": "moment().format(\"MM DD YYYY\");",
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"datepickerMode": "day"
@@ -1384,9 +1384,9 @@
 						"key": "csrPolicyPeriod",
 						"properties": {
 							"delegate": "RateCard",
-							"post_delegate_refresh1": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
+							"post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
 						},
-						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n  show = true;\n}\nelse{\n  show = false;\n}",
 						"type": "datetime",
 						"input": true,
 						"widget": {
@@ -1402,7 +1402,7 @@
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
 							"time_24hr": true,
-							"minDate": "moment().format(\"MM DD YYYY\");",
+							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
 							"maxDate": null
@@ -1439,7 +1439,7 @@
 						"properties": {
 							"data_type": "Date"
 						},
-						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n  show = true;\n}\nelse{\n  show = false;\n}",
 						"type": "datetime",
 						"input": true,
 						"widget": {
@@ -1494,6 +1494,13 @@
 				"input": true,
 				"tableView": true,
 				"lockKey": true
+			}, {
+				"label": "setCsrPolicyPeriod",
+				"calculateValue": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\nvalue = true;\n}",
+				"key": "setCsrPolicyPeriod",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}],
 			"type": "panel",
 			"tooltip": "Select a valid policy period from the list",
@@ -1512,7 +1519,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "coverageOptions",
-			"customConditional": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n show = true;\n}else{\n show = (data['start_date_range'].value)? true : false;\n}",
+			"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n show = true;\n}else{\n show = (data['start_date_range'].value)? true : false;\n}",
 			"type": "panel",
 			"label": "Coverage and Options",
 			"input": false,
@@ -1540,7 +1547,6 @@
 							},
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
-							"clearOnHide": false,
 							"validate": {
 								"required": true
 							},
@@ -4885,7 +4891,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 530,
+	"_vid": 536,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4906,6 +4912,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-03T10:17:48.060Z",
+	"modified": "2020-07-03T13:28:20.025Z",
 	"machineName": "testdivehub:csrInitiates"
 }
