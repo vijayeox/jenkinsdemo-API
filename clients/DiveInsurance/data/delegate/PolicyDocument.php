@@ -549,6 +549,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if ($temp['product'] == 'Individual Professional Liability') {
                  $check = $this->endorsementOptionsFlag($temp);
              }
+             // print_r($check);exit;
              if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
                 $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 if(is_array($policyDocuments)){
@@ -713,6 +714,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
                
+            $data['isRenewalFlow'] = false;
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
         }
@@ -1180,7 +1182,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $endorsement = 0;
         $endorsementOptionsAICheck = 0;
         $endorsementOptionsPACCheck = 0;
-        if(isset($data['endorsement_options'])){
+        if(isset($data['endorsement_options']) && $data['endorsement_options'] != ""){
             $endorsement = 1;
             if(is_array($data['endorsement_options'])){
                 if($data['endorsement_options']['modify_additionalInsured'] == true)

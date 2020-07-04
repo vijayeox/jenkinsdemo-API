@@ -1335,7 +1335,7 @@
 			}, {
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif(today.format(\"YYYY-MM-DD\") <= '2020-07-13')\n{\n  value = startRange.format(\"YYYY-MM-DD\");\n}else{\n  value = moment.max(today,startRange).format(\"YYYY-MM-DD\");\n}",
+				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) && today.format(\"YYYY-MM-DD\") <= '2020-07-13')\n{\n  value = startRange.format(\"YYYY-MM-DD\");\n}else{\n  value = moment.max(today,startRange).format(\"YYYY-MM-DD\");\n}",
 				"key": "start_date",
 				"properties": {
 					"data_type": " Date"
@@ -4752,7 +4752,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 483,
+	"_vid": 484,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4773,6 +4773,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-30T11:48:02.745Z",
+	"modified": "2020-06-30T15:13:46.697Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -27,6 +27,7 @@ class FieldService extends AbstractService
             $appId = $appUUId;
         }
         $data['app_id'] = $appId;
+        $data['data_type'] = isset($data['data_type']) ? trim($data['data_type']) : "";
         if(isset($data['data_type']) && !isset($data['type'])){
             $data['type'] = $this->getFieldTypeByDataType($data['data_type']);
         }
