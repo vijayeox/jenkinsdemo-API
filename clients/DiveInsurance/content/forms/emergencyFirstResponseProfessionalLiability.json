@@ -116,6 +116,15 @@
 						"calculateValue": "value = data['padi'];",
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "isRenewalFlow",
+						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
+						"key": "isRenewalFlow",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false,
+						"keyModified": true
+					}, {
 						"label": "padiNotFound",
 						"key": "padiNotFound",
 						"type": "hidden",
@@ -1289,7 +1298,7 @@
 			}, {
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
+				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) && today.format(\"YYYY-MM-DD\") <= '2020-07-13')\n{\n  value = startRange.format(\"YYYY-MM-DD\");\n}else{\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");\n}",
 				"key": "start_date",
 				"properties": {
 					"data_type": "Date"
@@ -3649,7 +3658,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 590,
+	"_vid": 593,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3733,7 +3742,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-06-29T01:27:24.048Z",
+	"modified": "2020-07-01T02:34:00.234Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }
