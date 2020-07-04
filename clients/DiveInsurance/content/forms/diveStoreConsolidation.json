@@ -13311,10 +13311,6 @@
 					"label": "On Hold",
 					"value": "onHold",
 					"shortcut": ""
-				}, {
-					"label": "On Hold",
-					"value": "onHold",
-					"shortcut": ""
 				}],
 				"clearOnHide": false,
 				"validate": {
@@ -13380,7 +13376,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 416,
+	"_vid": 418,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13397,6 +13393,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-01T07:46:26.032Z",
+	"modified": "2020-07-01T08:45:33.537Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
