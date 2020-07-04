@@ -269,7 +269,7 @@ namespace ProcessExcel
         private void PostFile(string folder, string fileName)
         {
             Console.WriteLine(_settings.postURL);
-            var client = new RestClient(_settings.postURL + _settings.appUUID + "/pipeline");
+            var client = new RestClient(_settings.postURL + "app/" +  _settings.appUUID + "/pipeline");
             client.Timeout = -1;
 
             var request = new RestRequest(Method.POST);
