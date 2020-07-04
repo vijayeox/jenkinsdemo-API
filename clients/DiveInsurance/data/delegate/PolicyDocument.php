@@ -100,7 +100,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
                         'alTemplate' => 'DiveStore_AdditionalLocations',
-                        'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
+                        'GLblanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
+                        'blanketForm' => 'GL_AI_Blanket.pdf',
                         'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf',
                         'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'),
@@ -421,18 +422,29 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             else if($data['product'] == "Dive Store"){
 
                if($this->type != 'endorsementQuote' && $this->type != "quote"){
+
+                    if(isset($this->template[$temp['product']]['cover_letter'])){
+                        $this->logger->info("DOCUMENT cover_letter");
+                        $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
+                    }
                     if(isset($this->template[$data['product']]['instruct'])){
                         $this->logger->info("DOCUMENT instruct");
                         $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
                     }
-                   
+                    if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
+                        $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+                    }
+
+                    if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
+                        $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
+                    }
                     if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
                         $this->logger->info("DOCUMENT additionalInsured");
                         $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                     }
-    
-                    if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
-                        $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+                    if(isset($this->template[$temp['product']]['blanketForm'])){
+                        $this->logger->info("DOCUMENT blanketForm");
+                        $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
                     }
 
                     if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
@@ -444,10 +456,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
                         $this->logger->info("DOCUMENT lossPayees");
                         $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
-                    }
-
-                    if($this->type == 'policy'){
-                        $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
                     }
 
                     if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
@@ -464,31 +472,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
 
-                    if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
-                        $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
-                    }
-
-                    if(isset($this->template[$temp['product']]['cover_letter'])){
-                        $this->logger->info("DOCUMENT cover_letter");
-                        $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
-                    }
-
-                    if(isset($this->template[$temp['product']]['AutoLiability']))   {
-                        if(isset($temp['doYouWantToApplyForNonOwnerAuto'])){
-                            if(is_bool($data['doYouWantToApplyForNonOwnerAuto']) === true || $data['doYouWantToApplyForNonOwnerAuto'] === true || $data['doYouWantToApplyForNonOwnerAuto'] === "true"){
-                               $documents['NonOwnedAutoLiability'] = $this->copyDocuments($temp,$dest['relativePath'],'AutoLiability'); 
-                            }
-                        }
-                    }
-                    if(isset($this->template[$temp['product']]['travelAgentEO']))   {
-                        if(isset($temp['TravelAgentEOFP']) && $temp['TravelAgentEOFP']){
-                            $this->logger->info("DOCUMENT TravelAgentEOFP");
-                            $documents['Travel_Agents_PL_Endorsement'] = $this->copyDocuments($temp,$dest['relativePath'],'travelAgentEO');
-                        }
-                    }
-                    if(isset($this->template[$temp['product']]['blanketForm'])){
-                        $this->logger->info("DOCUMENT blanketForm");
-                        $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                    if($this->type == 'policy'){
+                        $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
                     }
                 }
                 
@@ -1283,9 +1268,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
-                if(isset($this->template[$temp['product']]['blanketForm'])){
-                    $this->logger->info("DOCUMENT blanketForm");
-                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                if(isset($this->template[$temp['product']]['GLblanketForm'])){
+                    $this->logger->info("DOCUMENT GLblanketForm");
+                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
                 }
             }
 
