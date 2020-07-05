@@ -160,7 +160,7 @@ content:
                                 url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
                     -
                         name: 'Dive Store'
-                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Store\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Store\" || i.entity_name == \"Individual Professional Liability\" || i.entity_name == \"Emergency First Response\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
                         details:
                             -
                                 type: Form
