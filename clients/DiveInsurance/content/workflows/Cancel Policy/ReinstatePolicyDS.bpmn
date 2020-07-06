@@ -9,7 +9,7 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1rquzd5</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_135jvfh" default="SequenceFlow_00ep7uq">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_135jvfh">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">def confirmRP = execution.getVariable('confirmReinstatePolicy')
@@ -21,7 +21,6 @@ if(confirmRP == 'yes'){
       <bpmn:incoming>SequenceFlow_1rquzd5</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12ppmoc</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_045vqww</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_00ep7uq</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="EndEvent_1qyif06" name="No Reinstatement of policy">
       <bpmn:incoming>SequenceFlow_12ppmoc</bpmn:incoming>
@@ -30,7 +29,7 @@ if(confirmRP == 'yes'){
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${confirmReinstatePolicy=="no"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_045vqww" name="yes" sourceRef="ExclusiveGateway_135jvfh" targetRef="Task_0e4xhcl">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${confirmReinstatePolicy=="yes" &amp;&amp; automatic_renewal=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${confirmReinstatePolicy=="yes"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Task_0e4xhcl" name="Send Reinstated Policy Mail" camunda:expression="0">
       <bpmn:extensionElements>
@@ -43,7 +42,6 @@ if(confirmRP == 'yes'){
           </camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_00ep7uq</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_045vqww</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ia7z9k</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -52,61 +50,54 @@ if(confirmRP == 'yes'){
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0ia7z9k" sourceRef="Task_0e4xhcl" targetRef="EndEvent_053i92a" />
     <bpmn:sequenceFlow id="SequenceFlow_1rquzd5" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_135jvfh" />
-    <bpmn:sequenceFlow id="SequenceFlow_00ep7uq" sourceRef="ExclusiveGateway_135jvfh" targetRef="Task_0e4xhcl" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DSReInstate">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="169" width="36" height="36" />
+        <dc:Bounds x="179" y="99" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="157" y="212" width="80" height="14" />
+          <dc:Bounds x="157" y="142" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_135jvfh_di" bpmnElement="ExclusiveGateway_135jvfh" isMarkerVisible="true">
-        <dc:Bounds x="315" y="162" width="50" height="50" />
+        <dc:Bounds x="315" y="92" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_1qyif06_di" bpmnElement="EndEvent_1qyif06">
-        <dc:Bounds x="322" y="282" width="36" height="36" />
+        <dc:Bounds x="322" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="296" y="325" width="88" height="27" />
+          <dc:Bounds x="296" y="255" width="88" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_12ppmoc_di" bpmnElement="SequenceFlow_12ppmoc">
+        <di:waypoint x="340" y="142" />
         <di:waypoint x="340" y="212" />
-        <di:waypoint x="340" y="282" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="349" y="244" width="13" height="14" />
+          <dc:Bounds x="349" y="174" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_045vqww_di" bpmnElement="SequenceFlow_045vqww">
-        <di:waypoint x="365" y="187" />
-        <di:waypoint x="550" y="187" />
+        <di:waypoint x="365" y="117" />
+        <di:waypoint x="460" y="117" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="378" y="169" width="18" height="14" />
+          <dc:Bounds x="367" y="99" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_00zfig6_di" bpmnElement="Task_0e4xhcl">
-        <dc:Bounds x="550" y="147" width="100" height="80" />
+        <dc:Bounds x="460" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_053i92a_di" bpmnElement="EndEvent_053i92a">
-        <dc:Bounds x="682" y="169" width="36" height="36" />
+        <dc:Bounds x="642" y="99" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="657" y="212" width="86" height="14" />
+          <dc:Bounds x="617" y="142" width="86" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0ia7z9k_di" bpmnElement="SequenceFlow_0ia7z9k">
-        <di:waypoint x="650" y="187" />
-        <di:waypoint x="682" y="187" />
+        <di:waypoint x="560" y="117" />
+        <di:waypoint x="642" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1rquzd5_di" bpmnElement="SequenceFlow_1rquzd5">
-        <di:waypoint x="215" y="187" />
-        <di:waypoint x="315" y="187" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_00ep7uq_di" bpmnElement="SequenceFlow_00ep7uq">
-        <di:waypoint x="340" y="162" />
-        <di:waypoint x="340" y="80" />
-        <di:waypoint x="600" y="80" />
-        <di:waypoint x="600" y="147" />
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="315" y="117" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
