@@ -108,7 +108,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Username",
-						"calculateValue": "value = data.padi;",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = 'PL'+data['padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -3659,7 +3659,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 595,
+	"_vid": 597,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3743,7 +3743,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-07-03T13:16:09.830Z",
+	"modified": "2020-07-06T03:59:40.833Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

@@ -117,7 +117,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Username",
-						"calculateValue": "value = data['padi'];",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = 'S'+data['padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -143,6 +143,7 @@
 					}, {
 						"label": "identifier_field",
 						"defaultValue": "padi",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.identifier_field;\n}else{\n  value = 'business_padi';\n}",
 						"key": "identifier_field",
 						"type": "hidden",
 						"input": true,
@@ -1416,6 +1417,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Policy Start Date",
+						"displayInTimezone": "submission",
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"tableView": false,
@@ -1441,7 +1443,7 @@
 						"input": true,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "submission",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": false,
@@ -1460,7 +1462,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "start_date",
-						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\n if((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) && moment(data.policyPeriod).format(\"YYYY-MM-DD\") <= '2020-07-13')\n { \n   value = moment('2020-06-30').format(\"YYYY-MM-DD\");\n }else{\n   value = moment(parseZone(data.policyPeriod)).format(\"YYYY-MM-DD\").utcOffset();\n }\n}",
+						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\n if((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) && moment(data.policyPeriod).format(\"YYYY-MM-DD\") <= '2020-07-13')\n { \n   value = moment('2020-06-30').format(\"YYYY-MM-DD\");\n }else{\n   value = moment(data.policyPeriod).format(\"YYYY-MM-DD\");\n }\n}else{\n  value = moment().format(\"YYYY-MM-DD\");\n}",
 						"key": "start_date",
 						"properties": {
 							"data_type": "Date"
@@ -13270,7 +13272,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 473,
+	"_vid": 484,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13287,6 +13289,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-03T23:16:59.598Z",
+	"modified": "2020-07-06T03:10:36.982Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

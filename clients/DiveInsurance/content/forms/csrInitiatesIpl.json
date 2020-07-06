@@ -408,7 +408,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Username",
-						"calculateValue": "value = data['padi'];",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = 'PL'+data['padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -4073,6 +4073,7 @@
 								},
 								"selectThreshold": 0.3,
 								"validate": {
+									"required": true,
 									"customMessage": "Please select the Business Relation with the Additional Insured"
 								},
 								"errorLabel": "Additional Insured Business Relation",
@@ -4891,7 +4892,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 536,
+	"_vid": 542,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4912,6 +4913,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-03T13:28:20.025Z",
+	"modified": "2020-07-06T03:53:36.639Z",
 	"machineName": "testdivehub:csrInitiates"
 }
