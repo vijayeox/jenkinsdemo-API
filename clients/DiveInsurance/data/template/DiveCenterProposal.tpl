@@ -8,6 +8,28 @@
 </head>
 
 <body>
+
+  <center>
+      <b>
+        <p style="margin-top: 5px;" class="info">Store Location:
+        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false)}
+              <span class="uppercase">{$mailaddress1}</span>,
+              <span class="uppercase">{$mailaddress2}</span>,
+              <span class="uppercase">{$physical_city}</span>,
+              <span class="uppercase">{$physical_state}</span> <span class="uppercase">{$physical_zip}</span>
+          </p>
+        {else}
+              <span class="uppercase">{$address1}</span>,
+              <span class="uppercase">{$address2}</span>,
+              <span class="uppercase">{$city}</span>,
+              <span class="uppercase">{$state}</span> <span class="uppercase">{$zip}</span>
+          </p>
+        {/if}
+      </b>
+  </center>
+  <div class="spacer2"></div>
+  <p></p>
+  <div class="clearfix"></div>
     <p></p>
     <div>
         <div class="table_sec">
