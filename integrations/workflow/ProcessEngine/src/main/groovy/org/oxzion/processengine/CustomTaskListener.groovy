@@ -50,7 +50,7 @@ class CustomTaskListener implements TaskListener, Serializable {
       def userId = item.getUserId()
       def  typeArray = [] 
       if(userId ==~ reg1){
-        candidateList.userid = userId.substring(2, userId.length()-2)
+        def val = userId.substring(2, userId.length()-2)
         candidateList.userid = taskDetails.variables[val] ? taskDetails.variables[val]  : item.getUserId();
       }else{
         candidateList.userid = item.getUserId();
