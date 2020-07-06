@@ -152,12 +152,13 @@ class RenewalRateCard extends RateCard
             $data['form_data']['careerCoverageOptions'] = $coverageOptions;
         }
         $filterParams = array();
-        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
+        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
+        // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
         // print_r($filterParams);
         $policyList = $this->getFileList(null,$filterParams);
+        $this->logger->info("RENEWAL RATE CARD POLICY FILE--- ".print_r($policyList,true));
         if(count($policyList['data']) > 0){
             $policy_exists = true;
         } else {
