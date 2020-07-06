@@ -429,7 +429,8 @@
 					"input": true,
 					"tableView": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"calculateValue": "if(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n    value = 'business_padi';  \n}else{\n    value = 'padi';\n}"
 				}, {
 					"input": true,
 					"tableView": true,
@@ -450,7 +451,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "Username",
-					"calculateValue": "value = data.padi;",
+					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified === true  || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\n  if(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n    value = 'S'+data.padi;  \n  }else{\n    value = 'PL'+data.padi;\n  }\n}",
 					"key": "username",
 					"type": "hidden",
 					"input": true,
@@ -476,6 +477,14 @@
 				}, {
 					"label": "businessPadiVerified",
 					"key": "businessPadiVerified",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "business_padi",
+					"calculateValue": "value = \"\";\nif(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n  value = data.padi;\n}",
+					"key": "business_padi",
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
@@ -1553,7 +1562,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 154,
+	"_vid": 155,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1567,6 +1576,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-07-03T13:16:16.252Z",
+	"modified": "2020-07-06T01:43:21.317Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

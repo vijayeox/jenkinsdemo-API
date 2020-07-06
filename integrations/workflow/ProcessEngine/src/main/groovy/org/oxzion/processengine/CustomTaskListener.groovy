@@ -42,6 +42,7 @@ class CustomTaskListener implements TaskListener, Serializable {
     def reg1 = /\{\{[A-Za-z0-9]*\}\}/
     def reg2 = /\{\{role:[A-Za-z]*\}\}/
     def reg3 = /\{\{group:[A-Za-z]*\}\}/
+    def reg4 = /\{\{participant:[A-Za-z0-9_-]*\}\}/
     taskDetails.variables = execution.getVariables()
     for (IdentityLink item : delegateTask.getCandidates()){
       Map candidateList = [:]
@@ -49,10 +50,15 @@ class CustomTaskListener implements TaskListener, Serializable {
       def userId = item.getUserId()
       def  typeArray = [] 
       if(userId ==~ reg1){
-        def val = userId.substring(2, userId.length()-2)
+        candidateList.userid = userId.substring(2, userId.length()-2)
         candidateList.userid = taskDetails.variables[val] ? taskDetails.variables[val]  : item.getUserId();
       }else{
         candidateList.userid = item.getUserId();
+      }
+      if(userId ==~ reg4){
+        def val = userId.substring(2, userId.length()-2)
+        typeArray = val.split(":")
+        candidateList.participant = typeArray[1]
       }
       if(userId ==~ reg2){
         def val = userId.substring(2, userId.length()-2)

@@ -243,6 +243,7 @@ class ActivityInstanceService extends AbstractService
     
     public function createActivityInstanceEntry(&$data, $commandService)
     {
+        $this->logger->info("CREATE ACTIVITY INSTANCE - - ".print_r($data,true));
         if (!isset($data['processInstanceId'])) {
             return;
         }
@@ -340,13 +341,24 @@ class ActivityInstanceService extends AbstractService
                         }
                         if (isset($userId)) {
                             $this->logger->info("Creation of Activity Instance userID".print_r($userId,true));
-                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`)
-                            VALUES (:activityInstanceId,:userId,:assignee)";
-                            $insertParams = array("activityInstanceId" => $activityInstance['id'], "userId" => $userId, "assignee" => $assignee);
-                            $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
-                            unset($resultSet);
-                            unset($insert);
+                            $this->setUserAssignee($activityInstance['id'],$userId,$assignee);
                         }
+                    }
+                    if(isset($candidate['participant'])){
+                        if ($candidate['type'] == 'assignee') {
+                            $assignee = 1;
+                        }
+                        $identifierField = $data['variables'][$candidate['participant']];
+                        $identifier = $data['variables'][$identifierField];
+                        $select = "SELECT user_id from ox_wf_user_identifier WHERE identifier_name = :identifierField AND identifier = :identifier";
+                        $params = array("identifierField" => $identifierField,"identifier" => $identifier);
+                        $resultSet = $this->executeQuerywithBindParameters($select, $params)->toArray();
+                        if(count($resultSet) > 0){
+                            $userId = $resultSet[0]['user_id'];
+                            $this->setUserAssignee($activityInstance['id'],$userId,$assignee);
+                        }
+                        unset($resultSet);
+                        unset($select);
                     }
                 }
             }
@@ -371,6 +383,15 @@ class ActivityInstanceService extends AbstractService
         }
         return $data;
     }
+
+
+    private function setUserAssignee($activityInstanceId,$userId,$assignee){
+        $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`)
+                            VALUES (:activityInstanceId,:userId,:assignee)";
+        $insertParams = array("activityInstanceId" => $activityInstanceId, "userId" => $userId, "assignee" => $assignee);
+        $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
+    }
+
     public function completeActivityInstance(&$data)
     {
         try {
