@@ -133,21 +133,19 @@
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "identifier_field",
+						"calculateValue": "value = 'business_padi';",
+						"key": "identifier_field",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
 						"input": true,
 						"tableView": true,
 						"key": "verified1",
 						"label": "verified",
 						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "identifier_field",
-						"defaultValue": "padi",
-						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.identifier_field;\n}else{\n  value = 'business_padi';\n}",
-						"key": "identifier_field",
-						"type": "hidden",
-						"input": true,
-						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -13272,7 +13270,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 484,
+	"_vid": 486,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13289,6 +13287,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-06T03:10:36.982Z",
+	"modified": "2020-07-06T05:09:03.722Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
