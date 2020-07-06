@@ -102,7 +102,7 @@
                         {else}
                             <td>Excluded</td>{/if}
                         </p>
-					<p class = "sec_title2">                        
+					<p class = "sec_title2">
                         {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
                             <td>$100,000</td>
                         {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
@@ -119,11 +119,11 @@
                         {/if}
 					</p>
 					<p class = "sec_title2">
-					    {if isset($TravelAgentEOFP) && (int)$TravelAgentEOFP > 0}
-                            <td>$1,000,000</td>
-                        {else}
-                            <td>Excluded</td>
-                        {/if}
+						{if isset($travelAgentEOReceiptsPL) && (int)$travelAgentEOReceiptsPL > 0}
+								<td>$1,000,000</td>
+						{else}
+								<td>Not Included</td>
+						{/if}
 					</p>
 				</div></b>
 			</div>
@@ -136,7 +136,7 @@
 			</div>
 			<p class ="exop" style="margin-top:1px;">{$excludedOperation}</p>
 		{/if}
-		
+
 		<hr class="addIn"></hr>
 		<b><center><p class="addIn">{if !empty($additionalInsured)}
 			Certificate has Additional Insureds (See Attached)
@@ -346,7 +346,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
-				<center><p class = "notice">both of 
+				<center><p class = "notice">both of
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Vermont'}
@@ -373,4 +373,3 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 	</div>
 </body>
 </html>
-

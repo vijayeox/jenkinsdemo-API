@@ -6,13 +6,13 @@
     <link href="{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script> -->
 </head>
- 
+
 <body>
     <p></p>
     <div>
     {if isset($additionalLocationData.name) && $additionalLocationData.name != ""} <p class = "info"><b>Store/Location Description : </b>{$additionalLocationData.name}</p>{/if}
     {if isset($additionalLocationData.padiNumberAL) && $additionalLocationData.padiNumberAL != "" && $additionalLocationData.padiNumberAL != null} <p class = "info"><b>Store/Location Number: </b>{$additionalLocationData.padiNumberAL}</p>{/if}
-    
+
     {if isset($additional_named_insureds_option) && $additional_named_insureds_option =='yes'}
     {assign var=list value=$additionalNamedInsured|json_decode:true}
     <p class = "info"><b>Additional Named Insured:</b></p>
@@ -22,13 +22,13 @@
         </p>
     {/foreach}
     {/if}
-    {if (isset($additionalLocationData.address) && $additionalLocationData.address != "") || 
-    (isset($additionalLocationData.country) && $additionalLocationData.country != "") || 
-    ( isset($additionalLocationData.city)  && $additionalLocationData.city != "" ) || 
-    (isset($additionalLocationData.state) && $additionalLocationData.state != "" && is_string($additionalLocationData.state)) || 
+    {if (isset($additionalLocationData.address) && $additionalLocationData.address != "") ||
+    (isset($additionalLocationData.country) && $additionalLocationData.country != "") ||
+    ( isset($additionalLocationData.city)  && $additionalLocationData.city != "" ) ||
+    (isset($additionalLocationData.state) && $additionalLocationData.state != "" && is_string($additionalLocationData.state)) ||
     (isset($additionalLocationData.zip) && $additionalLocationData.zip != "")}<p  class = "info"><b>
     Location Address: </b>{if isset($additionalLocationData.address) && is_string($additionalLocationData.address) && $additionalLocationData.address !=""}{$additionalLocationData.address}{/if}<br>
-    {if isset($additionalLocationData.country) && is_string($additionalLocationData.country) && $additionalLocationData.country !=""}{$additionalLocationData.country},{/if}{if isset($additionalLocationData.city)  && is_string($additionalLocationData.city) && $additionalLocationData.city !=""},{$additionalLocationData.city}{/if}{if isset($additionalLocationData.state) && is_string($additionalLocationData.state)},{$additionalLocationData.state}{/if}{if isset($additionalLocationData.zip) && is_string($additionalLocationData.zip) && $additionalLocationData.zip !=""}{$additionalLocationData.zip}{/if}</p>
+    {if isset($additionalLocationData.country) && is_string($additionalLocationData.country) && $additionalLocationData.country !=""}{$additionalLocationData.country}{/if}{if isset($additionalLocationData.city)  && is_string($additionalLocationData.city) && $additionalLocationData.city !=""},{$additionalLocationData.city}{/if}{if isset($additionalLocationData.state) && is_string($additionalLocationData.state)},{$additionalLocationData.state}{/if}{if isset($additionalLocationData.zip) && is_string($additionalLocationData.zip) && $additionalLocationData.zip !=""} - {$additionalLocationData.zip}{/if}</p>
     {/if}
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
@@ -127,10 +127,10 @@
                         <td class = "info">Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $additionalLocationData.estimatedMonthlyReceipts && (int)$additionalLocationData.estimatedMonthlyReceipts > 0}
-                            <td class = "info">$1,000,000</td>
+                        {if isset($travelAgentEOReceiptsPL) && (int)$travelAgentEOReceiptsPL > 0}
+                            <td>$1,000,000</td>
                         {else}
-                            <td class = "info">Not Included</td>
+                            <td>Not Included</td>
                         {/if}
                     </tr>
                 </tbody>
@@ -145,7 +145,7 @@
             <!-- Report Header -->
 
             <!-- Alarm Calc -->
-            
+
                 {if isset($ALcentralStationAlarm) && $ALcentralStationAlarm != "yes"}
                     <hr class="line_divide"></hr>
               <div style="margin-top: 2% 0;">
@@ -156,7 +156,7 @@
                 </center>
                  </div>
                 {/if}
-           
+
         </div>
   </div>
 </body>
