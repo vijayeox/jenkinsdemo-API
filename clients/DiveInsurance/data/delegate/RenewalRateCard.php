@@ -63,7 +63,7 @@ class RenewalRateCard extends RateCard
             $data['form_data']['end_date'] = $endYear."-06-30";
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
-            $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['padi']."'";
+            $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['business_padi']."'";
             $result = $persistenceService->selectQuery($select);
             $coverageOptions = array();
             if($result->count() > 0){
@@ -157,7 +157,12 @@ class RenewalRateCard extends RateCard
         $filterParams = array();
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'start_date','operator'=>'gte','value'=>$data['form_data']['start_date']);
         // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'lte','value'=>$data['form_data']['end_date']);
-        $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
+         if($data['form_data']['product']=='Dive Store'){
+            $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'business_padi','operator'=>'eq','value'=>$data['form_data']['business_padi']);
+         }else{
+            $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
+         }
+        
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
         // print_r($filterParams);
         $policyList = $this->getFileList(null,$filterParams);
