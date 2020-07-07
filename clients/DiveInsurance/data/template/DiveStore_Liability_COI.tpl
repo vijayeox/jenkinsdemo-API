@@ -103,13 +103,17 @@
                             <td>Excluded</td>{/if}
                         </p>
 					<p class = "sec_title2">
-                        {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
-                            <td>$100,000</td>
-                        {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
-                            <td>$1,000,000</td>
-                        {else}
-                            <td>Not Included</td>
-                        {/if}
+										{if isset($doYouWantToApplyForNonOwnerAuto) && $doYouWantToApplyForNonOwnerAuto == true}
+										{if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+												<td>$100,000</td>
+										{else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+												<td>$1,000,000</td>
+										{else}
+												<td>Not Included</td>
+										{/if}
+										{else}
+												<td>Not Included</td>
+												{/if}
 					</p>
 					<p class = "sec_title2">
 					    {if isset($nonDivingPoolAmount) && (int)$nonDivingPoolAmount > 0}

@@ -221,6 +221,7 @@
                     </tr>
                     <tr>
                         <td>NON-Owned Auto:</td>
+                        {if isset($doYouWantToApplyForNonOwnerAuto) && $doYouWantToApplyForNonOwnerAuto == true}
                         {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
                             <td>$100,000</td>
                         {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
@@ -228,6 +229,9 @@
                         {else}
                             <td>Not Included</td>
                         {/if}
+                        {else}
+                            <td>Not Included</td>
+                            {/if}
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
