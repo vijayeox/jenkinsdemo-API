@@ -112,16 +112,25 @@
                     <tr><td   class = "info">Policy #: {$liability_policy_id}</td></tr>
                     <tr>
                         <td class = "info">NON-Diving Pool Use:</td>
-
-                        {if isset($additionalLocationDataItem.nonOwnedAutoLiabilityPL)}
-                        {if $additionalLocationDataItem.nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
-                            <td>$100,000</td>
-                        {else if $additionalLocationDataItem.nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
-                            <td>$1,000,000</td>
-                        {else}
-                            <td>Not Included</td>
-                        {/if}
-                        {/if}
+                        {if isset($additionalLocationDataItem.ALnonDivingPoolAmount) && (int)$additionalLocationDataItem.ALnonDivingPoolAmount > 0}
+                                      <td>$1,000,000</td>
+                                  {else}
+                                      <td>Excluded</td>
+                                  {/if}
+                    </tr>
+                    <tr>
+                          <td class = "info">NON-Owned Auto:</td>
+                          {if isset($doYouWantToApplyForNonOwnerAuto) && $doYouWantToApplyForNonOwnerAuto == true}
+                          {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+                              <td>$100,000</td>
+                          {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+                              <td>$1,000,000</td>
+                          {else}
+                              <td>Not Included</td>
+                          {/if}
+                          {else}
+                              <td>Not Included</td>
+                              {/if}
                     </tr>
                     <tr>
                         <td class = "info">Travel Agent E&O (Each wrongful act & Aggregate):
