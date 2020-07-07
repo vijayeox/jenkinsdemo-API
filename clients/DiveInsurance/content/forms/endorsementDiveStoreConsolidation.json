@@ -13354,11 +13354,13 @@
 		"label": "Quote Documents",
 		"input": false,
 		"components": [{
-			"label": "previewDocuments",
-			"protected": true,
+			"label": "quoteDocuments",
 			"redrawOn": "data",
-			"calculateValue": "value = {};\nif(data.previewDocuments)\n{\n  if(typeof data.previewDocuments === 'object'){\n    value = data.previewDocuments;  \n  }else{\n    var documents = {};\n    data.previewDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
-			"key": "previewDocuments",
+			"calculateValue": "value = {};\nif(data.quoteDocuments)\n{\n  if(typeof data.quoteDocuments === 'object'){\n    value = data.quoteDocuments;  \n  }else{\n    var documents = {};\n    data.quoteDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
+			"key": "quoteDocuments",
+			"properties": {
+				"data_type": "list"
+			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -13366,11 +13368,11 @@
 			"type": "documentviewer",
 			"key": "documents1",
 			"label": "Quote Information",
-			"calculateValue": "value = (data['previewDocuments'])",
+			"calculateValue": "value = (data['quoteDocuments'])",
 			"hideLabel": true,
 			"inputType": "documentviewer",
 			"input": 1,
-			"refreshOn": "previewDocuments",
+			"refreshOn": "quoteDocuments",
 			"tableView": false,
 			"protected": true,
 			"persistent": false
@@ -13489,7 +13491,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 270,
+	"_vid": 271,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13500,12 +13502,12 @@
 	"settings": {},
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveStore\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"name": "endorsementDiveStoreConsolidation",
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-06T01:56:52.453Z",
+	"modified": "2020-07-07T04:55:17.128Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

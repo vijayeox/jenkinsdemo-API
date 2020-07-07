@@ -77,7 +77,7 @@
 
       <div class = "box">
 
-    <b><p>Store/Location Number: {$padi}</p></b>
+    <b><p>Store/Location Number: {$business_padi}</p></b>
     <p><b>Location Address: {$address1},<br>
       {$address2}<br>
     {$country},{$city},{$state} - {$zip}</p>

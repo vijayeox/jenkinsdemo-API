@@ -67,9 +67,13 @@ class PadiVerification extends AbstractAppDelegate
             $data['verified'] = false;
             return $data;
         }
-        if(isset($data['padi']) && $data['padi'] != ''){
+        if(isset($data['padiNumber']) && $data['padiNumber'] != ''){
+            $data['member_number'] = $data['padiNumber'];
+        }else if(isset($data['padi']) && $data['padi'] != '' && $data['product'] != 'Dive Store'){
             $data['member_number'] = $data['padi'];
-        } 
+        }else if(isset($data['business_padi']) && $data['business_padi'] != '' && $data['product'] == 'Dive Store'){
+            $data['member_number'] = $data['business_padi'];
+        }
         if(isset($data['business_padi']) && $data['business_padi'] != ''){
             $data['member_number'] = $data['business_padi'];
         }

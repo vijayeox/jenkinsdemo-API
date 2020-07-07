@@ -476,28 +476,29 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
                     }
                 }
-                
-                if(isset($temp['groupPL']) && !empty($temp['groupPL'])){
-                    if (isset($this->template[$temp['product']]['card'])) {
-                        $this->logger->info('inside dive boat pocket card');
-                        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                        // $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
-                        $template = $this->template[$temp['product']]['card'];
-                        $options = array();        
-                        $docDest = $dest['absolutePath'].$template.'.pdf';
-                        $result = $this->newDataArray($temp);
-                        if(!isset($result) || empty($result)){
-                            $this->logger->warn('no pocket card generated');   
+                if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+                    if(isset($temp['groupPL']) && !empty($temp['groupPL'])){
+                        if (isset($this->template[$temp['product']]['card'])) {
+                            $this->logger->info('inside dive boat pocket card');
+                            $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
+                            // $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                            $template = $this->template[$temp['product']]['card'];
+                            $options = array();        
+                            $docDest = $dest['absolutePath'].$template.'.pdf';
+                            $result = $this->newDataArray($temp);
+                            if(!isset($result) || empty($result)){
+                                $this->logger->warn('no pocket card generated');   
+                            }
+                            else{                           
+                                $newData = json_encode($result);
+                                $docdata = array('data' => $newData);
+                                unset($NewData);
+                                unset($newData);
+                                $this->logger->info("Data is: ".print_r($docdata, true));
+                                $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
+                                $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
+                            } 
                         }
-                        else{                           
-                            $newData = json_encode($result);
-                            $docdata = array('data' => $newData);
-                            unset($NewData);
-                            unset($newData);
-                            $this->logger->info("Data is: ".print_r($docdata, true));
-                            $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
-                            $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
-                        } 
                     }
                 }
             }

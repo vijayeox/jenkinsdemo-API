@@ -117,7 +117,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Username",
-						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = 'S'+data['padi'];\n}",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = 'S'+data['business_padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -197,14 +197,6 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
-					}, {
-						"label": "business_padi",
-						"calculateValue": "value = data.padi;",
-						"key": "business_padi",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -225,7 +217,7 @@
 							"min": 0,
 							"step": "any"
 						},
-						"key": "padi",
+						"key": "business_padi",
 						"logic": [{
 							"name": "Check PADI Verified",
 							"trigger": {
@@ -266,7 +258,7 @@
 							"name": "disable field",
 							"trigger": {
 								"type": "javascript",
-								"javascript": "result = (!data.padi || data.padi === '') ? true : false;"
+								"javascript": "result = (!data.business_padi || data.business_padi === '') ? true : false;"
 							},
 							"actions": [{
 								"name": "disable field",
@@ -305,7 +297,7 @@
 							"actions": [{
 								"name": "Reset Form",
 								"type": "value",
-								"value": "data.padiVerified = \"\";\ndata.verified = \"\";\ndata.policy_exists = \"\";\ndata.padiNotFound = \"\";\ndata.firstname = \"\";\ndata.lastname = \"\";\ndata.initial = \"\";\ndata.address1 = \"\";\ndata.address2 = \"\";\ndata.city = \"\";\ndata.country = \"\";\ndata.state = \"\";\ndata.zip = \"\";\ndata.sameasmailingaddress = true;\ndata.physical_country = \"\";\ndata.mailaddress1 = \"\";\ndata.mailaddress2 = \"\";\ndata.physical_city = \"\";\ndata.physical_state =\"\";\ndata.physical_zip = \"\";\ndata.home_country_code = \"\";\ndata.home_phone_number = \"\";\ndata.phone_number = \"\";\ndata.phone_country_code = \"\";\ndata.home_phone = \"\";\ndata.mobile_phone = \"\";\ndata.fax = \"\";\ndata.email = \"\";\ndata.business_padi = \"\";\ndata.business_name = \"\";\ndata.padi = \"\";\ndata.businessPadiVerified = \"\";\ndata.businessPadiNotFound = \"\";\ndata.businessPadiEmpty = \"\";\ndata.padi_empty = \"\";"
+								"value": "data.padiVerified = \"\";\ndata.verified = \"\";\ndata.policy_exists = \"\";\ndata.padiNotFound = \"\";\ndata.firstname = \"\";\ndata.lastname = \"\";\ndata.initial = \"\";\ndata.address1 = \"\";\ndata.address2 = \"\";\ndata.city = \"\";\ndata.country = \"\";\ndata.state = \"\";\ndata.zip = \"\";\ndata.sameasmailingaddress = true;\ndata.physical_country = \"\";\ndata.mailaddress1 = \"\";\ndata.mailaddress2 = \"\";\ndata.physical_city = \"\";\ndata.physical_state =\"\";\ndata.physical_zip = \"\";\ndata.home_country_code = \"\";\ndata.home_phone_number = \"\";\ndata.phone_number = \"\";\ndata.phone_country_code = \"\";\ndata.home_phone = \"\";\ndata.mobile_phone = \"\";\ndata.fax = \"\";\ndata.email = \"\";\ndata.business_padi = \"\";\ndata.business_name = \"\";\ndata.businessPadiVerified = \"\";\ndata.businessPadiNotFound = \"\";\ndata.businessPadiEmpty = \"\";\ndata.padi_empty = \"\";"
 							}]
 						}],
 						"type": "button",
@@ -417,7 +409,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "subject",
-						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.business_padi;",
 						"key": "subject",
 						"type": "hidden",
 						"input": true,
@@ -1415,7 +1407,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Policy Start Date",
-						"displayInTimezone": "submission",
+						"displayInTimezone": "utc",
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"tableView": false,
@@ -1441,7 +1433,7 @@
 						"input": true,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "submission",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": false,
@@ -13094,6 +13086,9 @@
 			"redrawOn": "data",
 			"calculateValue": "value = {};\nif(data.quoteDocuments)\n{\n  if(typeof data.quoteDocuments === 'object'){\n    value = data.quoteDocuments;  \n  }else{\n    var documents = {};\n    data.quoteDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
 			"key": "quoteDocuments",
+			"properties": {
+				"data_type": "list"
+			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false
@@ -13270,7 +13265,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 486,
+	"_vid": 489,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13281,12 +13276,12 @@
 	"settings": {},
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"name": "diveStoreConsolidation",
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-06T05:09:03.722Z",
+	"modified": "2020-07-07T04:55:20.486Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

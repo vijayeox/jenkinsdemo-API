@@ -17,6 +17,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"CleanUpDelegate"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"PolicyDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
@@ -37,8 +38,7 @@
           <camunda:formField id="approved" type="boolean" defaultValue="false" />
         </camunda:formData>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="Groovy">execution.setVariable("approved","rejected")
-</camunda:script>
+          <camunda:script scriptFormat="Groovy">execution.setVariable("approved","rejected")</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_02oo9j7</bpmn:incoming>

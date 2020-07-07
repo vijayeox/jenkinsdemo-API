@@ -174,7 +174,7 @@
 						"customMessage": "Please provide a valid PADI Number",
 						"max": null
 					},
-					"key": "padi",
+					"key": "padiNumber",
 					"logic": [{
 						"name": "Check PADI Verified",
 						"trigger": {
@@ -395,6 +395,22 @@
 					"hideOnChildrenHidden": false,
 					"hideLabel": true
 				}, {
+					"label": "padi",
+					"calculateValue": "value = \"\";\nif((productName == 'DiveBoat' && (data.businessPadiVerified == 'false' || data.businessPadiVerified === false)) || productName != 'DiveStore'){\n  value = data.padiNumber;\n}",
+					"key": "padi",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "business_padi",
+					"calculateValue": "value = \"\";\nif(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n  value = data.padiNumber;\n}",
+					"key": "business_padi",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
 					"label": "padiEmpty",
 					"key": "padi_empty",
 					"type": "hidden",
@@ -451,7 +467,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "Username",
-					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified === true  || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\n  if(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n    value = 'S'+data.padi;  \n  }else{\n    value = 'PL'+data.padi;\n  }\n}",
+					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified === true  || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\n  if(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n    value = 'S'+data.business_padi;  \n  }else{\n    value = 'PL'+data.padi;\n  }\n}",
 					"key": "username",
 					"type": "hidden",
 					"input": true,
@@ -482,16 +498,8 @@
 					"tableView": false,
 					"hideOnChildrenHidden": false
 				}, {
-					"label": "business_padi",
-					"calculateValue": "value = \"\";\nif(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n  value = data.padi;\n}",
-					"key": "business_padi",
-					"type": "hidden",
-					"input": true,
-					"tableView": false,
-					"hideOnChildrenHidden": false
-				}, {
 					"label": "subject",
-					"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+					"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data[data.identifier_field];",
 					"key": "subject",
 					"type": "hidden",
 					"input": true,
@@ -1055,8 +1063,7 @@
 						"spellcheck": false,
 						"tableView": true,
 						"validate": {
-							"required": true,
-							"custom": "if(data.zip && data.zip != ''){\n  if(data.zip.length <= 12){\n      valid = (data.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+							"required": true
 						},
 						"key": "zip",
 						"type": "textfield",
@@ -1274,8 +1281,7 @@
 						"label": "Zip Code",
 						"tableView": true,
 						"validate": {
-							"required": true,
-							"custom": "if(data.physical_zip && data.physical_zip != ''){\n  if(data.physical_zip.length <= 12){\n      valid = (data.physical_zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.physical_zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+							"required": true
 						},
 						"key": "physical_zip",
 						"type": "textfield",
@@ -1562,7 +1568,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 155,
+	"_vid": 161,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1576,6 +1582,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-07-06T01:43:21.317Z",
+	"modified": "2020-07-07T04:59:28.629Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

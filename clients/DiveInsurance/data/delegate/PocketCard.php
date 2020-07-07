@@ -35,7 +35,12 @@ class PocketCard extends PolicyDocument
             $currentDate = date_create()->format("Y-m-d");
             $filter[] = array("field" => "end_date", "operator" => "gt", "value" => $currentDate);
             // $filter[] = array("field" => "policyStatus", "operator" => "eq", "value" => "In Force");
-            $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
+            if($data['padiProductType'] == 'diveStore'){
+                $filter[] = array("field" => "business_padi", "operator" => "eq", "value" => $data['padiNumber']);
+            }else{
+                $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
+            }
+            
             if($data['padiProductType'] == 'individualProfessionalLiability'){
                 $params['entityName'] = 'Individual Professional Liability';
             }
@@ -194,7 +199,7 @@ class PocketCard extends PolicyDocument
         $this->logger->info('pocket card - padi data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
-            if(isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]"){
+            if(isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]" &&  $data['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->logger->info('group PL members need to be formatted to a new array');
                 if(isset($value['groupPL'])){
                     $groupData = json_decode($value['groupPL'], true);

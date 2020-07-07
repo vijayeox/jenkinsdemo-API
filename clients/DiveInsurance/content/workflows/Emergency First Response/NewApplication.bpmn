@@ -17,6 +17,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"CleanUpDelegate"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"PolicyDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>

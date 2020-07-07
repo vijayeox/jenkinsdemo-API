@@ -22,7 +22,7 @@
             var css_selector_classes = ['page', 'frompage', 'topage','business_name' ,'webpage', 'section', 'subsection', 'date',
                 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages', 'start_date', 'license_number',
                 'firstname', 'lastname', 'city', 'state', 'country', 'zip', 'certificate_no', 'padi',
-                'end_date','state_in_short', 'policy_id', 'address1', 'address2', 'membernumber', 'dba'
+                'end_date','state_in_short', 'policy_id', 'address1', 'address2', 'membernumber', 'dba','business_padi'
             ];
             for (var css_class in css_selector_classes) {
                 if (css_selector_classes.hasOwnProperty(css_class)) {
@@ -83,7 +83,7 @@
                 <p class="info">Policy period: <span class="start_date"></span> thru
                     <span class="end_date"></span> 12:01:00 AM
                 </p>
-                <b class="p_margin">Member #: <span class="p_margin normal padi"></span></b>
+                <b class="p_margin">Member #: <span class="p_margin normal business_padi"></span></b>
                 <hr>
             </div>
         </div>

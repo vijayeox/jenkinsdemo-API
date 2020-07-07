@@ -3736,14 +3736,14 @@
 		"clickable": "false",
 		"showNext": "true",
 		"showPrevious": "true",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]",
 		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
 	},
 	"name": "emergencyFirstResponseProfessionalLiability",
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-07-06T03:59:40.833Z",
+	"modified": "2020-07-07T04:52:52.101Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

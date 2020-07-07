@@ -1226,6 +1226,7 @@ class UserService extends AbstractService
 
     public function checkAndCreateUser($params, &$data, $register = false)
     {
+       $this->logger->info("CHECK AND CREATE USER ----".print_r($data,true));
         if (!ArrayUtils::isKeyDefined($data, 'username')) {
             $data['username'] = $data['email'];
         }

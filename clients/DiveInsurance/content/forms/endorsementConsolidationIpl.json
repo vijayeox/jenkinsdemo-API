@@ -3399,7 +3399,7 @@
 	"properties": {
 		"showNext": "true",
 		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"CleanUpDelegate\"},{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
 		"showPrevious": "false",
 		"showCancel": "true",
 		"clickable": "false"
@@ -3408,6 +3408,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-29T01:25:15.837Z",
+	"modified": "2020-07-07T04:51:20.948Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

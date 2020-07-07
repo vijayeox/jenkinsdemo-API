@@ -63,7 +63,7 @@ class DispatchProposalDocument extends DispatchDocument {
             throw new DelegateException('Documents Not Found','file.not.found',0,$errorFile);
         }
         if($data['product'] == 'Dive Store'){
-            $subject = 'PADI Endorsed Dive Store Insurance Proposal - '.$data['padi'];
+            $subject = 'PADI Endorsed Dive Store Insurance Proposal - '.$data['business_padi'];
         }else if($data['product'] == 'Dive Boat'){
             $subject = 'PADI Endorsed Dive Boat Insurance Proposal - '.$data['padi'];
         }else{

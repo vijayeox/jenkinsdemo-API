@@ -2296,7 +2296,7 @@
 	"settings": {},
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
 		"showCancel": "true",
 		"clickable": "false",
 		"showNext": "true",
@@ -2306,7 +2306,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-06-29T03:15:38.819Z",
+	"modified": "2020-07-07T04:53:47.929Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
