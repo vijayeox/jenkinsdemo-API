@@ -408,7 +408,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Username",
-						"calculateValue": "value = data.username;",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = data['padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -1082,7 +1082,7 @@
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
@@ -1153,11 +1153,14 @@
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1374,7 +1377,6 @@
 						"timePicker": {
 							"showMeridian": false
 						},
-						"redrawOn": "data",
 						"clearOnHide": false,
 						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n  if((data.start_date && data.start_date != \"\") ){\n\tvalue = data.start_date;\n  }\n} else {\n  if ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-13')))) {\n\t\t\tvalue = moment('2020-06-30').format(\"MM-DD-YYYY\");\n\t}\n  if(value == \"\"){\n\tvalue = moment().format(\"MM-DD-YYYY\");\n  }\n}",
 						"allowCalculateOverride": true,
@@ -4895,7 +4897,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 546,
+	"_vid": 549,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4916,6 +4918,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-07T09:40:55.938Z",
+	"modified": "2020-07-07T13:12:14.540Z",
 	"machineName": "testdivehub:csrInitiates"
 }
