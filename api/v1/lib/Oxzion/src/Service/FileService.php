@@ -1212,6 +1212,7 @@ class FileService extends AbstractService
         unset($params['uuid']);
         unset($params['commands']);
         unset($params['last_workflow_instance_id']);
+        unset($params['inDraft']);
         return $params;
     }
 

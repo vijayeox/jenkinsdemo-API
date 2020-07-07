@@ -408,7 +408,7 @@ class WorkflowService extends AbstractService
         $where = "";
         $joinQuery = "";
         $whereQuery = "";
-        $sort = "ORDER BY ox_file.date_created desc";
+        $sort = "ORDER BY date_created desc";
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
         $sortjoinQuery = "";
@@ -489,6 +489,26 @@ class WorkflowService extends AbstractService
     LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id
     LEFT JOIN ox_user_role ON ox_activity_instance_assignee.role_id = ox_user_role.role_id LEFT JOIN ox_user ON ox_activity_instance_assignee.user_id = ox_user.id";
 
+        if(!empty($filterParams)){
+            $cacheQuery = '';
+        } else {
+            $cacheQuery =" UNION
+            SELECT ow.name as workflow_name,ouc.content as data,oai.activity_instance_id as activityInstanceId,owi.process_instance_id as workflowInstanceId,
+            oai.start_date,oae.name as entity_name,NULL as id,
+            oa.name as activityName,ouc.date_created,'in_draft' as to_be_claimed,ou.name as assigned_user
+            FROM ox_user_cache as ouc
+            LEFT JOIN ox_workflow_instance as owi ON ouc.workflow_instance_id = owi.id
+            LEFT JOIN ox_workflow_deployment as owd on owi.workflow_deployment_id = owd.id
+            LEFT JOIN ox_workflow as ow on owd.workflow_id = ow.id
+            INNER JOIN ox_form as oxf on ouc.form_id = oxf.id
+            INNER JOIN ox_app_entity as oae on oae.app_id = oxf.app_id and oxf.entity_id = oae.id
+            INNER JOIN ox_app on ox_app.id = oae.app_id
+            LEFT JOIN ox_activity_instance as oai on ouc.activity_instance_id = oai.activity_instance_id
+            LEFT JOIN ox_activity as oa on oai.activity_id = oa.id
+            LEFT JOIN ox_user as ou on ouc.user_id = ou.id
+            WHERE ouc.user_id =$userId and ouc.deleted = 0 and ouc.activity_instance_id IS NULL and $appFilter";
+        }
+
         if (strlen($whereQuery) > 0) {
             $whereQuery .= " " . $where;
         }
@@ -502,7 +522,7 @@ class WorkflowService extends AbstractService
     ox_activity.name as activityName, ox_file.date_created,
     CASE WHEN ox_activity_instance_assignee.assignee = 0 then 1
     WHEN ox_activity_instance_assignee.assignee = 1 AND ox_activity_instance_assignee.user_id = $userId then 0 else 2
-    end as to_be_claimed,ox_user.name as assigned_user $field $fromQuery $whereQuery $sort $pageSize $offset";
+    end as to_be_claimed,ox_user.name as assigned_user $field $fromQuery $whereQuery $cacheQuery $sort $pageSize $offset";
 
         $this->logger->info("Executing Assignment listing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
@@ -510,6 +530,9 @@ class WorkflowService extends AbstractService
         foreach ($resultSet as $key => $value) {
             $data = json_decode($value['data'], true);
             unset($value['data']);
+            if(isset($data['inDraft']) && ($data['inDraft'] == true || $data['inDraft'] == "true")){
+                $data['policyStatus'] = 'In Draft';
+            }
             $result[] = array_merge($value, $data);
         }
         return array('data' => $result, 'total' => $countResultSet[0]['count']);

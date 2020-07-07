@@ -80,6 +80,17 @@ content:
                             type: Form
                             url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                     icon: 'fa fa-check-circle'
+                -
+                    name: Edit
+                    rule: '''{{to_be_claimed}}'' == ''in_draft'''
+                    details:
+                        -
+                            type: Form
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                            activityinstance: '{{activityInstanceId}}'
+                            workflowId: '{{workflow_uuiid}}'
+                            content: '{{data}}'
+                    icon: 'fa fa-pencil'
             columnConfig:
                 -
                     title: PADI
