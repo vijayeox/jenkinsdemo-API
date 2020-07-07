@@ -1342,7 +1342,7 @@
 					"delegate": "RateCard",
 					"post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
 				},
-				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? false: true;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n  show = false;\n}\nelse{\n  show = true;\n}",
 				"type": "select",
 				"indexeddb": {
 					"filter": {}
@@ -4895,7 +4895,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 545,
+	"_vid": 546,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4916,6 +4916,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-07T09:31:09.891Z",
+	"modified": "2020-07-07T09:40:55.938Z",
 	"machineName": "testdivehub:csrInitiates"
 }
