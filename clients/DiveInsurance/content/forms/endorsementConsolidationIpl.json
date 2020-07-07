@@ -1070,16 +1070,22 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1093,15 +1099,18 @@
 								"label": "Home or Work Phone",
 								"tableView": false,
 								"validate": {
+									"pattern": "^\\d+$",
+									"customMessage": "Please enter a valid Phone Number",
 									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
 									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "phoneNumber",
+								"type": "textfield",
 								"delimiter": false,
 								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -1139,11 +1148,14 @@
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1158,16 +1170,18 @@
 								"tableView": false,
 								"validate": {
 									"required": true,
+									"pattern": "^\\d+$",
 									"customMessage": "Please enter a valid Mobile Phone number",
 									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
 									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "phoneNumber",
+								"type": "textfield",
 								"delimiter": false,
 								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -2228,9 +2242,9 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length == 0 && (data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  if(data.cylinderInstructor_attachments == undefined){\n    show = true;\n  } else {\n  show = false;\n  }\n}",
+				"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length == 0 && (data.cylinder == \"cylinderInspectionInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  if(data.cylinderInstructor_attachments == undefined){\n    show = true;\n  } else {\n  show = false;\n  }\n}",
 				"type": "panel",
-				"label": "Cylinder Instructor Attachments",
+				"label": "Cylinder Inspection Instructor Attachments",
 				"input": false,
 				"components": [{
 					"label": "HTML",
@@ -3383,7 +3397,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 284,
+	"_vid": 287,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3404,6 +3418,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-07-07T06:10:03.849Z",
+	"modified": "2020-07-07T09:57:41.665Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

@@ -1124,7 +1124,8 @@ class UserService extends AbstractService
             $userReset['orgId'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
             $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
             $userDetails['password_reset_code'] = $resetPasswordCode;
-            if($userDetails['email'] == $userDetails['firstname']."_".$userDetails['username']."@eoxvantage.com"){
+            $userRecord = $userDetails['firstname']."_".$userDetails['username']."@eoxvantage.";
+            if(($userDetails['email'] == $userRecord."com") || ($userDetails['email'] == $userRecord."in")){
                 throw new ValidationException("Invalid Email");
             }
             //Code to update the password reset and expiration time
@@ -1308,7 +1309,6 @@ class UserService extends AbstractService
                 throw $e;
             }
         }
-
         if ($data['username'] == $result[0]['username']) {
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];

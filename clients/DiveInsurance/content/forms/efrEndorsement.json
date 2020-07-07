@@ -773,16 +773,22 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -796,15 +802,18 @@
 								"label": "Home or Work Phone",
 								"tableView": false,
 								"validate": {
+									"pattern": "^\\d+$",
+									"customMessage": "Please enter a valid Phone Number",
 									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
 									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "phoneNumber",
+								"type": "textfield",
 								"delimiter": false,
 								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -842,11 +851,14 @@
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -861,16 +873,18 @@
 								"tableView": false,
 								"validate": {
 									"required": true,
+									"pattern": "^\\d+$",
 									"customMessage": "Please enter a valid Mobile Phone number",
 									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
 									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "phoneNumber",
+								"type": "textfield",
 								"delimiter": false,
 								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -2281,7 +2295,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 204,
+	"_vid": 206,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2302,7 +2316,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-07-07T06:14:49.896Z",
+	"modified": "2020-07-07T09:55:33.514Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
