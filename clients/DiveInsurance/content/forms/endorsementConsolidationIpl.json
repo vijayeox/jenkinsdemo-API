@@ -2228,9 +2228,9 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length == 0 && (data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  if(data.cylinderInstructor_attachments == undefined){\n    show = true;\n  } else {\n  show = false;\n  }\n}",
+				"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length == 0 && (data.cylinder == \"cylinderInspectionInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  if(data.cylinderInstructor_attachments == undefined){\n    show = true;\n  } else {\n  show = false;\n  }\n}",
 				"type": "panel",
-				"label": "Cylinder Instructor Attachments",
+				"label": "Cylinder Inspection Instructor Attachments",
 				"input": false,
 				"components": [{
 					"label": "HTML",
@@ -3383,7 +3383,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 284,
+	"_vid": 285,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3404,6 +3404,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-07-07T06:10:03.849Z",
+	"modified": "2020-07-07T07:28:24.008Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
