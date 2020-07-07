@@ -1058,20 +1058,18 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"inputType": "number"
+								"inputType": "phoneNumber"
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -1125,22 +1123,20 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"inputType": "number"
+								"inputType": "phoneNumber"
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -3659,7 +3655,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 597,
+	"_vid": 598,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3743,7 +3739,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-07-07T04:52:52.101Z",
+	"modified": "2020-07-07T06:16:22.542Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

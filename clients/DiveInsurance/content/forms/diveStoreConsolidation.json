@@ -1217,20 +1217,18 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Work Phone number' : true; \n}"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"inputType": "number"
+								"inputType": "phoneNumber"
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -1285,22 +1283,20 @@
 						}, {
 							"components": [{
 								"label": "Work Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter a valid mobile phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false,
-								"inputType": "number"
+								"inputType": "phoneNumber"
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -1472,6 +1468,7 @@
 				}, {
 					"components": [{
 						"label": "Policy End Date",
+						"displayInTimezone": "utc",
 						"useLocaleSettings": true,
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
@@ -1498,7 +1495,7 @@
 						"input": true,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": true,
 							"allowInput": false,
@@ -13265,7 +13262,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 489,
+	"_vid": 491,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13282,6 +13279,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-07T04:55:20.486Z",
+	"modified": "2020-07-07T06:12:53.540Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

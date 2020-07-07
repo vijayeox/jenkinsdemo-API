@@ -794,17 +794,15 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -860,19 +858,17 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -2285,7 +2281,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 203,
+	"_vid": 204,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2306,7 +2302,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-07-07T04:53:47.929Z",
+	"modified": "2020-07-07T06:14:49.896Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }
