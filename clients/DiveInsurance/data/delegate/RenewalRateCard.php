@@ -32,7 +32,7 @@ class RenewalRateCard extends RateCard
                             if (is_null($data['form_data'][$key])) {
                                 $data['form_data'][$key]  = $value;
                             }
-                            } catch (Exception $e) { 
+                            } catch (Exception $e) {
                               $data['form_data'][$key]  = $value;
                             }
                     }
@@ -42,7 +42,7 @@ class RenewalRateCard extends RateCard
         //Set Date PERIOD
         $startYear = date("Y");
         $endYear = date("Y") + 1;
-        
+
         $data['form_data']['isRenewalFlow'] = true;
          if (AuthContext::isPrivileged('MANAGE_POLICY_APPROVAL_WRITE')) {
             $data['form_data']['initiatedByCsr'] = true;
@@ -51,7 +51,7 @@ class RenewalRateCard extends RateCard
         }
 
         if($data['form_data']['product'] == 'Dive Boat'){
-            // SET DEFAULT DATE FOR DIVE 
+            // SET DEFAULT DATE FOR DIVE
             $data['form_data']['workflowId'] = 'bb15e393-11b9-48ea-bc5a-5b7616047cb1';
             $data['form_data']['start_date'] = $startYear."-07-22";
             $data['form_data']['end_date'] = $endYear."-07-22";
@@ -89,6 +89,9 @@ class RenewalRateCard extends RateCard
                 $data['form_data']['padiVerified'] = false;
                 $data['form_data']['padiNotApplicable'] = true;
                 $data['form_data']['padiNotFound'] = true;
+            }
+            if(isset($data['form_data']['groupPL'])){
+              $data['form_data']['groupPL'] = $this->verifyGroupPadi($data['form_data']['groupPL'],$persistenceService);
             }
         }
         else{
@@ -174,16 +177,16 @@ class RenewalRateCard extends RateCard
                 }
             }
         }
-        
+
         //END DATE PERIOD SELECTION
         $this->logger->info("AUTO RATE CARD PERSISTENCE".print_r($data,true));
         $data['form_data'] = parent::execute($data['form_data'],$persistenceService);
         //GET RATES FOR CURRENT YEAR
-        
+
         $data['form_data'] = $this->rateCalculation($data['form_data']);
         //CLEAN FILE DATA FOR CURRENT YEAR
         $data['form_data'] = $this->cleanExistingData($data['form_data']);
-        $data['form_data']['policyStatus'] = "Renewal Approval Pending"; 
+        $data['form_data']['policyStatus'] = "Renewal Approval Pending";
         //END CLEAN FILE DATA FOR CURRENT YEAR
         $this->logger->info("CLEAN DATA END" . print_r($data, true));
         $data['form_data']['userApproved'] = "";
@@ -223,5 +226,26 @@ class RenewalRateCard extends RateCard
             }
         }
         return $data;
+    }
+    private function verifyGroupPadi(&$groupMembers,$persistenceService){
+      $verifiedPadiMembers = array();
+      $i = 0;
+      foreach ($groupMembers as $key => $member) {
+        $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$member['padi']."'";
+        $result = $persistenceService->selectQuery($select);
+        $coverageOptions = array();
+        if($result->count() > 0){
+            $response = array();
+            while ($result->next()) {
+                $response[] = $result->current();
+            }
+        }
+        if (isset($response) && count($response) > 0) {
+            $member['rating'] = implode(',',array_column($response, 'rating'));
+            $verifiedPadiMembers[] = $member;
+            $i++;
+        }
+      }
+      return $verifiedPadiMembers;
     }
 }
