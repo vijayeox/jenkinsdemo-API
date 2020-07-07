@@ -467,7 +467,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "Username",
-					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified === true  || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\n  if(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n    value = 'S'+data.business_padi;  \n  }else{\n    value = 'PL'+data.padi;\n  }\n}",
+					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified === true  || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\n  if(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n    value = 'S'+data.business_padi;  \n  }else{\n    value = data.padi;\n  }\n}",
 					"key": "username",
 					"type": "hidden",
 					"input": true,
@@ -1348,14 +1348,12 @@
 					}, {
 						"components": [{
 							"label": "Home or Work Phone",
-							"mask": false,
-							"spellcheck": true,
 							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
 							"validate": {
-								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+								"pattern": "^\\d+$",
+								"customMessage": "Please enter a valid Phone Number",
+								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+								"step": "any"
 							},
 							"key": "home_phone_number",
 							"logic": [{
@@ -1404,7 +1402,9 @@
 									"text": "Home or Work Phone"
 								}]
 							}],
-							"type": "number",
+							"type": "textfield",
+							"delimiter": false,
+							"requireDecimal": false,
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -1464,19 +1464,18 @@
 					}, {
 						"components": [{
 							"label": "Mobile Phone",
-							"mask": false,
-							"spellcheck": true,
 							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
 							"validate": {
 								"required": true,
+								"pattern": "^\\d+$",
 								"customMessage": "Please enter a valid Mobile Phone number",
-								"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+								"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+								"step": "any"
 							},
 							"key": "phone_number",
-							"type": "number",
+							"type": "textfield",
+							"delimiter": false,
+							"requireDecimal": false,
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -1568,7 +1567,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 161,
+	"_vid": 162,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1582,6 +1581,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-07-07T04:59:28.629Z",
+	"modified": "2020-07-07T09:38:15.036Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
