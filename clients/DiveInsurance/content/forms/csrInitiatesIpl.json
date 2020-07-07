@@ -225,7 +225,7 @@
 						"customClass": "alignCenter",
 						"tableView": false,
 						"key": "changePadi",
-						"customConditional": "if(data.isRenewalFlow != true || data.isRenewalFlow != \"true\" || data.isRenewalFlow == \"\"){\n  \nif ((data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") || \n((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') && (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ||\n((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) \n    || (data.verified !== true && data.verified != \"true\") || (data['businessPadiVerified']===true || data['businessPadiVerified']=='true')) {\n    show = false;\n} else {\n    show = true;\n}\n  \n}else{\n  show = false;\n}",
+						"customConditional": "if(data.isRenewalFlow && data.isRenewalFlow == true){\n\tshow = false;\n}else if (data.isRenewalFlow != true || data.isRenewalFlow != \"true\" || data.isRenewalFlow == \"\") {\n\n\tif ((data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") ||\n\t\t((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') && (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ||\n\t\t((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) ||\n\t\t(data.verified !== true && data.verified != \"true\") || (data['businessPadiVerified'] === true || data['businessPadiVerified'] == 'true')) {\n\t\tshow = false;\n\t} else {\n\t\tshow = true;\n\t}\n\n} else {\n\tshow = false;\n}",
 						"logic": [{
 							"name": "Event Handler",
 							"trigger": {
@@ -408,7 +408,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Username",
-						"calculateValue": "value = data['padi'];",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = 'PL'+data['padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -1102,17 +1102,15 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1168,19 +1166,17 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
 									"required": true,
 									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "number",
+								"type": "phoneNumber",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
 								"hideOnChildrenHidden": false
 							}, {
@@ -1356,6 +1352,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Policy Start Date",
+						"displayInTimezone": "utc",
 						"useLocaleSettings": true,
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
@@ -1391,7 +1388,7 @@
 						"input": true,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": true,
 							"allowInput": false,
@@ -1417,6 +1414,7 @@
 				}, {
 					"components": [{
 						"label": "Policy End Date",
+						"displayInTimezone": "utc",
 						"useLocaleSettings": true,
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
@@ -1444,7 +1442,7 @@
 						"input": true,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": true,
 							"allowInput": false,
@@ -4073,6 +4071,7 @@
 								},
 								"selectThreshold": 0.3,
 								"validate": {
+									"required": true,
 									"customMessage": "Please select the Business Relation with the Additional Insured"
 								},
 								"errorLabel": "Additional Insured Business Relation",
@@ -4891,7 +4890,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 536,
+	"_vid": 544,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4905,13 +4904,13 @@
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]",
 		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
 	},
 	"name": "csrInitiatesIpl",
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-03T13:28:20.025Z",
+	"modified": "2020-07-07T06:11:53.371Z",
 	"machineName": "testdivehub:csrInitiates"
 }

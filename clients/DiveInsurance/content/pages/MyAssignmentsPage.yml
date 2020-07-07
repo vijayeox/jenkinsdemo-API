@@ -56,6 +56,9 @@ content:
                 -
                     title: PADI
                     field: padi
+                    cell: '<td>{item.identifier_field == "business_padi" ? item.business_padi : item.padi}</td>'
+                    multiFieldFilter:
+                        - business_padi
                 -
                     title: Name
                     field: firstname

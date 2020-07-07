@@ -124,10 +124,6 @@ entity:
                 data_type: text
                 index: true
             -
-                name: padi
-                data_type: text
-                index: true
-            -
                 name: product
                 data_type: text
                 index: true

@@ -162,7 +162,7 @@ content:
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
+                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
                             useRowData: true
                         -
                             type: Comment
@@ -175,7 +175,7 @@ content:
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period:{moment(data.start_date).format(''MM-DD-YYYY'')} - {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period:{moment(data.start_date).format(''MM-DD-YYYY'')} - {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
                             useRowData: true
                         -
                             type: DocumentViewer
@@ -264,6 +264,9 @@ content:
                 -
                     title: PADI
                     field: padi
+                    cell: '<td>{item.identifier_field == "business_padi" ? item.business_padi : item.padi}</td>'
+                    multiFieldFilter:
+                        - business_padi
                 -
                     title: Name
                     field: firstname

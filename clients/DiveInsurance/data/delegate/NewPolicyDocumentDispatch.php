@@ -58,9 +58,9 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
             $data['csrApprovalAttachments'] = array();
         }
         if($data['product'] == 'Dive Store'){
-            $subject = 'PADI Endorsed Dive Store Insurance Documents – '.$data['padi'];
+            $subject = 'PADI Endorsed Dive Store Insurance Documents – '.$data['business_padi'];
         }else if($data['product'] == 'Dive Boat'){
-            $subject = 'PADI Endorsed Dive Boat Insurance Documents – '.$data['padi'];
+            $subject = 'PADI Endorsed Dive Boat Insurance Documents – '.$data[$data['identifier_field']];
         }else{
             $subject = 'Certificate of Insurance';
         }

@@ -17,7 +17,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier','business_padi'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -82,7 +82,7 @@
         </div>
         <div class = "certificate_data1">
           <p class = "p_margin"><span class ="certificate_no"></span></p>
-          <p class = "p_margin"><span class ="padi"></span></p>
+          <p class = "p_margin"><span class ="business_padi"></span></p>
           <p class = "p_margin"><span class ="update_date"></span></p>
           <p class = "p_margin"><span class ="end_date"></span></p>
         </div>

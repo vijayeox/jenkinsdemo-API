@@ -36,6 +36,9 @@ namespace ArrowHeadWebService.Controllers
         {
             public IFormFile files { get; set; }
             public string fileuuid { get; set; }
+            public string commands { get; set; }
+            public string appUUID { get; set; }
+            public string delegateName { get; set; }
         }
 
         [HttpPost]
@@ -50,15 +53,20 @@ namespace ArrowHeadWebService.Controllers
                 }
                 if (objFile.files !=null)
                 {
+                    // _environment.WebRootPath = "D:\\Oxzion";
                     if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
                     {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
                     }
+                    Console.WriteLine("Project Directory : " + _environment.WebRootPath);
                     using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + objFile.files.FileName))
                     {
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
                     }
+                    _settings.commands = objFile.commands;
+                    _settings.appUUID = objFile.appUUID;
+                    _settings.delegateName = objFile.delegateName;
                     ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
                     new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName,objFile.fileuuid); }).Start();                    
                     return Content("{\"Status\":1,\"Message\":\"" + objFile.files.FileName+" file Uploaded\"}", "application/json");

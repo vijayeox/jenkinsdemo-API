@@ -19,7 +19,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','padi','end_date','group_policy_id','address1','address2','combinedSingleLimit','annualAggregate','state_in_short','padi','group_carrier'];
+     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','padi','end_date','group_policy_id','address1','address2','groupCombinedSingleLimit','groupAnnualAggregate','state_in_short','padi','group_carrier'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -126,8 +126,8 @@
             </div>
             <div class = "gin-type1"> 
                 <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability</p>
-                  <p class = "grpins_font">$<span class ="groupCombinedSingleLimit"></span>&nbsp&nbsp&nbsp(per occurrence)</p>
-                  <p class = "grpins_font">$<span class ="groupAnnualAggregate"></span></p>
+                  <p class = "grpins_font"><span class ="groupCombinedSingleLimit"></span>&nbsp&nbsp&nbsp(per occurrence)</p>
+                  <p class = "grpins_font"><span class ="groupAnnualAggregate"></span></p>
             </div>
           </div>
           <div class="gi_type2">

@@ -496,10 +496,84 @@
 			"input": false,
 			"lockKey": true,
 			"breadcrumbClickable": true
+		}, {
+			"title": "Payment Approval",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "paymentApprovalPage",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Panel",
+			"input": false,
+			"components": [{
+				"label": "Amount Recieved",
+				"prefix": "$",
+				"mask": false,
+				"spellcheck": true,
+				"tableView": false,
+				"delimiter": true,
+				"requireDecimal": true,
+				"inputFormat": "plain",
+				"clearOnHide": false,
+				"key": "paymentRecieved",
+				"type": "number",
+				"decimalLimit": 2,
+				"input": true,
+				"hideOnChildrenHidden": false
+			}, {
+				"label": "Amount Pending",
+				"prefix": "$",
+				"mask": false,
+				"spellcheck": true,
+				"tableView": false,
+				"delimiter": true,
+				"requireDecimal": true,
+				"inputFormat": "plain",
+				"key": "amountPending",
+				"type": "number",
+				"decimalLimit": 2,
+				"input": true,
+				"hideOnChildrenHidden": false
+			}, {
+				"label": "Payment Verified",
+				"optionsLabelPosition": "right",
+				"inline": true,
+				"tableView": false,
+				"values": [{
+					"label": "Approved",
+					"value": "approved",
+					"shortcut": ""
+				}, {
+					"label": "Declined",
+					"value": "declined",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"validate": {
+					"required": true
+				},
+				"key": "paymentVerified",
+				"type": "radio",
+				"input": true
+			}, {
+				"label": "Notes",
+				"autoExpand": false,
+				"tableView": true,
+				"key": "notes",
+				"type": "textarea",
+				"input": true
+			}]
 		}],
 		"path": "page5Panel"
 	}, {
-		"title": "Payment Approval",
+		"title": "Documents Preview",
 		"theme": "primary",
 		"breadcrumbClickable": true,
 		"buttonSettings": {
@@ -509,10 +583,10 @@
 		},
 		"collapsible": false,
 		"tableView": false,
-		"key": "paymentApprovalPanel",
+		"key": "DocumentPreview",
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
-		"label": "Payment Approval",
+		"label": "Document Preview",
 		"input": false,
 		"components": [{
 			"title": "Document Preview",
@@ -531,11 +605,14 @@
 			"label": "Document Preview",
 			"input": false,
 			"components": [{
-				"label": "previewDocuments",
+				"label": "finalDocuments",
 				"persistent": false,
 				"protected": true,
 				"calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}",
-				"key": "previewDocuments",
+				"key": "finalDocuments",
+				"properties": {
+					"data_type": "list"
+				},
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -553,63 +630,6 @@
 				"persistent": false
 			}],
 			"hideOnChildrenHidden": false
-		}, {
-			"label": "Amount Recieved",
-			"prefix": "$",
-			"mask": false,
-			"spellcheck": true,
-			"tableView": false,
-			"delimiter": true,
-			"requireDecimal": true,
-			"inputFormat": "plain",
-			"clearOnHide": false,
-			"key": "paymentRecieved",
-			"type": "number",
-			"decimalLimit": 2,
-			"input": true,
-			"hideOnChildrenHidden": false
-		}, {
-			"label": "Amount Pending",
-			"prefix": "$",
-			"mask": false,
-			"spellcheck": true,
-			"tableView": false,
-			"delimiter": true,
-			"requireDecimal": true,
-			"inputFormat": "plain",
-			"key": "amountPending",
-			"type": "number",
-			"decimalLimit": 2,
-			"input": true,
-			"hideOnChildrenHidden": false
-		}, {
-			"label": "Payment Verified",
-			"optionsLabelPosition": "right",
-			"inline": true,
-			"tableView": false,
-			"values": [{
-				"label": "Approved",
-				"value": "approved",
-				"shortcut": ""
-			}, {
-				"label": "Declined",
-				"value": "declined",
-				"shortcut": ""
-			}],
-			"clearOnHide": false,
-			"validate": {
-				"required": true
-			},
-			"key": "paymentVerified",
-			"type": "radio",
-			"input": true
-		}, {
-			"label": "Notes",
-			"autoExpand": false,
-			"tableView": true,
-			"key": "notes",
-			"type": "textarea",
-			"input": true
 		}]
 	}, {
 		"label": "Submit",
@@ -639,6 +659,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-07-03T12:18:01.585Z",
+	"modified": "2020-07-07T04:30:47.968Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
