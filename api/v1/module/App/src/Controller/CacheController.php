@@ -81,8 +81,13 @@ class CacheController extends AbstractApiController
     public function cacheAction()
     {
         $appId = $this->params()->fromRoute()['appId'];
+        if(isset($this->params()->fromRoute()['cacheId'])){
+          $cacheId = $this->params()->fromRoute()['cacheId'];
+        } else {
+          $cacheId = null;
+        }
         $this->log->info(__CLASS__ . "-> \n Get Cache - " . print_r($appId, true));
-        $result = $this->userCacheService->getCache(null, $appId, AuthContext::get(AuthConstants::USER_ID));
+        $result = $this->userCacheService->getCache($cacheId, $appId, AuthContext::get(AuthConstants::USER_ID));
         if ($result == 0) {
             return $this->getSuccessResponseWithData(array());
         }
