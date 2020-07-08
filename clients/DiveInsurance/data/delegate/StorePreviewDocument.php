@@ -26,7 +26,7 @@ class StorePreviewDocument extends PolicyDocument
                     $length = 1;
                 }
                 $data['certificate_no'] = $data['certificate_no'].' - '.$length;
-                if($endorsementOptions['modify_groupProfessionalLiability'] == true){  
+                if($endorsementOptions['modify_groupProfessionalLiability'] == true){
                     if(isset($data['groupPL'])){
                         if($data['groupProfessionalLiabilitySelect'] == 'yes'){
                             if(isset($data['documents']['endorsement_group_coi_document'])){
@@ -35,7 +35,7 @@ class StorePreviewDocument extends PolicyDocument
                                 $length = 1;
                             }
                             if(isset($data['group_certificate_no'])){
-                                $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;    
+                                $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;
                             } else {
                                 $data['group_certificate_no'] = 'S'.$data['certificate_no'];
                             }
@@ -52,13 +52,13 @@ class StorePreviewDocument extends PolicyDocument
         if($liabilityPolicyDetails){
             $data['liability_policy_id'] = $liabilityPolicyDetails['policy_number'];
             $data['liability_carrier'] = $liabilityPolicyDetails['carrier'];
-        } 
+        }
 
         $propertyPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'PROPERTY');
         if($propertyPolicyDetails){
             $data['property_policy_id'] = $propertyPolicyDetails['policy_number'];
             $data['property_carrier'] = $propertyPolicyDetails['carrier'];
-        } 
+        }
         if(isset($data['groupPL'])){
             if($data['groupProfessionalLiabilitySelect'] == 'yes'){
                 $data['group_certificate_no'] = 'S'."123456789";
@@ -153,21 +153,19 @@ class StorePreviewDocument extends PolicyDocument
             $this->logger->info("DOCUMENT blanketForm");
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
-        if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
-            $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-            if(is_array($policyDocuments)){
-                foreach ($policyDocuments as $key => $value) {
-                    $documents[$key] = $value;
-                }
-            }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
-                $documents['coi_document']  = array($policyDocuments);
-            }else if($temp['product'] == 'Dive Store'){ 
-                $documents['liability_coi_document']  = $policyDocuments;
-            }else{
-                $documents['coi_document']  = $policyDocuments;
+        if ($this->type != 'endorsement') {
+            $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+            if($temp['propertyCoverageSelect'] == 'yes'){
+                $this->logger->info("DOCUMENT property_coi_document");
+                $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
             }
         }
-        
+        if($this->type == 'endorsement') {
+              $documents['endorsement_coi_document'] = isset($documents['endorsement_coi_document']) ? $documents['endorsement_coi_document'] : array();
+              $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+              array_push($documents['endorsement_coi_document'], $endorsementDoc);
+        }
+
         if($this->type == 'policy'){
             $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         }
