@@ -44,7 +44,7 @@
 						{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}
                             ${$lossOfBusIncome|number_format}
                         {else}
-                            0
+                            $0
                         {/if}</p>
 					<p class = "sec_title2">
 						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
@@ -284,7 +284,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
-				<center><p class = "notice">both of 
+				<center><p class = "notice">both of
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Vermont'}
@@ -311,4 +311,3 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 	</div>
 </body>
 </html>
-
