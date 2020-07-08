@@ -199,7 +199,8 @@ class PadiVerification extends AbstractAppDelegate
             $returnArray['careerCoverageOptions'] = $coverageOptions;
             unset($returnArray['member_number']);
             unset($privileges);
-            return $returnArray;
+            $data = $returnArray;
+            // return $returnArray;
         } else {
             $returnArray = array();
             $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
@@ -221,7 +222,22 @@ class PadiVerification extends AbstractAppDelegate
             $data = array_merge($data,$returnArray);
             unset($data['member_number']);
             unset($privileges);
-            return $data;
         }
+        $userInfo = $this->getUserDetailsByIdentifier($data[$data['identifier_field']],$data['identifier_field']);
+        if($userInfo != 0){
+            $data['username'] = $userInfo['username'];
+        }else{
+            if($data['identifier_field'] == 'padi'){
+                $data['username'] = 'PL'.$data['padi'];
+            }else if($data['identifier_field'] == 'business_padi'){
+                $data['username'] = 'S'.$data['business_padi'];
+            }
+            // if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
+            //     $data['username'] = 'PL'.$data['padi'];
+            // }else if ($data['product'] == 'Dive Store') {
+            //     $data['username'] = 'S'.$data['business_padi'];
+            // }
+        }
+        return $data;
     }
 }

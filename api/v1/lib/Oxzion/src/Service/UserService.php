@@ -1265,7 +1265,7 @@ class UserService extends AbstractService
             }
             $from .= " INNER JOIN ox_wf_user_identifier ui ON ui.user_id = u.id";
             $where .= " AND ui.app_id = :appId AND ui.org_id = :orgId
-                        AND ui.identifier = :identifier AND ui.identifier_name = :identifierName";
+                        OR (ui.identifier = :identifier AND ui.identifier_name = :identifierName)";
             $queryParams = array_merge($queryParams, array("appId" => $appId,
                 "orgId" => $orgId,
                 "identifier" => $data[$data['identifier_field']],
@@ -1309,6 +1309,8 @@ class UserService extends AbstractService
                 throw $e;
             }
         }
+        // print($data['username']);
+        // print_r($result);
         if ($data['username'] == $result[0]['username']) {
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];
@@ -1369,6 +1371,17 @@ class UserService extends AbstractService
             $last_domain = str_replace(substr($last['0'], '1'), str_repeat('*', strlen($last['0'])-1), $last['0']);
             $hideEmailAddress = $first.'@'.$last_domain.'.'.$last['1'];
             return $hideEmailAddress;
+        }
+    }
+
+    public function getUserDetailsByIdentifier($identifier,$identifierName){
+        $select = "SELECT ou.* from ox_user as ou join ox_wf_user_identifier as owi on ou.id = owi.user_id WHERE owi.identifier = :identifier AND owi.identifier_name = :identifierName";
+        $selectParams = array("identifier" => $identifier, "identifierName" => $identifierName);
+        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+        if(count($result) > 0){
+            return $result[0];
+        }else{
+            return 0;
         }
     }
 }

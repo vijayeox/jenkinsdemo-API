@@ -3,6 +3,7 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\FileTrait;
+use Oxzion\AppDelegate\UserContextTrait;
 use Oxzion\DelegateException;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
@@ -11,6 +12,7 @@ require_once __DIR__."/RateCard.php";
 class RenewalRateCard extends RateCard
 {
     use FileTrait;
+    use UserContextTrait;
     public function __construct()
     {
         parent::__construct();
@@ -48,6 +50,14 @@ class RenewalRateCard extends RateCard
             $data['form_data']['initiatedByCsr'] = true;
         }else{
             $data['form_data']['initiatedByCsr'] = false;
+        }
+
+        $userInfo = $this->getUserDetailsByIdentifier($data['form_data'][$data['form_data']['identifier_field']],$data['form_data']['identifier_field']);
+        if($userInfo != 0){
+            $data['form_data']['username'] = $userInfo['username'];
+        }else{
+            $this->logger>info("Renewal Flow -- User Does Not Exist");
+            throw new DelegateException('User Not Found','user_not_found');
         }
 
         if($data['form_data']['product'] == 'Dive Boat'){
