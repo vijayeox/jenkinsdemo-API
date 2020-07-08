@@ -115,7 +115,7 @@ class UserCacheService extends AbstractService
             $count = $this->table->save($form);
             if (!isset($data['id'])) {
                 $id = $this->table->getLastInsertValue();
-                $data['cacheId'] = $id;
+                $params['cacheId'] = $id;
             }
             $this->commit();
         } catch (Exception $e) {
@@ -123,7 +123,7 @@ class UserCacheService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $data;
+        return $count;
     }
 
     public function updateUserCache($id, &$data)
