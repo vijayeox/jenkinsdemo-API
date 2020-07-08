@@ -72,6 +72,9 @@ class CacheController extends AbstractApiController
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
+        catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
+        }
         return $this->getSuccessResponseWithData($data, 201);
     }
 

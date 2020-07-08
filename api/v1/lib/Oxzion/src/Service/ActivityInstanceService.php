@@ -43,31 +43,56 @@ class ActivityInstanceService extends AbstractService
     }
     public function getActivityInstanceForm($data)
     {
-        $selectQuery = "SELECT oxa.* from ox_activity_instance_assignee as oxa 
-                        join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id 
-                        LEFT JOIN ox_user_group as oug on oxa.group_id = oug.group_id 
+        $selectQuery = "SELECT oxa.* from ox_activity_instance_assignee as oxa
+                        join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id
+                        LEFT JOIN ox_user_group as oug on oxa.group_id = oug.group_id
                         LEFT JOIN ox_user_role as our on oxa.role_id = our.role_id
-                        WHERE oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND 
+                        WHERE oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND
                         (oxa.user_id =:userId OR oug.avatar_id =:userId OR our.user_id = :userId)";
         $queryParams = array("activityInstanceId" => $data['activityInstanceId'], 'userId' => AuthContext::get(AuthConstants::USER_ID));
         $this->logger->info("Executing query - ". $selectQuery . " with params - " . json_encode($queryParams));
         $result = $this->executeQuerywithBindParameters($selectQuery, $queryParams)->toArray();
         if (isset($result[0])) {
-            $activityQuery = "SELECT ox_workflow_instance.process_instance_id as workflow_instance_id,
-            ox_activity_instance.activity_instance_id,
-            ox_activity_instance.status as status,
-            ox_file.data,ox_app.uuid as app_id,ox_file.uuid,
-            ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
-            ox_form.name as formName FROM `ox_activity_instance`
-            LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id
-            LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id
-            LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id
-            LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
-            LEFT JOIN ox_file on ox_file.id=ox_workflow_instance.file_id
-            LEFT JOIN ox_app on ox_app.id = ox_form.app_id
-            WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND
-            ox_activity_instance.activity_instance_id=:activityInstanceId;";
+            // $checkForCacheQuery = "Select ouc.id from ox_user_cache as ouc 
+            //                 INNER JOIN ox_activity_instance as oai on ouc.activity_instance_id = oai.id 
+            //                 where oai.activity_instance_id=:activityInstanceId and ouc.user_id=:userId and deleted = 0";
+            // $queryParams = array("activityInstanceId" => $data['activityInstanceId'], 'userId' => AuthContext::get(AuthConstants::USER_ID));
+            // $this->logger->info("CHECK FOR CACHE QUERY - $checkForCacheQuery with ".print_r($queryParams,true));
+            // $result = $this->executeQuerywithBindParameters($checkForCacheQuery, $queryParams)->toArray();
+            // if(isset($result[0])) {
+            //     $activityQuery = "SELECT ox_workflow_instance.process_instance_id as workflow_instance_id,
+            //     ox_activity_instance.activity_instance_id,
+            //     ox_activity_instance.status as status,
+            //     ox_user_cache.content as data,ox_app.uuid as app_id,
+            //     ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
+            //     ox_form.name as formName FROM `ox_activity_instance`
+            //     LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id
+            //     LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id
+            //     LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id
+            //     LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
+            //     LEFT JOIN ox_user_cache on ox_user_cache.activity_instance_id=ox_activity_instance.id
+            //     LEFT JOIN ox_app on ox_app.id = ox_form.app_id
+            //     WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND
+            //     ox_activity_instance.activity_instance_id=:activityInstanceId and ox_user_cache.deleted = 0;";
+            // } else {
+                $activityQuery = "SELECT ox_workflow_instance.process_instance_id as workflow_instance_id,
+                ox_activity_instance.activity_instance_id,
+                ox_activity_instance.status as status,
+                ox_file.data,ox_app.uuid as app_id,ox_file.uuid,
+                ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
+                ox_form.name as formName FROM `ox_activity_instance`
+                LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id
+                LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id
+                LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id
+                LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
+                LEFT JOIN ox_file on ox_file.id=ox_workflow_instance.file_id
+                LEFT JOIN ox_app on ox_app.id = ox_form.app_id
+                WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND
+                ox_activity_instance.activity_instance_id=:activityInstanceId;";
+            // }
+
             $activityParams = array("orgId" => AuthContext::get(AuthConstants::ORG_ID), "appId" => $this->getIdFromUuid('ox_app', $data['appId']), "activityInstanceId" => $data['activityInstanceId']);
+            $this->logger->info("EXECUTING GET ACTIVITY INSTANCE QUERY $activityQuery WITH ".print_r($activityParams,true));
             $activityInstance = $this->executeQuerywithBindParameters($activityQuery, $activityParams)->toArray();
             if (count($activityInstance) == 0) {
                 return 0;
@@ -88,7 +113,7 @@ class ActivityInstanceService extends AbstractService
                     }
                 }
             }
-            $data['fileId'] = $activityform['uuid'];
+            $data['fileId'] = isset($activityform['uuid']) ? $activityform['uuid'] : (isset($data['fileId']) ? $data['fileId'] : $data['uuid']);
             unset($activityform['uuid']);
             $activityform['data'] = json_encode($data);
             return $activityform;
@@ -158,6 +183,13 @@ class ActivityInstanceService extends AbstractService
         WHERE ai.activity_instance_id=:activityInstanceId and aia.user_id=:userId;";
         $selectParams = array("userId" => AuthContext::get(AuthConstants::USER_ID), "activityInstanceId" => $data['activityInstanceId']);
         $activityInstanceAssignee = $this->executeQuerywithBindParameters($selectQuery, $selectParams)->toArray();
+
+        $checkForCacheQuery = "Select ox_user_cache.id from ox_user_cache
+        inner join ox_activity_instance on ox_user_cache.activity_instance_id = ox_activity_instance.id
+        where ox_activity_instance.activity_instance_id=:activityInstanceId and deleted = 0 and ox_user_cache.user_id is null";
+        $checkParams = array('activityInstanceId' => $data['activityInstanceId']);
+        $cacheCheck = $this->executeQuerywithBindParameters($checkForCacheQuery, $checkParams)->toArray();
+
         if (isset($activityInstanceAssignee) && is_array($activityInstanceAssignee) && !empty($activityInstanceAssignee)) {
             $this->beginTransaction();
             try {
@@ -165,6 +197,12 @@ class ActivityInstanceService extends AbstractService
                 where id = :id;";
                 $updateParams = array("assignee" => 1, "userId" => AuthContext::get(AuthConstants::USER_ID), "id" => $activityInstanceAssignee[0]['id']);
                 $update = $this->executeQuerywithBindParameters($updateQuery, $updateParams);
+                if(isset($cacheCheck) && !empty($cacheCheck[0])) {
+                    $id = $cacheCheck[0]['id'];
+                    $updateQuery = "UPDATE ox_user_cache SET user_id = :userId WHERE id = :id";
+                    $updateParams = array("id" => $id,"userId" => AuthContext::get(AuthConstants::USER_ID));
+                    $update = $this->executeQuerywithBindParameters($updateQuery, $updateParams);
+                }
                 $this->commit();
             } catch (Exception $e) {
                 $this->logger->info("Creation of Activity Instance Entry Failed" . $e->getMessage());
@@ -201,6 +239,12 @@ class ActivityInstanceService extends AbstractService
         $this->logger->info("Executing query - $activityQuery with params " . json_encode($activityParams));
         $activityInstance = $this->executeQuerywithBindParameters($activityQuery, $activityParams)->toArray();
 
+        $checkForCacheQuery = "Select ox_user_cache.id from ox_user_cache
+        inner join ox_activity_instance on ox_user_cache.activity_instance_id = ox_activity_instance.id
+        where ox_activity_instance.activity_instance_id=:activityInstanceId and deleted = 0 and ox_user_cache.user_id is not null";
+        $checkParams = array('activityInstanceId' => $data['activityInstanceId']);
+        $cacheCheck = $this->executeQuerywithBindParameters($checkForCacheQuery, $checkParams)->toArray();
+
         if (isset($activityInstance) && is_array($activityInstance) && !empty($activityInstance)) {
             $taskId = str_replace($activityInstance[0]["task_id"] . ":", "", $activityInstance[0]['activity_instance_id']);
             try {
@@ -212,10 +256,17 @@ class ActivityInstanceService extends AbstractService
             $this->logger->info("No data found");
             return 0;
         }
+        $this->beginTransaction();
         try {
             $updateQuery = "UPDATE ox_activity_instance_assignee SET assignee = :assignee WHERE activity_instance_id = (SELECT id from ox_activity_instance WHERE activity_instance_id = :activityInstanceId)";
             $updateParams = array("assignee" => 0, "activityInstanceId" => $data['activityInstanceId']);
             $update = $this->executeQuerywithBindParameters($updateQuery, $updateParams);
+            if(isset($cacheCheck) && !empty($cacheCheck[0])) {
+                $id = $cacheCheck[0]['id'];
+                $updateQuery = "UPDATE ox_user_cache SET user_id = NULL WHERE id = :id";
+                $updateParams = array("id" => $id);
+                $update = $this->executeQuerywithBindParameters($updateQuery, $updateParams);
+            }
             $this->commit();
             return 1;
         } catch (Exception $e) {
@@ -231,16 +282,16 @@ class ActivityInstanceService extends AbstractService
         try{
             $result = $this->unclaimActivityInstance($data);
             if($result == 1){
-                $result = $this->claimActivityInstance($data);   
+                $result = $this->claimActivityInstance($data);
                 return $result;
             }
         }catch(Exception $e){
             throw $e;
         }
-         
+
     }
 
-    
+
     public function createActivityInstanceEntry(&$data, $commandService)
     {
         $this->logger->info("CREATE ACTIVITY INSTANCE - - ".print_r($data,true));
@@ -516,7 +567,7 @@ class ActivityInstanceService extends AbstractService
             $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
             $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             if(isset($result[0])){
-                return $result[0]; 
+                return $result[0];
             } else {
                 return;
             }

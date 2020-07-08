@@ -9,10 +9,14 @@ use GuzzleHttp\Psr7\MultipartStream;
 class RestClient
 {
     private $client;
-
-    public function __construct($baseUrl, $params = array())
+    
+    public function __construct($baseUrl, $params=array())
     {
-        $this->client = new Client(array_merge(['base_uri' => $baseUrl, 'timeout' => 40000.0], $params));
+        $config = ['verify' => false,'timeout'  => 40.0];
+        if(isset($baseUrl)) {
+            $config['base_uri'] = $baseUrl;
+        }
+        $this->client = new Client(array_merge($config, $params));
     }
 
     public function get($url, $params = array(), $headers = array())
