@@ -79,7 +79,6 @@ class FileService extends AbstractService
         unset($data['uuid']);
         $oldData = $data;
         $fields = $data = $this->cleanData($data);
-        $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
         $jsonData = json_encode($data);
         $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
 
@@ -94,8 +93,11 @@ class FileService extends AbstractService
         $data['data'] = $jsonData;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File();
+        if(isset($data['id'])){
+            unset($data['id']);
+        }
         $file->exchangeArray($data);
-        $this->logger->info("Data From Fileservice - " . print_r($data, true));
+        //$this->logger->info("Data From Fileservice - " . print_r($data, true));
         $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
         // $fields = array_diff_assoc($data, $file->toArray());
         $file->validate();
