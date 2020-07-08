@@ -89,6 +89,8 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                             activityinstance: '{{activityInstanceId}}'
                             workflowId: '{{workflowId}}'
+                            cacheId: '{{cacheId}}'
+                            isDraft: true
                     icon: 'fa fa-pencil'
             columnConfig:
                 -

@@ -75,7 +75,7 @@ class UserCacheService extends AbstractService
             $this->logger->warn("Cache not stored as Form was not found");
             return $params;
         }
-        
+
         if(isset($params['workflowInstanceId'])) {
             $select = "select ox_workflow_instance.id
             from ox_workflow_instance
@@ -113,10 +113,20 @@ class UserCacheService extends AbstractService
         $count = 0;
         try {
             $count = $this->table->save($form);
-            if (!isset($data['id'])) {
+            if ($count != 0 && !isset($data['id'])) {
                 $id = $this->table->getLastInsertValue();
                 $params['cacheId'] = $id;
+            } else {
+                $id = $data['id'];
             }
+            if(is_string($data['content'])){
+              $content = json_decode($data['content'],true);
+            } else {
+              $content = $params['content'];
+            }
+            $content['cacheId'] = $id;
+            $params['cacheId'] = $id;
+            $this->updateCacheData($id, $content);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -124,6 +134,13 @@ class UserCacheService extends AbstractService
             throw $e;
         }
         return $count;
+    }
+    private function updateCacheData($id, $data)
+    {
+        $query = "update ox_user_cache set content = :content where id = :id";
+        $params = array('content' => json_encode($data), 'id' => $id);
+        $result = $this->executeUpdateWithBindParameters($query, $params);
+        return $result->getAffectedRows() > 0;
     }
 
     public function updateUserCache($id, &$data)
