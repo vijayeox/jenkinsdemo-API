@@ -222,6 +222,12 @@ class RenewalRateCard extends RateCard
                 unset($data[$this->unsetVariables[$product][$key]]);
             }
         }
+        if(isset($data['uuid'])){
+            unset($data['uuid']);    
+        }
+        if(isset($data['fileId'])){
+            unset($data['fileId']);    
+        }
         return $data;
     }
     private function rateCalculation(&$data){
