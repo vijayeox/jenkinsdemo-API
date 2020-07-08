@@ -20,13 +20,17 @@
 		"label": "Quote Information",
 		"input": false,
 		"components": [{
-			"label": "documents",
+			"type": "document",
 			"key": "documents",
-			"properties": {
-				"data_type": "list"
-			},
-			"type": "hidden",
-			"input": true,
+			"dtype": "document",
+			"datype": "document",
+			"dattype": "document",
+			"datatype": "document",
+			"data_type": "document",
+			"label": "Documents",
+			"hideLabel": true,
+			"inputType": "document",
+			"input": 1,
 			"tableView": false
 		}, {
 			"type": "documentviewer",
@@ -290,7 +294,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "if(data.downpaymentDepositPercentge){\n var downpaymentVal = data['downpaymentDepositPercentge'] * parseFloat(data['amount']); \n value = downpaymentVal/100\n} else {\n  value =0;\n}",
+							"calculateValue": "if(data.downpaymentDepositPercentge){\n  var downpaymentVal = data['downpaymentDepositPercentge'] * parseFloat(data['amount']);\n  value = downpaymentVal/100\n} else {\n  value =0;\n}",
 							"key": "downPayment",
 							"type": "number",
 							"input": true,
@@ -685,7 +689,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 53,
+	"_vid": 55,
 	"title": "Dive Store User Approval Form",
 	"display": "wizard",
 	"access": [{
@@ -702,6 +706,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-07-08T04:32:03.056Z",
+	"modified": "2020-07-08T11:47:54.018Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }
