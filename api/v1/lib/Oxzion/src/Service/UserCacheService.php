@@ -42,11 +42,22 @@ class UserCacheService extends AbstractService
             $formId = $this->getIdFromUuid('ox_form',$params['formId']);
             // print_r($formId);exit;
         }
-        else {
+        else if (isset($params['activityInstanceId'])) {
+            $select = "select ox_form.id, ox_activity_instance.id as activity_instance_id
+            from ox_form
+            inner join ox_activity_form on ox_form.id = ox_activity_form.form_id
+            inner join ox_activity on ox_activity_form.activity_id = ox_activity.id
+            inner join ox_activity_instance on ox_activity.id = ox_activity_instance.activity_id
+            where ox_activity_instance.activity_instance_id =:activityInstanceId";
+            $queryParams = array("activityInstanceId" => $params['activityInstanceId']);
+            $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+            $formId = $response[0]['id'];
+            $activityInstanceId = $response[0]['activity_instance_id'];
+        }else{
             $workflowId = (isset($params['workflow_uuid']) && !empty($params['workflow_uuid']))?$params['workflow_uuid']:null;
             $workflowId = (isset($params['workflowId']) && !empty($params['workflowId']))?$params['workflowId']:$workflowId;
             if($workflowId) {
-                $select = "select ox_form.id
+                $select = "select ox_form.id, ox_workflow.id as workflow_id
                 from ox_form
                 left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
                 left join ox_workflow on ox_workflow.id=ox_workflow_deployment.workflow_id
@@ -55,46 +66,13 @@ class UserCacheService extends AbstractService
                 $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
                 $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 $formId = $response[0]['id'];
-            }
-            elseif (isset($params['activityInstanceId'])) {
-                $select = "select ox_form.id
-                from ox_form
-                inner join ox_activity_form on ox_form.id = ox_activity_form.form_id
-                inner join ox_activity on ox_activity_form.activity_id = ox_activity.id
-                inner join ox_activity_instance on ox_activity.id = ox_activity_instance.activity_id
-                where ox_activity_instance.activity_instance_id =:activityInstanceId";
-                $queryParams = array("activityInstanceId" => $params['activityInstanceId']);
-                $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-                $formId = $response[0]['id'];
-            }
-            elseif (isset($params['workflowInstanceId'])) {
-                $select = "select ox_form.id
-                from ox_form
-                inner join ox_workflow_deployment on ox_form.id = ox_workflow_deployment.form_id and ox_workflow_deployment.latest=1
-                inner join ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
-                where ox_workflow_instance.process_instance_id =:workflowInstanceId and ox_workflow_instance.app_id=:appId";
-                $queryParams = array("workflowInstanceId" => $params['workflowInstanceId'], "appId" => $appId);
-                $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-                $formId = $response[0]['id'];
+                $workflowId = $response[0]['workflow_id'];
             }
             else{
-                throw new Exception("Form could not be found due to insufficient parameters");
-            }
+            $this->logger->warn("Cache not stored as Form was not found");
         }
-        if(isset($params['workflow_uuid'])) {
-            $workflowId = $this->getIdFromUuid('ox_workflow',$params['workflow_uuid']);
-            if($workflowId == 0){
-                $workflowId = null;
-            }
-        }
-        if(isset($params['activityInstanceId'])) {
-            $select = "select ox_activity_instance.id
-            from ox_activity_instance
-            where ox_activity_instance.activity_instance_id =:activityInstanceId";
-            $queryParams = array("activityInstanceId" => $params['activityInstanceId']);
-            $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-            $activityInstanceId = $response[0]['id'];
-        }
+    
+        
         if(isset($params['workflowInstanceId'])) {
             $select = "select ox_workflow_instance.id
             from ox_workflow_instance
@@ -133,7 +111,7 @@ class UserCacheService extends AbstractService
             $count = $this->table->save($form);
             if (!isset($data['id'])) {
                 $id = $this->table->getLastInsertValue();
-                $data['id'] = $id;
+                $data['cacheId'] = $id;
             }
             $this->commit();
         } catch (Exception $e) {
