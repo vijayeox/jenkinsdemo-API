@@ -1377,6 +1377,7 @@
 						"timePicker": {
 							"showMeridian": false
 						},
+						"redrawOn": "data",
 						"clearOnHide": false,
 						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n  if((data.start_date && data.start_date != \"\") ){\n\tvalue = data.start_date;\n  }\n} else {\n  if ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-13')))) {\n\t\t\tvalue = moment('2020-06-30').format(\"MM-DD-YYYY\");\n\t}\n  if(value == \"\"){\n\tvalue = moment().format(\"MM-DD-YYYY\");\n  }\n}",
 						"allowCalculateOverride": true,
@@ -4897,7 +4898,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 549,
+	"_vid": 550,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4918,6 +4919,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-07T13:12:14.540Z",
+	"modified": "2020-07-08T05:54:36.309Z",
 	"machineName": "testdivehub:csrInitiates"
 }
