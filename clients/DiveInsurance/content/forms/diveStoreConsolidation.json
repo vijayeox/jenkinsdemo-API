@@ -2496,7 +2496,7 @@
 						"label": "Pool Supplemental Form",
 						"input": false,
 						"components": [{
-							"label": "Non-Diving Pool receipts",
+							"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
 							"prefix": "$",
 							"mask": false,
 							"spellcheck": true,
@@ -3073,28 +3073,6 @@
 									"hideOnChildrenHidden": false
 								}]
 							}],
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-							"prefix": "$",
-							"mask": false,
-							"spellcheck": true,
-							"tableView": false,
-							"delimiter": true,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"validate": {
-								"required": true,
-								"customMessage": "Gross receipts from your pool is required"
-							},
-							"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
-							"conditional": {
-								"show": true,
-								"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-								"eq": "yes"
-							},
-							"type": "number",
-							"input": true,
 							"hideOnChildrenHidden": false
 						}],
 						"hideOnChildrenHidden": false
@@ -6802,7 +6780,6 @@
 												"mask": false,
 												"spellcheck": false,
 												"tableView": false,
-												"defaultValue": 0,
 												"delimiter": true,
 												"requireDecimal": false,
 												"inputFormat": "plain",
@@ -7136,6 +7113,33 @@
 											"input": true,
 											"hideOnChildrenHidden": false
 										}, {
+											"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
+											"optionsLabelPosition": "right",
+											"inline": false,
+											"tableView": false,
+											"values": [{
+												"label": "Yes",
+												"value": "yes",
+												"shortcut": ""
+											}, {
+												"label": "No",
+												"value": "no",
+												"shortcut": ""
+											}],
+											"clearOnHide": false,
+											"validate": {
+												"customMessage": "Please select an option"
+											},
+											"key": "ALNonDivingPoolActivities",
+											"conditional": {
+												"show": true,
+												"when": "ALdoyouhaveapoolonpremisesPL",
+												"eq": "yes"
+											},
+											"type": "radio",
+											"input": true,
+											"hideOnChildrenHidden": false
+										}, {
 											"title": "Pool Supplemental Form",
 											"theme": "primary",
 											"breadcrumbClickable": true,
@@ -7149,14 +7153,14 @@
 											"key": "ALpoolSupplementalForm1",
 											"conditional": {
 												"show": true,
-												"when": "ALdoyouhaveapoolonpremisesPL",
+												"when": "additionalLocations.ALNonDivingPoolActivities",
 												"eq": "yes"
 											},
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
 											"components": [{
-												"label": "Non-Diving Pool receipts",
+												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
 												"prefix": "$",
 												"mask": false,
 												"spellcheck": true,
@@ -7718,56 +7722,7 @@
 													}]
 												}],
 												"hideOnChildrenHidden": false
-											}, {
-												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-												"prefix": "$",
-												"mask": false,
-												"spellcheck": true,
-												"tableView": false,
-												"delimiter": true,
-												"requireDecimal": false,
-												"inputFormat": "plain",
-												"validate": {
-													"required": true,
-													"customMessage": "Gross receipts from your pool is required"
-												},
-												"key": "ALpoolGrossReceipts",
-												"conditional": {
-													"show": true,
-													"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-													"eq": "yes"
-												},
-												"type": "number",
-												"input": true,
-												"hideOnChildrenHidden": false
 											}],
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
-											"optionsLabelPosition": "right",
-											"inline": false,
-											"tableView": false,
-											"values": [{
-												"label": "Yes",
-												"value": "yes",
-												"shortcut": ""
-											}, {
-												"label": "No",
-												"value": "no",
-												"shortcut": ""
-											}],
-											"clearOnHide": false,
-											"validate": {
-												"customMessage": "Please select an option"
-											},
-											"key": "ALNonDivingPoolActivities",
-											"conditional": {
-												"show": true,
-												"when": "ALdoyouhaveapoolonpremisesPL",
-												"eq": "yes"
-											},
-											"type": "radio",
-											"input": true,
 											"hideOnChildrenHidden": false
 										}],
 										"width": 8,
@@ -13271,7 +13226,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 495,
+	"_vid": 496,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13288,6 +13243,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-08T08:10:35.731Z",
+	"modified": "2020-07-08T10:54:50.046Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

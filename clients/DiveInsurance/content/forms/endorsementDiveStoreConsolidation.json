@@ -375,7 +375,7 @@
 							"customMessage": "Padi Number is not Valid!",
 							"step": "any"
 						},
-						"key": "padi",
+						"key": "business_padi",
 						"logic": [{
 							"name": "Check PADI Verified",
 							"trigger": {
@@ -2314,14 +2314,14 @@
 						"key": "poolSupplementalForm1",
 						"conditional": {
 							"show": true,
-							"when": "doyouhaveapoolonpremisesPL",
+							"when": "poolNonDivingActivities",
 							"eq": "yes"
 						},
 						"type": "panel",
 						"label": "Pool Supplemental Form",
 						"input": false,
 						"components": [{
-							"label": "Non-Diving Pool receipts",
+							"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
 							"prefix": "$",
 							"mask": false,
 							"spellcheck": true,
@@ -2366,6 +2366,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"validate": {
+											"required": true
+										},
 										"key": "dimensions",
 										"type": "number",
 										"input": true,
@@ -2386,6 +2389,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"validate": {
+											"required": true
+										},
 										"key": "depth",
 										"type": "number",
 										"input": true,
@@ -2399,6 +2405,9 @@
 										"delimiter": false,
 										"requireDecimal": false,
 										"inputFormat": "plain",
+										"validate": {
+											"required": true
+										},
 										"key": "maxDepth",
 										"type": "number",
 										"input": true,
@@ -2437,7 +2446,6 @@
 									"columns": [{
 										"components": [{
 											"label": "From",
-											"labelPosition": "left-left",
 											"tableView": true,
 											"dataFormat": "HH:mm",
 											"key": "time",
@@ -2454,7 +2462,6 @@
 									}, {
 										"components": [{
 											"label": "To",
-											"labelPosition": "left-left",
 											"tableView": true,
 											"dataFormat": "HH:mm",
 											"key": "time1",
@@ -2548,6 +2555,7 @@
 												}
 											},
 											"defaultValue": "00/00/0000",
+											"errorLabel": "Operating Months",
 											"key": "operationMonthTo",
 											"type": "day",
 											"input": true,
@@ -5904,6 +5912,33 @@
 											"input": true,
 											"hideOnChildrenHidden": false
 										}, {
+											"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
+											"optionsLabelPosition": "right",
+											"inline": false,
+											"tableView": false,
+											"values": [{
+												"label": "Yes",
+												"value": "yes",
+												"shortcut": ""
+											}, {
+												"label": "No",
+												"value": "no",
+												"shortcut": ""
+											}],
+											"clearOnHide": false,
+											"validate": {
+												"customMessage": "Please select an option"
+											},
+											"key": "ALNonDivingPoolActivities",
+											"conditional": {
+												"show": true,
+												"when": "ALdoyouhaveapoolonpremisesPL",
+												"eq": "yes"
+											},
+											"type": "radio",
+											"input": true,
+											"hideOnChildrenHidden": false
+										}, {
 											"title": "Pool Supplemental Form",
 											"theme": "primary",
 											"breadcrumbClickable": true,
@@ -5917,14 +5952,14 @@
 											"key": "ALpoolSupplementalForm1",
 											"conditional": {
 												"show": true,
-												"when": "ALdoyouhaveapoolonpremisesPL",
+												"when": "additionalLocations.ALNonDivingPoolActivities",
 												"eq": "yes"
 											},
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
 											"components": [{
-												"label": "Non-Diving Pool receipts",
+												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
 												"prefix": "$",
 												"mask": false,
 												"spellcheck": true,
@@ -6486,56 +6521,7 @@
 													}]
 												}],
 												"hideOnChildrenHidden": false
-											}, {
-												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-												"prefix": "$",
-												"mask": false,
-												"spellcheck": true,
-												"tableView": false,
-												"delimiter": true,
-												"requireDecimal": false,
-												"inputFormat": "plain",
-												"validate": {
-													"required": true,
-													"customMessage": "Gross receipts from your pool is required"
-												},
-												"key": "ALpoolGrossReceipts",
-												"conditional": {
-													"show": true,
-													"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-													"eq": "yes"
-												},
-												"type": "number",
-												"input": true,
-												"hideOnChildrenHidden": false
 											}],
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "If you have a pool, is it used for activities other than diving and/or swimming?",
-											"optionsLabelPosition": "right",
-											"inline": false,
-											"tableView": false,
-											"values": [{
-												"label": "Yes",
-												"value": "yes",
-												"shortcut": ""
-											}, {
-												"label": "No",
-												"value": "no",
-												"shortcut": ""
-											}],
-											"clearOnHide": false,
-											"validate": {
-												"customMessage": "Please select an option"
-											},
-											"key": "ALNonDivingPoolActivities",
-											"conditional": {
-												"show": true,
-												"when": "ALdoyouhaveapoolonpremisesPL",
-												"eq": "yes"
-											},
-											"type": "radio",
-											"input": true,
 											"hideOnChildrenHidden": false
 										}],
 										"width": 8,
@@ -13498,7 +13484,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 273,
+	"_vid": 275,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13515,6 +13501,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-07T10:00:22.240Z",
+	"modified": "2020-07-08T10:55:29.002Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

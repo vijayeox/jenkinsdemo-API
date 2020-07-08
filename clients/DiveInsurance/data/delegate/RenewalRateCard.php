@@ -56,7 +56,7 @@ class RenewalRateCard extends RateCard
         if($userInfo != 0){
             $data['form_data']['username'] = $userInfo['username'];
         }else{
-            $this->logger>info("Renewal Flow -- User Does Not Exist");
+            $this->logger->info("Renewal Flow -- User Does Not Exist");
             throw new DelegateException('User Not Found','user_not_found');
         }
 
@@ -221,6 +221,12 @@ class RenewalRateCard extends RateCard
             foreach ($this->unsetVariables[$product] as $key => $value) {
                 unset($data[$this->unsetVariables[$product][$key]]);
             }
+        }
+        if(isset($data['uuid'])){
+            unset($data['uuid']);    
+        }
+        if(isset($data['fileId'])){
+            unset($data['fileId']);    
         }
         return $data;
     }
