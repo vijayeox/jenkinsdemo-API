@@ -355,7 +355,8 @@ class Module
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\FileService::class),
                         $container->get(Service\WorkflowInstanceService::class),
-                        $container->get(Service\ActivityInstanceService::class)
+                        $container->get(Service\ActivityInstanceService::class),
+                        $container->get(Service\UserService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {
