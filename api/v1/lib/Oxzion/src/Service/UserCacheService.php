@@ -69,7 +69,8 @@ class UserCacheService extends AbstractService
                 $workflowId = $response[0]['workflow_id'];
             }
             else{
-            $this->logger->warn("Cache not stored as Form was not found");
+                $this->logger->warn("Cache not stored as Form was not found");
+            }
         }
     
         
