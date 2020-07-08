@@ -408,7 +408,6 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Username",
-						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = data['padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,
@@ -4898,7 +4897,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 550,
+	"_vid": 552,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4919,6 +4918,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-08T05:54:36.309Z",
+	"modified": "2020-07-08T08:10:53.235Z",
 	"machineName": "testdivehub:csrInitiates"
 }

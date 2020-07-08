@@ -108,7 +108,6 @@
 				"columns": [{
 					"components": [{
 						"label": "Username",
-						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  value = 'PL'+data['padi'];\n}",
 						"key": "username",
 						"type": "hidden",
 						"input": true,

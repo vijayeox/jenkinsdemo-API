@@ -957,25 +957,7 @@ class FileService extends AbstractService
                     }
                 }
                 if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
-                    //TODO Sort Fixes
-                    $sortCount = 0;
-                    $field = "";
-                    $sort = " ORDER BY ";
-
-                    foreach ($filterParamsArray[0]['sort'] as $key => $value) {
-                        $tablePrefix = "sorttblf".$prefix;
-                        $fieldName = $value['field'];
-                        if($fieldName == 'date_created'){
-                            $sort .= "`of`.date_created ".$value['dir'].",";
-                        }else{
-                            $sort .= " (CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean WHEN ".$tablePrefix.".field_value_type='TEXT' THEN ".$tablePrefix.".field_value_text END )".$value['dir'].",";
-                        }
-                        $sortCount += 1;
-                    }
-                    $sort = rtrim($sort, ",");
-                    if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
-                        $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
-                    }
+                    $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
@@ -1459,18 +1441,27 @@ class FileService extends AbstractService
         $sortTable = "tblf" . $sortCount;
         $sort = " ORDER BY ";
         foreach ($sortOptions as $key => $value) {
+            $dir = isset($value['dir']) ? $value['dir'] : "";
             if ($value['field'] == 'entity_name') {
                 if ($sortCount > 0) {
                     $sort .= ", ";
                 }
-                $sort .= " ox_app_entity.name ";
+                $sort .= " ox_app_entity.name ".$dir;
+                $sortCount++;
+                continue;
+            }
+            if ($value['field'] == 'date_created') {
+                if ($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " of.date_created ".$dir;
                 $sortCount++;
                 continue;
             }
             if ($sortCount == 0) {
-                $sort .= $value['field'] . " " . $value['dir'];
+                $sort .= $value['field'] . " " . $dir;
             } else {
-                $sort .= "," . $value['field'] . " " . $value['dir'];
+                $sort .= "," . $value['field'] . " " . $dir;
             }
             $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $value['field'];
             $sortCount += 1;

@@ -15,6 +15,7 @@ use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Service\UserService;
 
 class AppDelegateService extends AbstractService
 {
@@ -29,13 +30,14 @@ class AppDelegateService extends AbstractService
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
                                  MessageProducer $messageProducer, FileService $fileService, 
-                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService)
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
         $this->workflowInstanceService = $workflowInstanceService;
         $this->activityInstanceService = $activityInstanceService;
         $this->messageProducer = $messageProducer;
+        $this->userService = $userService;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
@@ -54,6 +56,13 @@ class AppDelegateService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
+    public function setFileService($fileService){
+        $this->fileService = $fileService;
+    }
+
+    // public function getFileservice(){
+    //     return $this->fileService;
+    // }
     public function execute($appId, $delegate, $dataArray = array())
     {
         $this->logger->info(AppDelegateService::class . "EXECUTE DELEGATE ---");
@@ -101,6 +110,9 @@ class AppDelegateService extends AbstractService
                         AuthContext::get(AuthConstants::NAME),
                         AuthContext::get(AuthConstants::ORG_UUID),
                         AuthContext::get(AuthConstants::PRIVILEGES));
+                }
+                if (method_exists($obj, "setUserService")) {
+                    $obj->setUserService($this->userService);
                 }
                 $persistenceService = $this->getPersistence($appId);
 

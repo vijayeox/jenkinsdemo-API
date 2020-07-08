@@ -89,13 +89,6 @@ class UserCacheService extends AbstractService
             if (count($obj->toArray()) > 0) {
                 $data['id'] = $params['cacheId'];
             }
-        } else {
-            $query = "select id from ox_user_cache where app_id = :appId and user_id = :userId and form_id = :formId and deleted = 0";
-            $queryParams = array("appId" => $appId, "userId" => AuthContext::get(AuthConstants::USER_ID), "formId" => $formId);
-            $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (count($result) > 0) {
-                $data['id'] = $result[0]['id'];
-            }
         }
         $form = new UserCache();
         $data['app_id'] = $appId;
