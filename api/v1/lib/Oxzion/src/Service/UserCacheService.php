@@ -32,6 +32,7 @@ class UserCacheService extends AbstractService
 
     public function storeUserCache($appUuId, &$params)
     {
+        $this->logger->info("STORE USER CACHE DATA ---".print_r($params,true));
         if ($app = $this->getIdFromUuid('ox_app', $appUuId)) {
             $appId = $app;
         } else {
@@ -42,7 +43,7 @@ class UserCacheService extends AbstractService
             $formId = $this->getIdFromUuid('ox_form',$params['formId']);
             // print_r($formId);exit;
         }
-        else if (isset($params['activityInstanceId'])) {
+        if (isset($params['activityInstanceId'])) {
             $select = "select ox_form.id, ox_activity_instance.id as activity_instance_id
             from ox_form
             inner join ox_activity_form on ox_form.id = ox_activity_form.form_id
@@ -53,26 +54,27 @@ class UserCacheService extends AbstractService
             $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
             $formId = $response[0]['id'];
             $activityInstanceId = $response[0]['activity_instance_id'];
-        }else{
-            $workflowId = (isset($params['workflow_uuid']) && !empty($params['workflow_uuid']))?$params['workflow_uuid']:null;
-            $workflowId = (isset($params['workflowId']) && !empty($params['workflowId']))?$params['workflowId']:$workflowId;
-            if($workflowId) {
-                $select = "select ox_form.id, ox_workflow.id as workflow_id
-                from ox_form
-                left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
-                left join ox_workflow on ox_workflow.id=ox_workflow_deployment.workflow_id
-                left join ox_app on ox_app.id=ox_workflow.app_id
-                where ox_workflow.uuid=:workflowId and ox_app.id=:appId;";
-                $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
-                $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-                $formId = $response[0]['id'];
-                $workflowId = $response[0]['workflow_id'];
-            }
-            else{
-                $this->logger->warn("Cache not stored as Form was not found");
-            }
         }
-    
+
+        $workflowId = (isset($params['workflow_uuid']) && !empty($params['workflow_uuid']))?$params['workflow_uuid']:null;
+        $workflowId = (isset($params['workflowId']) && !empty($params['workflowId']))?$params['workflowId']:$workflowId;
+        $this->logger->info("STORE USER CACHE -- workflowId : $workflowId");
+        if($workflowId) {
+            $select = "select ox_form.id, ox_workflow.id as workflow_id
+            from ox_form
+            left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
+            left join ox_workflow on ox_workflow.id=ox_workflow_deployment.workflow_id
+            left join ox_app on ox_app.id=ox_workflow.app_id
+            where ox_workflow.uuid=:workflowId and ox_app.id=:appId;";
+            $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
+            $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+            $formId = $response[0]['id'];
+            $workflowId = $response[0]['workflow_id'];
+        }
+        if(!isset($formId)){
+            $this->logger->warn("Cache not stored as Form was not found");
+            return $params;
+        }
         
         if(isset($params['workflowInstanceId'])) {
             $select = "select ox_workflow_instance.id
@@ -105,6 +107,7 @@ class UserCacheService extends AbstractService
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
         $form->exchangeArray($data);
+        $this->logger->info("STORE USER CACHE -- Data : ".print_r($data,true));
         $form->validate();
         $this->beginTransaction();
         $count = 0;
