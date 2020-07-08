@@ -530,7 +530,7 @@ class WorkflowService extends AbstractService
         foreach ($resultSet as $key => $value) {
             $data = json_decode($value['data'], true);
             unset($value['data']);
-            if(isset($value['to_be_claimed'] == 'in_draft')){
+            if(isset($value['to_be_claimed']) && ($value['to_be_claimed'] == 'in_draft')){
                 //TODO this is hardcoding for hub NEED to be REMOVED and changed to STATUS field
                 $data['policyStatus'] = 'In Draft';
             }
