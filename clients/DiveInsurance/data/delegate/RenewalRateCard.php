@@ -56,7 +56,7 @@ class RenewalRateCard extends RateCard
         if($userInfo != 0){
             $data['form_data']['username'] = $userInfo['username'];
         }else{
-            $this->logger>info("Renewal Flow -- User Does Not Exist");
+            $this->logger->info("Renewal Flow -- User Does Not Exist");
             throw new DelegateException('User Not Found','user_not_found');
         }
 
