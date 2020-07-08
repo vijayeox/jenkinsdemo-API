@@ -49,7 +49,7 @@ content:
             actions:
                 -
                     name: Review
-                    rule: '{{to_be_claimed}} == 2'
+                    rule: '''{{to_be_claimed}}'' == 2'
                     confirmationMessage: "This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded."
                     details:
                         -
@@ -62,7 +62,7 @@ content:
                     icon: 'fa fa-check-circle'
                 -
                     name: Review
-                    rule: '{{to_be_claimed}} == 1'
+                    rule: '''{{to_be_claimed}}'' == 1'
                     details:
                         -
                             type: Update
@@ -74,7 +74,7 @@ content:
                     icon: 'fa fa-check-circle'
                 -
                     name: Review
-                    rule: '{{to_be_claimed}} == 0'
+                    rule: '''{{to_be_claimed}}'' == 0'
                     details:
                         -
                             type: Form
