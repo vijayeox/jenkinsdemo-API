@@ -44,7 +44,7 @@ class UserCacheService extends AbstractService
         }
         else {
             $workflowId = (isset($params['workflow_uuid']) && !empty($params['workflow_uuid']))?$params['workflow_uuid']:null;
-            $workflowId = (isset($params['workflowId']) && !empty($params['workflowId']))?$params['workflowId']:null;
+            $workflowId = (isset($params['workflowId']) && !empty($params['workflowId']))?$params['workflowId']:$workflowId;
             if($workflowId) {
                 $select = "select ox_form.id
                 from ox_form
