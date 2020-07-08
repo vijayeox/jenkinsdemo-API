@@ -88,8 +88,7 @@ content:
                             type: Form
                             workflowInstanceId: '{{workflowInstanceId}}'
                             activityinstance: '{{activityInstanceId}}'
-                            workflowId: '{{workflow_uuiid}}'
-                            content: '{{data}}'
+                            workflowId: '{{workflowId}}'
                     icon: 'fa fa-pencil'
             columnConfig:
                 -
