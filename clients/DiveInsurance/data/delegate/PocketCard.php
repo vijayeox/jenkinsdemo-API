@@ -179,9 +179,7 @@ class PocketCard extends PolicyDocument
         $docDest = $dest['absolutePath'].$template.'.pdf';
         $data['documents']['PocketCard'] = $dest['relativePath'].$template.'.pdf';
         $this->logger->info("template path is: ".print_r($docDest, true));
-        if(is_string($newData)){
-            $newData = array('data' => json_encode($newData));
-        }
+        $newData = array('data' => json_encode($newData));
         $this->logger->info("The file data after encode is : ");
         $this->logger->info($newData);
         if(!file_exists($docDest)){
