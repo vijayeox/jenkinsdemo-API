@@ -81,8 +81,6 @@ class AppDelegateService extends AbstractService
                 } else if (is_a($obj, CommunicationDelegate::class)) {
                     $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
-                    $obj->setTemplateService($this->templateService);
-                    $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
                     $obj->setBaseUrl($this->config['applicationUrl']);
                 }else if (is_a($obj, TemplateAppDelegate::class)) {
@@ -95,6 +93,12 @@ class AppDelegateService extends AbstractService
                 } 
                 if (method_exists($obj, "setFileService")) {
                     $obj->setFileService($this->fileService);
+                }
+                if (method_exists($obj, "setTemplateService")) {
+                    $obj->setTemplateService($this->templateService);
+                }
+                if (method_exists($obj, "setMessageProducer")) {
+                    $obj->setMessageProducer($this->messageProducer);
                 }
                 if (method_exists($obj, "setWorkflowInstanceService")) {
                     $obj->setWorkflowInstanceService($this->workflowInstanceService);
