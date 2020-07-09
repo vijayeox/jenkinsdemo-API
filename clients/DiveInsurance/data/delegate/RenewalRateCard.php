@@ -51,8 +51,14 @@ class RenewalRateCard extends RateCard
         }else{
             $data['form_data']['initiatedByCsr'] = false;
         }
-
-        $userInfo = $this->getUserDetailsByIdentifier($data['form_data'][$data['form_data']['identifier_field']],$data['form_data']['identifier_field']);
+        if(isset($data['form_data']['identifier_field'])){
+            $identifier_field= $data['form_data']['identifier_field'];
+        } else{
+            if(isset($data['form_data']['identity_field'])){
+                $identifier_field= $data['form_data']['identity_field'];
+            }
+        }
+        $userInfo = $this->getUserDetailsByIdentifier($data['form_data'][$identifier_field],$identifier_field);
         if($userInfo != 0){
             $data['form_data']['username'] = $userInfo['username'];
         }else{
@@ -172,7 +178,7 @@ class RenewalRateCard extends RateCard
          }else{
             $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$data['form_data']['padi']);
          }
-        
+
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'product','operator'=>'eq','value'=>$data['form_data']['product']);
         // print_r($filterParams);
         $policyList = $this->getFileList(null,$filterParams);
@@ -223,10 +229,10 @@ class RenewalRateCard extends RateCard
             }
         }
         if(isset($data['uuid'])){
-            unset($data['uuid']);    
+            unset($data['uuid']);
         }
         if(isset($data['fileId'])){
-            unset($data['fileId']);    
+            unset($data['fileId']);
         }
         return $data;
     }
