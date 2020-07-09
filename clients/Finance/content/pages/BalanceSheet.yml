@@ -2,6 +2,6 @@ name: 'Balance Sheet'
 description: 'Balance Sheet'
 content:
     -
-        type: Dashboard
+        type: DashboardManager
         content:
             uuid: d83169fd-e469-410f-9137-6e8011102ce0
