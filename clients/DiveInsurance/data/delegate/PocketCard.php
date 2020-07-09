@@ -35,7 +35,12 @@ class PocketCard extends PolicyDocument
             $currentDate = date_create()->format("Y-m-d");
             $filter[] = array("field" => "end_date", "operator" => "gt", "value" => $currentDate);
             // $filter[] = array("field" => "policyStatus", "operator" => "eq", "value" => "In Force");
-            $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
+            if($data['padiProductType'] == 'diveStore'){
+                $filter[] = array("field" => "business_padi", "operator" => "eq", "value" => $data['padiNumber']);
+            }else{
+                $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
+            }
+            
             if($data['padiProductType'] == 'individualProfessionalLiability'){
                 $params['entityName'] = 'Individual Professional Liability';
             }
@@ -73,7 +78,9 @@ class PocketCard extends PolicyDocument
             }
             $params['workflowStatus'] = 'Completed';
             $filter = array();
-            $data['pocketCardProductType'] = json_decode($data['pocketCardProductType'], true);
+            if(is_string($data['pocketCardProductType'])){
+                $data['pocketCardProductType'] = json_decode($data['pocketCardProductType'], true);
+            }
             if($data['pocketCardProductType']['individualProfessionalLiability'] || $data['pocketCardProductType']['emergencyFirstResponse']){
                 if($data['pocketCardProductType']['individualProfessionalLiability']){
                     $params['entityName'][] = 'Individual Professional Liability';
@@ -172,7 +179,9 @@ class PocketCard extends PolicyDocument
         $docDest = $dest['absolutePath'].$template.'.pdf';
         $data['documents']['PocketCard'] = $dest['relativePath'].$template.'.pdf';
         $this->logger->info("template path is: ".print_r($docDest, true));
-        $newData = array('data' => json_encode($newData));
+        if(is_string($newData)){
+            $newData = array('data' => json_encode($newData));
+        }
         $this->logger->info("The file data after encode is : ");
         $this->logger->info($newData);
         if(!file_exists($docDest)){
@@ -190,9 +199,13 @@ class PocketCard extends PolicyDocument
         $this->logger->info('pocket card - padi data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
-            if(isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]"){
+            if(isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]" &&  $data['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->logger->info('group PL members need to be formatted to a new array');
-                $groupData = json_decode($value['groupPL'], true);
+                if(isset($value['groupPL'])){
+                    $groupData = json_decode($value['groupPL'], true);
+                } else {
+                    $groupData = array();
+                }
                 $this->logger->info('group data is: '.print_r($groupData, true));
                 $this->logger->info('value data is: '.print_r($value, true));
                 $total = count($groupData);

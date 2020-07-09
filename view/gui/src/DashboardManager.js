@@ -2,12 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { dashboard as section } from '../metadata.json';
 import Swal from "sweetalert2";
-import { Notification, DashboardViewer, DashboardFilter } from '../../apps/Analytics/GUIComponents'
+// import { Notification, DashboardViewer, DashboardFilter } from ''
+import Notification from './Notification'
+import DashboardViewer from './Dashboard'
+import DashboardFilter from './DashboardFilter'
+
 import { Button, Form, Col, Row } from 'react-bootstrap'
 import '../../gui/src/public/css/sweetalert.css';
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import DashboardEditorModal from './components/Modals/DashboardEditorModal'
-import DashboardEditor from "../../apps/Analytics/dashboardEditor"
+import DashboardEditor from "./dashboardEditor"
 import Select from 'react-select'
 import ReactToPrint from 'react-to-print'
 
@@ -31,6 +35,8 @@ class Dashboard extends React.Component {
       showFilter: false,
       dashboardFilter: [],
       drilldownDashboardFilter: [],
+      isDrillDownDashboard: false,
+      hideEdit: this.props.hideEdit
     };
     this.appId = this.props.app;
     this.proc = this.props.proc;
@@ -111,7 +117,7 @@ class Dashboard extends React.Component {
       value = event.target.value
     }
     inputs[name] = value
-    this.setState({ inputs: inputs, uuid: value["uuid"], filterConfiguration: value["filter_configuration"], showFilter: false, drilldownDashboardFilter: event.drilldownDashboardFilter})
+    this.setState({ inputs: inputs, uuid: value["uuid"], filterConfiguration: value["filter_configuration"], showFilter: false, drilldownDashboardFilter: event.drilldownDashboardFilter })
   }
 
   deleteDashboard() {
@@ -184,7 +190,8 @@ class Dashboard extends React.Component {
           style={{ width: '100%', height: '100vh' }} /// these are optional style, it is not necessary
         >
           <FrontSide>
-            {this.userProfile.key.privileges.MANAGE_DASHBOARD_WRITE &&
+            {
+              !this.props.hideEdit && this.userProfile.key.privileges.MANAGE_DASHBOARD_WRITE &&
               <div className="row">
                 <Button className="create-dash-btn" onClick={() => this.createDashboard()} title="Add New Dashboard"><i className="fa fa-plus" aria-hidden="true"></i> Create Dashboard</Button>
               </div>
@@ -208,27 +215,30 @@ class Dashboard extends React.Component {
                   <Form className="dashboard-manager-items">
                     <Row>
                       <Col lg="4" md="4" sm="4">
-                        <Form.Group as={Row} >
-                          <Col>
-                            <Select
-                              name="dashname"
-                              className="react-select-container"
-                              placeholder="Select Dashboard"
-                              id="dashname"
-                              onChange={(e) => this.handleChange(e, "dashname")}
-                              value={JSON.stringify(this.state.inputs["dashname"]) != undefined ? { value: this.state.inputs["dashname"], label: this.state.inputs["dashname"]["name"] } : ""}
-                              options={this.state.dashList &&
-                                this.state.dashList.map((option, index) => {
-                                  return {
-                                    value: JSON.stringify(option),
-                                    label: option.name,
-                                    key: option.uuid
-                                  }
-                                })
-                              }
-                            />
-                          </Col>
-                        </Form.Group>
+                        {
+                          !this.props.hideEdit && this.userProfile.key.privileges.MANAGE_DASHBOARD_WRITE &&
+                          <Form.Group as={Row} >
+                            <Col>
+                              <Select
+                                name="dashname"
+                                className="react-select-container"
+                                placeholder="Select Dashboard"
+                                id="dashname"
+                                onChange={(e) => this.handleChange(e, "dashname")}
+                                value={JSON.stringify(this.state.inputs["dashname"]) != undefined ? { value: this.state.inputs["dashname"], label: this.state.inputs["dashname"]["name"] } : ""}
+                                options={this.state.dashList &&
+                                  this.state.dashList.map((option, index) => {
+                                    return {
+                                      value: JSON.stringify(option),
+                                      label: option.name,
+                                      key: option.uuid
+                                    }
+                                  })
+                                }
+                              />
+                            </Col>
+                          </Form.Group>
+                        }
                       </Col>
                       <div className="dash-manager-buttons">
                         {(this.state.uuid !== "" && this.state.inputs["dashname"] != undefined) &&
@@ -244,9 +254,9 @@ class Dashboard extends React.Component {
                             <Button onClick={() => this.showFilter()} title="Filter Dashboard">
                               <i className="fa fa-filter" aria-hidden="true"></i>
                             </Button>
-                            {this.userProfile.key.privileges.MANAGE_DASHBOARD_WRITE &&
+                            {!this.props.hideEdit && this.userProfile.key.privileges.MANAGE_DASHBOARD_WRITE &&
                               <Button onClick={() => this.editDashboard()} title="Edit Dashboard">
-                                <i className="fa fa-pen" aria-hidden="true"></i>
+                                <i className="fa fa-edit" aria-hidden="true"></i>
                               </Button>
                             }
                             {
@@ -275,13 +285,16 @@ class Dashboard extends React.Component {
                 </div>
 
                 <div className="dashboard-viewer-div">
-                  <div className="dashboard-preview-tab">
-                    <span>Dashboard Previewer</span>
-                  </div>
+                  {
+                    !this.props.hideEdit &&
+                    <div className="dashboard-preview-tab">
+                      <span>Dashboard Previewer</span>
+                    </div>
+                  }
                   {
                     this.state.uuid !== "" &&
                     <DashboardViewer
-                      handleChange={(e, type) => this.handleChange(e, type)}
+                      drilldownToDashboard={(e, type) => this.setState({ isDrillDownDashboard: true }, () => { this.handleChange(e, type) })}
                       ref={el => (this.dashboardViewerRef = el)}
                       key={this.state.uuid}
                       uuid={this.state.uuid}
@@ -291,6 +304,7 @@ class Dashboard extends React.Component {
                       dashboardFilter={this.state.dashboardFilter}
                       applyDashboardFilter={filter => this.applyDashboardFilter(filter)}
                       drilldownDashboardFilter={this.state.drilldownDashboardFilter}
+                      isDrillDownDashboard={this.state.isDrillDownDashboard}
                     />
                   }
 

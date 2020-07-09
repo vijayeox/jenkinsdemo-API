@@ -379,7 +379,7 @@ return [
             'app_cache' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/cache',
+                    'route' => '/app/:appId/cache[/:cacheId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],

@@ -18,6 +18,21 @@
 		"type": "panel",
 		"label": "Primary Contact",
 		"components": [{
+			"label": "policyStartYear",
+			"protected": true,
+			"calculateValue": "var presentYear = moment().format('YYYY');\nvar presentMonth = moment().month();\nvar presentDate = moment().format('DD');\nif(presentMonth == 5 && presentDate <= 30 && presentYear == 2020){\n  value = presentYear;\n}else if(presentMonth == 5 && presentDate == 30){\n  value = presentYear;\n}else if(presentMonth > 5 && presentMonth <= 11){\n  value = presentYear;\n}else if(presentMonth <= 5){\n  value = presentYear - 1;\n}",
+			"key": "policyStartYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "policyEndYear",
+			"calculateValue": "value = parseInt(data.policyStartYear) + 1;",
+			"key": "policyEndYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Columns",
 			"columns": [{
 				"components": [{
@@ -26,8 +41,8 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2020.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-					"refreshOnChange": false,
+					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, {{data.policyStartYear}} through 12:01 AM June 30, {{data.policyEndYear}}  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, {{data.policyEndYear}}.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"refreshOnChange": true,
 					"tableView": false,
 					"key": "columnsContent",
 					"type": "htmlelement",
@@ -101,13 +116,28 @@
 				"key": "panelColumns",
 				"columns": [{
 					"components": [{
+						"label": "Username",
+						"key": "username",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "username",
-						"label": "Username",
-						"type": "hidden",
 						"lockKey": true,
-						"calculateValue": "value = data['padi'];",
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "automatic_renewal",
+						"customDefaultValue": "value = false;",
+						"key": "automatic_renewal",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "identifier_field",
+						"calculateValue": "value = 'business_padi';",
+						"key": "identifier_field",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
@@ -115,15 +145,6 @@
 						"key": "verified1",
 						"label": "verified",
 						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "identifier_field",
-						"label": "identifier_field",
-						"type": "hidden",
-						"defaultValue": "padi",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -195,7 +216,7 @@
 							"min": 0,
 							"step": "any"
 						},
-						"key": "padi",
+						"key": "business_padi",
 						"logic": [{
 							"name": "Check PADI Verified",
 							"trigger": {
@@ -236,7 +257,7 @@
 							"name": "disable field",
 							"trigger": {
 								"type": "javascript",
-								"javascript": "result = (!data.padi || data.padi === '') ? true : false;"
+								"javascript": "result = (!data.business_padi || data.business_padi === '') ? true : false;"
 							},
 							"actions": [{
 								"name": "disable field",
@@ -275,7 +296,7 @@
 							"actions": [{
 								"name": "Reset Form",
 								"type": "value",
-								"value": "data.padiVerified = \"\";\ndata.verified = \"\";\ndata.policy_exists = \"\";\ndata.padiNotFound = \"\";\ndata.firstname = \"\";\ndata.lastname = \"\";\ndata.initial = \"\";\ndata.address1 = \"\";\ndata.address2 = \"\";\ndata.city = \"\";\ndata.country = \"\";\ndata.state = \"\";\ndata.zip = \"\";\ndata.sameasmailingaddress = true;\ndata.physical_country = \"\";\ndata.mailaddress1 = \"\";\ndata.mailaddress2 = \"\";\ndata.physical_city = \"\";\ndata.physical_state =\"\";\ndata.physical_zip = \"\";\ndata.home_country_code = \"\";\ndata.home_phone_number = \"\";\ndata.phone_number = \"\";\ndata.phone_country_code = \"\";\ndata.home_phone = \"\";\ndata.mobile_phone = \"\";\ndata.fax = \"\";\ndata.email = \"\";\ndata.business_padi = \"\";\ndata.business_name = \"\";\ndata.padi = \"\";\ndata.businessPadiVerified = \"\";\ndata.businessPadiNotFound = \"\";\ndata.businessPadiEmpty = \"\";\ndata.padi_empty = \"\";"
+								"value": "data.padiVerified = \"\";\ndata.verified = \"\";\ndata.policy_exists = \"\";\ndata.padiNotFound = \"\";\ndata.firstname = \"\";\ndata.lastname = \"\";\ndata.initial = \"\";\ndata.address1 = \"\";\ndata.address2 = \"\";\ndata.city = \"\";\ndata.country = \"\";\ndata.state = \"\";\ndata.zip = \"\";\ndata.sameasmailingaddress = true;\ndata.physical_country = \"\";\ndata.mailaddress1 = \"\";\ndata.mailaddress2 = \"\";\ndata.physical_city = \"\";\ndata.physical_state =\"\";\ndata.physical_zip = \"\";\ndata.home_country_code = \"\";\ndata.home_phone_number = \"\";\ndata.phone_number = \"\";\ndata.phone_country_code = \"\";\ndata.home_phone = \"\";\ndata.mobile_phone = \"\";\ndata.fax = \"\";\ndata.email = \"\";\ndata.business_padi = \"\";\ndata.business_name = \"\";\ndata.businessPadiVerified = \"\";\ndata.businessPadiNotFound = \"\";\ndata.businessPadiEmpty = \"\";\ndata.padi_empty = \"\";"
 							}]
 						}],
 						"type": "button",
@@ -371,7 +392,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "workflowId",
-						"calculateValue": "value = 'bb15e393-11b9-48ea-bc5a-5b7616047cb1';",
+						"calculateValue": "value = 'cb99e634-de00-468d-9230-d6f77d241c5b';",
 						"key": "workflowId",
 						"type": "hidden",
 						"input": true,
@@ -379,7 +400,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "product_email_id",
-						"calculateValue": "value = 'diveboat@diveinsurance.com';",
+						"calculateValue": "value = 'divestore@diveinsurance.com';",
 						"key": "product_email_id",
 						"type": "hidden",
 						"input": true,
@@ -387,8 +408,16 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "subject",
-						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+						"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.business_padi;",
 						"key": "subject",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "initiatedByCsr",
+						"calculateValue": "if(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  value = true\n} else {\n  value = false\n}",
+						"key": "initiatedByCsr",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
@@ -524,6 +553,12 @@
 							"values": [{
 								"value": "corporation",
 								"label": "Corporation"
+							}, {
+								"label": "LLC",
+								"value": "llc"
+							}, {
+								"label": "LTD",
+								"value": "ltd"
 							}, {
 								"value": "partnership",
 								"label": "Partnership"
@@ -921,8 +956,7 @@
 							},
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"isNew": false
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -935,8 +969,7 @@
 							"spellcheck": false,
 							"tableView": false,
 							"validate": {
-								"required": true,
-								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+								"required": true
 							},
 							"key": "zip",
 							"type": "textfield",
@@ -953,7 +986,8 @@
 					"tableView": false,
 					"key": "columns6",
 					"type": "columns",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}],
 				"lockKey": true
 			}, {
@@ -1119,8 +1153,7 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
-								"required": true,
-								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+								"required": true
 							},
 							"key": "physical_zip",
 							"type": "textfield",
@@ -1142,7 +1175,8 @@
 						"eq": "false"
 					},
 					"type": "columns",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}],
 				"path": "panelPanel3"
 			}, {
@@ -1160,17 +1194,23 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\n  if (obj) {\n    value = obj.dial_code;\n  }\n}",
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1181,22 +1221,20 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"label": "Work Phone",
-								"mask": false,
-								"spellcheck": true,
+								"label": "Mobile Phone",
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
-									"required": true,
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Work Phone number' : true; \n}"
+									"pattern": "^\\d+$",
+									"customMessage": "Please enter a valid Phone Number",
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"inputType": "number"
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -1234,12 +1272,15 @@
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1250,23 +1291,21 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"label": "Mobile Phone",
-								"mask": false,
-								"spellcheck": true,
+								"label": "Work Phone",
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
 									"required": true,
+									"pattern": "^\\d+$",
 									"customMessage": "Please enter a valid mobile phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false,
-								"inputType": "number"
+								"hideOnChildrenHidden": false
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -1376,21 +1415,15 @@
 						"displayInTimezone": "utc",
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
-						"autofocus": true,
 						"tableView": false,
 						"enableMinDateInput": false,
 						"datePicker": {
 							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
-							"disableWeekdays": false,
-							"datepickerMode": "day"
+							"disableWeekdays": false
 						},
 						"enableMaxDateInput": false,
 						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
-						"defaultDate": "moment()",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
@@ -1403,7 +1436,6 @@
 						},
 						"type": "datetime",
 						"input": true,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 						"widget": {
 							"type": "calendar",
 							"displayInTimezone": "utc",
@@ -1416,7 +1448,7 @@
 							"format": "MM-dd-yyyy",
 							"hourIncrement": 1,
 							"minuteIncrement": 1,
-							"time_24hr": true,
+							"time_24hr": false,
 							"minDate": "2020-06-30T00:00:00+05:30",
 							"disableWeekends": false,
 							"disableWeekdays": false,
@@ -1425,7 +1457,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "start_date",
-						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\nvalue = moment(data.policyPeriod).format(\"YYYY-MM-DD\");\n}",
+						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\n if((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) && moment(data.policyPeriod).format(\"YYYY-MM-DD\") <= '2020-07-13')\n { \n   value = moment('2020-06-30').format(\"YYYY-MM-DD\");\n }else{\n   value = moment(data.policyPeriod).format(\"YYYY-MM-DD\");\n }\n}else{\n  value = moment().format(\"YYYY-MM-DD\");\n}",
 						"key": "start_date",
 						"properties": {
 							"data_type": "Date"
@@ -1445,6 +1477,8 @@
 				}, {
 					"components": [{
 						"label": "Policy End Date",
+						"displayInTimezone": "utc",
+						"useLocaleSettings": true,
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"disabled": true,
@@ -1463,14 +1497,16 @@
 						"clearOnHide": false,
 						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nvar day = today.date();\nif(month >= 5){\n  if(month==5 && day==30){\n    value = (year + 1) + \"-06-30\";\n  } else if(month ==5 && day < 30){\n    value = (year) + \"-06-30\";\n  } else {\n    value = (year + 1) + \"-06-30\";\n  }\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 						"key": "end_date",
+						"properties": {
+							"data_type": "Date"
+						},
 						"type": "datetime",
 						"input": true,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
-							"useLocaleSettings": false,
+							"useLocaleSettings": true,
 							"allowInput": false,
 							"mode": "single",
 							"enableTime": false,
@@ -1616,31 +1652,46 @@
 				"type": "columns",
 				"hideLabel": true
 			}, {
-				"label": "Survey",
-				"hideLabel": true,
-				"tableView": true,
-				"questions": [{
-					"value": "centralStationAlarmPL",
-					"label": "Central Station Alarm (Note:Burglary coverage is afforded only with a working central station alarm)"
-				}, {
-					"value": "fireSprinklersPL",
-					"label": "Fire Sprinklers"
-				}],
+				"label": "Central Station Alarm",
+				"optionsLabelPosition": "right",
+				"description": "(Note:Burglary coverage is afforded only with a working central station alarm)",
+				"inline": false,
+				"tableView": false,
 				"values": [{
+					"label": "Yes",
 					"value": "yes",
-					"label": "Yes"
+					"shortcut": ""
 				}, {
+					"label": "No",
 					"value": "no",
-					"label": "No"
+					"shortcut": ""
 				}],
-				"clearOnHide": false,
 				"validate": {
-					"customMessage": "Please Answer as applicable"
+					"required": true
 				},
-				"key": "dsPropCentralFirePL",
-				"type": "survey",
-				"input": true,
-				"lockKey": true
+				"key": "centralStationAlarm",
+				"type": "radio",
+				"input": true
+			}, {
+				"label": "Fire Sprinklers",
+				"optionsLabelPosition": "right",
+				"inline": false,
+				"tableView": false,
+				"values": [{
+					"label": "Yes",
+					"value": "yes",
+					"shortcut": ""
+				}, {
+					"label": "No",
+					"value": "no",
+					"shortcut": ""
+				}],
+				"validate": {
+					"required": true
+				},
+				"key": "fireSprinklers",
+				"type": "radio",
+				"input": true
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -1648,7 +1699,7 @@
 				"key": "pageNaNColumns",
 				"columns": [{
 					"components": [{
-						"label": "Distance from Ocean/Golf",
+						"label": "Distance from Ocean/Gulf",
 						"suffix": "Miles",
 						"mask": false,
 						"spellcheck": false,
@@ -2415,7 +2466,7 @@
 							"shortcut": ""
 						}],
 						"clearOnHide": false,
-						"key": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+						"key": "poolNonDivingActivities",
 						"conditional": {
 							"show": true,
 							"when": "doyouhaveapoolonpremisesPL",
@@ -2438,14 +2489,14 @@
 						"key": "poolSupplementalForm1",
 						"conditional": {
 							"show": true,
-							"when": "doyouhaveapoolonpremisesPL",
+							"when": "poolNonDivingActivities",
 							"eq": "yes"
 						},
 						"type": "panel",
 						"label": "Pool Supplemental Form",
 						"input": false,
 						"components": [{
-							"label": "Non-Diving Pool receipts",
+							"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
 							"prefix": "$",
 							"mask": false,
 							"spellcheck": true,
@@ -2572,9 +2623,6 @@
 											"label": "From",
 											"tableView": true,
 											"dataFormat": "HH:mm",
-											"validate": {
-												"required": true
-											},
 											"key": "time",
 											"type": "time",
 											"input": true,
@@ -2591,9 +2639,6 @@
 											"label": "To",
 											"tableView": true,
 											"dataFormat": "HH:mm",
-											"validate": {
-												"required": true
-											},
 											"key": "time1",
 											"type": "time",
 											"input": true,
@@ -2677,7 +2722,8 @@
 												},
 												"month": {
 													"placeholder": "To",
-													"hide": false
+													"hide": false,
+													"required": true
 												},
 												"year": {
 													"hide": true
@@ -3028,28 +3074,6 @@
 								}]
 							}],
 							"hideOnChildrenHidden": false
-						}, {
-							"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-							"prefix": "$",
-							"mask": false,
-							"spellcheck": true,
-							"tableView": false,
-							"delimiter": true,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"validate": {
-								"required": true,
-								"customMessage": "Gross receipts from your pool is required"
-							},
-							"key": "whatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
-							"conditional": {
-								"show": true,
-								"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-								"eq": "yes"
-							},
-							"type": "number",
-							"input": true,
-							"hideOnChildrenHidden": false
 						}],
 						"hideOnChildrenHidden": false
 					}],
@@ -3167,6 +3191,11 @@
 						},
 						"errorLabel": "Property at Location needs to be Insured",
 						"key": "doyouhavepropertyatthatlocationtobeinsuredPL",
+						"conditional": {
+							"show": true,
+							"when": "doyouhaveanyincidentallocationsiEOfficekiosketcPL",
+							"eq": "yes"
+						},
 						"type": "radio",
 						"input": true,
 						"hideOnChildrenHidden": false
@@ -3307,13 +3336,13 @@
 				"key": "pageNaNPanel3Columns6",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Cylinder hydrostatic testing",
-						"dataGridLabel": false,
-						"key": "cylinderhydrostatictestingPL",
+						"tableView": true,
 						"defaultValue": false,
+						"key": "cylinderhydrostatictestingPL",
 						"type": "checkbox",
+						"input": true,
+						"dataGridLabel": false,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -3574,7 +3603,7 @@
 						"customMessage": "Please let us know if you have had any claims in the last 5 years"
 					},
 					"errorLabel": "Claim Information",
-					"key": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
+					"key": "claimsInLast5YearsSelect",
 					"type": "radio",
 					"input": true,
 					"lockKey": true
@@ -3588,7 +3617,7 @@
 					"enableRowGroups": false,
 					"tableView": true,
 					"defaultValue": [{
-						"dsgldateoftheclaim": "2020-06-15T11:04:20.000Z",
+						"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
 						"claimsInformatio": ""
 					}],
 					"clearOnHide": false,
@@ -3598,7 +3627,7 @@
 					"key": "dsglClaimAmountpaidanyamountsoutstanding",
 					"conditional": {
 						"show": true,
-						"when": "pageNaNPanel3ColumnsPanelHaveyouhadanystorepropertyfiretheftburglarytheftetcOrliabilityslipfallotherinStoreliabilityclaimsinthelastfive5Years",
+						"when": "claimsInLast5YearsSelect",
 						"eq": "yes"
 					},
 					"type": "datagrid",
@@ -3618,9 +3647,9 @@
 									"tableView": false,
 									"enableMinDateInput": false,
 									"datePicker": {
+										"maxDate": "moment().startOf('day')",
 										"disableWeekends": false,
-										"disableWeekdays": false,
-										"maxDate": "moment().startOf('day')"
+										"disableWeekdays": false
 									},
 									"enableMaxDateInput": true,
 									"enableTime": false,
@@ -3634,7 +3663,6 @@
 									"key": "dsgldateoftheclaim",
 									"type": "datetime",
 									"input": true,
-									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 									"widget": {
 										"type": "calendar",
 										"displayInTimezone": "viewer",
@@ -3664,24 +3692,14 @@
 								"components": [{
 									"label": "Amount Paid",
 									"prefix": "$",
-									"mask": false,
-									"spellcheck": true,
-									"dataGridLabel": false,
 									"tableView": true,
-									"delimiter": true,
-									"requireDecimal": false,
-									"inputFormat": "plain",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
-									"key": "Pleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding2",
-									"type": "number",
-									"labelWidth": 0,
-									"labelMargin": 3,
+									"key": "claimAmountPaid",
+									"type": "textfield",
 									"input": true,
-									"inputType": "number",
-									"inDataGrid": true,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
@@ -3691,26 +3709,16 @@
 								"size": "md"
 							}, {
 								"components": [{
-									"label": "Amounts outstanding",
+									"label": "Amount Outstanding",
 									"prefix": "$",
-									"mask": false,
-									"spellcheck": true,
-									"dataGridLabel": false,
 									"tableView": true,
-									"delimiter": true,
-									"requireDecimal": false,
-									"inputFormat": "plain",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
-									"key": "pageNaNPanel3ColumnsPanelPleaselistthedateoftheclaimtheamountpaidandanyamountsoutstanding3",
-									"type": "number",
-									"labelWidth": 0,
-									"labelMargin": 3,
+									"key": "claimsAmountOutStanding",
+									"type": "textfield",
 									"input": true,
-									"inputType": "number",
-									"inDataGrid": true,
 									"hideOnChildrenHidden": false
 								}],
 								"size": "md",
@@ -3961,7 +3969,7 @@
 			"label": "Columns",
 			"columns": [{
 				"components": [{
-					"label": "Medical Expenses - 5000$ coverage limit",
+					"label": "Medical Expenses - $5,000 coverage limit",
 					"tableView": false,
 					"defaultValue": false,
 					"clearOnHide": false,
@@ -3994,13 +4002,13 @@
 			"key": "page4PanelPanelPanelColumns",
 			"columns": [{
 				"components": [{
-					"label": "Do you want to apply for Non Owner Auto?",
+					"label": "Do you want to apply for Non Owned Auto?",
 					"tableView": false,
+					"defaultValue": false,
 					"clearOnHide": false,
 					"key": "doYouWantToApplyForNonOwnerAuto",
 					"type": "checkbox",
 					"input": true,
-					"defaultValue": false,
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "NON-Owned Auto Liability",
@@ -4989,17 +4997,25 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "combinedSingalLimit",
-						"calculateValue": "var limit = '100000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
-						"key": "combinedSingalLimit",
+						"label": "combinedSingleLimit",
+						"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
+						"key": "combinedSingleLimit",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "annualAggregate",
-						"calculateValue": "var limit = '1,00,000';\nvalue = parseFloat(data['primaryCombinedSingalLimit']) + parseFloat(limit);",
+						"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
 						"key": "annualAggregate",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "groupExcessLiabilityLimit",
+						"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
+						"key": "groupExcessLiabilityLimit",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
@@ -5159,7 +5175,6 @@
 				"components": [{
 					"label": "Additional Insured",
 					"reorder": false,
-					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -5179,7 +5194,6 @@
 						"doYouHaveAWrittenContract": "",
 						"additionalInsuredAttachments": []
 					}],
-					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"minLength": 1
@@ -5200,9 +5214,7 @@
 								"components": [{
 									"label": "Name",
 									"tableView": true,
-									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Name",
@@ -5223,7 +5235,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the Address of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Address",
@@ -5241,9 +5252,7 @@
 								"components": [{
 									"label": "City",
 									"tableView": true,
-									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the City of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured City",
@@ -5263,9 +5272,6 @@
 							"hideLabel": true
 						}, {
 							"label": "Columns",
-							"input": false,
-							"tableView": false,
-							"key": "additionalInsuredPanelColumns2",
 							"columns": [{
 								"components": [{
 									"label": "Country",
@@ -5284,7 +5290,6 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please select the Country of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Country",
@@ -5301,7 +5306,7 @@
 									"source": "5d347da33e9be31e15d3b115",
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 4,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
@@ -5323,9 +5328,7 @@
 									"refreshOn": "row.country",
 									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
-									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please select the State of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured State",
@@ -5339,7 +5342,7 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 4,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
@@ -5349,9 +5352,7 @@
 									"label": "Zip Code",
 									"spellcheck": false,
 									"tableView": true,
-									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter the Zip Code of the Additional Insured",
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
@@ -5362,12 +5363,20 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 4,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
 								"size": "md"
-							}, {
+							}],
+							"hideLabel": true,
+							"tableView": false,
+							"key": "additionalInsuredPanelColumns2",
+							"type": "columns",
+							"input": false
+						}, {
+							"label": "Columns",
+							"columns": [{
 								"components": [{
 									"label": "Business Relation",
 									"widget": "choicesjs",
@@ -5439,27 +5448,37 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
-								"width": 3,
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Additional Information",
+									"autoExpand": false,
+									"tableView": true,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"validate": {
+										"customMessage": "Please enter Additional Information about the Additional Insured"
+									},
+									"errorLabel": "Additional Insured Additional Information",
+									"key": "additionalInformation",
+									"type": "textarea",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 6,
 								"offset": 0,
 								"push": 0,
 								"pull": 0,
 								"size": "md"
 							}],
+							"tableView": false,
+							"key": "columns2",
 							"type": "columns",
-							"hideLabel": true
-						}, {
-							"label": "Additional Information",
-							"autoExpand": false,
-							"tableView": true,
-							"inputFormat": "plain",
-							"clearOnHide": false,
-							"validate": {
-								"customMessage": "Please enter Additional Information about the Additional Insured"
-							},
-							"errorLabel": "Additional Insured Additional Information",
-							"key": "additionalInformation",
-							"type": "textarea",
-							"input": true
+							"input": false
 						}, {
 							"label": "Do you have a Written Contract?",
 							"optionsLabelPosition": "right",
@@ -5476,7 +5495,10 @@
 							}],
 							"key": "doYouHaveAWrittenContract",
 							"type": "radio",
-							"input": true
+							"input": true,
+							"validate": {
+								"required": true
+							}
 						}, {
 							"label": "Content",
 							"attrs": [{
@@ -5600,13 +5622,14 @@
 					"tableView": false,
 					"defaultValue": [{
 						"name": "",
-						"city": "",
 						"country": "",
-						"state": {},
 						"address": "",
+						"state": {},
+						"city": "",
 						"zip": ""
 					}],
 					"validate": {
+						"customMessage": "Please add an Additional Insured",
 						"minLength": 1
 					},
 					"key": "additionalNamedInsured",
@@ -5625,9 +5648,6 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -5650,10 +5670,9 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter your country."
 									},
-									"key": "country1",
+									"key": "country",
 									"properties": {
 										"clear_field": "state"
 									},
@@ -5676,10 +5695,7 @@
 									"label": "Address",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "address3",
+									"key": "address",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -5701,9 +5717,6 @@
 									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "state",
 									"type": "select",
 									"indexeddb": {
@@ -5723,10 +5736,7 @@
 									"label": "City",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "city1",
+									"key": "city",
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
@@ -5736,7 +5746,6 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"key": "zip",
@@ -5827,14 +5836,7 @@
 					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": true,
-					"defaultValue": [{
-						"name": "",
-						"city": "",
-						"country": "",
-						"state": {},
-						"address": "",
-						"zip": ""
-					}],
+					"defaultValue": [{}],
 					"clearOnHide": false,
 					"validate": {
 						"minLength": 1
@@ -5855,9 +5857,6 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -5880,7 +5879,6 @@
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"validate": {
-										"required": true,
 										"customMessage": "Please enter your country."
 									},
 									"key": "country",
@@ -5906,9 +5904,6 @@
 									"label": "Address",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "address",
 									"type": "textfield",
 									"input": true,
@@ -5931,9 +5926,6 @@
 									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "state",
 									"type": "select",
 									"indexeddb": {
@@ -5953,9 +5945,6 @@
 									"label": "City",
 									"tableView": true,
 									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
 									"key": "city",
 									"type": "textfield",
 									"input": true,
@@ -5965,7 +5954,6 @@
 									"label": "Zip Code",
 									"tableView": true,
 									"validate": {
-										"required": true,
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"key": "zip",
@@ -6080,6 +6068,7 @@
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"hideLabel": true,
 					"tableView": true,
 					"defaultValue": [{
 						"name": "",
@@ -6143,7 +6132,49 @@
 						"ALliabilityTaxTotal": "0",
 						"ALPropertyTaxTotal": 0,
 						"ALTotalTax": "0",
-						"locationTotal": 0
+						"locationTotal": 0,
+						"ALcentralStationAlarm": "",
+						"ALfireSprinklers": "",
+						"ALdoyouhaveapoolonpremisesPL1": "",
+						"ALcriminalBackGroundChecks": "",
+						"ALhasApplicantSexualAbuse": "",
+						"ALhasApplicantSexualAbuseMolestation": "",
+						"ALdoyouhaveapoolonpremisesPL": "",
+						"ALclaimsinLast5Years": "",
+						"ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL": false,
+						"ALAredepthmarkersclearlyvisibleabovewaterline": "",
+						"ALnoRunningSigns": "",
+						"ALpoolRulesPosted": "",
+						"ALpoolFencedIndoors": "",
+						"ALPooldivingBoardsOrPlatforms": "",
+						"ALglassContainers": "",
+						"ALalcoholBeverages": "",
+						"ALPoolwaiversOfLiability": "",
+						"ALpoolEquipmentChemicalsMaintained": "",
+						"ALpoolTrampolines": "",
+						"ALNonDivingPoolActivities": "",
+						"ALEquipmentSales": "",
+						"ALDescribeEquipmentRepairs": "",
+						"ALDescribeEquipmentRenatals": "",
+						"ALexplainOtherBusinessActivity": "",
+						"ALdsglClaimAmountpaidanyamountsoutstanding": [{
+							"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
+							"claimsInformatio": ""
+						}],
+						"ALlakedivingBoardsOrPlatforms": "",
+						"ALlakeAreasForHighDiving": "",
+						"ALLakewaiversOfLiability": "",
+						"ALlakeSwimmingAreaBoundaryBuoysRopes": "",
+						"ALlakeSponsorAthleticTeams": "",
+						"ALpoolTrampolines1": "",
+						"ALlakeLifeGaurdsPresent": "",
+						"ALlakeLifegaurdCertification": "",
+						"ALlakeLifeGaurds": "",
+						"ALlakeSafetyExcercises": "",
+						"ALlakeLifeGaurdRecordLog": "",
+						"ALlakeJacuzziWhirlPool": "",
+						"ALlakeTemperatureAdjusted": "",
+						"ALlakeFiltrationDrainsUsed": ""
 					}],
 					"clearOnHide": false,
 					"key": "additionalLocations",
@@ -6180,34 +6211,12 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
-										"label": "City",
-										"tableView": true,
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "city",
-										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 4,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [{
 										"label": "Country",
 										"widget": "choicesjs",
 										"tableView": true,
@@ -6224,7 +6233,6 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
-											"required": true,
 											"customMessage": "Please enter your country."
 										},
 										"key": "country",
@@ -6238,6 +6246,22 @@
 										"input": true,
 										"lockKey": true,
 										"source": "5d347da33e9be31e15d3b115",
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Address",
+										"tableView": true,
+										"clearOnHide": false,
+										"key": "address",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
 										"label": "State",
@@ -6256,9 +6280,6 @@
 										"clearOnRefresh": true,
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
 										"key": "state",
 										"type": "select",
 										"indexeddb": {
@@ -6275,13 +6296,10 @@
 									"size": "md"
 								}, {
 									"components": [{
-										"label": "Address",
+										"label": "City",
 										"tableView": true,
 										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "address",
+										"key": "city",
 										"type": "textfield",
 										"input": true,
 										"lockKey": true,
@@ -6292,7 +6310,6 @@
 										"tableView": false,
 										"clearOnHide": false,
 										"validate": {
-											"required": true,
 											"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
 										"key": "zip",
@@ -6317,11 +6334,52 @@
 							"clearOnHide": false,
 							"hideLabel": true
 						}, {
-							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel",
-							"input": false,
+							"label": "Do you want to apply Property Coverage?",
+							"widget": "choicesjs",
+							"tableView": true,
+							"data": {
+								"values": [{
+									"label": "Yes",
+									"value": "yes"
+								}, {
+									"label": "No",
+									"value": "no"
+								}]
+							},
+							"selectThreshold": 0.3,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Please select an option"
+							},
+							"errorLabel": "Property Coverage",
+							"key": "ALpropertyCoverageSelect",
+							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
+							"input": true
+						}, {
 							"title": "Property Information",
 							"theme": "primary",
+							"breadcrumbClickable": true,
+							"buttonSettings": {
+								"previous": true,
+								"cancel": true,
+								"next": true
+							},
+							"collapsible": false,
+							"dataGridLabel": false,
 							"tableView": false,
+							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel",
+							"conditional": {
+								"show": true,
+								"when": "ALpropertyCoverageSelect",
+								"eq": "yes"
+							},
+							"type": "panel",
+							"label": "Property Information",
+							"input": false,
 							"components": [{
 								"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelPanel",
 								"input": false,
@@ -6404,28 +6462,46 @@
 								"type": "panel",
 								"label": "Panel"
 							}, {
-								"input": true,
-								"tableView": true,
-								"label": "Survey",
-								"key": "dsPropCentralFireAL",
-								"questions": [{
-									"value": "centralStationAlarmAL",
-									"label": "Central Station Alarm (Note:Burglary coverage is afforded only with a working central station alarm)"
-								}, {
-									"value": "fireSprinklersAL",
-									"label": "Fire Sprinklers"
-								}],
+								"label": "Central Station Alarm",
+								"optionsLabelPosition": "right",
+								"description": "(Note:Burglary coverage is afforded only with a working central station alarm)",
+								"inline": false,
+								"tableView": false,
 								"values": [{
+									"label": "Yes",
 									"value": "yes",
-									"label": "Yes"
+									"shortcut": ""
 								}, {
+									"label": "No",
 									"value": "no",
-									"label": "No"
+									"shortcut": ""
 								}],
-								"type": "survey",
-								"hideLabel": true,
-								"lockKey": true,
-								"clearOnHide": false
+								"validate": {
+									"required": true
+								},
+								"key": "ALcentralStationAlarm",
+								"type": "radio",
+								"input": true
+							}, {
+								"label": "Fire Sprinklers",
+								"optionsLabelPosition": "right",
+								"inline": false,
+								"tableView": false,
+								"values": [{
+									"label": "Yes",
+									"value": "yes",
+									"shortcut": ""
+								}, {
+									"label": "No",
+									"value": "no",
+									"shortcut": ""
+								}],
+								"validate": {
+									"required": true
+								},
+								"key": "ALfireSprinklers",
+								"type": "radio",
+								"input": true
 							}, {
 								"label": "Columns",
 								"input": false,
@@ -6624,7 +6700,8 @@
 												"lockKey": true,
 												"labelWidth": null,
 												"labelMargin": null,
-												"hideOnChildrenHidden": false
+												"hideOnChildrenHidden": false,
+												"defaultValue": 0
 											}, {
 												"label": "Business Income",
 												"prefix": "$",
@@ -6639,11 +6716,6 @@
 													"required": true
 												},
 												"key": "ALLossofBusIncome",
-												"conditional": {
-													"show": true,
-													"when": "ALLossofBusIncomeCheckBox",
-													"eq": "true"
-												},
 												"type": "number",
 												"input": true,
 												"inputType": "number",
@@ -6701,9 +6773,6 @@
 										"hideOnChildrenHidden": false
 									}, {
 										"label": "Columns",
-										"input": false,
-										"tableView": false,
-										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"columns": [{
 											"components": [{
 												"label": "What is the replacement value?",
@@ -6740,9 +6809,6 @@
 													"customMessage": "Please enter the area of the building in sq ft"
 												},
 												"key": "squarefootageofyourbuildingAL",
-												"conditional": {
-													"show": true
-												},
 												"type": "number",
 												"input": true,
 												"labelWidth": null,
@@ -6763,6 +6829,10 @@
 												"tableView": true,
 												"dataSrc": "custom",
 												"data": {
+													"values": [{
+														"label": "",
+														"value": ""
+													}],
 													"custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
 												},
 												"template": "<span>{{ item }}</span>",
@@ -6772,7 +6842,8 @@
 													"required": true,
 													"customMessage": "The year in which the building was built is required"
 												},
-												"key": "built_year",
+												"errorLabel": "Year built of building",
+												"key": "built_year1",
 												"type": "select",
 												"indexeddb": {
 													"filter": {}
@@ -6787,9 +6858,6 @@
 													"customMessage": "Updates on plumbing,roof,etc. is required"
 												},
 												"key": "updatesOnPlumbingElectricalRoofEtcAL",
-												"conditional": {
-													"show": true
-												},
 												"type": "textfield",
 												"input": true,
 												"lockKey": true,
@@ -6803,13 +6871,17 @@
 											"pull": 0,
 											"size": "md"
 										}],
-										"type": "columns",
 										"hideLabel": true,
+										"tableView": false,
+										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"conditional": {
-											"show": "true",
-											"when": "additionalLocationDoYouOwntheBuilding",
+											"show": true,
+											"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
 											"eq": "yes"
-										}
+										},
+										"customConditional": "if(row['additionalLocationDoYouOwntheBuilding'] == \"yes\") {\n  show = true;\n} else {\n  show = false;\n}",
+										"type": "columns",
+										"input": false
 									}, {
 										"label": "Please explain location",
 										"tableView": true,
@@ -6833,14 +6905,8 @@
 								"type": "columns",
 								"hideLabel": true
 							}],
-							"type": "panel",
-							"conditional": {
-								"show": "true",
-								"when": "page4PanelSelect"
-							},
 							"inDataGrid": true,
-							"lockKey": true,
-							"label": "Panel"
+							"lockKey": true
 						}, {
 							"title": "General Liability Information/Claims Information",
 							"theme": "primary",
@@ -7064,7 +7130,7 @@
 											"validate": {
 												"customMessage": "Please select an option"
 											},
-											"key": "ALIfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+											"key": "ALNonDivingPoolActivities",
 											"conditional": {
 												"show": true,
 												"when": "ALdoyouhaveapoolonpremisesPL",
@@ -7087,14 +7153,14 @@
 											"key": "ALpoolSupplementalForm1",
 											"conditional": {
 												"show": true,
-												"when": "ALIfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
+												"when": "additionalLocations.ALNonDivingPoolActivities",
 												"eq": "yes"
 											},
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
 											"components": [{
-												"label": "Non-Diving Pool receipts",
+												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
 												"prefix": "$",
 												"mask": false,
 												"spellcheck": true,
@@ -7118,7 +7184,7 @@
 												"label": "Please describe your pool use other than for diving, swimming, snorkeling or freediving instruction & supervision",
 												"autoExpand": false,
 												"tableView": true,
-												"key": "ALpleaseDescribeYourPoolUseOtherThanForDivingSwimmingSnorkelingOrFreedivingInstructionSupervision",
+												"key": "ALPoolOtherThanDiving",
 												"type": "textarea",
 												"input": true,
 												"hideOnChildrenHidden": false
@@ -7279,7 +7345,8 @@
 																	},
 																	"month": {
 																		"placeholder": "From",
-																		"hide": false
+																		"hide": false,
+																		"required": true
 																	},
 																	"year": {
 																		"hide": true
@@ -7310,7 +7377,8 @@
 																	},
 																	"month": {
 																		"placeholder": "To",
-																		"hide": false
+																		"hide": false,
+																		"required": true
 																	},
 																	"year": {
 																		"hide": true
@@ -7654,28 +7722,6 @@
 													}]
 												}],
 												"hideOnChildrenHidden": false
-											}, {
-												"label": "What are your gross receipts from your pool use other than diving, swimming, snorkeling and freediving instruction and supervision?",
-												"prefix": "$",
-												"mask": false,
-												"spellcheck": true,
-												"tableView": false,
-												"delimiter": true,
-												"requireDecimal": false,
-												"inputFormat": "plain",
-												"validate": {
-													"required": true,
-													"customMessage": "Gross receipts from your pool is required"
-												},
-												"key": "ALwhatAreYourGrossReceiptsFromYourPoolUseOtherThanDivingSwimmingSnorkelingAndFreedivingInstructionAndSupervision",
-												"conditional": {
-													"show": true,
-													"when": "IfyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformPL",
-													"eq": "yes"
-												},
-												"type": "number",
-												"input": true,
-												"hideOnChildrenHidden": false
 											}],
 											"hideOnChildrenHidden": false
 										}],
@@ -7833,7 +7879,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentsales",
+											"key": "ALEquipmentSales",
 											"conditional": {
 												"show": true,
 												"when": "otherequipmentsalesAL",
@@ -7884,7 +7930,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentrepairs",
+											"key": "ALDescribeEquipmentRepairs",
 											"conditional": {
 												"show": true,
 												"when": "otherequipmentrepairsAL",
@@ -7935,7 +7981,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplaintheequipmentrentals",
+											"key": "ALDescribeEquipmentRenatals",
 											"conditional": {
 												"show": true,
 												"when": "otherequipmentrentalsAL",
@@ -7986,7 +8032,7 @@
 											"validate": {
 												"required": true
 											},
-											"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PanelColumns2Pleaseexplainotherbusinessactivity",
+											"key": "ALexplainOtherBusinessActivity",
 											"conditional": {
 												"show": true,
 												"when": "otherbusinessactivityAL",
@@ -8031,10 +8077,10 @@
 								"label": "Claims Information",
 								"input": false,
 								"components": [{
-									"input": true,
-									"tableView": true,
 									"label": "Have you had any store property (fire, theft, burglary, theft, etc.) or liability (slip & fall, other in-store liability) claims in the last five (5) years?",
-									"key": "claimsinLast5Years",
+									"optionsLabelPosition": "right",
+									"inline": false,
+									"tableView": true,
 									"values": [{
 										"value": "yes",
 										"label": "Yes",
@@ -8044,13 +8090,14 @@
 										"label": "No",
 										"shortcut": ""
 									}],
+									"clearOnHide": false,
 									"validate": {
 										"required": true
 									},
+									"key": "ALclaimsinLast5Years",
 									"type": "radio",
-									"optionsLabelPosition": "right",
-									"lockKey": true,
-									"clearOnHide": false
+									"input": true,
+									"lockKey": true
 								}, {
 									"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
 									"reorder": false,
@@ -8061,23 +8108,25 @@
 									"enableRowGroups": false,
 									"tableView": true,
 									"defaultValue": [{
-										"page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2PleaselistthedateoftheclaimtheamountpaidandanyamountsoutstandingColumnsDateTime": "",
-										"claimsInformatio": "",
-										"dsgldateoftheclaim": ""
+										"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
+										"claimsInformatio": ""
 									}],
 									"clearOnHide": false,
-									"key": "claimsMade",
+									"validate": {
+										"minLength": 1
+									},
+									"key": "ALdsglClaimAmountpaidanyamountsoutstanding",
 									"conditional": {
 										"show": true,
-										"when": "claimsinLast5Years",
+										"when": "ALclaimsinLast5Years",
 										"eq": "yes"
 									},
 									"type": "datagrid",
 									"input": true,
 									"components": [{
-										"label": "claimsWellAl",
+										"label": "claimswell",
 										"tableView": false,
-										"key": "claimsWellAl",
+										"key": "ALclaimswell",
 										"type": "well",
 										"input": false,
 										"components": [{
@@ -8089,24 +8138,22 @@
 													"tableView": false,
 													"enableMinDateInput": false,
 													"datePicker": {
+														"maxDate": "moment().startOf('day')",
 														"disableWeekends": false,
-														"disableWeekdays": false,
-														"maxDate": "moment().startOf('day')"
+														"disableWeekdays": false
 													},
 													"enableMaxDateInput": true,
 													"enableTime": false,
 													"timePicker": {
 														"showMeridian": false
 													},
-													"clearOnHide": false,
 													"validate": {
 														"required": true,
 														"custom": "if(row['dsgldateoftheclaim'] && row['dsgldateoftheclaim'] != ''){\n  valid = (moment(row['dsgldateoftheclaim']) < moment()) ? true : 'Please choose the date before '+moment().format('MM-DD-YYYY');\n}"
 													},
-													"key": "dsgldateoftheclaim",
+													"key": "ALdsgldateoftheclaim",
 													"type": "datetime",
 													"input": true,
-													"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 													"widget": {
 														"type": "calendar",
 														"displayInTimezone": "viewer",
@@ -8138,6 +8185,7 @@
 													"prefix": "$",
 													"mask": false,
 													"spellcheck": true,
+													"dataGridLabel": false,
 													"tableView": true,
 													"delimiter": true,
 													"requireDecimal": false,
@@ -8146,12 +8194,14 @@
 													"validate": {
 														"required": true
 													},
-													"key": "claimAmountPaid",
+													"key": "ALclaimAmountPaid",
 													"type": "number",
+													"labelWidth": 0,
+													"labelMargin": 3,
 													"input": true,
 													"inputType": "number",
-													"hideOnChildrenHidden": false,
-													"lockKey": true
+													"inDataGrid": true,
+													"hideOnChildrenHidden": false
 												}],
 												"width": 4,
 												"offset": 0,
@@ -8164,6 +8214,7 @@
 													"prefix": "$",
 													"mask": false,
 													"spellcheck": true,
+													"dataGridLabel": false,
 													"tableView": true,
 													"delimiter": true,
 													"requireDecimal": false,
@@ -8172,12 +8223,14 @@
 													"validate": {
 														"required": true
 													},
-													"key": "claimAmountOutstanding",
+													"key": "ALclaimsAmountOutStanding",
 													"type": "number",
+													"labelWidth": 0,
+													"labelMargin": 3,
 													"input": true,
 													"inputType": "number",
-													"hideOnChildrenHidden": false,
-													"lockKey": true
+													"inDataGrid": true,
+													"hideOnChildrenHidden": false
 												}],
 												"size": "md",
 												"width": 4,
@@ -8185,11 +8238,11 @@
 												"push": 0,
 												"pull": 0
 											}],
+											"hideLabel": true,
 											"tableView": false,
-											"key": "columns19",
+											"key": "ALcolumns17",
 											"type": "columns",
-											"input": false,
-											"hideLabel": true
+											"input": false
 										}, {
 											"label": "Columns",
 											"columns": [{
@@ -8197,8 +8250,7 @@
 													"label": "Information on Claims",
 													"autoExpand": false,
 													"tableView": true,
-													"clearOnHide": false,
-													"key": "claimsInformatio",
+													"key": "ALclaimsInformatio",
 													"type": "textarea",
 													"input": true,
 													"hideOnChildrenHidden": false
@@ -8218,7 +8270,7 @@
 											}],
 											"hideLabel": true,
 											"tableView": false,
-											"key": "columns18",
+											"key": "ALcolumns18",
 											"type": "columns",
 											"input": false
 										}],
@@ -8257,96 +8309,6 @@
 							"label": "Optional Coverages",
 							"input": false,
 							"components": [{
-								"label": "Columns",
-								"input": false,
-								"tableView": false,
-								"key": "page4PanelPanelPanel2Panel2Columns",
-								"columns": [{
-									"components": [{
-										"label": "Travel Agent E & O",
-										"tableView": true,
-										"defaultValue": false,
-										"clearOnHide": false,
-										"key": "ALTravelAgentEoCheckBox",
-										"type": "checkbox",
-										"input": true,
-										"dataGridLabel": false,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "Receipts",
-										"prefix": "$",
-										"mask": false,
-										"spellcheck": true,
-										"tableView": true,
-										"delimiter": false,
-										"requireDecimal": false,
-										"inputFormat": "plain",
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "ReceiptsAmont",
-										"conditional": {
-											"show": true,
-											"when": "ALTravelAgentEoCheckBox",
-											"eq": "true"
-										},
-										"type": "number",
-										"input": true,
-										"inputType": "number",
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}],
-								"type": "columns",
-								"hideLabel": true
-							}, {
-								"label": "Columns",
-								"columns": [{
-									"components": [{
-										"label": "Medical Expenses - $5000 Coverage Limit",
-										"tableView": true,
-										"defaultValue": false,
-										"clearOnHide": false,
-										"key": "ALMedicalExpenseCheckBox",
-										"type": "checkbox",
-										"input": true,
-										"dataGridLabel": false,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}],
-								"tableView": false,
-								"key": "columns16",
-								"type": "columns",
-								"input": false,
-								"hideLabel": true
-							}, {
 								"label": "Columns",
 								"columns": [{
 									"components": [{
@@ -9255,66 +9217,6 @@
 								"key": "ALpage4PanelPanelPanelColumns4",
 								"type": "columns",
 								"input": false
-							}, {
-								"label": "Columns",
-								"input": false,
-								"tableView": false,
-								"key": "page4PanelPanelPanelColumns",
-								"columns": [{
-									"components": [{
-										"label": "Do you want to apply for Non Owner Auto?",
-										"tableView": false,
-										"defaultValue": false,
-										"clearOnHide": false,
-										"key": "doYouWantToApplyForNonOwnerAutoAL",
-										"type": "checkbox",
-										"input": true,
-										"hideOnChildrenHidden": false,
-										"dataGridLabel": false
-									}, {
-										"label": "NON-Owned Auto Liability",
-										"widget": "choicesjs",
-										"tableView": true,
-										"data": {
-											"values": [{
-												"value": "nonOwnedAutoLiability100K",
-												"label": "100K"
-											}, {
-												"value": "nonOwnedAutoLiability1M",
-												"label": "1M"
-											}]
-										},
-										"selectThreshold": 0.3,
-										"clearOnHide": false,
-										"validate": {
-											"required": true,
-											"customMessage": "NON-Owned Auto Liability is required"
-										},
-										"key": "nonOwnedAutoLiabilityPL",
-										"customConditional": "show = (row.doYouWantToApplyForNonOwnerAutoAL == true || row.doYouWantToApplyForNonOwnerAutoAL == \"true\")",
-										"type": "select",
-										"indexeddb": {
-											"filter": {}
-										},
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [],
-									"width": 6,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}],
-								"type": "columns",
-								"hideLabel": true
 							}]
 						}, {
 							"title": "Liability & Property Coverages",
@@ -9348,20 +9250,8 @@
 											"label": "Columns",
 											"columns": [{
 												"components": [{
-													"label": "Location Premium",
-													"tableView": true,
-													"defaultValue": false,
-													"clearOnHide": false,
-													"key": "ALCoverageCheckBox",
-													"type": "checkbox",
-													"input": true,
-													"dataGridLabel": false,
-													"lockKey": true,
-													"hideOnChildrenHidden": false
-												}, {
-													"label": "Coverage",
+													"label": "Liability Premium",
 													"prefix": "$",
-													"hideLabel": true,
 													"mask": false,
 													"spellcheck": true,
 													"disabled": true,
@@ -9370,13 +9260,8 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALCoverageCheckBox == \"true\" || row.ALCoverageCheckBox === true){\n  value=((parseFloat(data[\"CoverageFP\"])||0)/10).toFixed(0);\n} else {\n  value = 0;\n}",
+													"calculateValue": "var coverageFp = parseFloat(data[\"CoverageFP\"]);\nvalue=(coverageFp/10).toFixed(0);",
 													"key": "ALCoverageFP",
-													"conditional": {
-														"show": true,
-														"when": "ALCoverageCheckBox",
-														"eq": "true"
-													},
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -9412,11 +9297,8 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "var amount = (parseInt(row.ReceiptsAmont)||0);\nif((parseInt(amount)||0) > 100000){\nvalue=data[\"TAEO100kTo500k\"]\n}\nelse if((parseInt(amount)||0) > 0){\nvalue=data[\"TAEOunder100k\"]\n}",
+													"calculateValue": "value = parseFloat(data['TravelAgentEOFP']/10).toFixed(0);",
 													"key": "ALTravelAgentEOFP",
-													"conditional": {
-														"show": true
-													},
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -9433,13 +9315,8 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALMedicalExpenseCheckBox == \"true\" || row.ALMedicalExpenseCheckBox === true){\nvalue = ((parseFloat(data[\"medicalExpense\"])||0)/10).toFixed(0);\n}\nelse{\nvalue = 0;\n}",
+													"calculateValue": "value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);",
 													"key": "ALMedicalExpenseFP",
-													"conditional": {
-														"show": true,
-														"when": "ALMedicalExpenseCheckBox",
-														"eq": "true"
-													},
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -9447,19 +9324,7 @@
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Non-Owned Auto",
-													"tableView": true,
-													"defaultValue": false,
-													"clearOnHide": false,
-													"key": "ALNonOwnedAutoCheckBox",
-													"type": "checkbox",
-													"input": true,
-													"dataGridLabel": false,
-													"lockKey": true,
-													"hideOnChildrenHidden": false
-												}, {
-													"label": "Non-Owned Auto",
 													"prefix": "$",
-													"hideLabel": true,
 													"mask": false,
 													"spellcheck": false,
 													"disabled": true,
@@ -9468,13 +9333,8 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALNonOwnedAutoCheckBox == \"true\" || row.ALNonOwnedAutoCheckBox === true){\nvalue=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);\n}\nelse{\nvalue = 0;\n}",
+													"calculateValue": "value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);",
 													"key": "ALNonOwnedAutoFP",
-													"conditional": {
-														"show": "true",
-														"when": "ALNonOwnedAutoCheckBox",
-														"eq": "true"
-													},
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -9482,19 +9342,7 @@
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Excess Liability",
-													"tableView": true,
-													"defaultValue": false,
-													"clearOnHide": false,
-													"key": "ALExcessLiabilityCheckBox",
-													"type": "checkbox",
-													"input": true,
-													"dataGridLabel": false,
-													"lockKey": true,
-													"hideOnChildrenHidden": false
-												}, {
-													"label": "Excess Liability",
 													"prefix": "$",
-													"hideLabel": true,
 													"mask": false,
 													"spellcheck": true,
 													"disabled": true,
@@ -9503,13 +9351,26 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALExcessLiabilityCheckBox == \"true\" || row.ALExcessLiabilityCheckBox === true){\n  value = ((parseInt(data[\"ALExcessLiabilityFP\"])||0)/10).toFixed(0);\n} else {\n  value = 0;\n}",
+													"calculateValue": "value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(0);",
 													"key": "ALExcessLiabilityFP",
-													"conditional": {
-														"show": true,
-														"when": "ALExcessLiabilityCheckBox",
-														"eq": "true"
-													},
+													"type": "number",
+													"input": true,
+													"inputType": "number",
+													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "Lake quarry Charges",
+													"prefix": "$",
+													"mask": false,
+													"spellcheck": true,
+													"disabled": true,
+													"tableView": true,
+													"delimiter": false,
+													"requireDecimal": false,
+													"inputFormat": "plain",
+													"clearOnHide": false,
+													"calculateValue": "if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  value = 4419\n} else {\n  value =0;\n}",
+													"key": "ALlakeQuarry",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
@@ -9546,11 +9407,20 @@
 									"size": "md"
 								}, {
 									"components": [{
-										"key": "page4PanelPanelPanel2PanelColumnsPanel2",
-										"input": false,
 										"title": "Property Coverages",
 										"theme": "primary",
+										"breadcrumbClickable": true,
+										"buttonSettings": {
+											"previous": true,
+											"cancel": true,
+											"next": true
+										},
+										"collapsible": false,
 										"tableView": false,
+										"key": "page4PanelPanelPanel2PanelColumnsPanel2",
+										"type": "panel",
+										"label": "Property Coverages",
+										"input": false,
 										"components": [{
 											"label": "Cat/NonCat AL",
 											"optionsLabelPosition": "right",
@@ -9590,7 +9460,7 @@
 														"requireDecimal": false,
 														"inputFormat": "plain",
 														"clearOnHide": false,
-														"calculateValue": "var amount = ((parseFloat(row.additionalLocationPropertyTotal)||0)).toFixed(0);\nvar option = row.ALPropertyCoverageOption;\nif (amount > 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 0 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (amount > 0 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
+														"calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.additionalLocationPropertyTotal)||0;\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
 														"key": "ALContentsFP",
 														"type": "number",
 														"input": true,
@@ -9609,8 +9479,7 @@
 														"delimiter": false,
 														"requireDecimal": false,
 														"inputFormat": "plain",
-														"clearOnHide": false,
-														"calculateValue": "var amount = (parseFloat(row.ALLossofBusIncome)||0);\nvar option = row.ALPropertyCoverageOption\n\nif (amount > 500000 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 500000 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount).toFixed(0);\n} else {\n  value = 0;\n}",
+														"calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.ALLossofBusIncome)\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
 														"key": "ALLossofBusIncomeFP",
 														"type": "number",
 														"input": true,
@@ -9630,7 +9499,7 @@
 														"requireDecimal": false,
 														"inputFormat": "plain",
 														"clearOnHide": false,
-														"calculateValue": "var amount = (parseFloat(row.ALBuildingReplacementValue)||0).toFixed(0);\nvar option = row.ALPropertyCoverageOption;\n\nif (amount > 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (amount > 0 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}",
+														"calculateValue": "var total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(row.additionalLocationPropertyTotal) + parseFloat(row.ALLossofBusIncome);\nvar amount = row.ALBuildingReplacementValue;\nvar option = row.ALPropertyCoverageOption;\nif (total > 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}",
 														"key": "ALBuildingLimitFP",
 														"type": "number",
 														"input": true,
@@ -9644,9 +9513,7 @@
 											"hideLabel": true,
 											"label": "Table"
 										}],
-										"type": "panel",
-										"hideOnChildrenHidden": false,
-										"label": "Panel"
+										"hideOnChildrenHidden": false
 									}],
 									"width": 6,
 									"offset": 0,
@@ -9709,7 +9576,7 @@
 											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value = ((parseFloat(row.ALCoverageFP)||0) + (parseFloat(row.ALnonDivingPoolAmount)||0) + (parseFloat(row.ALMedicalExpenseFP)||0) + (parseFloat(row.ALNonOwnedAutoFP)||0) + (parseFloat(row.ALExcessLiabilityFP)||0) + (parseFloat(row.ALTravelAgentEOFP)||0)).toFixed(0);",
+											"calculateValue": "value = ((parseFloat(row.ALCoverageFP)||0) + (parseFloat(row.ALnonDivingPoolAmount)||0) + (parseFloat(row.ALMedicalExpenseFP)||0) + (parseFloat(row.ALNonOwnedAutoFP)||0) + (parseFloat(row.ALExcessLiabilityFP)||0) + (parseFloat(row.ALTravelAgentEOFP)||0) + (parseFloat(row.ALlakeQuarry)||0)).toFixed(0);",
 											"key": "ALliabilityCoveragesTotal",
 											"type": "number",
 											"input": true,
@@ -9785,7 +9652,7 @@
 											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)",
+											"calculateValue": "if(row.ALpropertyCoverageSelect=='yes'){\nvalue = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)\n} else {\n  value = 0;\n}",
 											"key": "ALLiabilityPropertyCoveragesTotal",
 											"type": "number",
 											"input": true,
@@ -9814,20 +9681,24 @@
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
-											"spellcheck": true,
-											"disabled": true,
-											"tableView": true,
+											"spellcheck": false,
+											"tableView": false,
 											"delimiter": true,
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "value=data[\"proRataPercentage\"]",
+											"allowCalculateOverride": true,
+											"validate": {
+												"max": 100
+											},
 											"key": "ALProRataPremiumPercentage",
 											"type": "number",
 											"decimalLimit": 3,
 											"input": true,
 											"inputType": "number",
-											"lockKey": true
+											"lockKey": true,
+											"defaultValue": 0
 										}]
 									}, {
 										"components": [{
@@ -9871,15 +9742,17 @@
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
-											"spellcheck": true,
-											"disabled": true,
-											"tableView": true,
+											"spellcheck": false,
+											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == row.state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"validate": {
+												"max": 100
+											},
 											"key": "ALliabilityTaxPercentage",
 											"type": "number",
 											"decimalLimit": 3,
@@ -9897,12 +9770,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": false,
+											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value=((parseFloat(row.ALliabilityCoveragesTotal)||0)*(parseFloat(row.ALliabilityTaxPercentage)||0)/100).toFixed(0);",
+											"calculateValue": "value=((parseFloat(row.ALliabilityCoveragesTotal)||0)*(parseFloat(row.ALliabilityTaxPercentage)||0)/100).toFixed(2);",
 											"key": "ALliabilityTaxTotal",
 											"type": "number",
+											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -9929,15 +9803,17 @@
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
-											"spellcheck": true,
-											"disabled": true,
-											"tableView": true,
+											"spellcheck": false,
+											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"validate": {
+												"max": 100
+											},
 											"key": "ALPropertyTaxPercentage",
 											"type": "number",
 											"decimalLimit": 3,
@@ -9955,12 +9831,13 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": false,
+											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "if(data.additionalLocationsSelect=='yes'){\nvalue=((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALPropertyTaxPercentage)||0)/100).toFixed(0);\n} else {\n  value = 0\n}",
+											"calculateValue": "if(data.additionalLocationsSelect=='yes'){\nvalue=((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALPropertyTaxPercentage)||0)/100).toFixed(2);\n} else {\n  value = 0\n}",
 											"key": "ALPropertyTaxTotal",
 											"type": "number",
+											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
 											"lockKey": true
@@ -9993,7 +9870,7 @@
 											"disabled": true,
 											"tableView": true,
 											"delimiter": true,
-											"requireDecimal": false,
+											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "value=((parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)).toFixed(0);",
@@ -10001,7 +9878,8 @@
 											"type": "number",
 											"input": true,
 											"inputType": "number",
-											"lockKey": true
+											"lockKey": true,
+											"decimalLimit": 2
 										}]
 									}],
 									[{
@@ -10065,9 +9943,29 @@
 		"tableView": false,
 		"label": "Panel"
 	}, {
-		"type": "panel",
 		"title": "Group Professional Liability",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page7",
+		"type": "panel",
+		"label": "Group Professional Liability",
 		"components": [{
+			"label": "certificateLevelList",
+			"key": "certificateLevelList",
+			"properties": {
+				"data_type": "list"
+			},
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
 			"autofocus": true,
@@ -10096,7 +9994,8 @@
 			"input": true
 		}, {
 			"label": "groupCoverageSelect",
-			"calculateValue": "if(parseFloat(data['annualReceipt']).toFixed(0)>= 0 && parseFloat(data['annualReceipt']).toFixed(0)<= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 25001 && parseFloat(data['annualReceipt']).toFixed(0)<= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 50001 && parseFloat(data['annualReceipt']).toFixed(0)<= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 100001 && parseFloat(data['annualReceipt']).toFixed(0)<= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0)>= 150001 && parseFloat(data['annualReceipt']).toFixed(0)<= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 200001 && parseFloat(data['annualReceipt']).toFixed(0) <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 250001 && parseFloat(data['annualReceipt']).toFixed(0) <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 350001 && parseFloat(data['annualReceipt']).toFixed(0) <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(parseFloat(data['annualReceipt']).toFixed(0) >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
+			"redrawOn": "data",
+			"calculateValue": "var groupVal = parseFloat(data['annualEstimatedResponseRecieptsGL']).toFixed(0);\nif(groupVal > 0 && groupVal <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(groupVal >= 25001 && groupVal <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(groupVal >= 50001 && groupVal <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(groupVal >= 100001 && groupVal <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(groupVal >= 150001 && groupVal <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(groupVal >= 200001 && groupVal <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(groupVal >= 250001 && groupVal <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(groupVal >= 350001 && groupVal <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(groupVal >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
 			"key": "groupCoverageSelect",
 			"type": "hidden",
 			"input": true,
@@ -10124,7 +10023,7 @@
 						"rows": [
 							[{
 								"components": [{
-									"label": "What was your annual receipt instructional supervision?",
+									"label": "Annual receipt for previous 12 months",
 									"prefix": "$",
 									"mask": false,
 									"spellcheck": true,
@@ -10141,12 +10040,12 @@
 									"key": "annualReceiptInstructionalSupervision",
 									"type": "number",
 									"input": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"inputType": "number"
 								}]
 							}, {
 								"components": [{
-									"label": "Annual Estimated Receipts",
-									"description": "For Emergency First Response Instructional",
+									"label": "Annual Estimated Instructional Supervision receipts for next 12 months",
 									"prefix": "$",
 									"mask": false,
 									"spellcheck": true,
@@ -10154,7 +10053,11 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
+									"redrawOn": "data",
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "annualEstimatedResponseRecieptsGL",
 									"type": "number",
 									"labelWidth": 0,
@@ -10212,7 +10115,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = parseFloat(data['annualReceiptInstructionalSupervision']+data['annualEstimatedResponseRecieptsGL']).toFixed(0)",
+						"calculateValue": "value = parseFloat(data['annualEstimatedResponseRecieptsGL'])",
 						"key": "annualReceipt",
 						"attributes": {
 							"style": "display:none;"
@@ -10226,14 +10129,15 @@
 						"prefix": "$",
 						"customClass": "margin-top:25px",
 						"mask": false,
-						"spellcheck": true,
+						"spellcheck": false,
 						"disabled": true,
-						"tableView": true,
+						"tableView": false,
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "value = data[data[\"groupCoverageSelect\"]]",
+						"calculateValue": "if(data[\"groupCoverageSelect\"]){\n  value = parseFloat(data[data[\"groupCoverageSelect\"]]).toFixed(0);\n} else {\n  value = 0;\n}",
 						"key": "groupCoverage",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
@@ -10297,9 +10201,9 @@
 								"label": "Amount",
 								"prefix": "$",
 								"mask": false,
-								"spellcheck": true,
+								"spellcheck": false,
 								"disabled": true,
-								"tableView": true,
+								"tableView": false,
 								"delimiter": true,
 								"requireDecimal": false,
 								"inputFormat": "plain",
@@ -10325,7 +10229,8 @@
 						"tableView": false,
 						"key": "columns14",
 						"type": "columns",
-						"input": false
+						"input": false,
+						"hideLabel": true
 					}],
 					"width": 12,
 					"offset": 0,
@@ -10343,7 +10248,8 @@
 				"tableView": false,
 				"key": "columns5",
 				"type": "columns",
-				"input": false
+				"input": false,
+				"hideLabel": true
 			}, {
 				"title": "Add Members",
 				"theme": "primary",
@@ -10398,7 +10304,8 @@
 							"customConditional": "if(data.membersPadiVerified == 'false' || data.membersPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.membersPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"hideLabel": true
 						}],
 						"width": 6,
 						"offset": 0,
@@ -10423,7 +10330,8 @@
 					"tableView": false,
 					"key": "columns15",
 					"type": "columns",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}, {
 					"label": "HTML",
 					"attrs": [{
@@ -10435,204 +10343,241 @@
 					"tableView": false,
 					"key": "html1",
 					"type": "htmlelement",
-					"input": false
+					"input": false,
+					"hideLabel": true
 				}, {
-					"label": "Members applicable for Group Liability",
+					"label": "Group Members",
+					"reorder": false,
+					"addAnother": "Not a PADI Member?Click here to add external members",
+					"addAnotherPosition": "bottom",
+					"defaultOpen": false,
+					"layoutFixed": false,
+					"enableRowGroups": false,
 					"hideLabel": true,
 					"tableView": false,
-					"templates": {
-						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
-					},
-					"addAnother": "Not a PADI Member?Click here to add external members",
+					"defaultValue": [{
+						"padi": "",
+						"firstname": "",
+						"lastname": "",
+						"status": "",
+						"nameOfInstitution": "",
+						"initial": "",
+						"start_date": "2020-07-01",
+						"documentattach": [],
+						"verified": "",
+						"rating": "",
+						"document1": []
+					}],
 					"clearOnHide": false,
-					"validate": {
-						"custom": "valid = (data.groupPL.length > 0) ? true : \"Please add the members to group\";"
-					},
-					"rowDrafts": false,
+					"calculateValue": "if(value && value.length > 1){\n  var length = value.length - 1;\n  if(value[length]['padi'] == \"\"){\n    value.pop(); \n  }\n}",
 					"key": "groupPL",
-					"type": "editgrid",
+					"type": "datagrid",
 					"input": true,
 					"components": [{
-						"label": "Columns",
-						"columns": [{
-							"components": [{
-								"label": "Membership Number",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "padi",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md",
-							"width": 4
-						}, {
-							"components": [{
-								"label": "First Name",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "firstname",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md",
-							"width": 4
-						}, {
-							"components": [{
-								"label": "Last Name",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "lastname",
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}],
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md",
-							"width": 4
-						}],
-						"hideLabel": true,
-						"dataGridLabel": false,
+						"label": "well",
 						"tableView": false,
-						"key": "page7GroupColumns",
-						"type": "columns",
+						"key": "well1",
+						"type": "well",
 						"input": false,
-						"inDataGrid": true
-					}, {
-						"label": "Columns",
-						"columns": [{
-							"components": [{
-								"label": "Certificate Level",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "status",
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}],
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md",
-							"width": 4
-						}, {
-							"components": [{
-								"label": "Name of Training Agency",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
-								"key": "nameOfInstitution",
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}],
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md",
-							"width": 4
-						}, {
-							"components": [{
-								"label": "initial",
-								"key": "initial",
-								"type": "hidden",
-								"input": true,
-								"tableView": false,
-								"hideOnChildrenHidden": false
+						"components": [{
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Membership Number",
+									"tableView": true,
+									"redrawOn": "data",
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "padi",
+									"type": "textfield",
+									"input": true,
+									"lockKey": true,
+									"hideOnChildrenHidden": false
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md",
+								"width": 4
 							}, {
-								"label": "start_date",
-								"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
-								"key": "start_date",
-								"type": "hidden",
-								"input": true,
-								"tableView": false,
-								"hideOnChildrenHidden": false
+								"components": [{
+									"label": "First Name",
+									"tableView": true,
+									"redrawOn": "data",
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "firstname",
+									"type": "textfield",
+									"input": true,
+									"lockKey": true,
+									"hideOnChildrenHidden": false
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md",
+								"width": 4
+							}, {
+								"components": [{
+									"label": "Last Name",
+									"tableView": true,
+									"redrawOn": "data",
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "lastname",
+									"type": "textfield",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"size": "md",
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"width": 4
 							}],
-							"size": "md",
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"width": 4
+							"tableView": false,
+							"key": "columns19",
+							"type": "columns",
+							"input": false,
+							"hideLabel": true
+						}, {
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Certificate Level",
+									"widget": "choicesjs",
+									"tableView": true,
+									"dataSrc": "custom",
+									"data": {
+										"values": [{
+											"label": "",
+											"value": ""
+										}],
+										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  var ratingValues = padiRating.split(\",\");\n  var certificateValues = [];\n  ratingValues.forEach(function(item, index) {\n    for(var j=0;j<certificateLevel[item].length;j++){\n      certificateValues.push(certificateLevel[item][j])\n    }\n  });\n  \tvalues = certificateValues;\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+									},
+									"valueProperty": "value",
+									"selectThreshold": 0.3,
+									"allowCalculateOverride": true,
+									"validate": {
+										"required": true
+									},
+									"key": "status",
+									"type": "select",
+									"indexeddb": {
+										"filter": {}
+									},
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md",
+								"width": 8
+							}, {
+								"components": [{
+									"label": "Name of Training Agency",
+									"tableView": true,
+									"redrawOn": "data",
+									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
+									"key": "nameOfInstitution",
+									"type": "textfield",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md",
+								"width": 4
+							}],
+							"hideLabel": true,
+							"tableView": false,
+							"key": "columns25",
+							"type": "columns",
+							"input": false
+						}, {
+							"label": "initial",
+							"redrawOn": "data",
+							"key": "initial",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "start_date",
+							"redrawOn": "data",
+							"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
+							"key": "start_date",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "rating",
+							"key": "rating",
+							"type": "hidden",
+							"input": true,
+							"tableView": false
+						}, {
+							"label": "verified",
+							"key": "verified",
+							"type": "hidden",
+							"input": true,
+							"tableView": false
+						}, {
+							"label": "Document",
+							"hideLabel": true,
+							"tableView": true,
+							"storage": "url",
+							"webcam": false,
+							"fileTypes": [{
+								"label": "",
+								"value": ""
+							}],
+							"multiple": true,
+							"clearOnHide": false,
+							"validate": {
+								"multiple": true
+							},
+							"key": "documentattach",
+							"type": "file",
+							"input": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false,
+							"url": "/file/attachment"
+						}, {
+							"type": "documentviewer",
+							"key": "document1",
+							"calculateValue": "value = (row.documentattach)",
+							"dtype": "documentviewer",
+							"datype": "documentviewer",
+							"dattype": "documentviewer",
+							"customConditional": "if (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+							"datatype": "documentviewer",
+							"data_type": "documentviewer",
+							"label": " ",
+							"hideLabel": true,
+							"inputType": "documentviewer",
+							"input": 1,
+							"tableView": false,
+							"protected": true,
+							"persistent": false,
+							"keyModified": true
 						}],
-						"tableView": false,
-						"key": "columns",
-						"type": "columns",
-						"input": false
-					}, {
-						"label": "Document",
-						"hideLabel": true,
-						"tableView": true,
-						"storage": "url",
-						"webcam": false,
-						"fileTypes": [{
-							"label": "",
-							"value": ""
-						}],
-						"multiple": true,
+						"inDataGrid": true,
 						"clearOnHide": false,
-						"validate": {
-							"multiple": true
-						},
-						"key": "documentattach",
-						"type": "file",
-						"input": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"url": "/file/attachment"
-					}, {
-						"label": "verified",
-						"key": "verified",
-						"type": "hidden",
-						"input": true,
-						"tableView": false
-					}, {
-						"type": "documentviewer",
-						"key": "documentattach1",
-						"calculateValue": "value = row.documentattach",
-						"refreshOn": "row.documentattach",
-						"dtype": "documentviewer",
-						"datype": "documentviewer",
-						"dattype": "documentviewer",
-						"customConditional": "if (data.privileges){\n  if(row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
-						"datatype": "documentviewer",
-						"data_type": "documentviewer",
-						"label": "Attachments",
-						"hideLabel": true,
-						"inputType": "documentviewer",
-						"input": 1,
-						"tableView": false,
-						"protected": true,
-						"persistent": false,
-						"keyModified": true
-					}],
-					"path": "groupPL",
-					"keyModified": true
+						"hideLabel": true
+					}]
 				}],
 				"path": "addMembers"
 			}, {
@@ -10709,123 +10654,44 @@
 						"tableView": false,
 						"defaultValue": [{
 							"name": "",
-							"country": "",
 							"address": "",
 							"city": "",
+							"country": "",
 							"state": {},
 							"zip": "",
-							"city1": "",
-							"state1": {},
-							"zip1": "",
 							"businessRelation": "",
-							"additionalInformation1": "",
 							"businessRelationOther": "",
-							"additionalInformation": ""
+							"additionalInformation": "",
+							"doYouHaveAWrittenContract": "",
+							"additionalInsuredAttachments": []
 						}],
-						"clearOnHide": false,
 						"validate": {
+							"required": true,
 							"minLength": 1
 						},
 						"key": "groupAdditionalInsured",
 						"type": "datagrid",
 						"input": true,
 						"components": [{
-							"label": "well",
-							"tableView": false,
-							"key": "well1",
-							"type": "well",
+							"clearOnHide": false,
+							"key": "page4PanelPanelWell",
 							"input": false,
 							"components": [{
 								"label": "Columns",
+								"input": false,
+								"tableView": false,
+								"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
 								"columns": [{
 									"components": [{
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"customMessage": "Please enter the Name of the Additional Insured"
 										},
+										"errorLabel": "Additional Insured Name",
 										"key": "name",
 										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "City",
-										"tableView": true,
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "city",
-										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}],
-									"width": 4,
-									"offset": 0,
-									"push": 0,
-									"pull": 0,
-									"size": "md"
-								}, {
-									"components": [{
-										"label": "Country",
-										"widget": "choicesjs",
-										"tableView": true,
-										"dataSrc": "custom",
-										"data": {
-											"values": [{
-												"value": "",
-												"label": ""
-											}],
-											"custom": "values = data['countryList'];"
-										},
-										"valueProperty": "country",
-										"dataType": "string",
-										"template": "<span>{{ item.country }}</span>",
-										"selectThreshold": 0.3,
-										"clearOnHide": false,
-										"validate": {
-											"required": true
-										},
-										"key": "country",
-										"properties": {
-											"clear_field": "state"
-										},
-										"type": "select",
-										"indexeddb": {
-											"filter": {}
-										},
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "State",
-										"widget": "choicesjs",
-										"tableView": true,
-										"dataSrc": "custom",
-										"data": {
-											"values": [{
-												"value": "",
-												"label": ""
-											}],
-											"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
-										},
-										"template": "<span>{{ item }}</span>",
-										"refreshOn": "country",
-										"clearOnRefresh": true,
-										"selectThreshold": 0.3,
-										"clearOnHide": false,
-										"validate": {
-											"required": true,
-											"customMessage": "State is required"
-										},
-										"key": "state",
-										"type": "select",
-										"indexeddb": {
-											"filter": {}
-										},
 										"input": true,
 										"lockKey": true,
 										"hideOnChildrenHidden": false
@@ -10841,22 +10707,10 @@
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"customMessage": "Please enter the Address of the Additional Insured"
 										},
+										"errorLabel": "Additional Insured Address",
 										"key": "address",
-										"type": "textfield",
-										"input": true,
-										"lockKey": true,
-										"hideOnChildrenHidden": false
-									}, {
-										"label": "Zip Code",
-										"tableView": true,
-										"clearOnHide": false,
-										"validate": {
-											"required": true,
-											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
-										},
-										"key": "zip",
 										"type": "textfield",
 										"input": true,
 										"hideOnChildrenHidden": false
@@ -10868,35 +10722,176 @@
 									"size": "md"
 								}, {
 									"components": [{
-										"label": "Business Relation",
+										"label": "City",
+										"tableView": true,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter the City of the Additional Insured"
+										},
+										"errorLabel": "Additional Insured City",
+										"key": "city",
+										"type": "textfield",
+										"input": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}],
+								"type": "columns",
+								"inDataGrid": true,
+								"hideLabel": true
+							}, {
+								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "Country",
 										"widget": "choicesjs",
 										"tableView": true,
+										"dataSrc": "custom",
 										"data": {
 											"values": [{
-												"value": "diveStoreOwner",
-												"label": "Dive Store Owner"
+												"value": "",
+												"label": ""
+											}],
+											"custom": "values = data['countryList'];"
+										},
+										"valueProperty": "country",
+										"template": "<span>{{ item.country }}</span>",
+										"selectThreshold": 0.3,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please select the Country of the Additional Insured"
+										},
+										"errorLabel": "Additional Insured Country",
+										"key": "country",
+										"properties": {
+											"clear_field": "state"
+										},
+										"type": "select",
+										"indexeddb": {
+											"filter": {}
+										},
+										"input": true,
+										"lockKey": true,
+										"source": "5d347da33e9be31e15d3b115",
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "State",
+										"widget": "choicesjs",
+										"tableView": true,
+										"dataSrc": "custom",
+										"data": {
+											"values": [{
+												"label": "",
+												"value": ""
+											}],
+											"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
+										},
+										"template": "<span>{{ item }}</span>",
+										"refreshOn": "row.country",
+										"clearOnRefresh": true,
+										"selectThreshold": 0.3,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please select the State of the Additional Insured"
+										},
+										"errorLabel": "Additional Insured State",
+										"key": "state",
+										"customConditional": "show = (row.country)",
+										"type": "select",
+										"indexeddb": {
+											"filter": {}
+										},
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Zip Code",
+										"spellcheck": false,
+										"tableView": true,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter the Zip Code of the Additional Insured",
+											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+										},
+										"errorLabel": "Additional Insured Zip Code",
+										"key": "zip",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}],
+								"hideLabel": true,
+								"tableView": false,
+								"key": "additionalInsuredPanelColumns2",
+								"type": "columns",
+								"input": false
+							}, {
+								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "Business Relation",
+										"widget": "choicesjs",
+										"tableView": false,
+										"data": {
+											"values": [{
+												"value": "confinedWaterTrainingLocation",
+												"label": "Confined Water Training Location"
 											}, {
-												"value": "diveBoatOwner",
-												"label": "Dive Boat Owner"
+												"value": "openWaterTrainingLocation",
+												"label": " Open Water Training Location"
 											}, {
-												"value": "hotelResortOwner",
-												"label": "Hotel/Resort Owner"
+												"label": "Dive Boat Owner",
+												"value": "diveBoatOwner"
 											}, {
-												"value": "poolQuarryLakeOwner",
-												"label": "Pool/Quarry/Lake Owner"
+												"label": "Mortgagee / Loss Payee",
+												"value": "mortgageeLossPayee"
 											}, {
-												"value": "governmentEntity",
-												"label": "Government Entity"
+												"label": "Landlord",
+												"value": "landlord"
+											}, {
+												"label": " Government Entity – Permit Requirement",
+												"value": "governmentEntityPermitRequirement"
+											}, {
+												"label": "Dive Store",
+												"value": "diveStore"
+											}, {
+												"label": "Training Agency",
+												"value": "trainingAgency"
 											}, {
 												"value": "other",
 												"label": "Other"
 											}]
 										},
 										"selectThreshold": 0.3,
-										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"required": true,
+											"customMessage": "Please select the Business Relation with the Additional Insured"
 										},
+										"errorLabel": "Additional Insured Business Relation",
 										"key": "businessRelation",
 										"type": "select",
 										"indexeddb": {
@@ -10906,12 +10901,14 @@
 										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}, {
-										"label": "Please Mention",
+										"label": "Provide description to be reviewed by underwriting",
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
-											"required": true
+											"required": true,
+											"customMessage": "Please specify the Business Relation"
 										},
+										"errorLabel": "Additonal Insured Business Relation Details",
 										"key": "businessRelationOther",
 										"conditional": {
 											"show": true,
@@ -10920,42 +10917,104 @@
 										},
 										"type": "textfield",
 										"input": true,
+										"style": {
+											"margin-top": "4px"
+										},
+										"lockKey": true,
 										"hideOnChildrenHidden": false
 									}],
-									"size": "md",
-									"width": 4,
+									"width": 6,
 									"offset": 0,
 									"push": 0,
-									"pull": 0
+									"pull": 0,
+									"size": "md"
 								}, {
 									"components": [{
 										"label": "Additional Information",
 										"autoExpand": false,
 										"tableView": true,
+										"inputFormat": "plain",
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter Additional Information about the Additional Insured"
+										},
+										"errorLabel": "Additional Insured Additional Information",
 										"key": "additionalInformation",
 										"type": "textarea",
 										"input": true,
 										"hideOnChildrenHidden": false
 									}],
-									"size": "md",
-									"width": 8,
+									"width": 6,
 									"offset": 0,
 									"push": 0,
-									"pull": 0
+									"pull": 0,
+									"size": "md"
 								}],
-								"hideLabel": true,
-								"dataGridLabel": false,
 								"tableView": false,
-								"key": "groupAdditionalInsuredsColumns",
+								"key": "columns2",
 								"type": "columns",
+								"input": false
+							}, {
+								"label": "Do you have a Written Contract?",
+								"optionsLabelPosition": "right",
+								"inline": false,
+								"tableView": false,
+								"values": [{
+									"label": "Yes",
+									"value": "yes",
+									"shortcut": ""
+								}, {
+									"label": "No",
+									"value": "no",
+									"shortcut": ""
+								}],
+								"key": "doYouHaveAWrittenContract",
+								"type": "radio",
+								"input": true,
+								"validate": {
+									"required": true
+								}
+							}, {
+								"label": "Content",
+								"attrs": [{
+									"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
+									"attr": "style"
+								}],
+								"content": "Additional Insureds can only be added when required by written contract",
+								"refreshOnChange": false,
+								"tableView": false,
+								"key": "panelColumnsContent5",
+								"customConditional": "show = (row['doYouHaveAWrittenContract']=='no')?true:false",
+								"type": "htmlelement",
 								"input": false,
-								"inDataGrid": true
+								"hideLabel": true,
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "Additional Insured Attachments",
+								"tableView": false,
+								"storage": "url",
+								"webcam": false,
+								"fileTypes": [{
+									"label": "",
+									"value": ""
+								}],
+								"multiple": true,
+								"clearOnHide": false,
+								"validate": {
+									"multiple": true
+								},
+								"key": "additionalInsuredAttachments",
+								"type": "file",
+								"url": "/file/attachment",
+								"input": true
 							}],
+							"tableView": false,
+							"type": "well",
 							"inDataGrid": true,
-							"clearOnHide": false,
-							"hideLabel": true
+							"hideLabel": true,
+							"label": ""
 						}],
-						"path": "groupAdditionalInsured"
+						"lockKey": true
 					}],
 					"lockKey": true,
 					"path": "additional_insureds"
@@ -10979,7 +11038,7 @@
 				"components": [{
 					"label": "Would you like to add Additional Named Insureds?",
 					"widget": "choicesjs",
-					"tableView": true,
+					"tableView": false,
 					"data": {
 						"values": [{
 							"value": "yes",
@@ -11001,7 +11060,8 @@
 						"filter": {}
 					},
 					"input": true,
-					"lockKey": true
+					"lockKey": true,
+					"defaultValue": "no"
 				}, {
 					"title": "Information for each Additional Named Insureds is required as follows",
 					"theme": "primary",
@@ -11023,227 +11083,168 @@
 					"label": "Information for each Named Insureds is required as follows",
 					"input": false,
 					"components": [{
-						"label": "PADI Number?",
-						"description": "Enter the PADI Membership to Validate",
-						"tableView": true,
-						"clearOnHide": false,
-						"validate": {
-							"pattern": "[0-9\\s-]*$"
-						},
-						"key": "namedPadi",
-						"type": "textfield",
-						"input": true
-					}, {
-						"label": "Validate and Add Named Insureds",
-						"action": "event",
-						"showValidations": false,
-						"theme": "success",
-						"tableView": false,
-						"key": "validatePadiNI",
-						"properties": {
-							"delegate": "NamedInsuredPadiVerification",
-							"sourceDataKey": "namedPadi",
-							"destinationDataKey": "namedInsureds",
-							"valueKey": "padi",
-							"validationKey": "namedInsuredPadiVerified",
-							"cleanSource": "true"
-						},
-						"type": "button",
-						"event": "callDelegate",
-						"input": true
-					}, {
-						"label": "Columns",
-						"columns": [{
-							"components": [{
-								"label": "HTML",
-								"attrs": [{
-									"attr": "style",
-									"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
-								}],
-								"content": "PADI Membership not found",
-								"refreshOnChange": false,
-								"tableView": false,
-								"key": "html3",
-								"customConditional": "if(data.namedInsuredPadiVerified == 'false' || data.namedInsuredPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.namedInsuredPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
-								"type": "htmlelement",
-								"input": false,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "namedInsuredPadiVerified",
-								"key": "namedInsuredPadiVerified",
-								"type": "hidden",
-								"input": true,
-								"tableView": false,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"tableView": false,
-						"key": "columns15",
-						"type": "columns",
-						"input": false
-					}, {
-						"label": "Edit Grid",
+						"label": "Additional Named Insured",
+						"reorder": false,
+						"addAnother": "Add More",
+						"addAnotherPosition": "bottom",
+						"defaultOpen": false,
+						"layoutFixed": false,
+						"enableRowGroups": false,
 						"hideLabel": true,
 						"tableView": false,
-						"templates": {
-							"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
-							"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
-						},
-						"addAnother": "Not registered in system?Click here to add external members",
-						"clearOnHide": false,
+						"defaultValue": [{
+							"name": "",
+							"country": "",
+							"address": "",
+							"state": {},
+							"city": "",
+							"zip": ""
+						}],
 						"validate": {
-							"custom": "valid = (data.namedInsureds.length > 0) ? true : \"Please add the named insureds\";"
+							"customMessage": "Please add an Additional Insured",
+							"minLength": 1
 						},
-						"rowDrafts": false,
-						"key": "namedInsureds",
-						"type": "editgrid",
+						"key": "groupAdditionalNamedInsured",
+						"type": "datagrid",
 						"input": true,
 						"components": [{
-							"label": "Columns",
-							"columns": [{
-								"components": [{
-									"label": "Membership Number",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "padi",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md",
-								"width": 4
-							}, {
-								"components": [{
-									"label": "First Name",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "firstname",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md",
-								"width": 4
-							}, {
-								"components": [{
-									"label": "Last Name",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "lastname",
-									"type": "textfield",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}],
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md",
-								"width": 4
-							}],
-							"hideLabel": true,
-							"dataGridLabel": false,
+							"label": "well",
 							"tableView": false,
-							"key": "additionalNamedInsuredsColumns",
-							"type": "columns",
+							"key": "well1",
+							"type": "well",
 							"input": false,
-							"inDataGrid": true
-						}, {
-							"label": "Columns",
-							"columns": [{
-								"components": [{
-									"label": "Status",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "status",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
+							"components": [{
+								"label": "Columns",
+								"columns": [{
+									"components": [{
+										"label": "Name",
+										"tableView": true,
+										"clearOnHide": false,
+										"key": "name",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}, {
+										"label": "Country",
+										"widget": "choicesjs",
+										"tableView": true,
+										"dataSrc": "custom",
+										"data": {
+											"values": [{
+												"value": "",
+												"label": ""
+											}],
+											"custom": "values = data['countryList'];"
+										},
+										"valueProperty": "country",
+										"template": "<span>{{ item.country }}</span>",
+										"selectThreshold": 0.3,
+										"clearOnHide": false,
+										"validate": {
+											"customMessage": "Please enter your country."
+										},
+										"key": "country",
+										"properties": {
+											"clear_field": "state"
+										},
+										"type": "select",
+										"indexeddb": {
+											"filter": {}
+										},
+										"input": true,
+										"lockKey": true,
+										"source": "5d347da33e9be31e15d3b115",
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "Address",
+										"tableView": true,
+										"clearOnHide": false,
+										"key": "address",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}, {
+										"label": "State",
+										"widget": "choicesjs",
+										"tableView": true,
+										"dataSrc": "custom",
+										"data": {
+											"values": [{
+												"label": "",
+												"value": ""
+											}],
+											"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
+										},
+										"template": "<span>{{ item }}</span>",
+										"refreshOn": "row.country",
+										"clearOnRefresh": true,
+										"selectThreshold": 0.3,
+										"clearOnHide": false,
+										"key": "state",
+										"type": "select",
+										"indexeddb": {
+											"filter": {}
+										},
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
+								}, {
+									"components": [{
+										"label": "City",
+										"tableView": true,
+										"clearOnHide": false,
+										"key": "city",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}, {
+										"label": "Zip",
+										"tableView": true,
+										"clearOnHide": false,
+										"validate": {
+											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+										},
+										"key": "zip",
+										"type": "textfield",
+										"input": true,
+										"lockKey": true,
+										"hideOnChildrenHidden": false
+									}],
+									"width": 4,
+									"offset": 0,
+									"push": 0,
+									"pull": 0,
+									"size": "md"
 								}],
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md",
-								"width": 4
-							}, {
-								"components": [{
-									"label": "Name of Training Agency",
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "nameOfInstitution",
-									"type": "textfield",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}],
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md",
-								"width": 4
-							}, {
-								"components": [{
-									"label": "start_date",
-									"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
-									"key": "start_date",
-									"type": "hidden",
-									"input": true,
-									"tableView": false,
-									"hideOnChildrenHidden": false
-								}],
-								"size": "md",
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"width": 4
+								"hideLabel": true,
+								"dataGridLabel": false,
+								"tableView": false,
+								"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
+								"type": "columns",
+								"input": false,
+								"inDataGrid": true
 							}],
-							"tableView": false,
-							"key": "columns",
-							"type": "columns",
-							"input": false,
+							"inDataGrid": true,
+							"clearOnHide": false,
 							"hideLabel": true
-						}, {
-							"label": "verified",
-							"key": "verified",
-							"type": "hidden",
-							"input": true,
-							"tableView": false
 						}],
-						"path": "namedInsureds"
+						"path": "additionalNamedInsured"
 					}],
 					"path": "page7Panel"
 				}]
@@ -11254,7 +11255,6 @@
 				"key": "page7Table",
 				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "table",
-				"numRows": 5,
 				"clearOnHide": false,
 				"input": false,
 				"rows": [
@@ -11359,18 +11359,20 @@
 							"prefix": "%",
 							"hideLabel": true,
 							"mask": false,
-							"spellcheck": true,
-							"disabled": true,
+							"spellcheck": false,
 							"tableView": true,
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+							"allowCalculateOverride": true,
+							"validate": {
+								"max": 100
+							},
 							"key": "groupTaxPercentage",
 							"type": "number",
-							"decimalLimit": 3,
+							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -11385,13 +11387,13 @@
 							"disabled": true,
 							"tableView": true,
 							"delimiter": true,
-							"requireDecimal": false,
+							"requireDecimal": true,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = ((parseFloat(data[\"groupCoverage\"]) || 0)* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100).toFixed(0);",
+							"calculateValue": "value = (((parseFloat(data[\"groupCoverage\"]) || 0) + (parseFloat(data[\"groupExcessLiabilityAmount\"]) ||0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100);",
 							"key": "groupTaxAmount",
 							"type": "number",
+							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -11438,6 +11440,41 @@
 					}],
 					[{
 						"components": [{
+							"label": "PADI Fee",
+							"tag": "h4",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "Group Surcharge/Deductions",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7TablePadiFee1",
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true
+						}]
+					}, {
+						"components": []
+					}, {
+						"components": [{
+							"label": "Group Surcharge/Deductions Amount",
+							"prefix": "$",
+							"mask": false,
+							"spellcheck": true,
+							"tableView": false,
+							"defaultValue": 0,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"key": "groupSurchargeDeductionsAmount",
+							"type": "number",
+							"input": true
+						}]
+					}],
+					[{
+						"components": [{
 							"key": "page7TableTotal",
 							"label": "Total",
 							"input": false,
@@ -11468,9 +11505,10 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = ((parseFloat(data[\"groupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00))",
+							"calculateValue": "value = ((parseFloat(data[\"groupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00) - (parseFloat(data['groupSurchargeDeductionsAmount'])||0)).toFixed(2)",
 							"key": "groupTotalAmount",
 							"type": "number",
+							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -11478,17 +11516,14 @@
 					}]
 				],
 				"hideLabel": true,
-				"path": "page7Table"
+				"path": "page7Table",
+				"numRows": 6
 			}],
 			"path": "well2",
 			"clearOnHide": false,
 			"hideLabel": true
 		}],
 		"input": false,
-		"key": "page7",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel",
 		"path": "page7"
 	}, {
 		"type": "panel",
@@ -11638,15 +11673,6 @@
 					"hideOnChildrenHidden": false,
 					"label": "Panel"
 				}, {
-					"label": "attachmentsFieldnames",
-					"calculateValue": "value = [\"csrApprovalAttachments\",\"attachments\",\"chequeConsentForm\",\"receipts\",[\"additionalLocations\",\"receiptsAL\"],[\"groupPL\",\"documentattach\"]]",
-					"key": "attachmentsFieldnames",
-					"type": "hidden",
-					"input": true,
-					"tableView": true,
-					"lockKey": true,
-					"hideOnChildrenHidden": false
-				}, {
 					"key": "page5ColumnsPanel4",
 					"input": false,
 					"title": "GDPR Agreement",
@@ -11732,7 +11758,8 @@
 						"components": [{
 							"label": "Coverage",
 							"widget": "choicesjs",
-							"tableView": true,
+							"disabled": true,
+							"tableView": false,
 							"dataSrc": "custom",
 							"data": {
 								"values": [{
@@ -11744,8 +11771,7 @@
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateValue": "var receiptsAmount = parseFloat(data['dsglestmonthretailreceipt']).toFixed(0);\nvar properyCoverage = data['propertyCoverageSelect'];\nconsole.log(receiptsAmount)\nif(properyCoverage == 'yes' && receiptsAmount < 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
-							"allowCalculateOverride": true,
+							"calculateValue": "var receiptsAmount = (parseFloat(data['dsglestmonthretailreceipt'])||0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
 							"validate": {
 								"required": true
 							},
@@ -11774,8 +11800,8 @@
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"clearOnHide": false,
-							"calculateValue": "if(data['liabilityCoverageOption'] && data[data['liabilityCoverageOption']]){\n  value=parseFloat(data[data[\"liabilityCoverageOption\"]]).toFixed(0);\n} else {\n  value = 0\n}",
+							"redrawOn": "liabilityCoverageOption",
+							"calculateValue": "if(data['liabilityCoverageOption'] && data[data['liabilityCoverageOption']]){\n  value=parseFloat(data[data[\"liabilityCoverageOption\"]]);\n} else {\n  value = 0\n}",
 							"key": "CoverageFP",
 							"type": "number",
 							"input": true,
@@ -11837,7 +11863,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}",
+						"calculateValue": "if(data.doyouhaveapoolonpremisesPL == 'yes'){\nif((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}\n} else {\n  value = 0;\n}",
 						"key": "nonDivingPoolAmount",
 						"type": "number",
 						"input": true,
@@ -11880,7 +11906,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)",
+						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
 						"key": "Non-OwnedAutoFP",
 						"type": "number",
 						"input": true,
@@ -11918,7 +11944,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
+						"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
 						"key": "TravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -11990,7 +12016,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
+						"calculateValue": "var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
 						"key": "ContentsFP",
 						"type": "number",
 						"input": true,
@@ -12009,7 +12035,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (((parseFloat(data[\"lossOfBusIncome\"])||0)) > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
+						"calculateValue": "var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
 						"key": "LossofBusIncomeFP",
 						"type": "number",
 						"input": true,
@@ -12028,7 +12054,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0)+(parseFloat(data[\"lossOfBusIncome\"])||0) > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
+						"calculateValue": "var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+data['lossOfBusIncome'];\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}",
 						"key": "BuildingLimitFP",
 						"type": "number",
 						"input": true,
@@ -12190,7 +12216,7 @@
 						"mask": false,
 						"spellcheck": true,
 						"tableView": false,
-						"defaultValue": "0.00",
+						"defaultValue": 1,
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
@@ -12199,10 +12225,10 @@
 						"allowCalculateOverride": true,
 						"key": "proRataPercentage",
 						"type": "number",
-						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}, {
 					"components": [{
@@ -12322,7 +12348,6 @@
 						"prefix": "%",
 						"mask": false,
 						"spellcheck": true,
-						"disabled": true,
 						"tableView": true,
 						"defaultValue": "0",
 						"delimiter": false,
@@ -12330,9 +12355,10 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
+						"allowCalculateOverride": true,
 						"key": "propertyTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -12347,15 +12373,16 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"propertyProRataPremium\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100).toFixed(0);",
+						"calculateValue": "value = ((parseFloat(data[\"propertyProRataPremium\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100);",
 						"key": "PropTax",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}],
 				[{
@@ -12379,7 +12406,6 @@
 						"prefix": "%",
 						"mask": false,
 						"spellcheck": true,
-						"disabled": true,
 						"tableView": true,
 						"defaultValue": "0",
 						"delimiter": false,
@@ -12387,9 +12413,10 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
+						"allowCalculateOverride": true,
 						"key": "liabilityTaxPL",
 						"type": "number",
-						"decimalLimit": 3,
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true
@@ -12404,15 +12431,16 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"liabilityProRataPremium\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100).toFixed(0);",
+						"calculateValue": "value = ((parseFloat(data[\"liabilityProRataPremium\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100);",
 						"key": "LiaTax",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}],
 				[{
@@ -12482,7 +12510,7 @@
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": true,
-						"requireDecimal": false,
+						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray = \"additionalLocations\";\n  var additionalLocationArrayLength = data[additionalLocationArray].length;\n  var value = 0;\n  for (var i = 0; i < additionalLocationArrayLength; i++) {\n    value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n  }\n} else {\n  value = 0;\n}",
@@ -12490,7 +12518,8 @@
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
+						"lockKey": true,
+						"decimalLimit": 2
 					}]
 				}],
 				[{
@@ -12523,7 +12552,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[\"groupTotalAmount\"])||0)",
+						"calculateValue": "if(data.groupProfessionalLiabilitySelect == 'yes'){\n  value = (parseFloat(data[\"groupTotalAmount\"])||0)\n} else {\n  value = 0;\n}",
 						"key": "groupProfessionalLiability",
 						"type": "number",
 						"input": true,
@@ -12591,7 +12620,6 @@
 						"prefix": "%",
 						"mask": false,
 						"spellcheck": true,
-						"disabled": true,
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": false,
@@ -12599,12 +12627,13 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "if(data['propertyDeductibles'] && data[data['propertyDeductibles']]) {\n  value = (data[data[\"propertyDeductibles\"]]||0)\n}",
+						"allowCalculateOverride": true,
 						"key": "propertyDeductiblesPercentage",
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 3
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -12619,7 +12648,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100).toFixed(0)",
+						"calculateValue": "value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100).toFixed(2)",
 						"key": "PropDeductibleCredit",
 						"type": "number",
 						"input": true,
@@ -12694,7 +12723,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) -(parseFloat(data[\"PropDeductibleCredit\"])||0) ;",
+						"calculateValue": "value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) -(parseFloat(data[\"PropDeductibleCredit\"])||0)).toFixed(2);",
 						"key": "totalAmount",
 						"type": "number",
 						"input": true,
@@ -12763,7 +12792,6 @@
 						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false,
-						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
 						"widget": {
 							"type": "calendar",
 							"displayInTimezone": "viewer",
@@ -12940,6 +12968,19 @@
 			"label": "Panel",
 			"path": "page5Panel4"
 		}, {
+			"type": "document",
+			"key": "documents",
+			"dtype": "document",
+			"datype": "document",
+			"dattype": "document",
+			"datatype": "document",
+			"data_type": "document",
+			"label": "Documents",
+			"hideLabel": true,
+			"inputType": "document",
+			"input": 1,
+			"tableView": false
+		}, {
 			"title": "Attachments",
 			"theme": "primary",
 			"breadcrumbClickable": true,
@@ -12982,6 +13023,49 @@
 			"cancel": true,
 			"next": true
 		}
+	}, {
+		"title": "Quote Documents",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page10",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"QuoteDocument\"}]"
+		},
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"type": "panel",
+		"label": "Quote Document",
+		"input": false,
+		"components": [{
+			"label": "quoteDocuments",
+			"redrawOn": "data",
+			"calculateValue": "value = {};\nif(data.quoteDocuments)\n{\n  if(typeof data.quoteDocuments === 'object'){\n    value = data.quoteDocuments;  \n  }else{\n    var documents = {};\n    data.quoteDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
+			"key": "quoteDocuments",
+			"properties": {
+				"data_type": "list"
+			},
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"type": "documentviewer",
+			"key": "documents1",
+			"label": "Quote Information",
+			"calculateValue": "value = (data['quoteDocuments'])",
+			"hideLabel": true,
+			"inputType": "documentviewer",
+			"input": 1,
+			"refreshOn": "quoteDocuments",
+			"tableView": false,
+			"protected": true,
+			"persistent": false
+		}]
 	}, {
 		"input": true,
 		"label": "Submit",
@@ -13073,6 +13157,10 @@
 					"value": "rejected",
 					"label": "Rejected",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"clearOnHide": false,
 				"validate": {
@@ -13085,7 +13173,7 @@
 			}],
 			"path": "page77Panel"
 		}, {
-			"label": "Rejection Reason",
+			"label": "Rejection Reason / On Hold",
 			"reorder": false,
 			"addAnother": "Add More",
 			"addAnotherPosition": "bottom",
@@ -13096,6 +13184,7 @@
 			"defaultValue": [{
 				"reason": ""
 			}],
+			"clearOnHide": false,
 			"validate": {
 				"minLength": 1
 			},
@@ -13105,12 +13194,14 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
+			"customConditional": "show = (data.csrApproved == \"rejected\" || data.csrApproved == \"onHold\")",
 			"type": "datagrid",
 			"input": true,
 			"components": [{
 				"label": "Text Field",
 				"hideLabel": true,
 				"tableView": true,
+				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"customMessage": "Rejection reason is required"
@@ -13135,7 +13226,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 256,
+	"_vid": 496,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13145,13 +13236,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
+		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"name": "diveStoreConsolidation",
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-06-24T06:35:52.419Z",
+	"modified": "2020-07-08T10:54:50.046Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

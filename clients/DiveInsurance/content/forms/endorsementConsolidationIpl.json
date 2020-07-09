@@ -481,6 +481,26 @@
 			}],
 			"type": "panel",
 			"label": "Panel"
+		}, {
+			"label": "single_limit",
+			"defaultValue": "$1,000,000",
+			"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
+			"key": "single_limit",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "annual_aggregate",
+			"defaultValue": "$2,000,000",
+			"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
+			"key": "annual_aggregate",
+			"type": "hidden",
+			"input": true,
+			"tableView": true,
+			"lockKey": true,
+			"hideOnChildrenHidden": false
 		}],
 		"input": false,
 		"path": "pageNaN",
@@ -1050,16 +1070,22 @@
 								"tableView": true,
 								"dataSrc": "custom",
 								"data": {
-									"values": [{}],
+									"values": [{
+										"label": "",
+										"value": ""
+									}],
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "home_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1071,19 +1097,20 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"pattern": "^\\d+$",
+									"customMessage": "Please enter a valid Phone Number",
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -1121,11 +1148,14 @@
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1137,21 +1167,21 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
 									"required": true,
+									"pattern": "^\\d+$",
 									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -1793,26 +1823,6 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
-							}, {
-								"label": "single_limit",
-								"defaultValue": "$1,000,000",
-								"calculateValue": "var singleLimit = 1000000\nif(data.excessLiability == \"excessLiabilityCoverage1000000\"){\n  singleLimit +=1000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage2000000\"){\n  singleLimit +=2000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage3000000\"){\n  singleLimit +=3000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage4000000\"){\n  singleLimit +=4000000; \n}\nif(data.excessLiability == \"excessLiabilityCoverage9000000\"){\n  singleLimit +=9000000; \n}\nvalue = singleLimit",
-								"key": "single_limit",
-								"type": "hidden",
-								"input": true,
-								"tableView": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "annual_aggregate",
-								"defaultValue": "$2,000,000",
-								"calculateValue": "value = parseFloat(data.single_limit) + 1000000",
-								"key": "annual_aggregate",
-								"type": "hidden",
-								"input": true,
-								"tableView": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -2069,7 +2079,7 @@
 					"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length > 0 && (data.cylinder == 'cylinderInstructor' || data.cylinder == 'cylinderInspectorAndInstructor')){show = true;} else {show = false;}",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "Cylinder Instructor Attachments",
+					"label": "Cylinder Inspection Instructor Attachments",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -2232,9 +2242,9 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "panel4",
-				"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length == 0 && (data.cylinder == \"cylinderInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  if(data.cylinderInstructor_attachments == undefined){\n    show = true;\n  } else {\n  show = false;\n  }\n}",
+				"customConditional": "if(data.cylinderInstructor_attachments && data.cylinderInstructor_attachments.length == 0 && (data.cylinder == \"cylinderInspectionInstructor\" || data.cylinder == \"cylinderInspectorAndInstructor\" )){\n  show = true;\n}else{\n  if(data.cylinderInstructor_attachments == undefined){\n    show = true;\n  } else {\n  show = false;\n  }\n}",
 				"type": "panel",
-				"label": "Cylinder Instructor Attachments",
+				"label": "Cylinder Inspection Instructor Attachments",
 				"input": false,
 				"components": [{
 					"label": "HTML",
@@ -2506,8 +2516,24 @@
 			"next": true
 		}
 	}, {
-		"type": "panel",
 		"title": "Additional Insured",
+		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page4",
+		"conditional": {
+			"show": true,
+			"when": "endorsement_options",
+			"eq": "modify_additionalInsured"
+		},
+		"type": "panel",
+		"label": "Additional Insured",
 		"components": [{
 			"label": "AdditionalInsureds",
 			"attrs": [{
@@ -2897,6 +2923,9 @@
 							"value": "no",
 							"shortcut": ""
 						}],
+						"validate": {
+							"required": true
+						},
 						"key": "doYouHaveAWrittenContract",
 						"type": "radio",
 						"input": true
@@ -2943,18 +2972,7 @@
 				"lockKey": true
 			}]
 		}],
-		"input": false,
-		"key": "page4",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false
+		"input": false
 	}, {
 		"title": "Payment",
 		"theme": "primary",
@@ -3000,7 +3018,7 @@
 			"tableView": false
 		}, {
 			"label": "payment_fields",
-			"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":\"Not Applicable\",\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":0,\"total_amount\":data.amount});",
+			"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":\"Not Applicable\",\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":0,\"total_amount\":data.amount});",
 			"key": "payment_fields",
 			"type": "hidden",
 			"input": true,
@@ -3032,7 +3050,8 @@
 					}],
 					"clearOnHide": false,
 					"validate": {
-						"required": true
+						"required": true,
+						"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 					},
 					"key": "paymentOptions",
 					"properties": {
@@ -3288,6 +3307,10 @@
 					"label": "Rejected",
 					"value": "rejected",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"validate": {
 					"required": true,
@@ -3321,6 +3344,7 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
+			"customConditional": "show = (data.approved == \"rejected\" || data.approved == \"onHold\")",
 			"type": "datagrid",
 			"input": true,
 			"components": [{
@@ -3330,7 +3354,7 @@
 				"type": "well",
 				"input": false,
 				"components": [{
-					"label": "Reason for Rejection",
+					"label": "Reason for Rejection / On Hold",
 					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
@@ -3373,7 +3397,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 267,
+	"_vid": 287,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3385,7 +3409,7 @@
 	"properties": {
 		"showNext": "true",
 		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsement\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"CleanUpDelegate\"},{\"command\" : \"delegate\", \"delegate\":\"ProcessEndorsementAttachments\"},{\"command\" : \"submitWorkflow\"}]",
 		"showPrevious": "false",
 		"showCancel": "true",
 		"clickable": "false"
@@ -3394,6 +3418,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-06-24T05:16:20.621Z",
+	"modified": "2020-07-07T09:57:41.665Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

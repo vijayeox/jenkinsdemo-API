@@ -65,7 +65,11 @@ class PocketCardMenu extends AbstractAppDelegate
                 }
                 else{
                     if(isset($value['pocketCardProductType'])){
-                        $productName = json_decode($value['pocketCardProductType'], true);
+                        if(is_string($value['pocketCardProductType'])){
+                            $productName = json_decode($value['pocketCardProductType'], true);
+                        } else {
+                            $productName = array();
+                        }
                         unset($value['pocketCardProductType']);
                         $value['pocketCardProductType'] = '';
                         if(isset($productName['individualProfessionalLiability']) && ($productName['individualProfessionalLiability'] == 1)){

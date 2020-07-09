@@ -9,7 +9,6 @@
 	  <hr class = "s_hrtag"></hr>
       <center><b>Store Location:&nbsp<span class ="store_location"> {$address1},{$address2},{$city},{$state},{$country},{$zip}</span></b></center>
       <hr class = "s_hrtag"></hr>
-      <br/>
 		<div class="section_col">
 			<div class ="sec1">
 				<p class ="title">Propery Coverages</p>
@@ -40,8 +39,13 @@
 						${$dspropTotal|number_format}
 					</p>
 					<p></p>
-					<p class = "sec_title2">                        
-                            ${$lossOfBusIncome|number_format}</p>
+					<p class = "sec_title2">
+
+						{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}
+                            ${$lossOfBusIncome|number_format}
+                        {else}
+                            $0
+                        {/if}</p>
 					<p class = "sec_title2">
 						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
                             ${$dspropreplacementvalue|number_format}
@@ -86,7 +90,6 @@ certificate.</p>
 
 <p  class = "policy_notice">Notice of cancelation: If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of
 premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.</p>
-
 {if $state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/AK.tpl"}</b>
@@ -281,7 +284,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
-				<center><p class = "notice">both of 
+				<center><p class = "notice">both of
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Vermont'}
@@ -308,4 +311,3 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 	</div>
 </body>
 </html>
-

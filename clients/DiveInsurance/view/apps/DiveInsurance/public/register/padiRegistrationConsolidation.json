@@ -53,6 +53,21 @@
 		"tableView": true,
 		"lockKey": true
 	}, {
+		"label": "policyStartYear",
+		"protected": true,
+		"calculateValue": "var presentYear = moment().format('YYYY');\nvar presentMonth = moment().month();\nvar presentDate = moment().format('DD');\nif(productName != 'DiveBoat'){\n  if(presentMonth == 5 && presentDate <= 30 && presentYear == 2020){\n\t  value = presentYear;\n  }else if(presentMonth == 5 && presentDate == 30){\n    value = presentYear;\n  }else if(presentMonth > 5 && presentMonth <= 11){\n\t  value = presentYear;\n  }else if(presentMonth <= 5){\n\t  value = presentYear - 1;\n  }  \n}else{\n  if(presentMonth == 6 && presentDate <= 22 && presentYear == 2020){\n\t  value = presentYear;\n  }else if(presentMonth == 6 && presentDate >= 22){\n    value = presentYear;\n  }else if(presentMonth > 6 && presentMonth <= 11){\n\t  value = presentYear;\n  }else if(presentMonth <= 6){\n\t  value = presentYear - 1;\n  }  \n}",
+		"key": "policyStartYear",
+		"type": "hidden",
+		"input": true,
+		"tableView": false
+	}, {
+		"label": "policyEndYear",
+		"calculateValue": "value = parseInt(data.policyStartYear) + 1;",
+		"key": "policyEndYear",
+		"type": "hidden",
+		"input": true,
+		"tableView": false
+	}, {
 		"label": "Columns",
 		"input": false,
 		"tableView": false,
@@ -64,8 +79,8 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2020 through 12:01 AM June 30, 2021</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2021.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-				"refreshOnChange": false,
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, {{data.policyStartYear}} through 12:01 AM June 30, {{data.policyEndYear}}</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, {{data.policyEndYear}}.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"refreshOnChange": true,
 				"tableView": false,
 				"key": "panelColumns3Content",
 				"customConditional": "show = false;\nif(productName == 'IPLRegister' || productName == 'EFR' || productName == 'DiveStore'){\n   show =true;\n}",
@@ -79,8 +94,8 @@
 					"value": "",
 					"attr": ""
 				}],
-				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2020 through 12:01 AM July 22, 2021  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2021.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-				"refreshOnChange": false,
+				"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, {{data.policyStartYear}} through 12:01 AM July 22, {{data.policyEndYear}}  \t</font></b></center><br/>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, {{data.policyEndYear}}.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> </center><br/>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member & Resort Members</font></b></center>\n \t \t <br/>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+				"refreshOnChange": true,
 				"tableView": false,
 				"key": "panelColumns3Content1",
 				"customConditional": "show = false;\nif(productName == 'DiveBoat'){\n   show =true;\n}",
@@ -159,7 +174,7 @@
 						"customMessage": "Please provide a valid PADI Number",
 						"max": null
 					},
-					"key": "padi",
+					"key": "padiNumber",
 					"logic": [{
 						"name": "Check PADI Verified",
 						"trigger": {
@@ -286,11 +301,12 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "Content",
+					"tag": "div",
 					"attrs": [{
 						"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
 						"attr": "style"
 					}],
-					"content": "PADI number already Registered!",
+					"content": "<div>PADI number already Registered!</div> <div>Please proceed to Login page.</div>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "panelColumnsContent3",
@@ -379,6 +395,22 @@
 					"hideOnChildrenHidden": false,
 					"hideLabel": true
 				}, {
+					"label": "padi",
+					"calculateValue": "value = \"\";\nif((productName == 'DiveBoat' && (data.businessPadiVerified == 'false' || data.businessPadiVerified === false)) || productName != 'DiveStore'){\n  value = data.padiNumber;\n}",
+					"key": "padi",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "business_padi",
+					"calculateValue": "value = \"\";\nif(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n  value = data.padiNumber;\n}",
+					"key": "business_padi",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
+				}, {
 					"label": "padiEmpty",
 					"key": "padi_empty",
 					"type": "hidden",
@@ -406,14 +438,15 @@
 					"defaultValue": "false",
 					"hideOnChildrenHidden": false
 				}, {
+					"label": "identifier_field",
+					"defaultValue": "padi",
+					"key": "identifier_field",
+					"type": "hidden",
 					"input": true,
 					"tableView": true,
-					"key": "identifier_field",
-					"label": "identifier_field",
-					"type": "hidden",
 					"lockKey": true,
-					"defaultValue": "padi",
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"calculateValue": "if(productName == 'DiveStore' || (productName == 'DiveBoat' && (data.businessPadiVerified == 'true' || data.businessPadiVerified === true))){\n    value = 'business_padi';  \n}else{\n    value = 'padi';\n}"
 				}, {
 					"input": true,
 					"tableView": true,
@@ -434,7 +467,6 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "Username",
-					"calculateValue": "if(data.padiVerified == 'true' || data.businessPadiVerified == 'true' || data.businessPadiVerified === true  || data.padiVerified === true || data.padiNotFound == 'true' || data.padiNotFound === true){\nvalue = data.padi;\n}",
 					"key": "username",
 					"type": "hidden",
 					"input": true,
@@ -466,7 +498,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "subject",
-					"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data.padi;",
+					"calculateValue": "value = \"PADI Endorsed Insurance Portal – \" + data[data.identifier_field];",
 					"key": "subject",
 					"type": "hidden",
 					"input": true,
@@ -499,7 +531,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "businessInformation",
-		"customConditional": "if ((data[\"verified\"] === true && (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\")) && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")) {\n  if(data['product'] == 'Dive Store' || data['product'] == 'Dive Boat'){\n  if(data.businessPadiVerified===true||data.businessPadiVerified==\"true\"){\n    show =true;\n  } else {\n    console.log(data);\n    if(data['product'] == 'Dive Store'){\n      if((data.padiNotFound == \"true\" || data.padiNotFound == true)||(data.businessPadiNotFound == \"true\" || data.businessPadiNotFound == true)){\n        show = true;\n      } else {\n        show = false;\n      }\n    } else {\n      show = false;\n    }\n  }\n} else {\n  show = false;\n}\n} else {\n  show = false;\n}",
+		"customConditional": "if ((data[\"verified\"] === true && (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\")) && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")) {\n  if(data['product'] == 'Dive Store' || data['product'] == 'Dive Boat'){\n  if(data.businessPadiVerified===true||data.businessPadiVerified==\"true\"){\n    show =true;\n  } else {\n    if(data['product'] == 'Dive Store'){\n      if((data.padiNotFound == \"true\" || data.padiNotFound == true)||(data.businessPadiNotFound == \"true\" || data.businessPadiNotFound == true)){\n        show = true;\n      } else {\n        show = false;\n      }\n    } else {\n      show = false;\n    }\n  }\n} else {\n  show = false;\n}\n} else {\n  show = false;\n}",
 		"type": "panel",
 		"label": "Business Information",
 		"input": false,
@@ -1030,8 +1062,7 @@
 						"spellcheck": false,
 						"tableView": true,
 						"validate": {
-							"required": true,
-							"custom": "if(data.zip && data.zip != ''){\n  if(data.zip.length <= 12){\n      valid = (data.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+							"required": true
 						},
 						"key": "zip",
 						"type": "textfield",
@@ -1249,8 +1280,7 @@
 						"label": "Zip Code",
 						"tableView": true,
 						"validate": {
-							"required": true,
-							"custom": "if(data.physical_zip && data.physical_zip != ''){\n  if(data.physical_zip.length <= 12){\n      valid = (data.physical_zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.physical_zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+							"required": true
 						},
 						"key": "physical_zip",
 						"type": "textfield",
@@ -1317,14 +1347,12 @@
 					}, {
 						"components": [{
 							"label": "Home or Work Phone",
-							"mask": false,
-							"spellcheck": true,
 							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
 							"validate": {
-								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+								"pattern": "^\\d+$",
+								"customMessage": "Please enter a valid Phone Number",
+								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+								"step": "any"
 							},
 							"key": "home_phone_number",
 							"logic": [{
@@ -1373,7 +1401,9 @@
 									"text": "Home or Work Phone"
 								}]
 							}],
-							"type": "number",
+							"type": "textfield",
+							"delimiter": false,
+							"requireDecimal": false,
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -1433,19 +1463,18 @@
 					}, {
 						"components": [{
 							"label": "Mobile Phone",
-							"mask": false,
-							"spellcheck": true,
 							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
 							"validate": {
 								"required": true,
+								"pattern": "^\\d+$",
 								"customMessage": "Please enter a valid Mobile Phone number",
-								"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+								"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+								"step": "any"
 							},
 							"key": "phone_number",
-							"type": "number",
+							"type": "textfield",
+							"delimiter": false,
+							"requireDecimal": false,
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
@@ -1537,7 +1566,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 124,
+	"_vid": 166,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1551,6 +1580,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-06-23T06:46:47.324Z",
+	"modified": "2020-07-08T08:10:58.684Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

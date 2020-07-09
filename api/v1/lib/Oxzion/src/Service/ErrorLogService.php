@@ -158,10 +158,10 @@ class ErrorLogService extends AbstractService
                 $params = (null !== json_decode($error['params'],true))?json_decode($error['params'],true):$error['params'];
                 switch ($error['error_type']) {
                     case 'activemq_topic':
-                            $this->messageProducer->sendTopic($params['to'],$error['payload']);
+                            $this->messageProducer->sendTopic($error['payload'],$params['to']);
                         break;
                     case 'activemq_queue':
-                            $this->messageProducer->sendTopic($params['to'],$error['payload']);
+                            $this->messageProducer->sendQueue($error['payload'],$params['to']);
                         break;
                     case 'form':
                         if(isset($error['params'])){

@@ -107,3 +107,51 @@ ox_query:
     org_id: 1
     isdeleted: 0
     version: 1
+  -
+    id: 120
+    uuid: '12989e0d-3344-40e2-0054-87de247b9ce1'
+    name: 'testSessionUserName'
+    datasource_id: 3
+    configuration: '{"app_name":"crmnew","group":"owner_username","field":"actual_amount","operation":"sum","filter":[["industry","==","Insurance"],"AND",[["owner_username","==","john"],"OR",["owner_username","==","session:username"]]]}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 121
+    uuid: '12989e0d-3344-40e2-1154-87de247b9ce1'
+    name: 'testSessionUserId'
+    datasource_id: 3
+    configuration: '{"app_name":"crmnew","group":"owner_username","field":"actual_amount","operation":"sum","filter":[["industry","==","Insurance"],"AND",[["owner_username","==","john"],"OR",["owner_username","==","session:userid"]]]}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 122
+    uuid: '22229e0d-f6cd-40e2-9154-66de247b9ce1'
+    name: 'querySumNew'
+    datasource_id: 3
+    configuration: '{"app_name":"crmnew","operation":"count","group":"owner_username","filter":["status","==","new"]}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1     
+  -
+    id: 123
+    uuid: '22229e0d-f6cd-40e2-9154-77de247b9ce1'
+    name: 'querySumClosed'
+    datasource_id: 3
+    configuration: '{"app_name":"crmnew","operation":"count","group":"owner_username","filter":["status","==","closed"]}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1     

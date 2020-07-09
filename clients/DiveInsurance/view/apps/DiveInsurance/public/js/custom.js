@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
           Swal.fire({
             title: "Login Failed",
             html:
-              '<div style="font-size: 17px">The username and/or password is incorrect!  <br /> Please try again.</div>',
+              '<div style="font-size: 17px">The Username and/or password is incorrect!  <br /> Please try again.</div>',
             icon: "error",
             confirmButtonText: "Forgot Password ?",
             showCancelButton: true
@@ -117,14 +117,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function forgotPassword() {
     Swal.fire({
-      title: "Please enter your username",
+      title: "Please enter your Username / PADI Number",
       input: "text",
       inputAttributes: {
         autocapitalize: "off"
       },
       inputValidator: value => {
         if (!value) {
-          return "Please enter your username!";
+          return "Please enter your Username / PADI Number!";
         }
       },
       confirmButtonText: "Confirm",
@@ -138,13 +138,17 @@ document.addEventListener("DOMContentLoaded", function() {
           body: formData
         })
           .then(response => {
+            if (response.status == 417) {
+              Swal.showValidationMessage(`We do not have an email on your account.<br/>Contact Us:Helpline Ph: +1 216-452-0324 | Email: padi-professionals@hubinternational.com`);
+              return;
+            }
             if (!response.ok) {
               throw new Error(response.statusText);
             }
             return response.json();
           })
           .catch(error => {
-            Swal.showValidationMessage(`Request failed: Username not found.`);
+            Swal.showValidationMessage(`Request failed: Username / PADI Number not found.`);
           });
       }
     }).then(result => {
@@ -152,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function() {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Verification Mail has been sent",
+          title: "Verification Mail has been sent to " + result.value.data.email,
           showConfirmButton: false,
           timer: 2100
         });

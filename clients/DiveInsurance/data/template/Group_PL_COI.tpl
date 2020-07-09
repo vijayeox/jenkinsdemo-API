@@ -248,7 +248,26 @@
 		{assign var=list value=$groupAdditionalInsured|json_decode:true}
 		{foreach from=$list item=$additional}
 	    		<p class = "grpai_list">
-	    			&nbsp&nbsp&nbsp{$additional.name}
+	    			&nbsp&nbsp&nbsp{$additional.name} {if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
+		    			{if $additional.businessRelation == "confinedWaterTrainingLocation"}
+		    			 	Confined Water Training Location 
+		    			{elseif $additional.businessRelation == "openWaterTrainingLocation"} 
+		    				Open Water Training Location 
+		    			{elseif $additional.businessRelation == "diveBoatOwner"} 
+		    				Dive Boat Owner
+		    			{elseif $additional.businessRelation == "mortgageeLossPayee"} 
+		    				Mortgagee / Loss Payee
+		    			{elseif $additional.businessRelation == "landlord"}
+		    				Landlord
+		    			{elseif $additional.businessRelation == "governmentEntityPermitRequirement"} 
+		    			    Government Entity - Permit Requirement
+		    			{elseif $additional.businessRelation == "diveStore"} 
+		    			   Dive Store
+		    			{elseif $additional.businessRelation == "trainingAgency"} 
+		    			   Training Agency
+		    			{elseif $additional.businessRelation == "other"} 									   {$additional.businessRelationOther}
+		    			{/if})
+		    			{/if}
 	    		</p>
     		{/foreach}
 	{/if}

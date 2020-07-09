@@ -14,6 +14,7 @@ class Module
     private static $logInitialized = false;
     public function init(ModuleManager $moduleManager)
     {
+        ini_set('max_execution_time', 100); 
         $events = $moduleManager->getEventManager();
         // Registering a listener at default priority, 1, which will trigger
         // after the ConfigListener merges config.
@@ -354,7 +355,8 @@ class Module
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\FileService::class),
                         $container->get(Service\WorkflowInstanceService::class),
-                        $container->get(Service\ActivityInstanceService::class)
+                        $container->get(Service\ActivityInstanceService::class),
+                        $container->get(Service\UserService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {

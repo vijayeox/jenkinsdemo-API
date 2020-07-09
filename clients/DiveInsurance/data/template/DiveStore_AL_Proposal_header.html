@@ -18,7 +18,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','state_in_short','country','zip','certificate_no','padi','end_date','policy_id','address1','address2','business_padi'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -71,7 +71,7 @@
           <p class = "details uppercase"><span class ="firstname"></span>&nbsp<span class ="lastname"></span></p>
           <p class = "details uppercase"><span class ="address1"></span></p>
           <p class = "details uppercase"><span class ="address2"></span></p>
-          <p class = "details uppercase"><span class ="city"></span>, <span class ="state"></span>&nbsp<span class ="zip"></span></p>
+          <p class = "details uppercase"><span class ="city"></span>, <span class ="state_in_short"></span>&nbsp<span class ="zip"></span></p>
           <p class = "details uppercase"><span class ="country"></span></p>
       </div>
       <div class ="content2">
@@ -81,7 +81,7 @@
           <p class = "p_margin"><b>Expiration Date:</b></p>
         </div>
         <div class = "certificate_data1">
-          <p class = "p_margin"><span class ="padi"></span></p>
+          <p class = "p_margin"><span class ="business_padi"></span></p>
           <p class = "p_margin"><span class ="start_date"></span></p>
           <p class = "p_margin"><span class ="end_date"></span></p>
         </div>

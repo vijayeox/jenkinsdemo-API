@@ -89,4 +89,4 @@ form:
         uuid: e980dac2-2ef7-467a-8e0d-863078c458e0
         description: 'Demo Form'
         entity: 'Demo Entity'
-        template_file: copyLocationForm.json
+        template_file: dealerWorkbook.json

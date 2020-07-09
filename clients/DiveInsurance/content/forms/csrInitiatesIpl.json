@@ -10,6 +10,21 @@
 		"theme": "primary",
 		"tableView": false,
 		"components": [{
+			"label": "policyStartYear",
+			"protected": true,
+			"calculateValue": "var presentYear = moment().format('YYYY');\nvar presentMonth = moment().month();\nvar presentDate = moment().format('DD');\nif(presentMonth == 5 && presentDate <= 30 && presentYear == 2020){\n  value = presentYear;\n}else if(presentMonth == 5 && presentDate == 30){\n  value = presentYear;\n}else if(presentMonth > 5 && presentMonth <= 11){\n  value = presentYear;\n}else if(presentMonth <= 5){\n  value = presentYear - 1;\n}",
+			"key": "policyStartYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "policyEndYear",
+			"calculateValue": "value = parseInt(data.policyStartYear) + 1;",
+			"key": "policyEndYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Columns",
 			"columns": [{
 				"components": [{
@@ -18,8 +33,8 @@
 						"value": "",
 						"attr": ""
 					}],
-					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, 2019 through 12:01 AM June 30, 2020  \t</font></b></center>\n</br>\n<br/>\n<center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, 2019.\n   THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> \n</center>\n</br>\n<br/>\n</br>\n<center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
-					"refreshOnChange": false,
+					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM June 30, {{data.policyStartYear}} through 12:01 AM June 30, {{data.policyEndYear}}  \t</font></b></center>\n</br>\n<br/>\n<center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JUNE 30, {{data.policyEndYear}}.\n   THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE ON THE DATE RECEIVED.\t</b> \n</center>\n</br>\n<br/>\n</br>\n<center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"refreshOnChange": true,
 					"tableView": false,
 					"key": "panelColumns4ColumnsContent",
 					"type": "htmlelement",
@@ -210,7 +225,7 @@
 						"customClass": "alignCenter",
 						"tableView": false,
 						"key": "changePadi",
-						"customConditional": "if ((data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") || \n((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') && (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ||\n((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) \n    || (data.verified !== true && data.verified != \"true\") || (data['businessPadiVerified']===true || data['businessPadiVerified']=='true')) {\n    show = false;\n} else {\n    show = true;\n}",
+						"customConditional": "if(data.isRenewalFlow && data.isRenewalFlow == true){\n\tshow = false;\n}else if (data.isRenewalFlow != true || data.isRenewalFlow != \"true\" || data.isRenewalFlow == \"\") {\n\n\tif ((data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") ||\n\t\t((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') && (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ||\n\t\t((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) ||\n\t\t(data.verified !== true && data.verified != \"true\") || (data['businessPadiVerified'] === true || data['businessPadiVerified'] == 'true')) {\n\t\tshow = false;\n\t} else {\n\t\tshow = true;\n\t}\n\n} else {\n\tshow = false;\n}",
 						"logic": [{
 							"name": "Event Handler",
 							"trigger": {
@@ -257,6 +272,22 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
+						"label": "privileges",
+						"protected": true,
+						"key": "privileges",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "isRenewalFlow",
+						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
+						"key": "isRenewalFlow",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
 						"input": true,
 						"tableView": true,
 						"key": "policy_exists",
@@ -291,12 +322,13 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "identifier_field",
+						"defaultValue": "padi",
+						"calculateValue": "value = 'padi';",
+						"key": "identifier_field",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "identifier_field",
-						"label": "identifier_field",
-						"type": "hidden",
-						"defaultValue": "padi",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -375,13 +407,12 @@
 						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "Username",
+						"key": "username",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "username",
-						"label": "Username",
-						"type": "hidden",
 						"lockKey": true,
-						"calculateValue": "value = data['padi'];",
 						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
@@ -1050,7 +1081,7 @@
 								},
 								"valueProperty": "dial_code",
 								"dataType": "auto",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"clearOnHide": false,
 								"calculateValue": "if(data.country && data['phoneList']){\nlet obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
@@ -1070,19 +1101,20 @@
 						}, {
 							"components": [{
 								"label": "Home or Work Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"pattern": "^\\d+$",
+									"customMessage": "Please enter a valid Phone Number",
+									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "home_phone_number",
-								"type": "number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "home_phone",
 								"calculateValue": "value = data.home_country_code + \"\"+ data.home_phone_number",
@@ -1120,11 +1152,14 @@
 									"custom": "values = data['phoneList']"
 								},
 								"valueProperty": "dial_code",
-								"template": "<span>{{item.name}}({{ item.dial_code }})</span>",
+								"template": "<span>{{ item.dial_code }}</span>",
 								"selectThreshold": 0.3,
 								"calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
 								"key": "phone_country_code",
 								"type": "select",
+								"indexeddb": {
+									"filter": {}
+								},
 								"input": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -1136,21 +1171,21 @@
 						}, {
 							"components": [{
 								"label": "Mobile Phone",
-								"mask": false,
-								"spellcheck": true,
 								"tableView": false,
-								"delimiter": false,
-								"requireDecimal": false,
-								"inputFormat": "plain",
 								"validate": {
 									"required": true,
+									"pattern": "^\\d+$",
 									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}"
+									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"step": "any"
 								},
 								"key": "phone_number",
-								"type": "number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
 								"input": true,
-								"hideOnChildrenHidden": false
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
@@ -1263,8 +1298,22 @@
 		},
 		"collapsible": false
 	}, {
-		"type": "panel",
 		"title": "Coverage",
+		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "coveragePage",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
+		},
+		"type": "panel",
+		"label": "Coverage",
 		"components": [{
 			"key": "page3Panel3",
 			"input": false,
@@ -1282,7 +1331,7 @@
 						"value": "",
 						"label": ""
 					}],
-					"custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n\t    if(currentDate.year() === 2020){\n\t   \t\tconsole.log('Skipping JUNE')\n\t    }else{\n\t        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n\t    }\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}"
+					"custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n\t        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}\nif(moment().year() == 2020 && moment().month() == 5 && moment().date() <= 30){\nvalues.shift();\n}"
 				},
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
@@ -1295,6 +1344,7 @@
 					"delegate": "RateCard",
 					"post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
 				},
+				"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n  show = false;\n}\nelse{\n  show = true;\n}",
 				"type": "select",
 				"indexeddb": {
 					"filter": {}
@@ -1302,9 +1352,134 @@
 				"input": true,
 				"lockKey": true
 			}, {
+				"label": "Columns",
+				"input": false,
+				"tableView": false,
+				"key": "panelColumns1",
+				"columns": [{
+					"components": [{
+						"label": "Policy Start Date",
+						"displayInTimezone": "utc",
+						"useLocaleSettings": true,
+						"allowInput": false,
+						"format": "MM-dd-yyyy",
+						"tableView": false,
+						"enableMinDateInput": false,
+						"datePicker": {
+							"minDate": "2020-06-30T00:00:00+05:30",
+							"disableWeekends": false,
+							"disableWeekdays": false,
+							"datepickerMode": "day"
+						},
+						"enableMaxDateInput": false,
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
+						"redrawOn": "data",
+						"clearOnHide": false,
+						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n  if((data.start_date && data.start_date != \"\") ){\n\tvalue = data.start_date;\n  }\n} else {\n  if ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-13')))) {\n\t\t\tvalue = moment('2020-06-30').format(\"MM-DD-YYYY\");\n\t}\n  if(value == \"\"){\n\tvalue = moment().format(\"MM-DD-YYYY\");\n  }\n}",
+						"allowCalculateOverride": true,
+						"validate": {
+							"required": true,
+							"customMessage": "Please select the Policy Start Date"
+						},
+						"errorLabel": "Policy Start Date",
+						"key": "csrPolicyPeriod",
+						"properties": {
+							"delegate": "RateCard",
+							"post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
+						},
+						"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n  show = true;\n}\nelse{\n  show = false;\n}",
+						"type": "datetime",
+						"input": true,
+						"widget": {
+							"type": "calendar",
+							"displayInTimezone": "utc",
+							"language": "en",
+							"useLocaleSettings": true,
+							"allowInput": false,
+							"mode": "single",
+							"enableTime": false,
+							"noCalendar": false,
+							"format": "MM-dd-yyyy",
+							"hourIncrement": 1,
+							"minuteIncrement": 1,
+							"time_24hr": true,
+							"minDate": "2020-06-30T00:00:00+05:30",
+							"disableWeekends": false,
+							"disableWeekdays": false,
+							"maxDate": null
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"width": 5,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Policy End Date",
+						"displayInTimezone": "utc",
+						"useLocaleSettings": true,
+						"allowInput": false,
+						"format": "MM-dd-yyyy",
+						"disabled": true,
+						"tableView": false,
+						"enableMinDateInput": false,
+						"datePicker": {
+							"disableWeekends": false,
+							"disableWeekdays": false,
+							"datepickerMode": "day"
+						},
+						"enableMaxDateInput": false,
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
+						"clearOnHide": false,
+						"calculateValue": "value = data.end_date;",
+						"key": "csrPolicyEndDate",
+						"properties": {
+							"data_type": "Date"
+						},
+						"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n  show = true;\n}\nelse{\n  show = false;\n}",
+						"type": "datetime",
+						"input": true,
+						"widget": {
+							"type": "calendar",
+							"displayInTimezone": "utc",
+							"language": "en",
+							"useLocaleSettings": true,
+							"allowInput": false,
+							"mode": "single",
+							"enableTime": false,
+							"noCalendar": false,
+							"format": "MM-dd-yyyy",
+							"hourIncrement": 1,
+							"minuteIncrement": 1,
+							"time_24hr": true,
+							"minDate": null,
+							"disableWeekends": false,
+							"disableWeekdays": false,
+							"maxDate": null
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"width": 5,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"type": "columns",
+				"hideLabel": true,
+				"path": "panelColumns"
+			}, {
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
+				"calculateValue": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) {\n\tif (data.csrPolicyPeriod && moment(data.csrPolicyPeriod)) {\n\t\t\tvalue = moment(data.csrPolicyPeriod).format(\"YYYY-MM-DD\");\n\t}\n}else{\nvar startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1)\n\t&& (moment().isSameOrBefore(moment('2020-07-13')))) {\n\tvalue = startRange.format(\"YYYY-MM-DD\");\n} else {\n\tvalue = moment.max(today, startRange).format(\"YYYY-MM-DD\");\n}\n}",
 				"key": "start_date",
 				"properties": {
 					"data_type": " Date"
@@ -1324,6 +1499,13 @@
 				"input": true,
 				"tableView": true,
 				"lockKey": true
+			}, {
+				"label": "setCsrPolicyPeriod",
+				"calculateValue": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\nvalue = true;\n}",
+				"key": "setCsrPolicyPeriod",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}],
 			"type": "panel",
 			"tooltip": "Select a valid policy period from the list",
@@ -1342,7 +1524,7 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "coverageOptions",
-			"customConditional": "show = data['start_date_range'].value ? true : false;",
+			"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n show = true;\n}else{\n show = (data['start_date_range'].value)? true : false;\n}",
 			"type": "panel",
 			"label": "Coverage and Options",
 			"input": false,
@@ -1370,7 +1552,6 @@
 							},
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
-							"clearOnHide": false,
 							"validate": {
 								"required": true
 							},
@@ -1708,6 +1889,8 @@
 								"label": "ScubaFit Instructor - Declined",
 								"shortcut": ""
 							}],
+							"clearOnHide": false,
+							"customDefaultValue": "value = \"scubaFitInstructorDeclined\";",
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -1830,6 +2013,7 @@
 								"label": "Cylinder Inspector Or Cylinder Inspection Instructor - Declined",
 								"shortcut": ""
 							}],
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -1962,6 +2146,7 @@
 								"label": "Equipment Liability Coverage - Declined",
 								"shortcut": ""
 							}],
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -2023,7 +2208,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "equipmentDownPayment",
-							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayment']){\n  value = data[data['equipment']+'_downpayment'];\n}",
+							"calculateValue": "if(data['equipment'] &&data[data['equipment']+'_downpayment']){\n  value = data[data['equipment']+'_downpayment'];\n} else {\n  value = 0;\n}",
 							"key": "equipmentDownPayment",
 							"type": "hidden",
 							"input": true,
@@ -2093,6 +2278,7 @@
 								"value": "excessLiabilityCoverage9000000",
 								"shortcut": ""
 							}],
+							"clearOnHide": false,
 							"validate": {
 								"required": true,
 								"customMessage": "Please select an option"
@@ -2528,7 +2714,7 @@
 					"dattype": "documentviewer",
 					"datatype": "documentviewer",
 					"data_type": "documentviewer",
-					"label": "Cylinder Instructor Attachments",
+					"label": "Cylinder Inspection Instructor Attachments",
 					"hideLabel": true,
 					"inputType": "documentviewer",
 					"input": 1,
@@ -2586,7 +2772,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "techRecAttachment",
-				"customConditional": "if (data.privileges){\n    show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}else{  \n    show = false;\n}",
+				"customConditional": "if (data.privileges){\n    show = (data.tecRecEndorsment === 'withTecRecEndorsementForSelectionAbove') ? true: false;\n}else{  \n    show = false;\n}",
 				"type": "panel",
 				"label": "TecRec Attachments",
 				"input": false,
@@ -2639,7 +2825,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "cylinderInspectorAttachments",
-				"customConditional": "if (data.privileges){\n  show = ((data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\") && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.cylinder == \"cylinderInspector\" || data.cylinder == \"cylinderInspectorAndInstructor\") ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Cylinder Inspector Attachments",
 				"input": false,
@@ -2744,7 +2930,7 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "scubaFitAttachments",
-				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor' && (data.CSRReviewRequired == false || data.CSRReviewRequired == 'false')) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"customConditional": "if (data.privileges){\n  show = (data.scubaFit === 'scubaFitInstructor') ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "panel",
 				"label": "Scuba Fit Attachments",
 				"input": false,
@@ -3017,18 +3203,7 @@
 			"label": "Panel"
 		}],
 		"input": false,
-		"key": "coveragePage",
-		"theme": "primary",
-		"tableView": false,
-		"lockKey": true,
-		"label": "Coverage",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false
+		"lockKey": true
 	}, {
 		"type": "panel",
 		"title": "Special Notice",
@@ -3903,6 +4078,7 @@
 								},
 								"selectThreshold": 0.3,
 								"validate": {
+									"required": true,
 									"customMessage": "Please select the Business Relation with the Additional Insured"
 								},
 								"errorLabel": "Additional Insured Business Relation",
@@ -3981,6 +4157,9 @@
 							"value": "no",
 							"shortcut": ""
 						}],
+						"validate": {
+							"required": true
+						},
 						"key": "doYouHaveAWrittenContract",
 						"type": "radio",
 						"input": true
@@ -4040,8 +4219,20 @@
 		},
 		"collapsible": false
 	}, {
-		"type": "panel",
 		"title": "Payment Information",
+		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page6",
+		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}",
+		"type": "panel",
+		"label": "Payment Information",
 		"components": [{
 			"key": "page6Panel",
 			"input": false,
@@ -4125,7 +4316,7 @@
 				"tableView": false
 			}, {
 				"label": "payment_fields",
-				"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinance,\"policy_type\":\"New\",\"installment_amount\":data.installmentAmount,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.amountPayable});",
+				"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinanceSelect,\"policy_type\":\"New\",\"installment_amount\":data.installmentAmount,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.amountPayable});",
 				"key": "payment_fields",
 				"type": "hidden",
 				"input": true,
@@ -4328,7 +4519,8 @@
 						}],
 						"clearOnHide": false,
 						"validate": {
-							"required": true
+							"required": true,
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -4526,19 +4718,7 @@
 			"breadcrumb": "none",
 			"label": "Panel"
 		}],
-		"input": false,
-		"key": "page6",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Payment Information",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false,
-		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}"
+		"input": false
 	}, {
 		"input": false,
 		"label": "Approval",
@@ -4632,6 +4812,10 @@
 					"label": "Rejected",
 					"value": "rejected",
 					"shortcut": ""
+				}, {
+					"label": "On Hold",
+					"value": "onHold",
+					"shortcut": ""
 				}],
 				"validate": {
 					"required": true,
@@ -4664,6 +4848,7 @@
 				"when": "approved",
 				"eq": "rejected"
 			},
+			"customConditional": "show = (data.approved == \"rejected\" || data.approved == \"onHold\")",
 			"type": "datagrid",
 			"input": true,
 			"components": [{
@@ -4673,7 +4858,7 @@
 				"type": "well",
 				"input": false,
 				"components": [{
-					"label": "Reason for Rejection",
+					"label": "Reason for Rejection / On Hold",
 					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
@@ -4712,7 +4897,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 457,
+	"_vid": 552,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4726,13 +4911,13 @@
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]",
 		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
 	},
 	"name": "csrInitiatesIpl",
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-06-24T05:15:47.699Z",
+	"modified": "2020-07-08T08:10:53.235Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -17,7 +17,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','state_in_short','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2','business_padi'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -70,7 +70,7 @@
           <p class ="p_info">www.diveinsurance.com</p>
           <p class ="p_info">diveboat@diveinsurance.com</p>
           <p class ="p_info">Policy period from <span class ="start_date"></span> to <span class = "end_date"></span></p>
-          <p class ="agent_info2"><b>Member#:</b> <span class ="padi"></span></p>
+          <p class ="agent_info2"><b>Member#:</b> <span class ="business_padi"></span></p>
       </div>
       </div>
     </div>
@@ -79,17 +79,17 @@
     <div class="agent">
       <div class = "agent_info">
       <b >Insured's Name and Mailing Address:</b>
-          <p class = "c_details"><span class ="firstname"></span>,<span class ="lastname"></span></p>
+          <p class = "c_details"><span class ="firstname"></span>,&nbsp<span class ="lastname"></span></p>
           <p class = "c_details"><span class="address1"></span></p>
           <p class = "c_details"><span class="address2"></span></p>
-          <p class = "c_details"><span class ="city"></span>, <span class ="state"></span> <span class ="zip"></span></p>
+          <p class = "c_details"><span class ="city"></span>, <span class ="state_in_short"></span> <span class ="zip"></span></p>
           <p class = "c_details"><span class = "country"></span></p>
       </div>
       <div class = "agent_info1">
         <p class ="padi_margin"></p>                                                                
       </div>
     </div>
-<div class = "spacing_div">&nbsp</div>
+ <div class = "spacing_div">&nbsp</div>
     <hr class = "qfooter_line1"></hr>
 </div>
 </body>

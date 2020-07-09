@@ -77,8 +77,8 @@ class FileService extends AbstractService
             }
         }
         unset($data['uuid']);
+        $oldData = $data;
         $fields = $data = $this->cleanData($data);
-        $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
         $jsonData = json_encode($data);
         $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
 
@@ -91,9 +91,13 @@ class FileService extends AbstractService
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
         $data['data'] = $jsonData;
+        $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File();
+        if(isset($data['id'])){
+            unset($data['id']);
+        }
         $file->exchangeArray($data);
-        $this->logger->info("Data From Fileservice - " . print_r($data, true));
+        //$this->logger->info("Data From Fileservice - " . print_r($data, true));
         $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
         // $fields = array_diff_assoc($data, $file->toArray());
         $file->validate();
@@ -112,7 +116,7 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
-            $this->logger->info("Check Fields Data ----- " . print_r($validFields,true));
+            $this->logger->debug("Check Fields Data ----- " . print_r($validFields,true));
             $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
             unset($validFields['validFields']['data']);
             unset($validFields['indexedFields']['data']);
@@ -163,7 +167,7 @@ class FileService extends AbstractService
      */
     public function updateFile(&$data, $id)
     {
-        // print_r($data['workflow_instance_id']);exit;
+        $this->logger->info("FILE DATA -------" . print_r($data,true) . "\n");
         $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         if (isset($data['workflow_instance_id'])) {
             $select = "SELECT ox_file.* from ox_file join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where ox_workflow_instance.id = " . $data['workflow_instance_id'];
@@ -217,6 +221,9 @@ class FileService extends AbstractService
         $fileObject['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
+        if (isset($data['last_workflow_instance_id'])) {
+           $fileObject['last_workflow_instance_id'] = $data['last_workflow_instance_id'];
+        }
         $this->beginTransaction();
         try {
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
@@ -363,7 +370,7 @@ class FileService extends AbstractService
      */
     protected function checkFields($entityId, &$fieldData, $fileId)
     {
-        $this->logger->info("Entering into checkFields method---EntityId : " . $entityId);
+        $this->logger->debug("Entering into checkFields method---EntityId : " . $entityId);
         $required = array();
         if (isset($entityId)) {
             $query = "SELECT ox_field.*,group_concat(childFieldsTable.name order by childFieldsTable.name separator ',') child_fields from ox_field
@@ -372,18 +379,18 @@ class FileService extends AbstractService
             where ox_app_entity.id=? and ox_field.parent_id is NULL group by ox_field.id;";
            
             $where = array($entityId);
-            $this->logger->info("Executing query - $query with  params" . json_encode($where));
+            $this->logger->debug("Executing query - $query with  params" . json_encode($where));
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
-            $this->logger->info("Query result got " . count($fields) . " fields");
+            $this->logger->debug("Query result got " . count($fields) . " fields");
         } else {
-            $this->logger->info("No Entity ID");
+            $this->logger->debug("No Entity ID");
             return 0;
         }
         $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=?";
         $whereParams = array($fileId);
-        $this->logger->info("Executing query - $sqlQuery with  params" . json_encode($whereParams));
+        $this->logger->debug("Executing query - $sqlQuery with  params" . json_encode($whereParams));
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery, $whereParams)->toArray();
-        $this->logger->info("Query result got " . count($fileArray) . " records");
+        $this->logger->debug("Query result got " . count($fileArray) . " records");
         $keyValueFields = array();
         $i = 0;
         $childFields = array();
@@ -409,6 +416,9 @@ class FileService extends AbstractService
                     $indexedField['date_modified'] = date('Y-m-d H:i:s'); 
                     $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
                     $indexedField = array_merge($indexedField,$this->generateFieldPayload($field['data_type'],$field,$indexedField,$fieldvalue,$entityId,$fileId,$fileArray));
+                    if ($indexedField['field_value_type'] == 'OTHER') {
+                       throw new ServiceException("Unsupported data type for indexing for field - ".$field['name']." with dataType -".$field['data_type'],"invalid.datatype");                       
+                    }
                     $indexedField['data'][$field['name']] = $indexedField[$field['name']]; 
 
                     if(isset($indexedField['data'])){
@@ -472,8 +482,8 @@ class FileService extends AbstractService
                 $i++;
             }
         }
-        $this->logger->info("Key Values - " . json_encode($keyValueFields));
-        $this->logger->info("Indexed Values - " . json_encode($indexedFields));
+        $this->logger->debug("Key Values - " . json_encode($keyValueFields));
+        $this->logger->debug("Indexed Values - " . json_encode($indexedFields));
         return array('validFields' => $keyValueFields,'indexedFields' => $indexedFields);
     }
 
@@ -521,7 +531,11 @@ class FileService extends AbstractService
                 $fieldData['field_value_text'] = NULL;
                 $fieldData['field_value_numeric'] = NULL;
                 $fieldData['field_value_boolean'] = NULL;
-                $fieldData['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
+                if(is_string($fieldvalue) && date_create($fieldvalue)){
+                    $fieldData['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
+                } else {
+                    $fieldData['field_value_date'] = date_format(date_create(),'Y-m-d H:i:s');;
+                }
                 $fieldData[$field['name']] = $fieldData['field_value_date'];
                 break;
             case 'list':
@@ -823,10 +837,14 @@ class FileService extends AbstractService
                 $identifierParams = array('userId'=>$userId,'appId'=>$appId);
                 $getIdentifier = $this->executeQueryWithBindParameters($identifierQuery, $identifierParams)->toArray();
                 if(isset($getIdentifier) && count($getIdentifier)>0){
-                    $fromQuery .= " INNER JOIN ox_indexed_file_attribute ofa on (ofa.file_id = of.id) inner join ox_field as d on (ofa.field_id = d.id and d.name= :fieldName)  ";
+                    $fromQuery .= " INNER JOIN ox_indexed_file_attribute ofa on (ofa.file_id = of.id) inner join ox_field as d on (ofa.field_id = d.id and d.name= :fieldName)
+                        INNER join ox_entity_identifier as oei on oei.identifier = '".$getIdentifier[0]['identifier_name']."' AND oei.entity_id = en.id ";
                     $queryParams['fieldName'] = $getIdentifier[0]['identifier_name'];
                     $queryParams['identifier'] = $getIdentifier[0]['identifier'];
                     $whereQuery = " ofa.field_value_text = :identifier AND ";
+                }else{
+                    $this->logger->warn("User id mapping not found so returning no records");
+                    return array('data' => [], 'total' => 0);
                 }
             } else {
                 $whereQuery = "";
@@ -941,26 +959,7 @@ class FileService extends AbstractService
                     }
                 }
                 if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
-                    //TODO Sort Fixes
-                    $sortCount = 0;
-                    $field = "";
-                    $sort = " ORDER BY ";
-
-                    foreach ($filterParamsArray[0]['sort'] as $key => $value) {
-                        $tablePrefix = "sorttblf".$prefix;
-                        $fieldName = $value['field'];
-                        if($fieldName == 'date_created'){
-                            $sort .= "`of`.date_created ".$value['dir'].",";
-                        }else{
-                            $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$fieldName.$tablePrefix." on(".$fieldName.$tablePrefix.".id = ".$tablePrefix.".field_id and ". $fieldName.$tablePrefix.".name='".$fieldName."')";
-                            $sort .= " (CASE WHEN ".$tablePrefix.".field_value_type='DATE' THEN ".$tablePrefix.".field_value_date WHEN ".$tablePrefix.".field_value_type='NUMERIC' THEN " . $tablePrefix.".field_value_numeric WHEN ".$tablePrefix.".field_value_type='BOOLEAN' THEN ".$tablePrefix.".field_value_boolean WHEN ".$tablePrefix.".field_value_type='TEXT' THEN ".$tablePrefix.".field_value_text END )".$value['dir'].",";
-                        }
-                        $sortCount += 1;
-                    }
-                    $sort = rtrim($sort, ",");
-                    if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
-                        $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
-                    }
+                    $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
@@ -1196,6 +1195,8 @@ class FileService extends AbstractService
         unset($params['access']);
         unset($params['uuid']);
         unset($params['commands']);
+        unset($params['last_workflow_instance_id']);
+        unset($params['inDraft']);
         return $params;
     }
 
@@ -1262,12 +1263,14 @@ class FileService extends AbstractService
             foreach($gridResult as $parentName => $data){
                 $initialDataset = $data['initial'];
                 $submissionDataset = $data['submission'];
-                $count = max(count($initialDataset), count($submissionDataset));
-                for($i = 0; $i < $count; $i++) {
-                    $initialRowData = isset($initialDataset[$i]) ? $initialDataset[$i] : array();
-                    $submissionRowData = isset($submissionDataset[$i]) ? $submissionDataset[$i] : array();
-                    foreach($data['fields'] as $key => $field) {
-                        $this->buildChangeLog($initialRowData, $submissionRowData, $field, $labelMapping, $resultData,$i+1);
+                if(is_array($initialDataset) && is_array($submissionDataset)){
+                    $count = max(count($initialDataset), count($submissionDataset));
+                    for($i = 0; $i < $count; $i++) {
+                        $initialRowData = isset($initialDataset[$i]) ? $initialDataset[$i] : array();
+                        $submissionRowData = isset($submissionDataset[$i]) ? $submissionDataset[$i] : array();
+                        foreach($data['fields'] as $key => $field) {
+                            $this->buildChangeLog($initialRowData, $submissionRowData, $field, $labelMapping, $resultData,$i+1);
+                        }
                     }
                 }
             }
@@ -1440,18 +1443,27 @@ class FileService extends AbstractService
         $sortTable = "tblf" . $sortCount;
         $sort = " ORDER BY ";
         foreach ($sortOptions as $key => $value) {
+            $dir = isset($value['dir']) ? $value['dir'] : "";
             if ($value['field'] == 'entity_name') {
                 if ($sortCount > 0) {
                     $sort .= ", ";
                 }
-                $sort .= " ox_app_entity.name ";
+                $sort .= " ox_app_entity.name ".$dir;
+                $sortCount++;
+                continue;
+            }
+            if ($value['field'] == 'date_created') {
+                if ($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " of.date_created ".$dir;
                 $sortCount++;
                 continue;
             }
             if ($sortCount == 0) {
-                $sort .= $value['field'] . " " . $value['dir'];
+                $sort .= $value['field'] . " " . $dir;
             } else {
-                $sort .= "," . $value['field'] . " " . $value['dir'];
+                $sort .= "," . $value['field'] . " " . $dir;
             }
             $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $value['field'];
             $sortCount += 1;
