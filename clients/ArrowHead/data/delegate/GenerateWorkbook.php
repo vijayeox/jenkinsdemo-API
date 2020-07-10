@@ -67,7 +67,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $this->logger->info("GenerateWorkbook Dest" . json_encode($dest));
         $generatedDocumentspath = array();
         $this->logger->info("Execute generate document ---------");
-        $tempData = $data;
         foreach (json_decode($data['workbooksToBeGenerated'], true) as  $key => $templateSelected) {
             if ($templateSelected) {
                 $selectedTemplate = $this->carrierTemplateTypeMapping[$key];
@@ -87,6 +86,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     array_push(
                         $generatedDocumentspath,
                         array(
+                            "fullPath" => $docDest,
                             "file" => $dest['relativePath'] . $selectedTemplate["template"],
                             "originalName" => $selectedTemplate["template"],
                             "type" => "excel/xlsx"
@@ -115,7 +115,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                             if (isset($data[$fieldProps["parentKey"]]) && !empty($data[$fieldProps["parentKey"]])) {
                                 $fieldNamePDFData = $fieldProps["fieldname"];
                                 $fieldOptions = $fieldProps["options"];
-                                $parentValues = json_decode($data[$fieldProps["parentKey"]], true);
+                                if (!is_array($data[$fieldProps["parentKey"]])) {
+                                    $parentValues = json_decode($data[$fieldProps["parentKey"]], true);
+                                } else {
+                                    $parentValues = $data[$fieldProps["parentKey"]];
+                                }
                                 if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == true) {
                                     $pdfData[$fieldNamePDFData] =  $fieldOptions["true"];
                                 } else {
@@ -153,6 +157,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     array_push(
                         $generatedDocumentspath,
                         array(
+                            "fullPath" => $docDest,
                             "file" => $dest['relativePath'] . $selectedTemplate["template"],
                             "originalName" => $selectedTemplate["template"],
                             "type" => "file/pdf"
@@ -161,7 +166,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 }
             }
         }
-        $data = $tempData;
+        $data["status"] = "PDF_Generated";
         $data["documents"] = json_encode($generatedDocumentspath);
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
