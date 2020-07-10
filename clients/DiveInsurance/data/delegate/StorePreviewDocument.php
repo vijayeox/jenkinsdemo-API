@@ -136,7 +136,9 @@ class StorePreviewDocument extends PolicyDocument
         }
 
         if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
-            if(is_string($temp['additionalLocations'])){
+          $addLocations = $temp['additionalLocations'];
+          unset($temp['additionalLocations']);
+            if(is_string($addLocations)){
                 $additionalLocations = json_decode($temp['additionalLocations'],true);
             } else {
                 $additionalLocations = $temp['additionalLocations'];
@@ -144,7 +146,7 @@ class StorePreviewDocument extends PolicyDocument
             for($i=0; $i<sizeof($additionalLocations);$i++){
                 $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
                 $temp["additionalLocationData"] = json_encode($additionalLocations[$i]);
-                $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter');
+                $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter',$i,0,true);
                 unset($temp["additionalLocationData"]);
             }
         }
