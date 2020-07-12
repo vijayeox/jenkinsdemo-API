@@ -79,7 +79,14 @@ class AdminPage extends React.Component {
     let delegateParams = {
       id: item.id
     };
-    this.props.gridConfig.inlineDelegateParams.map(
+    var inlineDelegateParams = this.props.gridConfig.inlineDelegateParams;
+    if (
+      this.state.product == "Individual Professional Liability - New Policy" ||  this.state.product == "Emergency First Response - New Policy"
+    ) { 
+      var additionalInlineDelegateParams = ["downpayment","installment_count","installment_amount"];
+      inlineDelegateParams = inlineDelegateParams.concat(additionalInlineDelegateParams);
+    }
+    inlineDelegateParams.map(
       (param) => (delegateParams[param] = item[param])
     );
     let editedData = await this.helper.request(
@@ -190,11 +197,24 @@ class AdminPage extends React.Component {
 
   renderRow(e) {
     var childColumnConfig = [
-      { title: "Month", field: "month", editable: false },
-      { title: "Premium", field: "premium", editor: "numeric" },
-      { title: "Tax", field: "tax", editor: "numeric" },
-      { title: "PADI Fee", field: "padi_fee", editor: "numeric" }
+        { title: "Month", field: "month", editable: false },
+        { title: "Premium", field: "premium", editor: "numeric" },
+        { title: "Tax", field: "tax", editor: "numeric" },
+        { title: "PADI Fee", field: "padi_fee", editor: "numeric" }
     ];
+    if (
+      this.state.product == "Individual Professional Liability - New Policy" ||  this.state.product == "Emergency First Response - New Policy"
+    ) {
+      var childColumnConfig = [
+        { title: "Month", field: "month", editable: false },
+        { title: "Premium", field: "premium", editor: "numeric" },
+        { title: "Tax", field: "tax", editor: "numeric" },
+        { title: "PADI Fee", field: "padi_fee", editor: "numeric" },
+        { title: "Down Payment", field: "downpayment", editor: "numeric" },
+        { title: "Installment Count", field: "installment_count", editor: "numeric" },
+        { title: "Installment Amount", field: "installment_amount", editor: "numeric" }
+      ];
+    }
     var childInlineAction = {
       update: (dataItem) => this.inlineUpdate(dataItem),
       remove: false
@@ -284,7 +304,6 @@ class AdminPage extends React.Component {
           }
         : column
     );
-    console.log(columnConfig);
 
     return (
       <div className="customAdminPage">
