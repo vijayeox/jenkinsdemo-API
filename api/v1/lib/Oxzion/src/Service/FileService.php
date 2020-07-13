@@ -158,6 +158,14 @@ class FileService extends AbstractService
         return $result->getAffectedRows() > 0;
     }
 
+
+    public function startBatchProcessing(){
+        $this->beginTransaction();
+    }
+
+    public function completeBatchProcessing(){
+        $this->commit();
+    }
     /**
      * Update File Service
      * @method updateFile
@@ -225,6 +233,7 @@ class FileService extends AbstractService
            $fileObject['last_workflow_instance_id'] = $data['last_workflow_instance_id'];
         }
         $this->beginTransaction();
+        $count = 0;
         try {
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
 
@@ -262,7 +271,7 @@ class FileService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $obj['id'];
+        return $count;
     }
 
     /**
@@ -770,25 +779,7 @@ class FileService extends AbstractService
             $createdFilter = "";
             $entityFilter = "";
             $whereQuery = "";
-            if (isset($params['entityName'])) {
-                if(is_array($params['entityName'])){
-                    $entityFilter = " (";
-                    foreach ($params['entityName'] as $value) {
-                        $entityFilter .= " en.name = '".$value."' OR ";
-                    }
-                    $entityFilter = rtrim($entityFilter, " OR ");
-                    $entityFilter .= ")  AND ";
-                } else {
-                    $entityFilter = " en.name = :entityName AND ";
-                    $queryParams['entityName'] = $params['entityName'];
-                }
-                if (isset($params['assocId'])) {
-                    if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId'])) {
-                        $entityFilter .= " of.assoc_id = :assocId AND ";
-                    }
-
-                }
-            }
+            $this->getEntityFilter($params,$entityFilter,$queryParams);
             $workflowJoin = "";
             $workflowFilter = "";
             if (isset($params['workflowId'])) {
@@ -851,119 +842,16 @@ class FileService extends AbstractService
             }
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
             $fromQuery .= "left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
-            $prefix = 1;
             if (isset($params['workflowStatus'])) {
                 $whereQuery .= " wi.status = '" . $params['workflowStatus'] . "'  AND ";
             } else {
                 $whereQuery .= "";
             }
-            $joinQuery = "";
             $sort = "";
             $field = "";
             $pageSize = " LIMIT 10";
             $offset = " OFFSET 0";
-            $sortjoinQuery = "";
-            if (!empty($filterParams)) {
-                if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
-                    $jsonParams = json_decode($filterParams['filter'], true);
-                    if (isset($filterParamsArray['filter'])) {   // This is not correct. Please check
-                        $filterParamsArray[0] = $jsonParams;
-                    } else {
-                        $filterParamsArray = $jsonParams;
-                    }
-                } else {
-                    if (isset($filterParams['filter'])) {
-                        $filterParamsArray = $filterParams['filter'];
-                    } else {
-                        $filterParamsArray = $filterParams;
-                    }
-                }
-                
-                $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
-                $cnt = 1;
-                $fieldParams = array();
-                $tableFilters = "";
-                if (isset($filterParamsArray[0]['filter'])) {
-                    $filterData = $filterParamsArray[0]['filter']['filters'];
-                    if($filterlogic == 'or'){
-                        $subQuery = "";
-                        $fieldNamesArray = array();
-                        foreach ($filterData as $val) {
-                            if (!empty($val)) {
-                                if(isset($val['filter'])){
-                                    if(isset($val['filter']['logic'])){
-                                        $subFilterLogic = $val['filter']['logic'];
-                                    } else {
-                                        $subFilterLogic = " OR ";
-                                    }
-                                    if(isset($val['filter']['filters'])){
-                                        foreach ($val['filter']['filters'] as $subFilter) {
-                                            $filterOperator = $this->processFilters($subFilter);
-                                            $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
-                                            $fieldNamesArray[] = '"'.$subFilter['field'].'"';
-                                            $subQuery .= " (CASE WHEN (fileAttributes.field_value_type='DATE') THEN fileAttributes.field_value_date $queryString WHEN (fileAttributes.field_value_type='NUMERIC') THEN fileAttributes.field_value_numeric $queryString WHEN (fileAttributes.field_value_type='BOOLEAN') THEN fileAttributes.field_value_boolean $queryString  WHEN (fileAttributes.field_value_type='TEXT') THEN fileAttributes.field_value_text $queryString END ) $subFilterLogic ";
-                                        }
-                                        $subQuery = rtrim($subQuery, $subFilterLogic." ");
-                                        $whereQuery .= " ( ".$subQuery." ) $filterlogic ";
-                                    }
-                                } else {
-                                    $filterOperator = $this->processFilters($val);
-                                    $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
-                                    $fieldNamesArray[] = '"'.$val['field'].'"';
-                                    $whereQuery .= " (CASE WHEN (fileAttributes.field_value_type='TEXT' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_text $queryString WHEN (fileAttributes.field_value_type='DATE' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_date $queryString WHEN (fileAttributes.field_value_type='NUMERIC' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_numeric $queryString WHEN (fileAttributes.field_value_type='BOOLEAN' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_boolean $queryString END ) $filterlogic ";
-                                }
-                            }
-                        }
-                        $fromQuery .= "inner join ox_indexed_file_attribute as fileAttributes on (`of`.id =fileAttributes.file_id) inner join ox_field as fieldsTable on(fieldsTable.entity_id = `of`.entity_id and fieldsTable.id=fileAttributes.field_id and fieldsTable.name in (".implode(',',$fieldNamesArray)."))";
-                        $whereQuery = rtrim($whereQuery, $filterlogic." ");
-                    } else {
-                        foreach ($filterData as $val) {
-                            $tablePrefix = "tblf" . $prefix;
-                            if (!empty($val)) {
-                                if(isset($val['filter'])){
-                                    if(isset($val['filter']['logic'])){
-                                        $subFilterLogic = $val['filter']['logic'];
-                                    } else {
-                                        $subFilterLogic = " OR ";
-                                    }
-                                    if(isset($val['filter']['filters'])){
-                                        $subQuery = "";
-                                        $subFromQuery = "";
-                                        foreach ($val['filter']['filters'] as $subFilter) {
-                                            $filterOperator = $this->processFilters($subFilter);
-                                            $subTablePrefix = $tablePrefix.$subFilter['field'];
-                                            $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
-                                            if($subFilterLogic=='or'){
-                                                $fieldNamesArray[] = '"'.$subFilter['field'].'"';
-                                                $subQuery .= " (CASE WHEN (fileAttributes.field_value_type='DATE') THEN fileAttributes.field_value_date $queryString WHEN (fileAttributes.field_value_type='NUMERIC') THEN fileAttributes.field_value_numeric $queryString WHEN (fileAttributes.field_value_type='BOOLEAN') THEN fileAttributes.field_value_boolean $queryString  WHEN (fileAttributes.field_value_type='TEXT') THEN fileAttributes.field_value_text $queryString END ) $subFilterLogic ";
-                                                $subFromQuery = "inner join ox_indexed_file_attribute as fileAttributes on (`of`.id =fileAttributes.file_id) inner join ox_field as fieldsTable on(fieldsTable.entity_id = `of`.entity_id and fieldsTable.id=fileAttributes.field_id and fieldsTable.name in (".implode(',',$fieldNamesArray)."))";
-                                            } else {
-                                                $subFromQuery .= " inner join ox_indexed_file_attribute as ".$subTablePrefix." on (`of`.id =" . $subTablePrefix . ".file_id) inner join ox_field as ".$subFilter['field'].$subTablePrefix." on(".$subFilter['field'].$subTablePrefix.".id = ".$subTablePrefix.".field_id and ". $subFilter['field'].$subTablePrefix.".name='".$subFilter['field']."')";
-                                                $subQuery .= "(CASE WHEN (" .$subTablePrefix . ".field_value_type='DATE') THEN " . $subTablePrefix . ".field_value_date $queryString WHEN (" .$subTablePrefix . ".field_value_type='NUMERIC') THEN " . $subTablePrefix . ".field_value_numeric $queryString WHEN (" .$subTablePrefix . ".field_value_type='BOOLEAN') THEN " . $subTablePrefix . ".field_value_boolean $queryString  WHEN (" .$subTablePrefix . ".field_value_type='TEXT') THEN " . $subTablePrefix . ".field_value_text $queryString END ) $subFilterLogic";
-                                            }
-                                        }
-                                        $fromQuery .= $subFromQuery;
-                                        $subQuery = rtrim($subQuery, $subFilterLogic." ");
-                                        $whereQuery .= " ( ".$subQuery." ) $filterlogic ";
-                                    }
-                                } else {
-                                    $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
-                                    $filterOperator = $this->processFilters($val);
-                                    $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
-                                    $whereQuery .= "(CASE WHEN (" .$tablePrefix . ".field_value_type='DATE') THEN " . $tablePrefix . ".field_value_date $queryString WHEN (" .$tablePrefix . ".field_value_type='NUMERIC') THEN " . $tablePrefix . ".field_value_numeric $queryString WHEN (" .$tablePrefix . ".field_value_type='BOOLEAN') THEN " . $tablePrefix . ".field_value_boolean $queryString  WHEN (" .$tablePrefix . ".field_value_type='TEXT') THEN " . $tablePrefix . ".field_value_text $queryString END ) $filterlogic";
-                                }
-                                $prefix += 1;
-                            }
-                        }
-                        $whereQuery = rtrim($whereQuery, $filterlogic." ");
-                    }
-                }
-                if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
-                    $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
-                }
-                $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
-                $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-            }
+            $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
             $whereQuery = rtrim($whereQuery, " AND ");
             if($whereQuery==" WHERE "){
                 $where = "";
@@ -972,11 +860,12 @@ class FileService extends AbstractService
             }
             $where = trim($where) != "" ? "WHERE $where" : "";
             $where = rtrim($where, " AND ");
-            $fromQuery .= " " . $joinQuery . " " . $sortjoinQuery;
             try {
-                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS  of.id,of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name $field $fromQuery $where $sort $pageSize $offset";
+                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name $field $fromQuery $where $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+                print_r($select);
+                print_r($queryParams);
                 $countQuery = "SELECT FOUND_ROWS();";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
@@ -1469,6 +1358,276 @@ class FileService extends AbstractService
             $sortCount += 1;
         }
         return $sort;
+    }
+
+    public function getEntityFilter(&$params,&$entityFilter,&$queryParams){
+        if (isset($params['entityName'])) {
+            if(is_array($params['entityName'])){
+                $entityFilter = " (";
+                foreach ($params['entityName'] as $value) {
+                    $entityFilter .= " en.name = '".$value."' OR ";
+                }
+                $entityFilter = rtrim($entityFilter, " OR ");
+                $entityFilter .= ")  AND ";
+            } else {
+                $entityFilter = " en.name = :entityName AND ";
+                $queryParams['entityName'] = $params['entityName'];
+            }
+            if (isset($params['assocId'])) {
+                if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId'])) {
+                    $entityFilter .= " of.assoc_id = :assocId AND ";
+                }
+            }
+        }
+    }
+
+    public function updateFieldValueOnFiles($appUUid,$data,$fieldName,$initialFieldValue,$newFieldValue,$filterParams = null){
+
+        $whereQuery = " ";
+        $sort = "";
+        $field = "";
+        $pageSize = " ";
+        $offset = " ";
+        $entityFilter = " ";
+        $queryParams = array();
+        $appId = $this->getIdFromUuid('ox_app', $appUUid);
+        $fromQuery = "
+            inner join ox_app_entity as en on en.id = `of`.entity_id
+            inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
+        $this->getEntityFilter($data,$entityFilter,$queryParams);
+        $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
+        $this->beginTransaction();
+        try {
+            $updateFile = 'UPDATE ox_file as of '.$fromQuery.'SET data = REPLACE(data,'."'".'"'.$fieldName.'":"'.$initialFieldValue.'"'."','".'"'.$fieldName.'":"'.$newFieldValue.'"'."'".') WHERE '.$entityFilter.' '.$whereQuery; 
+            $queryParams['appId'] = $appId;
+            $this->logger->info("Update File Attribute Query -- $updateFile with params - ".print_r($queryParams,true));
+            $resultSet = $this->executeUpdateWithBindParameters($updateFile,$queryParams);
+
+            unset($queryParams['entityName']);
+
+            $fromClause = "";
+            $whereClause = " WHERE oxf.app_id = :appId AND oxf.name = :fieldName ";
+            if(isset($data['entityName'])){
+                $fromClause .= " inner join ox_app_entity as oxe on oxe.id = oxf.entity_id ";
+                $whereClause .= " AND oxe.name = :entityName ";
+                $queryParams['entityName'] = $data['entityName'];
+            }
+            $queryParams['fieldName'] = $fieldName;
+            $selectField = "SELECT oxf.* from ox_field as oxf $fromClause $whereClause";
+            $this->logger->info("GET FIELD DATA  -- $selectField with params - ".print_r($queryParams,true));
+            $resultSet = $this->executeQueryWithBindParameters($selectField,$queryParams)->toArray();
+
+            foreach ($resultSet as $value) {
+                $this->updateFileAttribute($appId,$fieldName,$newFieldValue,$value['data_type'],$fromQuery,$whereQuery,$value['entity_id'],'ox_file_attribute');
+                if($value['index'] == 1) {
+                    $this->updateFileAttribute($appId,$fieldName,$newFieldValue,$value['data_type'],$fromQuery,$whereQuery,$value['entity_id'],'ox_indexed_file_attribute');
+                }
+            }
+            $this->commit();
+        }catch(Exception $e){
+            $this->logger->error($e->getMessage(),$e);
+            $this->rollback();
+            throw $e;
+        }
+        return 1;
+    }
+
+    private function updateFileAttribute($appId,$fieldName,$fieldValue,$dataType,$fromQuery,$whereQuery,$entityId,$tableName){
+        $queryParams = 
+                array("appId" => $appId,
+                      "fieldName" => $fieldName,
+                      "fieldValue" => $fieldValue,
+                      "entityId" => $entityId
+                );
+
+        $fileAttributeFromQuery = " 
+                inner join ox_file as of on of.id = ofa.file_id 
+                inner join ox_field as oxf on oxf.id = ofa.field_id ".$fromQuery;
+        $whereQuery .= ' AND oxf.name = :fieldName AND oxf.entity_id = :entityId'; 
+
+        $setQuery = "";
+        if($tableName == 'ox_file_attribute'){
+            $setQuery = " SET ofa.field_value = :fieldValue ";
+        }
+        switch($dataType){
+            case "date":
+                $setQuery .= (strlen($setQuery) > 0) ? ", ofa.field_value_date = :fieldValue" : "SET ofa.field_value_date = :fieldValue";
+                break;
+            case "numeric":
+                $setQuery .= (strlen($setQuery) > 0) ? ", ofa.field_value_numeric = :fieldValue" : "SET ofa.field_value_numeric = :fieldValue";
+                break;
+            case "boolean":
+                $setQuery .= (strlen($setQuery) > 0) ? ", ofa.field_value_boolean = :fieldValue" : "SET ofa.field_value_boolean = :fieldValue";
+                break;
+            default:
+                $setQuery .= (strlen($setQuery) > 0) ? ", ofa.field_value_text = :fieldValue" : "SET ofa.field_value_text = :fieldValue";
+                break;
+        }
+        $updateField = "UPDATE $tableName as ofa $fileAttributeFromQuery $setQuery WHERE $whereQuery";
+        $this->logger->info("Update File Attribute Field Value Query -- $updateField with params - ".print_r($queryParams,true));
+        $resultSet = $this->executeUpdateWithBindParameters($updateField,$queryParams);
+    }
+
+    public function processFilterParams(&$fromQuery,&$whereQuery,&$sort,&$pageSize,&$offset,&$field,$filterParams){
+        $prefix = 1;
+        if (!empty($filterParams)) {
+                if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
+                    $jsonParams = json_decode($filterParams['filter'], true);
+                    if (isset($filterParamsArray['filter'])) {   // This is not correct. Please check
+                        $filterParamsArray[0] = $jsonParams;
+                    } else {
+                        $filterParamsArray = $jsonParams;
+                    }
+                } else {
+                    if (isset($filterParams['filter'])) {
+                        $filterParamsArray = $filterParams['filter'];
+                    } else {
+                        $filterParamsArray = $filterParams;
+                    }
+                }
+                
+                $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
+                $cnt = 1;
+                $fieldParams = array();
+                $tableFilters = "";
+                if (isset($filterParamsArray[0]['filter'])) {
+                    $filterData = $filterParamsArray[0]['filter']['filters'];
+                    if($filterlogic == 'or'){
+                        $subQuery = "";
+                        $fieldNamesArray = array();
+                        foreach ($filterData as $val) {
+                            if (!empty($val)) {
+                                if(isset($val['filter'])){
+                                    if(isset($val['filter']['logic'])){
+                                        $subFilterLogic = $val['filter']['logic'];
+                                    } else {
+                                        $subFilterLogic = " OR ";
+                                    }
+                                    if(isset($val['filter']['filters'])){
+                                        foreach ($val['filter']['filters'] as $subFilter) {
+                                            $filterOperator = $this->processFilters($subFilter);
+                                            $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
+                                            $fieldNamesArray[] = '"'.$subFilter['field'].'"';
+
+                                            $subQuery .= " (CASE WHEN (fileAttributes.field_value_type='TEXT') THEN fileAttributes.field_value_text $queryString ";
+
+                                            if (date('Y-m-d', strtotime($subFilter['value'])) === $subFilter['value']) {
+                                                $subQuery .= "  WHEN (fileAttributes.field_value_type='DATE') THEN fileAttributes.field_value_date $queryString ";
+                                            }
+                                            if(is_numeric($subFilter['value'])){
+                                                $subQuery .= " WHEN (fileAttributes.field_value_type='NUMERIC') THEN fileAttributes.field_value_numeric $queryString ";
+                                            }
+                                            if(is_bool($subFilter['value'])){
+                                                $subQuery .= " WHEN (fileAttributes.field_value_type='BOOLEAN') THEN fileAttributes.field_value_boolean $queryString  ";  
+                                            }
+
+                                            $subQuery .= " END ) $subFilterLogic ";
+                                        }
+                                        $subQuery = rtrim($subQuery, $subFilterLogic." ");
+                                        $whereQuery .= " ( ".$subQuery." ) $filterlogic ";
+                                    }
+                                } else {
+                                    $filterOperator = $this->processFilters($val);
+                                    $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                                    $fieldNamesArray[] = '"'.$val['field'].'"';
+                                    $whereQuery .= " (CASE WHEN (fileAttributes.field_value_type='TEXT' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_text $queryString ";
+                                    if (date('Y-m-d', strtotime($val['value'])) === $val['value']) {
+                                        $whereQuery .= " WHEN (fileAttributes.field_value_type='DATE' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_date $queryString ";
+                                    }
+                                    if(is_numeric($val['value'])){
+                                        $whereQuery .= " WHEN (fileAttributes.field_value_type='NUMERIC' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_numeric $queryString ";
+                                    }
+                                    if(is_bool($val['value'])){
+                                        $whereQuery .= " WHEN (fileAttributes.field_value_type='BOOLEAN' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_boolean $queryString ";  
+                                    }
+                                    $whereQuery .= " END ) $filterlogic ";
+                                }
+                            }
+                        }
+                        $fromQuery .= "inner join ox_indexed_file_attribute as fileAttributes on (`of`.id =fileAttributes.file_id) inner join ox_field as fieldsTable on(fieldsTable.entity_id = `of`.entity_id and fieldsTable.id=fileAttributes.field_id and fieldsTable.name in (".implode(',',$fieldNamesArray)."))";
+                        $whereQuery = rtrim($whereQuery, $filterlogic." ");
+                    } else {
+                        foreach ($filterData as $val) {
+                            $tablePrefix = "tblf" . $prefix;
+                            if (!empty($val)) {
+                                if(isset($val['filter'])){
+                                    if(isset($val['filter']['logic'])){
+                                        $subFilterLogic = $val['filter']['logic'];
+                                    } else {
+                                        $subFilterLogic = " OR ";
+                                    }
+                                    if(isset($val['filter']['filters'])){
+                                        $subQuery = "";
+                                        $subFromQuery = "";
+                                        foreach ($val['filter']['filters'] as $subFilter) {
+                                            $filterOperator = $this->processFilters($subFilter);
+                                            $subTablePrefix = $tablePrefix.$subFilter['field'];
+                                            $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
+                                            if($subFilterLogic=='or'){
+                                                $fieldNamesArray[] = '"'.$subFilter['field'].'"';
+                                                $subQuery .= " (CASE WHEN (fileAttributes.field_value_type='TEXT') THEN fileAttributes.field_value_text $queryString ";
+                                                if (date('Y-m-d', strtotime($subFilter['value'])) === $subFilter['value']) {
+                                                    $subQuery .= "  WHEN (fileAttributes.field_value_type='DATE') THEN fileAttributes.field_value_date $queryString ";
+                                                }
+                                                if(is_numeric($subFilter['value'])){
+                                                    $subQuery .= " WHEN (fileAttributes.field_value_type='NUMERIC') THEN fileAttributes.field_value_numeric $queryString ";
+                                                }
+                                                if(is_bool($subFilter['value'])){
+                                                    $subQuery .= " WHEN (fileAttributes.field_value_type='BOOLEAN') THEN fileAttributes.field_value_boolean $queryString  ";  
+                                                }
+                                                $subQuery .= " END ) $subFilterLogic ";
+
+                                                $subFromQuery = "inner join ox_indexed_file_attribute as fileAttributes on (`of`.id =fileAttributes.file_id) inner join ox_field as fieldsTable on(fieldsTable.entity_id = `of`.entity_id and fieldsTable.id=fileAttributes.field_id and fieldsTable.name in (".implode(',',$fieldNamesArray)."))";
+                                            } else {
+                                                $subFromQuery .= " inner join ox_indexed_file_attribute as ".$subTablePrefix." on (`of`.id =" . $subTablePrefix . ".file_id) inner join ox_field as ".$subFilter['field'].$subTablePrefix." on(".$subFilter['field'].$subTablePrefix.".id = ".$subTablePrefix.".field_id and ". $subFilter['field'].$subTablePrefix.".name='".$subFilter['field']."')";
+                                                $subQuery .= " (CASE WHEN (" .$subTablePrefix . ".field_value_type='TEXT') THEN " . $subTablePrefix . ".field_value_text $queryString ";
+
+                                                if (date('Y-m-d', strtotime($subFilter['value'])) === $subFilter['value']) {
+                                                    $subQuery .= "  WHEN (" .$subTablePrefix . ".field_value_type='DATE') THEN " . $subTablePrefix . ".field_value_date $queryString ";
+                                                }
+                                                if(is_numeric($subFilter['value'])){
+                                                    $subQuery .= "  WHEN (" .$subTablePrefix . ".field_value_type='NUMERIC') THEN " . $subTablePrefix . ".field_value_numeric $queryString ";
+                                                }
+                                                if(is_bool($subFilter['value'])){
+                                                    $subQuery .= " WHEN (" .$subTablePrefix . ".field_value_type='BOOLEAN') THEN " . $subTablePrefix . ".field_value_boolean $queryString  ";  
+                                                }
+
+                                                $subQuery .= " END ) $subFilterLogic ";
+                                            }
+                                        }
+                                        $fromQuery .= $subFromQuery;
+                                        $subQuery = rtrim($subQuery, $subFilterLogic." ");
+                                        $whereQuery .= " ( ".$subQuery." ) $filterlogic ";
+                                    }
+                                } else {
+                                    $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
+                                    $filterOperator = $this->processFilters($val);
+                                    $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                                    $whereQuery .= " (CASE  WHEN (" .$tablePrefix . ".field_value_type='TEXT') THEN " . $tablePrefix . ".field_value_text $queryString ";
+
+                                    if (date('Y-m-d', strtotime($val['value'])) === $val['value']) {
+                                        $whereQuery .= " WHEN (" .$tablePrefix . ".field_value_type='DATE') THEN " . $tablePrefix . ".field_value_date $queryString ";
+                                    }
+                                    if(is_numeric($val['value'])){
+                                        $whereQuery .= " WHEN (" .$tablePrefix . ".field_value_type='NUMERIC') THEN " . $tablePrefix . ".field_value_numeric $queryString ";
+                                    }
+                                    if(is_bool($val['value'])){
+                                        $whereQuery .= "  WHEN (" .$tablePrefix . ".field_value_type='BOOLEAN') THEN " . $tablePrefix . ".field_value_boolean $queryString  ";  
+                                    }
+                                    $whereQuery .= " END ) $filterlogic ";
+                                }
+                                $prefix += 1;
+                            }
+                        }
+                        $whereQuery = rtrim($whereQuery, $filterlogic." ");
+                    }
+                }
+                if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
+                    $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
+                }
+                $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
+                $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
+        }
     }
 
 }

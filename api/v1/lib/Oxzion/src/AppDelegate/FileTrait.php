@@ -41,4 +41,16 @@ trait FileTrait
         $this->logger->info("GET FILE BY WORKFLOW INSTANCE ID");
         return $this->fileService->getWorkflowInstanceByFileId($fileId);
     }
+
+    protected function startBatchProcessing(){
+        $this->fileService->startBatchProcessing();
+    }
+
+    protected function completeBatchProcessing(){
+        $this->fileService->completeBatchProcessing();
+    }
+
+    protected function updateFieldValueOnFiles($data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams = null){
+        $this->fileService->updateFieldValueOnFiles($this->appId,$data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams);
+    }
 }
