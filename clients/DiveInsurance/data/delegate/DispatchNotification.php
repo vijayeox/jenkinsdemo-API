@@ -18,6 +18,9 @@ abstract class DispatchNotification extends MailDelegate
     {
         $this->logger->info("DISPATCH DATA" . print_r($data, true));
         $mailOptions = array();
+        if(!isset($data['email']) && isset($data['business_email']) ){
+          $data['email'] = $data['business_email'];
+        }
         $mailOptions['to'] = $data['email'];
         $mailOptions['subject'] = $data['subject'];
         $template = $data['template'];
