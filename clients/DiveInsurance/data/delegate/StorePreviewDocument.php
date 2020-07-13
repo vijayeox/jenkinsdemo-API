@@ -43,7 +43,7 @@ class StorePreviewDocument extends PolicyDocument
                     }
                 }
             }else{
-                $data['certificate_no'] = "123456789";
+                $data['certificate_no'] = "1234456789";
             }
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));
@@ -139,9 +139,9 @@ class StorePreviewDocument extends PolicyDocument
           $addLocations = $temp['additionalLocations'];
           unset($temp['additionalLocations']);
             if(is_string($addLocations)){
-                $additionalLocations = json_decode($temp['additionalLocations'],true);
+                $additionalLocations = json_decode($additionalLocations,true);
             } else {
-                $additionalLocations = $temp['additionalLocations'];
+                $additionalLocations = $additionalLocations;
             }
             for($i=0; $i<sizeof($additionalLocations);$i++){
                 $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");

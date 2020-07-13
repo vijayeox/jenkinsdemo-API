@@ -462,9 +462,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                       $addLocations = $temp['additionalLocations'];
                       unset($temp['additionalLocations']);
                         if(is_string($addLocations)){
-                            $additionalLocations = json_decode($temp['additionalLocations'],true);
+                            $additionalLocations = json_decode($addLocations,true);
                         } else {
-                            $additionalLocations = $temp['additionalLocations'];
+                            $additionalLocations = $addLocations;
                         }
                         for($i=0; $i<sizeof($additionalLocations);$i++){
                             $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
