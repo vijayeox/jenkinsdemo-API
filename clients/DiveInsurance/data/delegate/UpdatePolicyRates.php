@@ -34,11 +34,15 @@ class UpdatePolicyRates extends AbstractAppDelegate
     }
     private function updatePolicyRates($data, $persistenceService)
     {
-        $data['padi_fee'] = isset($data['padi_fee']) ? $data['padi_fee'] : 0;
-        $data['premium'] = isset($data['premium']) ? $data['premium'] : 0;
-        $data['tax'] = isset($data['tax']) ? $data['tax'] : 0;
+        $data['padi_fee'] = !empty($data['padi_fee']) ? $data['padi_fee'] : 0;
+        $data['premium'] = !empty($data['premium']) ? $data['premium'] : 0;
+        $data['tax'] = !empty($data['tax']) ? $data['tax'] : 0;
+        $data['downpayment'] = !empty($data['downpayment']) ? $data['downpayment'] : 'NULL';
+        $data['installment_count'] = !empty($data['installment_count']) ? $data['installment_count'] : 'NULL';
+        $data['installment_amount'] = !empty($data['installment_amount']) ? $data['installment_amount'] : 'NULL';
         $total = (float) $data['premium'] + (float) $data['tax'] + (float) $data['padi_fee'];
-        $updateQuery = "UPDATE premium_rate_card SET `premium` = " . $data['premium'] . ",`tax` = " . $data['tax'] . ", padi_fee = " . $data['padi_fee'] . ",total = " . $total . " WHERE id = " . $data['id'];
+        $updateQuery = "UPDATE premium_rate_card SET `premium` = " . $data['premium'] . ",`tax` = " . $data['tax'] . ", padi_fee = " . $data['padi_fee'] . ",total = " . $total . ", downpayment = ".$data['downpayment'].", installment_count = ".$data['installment_count'].", installment_amount = ".$data['installment_amount']." WHERE id = " . $data['id'];
+        $this->logger->info(" UpdatePolicyRates Query : $updateQuery");
         $result = $persistenceService->updateQuery($updateQuery);
     }
 }

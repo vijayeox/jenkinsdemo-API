@@ -52,7 +52,7 @@ ox_field:
   - id: 2
     name: "field2"
     app_id: 99
-    data_type: "integer"
+    data_type: "text"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 1
@@ -108,6 +108,16 @@ ox_field:
     sequence: 7
     entity_id: 1
     index: 1
+  - id: 8
+    name: "policy_period"
+    text: "Policy Period"
+    app_id: 99
+    data_type: "text"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 7
+    entity_id: 1
+    index: 0
 ox_form:
   - id: 1
     app_id: 99
@@ -392,42 +402,42 @@ ox_activity_instance_assignee:
 ox_file:
   - id: 11
     org_id: 1
-    data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    data: '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","app_id":"ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30","form_id":"0","entity_id":"1","created_by":"1","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","workflow_instance_id":"1","credit_card_type":"credit","workflowId":"a01a6776-431a-401e-9288-6acf3b2f3925","email":"bharat@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     date_created: "2019-06-25 00:00:00"
     entity_id: 1
     last_workflow_instance_id: 1
   - id: 12
     org_id: 1
-    data: '{"firstname" : "Rai","product": "Individual Professional Liability"}'
+    data: '{"firstname":"Rai","product":"Individual Professional Liability"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     date_created: "2019-06-28 00:00:00"
     entity_id: 1
     last_workflow_instance_id: 2
   - id: 13
     org_id: 1
-    data: '{"firstname" : "Raj","product": "Individual Professional Liability"}'
+    data: '{"firstname":"Raj","product":"Individual Professional Liability"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     date_created: "2019-06-26 00:00:00"
     entity_id: 1
     last_workflow_instance_id: 3
   - id: 14
     org_id: 1
-    data: '{"firstname" : "Ram","product": "Dive Boat"}'
+    data: '{"firstname":"Ram","product":"Dive Boat"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
     last_workflow_instance_id: 4
   - id: 15
     org_id: 1
-    data: '{"firstname" : "Reshma","product": "Dive Store"}'
+    data: '{"firstname":"Reshma","product":"Dive Store"}'
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c91478"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
     last_workflow_instance_id: 6
   - id: 16
     org_id: 1
-    data: '{"firstname" : "Arpitha","product": "Dive Store"}'
+    data: '{"firstname":"Arpitha","product":"Dive Store"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c91478"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
@@ -661,3 +671,6 @@ ox_wf_user_identifier:
     user_id: 2
     identifier_name: "field1"
     identifier: "32253"
+ox_entity_identifier:
+  - entity_id: 1
+    identifier: "field1"

@@ -2,16 +2,6 @@
 using Microsoft.Office.Interop.Excel;
 using System;
 using System.IO;
-using System.Net;
-using System.Configuration;
-using Microsoft.Win32;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
-using System.Net.Mail;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Range = Microsoft.Office.Interop.Excel.Range;
@@ -20,9 +10,25 @@ using ArrowHeadWebService;
 using RestSharp;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace ProcessExcel
 {
+    public class ErrorDetails
+    {
+        public string worksheet { get; set; }
+        public int row { get; set; }
+        public string message { get; set; }
+        public string file { get; set; }
+
+        public int errortype { get; set; }
+
+        public static implicit operator List<object>(ErrorDetails v)
+        {
+            throw new NotImplementedException();
+        }
+    }
     class ProcessExcel
     {
         public string baseDirectory { get; set; }
@@ -31,10 +37,14 @@ namespace ProcessExcel
         private Settings _settings;
 
         private string _fileuuid;
+        private List<ErrorDetails> _errordetails = new List<ErrorDetails>();
+
         public ProcessExcel(Settings settings)
         {
             _settings = settings;
         }
+
+
 
         public void processFile(string baseFolder, string filename, string fileuuid)
         {
@@ -71,7 +81,7 @@ namespace ProcessExcel
                 excel.Quit();
                 LogProcess("In Catch - Workbook Closed");
                 File.Move(this.baseDirectory + @"\Templates\" + fnameSource, this.baseDirectory + @"\Errors\" + fnameSource);
-                PostError(fnameSource, 1);
+                PostError(fnameSource, 0,e.Message);
                 LogProcess("In Catch - Moved to Error Folder");
                 Logerror("Error - In Catch - " + e.Message, fnameSource);
             }
@@ -129,9 +139,9 @@ namespace ProcessExcel
                 int vTotalCount = vRow - 3;
                 MapData(vFolder, vFile, aMapping, vTotalCount, vCurWorkbook, vMappingWorkSheet);
             }
-            catch
+            catch (Exception e)
             {
-                PostError(vFile, 0);
+                PostError(vFile, 1,e.Message);
             }
         }
 
@@ -176,7 +186,7 @@ namespace ProcessExcel
                     Logerror("Error:" + e, wbDealer.Name);
                 }
                 excel.Quit();
-                PostError(wbCarrier.Name, 0);
+                PostError(wbCarrier.Name, 1,e.Message);
             }
         }
 
@@ -221,7 +231,13 @@ namespace ProcessExcel
             }
             catch (Exception e)
             {
-                Logerror("Error Mapping - Sheet:" + vDestSheet + " Row: " + (i + 2).ToString() + " Message: " + e, wbCarrier.Name);
+                ErrorDetails errordetail = new ErrorDetails();
+                errordetail.file = wbCarrier.Name;
+                errordetail.row = i + 2;
+                errordetail.worksheet = vDestSheet;
+                errordetail.message = e.ToString();
+                errordetail.errortype = 2;
+                _errordetails.Add(errordetail);
             }
 
         }
@@ -264,12 +280,14 @@ namespace ProcessExcel
             public string fileuuid { get; set; }
             public byte status { get; set; }
             public string commands { get; set; }
+            public List<ErrorDetails> _errorlist { get; set; }
         }
 
         private void PostFile(string folder, string fileName)
         {
             Console.WriteLine(_settings.postURL);
             var client = new RestClient(_settings.postURL + "app/" +  _settings.appUUID + "/pipeline");
+          //  var client = new RestClient(_settings.postURL);
             client.Timeout = -1;
 
             var request = new RestRequest(Method.POST);
@@ -282,26 +300,41 @@ namespace ProcessExcel
                 fileuuid = _fileuuid,
                 filename = fileName,
                 commands = _settings.commands,
-            });
+                _errorlist = this._errordetails
+
+            }) ;
             request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
 
             string fname = fileName.Replace(".", "-");
-            if (File.Exists(this.baseDirectory + @"\Errors\" + fname + "-error.txt"))
-            {
-                request.AddFile("errorfile", this.baseDirectory + @"\Errors\" + fname + "-error.txt");
-            }
-
+            LogProcess(postCallbackData);
+            this._errordetails.Clear();
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
             LogProcess("Sending Post:" + fileName);
         }
 
-        private void PostError(string fileName, int allflag)
+        private void PostError(string fileName, int errortype, string message)
         {
             var client = new RestClient(_settings.postURL);
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
-            request.AddParameter("data", "{\"filename\":\"" + fileName + "\",\"status\":0,\"fileuuidl\":\"" + _fileuuid + "\",\"allfiles\":" + allflag + "}", ParameterType.RequestBody);
+            ErrorDetails errordetail = new ErrorDetails()
+            {
+                file = fileName,
+                row = 0,
+                message = message,
+                worksheet = "",
+                errortype = errortype
+            };
+            var postCallbackData = JsonSerializer.Serialize(new CallbackData()
+            {
+                status = 0,
+                fileuuid = _fileuuid,
+                filename = fileName,
+                commands = _settings.commands,
+                _errorlist = new List<ErrorDetails> { errordetail}
+            });
+            request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
         }
 

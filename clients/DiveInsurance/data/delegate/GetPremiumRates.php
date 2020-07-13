@@ -128,7 +128,7 @@ class GetPremiumRates extends AbstractAppDelegate
             $select = "SELECT id,coverage,CASE 
                         WHEN DAY(start_date) = '30' AND MONTH(start_date) = 6 AND product = 'Individual Professional Liability' 
                         THEN 'July' 
-                        ELSE MONTHNAME(start_date) END as `month`,start_date,end_date,premium,tax,padi_fee,total,year,coverage_category 
+                        ELSE MONTHNAME(start_date) END as `month`,start_date,end_date,premium,tax,padi_fee,downpayment,installment_count,installment_amount,total,year,coverage_category 
                         FROM premium_rate_card WHERE product = '" . $product . "' 
                         AND `year` = '" . $data['year'] . "' 
                         AND `is_upgrade` = 0 
@@ -165,11 +165,11 @@ class GetPremiumRates extends AbstractAppDelegate
         $year = $this->getMaxYear($data, $product, $is_upgrade, $andClause,$persistenceService);
         $persistenceService->beginTransaction();
         try {
-            $query = "INSERT INTO premium_rate_card (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`,`tax`,`padi_fee`,`total`,`is_upgrade`,`previous_key`,`coverage_category`,`year`) SELECT product,coverage,`key`,DATE_ADD(start_date, INTERVAL 1 year) as start_date,CASE WHEN ((YEAR(end_date) + 1) % 4 = 0 AND MONTH(end_date) = 2) THEN 
+            $query = "INSERT INTO premium_rate_card (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`,`tax`,`padi_fee`,`total`,`is_upgrade`,`previous_key`,`coverage_category`,`year`,`downpayment`,`installment_count`,`installment_amount`) SELECT product,coverage,`key`,DATE_ADD(start_date, INTERVAL 1 year) as start_date,CASE WHEN ((YEAR(end_date) + 1) % 4 = 0 AND MONTH(end_date) = 2) THEN 
                                 DATE_ADD(DATE_ADD(end_date, INTERVAL 1 YEAR),INTERVAL 1 dAY)
                             ELSE
                                 DATE_ADD(end_date, INTERVAL 1 year) 
-                            END as end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category," . $data['year'] . " as `year` FROM premium_rate_card WHERE product = '" . $product . "' and `year` = " . $year . " and `is_upgrade` = " . $is_upgrade." ".$andClause;
+                            END as end_date,premium,`type`,tax,padi_fee,total,is_upgrade,previous_key,coverage_category," . $data['year'] . " as `year`,downpayment,installment_count,installment_amount FROM premium_rate_card WHERE product = '" . $product . "' and `year` = " . $year . " and `is_upgrade` = " . $is_upgrade." ".$andClause;
             $this->logger->info("Add New Record for Next Year Query -----" . print_r($query, true));
             $persistenceService->insertQuery($query);
             $persistenceService->commit();

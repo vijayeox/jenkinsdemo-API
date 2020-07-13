@@ -93,9 +93,16 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
       color: #ffffff;
     }
   }
- .formio-dialog-buttons button.formio-dialog-button{
-  background-color: $secondary;
- }
+  .formio-dialog-buttons button.formio-dialog-button {
+    background-color: $secondary;
+  }
+
+  .fad.fa-circle-notch {
+    font-size: 18px !important;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+  }
 
   #floater {
     position: fixed;
