@@ -232,11 +232,6 @@ class PadiVerification extends AbstractAppDelegate
             }else if($data['identifier_field'] == 'business_padi'){
                 $data['username'] = 'S'.$data['business_padi'];
             }
-            // if($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){
-            //     $data['username'] = 'PL'.$data['padi'];
-            // }else if ($data['product'] == 'Dive Store') {
-            //     $data['username'] = 'S'.$data['business_padi'];
-            // }
         }
         return $data;
     }

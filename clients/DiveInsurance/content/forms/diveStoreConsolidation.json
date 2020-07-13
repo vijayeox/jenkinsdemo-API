@@ -12148,7 +12148,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(parseFloat(data[\"ContentsFP\"])||0)+(parseFloat(data[\"LossofBusIncomeFP\"])||0)+(parseFloat(data[\"BuildingLimitFP\"])||0)",
+						"calculateValue": "value=(parseFloat(data[\"ContentsFP\"])||0)+(parseFloat(data[\"LossofBusIncomeFP\"])||0)+(parseFloat(data[\"BuildingLimitFP\"])||0)-(parseFloat(data[\"PropDeductibleCredit\"])||0)).toFixed(2)",
 						"key": "propertyCoveragesTotalPL",
 						"type": "number",
 						"input": true,
@@ -12723,7 +12723,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) -(parseFloat(data[\"PropDeductibleCredit\"])||0)).toFixed(2);",
+						"calculateValue": "value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) ;",
 						"key": "totalAmount",
 						"type": "number",
 						"input": true,
@@ -13226,7 +13226,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 496,
+	"_vid": 497,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13243,6 +13243,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-08T10:54:50.046Z",
+	"modified": "2020-07-09T13:59:40.478Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
