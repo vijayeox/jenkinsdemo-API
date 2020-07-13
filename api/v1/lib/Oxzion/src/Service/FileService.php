@@ -864,8 +864,6 @@ class FileService extends AbstractService
                 $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name $field $fromQuery $where $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-                print_r($select);
-                print_r($queryParams);
                 $countQuery = "SELECT FOUND_ROWS();";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
