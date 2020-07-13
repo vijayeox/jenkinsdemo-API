@@ -1379,7 +1379,7 @@ class FileService extends AbstractService
         }
     }
 
-    public function updateFieldValueOnFiles($appUUid,$data,$fieldName,$initialFieldValue,$newFieldValue,$filterParams = null){
+    public function updateFieldValueOnFiles($appUUid,$data,$fieldName,$initialFieldValue,$newFieldValue,$filterParams){
 
         $whereQuery = " ";
         $sort = "";
