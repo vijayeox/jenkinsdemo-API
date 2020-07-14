@@ -41,7 +41,11 @@
                     </tr>
                     <tr>
                         <td>Contents Limit:</td>
+                        {if $propertyCoverageSelect != "no"}
                         <td>${$dspropTotal|number_format}</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td id="space_left">(Sign limited to : $25,000)</td>
@@ -49,10 +53,15 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        <td>{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}                           ${$lossOfBusIncome|number_format}{else}$0{/if}</td>
+                        {if $propertyCoverageSelect != "no"}
+                        <td>{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0} ${$lossOfBusIncome|number_format}{else}$0{/if}</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
+                        {if $propertyCoverageSelect != "no"}
                         {if isset($dspropownbuilding) && $dspropownbuilding != "no"}
                             {if isset($dspropreplacementvalue)}
                             <td>${$dspropreplacementvalue|number_format}</td>
@@ -62,14 +71,21 @@
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
+                        {if $propertyCoverageSelect != "no"}
                         {if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}
                             <td>Included</td>
                         {else}
                             <td>Not Included</td>
                         {/if}
+                    {else}
+                        <td>Not Included</td>
+                    {/if}
                     </tr>
                     <tr>
                         <td>Business Income from dependant properties:</td>
