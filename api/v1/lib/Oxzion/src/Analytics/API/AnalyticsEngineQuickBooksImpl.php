@@ -65,19 +65,28 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI
   }
 
 
-  public function parseFilter($parameters){
+  public function parseFilter($parameters)
+  {
     if (isset($parameters['filter'])) {
-        $filter = $parameters['filter'];
+      $filter = $parameters['filter'];
     }
-   if (isset($parameters['inline_filter'])) {
-        $filter = $parameters['inline_filter'];
+    if (isset($parameters['inline_filter'])) {
+      $filter = $parameters['inline_filter'];
     }
-    if (isset($filter[0][0][0])){
-      if ($filter[0][0][0]=='date_period' || $filter[0][0][0]=='date-period') {
-        $startdate=Date('Y-m-d',strtotime($filter[0][0][2]));
-        $enddate=Date('Y-m-d',strtotime($filter[0][2][2]));
-        $parameters['date_period']=$startdate.'/'.$enddate;
-      }  
+    if (isset($filter[0][0][0])) {
+      if ($filter[0][0][0] == 'date_period' || $filter[0][0][0] == 'date-period') {
+        $startdate = $filter[0][0][2];
+        $enddate = $filter[0][2][2];
+        if (substr($startdate, 0, 5) == "date:") {
+          $startdate = substr($startdate, 5);
+        }
+        if (substr($enddate, 0, 5) == "date:") {
+          $enddate = substr($enddate, 5);
+        }
+        $startdate = Date('Y-m-d', strtotime($startdate));
+        $enddate = Date('Y-m-d', strtotime($enddate));
+        $parameters['date_period'] = $startdate . '/' . $enddate;
+      }
     }
     return $parameters;
   }
