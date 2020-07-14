@@ -109,61 +109,12 @@
 				"columns": [{
 					"components": [{
 						"label": "Policy Start Date",
-						"displayInTimezone": "utc",
-						"allowInput": false,
-						"format": "MM-dd-yyyy",
+						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"minDate": "moment().startOf('day')",
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
-						"clearOnHide": false,
-						"validate": {
-							"required": true,
-							"customMessage": "Please select the Policy Start Date"
-						},
-						"errorLabel": "Policy Start Date",
-						"key": "policyPeriod",
-						"properties": {
-							"delegate": "RateCard"
-						},
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "utc",
-							"language": "en",
-							"useLocaleSettings": false,
-							"allowInput": false,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": "moment().startOf('day')",
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "start_date",
-						"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
 						"key": "start_date",
-						"type": "hidden",
+						"type": "textfield",
 						"input": true,
-						"tableView": true,
-						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 5,
@@ -174,45 +125,12 @@
 				}, {
 					"components": [{
 						"label": "Policy End Date",
-						"displayInTimezone": "utc",
-						"allowInput": false,
-						"format": "MM-dd-yyyy",
+						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"datepickerMode": "day"
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
-						"clearOnHide": false,
-						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 						"key": "end_date",
-						"type": "datetime",
+						"type": "textfield",
 						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "utc",
-							"language": "en",
-							"useLocaleSettings": false,
-							"allowInput": false,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
 						"hideOnChildrenHidden": false
 					}],
 					"width": 5,
@@ -13484,7 +13402,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 275,
+	"_vid": 276,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13501,6 +13419,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-08T10:55:29.002Z",
+	"modified": "2020-07-08T14:54:39.498Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

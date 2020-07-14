@@ -1345,7 +1345,7 @@
 						},
 						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n  if((data.start_date && data.start_date != \"\") ){\n\tvalue = data.start_date;\n  }\n} else {\n  if ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-13')))) {\n\t\t\tvalue = moment('2020-06-30').format(\"MM-DD-YYYY\");\n\t}\n  if(value == \"\"){\n\tvalue = moment().format(\"MM-DD-YYYY\");\n  }\n}",
+						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n  if((data.start_date && data.start_date != \"\") ){\n\tvalue = data.start_date;\n  }\n} else {\n  if ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-15')))) {\n\t\t\tvalue = moment('2020-06-30').format(\"MM-DD-YYYY\");\n\t}\n  if(value == \"\"){\n\tvalue = moment().format(\"MM-DD-YYYY\");\n  }\n}",
 						"allowCalculateOverride": true,
 						"validate": {
 							"required": true,
@@ -1446,7 +1446,7 @@
 			}, {
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) {\n\tif (data.csrPolicyPeriod && moment(data.csrPolicyPeriod)) {\n\t\tvalue = moment(data.csrPolicyPeriod).format(\"YYYY-MM-DD\");\n\t}\n} else {\n\tvar startRange = moment(data['start_date_range'].value);\n\tvar today = moment();\n\tif ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t\t(moment().isSameOrBefore(moment('2020-07-13')))) {\n\t\tvalue = startRange.format(\"YYYY-MM-DD\");\n\t} else {\n\t\tvalue = moment.max(today, startRange).format(\"YYYY-MM-DD\");\n\t}\n}",
+				"calculateValue": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) {\n\tif (data.csrPolicyPeriod && moment(data.csrPolicyPeriod)) {\n\t\tvalue = moment(data.csrPolicyPeriod).format(\"YYYY-MM-DD\");\n\t}\n} else {\n\tvar startRange = moment(data['start_date_range'].value);\n\tvar today = moment();\n\tif ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t\t(moment().isSameOrBefore(moment('2020-07-15')))) {\n\t\tvalue = startRange.format(\"YYYY-MM-DD\");\n\t} else {\n\t\tvalue = moment.max(today, startRange).format(\"YYYY-MM-DD\");\n\t}\n}",
 				"key": "start_date",
 				"properties": {
 					"data_type": "Date"
@@ -3806,7 +3806,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 614,
+	"_vid": 616,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3890,7 +3890,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-07-09T08:27:23.210Z",
+	"modified": "2020-07-14T11:17:19.541Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

@@ -228,7 +228,7 @@ class PadiVerification extends AbstractAppDelegate
             $data['username'] = $userInfo['username'];
         }else{
             if($data['identifier_field'] == 'padi'){
-                $data['username'] = 'PL'.$data['padi'];
+                $data['username'] = $data['padi'];
             }else if($data['identifier_field'] == 'business_padi'){
                 $data['username'] = 'S'.$data['business_padi'];
             }

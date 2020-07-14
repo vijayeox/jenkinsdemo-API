@@ -356,7 +356,8 @@ class Module
                         $container->get(Service\FileService::class),
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(Service\ActivityInstanceService::class),
-                        $container->get(Service\UserService::class)
+                        $container->get(Service\UserService::class),
+                        $container->get(Service\CommentService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {
