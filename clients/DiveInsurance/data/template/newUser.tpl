@@ -2,13 +2,11 @@
 
 <div style='width:100%;background:#053b6d;color:#fff;height:35px;margin-bottom:2px'>
 </div>
-<div style='line-height: 24px'>Dear {$firstname} &nbsp{$padi}, </br/>
-	<p>&nbsp&nbsp&nbsp&nbspVicencia & Buckley / HUB International  is excited to announce the launch of our new insurance portal to help simplify the management of your PADI Endorsed Insurance Program.  With the new web portal you will be able to renew your coverage, print your insurance documents and  request policy changes.  You will be receiving two separate e-mails  with initial login information.  This is the initial version of the platform and additional features will be added in the future.  Please let us know what you would like to see.</p>
-
-	<p>We has created a new ID for you,</p> <br/>Details are below: <br/>
-	URL: <a href='{$baseurl}/apps/DiveInsurance/register/IPLRegister' >Click here to Login </a> <br/>
+<div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, </br/>
+	<p>We have created a new ID for you,</p> <br/>Details are below: <br/>
 	Username: {$username} <br/>
-	Password: {$password} <br/>
+	<br/>                
+    <a href = "{$passwordResetUrl}" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>Click here to set your password</u></a>
 </div>
 <br/>
 Sincerely,

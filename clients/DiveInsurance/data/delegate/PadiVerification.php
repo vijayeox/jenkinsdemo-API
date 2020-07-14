@@ -49,6 +49,7 @@ class PadiVerification extends AbstractAppDelegate
         unset($data['fax']);
         unset($data['email']);
         $privileges = $this->getPrivilege();
+        $coverageOptions = array();
         if(isset($privileges['MANAGE_POLICY_APPROVAL_WRITE']) && 
             $privileges['MANAGE_POLICY_APPROVAL_WRITE'] == true){
             $data['initiatedByCsr'] = true;
@@ -66,9 +67,13 @@ class PadiVerification extends AbstractAppDelegate
             $data['verified'] = false;
             return $data;
         }
-        if(isset($data['padi']) && $data['padi'] != ''){
+        if(isset($data['padiNumber']) && $data['padiNumber'] != ''){
+            $data['member_number'] = $data['padiNumber'];
+        }else if(isset($data['padi']) && $data['padi'] != '' && $data['product'] != 'Dive Store'){
             $data['member_number'] = $data['padi'];
-        } 
+        }else if(isset($data['business_padi']) && $data['business_padi'] != '' && $data['product'] == 'Dive Store'){
+            $data['member_number'] = $data['business_padi'];
+        }
         if(isset($data['business_padi']) && $data['business_padi'] != ''){
             $data['member_number'] = $data['business_padi'];
         }
@@ -80,7 +85,7 @@ class PadiVerification extends AbstractAppDelegate
             $data['verified'] = false;
             return $data;
         }
-        $select = "Select firstname, MI as initial, lastname, business_name FROM padi_data WHERE member_number ='".$data['member_number']."'";
+        $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['member_number']."'";
         $result = $persistenceService->selectQuery($select);
         if($result->count() > 0){
             $response = array();
@@ -95,6 +100,36 @@ class PadiVerification extends AbstractAppDelegate
                         $returnArray['padiVerified'] = true;
                         $returnArray['businessPadiVerified'] = false;
                         $returnArray['padiNotFound'] = false;
+                        if($response[0]['rating']=='EFR' && $data['product']=='Individual Professional Liability'){
+                            $returnArray['padiVerified'] = false;
+                            $returnArray['businessPadiVerified'] = false;
+                            $returnArray['padiNotApplicable'] = true;
+                            $returnArray['padiNotFound'] = false;
+                        } else if($response[0]['rating']=='PM' && $data['product']=='Individual Professional Liability'){
+                            $returnArray['padiVerified'] = false;
+                            $returnArray['businessPadiVerified'] = false;
+                            $returnArray['padiNotApplicable'] = true;
+                            $returnArray['padiNotFound'] = false;
+                        } else {
+                            $ratingApplicable = implode('","',array_column($response, 'rating'));
+                            $returnArray['rating'] = $ratingApplicable;
+                            $coverageSelect = 'Select DISTINCT coverage_level,coverage_name FROM coverage_options WHERE padi_rating  in ("'.$ratingApplicable.'") and category IS NULL';
+                            $this->logger->info("coverage select".$coverageSelect);
+                            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                            if($result->count() > 0){
+                                while ($coverageLevels->next()) {
+                                    $coverage = $coverageLevels->current();
+                                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                                }
+                            } else {
+                                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options and category IS NULL";
+                                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                                while ($coverageLevels->next()) {
+                                    $coverage = $coverageLevels->current();
+                                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                                }
+                            }
+                        }
                     } else {
                         $returnArray['padiVerified'] = false;
                         $returnArray['businessPadiVerified'] = true;
@@ -161,11 +196,19 @@ class PadiVerification extends AbstractAppDelegate
             $returnArray['padi_empty'] = false;
             $returnArray['businessPadiEmpty'] = false;
             $returnArray['padiNotFoundCsrReview'] = false;
+            $returnArray['careerCoverageOptions'] = $coverageOptions;
             unset($returnArray['member_number']);
             unset($privileges);
-            return $returnArray;
+            $data = $returnArray;
+            // return $returnArray;
         } else {
             $returnArray = array();
+            $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+            while ($coverageLevels->next()) {
+                $coverage = $coverageLevels->current();
+                $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+            }
             $returnArray['businessPadiVerified'] = false;
             $returnArray['padiVerified'] = false;
             $returnArray['verified'] = true;
@@ -173,12 +216,23 @@ class PadiVerification extends AbstractAppDelegate
             $returnArray['businessPadiEmpty'] = false;
             $returnArray['padiNotFound'] = true;
             $returnArray['businessPadiNotFound'] = true;
+            $returnArray['careerCoverageOptions'] = $coverageOptions;
             $returnArray['padiNotFoundCsrReview'] = true;
             $returnArray['padiNotApplicable'] = false;
             $data = array_merge($data,$returnArray);
             unset($data['member_number']);
             unset($privileges);
-            return $data;
         }
+        $userInfo = $this->getUserDetailsByIdentifier($data[$data['identifier_field']],$data['identifier_field']);
+        if($userInfo != 0){
+            $data['username'] = $userInfo['username'];
+        }else{
+            if($data['identifier_field'] == 'padi'){
+                $data['username'] = $data['padi'];
+            }else if($data['identifier_field'] == 'business_padi'){
+                $data['username'] = 'S'.$data['business_padi'];
+            }
+        }
+        return $data;
     }
 }

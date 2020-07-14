@@ -10,6 +10,7 @@ use Oxzion\Model\Comment;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
+use Oxzion\Utils\UuidUtil;
 use Zend\Db\Sql\Expression;
 use Exception;
 
@@ -32,17 +33,24 @@ class CommentService extends AbstractService
         $this->table = $table;
     }
 
-    public function createComment(&$data, $fileId)
+    public function createComment($data, $fileId)
     {
         $form = new Comment();
         //Additional fields that are needed for the create
         $data['text'] = isset($data['text']) ? $data['text'] : null;
         $data['file_id'] = $this->getIdFromUuid('ox_file', $fileId);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['uuid'] = UuidUtil::uuid();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
+        if(isset($data['parent'])){
+            $ret = $this->getParentId($data, $fileId);
+            if(!$ret){
+                return 0;
+            }
+        }
         $data['isdeleted'] = false;
         $form->exchangeArray($data);
         $form->validate();
@@ -64,16 +72,32 @@ class CommentService extends AbstractService
         return $count;
     }
 
-    public function updateComment($id, &$data)
-    {
-        $obj = $this->table->get($id, array());
-        if (is_null($obj)) {
+    private function getParentId(&$data, $fileId){
+        $fId = $this->getIdFromUuid("ox_file", $fileId);
+        $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
+        if(!$obj){
             return 0;
         }
+        $data['parent'] = $obj;
+        return 1;    
+    }
+    public function updateComment($id, $fileId, $data)
+    {
+        $fId = $this->getIdFromUuid("ox_file", $fileId);
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
+        if (!$obj) {
+            return 0;
+        }
+        if(isset($data['parent'])){
+            $ret = $this->getParentId($data, $fileId);
+            if(!$ret){
+                return 0;
+            }
+        }
+        $obj = $obj->toArray();
         $form = new Comment();
-        $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
-        $data['id'] = $id;
-        $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
+        $data = array_merge($obj, $data); //Merging the data from the db for the ID
+        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
         $form->validate();
@@ -91,16 +115,16 @@ class CommentService extends AbstractService
         return $count;
     }
 
-    public function deleteComment($id)
+    public function deleteComment($id, $fileId)
     {
-        $obj = $this->table->get($id, array());
+        $fId = $this->getIdFromUuid("ox_file", $fileId);
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
         if (is_null($obj)) {
             return 0;
         }
         $form = new Comment();
         $data = $obj->toArray();
-        $data['id'] = $id;
-        $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = 1;
         $form->exchangeArray($data);
@@ -119,28 +143,46 @@ class CommentService extends AbstractService
         return $count;
     }
 
+    public function getComment($id, $fileId){
+        $result = $this->getCommentsInternal($fileId, $id);
+        if(count($result) > 0){
+            return $result[0];
+        }
+
+        return 0;
+    }
     public function getComments($fileId)
     {
-        $query = "select text,ou.name as name,ou.icon as icon,ou.uuid as userId,ox_comment.date_created as time from ox_comment inner join ox_user ou on ou.id = ox_comment.created_by where ox_comment.org_id = :orgId AND ox_comment.file_id = :fileId order by ox_comment.date_created desc";
-        $fileId = $this->getIdFromUuid('ox_file', $fileId);
+        return $this->getCommentsInternal($fileId);
+    }
+
+    private function getCommentsInternal($fileId, $id = null){
+        $fileClause = "";
         $queryParams = array("orgId"=>AuthContext::get(AuthConstants::ORG_ID),"fileId"=>$fileId);
+        if($id){
+            $fileClause = "AND ox_comment.uuid = :commentId";
+            $queryParams['commentId'] = $id;
+        }
+        $query = "select text,ou.name as name,ou.icon as icon,ou.uuid as userId,ox_comment.date_created as time, ox_comment.uuid as commentId 
+                    from ox_comment 
+                    inner join ox_user ou on ou.id = ox_comment.created_by 
+                    inner join ox_file of on of.id = ox_comment.file_id 
+                    where ox_comment.org_id = :orgId AND of.uuid = :fileId $fileClause order by ox_comment.date_created desc";
+        $this->logger->info("Executing Query $query with params - ".print_r($queryParams, true));
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         return $resultSet;
     }
 
-    public function getchildren($id)
+    public function getchildren($id, $fileId)
     {
-        $queryString = "select * from ox_comment";
-        $where = "where ox_comment.id =".$id." AND ox_comment.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_comment.isdeleted!=1";
-        $order = "order by ox_comment.id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
-        if ($resultSet) {
-            $where = "where ox_comment.parent =".$id." AND ox_comment.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_comment.isdeleted!=1";
-            $result = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
-            if ($result) {
-                return $result;
-            }
-        }
-        return 0;
+        $queryString = "select ox_comment.text, ou.name, ou.icon, ou.uuid as userId, ox_comment.date_created as time, 
+                        ox_comment.uuid as commentId from ox_comment 
+                        inner join ox_comment as parent on parent.id = ox_comment.parent
+                        inner join ox_user ou on ou.id = ox_comment.created_by 
+                        inner join ox_file of on of.id = ox_comment.file_id
+                        where parent.uuid = :commentId AND ox_comment.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_comment.isdeleted!=1 AND of.uuid = :fileId order by ox_comment.id";
+        $queryParams = ["commentId" => $id, "fileId" => $fileId];
+        $result = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+        return $result;
     }
 }

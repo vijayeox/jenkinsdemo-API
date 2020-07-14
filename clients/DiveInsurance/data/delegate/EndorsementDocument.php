@@ -9,7 +9,7 @@ class EndorsementDocument extends PolicyDocument
         parent::__construct();
         $this->type = 'endorsement';
         $this->template = array(
-            'Dive Boat' 
+            'Dive Boat'
             => array(
              'cover_letter' => 'Dive_Boat_Quote_Cover_Letter',
              'lheader' => 'letter_header.html',
@@ -33,15 +33,18 @@ class EndorsementDocument extends PolicyDocument
              'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
              'blanketForm' => 'DB_AI_Blanket_Endorsement.pdf',
              'groupExclusions' => 'Group_Exclusions.pdf'),
-            'Dive Store' 
+            'Dive Store'
             => array(
              'template' => 'DiveStoreEndorsement',
              'header' => 'DiveStoreEndorsement_header.html',
-             'footer' => 'DiveStoreEndorsement_footer.html', 
+             'footer' => 'DiveStoreEndorsement_footer.html',
              'cover_letter' => 'Dive_Store_Cover_Letter',
              'lheader' => 'letter_header.html',
              'lfooter' => 'letter_footer.html',
              'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
+             'aiTemplate' => 'DiveStore_AI',
+             'aiheader' => 'DiveStore_AI_header.html',
+             'aifooter' => 'DiveStore_AI_footer.html',
              'lpTemplate' => 'DiveStore_LP',
              'lpheader' => 'DiveStore_LP_header.html',
              'lpfooter' => 'DiveStore_LP_footer.html',
@@ -55,12 +58,15 @@ class EndorsementDocument extends PolicyDocument
              'gheader' => 'Group_EndoHeader.html',
              'gfooter' => 'Group_footer.html',
              'nTemplate' => 'Group_PL_NI',
-             'nheader' => 'Group_Endo_NI_header.html',
+             'nheader' => 'Group_Endo_DS_NI_header.html',
              'nfooter' => 'Group_NI_footer.html',
-             'blanketForm' => 'DS_AI_Blanket_Endorsement.pdf',
+             'ganiTemplate' => 'Group_ANI',
+             'ganiheader' => 'Group_DS_ANI_header.html',
+             'ganifooter' => 'Group_ANI_footer.html',
+             'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
              'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
              'groupExclusions' => 'Group_Exclusions.pdf',
              'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'
-         ));        
+         ));
     }
 }

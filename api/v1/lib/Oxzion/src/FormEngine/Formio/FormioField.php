@@ -170,7 +170,9 @@ class FormioField
         return array('required' => $required, 'data_type' => $dataType);
     }
     private function validateField($field, $fieldReference){
-        if(isset($field['parent'])){
+        if(isset($field['parent']) && ($field['parent']['type'] == 'datagrid' || 
+                                        $field['parent']['type'] == 'editgrid' || 
+                                        $field['parent']['type'] == 'survey')) {
             if(!isset($fieldReference[$field['parent']['name']])){
                 $this->error[] = "Field ".$field['name']." - Unexpected Parent Field '".$field['parent']['name']."'";
                 return;

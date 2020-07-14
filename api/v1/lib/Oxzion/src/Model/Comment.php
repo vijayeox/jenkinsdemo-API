@@ -7,14 +7,15 @@ use Oxzion\Model\Entity;
 class Comment extends Entity
 {
     protected $data = array(
-        'id'=>0 ,
-        'org_id' => 0,
+        'id'=>NULL ,
+        'org_id' => NULL,
         'parent' => null,
-        'text' => 0,
-        'file_id' => 0,
-        'created_by' => 0,
+        'uuid' => NULL,
+        'text' => NULL,
+        'file_id' => NULL,
+        'created_by' => NULL,
         'modified_by' => null,
-        'date_created' => 0,
+        'date_created' => NULL,
         'date_modified' => null,
         'isdeleted' => 0,
     );
@@ -22,7 +23,7 @@ class Comment extends Entity
 
     public function validate()
     {
-        $required = array('text');
+        $required = array('text', 'uuid');
         $this->validateWithParams($required);
     }
 }

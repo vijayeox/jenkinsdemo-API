@@ -17,7 +17,7 @@
 
 		<p class = "rgard">RE: PADI SPONSORED DIVE CENTER INSURANCE</p>
 
-		<p>Dear <span class ="rgard1">{$firstname}&nbsp{$lastname}</span></p>
+		<p>Dear <span class ="rgard1">{$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if},</span></p>
 		<div class = "line_space">
 		<p>We are pleased to enclose the certificate of insurance and policy for your dive center operation. The certificate lists the coverage and policy limits applicable to your business.</p>
 		<ul class ="order">
@@ -34,7 +34,7 @@ questions.</p>
 </div>
 		<p>Sincerely,</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
-		<p class="footer_line">{$approverName},CISR, Account Manager</p>
+		<p class ="footer_line">{$approverName}, {$approverDesignation}</p>
 		<p class ="footer_line">(800) 223-9998 or (714) 739-3176</p>
 		<p class ="footer_line">{$approverEmailId}</p>
 

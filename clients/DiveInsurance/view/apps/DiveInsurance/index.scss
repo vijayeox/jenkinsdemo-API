@@ -14,12 +14,19 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 }
 // ---SweetAlert2 Fixes (End)---
 
-.k-list-scroller{
+.k-list-scroller {
   font-size: 14px;
 }
 
-.k-popup{
+.k-popup {
   padding: 0px;
+}
+
+.gridActions .manage-btn{
+  // width: 70px!important;
+  border-radius: 7px!important;
+  font-weight: unset!important;
+  font-family: inherit!important;
 }
 
 .osjs-window[data-id="Window_DiveInsurance"] {
@@ -66,22 +73,47 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     cursor: auto !important;
   }
   .page-link {
-    color: $primary-color;;
+    color: $primary-color;
   }
   .bg-primary {
     background-color: $primary-color;
     color: white;
   }
+
+
+  .iframeDoc {
+    height: 100% !important;
+    min-height: 650px !important;
+    width: 100% !important;
+    height: -moz-available;
+    height: fill-available;
+    width: -webkit-fill-available;
+    width: -moz-available;
+  }
+  
   #floater {
     position: fixed;
-    bottom: 10px;
-    right: 30px;
+    bottom: 12px;
+    right: 15px;
     pointer-events: none;
-    img { 
+    img {
       height: 40px;
       width: auto;
-      pointer-events:  none;
+      pointer-events: none;
       opacity: 0.8;
+    }
+    .helpText {
+      position: absolute;
+      display: flex;
+      top: 27px;
+      width: max-content;
+      text-align: center;
+      left: -280px;
+      p {
+        padding: 3px;
+        font-weight: bolder;
+        font-size: 14px;
+      }
     }
   }
 }

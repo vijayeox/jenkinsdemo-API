@@ -54,6 +54,10 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     border-color: $secondary;
   }
 
+  .bg-primary {
+    background-color: $primary-color !important;
+  }
+
   .k-button.k-primary {
     /*border-color: $primary-color;*/
     color: #fff;
@@ -71,6 +75,33 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
   .page-link {
     color: $primary-color;
+  }
+
+  .inlineCheckboxes {
+    .form-radio.radio {
+      .form-check-inline {
+        padding-bottom: 12px;
+        padding-left: 1px;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .table.datagrid-table.table-bordered {
+    th {
+      background-color: $primary-color;
+      color: #ffffff;
+    }
+  }
+  .formio-dialog-buttons button.formio-dialog-button {
+    background-color: $secondary;
+  }
+
+  .fad.fa-circle-notch {
+    font-size: 18px !important;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
   }
 
   #floater {

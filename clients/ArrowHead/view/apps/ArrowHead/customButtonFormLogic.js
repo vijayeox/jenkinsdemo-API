@@ -8,7 +8,7 @@ s.onload = function (e) {
   var appendCustomButtonTimer = setInterval(() => {
     if (
       document.getElementById(
-        "formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7"
+        "formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b"
       )
     ) {
       if (!document.getElementById("saveDraftCustomButton")) {
@@ -29,10 +29,20 @@ s.onload = function (e) {
           });
           document
             .getElementById(
-              "formio_loader_2b4a5099-4a2b-415a-b1d1-b539cbe1eee7"
+              "formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b"
             )
             .dispatchEvent(ev);
         };
+        var dataGridDeleteIcons = document.getElementsByClassName(
+          "fa-times-circle-o"
+        );
+        dataGridDeleteIcons = Array.from(dataGridDeleteIcons);
+        if (dataGridDeleteIcons.length > 0) {
+          dataGridDeleteIcons.map((item) => {
+            item.classList.add("fa-times-circle");
+            item.classList.remove("fa-times-circle-o");
+          });
+        }
       }
     } else {
       appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;
@@ -40,13 +50,3 @@ s.onload = function (e) {
   }, 1000);
 };
 document.head.appendChild(s);
-
-fetch("https://api.npoint.io/ac5a62e2a6c18c0dbb6c")
-  .then((response) => response.json())
-  .then((jsondata) => {
-    setTimeout(() => {
-      for (item in jsondata) {
-        data[item] = jsondata[item];
-      }
-    }, 2000);
-  });

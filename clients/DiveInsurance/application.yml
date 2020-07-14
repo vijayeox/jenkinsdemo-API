@@ -55,6 +55,9 @@ role:
 entity:
     -
         name: 'Individual Professional Liability'
+        identifiers:
+            -
+                identifier: padi
         field:
             -
                 name: policyStatus
@@ -84,9 +87,16 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true            
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
+        identifiers:
+            -
+                identifier: business_padi
         field:
             -
                 name: policyStatus
@@ -114,9 +124,13 @@ entity:
                 data_type: text
                 index: true
             -
-                name: padi
+                name: product
                 data_type: text
-                index: true     
+                index: true
+            -
+                name: business_padi
+                data_type: text
+                index: true
     -
         name: 'Dive Boat'
         field:
@@ -148,9 +162,20 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true    
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: business_padi
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
+        identifiers:
+            -
+                identifier: padi
         field:
             -
                 name: policyStatus
@@ -180,7 +205,11 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true    
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
     -
         name: 'Pocket Card Job'
         field:
@@ -223,7 +252,11 @@ entity:
             -
                 name: padi
                 data_type: text
-                index: true      
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
 pages:
     -
         page_name: UserHomePage.yml

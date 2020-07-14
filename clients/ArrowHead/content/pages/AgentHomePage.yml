@@ -6,6 +6,11 @@ content:
         content:
             route: 'file'
             filterable: true
+            defaultFilters: 
+                sort:
+                    -
+                        field: date_modified
+                        dir: desc                 
             resizable: true
             pageable:
                 buttonCount: 3
@@ -36,11 +41,12 @@ content:
                     details:
                         -
                             type: Form
-                            form_id: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7
+                            form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:
+                title: "Create Workbook"
                 actions:
                     -
                         name: Create New Workbook
@@ -48,7 +54,7 @@ content:
                         details:
                             -
                                 type: Form
-                                form_id: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7           
+                                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b      
             columnConfig:
                 -
                     title: Insured

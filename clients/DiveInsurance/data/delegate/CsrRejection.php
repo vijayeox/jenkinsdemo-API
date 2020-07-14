@@ -9,7 +9,7 @@ require_once __DIR__."/DispatchNotification.php";
 class CsrRejection extends DispatchNotification {
 
     public $template;
- 
+
     public function __construct(){
         $this->template = array(
             'Individual Professional Liability' => 'CsrRejectionTemplate',
@@ -24,7 +24,7 @@ class CsrRejection extends DispatchNotification {
         $this->logger->info("Rejection Policy Notification");
         $data['template'] = $this->template[$data['product']];
         if($data['product'] == 'Dive Store'){
-            $subject = 'Dive Store Insurance Application on Hold - '.$data['padi'];
+            $subject = 'Dive Store Insurance Application on Hold - '.$data['business_padi'];
             $data['productType'] = 'Dive Store';
         }else if($data['product'] == 'Dive Boat'){
             $subject = 'Dive Boat Insurance Application on Hold - '.$data['padi'];
@@ -52,10 +52,10 @@ class CsrRejection extends DispatchNotification {
         }else{
             while ($resultSet->next()) {
                 $stateDetails[] = $resultSet->current();
-            }       
+            }
             if(isset($stateDetails) && count($stateDetails)>0){
                  $state = $stateDetails[0]['state_in_short'];
-            } 
+            }
         }
         return $state;
     }

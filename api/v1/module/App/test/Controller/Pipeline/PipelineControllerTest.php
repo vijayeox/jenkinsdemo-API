@@ -5,6 +5,7 @@ use Mockery;
 use Oxzion\Service\CommandService;
 use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use Oxzion\Utils\FileUtils;
 
 class PipelineControllerTest extends ControllerTest
 {
@@ -30,9 +31,9 @@ class PipelineControllerTest extends ControllerTest
 
     private function getMockRestClientForScheduleService()
     {
-        $taskService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\CommandService::class);
+        $jobService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\JobService::class);
         $mockRestClient = Mockery::mock('Oxzion\Utils\RestClient');
-        $taskService->setRestClient($mockRestClient);
+        $jobService->setRestClient($mockRestClient);
         return $mockRestClient;
     }
 
@@ -80,33 +81,103 @@ class PipelineControllerTest extends ControllerTest
     public function testPipelineSchedule()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "command" => "schedule", "firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "jobUrl" => "/app/ec8942b7-aa93-4bc6-9e8c-e1371988a5d4/delegate/DispatchAutoRenewalNotification", "state" => "karnataka", "cron" => "0 0/1 * * * ? *", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "setupjob", "jobName" => "autoRenewalJob", "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com', "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", 
+                 "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", 
+                 "command" => "schedule", 
+                 "firstname" => "Neha", 
+                 "policy_period" => "1year", 
+                 "card_expiry_date" => "10/24", 
+                 "city" => "Bangalore", 
+                 "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", 
+                 "isequipmentliability" => "1", 
+                 "card_no" => "1234", 
+                 "jobUrl" => "/app/ec8942b7-aa93-4bc6-9e8c-e1371988a5d4/delegate/DispatchAutoRenewalNotification", 
+                 "state" => "karnataka", 
+                 "cron" => "0 0/1 * * * ? *", 
+                 "zip" => "560030", 
+                 "coverage" => "100000", 
+                 "product" => "Individual Professional Liability", 
+                 "address2" => "dhgdhdh", 
+                 "address1" => "hjfjhfjfjfhfg", 
+                 "expiry_date" => "2020-06-30", 
+                 "form_id" => "0", 
+                 "entity_id" => "1", 
+                 "created_by" => "1", 
+                 "url" => "setupjob", 
+                 "jobName" => "autoRenewalJob", 
+                 "expiry_year" => "2019", 
+                 "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", 
+                 "lastname" => "Rai", 
+                 "isexcessliability" => "1", 
+                 "credit_card_type" => "credit", 
+                 "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", 
+                 "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b", 
+                 "email" => 'bharat@gmail.com', 
+                 "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", 
+                 "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(["body" => '{"Success" : true, "JobId" : "123456", "Message" : "Job setup was successful"}']);
         }
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
+        $this->assertEquals("success", $content['status']);
+        $this->assertEquals(true, isset($content['data'][$data['jobName']]));
+        $jobData = json_decode($content['data'][$data['jobName']], true);
+        $this->assertEquals(123456, $jobData['jobId']);
+        $this->assertEquals($data['jobName'], $jobData['jobGroup']);
     }
 
     public function testPipelineScheduleWithoutRequiredFields()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "jobUrl" => "/app/ec8942b7-aa93-4bc6-9e8c-e1371988a5d4/delegate/DispatchAutoRenewalNotification", "state" => "karnataka", "cron" => "0 0/1 * * * ? *", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "url" => "setupjob", "command" => "schedule", "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "142", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "134", "email" => 'bharat@gmail.com', "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", 
+                 "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", 
+                 "firstname" => "Neha", 
+                 "policy_period" => "1year", 
+                 "card_expiry_date" => "10/24", 
+                 "city" => "Bangalore", 
+                 "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", 
+                 "isequipmentliability" => "1", 
+                 "card_no" => "1234", 
+                 "jobUrl" => "/app/ec8942b7-aa93-4bc6-9e8c-e1371988a5d4/delegate/DispatchAutoRenewalNotification", 
+                 "state" => "karnataka", 
+                 "cron" => "0 0/1 * * * ? *", 
+                 "zip" => "560030", 
+                 "coverage" => "100000", 
+                 "product" => "Individual Professional Liability", 
+                 "address2" => "dhgdhdh", 
+                 "address1" => "hjfjhfjfjfhfg", 
+                 "expiry_date" => "2020-06-30", 
+                 "form_id" => "0", 
+                 "entity_id" => "1", 
+                 "created_by" => "1", 
+                 "url" => "setupjob", 
+                 "command" => "schedule", 
+                 "expiry_year" => "2019", 
+                 "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", 
+                 "lastname" => "Rai", 
+                 "isexcessliability" => "1", 
+                 "credit_card_type" => "credit", 
+                 "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", 
+                 "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b", 
+                 "email" => 'bharat@gmail.com', 
+                 "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", 
+                 "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(["body" => '{"Success" : true, "JobId" : "123456", "Message" : "Job setup was successful"}']);
         }
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'JobUrl or Cron Expression or URL or JobName Not Specified');
+        $this->assertEquals($content['message'], 'JobUrl or Cron Expression or JobName Not Specified');
     }
 
     public function testPipelineCancelJob()
@@ -174,7 +245,7 @@ class PipelineControllerTest extends ControllerTest
         }
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
     }
 
     public function testFileSave()
@@ -194,7 +265,7 @@ class PipelineControllerTest extends ControllerTest
     public function testFileSaveInvalidWokflowInstanceID()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "command" => "fileSave", "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "5", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "1", "email" => 'bharat@gmail.com', "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "firstname" => "Neha", "policy_period" => "1year", "card_expiry_date" => "10/24", "city" => "Bangalore", "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", "isequipmentliability" => "1", "card_no" => "1234", "state" => "karnataka", "zip" => "560030", "coverage" => "100000", "product" => "Individual Professional Liability", "address2" => "dhgdhdh", "address1" => "hjfjhfjfjfhfg", "expiry_date" => "2020-06-30", "form_id" => "0", "entity_id" => "1", "created_by" => "1", "command" => "fileSave", "expiry_year" => "2019", "orgid" => "53012471-2863-4949-afb1-e69b0891c98a", "lastname" => "Rai", "isexcessliability" => "1", "workflow_instance_id" => "225", "credit_card_type" => "credit", "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925", "fileId" => "1", "email" => 'bharat@gmail.com', "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $data);
         $query = "Select data from ox_file where uuid = 'd13d0c68-98c9-11e9-adc5-308d99c9145b'";
@@ -233,10 +304,20 @@ class PipelineControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
+        $appId = "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4";
+        $config = $this->getApplicationConfig();
+        $formFolder = $config['FORM_FOLDER'];
+        $file = "/Test-Form-2.json";
+        $linkFolder = $formFolder.$appId;
+        FileUtils::createDirectory($linkFolder);
+        $link = $linkFolder.$file;
+        $target = __DIR__."/../../Dataset/Test-Form-2.json";
+        FileUtils::symlink($target, $link);
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
         $params = json_decode('{"commands": [{"command":"startform","workflow_id":"1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"}]}', true);
         $this->setJsonContent(json_encode($params));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $params);
+        $this->dispatch("/app/$appId/pipeline", 'POST', $params);
+        FileUtils::deleteDirectoryContents($linkFolder);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['appId'], "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4");

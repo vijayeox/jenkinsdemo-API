@@ -6,6 +6,12 @@
                 <p>Attached are your PADI Endorsed Insurance Documents for your Emergency First Response coverage. Please review carefully and advise of any changes needed.</p>
 			 <br/>
              
+			 <br/>
+			 {if isset($additionalNotes)} {$additionalNotes}
+			 <br/>
+			 <br/>
+			 <br/>{/if}
+			 <br/>
             </div>
 
 Sincerely,

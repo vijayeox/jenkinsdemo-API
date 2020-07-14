@@ -19,6 +19,7 @@ use Oxzion\Utils\BosUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ArrayUtils;
+use Oxzion\ValidationException;
 
 
 class UserService extends AbstractService
@@ -225,12 +226,18 @@ class UserService extends AbstractService
             $data['name'] = $data['firstname'] . " " . $data['lastname'];
             $data['uuid'] = UuidUtil::uuid();
             $data['date_created'] = date('Y-m-d H:i:s');
+            $setPasswordCode = UuidUtil::uuid();
+            $data['password_reset_code'] = $setPasswordCode;
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
             if (isset($data['managerid'])) {
                 $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
             }
             if (isset($data['preferences'])) {
-                $preferences = json_decode($data['preferences'], true);
+                if(is_string($data['preferences'])){
+                    $preferences = json_decode($data['preferences'], true);
+                } else {
+                    $preferences = $data['preferences'];
+                }
                 $data['timezone'] = $preferences['timezone'];
                 unset($preferences['timezone']);
                 $data['preferences'] = json_encode($preferences);
@@ -262,9 +269,11 @@ class UserService extends AbstractService
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
+                'lastname' => $data['lastname'],
                 'email' => $data['email'],
-                'orgid' => $orgid,
+                'orgId' => $orgid,
                 'password' => $password,
+                'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
             )), 'USER_ADDED');
             $this->addUserToOrg($form->id, $form->orgid);
@@ -1090,7 +1099,7 @@ class UserService extends AbstractService
         $resetCode = $data['password_reset_code'];
         $password = md5(sha1($data['new_password']));
         $expiry = date("Y-m-d H:i:s");
-        $query = "select id from ox_user where password_reset_expiry_date > '" . $expiry . "' and password_reset_code = '" . $resetCode . "'";
+        $query = "select id from ox_user where (password_reset_expiry_date > '" . $expiry . "' OR password_reset_expiry_date is NULL) and password_reset_code = '" . $resetCode . "'";
         $result = $this->executeQuerywithParams($query);
         $result = $result->toArray();
         if (count($result) == 0) {
@@ -1104,33 +1113,43 @@ class UserService extends AbstractService
     public function sendResetPasswordCode($username)
     {
         $resetPasswordCode = UuidUtil::uuid();
-        try {
-            $userDetails = $this->getUserBaseProfile($username);
-            if ($username === $userDetails['username']) {
-                $userReset['email'] = $userDetails['email'];
-                $userReset['firstname'] = $userDetails['firstname'];
-                $userReset['lastname'] = $userDetails['lastname'];
-                $userReset['url'] = $this->config['applicationUrl'] . "/?resetpassword=" . $resetPasswordCode;
-                $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
-                $userReset['orgid'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
-                $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
-                $userDetails['password_reset_code'] = $resetPasswordCode;
-                //Code to update the password reset and expiration time
-                $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);
-                if ($userUpdate) {
-                    $this->messageProducer->sendQueue(json_encode(array(
-                        'to' => $userReset['email'],
-                        'subject' => $userReset['firstname'] . ', You login details for EOX vantage!',
-                        'body' => $this->templateService->getContent('resetPassword', $userReset),
-                    )), 'mail');
-                    return $userReset;
-                }
-                return 0;
-            } else {
-                return 0;
+        $userDetails = $this->getUserBaseProfile($username);
+        if ($username === $userDetails['username']) {
+            $userReset['username'] = $userDetails['username'];
+            $userReset['email'] = $userDetails['email'];
+            $userReset['firstname'] = $userDetails['firstname'];
+            $userReset['lastname'] = $userDetails['lastname'];
+            $userReset['url'] = $this->config['applicationUrl'] . "/?resetpassword=" . $resetPasswordCode;
+            $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+            $userReset['orgId'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
+            $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
+            $userDetails['password_reset_code'] = $resetPasswordCode;
+            $userRecord = $userDetails['firstname']."_".$userDetails['username']."@eoxvantage.";
+            if(($userDetails['email'] == $userRecord."com") || ($userDetails['email'] == $userRecord."in")){
+                throw new ValidationException("Invalid Email");
             }
-        } catch (Exception $e) {
-            throw $e;
+            //Code to update the password reset and expiration time
+            $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);
+            if ($userUpdate) {
+                $subject = $userReset['firstname'] . ', You login details for EOX vantage!';
+                $bcc = " ";
+                if(isset($this->config['emailConfig'])){
+                    $emailConfig = $this->config['emailConfig'];
+                    if(isset($emailConfig['resetPassword'])){
+                        $subject = isset($emailConfig['resetPassword']['subject']) ? $userReset['firstname'].', '.$emailConfig['resetPassword']['subject'] : $userReset['firstname'] . ', You login details for EOX vantage!';
+                    }
+                }
+                $this->messageProducer->sendQueue(json_encode(array(
+                    'to' => $userReset['email'],
+                    'subject' => $subject,
+                    'body' => $this->templateService->getContent('resetPassword', $userReset),
+                )), 'mail');
+                $userReset['email']= $this->hideEmailAddress($userReset['email']);
+                return $userReset;
+            }
+            return 0;
+        } else {
+            return 0;
         }
     }
 
@@ -1208,6 +1227,7 @@ class UserService extends AbstractService
 
     public function checkAndCreateUser($params, &$data, $register = false)
     {
+       $this->logger->info("CHECK AND CREATE USER ----".print_r($data,true));
         if (!ArrayUtils::isKeyDefined($data, 'username')) {
             $data['username'] = $data['email'];
         }
@@ -1245,7 +1265,7 @@ class UserService extends AbstractService
             }
             $from .= " INNER JOIN ox_wf_user_identifier ui ON ui.user_id = u.id";
             $where .= " AND ui.app_id = :appId AND ui.org_id = :orgId
-                        AND ui.identifier = :identifier AND ui.identifier_name = :identifierName";
+                        OR (ui.identifier = :identifier AND ui.identifier_name = :identifierName)";
             $queryParams = array_merge($queryParams, array("appId" => $appId,
                 "orgId" => $orgId,
                 "identifier" => $data[$data['identifier_field']],
@@ -1289,7 +1309,8 @@ class UserService extends AbstractService
                 throw $e;
             }
         }
-
+        // print($data['username']);
+        // print_r($result);
         if ($data['username'] == $result[0]['username']) {
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];
@@ -1337,6 +1358,30 @@ class UserService extends AbstractService
         } catch (Exception $e) {
             throw $e;
 
+        }
+    }
+
+    private function hideEmailAddress($email)
+    {
+        if(filter_var($email, FILTER_VALIDATE_EMAIL))
+        {
+            list($first, $last) = explode('@', $email);
+            $first = str_replace(substr($first, '3'), str_repeat('*', strlen($first)-3), $first);
+            $last = explode('.', $last);
+            $last_domain = str_replace(substr($last['0'], '1'), str_repeat('*', strlen($last['0'])-1), $last['0']);
+            $hideEmailAddress = $first.'@'.$last_domain.'.'.$last['1'];
+            return $hideEmailAddress;
+        }
+    }
+
+    public function getUserDetailsByIdentifier($identifier,$identifierName){
+        $select = "SELECT ou.* from ox_user as ou join ox_wf_user_identifier as owi on ou.id = owi.user_id WHERE owi.identifier = :identifier AND owi.identifier_name = :identifierName";
+        $selectParams = array("identifier" => $identifier, "identifierName" => $identifierName);
+        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+        if(count($result) > 0){
+            return $result[0];
+        }else{
+            return 0;
         }
     }
 }

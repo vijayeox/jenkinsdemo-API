@@ -14,11 +14,6 @@
     "copy-webpack-plugin": "^5.0.4",
     "express": "^4.17.1",
     "file-loader": "^4.2.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0",
-    "react-server-boilerplate": "^1.0.2",
-    "react-tabs": "^3.0.0",
     "url-loader": "^2.1.0"
   },
   "devDependencies": {

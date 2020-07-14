@@ -89,6 +89,11 @@ class ServiceTest extends TestCase
     {
     }
 
+    protected function getSetUpOperation()
+    {
+        return Factory::INSERT();
+    }
+
     /**
      * Restore params
      */

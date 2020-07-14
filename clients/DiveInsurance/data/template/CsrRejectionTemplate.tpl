@@ -2,8 +2,8 @@
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
-            <div style='line-height: 24px'>Dear {$firstname} {$lastname}, <br/><br/>
-                 <p>{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}<br/>
+            <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, <br/><br/>
+                 <p>{$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}<br/>
 					{$address1}<br/>
 					{$address2}<br/>
 					{$city},{$state_in_short} - {$zip}<br/>
@@ -11,12 +11,14 @@
 				<br/>
 				<p>Your application for the PADI {$productType} Insurance is on hold, pending additional information from you.  Please provide us with the following additional information.<br/></p>
 				<br/>
-				<center>{assign var=reasons value=$rejectionReason|json_decode:true}
-				{assign var=count value=$reasons|@sizeof}
-				{assign var=count1 value=$count}
-				{for $foo=1 to $count1}
+				{if isset($rejectionReason)}
+					<center>{assign var=reasons value=$rejectionReason|json_decode:true}
+					{assign var=count value=$reasons|@sizeof}
+					{assign var=count1 value=$count}
+					{for $foo=1 to $count1}
 					<p>{$foo}.{$reasons[$foo - 1]['reason']}</p><br/>
-				{/for}</center>				
+					{/for}</center>		
+				{/if}
 				<p>Please provide the additional requested information so we may finalize your coverage.  If you have any questions please call or e-mail us.</p>
 			 <br/>
 

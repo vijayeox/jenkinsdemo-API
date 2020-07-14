@@ -136,10 +136,10 @@ mattermost()
     then
         echo -e "${RED}MATTERMOST was not packaged so skipping it\n${RESET}"
     else
-    	echo -e "${YELLOW}Backing up current configurations${RESET}"
-    	cp /opt/oxzion/mattermost/config/config.json ${TEMP}/integrations/mattermost/config/config.json
-    	cp /opt/oxzion/mattermost/config/config.json /home/ubuntu/env/integrations/mattermost/mattermost-server/config/config.json
-    	echo -e "${GREEN}Backing up current configurations completed${RESET}"
+        echo -e "${YELLOW}Backing up current configurations${RESET}"
+        cp /opt/oxzion/mattermost/config/config.json ${TEMP}/integrations/mattermost/config/config.json
+        cp /opt/oxzion/mattermost/config/config.json /home/ubuntu/env/integrations/mattermost/mattermost-server/config/config.json
+        echo -e "${GREEN}Backing up current configurations completed${RESET}"
         echo -e "${GREEN}Stopping Mattermost service${RESET}"
         systemctl stop mattermost
         echo -e "${YELLOW}Stopped!${RESET}"
@@ -500,6 +500,10 @@ bridgemed()
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BridgeMed'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/apps/BridgeMed/
+        rm -rf /opt/oxzion/view/apps/BridgeMed/node_modules
+        npm install --unsafe-perm
+        npm run build
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover

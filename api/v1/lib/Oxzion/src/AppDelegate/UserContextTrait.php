@@ -2,6 +2,7 @@
 namespace Oxzion\AppDelegate;
 
 use Oxzion\Db\Persistence\Persistence;
+use Oxzion\Service\UserService;
 
 trait UserContextTrait
 {
@@ -9,6 +10,7 @@ trait UserContextTrait
 	private $username;
 	private $orgId;
     private $privilege;
+    private $userService;
 
     public function setUserContext($userId, $username, $orgId,$privilege){
     	$this->username = $username;
@@ -27,6 +29,13 @@ trait UserContextTrait
     }
     public function getPrivilege(){
         return $this->privilege;
+    }
+    public function setUserService(UserService $userService){
+        $this->logger->info("SET User SERVICE");
+        $this->userService = $userService;
+    }
+    public function getUserDetailsByIdentifier($identifier,$identifierName){
+        return $this->userService->getUserDetailsByIdentifier($identifier,$identifierName);
     }
 
 }

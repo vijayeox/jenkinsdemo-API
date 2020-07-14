@@ -3,6 +3,8 @@ namespace Oxzion\Service;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Logger;
 
 use function GuzzleHttp\json_encode;
@@ -171,7 +173,7 @@ class ElasticService
         }
 
         $result_obj = $this->search($params);
-		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
+        if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
 			$results['type']='group';
 		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
@@ -224,8 +226,26 @@ class ElasticService
                  }
                  
         } else {
-        //    echo $column.' '.$condition.' '.$value;
+           // echo $column.' '.$condition.' '.$value;exit;
             if (!in_array($column,$this->filterFields)) {
+                if (strtolower(substr($value,0,8))=="session:") {
+                    $sessionvar = substr($value,8);
+                    switch($sessionvar) {
+                        case "username":
+                            $value = AuthContext::get(AuthConstants::USERNAME);
+                            break;
+                        case "name":
+                            $value = AuthContext::get(AuthConstants::NAME);
+                            break;
+                        case "orgid":
+                            $value = AuthContext::get(AuthConstants::ORG_ID);
+                            break;
+                        case "userid":
+                            $value = AuthContext::get(AuthConstants::USER_ID);
+                            break;
+                    }
+
+                }
                 if ($condition=="=="){                
                         if (!is_array($value)) {
                         $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
@@ -234,6 +254,8 @@ class ElasticService
                         }    
                 } elseif ($condition=="<>" || $condition=="!=") {
                         $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
+                } elseif ($condition=="NOT LIKE" || $condition=="not like") {
+                        $subQuery['bool']['must_not'][] =  ["match_phrase"=>[ $column=>$value ]];
                 }  else {
                         if (strtolower(substr($value,0,5))=="date:") {
                             $value = date("Y-m-d",strtotime(substr($value,5)));

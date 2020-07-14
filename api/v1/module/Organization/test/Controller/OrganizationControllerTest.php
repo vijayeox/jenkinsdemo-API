@@ -931,7 +931,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
-        $this->assertEquals($content['total'], 2);
+        $this->assertEquals(7, $content['total']);
     }
 
     public function testgetOrgAnnouncementsWithFilter()
@@ -957,11 +957,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
-        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
-        $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
-        $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
-        $this->assertEquals($content['total'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '36c8980d-48c2-45fc-b5bc-4407c80f6d71');
+        $this->assertEquals($content['data'][0]['name'], 'Announcement 7');
+        $this->assertEquals($content['data'][1]['uuid'], '70d53bec-6e2d-4128-933b-96caa3d88e2a');
+        $this->assertEquals($content['data'][1]['name'], 'Announcement 6');
+        $this->assertEquals($content['total'], 7);
     }
 
     public function testgetOrgAnnouncementsWithPagsize()
@@ -974,7 +974,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
         $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
-        $this->assertEquals($content['total'], 2);
+        $this->assertEquals($content['total'], 7);
     }
 
     public function testgetOrgAnnouncementsWithPagination()
@@ -987,7 +987,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][0]['name'], 'Announcement 2');
-        $this->assertEquals($content['total'], 2);
+        $this->assertEquals($content['total'], 7);
     }
 
     public function testgetOrgAnnouncementsWithInvalidOrgID()

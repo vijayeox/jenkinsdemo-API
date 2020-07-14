@@ -60,8 +60,8 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'entity' => array(array( 'name' => 'Individual Professional Liability', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text')))));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processEntity($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processEntity($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_entity WHERE app_id = 299";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -76,8 +76,8 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'entity' => '');
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processEntity($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processEntity($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_entity WHERE app_id = 299";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -92,8 +92,8 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processEntity($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processEntity($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_entity WHERE app_id = 299";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -108,8 +108,8 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'entity' => array(array( 'name' => 'Individual Professional Liability', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text')))));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processEntity($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processEntity($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_entity WHERE app_id = 299";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -125,8 +125,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'form' => array(array('name' => 'PADI Verification', 'uuid' => 'd2ed4200-9131-4671-b0e0-de3e27c3f610', 'description' => 'Page for CSR to verify PADI details', 'template_file' => 'dummypage.json','entity' => 'Padi')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processForm($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processForm($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_form WHERE app_id = 299 and uuid = 'd2ed4200-9131-4671-b0e0-de3e27c3f610'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -142,8 +142,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processForm($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processForm($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_form WHERE app_id = 299 and uuid = 'd2ed4200-9131-4671-b0e0-de3e27c3f610'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -159,13 +159,13 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'workflow' =>array(array('name' => 'Dive Boat Reinstate Policy', 'entity' => 'Dive Boat', 'uuid' => '2d94a2f0-c64c-48e0-a4f0-f85f626f0626', 'bpmn_file' => 'Cancel Policy/ReinstatePolicyDB.bpmn')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
             $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
-        $content = $delegateService->processWorkflow($data, $path);
+        $content = $appService->processWorkflow($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_workflow WHERE app_id = 299 and name = 'Dive Boat Reinstate Policy'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -181,8 +181,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processWorkflow($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processWorkflow($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_workflow WHERE app_id = 299 and name = 'Dive Boat Reinstate Policy'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -197,9 +197,9 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')),'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'menu' => array(array('name' => 'Home', 'icon' => 'fa fa-home', 'uuid' => '24176975-8f4d-499d-8b2d-86902de26c14', 'page_uuid' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c')));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $path = __DIR__ . '/../sampleapp/';
-        $content = $delegateService->processMenu($data, $path);
+        $content = $appService->processMenu($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_menu WHERE app_id = 299 and name = 'Home'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -207,16 +207,16 @@ class AppServiceTest extends AbstractServiceTest
         $result = $statement->execute();
         $resultSet = new ResultSet();
         $result = $resultSet->initialize($result)->toArray();
-        $this->assertEquals($result[0]['count'], 1);
+        $this->assertEquals(1, $result[0]['count']);
     }
 
     public function testProcessMenuWithoutYmlData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')),'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $path = __DIR__ . '/../sampleapp/';
-        $content = $delegateService->processMenu($data, $path);
+        $content = $appService->processMenu($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_menu WHERE app_id = 299 and name = 'Home'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -232,8 +232,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'pages' => array(array('page_name' => 'dummyPage.yml', 'uuid' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processPage($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processPage($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_page WHERE app_id = 299 and uuid = 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -249,8 +249,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processPage($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processPage($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_app_page WHERE app_id = 299 and name = 'View Policy'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -269,8 +269,8 @@ class AppServiceTest extends AbstractServiceTest
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processJob($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processJob($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_job WHERE app_id = 299 and job_id = '3a289705-763d-489a-b501-0755b9d4b64b'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -286,8 +286,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processJob($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processJob($data, $path);
         $sqlQuery = "SELECT count(name) as count FROM ox_job WHERE app_id = 299 and job_id = '3a289705-763d-489a-b501-0755b9d4b64b'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -303,8 +303,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ORG_UUID, 'a77ea120-b028-479b-8c6e-60476b6a4456');        
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'org' => array(array( 'uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')), 'role' => array(array('name' => 'Policy Holder', 'default' => '1', 'privileges' => array(array('privilege_name' => 'MANAGE_MY_POLICY', 'permission' => '3')),'uuid' => '703d3a09-b7f3-49e9-9c79-74d5cae7f6e7')));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->createRole($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->createRole($data);
         $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and org_id = 300";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -320,8 +320,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->createRole($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->createRole($data);
         $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and org_id = 300";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -337,8 +337,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ORG_UUID, 'e1033dc0-126b-40ba-89e0-d3061bdeda4p');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'org' => array(array('name' => 'V&B', 'uuid' => 'e1033dc0-126b-40ba-89e0-d3061bdeda4p','email' => 'vb07@gmail.com','address1' => '6 bCenterpoint','address2' => 'Dr.','city' => 'La Palma','state' => 'CA','zip' => '90623','country' => 'United States','contact' => array('username' => 'vb07.gmail.com','firstname' => 'Admin','lastname' => 'User','email' => 'vb07@gmail.com'),'preferences' => '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}')));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->createOrg($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->createOrg($data);
         $sqlQuery = "SELECT count(*) as count FROM ox_organization";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -354,8 +354,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->createOrg($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->createOrg($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_organization WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -370,8 +370,8 @@ class AppServiceTest extends AbstractServiceTest
     {
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'SampleApp2', 'description' => 'test db for app service test')));        
         $path = __DIR__ . '/../sampleapp';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->performMigration($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->performMigration($data, $path);
         $result = true;
         $appName = 'SampleApp2';
         $YmlappUuid = 'p77ea120-b028-479b-8c6e-60476b6a4459';
@@ -383,8 +383,8 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'privilege' => array(array('name' => 'MANAGE_POLICY_APPROVAL', 'permission' => 3)));
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->createAppPrivileges($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->createAppPrivileges($data);
         $sqlQuery = "SELECT count(*) as count FROM ox_privilege where name = 'MANAGE_POLICY_APPROVAL' and app_id = '299'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -400,8 +400,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->createAppPrivileges($data);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->createAppPrivileges($data);
         $sqlQuery = "SELECT count(*) as count FROM ox_privilege where name = 'MANAGE_POLICY_APPROVAL' and app_id = '299'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -417,8 +417,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->setupAppView($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->setupAppView($data, $path);
         $appname = $path . 'view/apps/DummyApp' ;
         $result = is_dir($appname);
         $this->assertEquals($result, 1);
@@ -430,8 +430,8 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp')), 'org' => array(array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456')));        
         $path = __DIR__ . '/../sampleapp/';
-        $delegateService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $delegateService->processSymlinks($data, $path);
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processSymlinks($data, $path);
         $config = $this->getApplicationConfig();
         $delegatefolder = $config['DELEGATE_FOLDER']. 'p77ea120-b028-479b-8c6e-60476b6a4459' ;
         $result = file_exists($delegatefolder);

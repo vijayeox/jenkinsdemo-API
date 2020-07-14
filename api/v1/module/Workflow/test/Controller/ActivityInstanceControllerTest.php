@@ -29,9 +29,10 @@ class ActivityInstanceControllerTest extends ControllerTest
     public function testaddactivityinstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'3f6622fd-0124-11ea-a8a0-22e8105c0778','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'3f6622fd-0124-11ea-a8a0-22e8105c0779','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>"Task_1s7qzh3",'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activityinstance', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $sqlQuery1 = "Select * from ox_activity_instance";
@@ -42,20 +43,33 @@ class ActivityInstanceControllerTest extends ControllerTest
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName[0]['workflow_instance_id'], $data['workflow_instance_id']);
-        $this->assertEquals($tableFieldName[0]['activity_instance_id'], $data['activityInstanceId']);
+        $this->assertEquals($tableFieldName[3]['activity_instance_id'], $data['activityInstanceId']);
         $sqlQuery2 = "Select * from ox_activity_instance_assignee";
         $statement2 = $dbAdapter->query($sqlQuery2);
         $result2 = $statement2->execute();
-        $this->assertEquals($result2->count(), 3);
+        $this->assertEquals(4, $result2->count());
         while ($result2->next()) {
             $tableFieldName1[] = $result2->current();
         }
-        $this->assertEquals($tableFieldName1[0]['assignee'], 1);
-        $this->assertEquals($tableFieldName1[0]['group_id'], null);
-        $this->assertEquals($tableFieldName1[1]['assignee'], 0);
-        $this->assertEquals($tableFieldName1[1]['group_id'], 1);
-        $this->assertEquals($tableFieldName1[2]['assignee'], 1);
-        $this->assertEquals($tableFieldName1[2]['group_id'], null);
+        $this->assertEquals(1, $tableFieldName1[0]['activity_instance_id']);
+        $this->assertEquals(1, $tableFieldName1[0]['user_id']);
+        $this->assertEquals(1, $tableFieldName1[0]['assignee']);
+        $this->assertEquals(null, $tableFieldName1[0]['group_id']);
+        $this->assertEquals(null, $tableFieldName1[0]['role_id']);
+        $this->assertEquals(3, $tableFieldName1[1]['activity_instance_id']);
+        $this->assertEquals(1, $tableFieldName1[1]['user_id']);
+        $this->assertEquals(1, $tableFieldName1[1]['assignee']);
+        $this->assertEquals(null, $tableFieldName1[1]['group_id']);
+        $this->assertEquals(null, $tableFieldName1[1]['role_id']);
+        $this->assertEquals($tableFieldName1[2]['activity_instance_id'], $tableFieldName1[3]['activity_instance_id']);
+        $this->assertEquals(null, $tableFieldName1[2]['user_id']);
+        $this->assertEquals(0, $tableFieldName1[2]['assignee']);
+        $this->assertEquals(1, $tableFieldName1[2]['group_id']);
+        $this->assertEquals(null, $tableFieldName1[2]['role_id']);
+        $this->assertEquals(1, $tableFieldName1[3]['user_id']);
+        $this->assertEquals(1, $tableFieldName1[3]['assignee']);
+        $this->assertEquals(null, $tableFieldName1[3]['group_id']);
+        $this->assertEquals(null, $tableFieldName1[3]['role_id']);
     }
     public function testaddactivityinstanceWithoutProcessId()
     {

@@ -31,21 +31,37 @@
 			"input": true,
 			"tableView": false
 		}, {
+			"label": "policyStartYear",
+			"protected": true,
+			"calculateValue": "var presentYear = moment().format('YYYY');\nvar presentMonth = moment().month();\nvar presentDate = moment().format('DD');\nif(presentMonth == 6 && presentDate <= 22 && presentYear == 2020){\n  value = presentYear;\n}else if(presentMonth == 6 && presentDate >= 22){\n  value = presentYear;\n}else if(presentMonth > 6 && presentMonth <= 11){\n  value = presentYear;\n}else if(presentMonth <= 6){\n  value = presentYear - 1;\n}",
+			"key": "policyStartYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "policyEndYear",
+			"calculateValue": "value = parseInt(data.policyStartYear) + 1;",
+			"key": "policyEndYear",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"label": "Columns",
 			"columns": [{
 				"components": [{
-					"key": "columnsContent",
 					"label": "Content",
-					"input": false,
 					"attrs": [{
 						"value": "",
 						"attr": ""
 					}],
-					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, 2019 through 12:01 AM July 22, 2020  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, 2019.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"content": "<center><b><font color=\"blue\"> Policy Period is from 12:01 AM July 22, {{data.policyStartYear}} through 12:01 AM July 22, {{data.policyEndYear}}  \t</font></b></center></br>\n\n                   <center><b> APPLICATIONS MUST BE RECEIVED IN OUR OFFICE BY JULY 22, {{data.policyEndYear}}.\n                                                      THERE IS NO GRACE PERIOD. ALL OTHERS WILL BE EFFECTIVE THE DATE RECEIVED.\t</b> </center></br>\n\n                                        <center> <b><font color=\"blue\">Exclusively for PADI Professional Member</font></b></center>\n \t \t </br>\n   \t                             <center>  Underwritten by a U.S. Rated A++ XV Insurer</center>",
+					"refreshOnChange": true,
+					"tableView": false,
+					"key": "columnsContent",
 					"type": "htmlelement",
+					"input": false,
 					"hideLabel": true,
-					"hideOnChildrenHidden": false,
-					"tableView": false
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -112,13 +128,13 @@
 				"key": "panelColumns",
 				"columns": [{
 					"components": [{
+						"label": "Username",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.username;\n}else{\n  if(data.businessPadiVerified == 'true' || data.businessPadiVerified === true){\n    value = 'S'+data.padi;  \n  }else{\n    value = 'PL'+data.padi;\n  }\n}",
+						"key": "username",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "username",
-						"label": "Username",
-						"type": "hidden",
 						"lockKey": true,
-						"calculateValue": "value = data['padi'];",
 						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
@@ -129,12 +145,13 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "identifier_field",
+						"defaultValue": "padi",
+						"calculateValue": "if(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  value = data.identifier_field;\n}else{\n  if(data.businessPadiVerified == 'true' || data.businessPadiVerified === true){\n    value = 'business_padi';  \n  }else{\n    value = 'padi';\n  }\n}",
+						"key": "identifier_field",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "identifier_field",
-						"label": "identifier_field",
-						"type": "hidden",
-						"defaultValue": "padi",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -187,18 +204,15 @@
 				}, {
 					"components": [{
 						"label": "PADI Number",
-						"mask": false,
 						"autofocus": true,
-						"spellcheck": true,
 						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
+							"pattern": "[0-9\\s-]*$",
 							"customMessage": "Padi Number is required",
-							"min": 0
+							"min": 0,
+							"step": "any"
 						},
 						"key": "padi",
 						"logic": [{
@@ -218,10 +232,11 @@
 								"state": true
 							}]
 						}],
-						"type": "number",
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
 						"decimalLimit": 0,
 						"input": true,
-						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
@@ -2594,24 +2609,22 @@
 					"lockKey": true
 				}, {
 					"label": "PADI Number",
-					"mask": false,
-					"spellcheck": true,
 					"dataGridLabel": false,
 					"tableView": false,
-					"delimiter": false,
-					"requireDecimal": false,
-					"inputFormat": "plain",
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"custom": "if(row.padi && row.padi != ''){\n  valid = (row.padi.toString().length > 0 && row.padi.toString().length <= 6) ? true : 'Please enter a valid PADI Number';\n}"
+						"pattern": "[0-9\\s-]*$",
+						"custom": "if(row.padi && row.padi != ''){\n  valid = (row.padi.toString().length > 0 && row.padi.toString().length <= 6) ? true : 'Please enter a valid PADI Number';\n}",
+						"step": "any"
 					},
 					"key": "padi",
 					"customConditional": "if(row.padi && row.padi != ''){\n  valid = (row.padi.length > 6) ? 'Please enter valid PADI Number' : true;\n}",
-					"type": "number",
+					"type": "textfield",
+					"delimiter": false,
+					"requireDecimal": false,
 					"input": true,
-					"inDataGrid": true,
-					"inputType": "number"
+					"inDataGrid": true
 				}],
 				"lockKey": true,
 				"path": "CrewGrid"
@@ -4526,23 +4539,25 @@
 		"components": [{
 			"label": "Would you like to apply for Coverage for divers in the water?",
 			"widget": "choicesjs",
+			"autofocus": true,
 			"tableView": true,
 			"data": {
 				"values": [{
 					"label": "Yes",
 					"value": "yes"
 				}, {
-					"label": "None",
-					"value": "none"
+					"label": "No",
+					"value": "no"
 				}]
 			},
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
 			"validate": {
 				"required": true,
-				"customMessage": "Would you like to apply for Coverage for divers in the water is required"
+				"customMessage": "Please select if you would like to add Group Professional Liability"
 			},
-			"key": "groupProfessionalLiability",
+			"errorLabel": "Group Professional Liability",
+			"key": "groupProfessionalLiabilitySelect",
 			"type": "select",
 			"indexeddb": {
 				"filter": {}
@@ -4561,83 +4576,13 @@
 			"key": "well2",
 			"conditional": {
 				"show": true,
-				"when": "groupProfessionalLiability",
+				"when": "groupProfessionalLiabilitySelect",
 				"eq": "yes"
 			},
 			"type": "well",
 			"input": false,
 			"components": [{
 				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page7Columns",
-				"columns": [{
-					"components": [{
-						"label": "What was your annual receipt instructional supervision?",
-						"prefix": "$",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": false,
-						"delimiter": true,
-						"requireDecimal": true,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"validate": {
-							"required": true,
-							"customMessage": "Annual receipt instructional supervision is required"
-						},
-						"key": "annualReceipt",
-						"type": "number",
-						"decimalLimit": 2,
-						"input": true,
-						"hideOnChildrenHidden": false,
-						"inputType": "number"
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"label": "Amount",
-						"prefix": "$",
-						"customClass": "margin-top:25px",
-						"mask": false,
-						"spellcheck": true,
-						"disabled": true,
-						"tableView": true,
-						"defaultValue": 0,
-						"delimiter": true,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data[data[\"groupCoverageSelect\"]]) || 0).toFixed(0);",
-						"key": "groupCoverage",
-						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
-						"type": "number",
-						"input": true,
-						"inputType": "number",
-						"lockKey": true,
-						"style": {
-							"margin-top": "25px"
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true,
-				"path": "page7Columns"
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page7Columns2",
 				"columns": [{
 					"components": [{
 						"label": "Select Liability Limit",
@@ -4646,6 +4591,9 @@
 						"tableView": true,
 						"data": {
 							"values": [{
+								"label": "No",
+								"value": "no"
+							}, {
 								"value": "groupExcessLiability1M",
 								"label": "1M"
 							}, {
@@ -4668,9 +4616,6 @@
 							"required": true
 						},
 						"key": "groupExcessLiabilitySelect",
-						"properties": {
-							"delegate": "RateCard"
-						},
 						"type": "select",
 						"indexeddb": {
 							"filter": {}
@@ -4696,7 +4641,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = (parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100).toFixed(0);\n}",
+						"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100\n}",
 						"key": "groupExcessLiability",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
@@ -4706,8 +4651,7 @@
 						"style": {
 							"margin-top": "25px"
 						},
-						"hideOnChildrenHidden": false,
-						"defaultValue": 0
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -4715,8 +4659,150 @@
 					"pull": 0,
 					"size": "md"
 				}],
+				"tableView": false,
+				"key": "columns14",
 				"type": "columns",
-				"hideLabel": true
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"clearOnHide": false,
+						"input": false,
+						"key": "page4PanelPanelPanelPanelTable",
+						"numRows": 1,
+						"numCols": 4,
+						"rows": [
+							[{
+								"components": [{
+									"label": "What was your annual receipt instructional supervision?",
+									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": false,
+									"delimiter": true,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"validate": {
+										"required": true,
+										"customMessage": "Please enter the Amount spent on Annual Instructional Supervision"
+									},
+									"errorLabel": "Annual Receipt Instructional Supervision",
+									"key": "annualReceiptInstructionalSupervision",
+									"type": "number",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}]
+							}, {
+								"components": [{
+									"label": "Annual Estimated Receipts",
+									"description": "For Emergency First Response Instructional",
+									"prefix": "$",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": true,
+									"delimiter": true,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"key": "annualEstimatedResponseRecieptsGL",
+									"type": "number",
+									"labelWidth": 0,
+									"labelMargin": 5,
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
+								}]
+							}, {
+								"components": [{
+									"label": "Number of Instructors",
+									"mask": false,
+									"spellcheck": true,
+									"tableView": true,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"key": "NumberofInstructorsGL",
+									"type": "number",
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
+								}]
+							}, {
+								"components": [{
+									"label": "Divemaster/Assistant Instructors",
+									"mask": false,
+									"spellcheck": false,
+									"tableView": false,
+									"delimiter": false,
+									"requireDecimal": false,
+									"inputFormat": "plain",
+									"clearOnHide": false,
+									"key": "DivemasterAssistantInstructorCountGL",
+									"type": "number",
+									"input": true,
+									"inputType": "number",
+									"lockKey": true
+								}]
+							}]
+						],
+						"tableView": false,
+						"type": "table",
+						"hideLabel": true,
+						"label": "Table",
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "annualReceipt",
+						"redrawOn": "data",
+						"calculateValue": "value = parseFloat(data.annualReceiptInstructionalSupervision).toFixed(0) + parseFloat(data.annualEstimatedResponseRecieptsGL).toFixed(0)",
+						"key": "annualReceipt",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Group Coverage Amount Applicable",
+						"prefix": "$",
+						"customClass": "margin-top:25px",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": true,
+						"delimiter": true,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "value = data[data[\"groupCoverageSelect\"]]",
+						"key": "groupCoverage",
+						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
+						"type": "number",
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"style": {
+							"margin-top": "25px"
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"width": 12,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns5",
+				"type": "columns",
+				"input": false
 			}, {
 				"title": "Add Members",
 				"theme": "primary",
@@ -4727,10 +4813,13 @@
 				"label": "Pane",
 				"input": false,
 				"components": [{
-					"label": "PADI Number in System?",
+					"label": "PADI Number?",
 					"description": "Enter the PADI Membership to Validate",
 					"tableView": true,
 					"clearOnHide": false,
+					"validate": {
+						"pattern": "[0-9\\s-]*$"
+					},
 					"key": "groupPadi",
 					"type": "textfield",
 					"input": true
@@ -4768,8 +4857,7 @@
 							"customConditional": "if(data.membersPadiVerified == 'false' || data.membersPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.membersPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
 							"type": "htmlelement",
 							"input": false,
-							"hideOnChildrenHidden": false,
-							"hideLabel": true
+							"hideOnChildrenHidden": false
 						}],
 						"width": 6,
 						"offset": 0,
@@ -4794,21 +4882,19 @@
 					"tableView": false,
 					"key": "columns15",
 					"type": "columns",
-					"input": false,
-					"hideLabel": true
+					"input": false
 				}, {
 					"label": "HTML",
 					"attrs": [{
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\">link</a> for more information.</h4>",
+					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\" target=\"_blank\">link</a> for more information.</h4>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html1",
 					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true
+					"input": false
 				}, {
 					"label": "Members applicable for Group Liability",
 					"hideLabel": true,
@@ -4817,7 +4903,7 @@
 						"header": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type == \"textfield\" && component.type != \"hidden\" ) { %}\n  {% console.log(component.type) %}\n    <div class=\"col-sm-2\">{{ component.label }}</div>\n  {% } %}\n  {% }) %}\n</div>",
 						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-2\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
-					"addAnother": "Not registered in system?Click here to add external members",
+					"addAnother": "Not a PADI Member?Click here to add external members",
 					"clearOnHide": false,
 					"validate": {
 						"custom": "valid = (data.groupPL.length > 0) ? true : \"Please add the members to group\";"
@@ -4895,7 +4981,7 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Status",
+								"label": "Certificate Level",
 								"tableView": true,
 								"clearOnHide": false,
 								"validate": {
@@ -4904,7 +4990,6 @@
 								"key": "status",
 								"type": "textfield",
 								"input": true,
-								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
 							"offset": 0,
@@ -4933,7 +5018,7 @@
 						}, {
 							"components": [{
 								"label": "initial",
-								"key": "initial1",
+								"key": "initial",
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
@@ -4956,21 +5041,19 @@
 						"tableView": false,
 						"key": "columns",
 						"type": "columns",
-						"input": false,
-						"hideLabel": true
+						"input": false
 					}, {
 						"label": "Document",
 						"hideLabel": true,
 						"tableView": true,
 						"storage": "url",
-						"webcam": true,
+						"webcam": false,
 						"fileTypes": [{
 							"label": "",
 							"value": ""
 						}],
 						"multiple": true,
-						"persistent": false,
-						"protected": true,
+						"clearOnHide": false,
 						"validate": {
 							"multiple": true
 						},
@@ -4988,15 +5071,16 @@
 						"tableView": false
 					}, {
 						"type": "documentviewer",
-						"key": "document1",
-						"calculateValue": "value = (row.documentattach)",
+						"key": "documentattach1",
+						"calculateValue": "value = row.documentattach",
+						"refreshOn": "row.documentattach",
 						"dtype": "documentviewer",
 						"datype": "documentviewer",
 						"dattype": "documentviewer",
 						"customConditional": "if (data.privileges){\n  if(row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 						"datatype": "documentviewer",
 						"data_type": "documentviewer",
-						"label": " ",
+						"label": "Attachments",
 						"hideLabel": true,
 						"inputType": "documentviewer",
 						"input": 1,
@@ -5033,16 +5117,17 @@
 							"value": "yes",
 							"label": "Yes"
 						}, {
-							"value": "none",
-							"label": "None"
+							"value": "no",
+							"label": "No"
 						}]
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"customMessage": "Would you like to add Additional Insureds is required"
+						"customMessage": "Would you like to add Additional Insureds for your Group Professional Liability?"
 					},
+					"errorLabel": "Additional Insured",
 					"key": "additional_insured",
 					"type": "select",
 					"indexeddb": {
@@ -5071,7 +5156,7 @@
 					"label": "Information for each Additional Insured is required as follows",
 					"input": false,
 					"components": [{
-						"label": "Data Grid",
+						"label": "Group Additional Insured",
 						"reorder": false,
 						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
@@ -5092,7 +5177,8 @@
 							"zip1": "",
 							"businessRelation": "",
 							"additionalInformation1": "",
-							"businessRelationOther": ""
+							"businessRelationOther": "",
+							"additionalInformation": ""
 						}],
 						"clearOnHide": false,
 						"validate": {
@@ -5185,7 +5271,7 @@
 											"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 										},
 										"template": "<span>{{ item }}</span>",
-										"refreshOn": "document1",
+										"refreshOn": "country",
 										"clearOnRefresh": true,
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
@@ -5357,14 +5443,14 @@
 							"value": "yes",
 							"label": "Yes"
 						}, {
-							"value": "none",
-							"label": "None"
+							"value": "no",
+							"label": "No"
 						}]
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
 					"validate": {
-						"required": true,
-						"customMessage": "Would you like to add Additional Named Insureds is required"
+						"required": true
 					},
 					"key": "named_insureds",
 					"type": "select",
@@ -5394,9 +5480,13 @@
 					"label": "Information for each Named Insureds is required as follows",
 					"input": false,
 					"components": [{
-						"label": "PADI Number in System?",
+						"label": "PADI Number?",
 						"description": "Enter the PADI Membership to Validate",
 						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"pattern": "[0-9\\s-]*$"
+						},
 						"key": "namedPadi",
 						"type": "textfield",
 						"input": true
@@ -5434,8 +5524,7 @@
 								"customConditional": "if(data.namedInsuredPadiVerified == 'false' || data.namedInsuredPadiVerified === false){\n  show = true;\n  setTimeout(function(){\n    data.namedInsuredPadiVerified = true;\n  },3000);\n}else{\n  show = false;\n}",
 								"type": "htmlelement",
 								"input": false,
-								"hideOnChildrenHidden": false,
-								"hideLabel": true
+								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
 							"offset": 0,
@@ -5460,8 +5549,7 @@
 						"tableView": false,
 						"key": "columns15",
 						"type": "columns",
-						"input": false,
-						"hideLabel": true
+						"input": false
 					}, {
 						"label": "Edit Grid",
 						"hideLabel": true,
@@ -5622,9 +5710,90 @@
 				"key": "page7Table",
 				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "table",
+				"numRows": 5,
 				"clearOnHide": false,
 				"input": false,
 				"rows": [
+					[{
+						"components": [{
+							"label": "Group Coverage Amount",
+							"tag": "h4",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "Group Coverage Amount",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7TableTaxes2",
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true
+						}]
+					}, {
+						"components": []
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"redrawOn": "data",
+							"clearOnHide": false,
+							"calculateValue": "value = (parseFloat(data[\"groupCoverage\"]) || 0).toFixed(0);",
+							"key": "groupCoverageAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
+						}]
+					}],
+					[{
+						"components": [{
+							"label": "Group Excess Liability",
+							"tag": "h4",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "Group Excess Liability",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7TableTaxes1",
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true
+						}]
+					}, {
+						"components": []
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"redrawOn": "data",
+							"clearOnHide": false,
+							"calculateValue": "value = (parseFloat(data[\"groupExcessLiability\"]) || 0).toFixed(0);",
+							"key": "groupExcessLiabilityAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
+						}]
+					}],
 					[{
 						"components": [{
 							"key": "page7TableTaxes",
@@ -5643,19 +5812,18 @@
 					}, {
 						"components": [{
 							"label": "Tax Percentage",
-							"suffix": "%",
+							"prefix": "%",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": 0,
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.business_state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
+							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"key": "groupTaxPercentage",
 							"type": "number",
 							"decimalLimit": 3,
@@ -5677,7 +5845,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = (((parseFloat(data[\"groupCoverage\"]) || 0)+ (parseFloat(data[\"groupExcessLiability\"]) || 0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100).toFixed(0);",
+							"calculateValue": "value = ((parseFloat(data[\"groupCoverage\"]) || 0)* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100).toFixed(0);",
 							"key": "groupTaxAmount",
 							"type": "number",
 							"input": true,
@@ -5711,13 +5879,12 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": 0,
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = (parseFloat(data[\"groupPadiFee\"])).toFixed(0);",
+							"calculateValue": "value = (parseFloat(data[\"groupPadiFee\"])).toFixed(0)",
 							"key": "groupPadiFeeAmount",
 							"type": "number",
 							"input": true,
@@ -5751,13 +5918,13 @@
 							"spellcheck": true,
 							"disabled": true,
 							"tableView": true,
-							"defaultValue": 0,
+							"defaultValue": "0",
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "var val = (parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00)+(parseFloat(data[\"groupExcessLiability\"])||0.00);\nif(parseFloat(val) > 175){\n  value = parseFloat(val).toFixed(0);\n}else{\n  value = 0;\n}",
+							"calculateValue": "value = ((parseFloat(data[\"groupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00))",
 							"key": "groupTotalAmount",
 							"type": "number",
 							"input": true,
@@ -5777,15 +5944,8 @@
 		"key": "page7",
 		"theme": "primary",
 		"tableView": false,
-		"label": "Group Professional Liability",
-		"path": "page7",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false
+		"label": "Panel",
+		"path": "page7"
 	}, {
 		"type": "panel",
 		"title": "Terms & Conditions",
@@ -7778,7 +7938,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "groupExcessLiabilityLimit",
-					"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '100000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '200000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '300000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '400000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '900000';\n}",
+					"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
 					"key": "groupExcessLiabilityLimit",
 					"type": "hidden",
 					"input": true,
@@ -8285,7 +8445,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 592,
+	"_vid": 606,
 	"title": "Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -8303,6 +8463,6 @@
 	"path": "diveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T03:58:42.167Z",
-	"modified": "2020-06-16T04:12:28.788Z",
+	"modified": "2020-07-06T03:10:40.081Z",
 	"machineName": "testdivehub:diveBoatConsolidation"
 }

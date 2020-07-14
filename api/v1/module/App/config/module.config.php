@@ -4,6 +4,7 @@ namespace App;
 
 use Oxzion\Utils\UuidUtil;
 use Zend\Router\Http\Segment;
+use Zend\Router\Http\Regex;
 
 return [
     'router' => [
@@ -378,7 +379,7 @@ return [
             'app_cache' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/cache',
+                    'route' => '/app/:appId/cache[/:cacheId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
@@ -413,6 +414,21 @@ return [
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'action' => 'getDocument',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
+            'gettempdocument' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/:appId/data/:orgId/temp/:tempId/:documentName',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\DocumentController::class,
+                        'action' => 'getTempDocument',
                         'method' => 'GET',
                     ],
                 ],
@@ -640,7 +656,7 @@ return [
             'file_document_get' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/:appId/:orgId/:fileId[/:folder]/:document',
+                    'route' => '[/:appId]/:orgId/:fileId[/:folder]/:document',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'orgId' => UuidUtil::UUID_PATTERN,

@@ -19,7 +19,7 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname}, {$firstname} {if isset($initial)}, {$initial}{/if}</p>
+					<p class = "details">{$lastname}, {$firstname}{if isset($initial)}, {$initial} {/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city}, {$state_in_short} {$zip}</p>
@@ -73,7 +73,7 @@
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claim s Made Form</p>
 		            	{math assign="sl" equation='x/y' x=$liability y=1000000} 
 		            	{math assign="aa" equation='x/y' x=$annualA y=1000000}
-			            <p class = "ins_font">Insured's Status EFR Instructor ({$sl}M/{$aa}M)</p>
+			            <p class = "ins_font">Insured's Status EFR Instructor</p>
 			            <p class = "ins_font">${$liability|number_format}&nbsp&nbsp&nbsp(per occurence)</p>
 			            <p class = "ins_font">${$annualA|number_format}</p>						
 		        </div>
@@ -85,8 +85,7 @@
 		<br/>
     	
     	<hr class="hrtag_efr"></hr>
-    	<center><p class = "policy_notice1">Retro Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
+    	<center><p class = "policy_notice1">Retro Date: {$start_date}, or the first day of uninterrupted coverage,whichever is earlier (refer to section VI of the policy). However, in no case will the retro date be prior to 6/30/1992. In the event of a claim which invokes a Retroactive Date prior to {$start_date}, the Certificate Holder must submit proof of uninterrupted insurance coverage dating prior to the date that the alleged negligent act, error, or omission occurred.
 		</p></center>
 		<hr class = "spacing1"></hr>
 		<div class = "second_content">

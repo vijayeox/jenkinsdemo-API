@@ -4,56 +4,62 @@ namespace Oxzion\Utils;
 
 class FilterUtils
 {
-    static public function paginate($params)
+    public static function paginate($params)
     {
         $pageSize = 20;
         $offset = 0;
-        $sort = NULL;
+        $sort = null;
         $where = "";
 
-        if(!empty($params))
-        {
-            if(!empty($params['limit']))
+        if (!empty($params)) {
+            if (!empty($params['limit'])) {
                 $pageSize = $params['limit'];
-            if(!empty($params['skip']))
+            }
+
+            if (!empty($params['skip'])) {
                 $offset = $params['skip'];
-            if(isset($params['sort'])){
-                $sortArray = json_decode($params['sort'],true);
+            }
+
+            if (isset($params['sort'])) {
+                $sortArray = json_decode($params['sort'], true);
                 $sort = FilterUtils::sortArray($sortArray);
             }
-            if(isset($params['filter'])){
-                $filterArray = call_user_func_array('array_merge',json_decode($params['filter'],true));
-                $filterlogic = isset($filterArray['logic']) ? $filterArray['logic'] : "AND" ;
+            if (isset($params['filter'])) {
+                $filterArray = call_user_func_array('array_merge', json_decode($params['filter'], true));
+                $filterlogic = isset($filterArray['logic']) ? $filterArray['logic'] : "AND";
                 $filterList = $filterArray['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                $where = " WHERE " . FilterUtils::filterArray($filterList, $filterlogic);
             }
         }
         return $paginate = array('pageSize' => $pageSize, 'offset' => $offset, 'sort' => $sort, 'where' => $where);
     }
 
-    static public function paginateLikeKendo($params,$fieldMap = array())
+    public static function paginateLikeKendo($params, $fieldMap = array())
     {
         $pageSize = 20;
         $offset = 0;
-        $sort = NULL;
+        $sort = null;
         $where = "";
 
-        if(!empty($params))
-        {
-            if(!empty($params['filter'])){
-                $filterArray = json_decode($params['filter'],true);
-                if(count($filterArray) > 0 || sizeof($filterArray) > 0){
-                    if(isset($filterArray[0]['take']))
+        if (!empty($params)) {
+            if (!empty($params['filter'])) {
+                $filterArray = json_decode($params['filter'], true);
+                if (count($filterArray) > 0 || sizeof($filterArray) > 0) {
+                    if (isset($filterArray[0]['take'])) {
                         $pageSize = ($filterArray[0]['take'] == 0) ? null : $filterArray[0]['take'];
-                    if(isset($filterArray[0]['skip']))
-                        $offset = $filterArray[0]['skip'];
-                    if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                        $sort = FilterUtils::sortArray($filterArray[0]['sort'],$fieldMap);
                     }
-                    if(isset($filterArray[0]['filter'])){
-                        $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+
+                    if (isset($filterArray[0]['skip'])) {
+                        $offset = $filterArray[0]['skip'];
+                    }
+
+                    if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+                        $sort = FilterUtils::sortArray($filterArray[0]['sort'], $fieldMap);
+                    }
+                    if (isset($filterArray[0]['filter'])) {
+                        $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
                         $filterList = $filterArray[0]['filter']['filters'];
-                        $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,$fieldMap);
+                        $where = " WHERE " . FilterUtils::filterArray($filterList, $filterlogic, $fieldMap);
                     }
                 }
             }

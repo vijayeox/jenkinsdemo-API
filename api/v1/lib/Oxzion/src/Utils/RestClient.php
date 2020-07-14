@@ -11,7 +11,11 @@ class RestClient
     private $client;
     public function __construct($baseUrl, $params=array())
     {
-        $this->client = new Client(array_merge(['verify' => false, 'base_uri' => $baseUrl,'timeout'  => 40.0], $params));
+        $config = ['verify' => false,'timeout'  => 40.0];
+        if(isset($baseUrl)) {
+            $config['base_uri'] = $baseUrl;
+        }
+        $this->client = new Client(array_merge($config, $params));
     }
     public function get($url, $params=array(), $headers=array())
     {

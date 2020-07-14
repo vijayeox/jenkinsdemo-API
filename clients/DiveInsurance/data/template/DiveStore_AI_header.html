@@ -17,7 +17,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2','carrier'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section','business_name', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','state_in_short','country','zipcode','certificate_no','padi','end_date','liability_policy_id','address1','address2','liability_carrier','business_padi'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -43,7 +43,7 @@
   }
   </script>
 </head>
-<body onload="subst()" id = "doc_body">  
+<body onload="subst()" id = "doc_body">
  <div class = "main_div_ai">
             <hr class="line1"></hr>
           <div class="spacer"></div>
@@ -67,10 +67,10 @@
             <p class = "info">License #: <span class = "license_number"></span></p>
           </div>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
-          <p class = "details"><span class ="firstname"></span>&nbsp<span class ="lastname"></span></p>
+          <p class = "details"><span class ="business_name"></span></p>
           <p class = "details"><span class ="address1"></span></p>
           <p class = "details"><span class ="address2"></span></p>
-          <p class = "details"><span class ="city"></span>, <span class ="state"></span>&nbsp<span class ="zip"></span></p>
+          <p class = "details"><span class ="city"></span>, <span class ="state_in_short"></span>&nbsp<span class ="zip"></span></p>
           <p class = "details"><span class ="country"></span></p>
       </div>
       <div class ="content2">
@@ -82,19 +82,20 @@
         </div>
         <div class = "certificate_data1">
           <p class = "p_margin"><span class ="certificate_no"></span></p>
-          <p class = "p_margin"><span class ="padi"></span></p>
+          <p class = "p_margin"><span class ="business_padi"></span></p>
           <p class = "p_margin"><span class ="start_date"></span></p>
           <p class = "p_margin"><span class ="end_date"></span></p>
         </div>
         <div>
           <hr></hr>
-          <p class = "p_margin">Policy issued by <span class ="carrier"></span></p>
-          <p class = "p_margin">Policy #: <span class ="policy_id"></span></p>
-          <hr></hr>
+          <p class = "p_margin">Policy issued by <span class ="liability_carrier"></span></p>
+          <p class = "p_margin">Policy #: <span class ="liability_policy_id"></span></p>
+          <hr style = "margin-bottom:20%"></hr>
         </div>
       </div>
       </div>
     </div>
+    <div style = "margin-top:10%">&nbsp</div>
     <hr class="hr_value"></hr>
     <div>&nbsp</div>
 </body>

@@ -12,6 +12,7 @@ use PHPSQLParser\PHPSQLCreator;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Db\Adapter\ParameterContainer;
+use Exception;
 
 class Persistence extends AbstractService
 {
@@ -34,11 +35,29 @@ class Persistence extends AbstractService
         parent::__construct($config, $adapter);
     }
 
-    //this method is used only for phpunit tests. Not required to be called otherwise
-    public function setAdapter($adapter){
-        $this->dbAdapter = $adapter;
+    // public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null){
+    //     //This api is not allowed to be executed as it does not implement the security required for application specific persistence
+    //     throw new Exception("Unsupported method");
+    // }
+
+    public function create(&$data, $commit = true){
+        //This api is not allowed to be executed as it does not implement the security required for application specific persistence
+        throw new Exception("Unsupported method");   
     }
 
+    public function multiInsertOrUpdate($tableName, array $data, array $excludedColumns = array()){
+        //This api is not allowed to be executed as it does not implement the security required for application specific persistence
+        throw new Exception("Unsupported method");      
+    }
+    public function runGenericQuery($query){
+        //This api is not allowed to be executed as it does not implement the security required for application specific persistence
+        throw new Exception("Unsupported method");         
+    }
+
+    public function updateOrganizationContext($data){
+        //This api is not allowed to be executed as it does not implement the security required for application specific persistence
+        throw new Exception("Unsupported method");            
+    }
     /**
      * @param $sqlQuery
      * @return \Zend\Db\Adapter\Driver\ResultInterface

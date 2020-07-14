@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href= "./css/template_css.css" rel="stylesheet" type="text/css" />
+  <script>
+  function subst() {
+        var vars = {};
+        var css_selector_classes = [];
+        var query_strings_from_url = document.location.search.substring(1).split('&');
+        for (var query_string in query_strings_from_url) {
+            if (query_strings_from_url.hasOwnProperty(query_string)) {
+                var temp_var = query_strings_from_url[query_string].split('=', 2);
+                vars[temp_var[0]] = unescape(temp_var[1]);
+                css_selector_classes.push(temp_var[0]);
+            }
+        }
+
+        // var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages', 'reference','start_date'];
+        for (var css_class in css_selector_classes) {
+            if (css_selector_classes.hasOwnProperty(css_class)) {
+                var element = document.getElementsByClassName(css_selector_classes[css_class]);
+                for (var j = 0; j < element.length; ++j) {
+                    element[j].textContent = vars[css_selector_classes[css_class]];
+                }
+            }
+        }
+    }
+  </script>
+</head>
+<body class="footer_html" onload="subst()">
+  <hr class = "hr_value"></hr> 
+   <div class= "gfooter" id="gfooter">
+      <span class = "gfooter1">
+        Issued on behalf of:
+        <p><span class="group_carrier"></span></p>
+       </span>
+      <span class = "gfooter2">
+        Date
+        <p><span class="start_date"></span></p>
+      </span>
+      <span class = "gfooter3">
+        <center>
+          <p class = "gfooter_title">Authorized Representative</p>
+          <img class="gimg" height = "40" width ="200" src = "./image/brian_jondle.png"/>
+          <hr class = "ghrtag2"></hr>
+          Brian Jondle
+        </center>
+      </span>
+  </div>
+</body>
+</html>

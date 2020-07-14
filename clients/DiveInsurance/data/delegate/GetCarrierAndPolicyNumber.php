@@ -44,7 +44,7 @@ class GetCarrierAndPolicyNumber extends AbstractAppDelegate
             $this->addNewRecord($data, $persistenceService);
         }
 
-        $selectQuery = "SELECT id,carrier,policy_number,year,product FROM carrier_policy WHERE `year` = " . $data['year'];
+        $selectQuery = "SELECT id,carrier,policy_number,category,state,year,product FROM carrier_policy WHERE `year` = " . $data['year'];
         $this->logger->info("Get Carrier And PolicyNumber Query------" . print_r($selectQuery, true));
         $result = $persistenceService->selectQuery($selectQuery);
         while ($result->next()) {
@@ -71,7 +71,7 @@ class GetCarrierAndPolicyNumber extends AbstractAppDelegate
         $year = $this->getMaxYear($data, $persistenceService);
         $persistenceService->beginTransaction();
         try {
-            $query = "INSERT INTO carrier_policy (`product`,`carrier`,`policy_number`,`start_date`,`end_date`,`year`) SELECT product,carrier,policy_number,DATE_ADD(start_date, INTERVAL 1 year) as start_date,DATE_ADD(end_date, INTERVAL 1 year) as end_date," . $data['year'] . " as `year` FROM carrier_policy WHERE `year` = " . $year;
+            $query = "INSERT INTO carrier_policy (`product`,`carrier`,`policy_number`,`category`,`state`,`start_date`,`end_date`,`year`) SELECT product,carrier,policy_number,category,state,DATE_ADD(start_date, INTERVAL 1 year) as start_date,DATE_ADD(end_date, INTERVAL 1 year) as end_date," . $data['year'] . " as `year` FROM carrier_policy WHERE `year` = " . $year;
             $this->logger->info("Add New Record Carrier And PolicyNumber Query------" . print_r($query, true));
             $persistenceService->insertQuery($query);
             $persistenceService->commit();

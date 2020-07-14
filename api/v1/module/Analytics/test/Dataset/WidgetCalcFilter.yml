@@ -142,3 +142,56 @@ ox_widget:
     configuration: 'sample config3'
     version: 1
     expression: '{"expression":"q1+q2"}'
+  -
+    id: 122
+    uuid: '667781c3-344d-44d8-0095-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'testwithSession'
+    configuration: 'sample config3'
+    version: 1
+    expression: ''    
+  -
+    id: 123
+    uuid: '667781c3-344d-44d8-1195-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'testwithSessionUserId'
+    configuration: 'sample config3'
+    version: 1
+    expression: '' 
+  -
+    id: 124
+    uuid: '667781c3-344d-4400-1195-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'testCombineTwoCounts'
+    configuration: 'sample config3'
+    version: 1
+    expression: '' 
+  -
+    id: 125
+    uuid: '123781c3-040d-44d8-6695-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'NoFilterOverride'
+    configuration: ''
+    version: 1
+    expression: ''
+    no_filter_override: 1
