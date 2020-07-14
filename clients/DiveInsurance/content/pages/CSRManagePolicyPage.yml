@@ -167,7 +167,7 @@ content:
                         -
                             type: Comment
                             url: '{{uuid}}'
-                    icon: 'fa fa-comments-o'
+                    icon: 'far fa-comment'
                 -
                     name: 'View Policy'
                     icon: 'fa fa-envelope-open'

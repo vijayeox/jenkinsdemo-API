@@ -92,6 +92,18 @@ content:
                             cacheId: '{{cacheId}}'
                             isDraft: true
                     icon: 'fa fa-pencil'
+                -
+                    name: Comment
+                    rule: 'true'
+                    details:
+                        -
+                            type: Document
+                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
+                            useRowData: true
+                        -
+                            type: Comment
+                            url: '{{uuid}}'
+                    icon: 'far fa-comment'
             columnConfig:
                 -
                     title: PADI

@@ -16,6 +16,7 @@ use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
+use Oxzion\Service\CommentService;
 
 class AppDelegateService extends AbstractService
 {
@@ -30,7 +31,7 @@ class AppDelegateService extends AbstractService
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
                                  MessageProducer $messageProducer, FileService $fileService, 
-                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService)
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
@@ -38,6 +39,7 @@ class AppDelegateService extends AbstractService
         $this->activityInstanceService = $activityInstanceService;
         $this->messageProducer = $messageProducer;
         $this->userService = $userService;
+        $this->commentService = $commentService;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
@@ -117,6 +119,9 @@ class AppDelegateService extends AbstractService
                 }
                 if (method_exists($obj, "setUserService")) {
                     $obj->setUserService($this->userService);
+                }
+                if (method_exists($obj, "setCommentService")) {
+                    $obj->setCommentService($this->commentService);
                 }
                 $persistenceService = $this->getPersistence($appId);
 
