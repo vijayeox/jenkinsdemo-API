@@ -1120,7 +1120,7 @@ class UserService extends AbstractService
             $userReset['firstname'] = $userDetails['firstname'];
             $userReset['lastname'] = $userDetails['lastname'];
             $userReset['url'] = $this->config['applicationUrl'] . "/?resetpassword=" . $resetPasswordCode;
-            $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+            $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+24 hours"));
             $userReset['orgId'] = $this->getUuidFromId('ox_organization', $userDetails['orgid']);
             $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
             $userDetails['password_reset_code'] = $resetPasswordCode;
