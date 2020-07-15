@@ -196,6 +196,14 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "entity_name",
+						"calculateValue": "value = \"Dive Store\"",
+						"key": "entity_name",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -9653,7 +9661,7 @@
 											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "if(row.ALpropertyCoverageSelect=='yes'){\nvalue = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)\n} else {\n  value = 0;\n}",
+											"calculateValue": "value = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)",
 											"key": "ALLiabilityPropertyCoveragesTotal",
 											"type": "number",
 											"input": true,
@@ -13046,11 +13054,11 @@
 		"tableView": false,
 		"key": "page10",
 		"properties": {
-			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"QuoteDocument\"}]"
+			"commands": "[{\"command\":\"fileSave\"},{\"command\" : \"delegate\",\"delegate\":\"QuoteDocument\"}]"
 		},
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
-		"label": "Quote Document",
+		"label": "Quote Documents",
 		"input": false,
 		"components": [{
 			"label": "quoteDocuments",
@@ -13236,7 +13244,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 505,
+	"_vid": 508,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13253,6 +13261,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-14T11:00:57.946Z",
+	"modified": "2020-07-15T06:18:49.759Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

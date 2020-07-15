@@ -229,7 +229,20 @@ class WorkflowInstanceService extends AbstractService
                 }
                 $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
             }else{
-                $file = $this->fileService->createFile($fileData);
+                if(isset($fileData['uuid'])){
+                    $select  = "SELECT of.id from ox_file as of join ox_workflow_instance as owi on owi.file_id = of.id WHERE of.uuid = :fileId";
+                    $queryParams = array('fileId' => $fileData['uuid']);
+                    $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
+                    if(count($result) == 0){
+                        $file = $this->fileService->updateFile($fileData,$fileData['uuid']);
+                        $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
+                    }else{
+                        unset($fileData['uuid']);
+                    }
+                }
+                if(!isset($fileData['uuid'])){
+                    $file = $this->fileService->createFile($fileData);    
+                }
             }
             $this->beginTransaction();
             $this->logger->info("File created -" . json_encode($fileData));
@@ -461,9 +474,7 @@ class WorkflowInstanceService extends AbstractService
         unset($params['method']);
         unset($params['action']);
         unset($params['access']);
-        unset($params['uuid']);
         return $params;
-
     }
 
     public function claimActivityInstance(&$data){
