@@ -146,11 +146,18 @@ class Dashboard extends Component {
           if (typeof startDate !== "string") {
             startDate = filter["startDate"]
             startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          } else if(new Date(startDate)){
+            startDate = new Date(filter["startDate"])
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
           }
           //date range received
           if (filter["operator"] == "gte&&lte") {
             endDate = filter["endDate"]
             if (typeof endDate !== "string") {
+              endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
+            }else if(new Date(endDate))
+            {
+              endDate =new Date(endDate)
               endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
             }
             //prepare startDate array
@@ -166,6 +173,14 @@ class Dashboard extends Component {
             filterarray.push("<=")
             filterarray.push(endDate)
             filterParams.push(filterarray)
+          } else {
+            //if date is not a range
+            filterarray = []
+            filterarray.push(filter["field"])
+            filterarray.push(filter["operator"])
+            filterarray.push(startDate)
+            filterParams.push(filterarray)
+
           }
         } else {
           //single date passed
@@ -178,7 +193,9 @@ class Dashboard extends Component {
         filterarray.push(filter["field"])
         filterarray.push(filter["operator"])
         filterarray.push(filter["value"]["selected"])
-        filterParams.push(filterarray)
+        if (filter["value"] !== "" && filter["value"] !== null) {
+          filterParams.push(filterarray)
+        }
       }
     })
     return filterParams
@@ -335,15 +352,17 @@ class Dashboard extends Component {
     let url = `analytics/widget/${widgetId}?data=true`;
     let filter = eventData[WidgetDrillDownHelper.MSG_PROP_FILTER];
 
+    console.log("Printing Filter: " + this.state.preparedDashboardFilter)
     //apply dashboard filter if exists
     if (this.state.preparedDashboardFilter) {
       //combining dashboardfilter with widgetfilter
       let preparedFilter = filter ? this.preparefilter(this.state.preparedDashboardFilter, JSON.parse(filter)) : this.state.preparedDashboardFilter
       filter = preparedFilter
       url = url + '&filter=' + JSON.stringify(filter);
-    }
-    else if (filter && ('' !== filter)) {
+    } else if (filter && ('' !== filter)) {
       url = url + '&filter=' + encodeURIComponent(filter);
+    } else {
+      url = url;
     }
     //starting spinner 
     if (eventData.elementId) {

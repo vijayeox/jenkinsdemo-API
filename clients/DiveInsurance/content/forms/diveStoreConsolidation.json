@@ -196,6 +196,14 @@
 						"input": true,
 						"tableView": false,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "entity_name",
+						"calculateValue": "value = \"Dive Store\"",
+						"key": "entity_name",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -6188,16 +6196,17 @@
 						"tableView": false,
 						"components": [{
 							"label": "Please enter the Location's PADI Number",
-							"mask": false,
 							"spellcheck": false,
 							"tableView": false,
 							"delimiter": false,
 							"requireDecimal": false,
-							"inputFormat": "plain",
 							"clearOnHide": false,
 							"key": "padiNumberAL",
-							"type": "number",
-							"input": true
+							"type": "textfield",
+							"input": true,
+							"validate": {
+								"step": "any"
+							}
 						}, {
 							"label": "locationWell",
 							"tableView": false,
@@ -9260,7 +9269,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "var coverageFp = parseFloat(data[\"CoverageFP\"]);\nvalue=(coverageFp/10).toFixed(0);",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else {  var coverageFp = parseFloat(data[\"CoverageFP\"]);\nvalue=(coverageFp/10).toFixed(0);\n}",
 													"key": "ALCoverageFP",
 													"type": "number",
 													"input": true,
@@ -9297,7 +9306,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = parseFloat(data['TravelAgentEOFP']/10).toFixed(0);",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  value = parseFloat(data['TravelAgentEOFP']/10).toFixed(0);\n}",
 													"key": "ALTravelAgentEOFP",
 													"type": "number",
 													"input": true,
@@ -9315,7 +9324,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);\n}",
 													"key": "ALMedicalExpenseFP",
 													"type": "number",
 													"input": true,
@@ -9333,7 +9342,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);\n}",
 													"key": "ALNonOwnedAutoFP",
 													"type": "number",
 													"input": true,
@@ -9351,7 +9360,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(0);",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(0);\n}",
 													"key": "ALExcessLiabilityFP",
 													"type": "number",
 													"input": true,
@@ -9652,7 +9661,7 @@
 											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "if(row.ALpropertyCoverageSelect=='yes'){\nvalue = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)\n} else {\n  value = 0;\n}",
+											"calculateValue": "value = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)",
 											"key": "ALLiabilityPropertyCoveragesTotal",
 											"type": "number",
 											"input": true,
@@ -11771,7 +11780,7 @@
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateValue": "var receiptsAmount=totalReceiptsAmount;\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
+							"calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
 							"validate": {
 								"required": true
 							},
@@ -13045,11 +13054,11 @@
 		"tableView": false,
 		"key": "page10",
 		"properties": {
-			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"QuoteDocument\"}]"
+			"commands": "[{\"command\":\"fileSave\"},{\"command\" : \"delegate\",\"delegate\":\"QuoteDocument\"}]"
 		},
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
-		"label": "Quote Document",
+		"label": "Quote Documents",
 		"input": false,
 		"components": [{
 			"label": "quoteDocuments",
@@ -13235,7 +13244,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 502,
+	"_vid": 508,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13252,6 +13261,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-13T08:18:54.082Z",
+	"modified": "2020-07-15T06:18:49.759Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

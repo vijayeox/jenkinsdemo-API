@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var password = document.getElementById("password_field").value;
     if (username && password) {
       const formData = new FormData();
-      formData.append("username", username);
+      formData.append("username", getUsername(productName,username));
       formData.append("password", password);
       let response = fetch(baseUrl + "auth", {
         body: formData,
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
       showLoaderOnConfirm: true,
       preConfirm: login => {
         let formData = new FormData();
-        formData.append("username", login);
+        formData.append("username", getUsername(productName,login));
         return fetch(baseUrl + "user/me/forgotpassword", {
           method: "post",
           body: formData
@@ -164,6 +164,13 @@ document.addEventListener("DOMContentLoaded", function() {
         Swal.showValidationMessage(`Request failed: Username not found.`);
       }
     });
+  }
+
+  function getUsername(productName,username){
+    if(productName == 'DiveStore' && !username.startsWith('S')){
+        username = 'S'+username;
+    }
+    return username;
   }
 
   function autoLogin(data) {
