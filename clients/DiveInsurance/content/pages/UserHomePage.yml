@@ -66,7 +66,7 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
+                    rule: '("{{entity_name}}" == "Individual Professional Liability") && (moment().isAfter(moment("{{end_date}}").subtract(30, "days")))'
                     details:
                         -
                             type: Form
@@ -85,7 +85,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
+                    rule: '("{{entity_name}}" == "Emergency First Response") && (moment().isAfter(moment("{{end_date}}").subtract(30, "days")))'
                     details:
                         -
                             type: Form
@@ -104,7 +104,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
+                    rule: '("{{entity_name}}" == "Dive Store") && (moment().isAfter(moment("{{end_date}}").subtract(30, "days")))'
                     details:
                         -
                             type: Form
@@ -123,7 +123,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''moment("2020-07-13")'')'
+                    rule: '("{{entity_name}}" == "Dive Boat") && (moment().isAfter(moment("{{end_date}}").subtract(30, "days")))'
                     details:
                         -
                             type: Form
