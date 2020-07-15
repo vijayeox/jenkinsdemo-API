@@ -382,7 +382,6 @@ class WidgetService extends AbstractService
                     $overRides[$overRidesKey] = $params[$overRidesKey];
                 }
             }
-
             $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
 
             if (isset($response['widget']['expression']['expression'])) {
