@@ -272,6 +272,7 @@
 							"mask": false,
 							"spellcheck": true,
 							"tableView": false,
+							"defaultValue": 25,
 							"delimiter": false,
 							"requireDecimal": false,
 							"inputFormat": "plain",
@@ -281,8 +282,7 @@
 							},
 							"key": "downpaymentDepositPercentge",
 							"type": "number",
-							"input": true,
-							"defaultValue": 25
+							"input": true
 						}, {
 							"label": "Down Payment",
 							"prefix": "$",
@@ -294,7 +294,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "if(data.downpaymentDepositPercentge){\n  var downpaymentVal = data['downpaymentDepositPercentge'] * parseFloat(data['amount']);\n  value = downpaymentVal/100\n} else {\n  value =0;\n}",
+							"calculateValue": "if(data.downpaymentDepositPercentge){\n  var downpaymentVal = data['downpaymentDepositPercentge'] * parseFloat(data['amount']);\n  value = (downpaymentVal/100).toFixed(2);\n} else {\n  value =0;\n}",
 							"key": "downPayment",
 							"type": "number",
 							"input": true,
@@ -689,7 +689,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 55,
+	"_vid": 56,
 	"title": "Dive Store User Approval Form",
 	"display": "wizard",
 	"access": [{
@@ -706,6 +706,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-07-08T11:47:54.018Z",
+	"modified": "2020-07-15T12:26:08.485Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }

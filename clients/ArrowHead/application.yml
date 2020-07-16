@@ -45,6 +45,7 @@ role:
 entity:
     -
         name: 'Dealer Policy'
+        override_data: true
         field:
             -
                 name: status
@@ -91,4 +92,4 @@ job:
         data:
             orgId: 34bf01ab-79ca-42df-8284-965d8dbf290e
             appId: da8f0152-b8d3-43bf-8090-40103bb98d5e
-            entityName: Dealer Policy
+            entityName: 'Dealer Policy'

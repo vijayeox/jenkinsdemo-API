@@ -19,6 +19,37 @@ content:
                     - 20
                     - 50
                 info: true
+            exportToExcel: 
+                columnConfig:
+                    -
+                        title: PADI
+                        field: padi
+                        cell: 'data.identifier_field == "business_padi" ? data.business_padi : data.padi'
+                        locked: true
+                        cellOptions:
+                            textAlign: "center"
+                            verticalAlign: "center"
+                            background: "#005295"
+                            color: "#fafafa"
+                            bold: true
+                    -
+                        title: Name
+                        field: firstname
+                        cell: 'data.firstname + " " +data.lastname'
+                    -
+                        title: Product
+                        field: product
+                    -
+                        title: 'Policy Status'
+                        field: policyStatus
+                    -
+                        title: 'Policy Start Date'
+                        field: start_date
+                        cell: 'formatDateWithoutTimezone(data.start_date)'
+                    -
+                        title: 'Policy End Date'
+                        field: end_date
+                        cell: 'formatDateWithoutTimezone(data.end_date)'
             actions:
                 -
                     name: Endorsement
@@ -167,7 +198,7 @@ content:
                         -
                             type: Comment
                             url: '{{uuid}}'
-                    icon: 'fa fa-comments-o'
+                    icon: 'far fa-comment'
                 -
                     name: 'View Policy'
                     icon: 'fa fa-envelope-open'

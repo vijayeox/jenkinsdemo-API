@@ -20,7 +20,7 @@
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${if isset($dsglestmonthretailreceipt) &&  $dsglestmonthretailreceipt}{$dsglestmonthretailreceipt|number_format:2}{else}0{/if})</p>
+                <p>(Based on estimated annual receipts of ${if isset($totalReceiptsAmount) &&  $totalReceiptsAmount}{$totalReceiptsAmount|number_format:2}{else}0{/if})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
                 <p>Dive Center Additional Location Premium:</p>

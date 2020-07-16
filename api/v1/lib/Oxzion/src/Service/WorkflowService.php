@@ -513,13 +513,14 @@ class WorkflowService extends AbstractService
             $cacheQuery = '';
         } else {
             $cacheQuery =" UNION
-            SELECT ow.name as workflow_name,ouc.content as data,oai.activity_instance_id as activityInstanceId,owi.process_instance_id as workflowInstanceId,
+            SELECT ow.name as workflow_name,ofile.uuid,ouc.content as data,oai.activity_instance_id as activityInstanceId,owi.process_instance_id as workflowInstanceId,
             oai.start_date,oae.name as entity_name,NULL as id,
             oa.name as activityName,ouc.date_created,'in_draft' as to_be_claimed,ou.name as assigned_user
             FROM ox_user_cache as ouc
             LEFT JOIN ox_workflow_instance as owi ON ouc.workflow_instance_id = owi.id
             LEFT JOIN ox_workflow_deployment as owd on owi.workflow_deployment_id = owd.id
             LEFT JOIN ox_workflow as ow on owd.workflow_id = ow.id
+            LEFT JOIN ox_file as ofile ON ofile.id = owi.file_id
             INNER JOIN ox_form as oxf on ouc.form_id = oxf.id
             INNER JOIN ox_app_entity as oae on oae.app_id = oxf.app_id and oxf.entity_id = oae.id
             INNER JOIN ox_app on ox_app.id = oae.app_id
@@ -537,7 +538,7 @@ class WorkflowService extends AbstractService
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
 
-        $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
+        $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.uuid,ox_file.data,
     ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,ox_file.id,
     ox_activity.name as activityName, ox_file.date_created,
     CASE WHEN ox_activity_instance_assignee.assignee = 0 then 1
@@ -555,6 +556,7 @@ class WorkflowService extends AbstractService
             }
             $result[] = array_merge($value, $data);
         }
+        $this->logger->info("ASSIGNMENT RESULT -- ".print_r($result,true));
         return array('data' => $result, 'total' => $countResultSet[0]['count']);
     }
 

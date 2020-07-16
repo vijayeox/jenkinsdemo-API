@@ -7,10 +7,12 @@ use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Utils\FileUtils;
 use Oxzion\PDF\PDF_Watermarker;
 use Oxzion\AppDelegate\FileTrait;
+use Oxzion\AppDelegate\CommentTrait;
 
 class PolicyDocument extends AbstractDocumentAppDelegate
 {
     use FileTrait;
+    use CommentTrait;
     protected $type;
     protected $template;
     public function __construct(){
@@ -716,6 +718,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $data['rejectionReason'] = array();
                 }
             }
+            if(isset($data['additionalNotes']) && $data['additionalNotes'] != ""){
+                $comments = array();
+                $comments['text'] = $data['additionalNotes'];
+                $this->createComment($comments,$data['fileId']);
+            }
+
 
             $data['isRenewalFlow'] = false;
             $this->logger->info("Policy Document Generation",print_r($data,true));
