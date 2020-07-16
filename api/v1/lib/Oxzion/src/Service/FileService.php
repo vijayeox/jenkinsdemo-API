@@ -213,16 +213,21 @@ class FileService extends AbstractService
             }
         }
 
+        if(isset($obj['entity_id'])){
+            $entityId = $obj['entity_id'];
+        } else {
+            throw new ServiceException("Invalid Entity", "entity.invalid");
+        }
 
-        //TODO avoid doing array merge here instead replace the incoming data as is
-        $fields = array_merge($fileObject, $data);
+
+        $fields = $this->processMergeData($entityId, $fileObject, $data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
-        $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
+        $validFields = $this->checkFields($entityId ,$fields, $id);
         $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
         unset($validFields['validFields']['data']);
         unset($validFields['indexedFields']['data']);
-        $dataArray = array_merge($fileObject, $fields);
+        $dataArray = $this->processMergeData($entityId, $fileObject, $fields);
         $fileObject = $obj;
         $dataArray = $this->cleanData($dataArray);
         $this->updateFileData($id, $dataArray);
@@ -274,6 +279,28 @@ class FileService extends AbstractService
         return $count;
     }
 
+    private function processMergeData($entityId, $fileObject, $data){
+        $override_data = false;
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_app_entity')
+            ->columns(array("override_data"))
+            ->where(array('ox_app_entity.id' => $entityId));
+        $response = $this->executeQuery($select)->toArray();
+        if (count($response) > 0) {
+            $override_data =  $response[0]['override_data'];
+        } else {
+            throw new ServiceException("Invalid Entity", "entity.invalid");
+        }
+
+        if ($override_data) {
+            $fields = $data;
+        } else {
+            $fields = array_merge($fileObject, $data);
+        }
+        return $fields;
+    }
+
     /**
      * Delete File Service
      * @method deleteFile
@@ -312,12 +339,14 @@ class FileService extends AbstractService
      * @return array $data
      * @return array Returns a JSON Response with Status Code and Created File.
      */
-    public function getFile($id, $latest = false)
+    public function getFile($id, $latest = false, $orgId = null)
     {
         try {
             $this->logger->info("FILE ID  ------" . json_encode($id));
+            $orgId = isset($orgId) ? $this->getIdFromUuid('ox_organization', $orgId) :
+                                    AuthContext::get(AuthConstants::ORG_ID);
             $params = array('id' => $id,
-                'orgId' => AuthContext::get(AuthConstants::ORG_ID));
+                'orgId' => $orgId);
             $select = "SELECT id, uuid, data, entity_id  from ox_file where uuid = :id AND org_id = :orgId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
@@ -393,7 +422,7 @@ class FileService extends AbstractService
             $this->logger->debug("Query result got " . count($fields) . " fields");
         } else {
             $this->logger->debug("No Entity ID");
-            return 0;
+            throw new ServiceException("Invalid Entity", "entity.invalid");
         }
         $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=?";
         $whereParams = array($fileId);
@@ -1300,11 +1329,12 @@ class FileService extends AbstractService
         $data['size'] = filesize($data['path']);
         return $data;
     }
-    public function appendAttachmentToFile($fileAttachment,$field,$fileId){
-        if(!isset($fileAttachment['file'])){
-            $fileUuid = $this->getUuidFromId('ox_file',$fileId);
+    public function appendAttachmentToFile($fileAttachment,$field,$fileId,$orgId = null){
+        if(!isset($fileAttachment['file'])) {
+            $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_UUID);
+            $fileUuid = $this->getUuidFromId('ox_file', $fileId);
             $fileLocation = $fileAttachment['path'];
-            $targetLocation = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $fileUuid . '/';
+            $targetLocation = $this->config['APP_DOCUMENT_FOLDER']. $orgId . '/' . $fileUuid . '/';
             $this->logger->info("Data CreateFile- " . json_encode($fileLocation));
             $tempname = str_replace(".".$fileAttachment['extension'], "", $fileAttachment['name']);
             $fileAttachment['name'] = $tempname."-".$fileAttachment['uuid'].".".$fileAttachment['extension'];
@@ -1313,9 +1343,9 @@ class FileService extends AbstractService
             if(file_exists($fileLocation)){
                 FileUtils::copy($fileLocation,$fileAttachment['name'],$targetLocation);
                 // FileUtils::deleteFile($fileAttachment['originalName'],dirname($fileLocation)."/");
-                $fileAttachment['file'] = AuthContext::get(AuthConstants::ORG_UUID) . '/' . $fileUuid . '/'.$fileAttachment['name'];
-                $fileAttachment['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $fileUuid . '/'.$fileAttachment['name'];
-                $fileAttachment['path'] = FileUtils::truepath($targetLocation."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $fileUuid . '/'.$fileAttachment['name']);
+                $fileAttachment['file'] = $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
+                $fileAttachment['url'] = $this->config['baseUrl']."/". $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
+                $fileAttachment['path'] = FileUtils::truepath($targetLocation."/". $orgId . '/' . $fileUuid . '/'.$fileAttachment['name']);
                 $this->logger->info("File Moved- " . json_encode($fileAttachment));
                 // $count = $this->attachmentTable->delete($fileAttachment['id'], []);
             }
