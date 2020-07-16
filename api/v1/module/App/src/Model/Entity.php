@@ -14,6 +14,7 @@ class Entity extends OxzionEntity
         'app_id' => 0,
         'assoc_id' => null,
         'description'=> null,
+        'override_data' => false,
         'date_created' => null,
         'date_modified' => null,
         'created_by' => null,

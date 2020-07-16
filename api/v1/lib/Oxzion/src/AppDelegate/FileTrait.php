@@ -22,9 +22,9 @@ trait FileTrait
         $this->appId = $appId;
     }
 
-    protected function getFile($id){
+    protected function getFile($id, $latest = false, $orgId = null){
         $this->logger->info("GET FILE");
-        return $this->fileService->getFile($id);
+        return $this->fileService->getFile($id, $latest, $orgId);
     }
 
     protected function getFileList($params,$filterparams = null){
