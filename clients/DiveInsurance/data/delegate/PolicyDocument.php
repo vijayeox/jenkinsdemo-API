@@ -99,6 +99,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'ganiTemplate' => 'Group_ANI',
                         'ganiheader' => 'Group_DS_ANI_header.html',
                         'ganifooter' => 'Group_ANI_footer.html',
+                        'gaitemplate' => 'Group_AI',
+                        'gaiheader' => 'Group_AI_header.html',
+                        'gaifooter' => 'Group_AI_footer.html',
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
                         'alTemplate' => 'DiveStore_AdditionalLocations',
@@ -106,7 +109,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'blanketForm' => 'GL_AI_Blanket.pdf',
                         'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf',
-                        'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'),
+                        'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf',
+                        'roster' => 'Roster_Certificate',
+                        'rosterHeader' => 'Roster_header_DS.html',
+                        'rosterFooter' => 'Roster_footer.html',
+                        'rosterPdf' => 'Roster.pdf'),
             'Emergency First Response'
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
@@ -1129,9 +1136,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
 
     protected function generateGroupDocuments(&$data,&$temp,&$documents,$previous_data,$endorsementOptions,$dest,$options,$length){
+        $groupData = json_decode($temp['groupPL'],true);
+        asort($groupData);
+        $temp['groupPL'] = json_encode($groupData);
         if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-             $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
-             $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
+            $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+            $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
+            if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
+                $documents['group_ai_certificate'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
+            }
         }
         else{
             $this->logger->info("DOCUMENT groupPL");
@@ -1153,6 +1166,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         array_push($data['upgradeGroupLiability'], $upgrade);
                     }
                     $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);
+                    $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+                    $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
                     $documents['endorsement_group_coi_document'] = isset($documents['endorsement_group_coi_document']) ? $documents['endorsement_group_coi_document'] : array();
                     $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
                     array_push($documents['endorsement_group_coi_document'], $endorsementDoc);
@@ -1167,6 +1182,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
                         array_push($documents['endorsement_group_ani_document'], $endorsementDoc);
                     }
+
+                    if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
+                        $documents['endorsement_group_ai_document'] = isset($documents['endorsement_group_ai_document']) ? $documents['endorsement_group_ai_document'] : array();
+                        $this->logger->info("DOCUMENT namedInsured");
+                        $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
+                        array_push($documents['endorsement_group_ai_document'], $endorsementDoc);
+                    }
+
                     $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
                 }
             }else{
@@ -1193,11 +1216,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['groupAnnualAggregate'] = "$2,000,000";
                 }
                 $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
-
+                $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+                $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
                 $documents['group_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
                 if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
                     $this->logger->info("DOCUMENT Group Additional Named Insured");
                     $documents['group_additional_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
+                }
+
+                if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
+                    $this->logger->info("DOCUMENT Group Additional Insured");
+                    $documents['group_additional_insured_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
                 }
 
                 $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
