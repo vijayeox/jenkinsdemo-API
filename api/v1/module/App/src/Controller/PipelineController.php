@@ -66,7 +66,7 @@ class PipelineController extends AbstractApiController
         }catch (Exception $e) {
             $this->log->error(":Error -" . $e->getMessage(), $e);
             $response = ['data' => $params];
-            return $this->getErrorResponse($e->getMessage(), 500, $response);
+            return $this->getErrorResponse("An error occurred! Please try again later.", 500, $response);
         }
     }
 }

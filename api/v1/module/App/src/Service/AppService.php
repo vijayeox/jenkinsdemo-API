@@ -1016,6 +1016,9 @@ class AppService extends AbstractService
                     $entity['id'] = $entityRec['id'];
                     $entity['uuid'] = $entityRec['uuid'];
                 }
+                if(isset($entity['identifiers'])){
+                    $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);
+                }
                 if(isset($entity['field'])){
                     foreach ($entity['field'] as $field) {
                         $result = $this->fieldService->getFieldByName($entity['uuid'], $field['name']);

@@ -15,6 +15,8 @@ use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Service\UserService;
+use Oxzion\Service\CommentService;
 
 class AppDelegateService extends AbstractService
 {
@@ -29,13 +31,15 @@ class AppDelegateService extends AbstractService
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
                                  MessageProducer $messageProducer, FileService $fileService, 
-                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService)
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
         $this->workflowInstanceService = $workflowInstanceService;
         $this->activityInstanceService = $activityInstanceService;
         $this->messageProducer = $messageProducer;
+        $this->userService = $userService;
+        $this->commentService = $commentService;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
@@ -54,6 +58,13 @@ class AppDelegateService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
+    public function setFileService($fileService){
+        $this->fileService = $fileService;
+    }
+
+    // public function getFileservice(){
+    //     return $this->fileService;
+    // }
     public function execute($appId, $delegate, $dataArray = array())
     {
         $this->logger->info(AppDelegateService::class . "EXECUTE DELEGATE ---");
@@ -72,8 +83,6 @@ class AppDelegateService extends AbstractService
                 } else if (is_a($obj, CommunicationDelegate::class)) {
                     $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
-                    $obj->setTemplateService($this->templateService);
-                    $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
                     $obj->setBaseUrl($this->config['applicationUrl']);
                 }else if (is_a($obj, TemplateAppDelegate::class)) {
@@ -86,6 +95,12 @@ class AppDelegateService extends AbstractService
                 } 
                 if (method_exists($obj, "setFileService")) {
                     $obj->setFileService($this->fileService);
+                }
+                if (method_exists($obj, "setTemplateService")) {
+                    $obj->setTemplateService($this->templateService);
+                }
+                if (method_exists($obj, "setMessageProducer")) {
+                    $obj->setMessageProducer($this->messageProducer);
                 }
                 if (method_exists($obj, "setWorkflowInstanceService")) {
                     $obj->setWorkflowInstanceService($this->workflowInstanceService);
@@ -101,6 +116,12 @@ class AppDelegateService extends AbstractService
                         AuthContext::get(AuthConstants::NAME),
                         AuthContext::get(AuthConstants::ORG_UUID),
                         AuthContext::get(AuthConstants::PRIVILEGES));
+                }
+                if (method_exists($obj, "setUserService")) {
+                    $obj->setUserService($this->userService);
+                }
+                if (method_exists($obj, "setCommentService")) {
+                    $obj->setCommentService($this->commentService);
                 }
                 $persistenceService = $this->getPersistence($appId);
 

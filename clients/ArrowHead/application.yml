@@ -45,18 +45,17 @@ role:
 entity:
     -
         name: 'Dealer Policy'
-        fieldReference: DealerPolicyFields.xlsx
+        override_data: true
         field:
             -
                 name: status
                 text: Status
+                index: true
                 data_type: text
             -
                 name: documents
                 text: Documents
                 data_type: document
-    -
-        name: 'Demo Entity'
 pages:
     -
         page_name: AgentHomePage.yml
@@ -79,14 +78,18 @@ menu:
         privilege: MANAGE_APPLICATION_EXPORT_READ
 form:
     -
-        name: 'Consolidated Form'
-        uuid: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7
-        description: 'Consolidated Wiz'
-        template_file: consolidatedWizard.json
+        name: 'DealerWorkbook Form'
+        uuid: 280dbc6d-638e-4fba-9095-8430c226ec7b
+        description: 'Dealer Workbook form to generate carrier templates'
+        template_file: dealerWorkbook.json
         entity: 'Dealer Policy'
+job:
     -
-        name: 'Demo Form'
-        uuid: e980dac2-2ef7-467a-8e0d-863078c458e0
-        description: 'Demo Form'
-        entity: 'Demo Entity'
-        template_file: copyLocationForm.json
+        uuid: 3d040d2b-4cdc-4ecb-a06f-235b2740e596
+        name: 'Trigger Template Generation'
+        url: /app/da8f0152-b8d3-43bf-8090-40103bb98d5e/delegate/TriggerTemplateService
+        cron: '30000 * * * * ? *'
+        data:
+            orgId: 34bf01ab-79ca-42df-8284-965d8dbf290e
+            appId: da8f0152-b8d3-43bf-8090-40103bb98d5e
+            entityName: 'Dealer Policy'

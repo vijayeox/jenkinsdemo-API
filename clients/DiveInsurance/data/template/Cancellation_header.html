@@ -39,6 +39,7 @@
                   "D MMMM YYYY"
                 ) + " - 12:01:00 AM";
             }
+            document.getElementsByClassName("padi_no")[0].textContent = vars[vars['identifier_field']];
           }
         }
       agentInfo();
@@ -82,7 +83,7 @@
           </tr>
           <tr>
             <td>Member #:</td>
-            <td><span class ="padi"></span></td>
+            <td><span class ="padi_no"></span></td>
           </tr>
           <tr>
             <td>Certificate Effective Date: &nbsp; &nbsp; &nbsp;</td>

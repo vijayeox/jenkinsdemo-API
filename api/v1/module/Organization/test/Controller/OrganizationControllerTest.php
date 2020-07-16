@@ -931,7 +931,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
-        $this->assertEquals($content['total'], 7);
+        $this->assertEquals(7, $content['total']);
     }
 
     public function testgetOrgAnnouncementsWithFilter()

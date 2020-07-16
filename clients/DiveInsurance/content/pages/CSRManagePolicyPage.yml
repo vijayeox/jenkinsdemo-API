@@ -19,6 +19,37 @@ content:
                     - 20
                     - 50
                 info: true
+            exportToExcel: 
+                columnConfig:
+                    -
+                        title: PADI
+                        field: padi
+                        cell: 'data.identifier_field == "business_padi" ? data.business_padi : data.padi'
+                        locked: true
+                        cellOptions:
+                            textAlign: "center"
+                            verticalAlign: "center"
+                            background: "#005295"
+                            color: "#fafafa"
+                            bold: true
+                    -
+                        title: Name
+                        field: firstname
+                        cell: 'data.firstname + " " +data.lastname'
+                    -
+                        title: Product
+                        field: product
+                    -
+                        title: 'Policy Status'
+                        field: policyStatus
+                    -
+                        title: 'Policy Start Date'
+                        field: start_date
+                        cell: 'formatDateWithoutTimezone(data.start_date)'
+                    -
+                        title: 'Policy End Date'
+                        field: end_date
+                        cell: 'formatDateWithoutTimezone(data.end_date)'
             actions:
                 -
                     name: Endorsement
@@ -162,12 +193,12 @@ content:
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
+                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
                             useRowData: true
                         -
                             type: Comment
                             url: '{{uuid}}'
-                    icon: 'fa fa-comments-o'
+                    icon: 'far fa-comment'
                 -
                     name: 'View Policy'
                     icon: 'fa fa-envelope-open'
@@ -175,7 +206,7 @@ content:
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period:{moment(data.start_date).format(''MM-DD-YYYY'')} - {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period:{moment(data.start_date).format(''MM-DD-YYYY'')} - {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
                             useRowData: true
                         -
                             type: DocumentViewer
@@ -264,6 +295,9 @@ content:
                 -
                     title: PADI
                     field: padi
+                    cell: '<td>{item.identifier_field == "business_padi" ? item.business_padi : item.padi}</td>'
+                    multiFieldFilter:
+                        - business_padi
                 -
                     title: Name
                     field: firstname

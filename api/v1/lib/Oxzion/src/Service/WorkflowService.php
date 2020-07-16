@@ -408,13 +408,13 @@ class WorkflowService extends AbstractService
         $where = "";
         $joinQuery = "";
         $whereQuery = "";
-        $sort = "ORDER BY ox_file.date_created desc";
+        $sort = "ORDER BY date_created desc";
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
         $sortjoinQuery = "";
         $appFilter = "ox_app.uuid ='" . $appId . "'";
 
-        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR ox_user_role.user_id = $userId) 
+        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR ox_user_role.user_id = $userId)
                                 OR ox_activity_instance_assignee.user_id = $userId)
                                 AND $appFilter AND ox_activity_instance.status = 'In Progress'
                                 AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
@@ -449,27 +449,47 @@ class WorkflowService extends AbstractService
                 foreach ($filterData as $val) {
                     $tablePrefix = "tblf" . $prefix;
                     if (!empty($val)) {
-                        $filterOperator = $this->fileService->processFilters($val);
-                        if ($val['field'] == 'entity_name') {
-                            $whereQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
-                            continue;
+                    $subFilterLogic = isset($val['filter']['logic']) ? $val['filter']['logic'] : " AND ";
+                      if(isset($val['filter'])){
+                      $nestedFilter = "";
+                        foreach ($val['filter']['filters'] as $subFilter) {
+                            $stablePrefix = "stblf" . $prefix;
+                              $filterOperator = $this->fileService->processFilters($subFilter);
+                              if ($nestedFilter != '') {
+                                  $nestedFilter .= " " . $subFilterLogic . " ox_file.id in ";
+                              } else {
+                                  $nestedFilter = " ox_file.id in ";
+                              }
+                            $nestedFilter .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $stablePrefix . " on (ox_file.id =" . $stablePrefix . ".file_id) inner join ox_field as " . $subFilter['field'] . $stablePrefix . " on( " . $subFilter['field'] . $stablePrefix . ".id = " . $stablePrefix . ".field_id )";
+                            $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
+                            $nestedFilter .= " WHERE ";
+                            $nestedFilter .= " (" . $subFilter['field'] . $stablePrefix . ".entity_id = ox_file.entity_id and " . $subFilter['field'] . $stablePrefix . ".name ='" . $subFilter['field'] . "' and (CASE WHEN (" . $subFilter['field'] . $stablePrefix . ".data_type='date') THEN CAST(" . $stablePrefix . ".field_value AS DATETIME) $queryString WHEN (" . $subFilter['field'] . $stablePrefix . ".data_type='int') THEN " . $stablePrefix . ".field_value " . (($filterOperator['integerOperation'])) . " '" . $subFilter['value'] . "' ELSE (" . $stablePrefix . ".field_value $queryString) END ))) ";
                         }
-                        if ($subQuery != '') {
-                            $subQuery .= " " . $filterlogic . " ox_file.id in ";
-                        } else {
-                            $subQuery = " ox_file.id in ";
-                        }
-                        $subQuery .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as " . $val['field'] . $tablePrefix . " on( " . $val['field'] . $tablePrefix . ".id = " . $tablePrefix . ".field_id )";
-                        $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
-                        $subQuery .= " WHERE ";
-                        $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN CAST(" . $tablePrefix . ".field_value AS DATETIME) $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='int') THEN " . $tablePrefix . ".field_value " . (($filterOperator['integerOperation'])) . " '" . $val['value'] . "' ELSE (" . $tablePrefix . ".field_value $queryString) END )))";
-
+                        $nestedFilter = rtrim($nestedFilter, $subFilterLogic);
+                        $subQuery .= " ( ".$nestedFilter." ) ";
+                      } else {
+                          $filterOperator = $this->fileService->processFilters($val);
+                          if ($val['field'] == 'entity_name') {
+                              $whereQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                              continue;
+                          }
+                          if ($subQuery != '') {
+                              $subQuery .= " " . $filterlogic . " ox_file.id in ";
+                          } else {
+                              $subQuery = " ox_file.id in ";
+                          }
+                          $subQuery .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as " . $val['field'] . $tablePrefix . " on( " . $val['field'] . $tablePrefix . ".id = " . $tablePrefix . ".field_id )";
+                          $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                          $subQuery .= " WHERE ";
+                          $subQuery .= " (" . $val['field'] . $tablePrefix . ".entity_id = ox_file.entity_id and " . $val['field'] . $tablePrefix . ".name ='" . $val['field'] . "' and (CASE WHEN (" . $val['field'] . $tablePrefix . ".data_type='date') THEN CAST(" . $tablePrefix . ".field_value AS DATETIME) $queryString WHEN (" . $val['field'] . $tablePrefix . ".data_type='int') THEN " . $tablePrefix . ".field_value " . (($filterOperator['integerOperation'])) . " '" . $val['value'] . "' ELSE (" . $tablePrefix . ".field_value $queryString) END )))";
+                      }
+                    }
+                    if ($subQuery != "") {
+                        $where = " AND (" . $subQuery . ")";
                     }
                     $prefix += 1;
                 }
-                if ($subQuery != "") {
-                    $where = " AND (" . $subQuery . ")";
-                }
+                $subQuery = rtrim($subQuery, $filterlogic);
             }
             if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
                 $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
@@ -484,10 +504,31 @@ class WorkflowService extends AbstractService
     INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
     INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
     LEFT JOIN (SELECT  oxi.id,oxi.activity_instance_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_activity_instance_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_activity_instance_assignee GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee
-        UNION  
+        UNION
         SELECT oaia.id,oaia.activity_instance_id,oaia.user_id,2,oaia.role_id,oaia.group_id FROM ox_activity_instance_assignee AS oaia INNER JOIN (SELECT activity_instance_id FROM ox_activity_instance_assignee GROUP BY activity_instance_id HAVING max(assignee) = 1) AS oxaia1 ON oaia.activity_instance_id = oxaia1.activity_instance_id WHERE oaia.assignee = 0 AND oaia.user_id is not NULL) as ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
     LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id
-    LEFT JOIN ox_user_role ON ox_activity_instance_assignee.role_id = ox_user_role.role_id";
+    LEFT JOIN ox_user_role ON ox_activity_instance_assignee.role_id = ox_user_role.role_id LEFT JOIN ox_user ON ox_activity_instance_assignee.user_id = ox_user.id";
+
+        if(!empty($filterParams)){
+            $cacheQuery = '';
+        } else {
+            $cacheQuery =" UNION
+            SELECT ow.name as workflow_name,ofile.uuid,ouc.content as data,oai.activity_instance_id as activityInstanceId,owi.process_instance_id as workflowInstanceId,
+            oai.start_date,oae.name as entity_name,NULL as id,
+            oa.name as activityName,ouc.date_created,'in_draft' as to_be_claimed,ou.name as assigned_user
+            FROM ox_user_cache as ouc
+            LEFT JOIN ox_workflow_instance as owi ON ouc.workflow_instance_id = owi.id
+            LEFT JOIN ox_workflow_deployment as owd on owi.workflow_deployment_id = owd.id
+            LEFT JOIN ox_workflow as ow on owd.workflow_id = ow.id
+            LEFT JOIN ox_file as ofile ON ofile.id = owi.file_id
+            INNER JOIN ox_form as oxf on ouc.form_id = oxf.id
+            INNER JOIN ox_app_entity as oae on oae.app_id = oxf.app_id and oxf.entity_id = oae.id
+            INNER JOIN ox_app on ox_app.id = oae.app_id
+            LEFT JOIN ox_activity_instance as oai on ouc.activity_instance_id = oai.activity_instance_id
+            LEFT JOIN ox_activity as oa on oai.activity_id = oa.id
+            LEFT JOIN ox_user as ou on ouc.user_id = ou.id
+            WHERE ouc.user_id =$userId and ouc.deleted = 0 and ouc.activity_instance_id IS NULL and $appFilter";
+        }
 
         if (strlen($whereQuery) > 0) {
             $whereQuery .= " " . $where;
@@ -497,21 +538,25 @@ class WorkflowService extends AbstractService
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
 
-        $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
-    ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,ox_app_entity.name as entity_name,
+        $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.uuid,ox_file.data,
+    ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,ox_file.id,
     ox_activity.name as activityName, ox_file.date_created,
     CASE WHEN ox_activity_instance_assignee.assignee = 0 then 1
     WHEN ox_activity_instance_assignee.assignee = 1 AND ox_activity_instance_assignee.user_id = $userId then 0 else 2
-    end as to_be_claimed $field $fromQuery $whereQuery $sort $pageSize $offset";
-
+    end as to_be_claimed,ox_user.name as assigned_user $field $fromQuery $whereQuery $cacheQuery $sort $pageSize $offset";
         $this->logger->info("Executing Assignment listing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         $result = array();
         foreach ($resultSet as $key => $value) {
             $data = json_decode($value['data'], true);
             unset($value['data']);
+            if($value['to_be_claimed']  == 'in_draft'){
+                //TODO this is hardcoding for hub NEED to be REMOVED and changed to STATUS field
+                $data['policyStatus'] = 'In Draft';
+            }
             $result[] = array_merge($value, $data);
         }
+        $this->logger->info("ASSIGNMENT RESULT -- ".print_r($result,true));
         return array('data' => $result, 'total' => $countResultSet[0]['count']);
     }
 

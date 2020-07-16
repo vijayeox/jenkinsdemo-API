@@ -18,7 +18,8 @@ class SearchEngineImpl implements SearchEngine
     public function search($parameters, $appId)
     {
         try {
-            $elasticService = new ElasticService($this->config);
+            $elasticService = new ElasticService();
+            $elasticService->setConfig($this->config);
             $text = $parameters['searchtext'];
             // $type = $parameters['type'];
             $pagesize = (isset($parameters['pagesize'])) ? $parameters['pagesize'] : 25;

@@ -221,6 +221,11 @@ body{
 	margin-left: 5%;
 	width:100%;
 }
+.section_col1{
+	margin-right: 10%;
+	margin-left: 5%;
+	width:81%;
+}
 .sec1{
 	width:60%;
 	float:left;
@@ -274,8 +279,8 @@ body{
 }
 
 .addIn{
-	margin-bottom: 0px;
-	margin-top: 0px;
+	margin: 0px;
+	padding: 0px;
 }
 
 .title{
@@ -528,4 +533,17 @@ table.proposal_table td:last-child {
 }
 .table_hd{
 	border: 1px solid black;
+}
+
+.exop{
+	margin-left: 6%;
+	font-family: sans-serif;
+	font-style: normal;
+	font-size: 13px;
+	margin-bottom:3%;
+	margin-top:5px;
+	padding: 0px;
+	letter-spacing: 1px;
+	width:80%;
+	text-align: justify;
 }

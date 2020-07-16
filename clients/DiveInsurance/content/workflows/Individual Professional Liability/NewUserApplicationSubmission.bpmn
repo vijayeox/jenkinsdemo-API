@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
   <bpmn:process id="IPLNewPolicy" isExecutable="true">
     <bpmn:extensionElements>
       <camunda:executionListener expression="0" event="start" />
@@ -9,9 +9,6 @@
     </bpmn:endEvent>
     <bpmn:startEvent id="StartEvent_198mssd" name="Insure Fills Online Application" camunda:asyncAfter="true">
       <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="automatic_renewal" label="Auto Renewal?" type="boolean" />
-        </camunda:formData>
         <camunda:properties>
           <camunda:property name="template" value="csrInitiatesIpl" />
         </camunda:properties>
@@ -24,6 +21,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"CleanUpDelegate"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"PolicyDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
@@ -31,65 +29,11 @@
           </camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_11oqk7c</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_17xyewr</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1rq996b</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_16ob5w0</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_19lqizm</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_19lqizm" sourceRef="Task_1mka1rj" targetRef="EndEvent_19debzw" />
-    <bpmn:exclusiveGateway id="ExclusiveGateway_12lkytx">
-      <bpmn:incoming>SequenceFlow_16ob5w0</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_1rq996b</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_11oqk7c</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_03hjjoz</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_11oqk7c" name="No" sourceRef="ExclusiveGateway_12lkytx" targetRef="Task_1mka1rj">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false || automatic_renewal=="false"}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_03hjjoz" name="Yes" sourceRef="ExclusiveGateway_12lkytx" targetRef="Task_0rtdhn2">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true || automatic_renewal=="true"}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Task_0rtdhn2" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
-      <bpmn:extensionElements>
-        <camunda:properties>
-          <camunda:property />
-        </camunda:properties>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="command">schedule</camunda:inputParameter>
-          <camunda:inputParameter name="url">setupjob</camunda:inputParameter>
-          <camunda:inputParameter name="jobUrl">
-            <camunda:script scriptFormat="groovy">def jobUrl = '/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6'</camunda:script>
-          </camunda:inputParameter>
-          <camunda:inputParameter name="cron">
-            <camunda:script scriptFormat="groovy">Calendar calendar = Calendar.getInstance();
-def day = calendar.get(Calendar.DAY_OF_MONTH); 
-def hour = calendar.get(Calendar.HOUR_OF_DAY);
-def minute = calendar.get(Calendar.MINUTE);
-minute = minute+30
-hour = minute &gt; 59 ? hour+1 : hour
-minute = minute &gt; 59 ? minute - 60 : minute
-def cron = '0 '+(minute)+' '+hour+' '+day+' * ? 2020'</camunda:script>
-          </camunda:inputParameter>
-          <camunda:inputParameter name="send_reminder">true</camunda:inputParameter>
-          <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
-        </camunda:inputOutput>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">def variables = execution.getVariables()
-def fileId = variables.fileId
-def workflowId = variables.workflowId
-if(fileId){
-  execution.setVariable("previous_fileId",fileId)
-} 
-if(workflowId){
-  execution.setVariable("parent_workflow_id",workflowId) 
-}
-execution.removeVariable("workflowId")
-execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
-        </camunda:executionListener>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_03hjjoz</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_17xyewr</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_17xyewr" sourceRef="Task_0rtdhn2" targetRef="Task_1mka1rj" />
     <bpmn:sequenceFlow id="SequenceFlow_0d6flow" name="Approved" sourceRef="Task_1s7qzh3" targetRef="ExclusiveGateway_06iy274">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -107,6 +51,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0gvf8c9</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0m69sz4</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1r1a5vu</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0d6flow</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_199pho8</bpmn:outgoing>
     </bpmn:userTask>
@@ -127,6 +72,8 @@ def padiNotFoundCsrReview = execution.getVariable('padiNotFoundCsrReview')
 def efrToIPLUpgrade = execution.getVariable('efrToIPLUpgrade')
 def paymentOptions = execution.getVariable('paymentOptions')
 def userGrandTotal = execution.getVariable('userGrandTotal')
+def renewalFlow = execution.getVariable('isRenewalFlow')
+def startDate = execution.getVariable('start_date')
 
 boolean result1 = false
 boolean result2 = false
@@ -136,15 +83,21 @@ boolean result5 = false
 boolean result6 = true
 boolean result7 = false
 boolean result8 = false
+boolean result9 = false
+boolean result10 = false
+boolean result11 = false
 
+if(startDate &gt; '2020-07-31'){
+  result11 = true
+}
 if (additionalInsured) {
  additionalInsured.each {
-  if (it.hasProperty('businessRelation') &amp;&amp; it.businessRelation == 'other') {
+  if (it.businessRelation &amp;&amp; it.businessRelation == 'other') {
     result1 = true
   }
-  if (it.hasProperty('doYouHaveAWrittenContract') &amp;&amp; it.doYouHaveAWrittenContract=='no'){
+  if (it.doYouHaveAWrittenContract &amp;&amp; it.doYouHaveAWrittenContract=='no'){
     result1 = true
-}
+  }
  }
 }
 
@@ -158,7 +111,7 @@ if (section2Agreement) {
   }
 }
 if (cylinder) {
-  if (cylinder == "cylinderInspector" || cylinder == "cylinderInstructor") {
+  if (cylinder == "cylinderInspector" || cylinder == "cylinderInspectionInstructor") {
     result5 = true;
   }
 }
@@ -187,7 +140,7 @@ if (internationalCoverages) {
 }
 
 if(country != "United States of America" &amp;&amp; country != "Mexico" &amp;&amp; country != "The Bahamas" &amp;&amp; country != "Turks and Caicos" &amp;&amp; country != "British Virgin Islands" &amp;&amp; country != "Cayman Islands" &amp;&amp; country != "Jamaica" &amp;&amp; country != "Aruba" &amp;&amp; country != "Curacao" &amp;&amp; country != "Grenada" &amp;&amp; country != "Barbados" &amp;&amp; country != "St Lucia" &amp;&amp; country != "Trinidad and Tobago" &amp;&amp; country != "Belize" &amp;&amp; country != "Costa Rica" &amp;&amp; country != "Dominican Republic" &amp;&amp; country != "Dominica" &amp;&amp; country != "Martinique" &amp;&amp; country != "Anguilla" &amp;&amp; country != "St Kitts and Nevis"){
-	result3 = true;
+  result9 = true;
 }
 
 
@@ -198,6 +151,7 @@ if (
     initiatedByCsr == "") &amp;&amp;
   ( tecRecEndorsment == "accepted" ||
     result1 ||
+    result9 ||
     result2 ||
     result4 ||
     result6 ||
@@ -205,6 +159,7 @@ if (
     efrToIPLUpgrade == true || efrToIPLUpgrade == "true" ||
     scubaFit == "scubaFitInstructor" ||
     result5 ||
+    result11 ||
     padiNotFoundCsrReview == "true" ||
     padiNotFoundCsrReview == true)
 ) {
@@ -213,7 +168,7 @@ if (
 
 execution.setVariable("CSRReviewRequired", result3);
 
-if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
+if ((initiatedByCsr == true || initiatedByCsr == "true") &amp;&amp; (approved == "rejected" || approved == "onHold")) {
   execution.setVariable("RejectedPolicy", true);
 } else {
   execution.setVariable("RejectedPolicy", false);
@@ -231,28 +186,36 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
     <bpmn:sequenceFlow id="SequenceFlow_1maipgq" name="Bypass CSR Approval" sourceRef="ExclusiveGateway_1a80v3g" targetRef="ExclusiveGateway_06iy274">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==false and RejectedPolicy != true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_199pho8" name="Rejected" sourceRef="Task_1s7qzh3" targetRef="Task_1g3m6bq">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="SequenceFlow_199pho8" name="Rejected/Onhold" sourceRef="Task_1s7qzh3" targetRef="Task_1g3m6bq">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected" or approved== "onHold"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Task_1g3m6bq" name="CSR Cancel policy Mail" camunda:expression="0">
+    <bpmn:serviceTask id="Task_1g3m6bq" name="CSR Rejection or OnHold" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
-              <camunda:value>{"command" : "delegate", "delegate" : "CsrRejection"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable("policyStatus","Rejected")</camunda:script>
+          <camunda:script scriptFormat="groovy">def status = execution.getVariable('approved')
+if(status == "rejected"){
+	execution.setVariable("policyStatus","Rejected")	
+}
+if(status == "onHold"){
+	execution.setVariable("policyStatus","On Hold")
+}</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_199pho8</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_022khxp</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0gvf8c9</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_177n7jz</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0gvf8c9" sourceRef="Task_1g3m6bq" targetRef="Task_1s7qzh3" />
+    <bpmn:sequenceFlow id="SequenceFlow_0gvf8c9" sourceRef="Task_1g3m6bq" targetRef="Task_1s7qzh3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "onHold"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0m69sz4" sourceRef="Task_0giy3fm" targetRef="Task_1s7qzh3" />
     <bpmn:serviceTask id="Task_0giy3fm" name="Policy Status Change during Review" camunda:expression="0">
       <bpmn:extensionElements>
@@ -288,20 +251,56 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
       <bpmn:incoming>SequenceFlow_1b31ud4</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1rq996b</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_16ob5w0" sourceRef="ExclusiveGateway_06iy274" targetRef="ExclusiveGateway_12lkytx">
+    <bpmn:sequenceFlow id="SequenceFlow_16ob5w0" sourceRef="ExclusiveGateway_06iy274" targetRef="Task_1mka1rj">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${efrToIPLUpgrade == "false" || efrToIPLUpgrade == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1b31ud4" sourceRef="ExclusiveGateway_06iy274" targetRef="ServiceTask_1ssocdc">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${efrToIPLUpgrade == "true" || efrToIPLUpgrade == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1rq996b" sourceRef="ServiceTask_1ssocdc" targetRef="ExclusiveGateway_12lkytx" />
+    <bpmn:sequenceFlow id="SequenceFlow_1rq996b" sourceRef="ServiceTask_1ssocdc" targetRef="Task_1mka1rj" />
+    <bpmn:serviceTask id="Task_03fwvvy" name="CSR Cancel policy Mail" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"CsrRejection"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1i8eylg</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1r1a5vu</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_17ldnvw">
+      <bpmn:incoming>SequenceFlow_177n7jz</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1i8eylg</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_177n7jz" sourceRef="Task_1g3m6bq" targetRef="ExclusiveGateway_17ldnvw">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1i8eylg" sourceRef="ExclusiveGateway_17ldnvw" targetRef="Task_03fwvvy" />
+    <bpmn:sequenceFlow id="SequenceFlow_1r1a5vu" sourceRef="Task_03fwvvy" targetRef="Task_1s7qzh3" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="IPLNewPolicy">
+      <bpmndi:BPMNEdge id="SequenceFlow_1r1a5vu_di" bpmnElement="SequenceFlow_1r1a5vu">
+        <di:waypoint x="910" y="539" />
+        <di:waypoint x="664" y="539" />
+        <di:waypoint x="664" y="340" />
+        <di:waypoint x="664" y="292" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1i8eylg_di" bpmnElement="SequenceFlow_1i8eylg">
+        <di:waypoint x="960" y="421" />
+        <di:waypoint x="960" y="499" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_177n7jz_di" bpmnElement="SequenceFlow_177n7jz">
+        <di:waypoint x="893" y="396" />
+        <di:waypoint x="935" y="396" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1rq996b_di" bpmnElement="SequenceFlow_1rq996b">
         <di:waypoint x="1120" y="120" />
-        <di:waypoint x="1191" y="120" />
-        <di:waypoint x="1191" y="226" />
+        <di:waypoint x="1277" y="120" />
+        <di:waypoint x="1277" y="210" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1b31ud4_di" bpmnElement="SequenceFlow_1b31ud4">
         <di:waypoint x="1070" y="226" />
@@ -309,7 +308,7 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_16ob5w0_di" bpmnElement="SequenceFlow_16ob5w0">
         <di:waypoint x="1095" y="251" />
-        <di:waypoint x="1166" y="251" />
+        <di:waypoint x="1240" y="251" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_022khxp_di" bpmnElement="SequenceFlow_022khxp">
         <di:waypoint x="354" y="276" />
@@ -331,7 +330,7 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
         <di:waypoint x="843" y="270" />
         <di:waypoint x="843" y="356" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="778" y="283" width="44" height="14" />
+          <dc:Bounds x="759" y="283" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1maipgq_di" bpmnElement="SequenceFlow_1maipgq">
@@ -357,38 +356,18 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
           <dc:Bounds x="921" y="233" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_17xyewr_di" bpmnElement="SequenceFlow_17xyewr">
-        <di:waypoint x="1403" y="452" />
-        <di:waypoint x="1533" y="452" />
-        <di:waypoint x="1533" y="291" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_03hjjoz_di" bpmnElement="SequenceFlow_03hjjoz">
-        <di:waypoint x="1191" y="276" />
-        <di:waypoint x="1191" y="452" />
-        <di:waypoint x="1303" y="452" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1197" y="364" width="19" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_11oqk7c_di" bpmnElement="SequenceFlow_11oqk7c">
-        <di:waypoint x="1216" y="251" />
-        <di:waypoint x="1483" y="251" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1344" y="233" width="14" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_19lqizm_di" bpmnElement="SequenceFlow_19lqizm">
-        <di:waypoint x="1583" y="251" />
-        <di:waypoint x="1685" y="251" />
+        <di:waypoint x="1340" y="251" />
+        <di:waypoint x="1462" y="251" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_161msdp_di" bpmnElement="SequenceFlow_161msdp">
         <di:waypoint x="218" y="251" />
         <di:waypoint x="329" y="251" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_19debzw_di" bpmnElement="EndEvent_19debzw">
-        <dc:Bounds x="1685" y="233" width="36" height="36" />
+        <dc:Bounds x="1462" y="233" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1677" y="276" width="54" height="40" />
+          <dc:Bounds x="1454" y="276" width="54" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_198mssd_di" bpmnElement="StartEvent_198mssd">
@@ -398,13 +377,7 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1rp7im0_di" bpmnElement="Task_1mka1rj">
-        <dc:Bounds x="1483" y="211" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_12lkytx_di" bpmnElement="ExclusiveGateway_12lkytx" isMarkerVisible="true">
-        <dc:Bounds x="1166" y="226" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0uu2u9t_di" bpmnElement="Task_0rtdhn2">
-        <dc:Bounds x="1303" y="412" width="100" height="80" />
+        <dc:Bounds x="1240" y="211" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_06cefdr_di" bpmnElement="Task_1s7qzh3">
         <dc:Bounds x="651" y="211" width="100" height="80" />
@@ -423,6 +396,12 @@ if (initiatedByCsr == true &amp;&amp; approved == "rejected") {
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1ssocdc_di" bpmnElement="ServiceTask_1ssocdc">
         <dc:Bounds x="1020" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1desson_di" bpmnElement="Task_03fwvvy">
+        <dc:Bounds x="910" y="499" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_17ldnvw_di" bpmnElement="ExclusiveGateway_17ldnvw" isMarkerVisible="true">
+        <dc:Bounds x="935" y="371" width="50" height="50" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

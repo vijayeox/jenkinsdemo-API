@@ -48,6 +48,8 @@ smtp:
   password: password
   from:
     email: support@eoxvantage.com
+  # bcc:
+    # email: 
 db:
   host: jdbc:mysql://${DB_HOST}/${API_DB}
   user: ${DB_USERNAME}

@@ -2,12 +2,10 @@
 
 namespace Analytics\Controller;
 
-use Zend\Log\Logger;
 use Analytics\Model\DataSource;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
-use Exception;
 
 class DataSourceController extends AbstractApiController
 {
@@ -42,8 +40,7 @@ class DataSourceController extends AbstractApiController
         $data = $this->params()->fromPost();
         try {
             $count = $this->dataSourceService->createDataSource($data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -66,12 +63,10 @@ class DataSourceController extends AbstractApiController
     {
         try {
             $count = $this->dataSourceService->updateDataSource($uuid, $data);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (VersionMismatchException $e) {
+        } catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         if ($count == 0) {
@@ -80,13 +75,13 @@ class DataSourceController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function delete($uuid) {
+    public function delete($uuid)
+    {
         $params = $this->params()->fromQuery();
-        if(isset($params['version'])){
+        if (isset($params['version'])) {
             try {
-                $response = $this->dataSourceService->deleteDataSource($uuid,$params['version']);
-            }
-            catch (VersionMismatchException $e) {
+                $response = $this->dataSourceService->deleteDataSource($uuid, $params['version']);
+            } catch (VersionMismatchException $e) {
                 return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
@@ -153,7 +148,6 @@ class DataSourceController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dataSourceService->getDataSourceList($params);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }
-

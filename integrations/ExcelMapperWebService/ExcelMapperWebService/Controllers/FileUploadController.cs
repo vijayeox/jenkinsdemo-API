@@ -16,12 +16,12 @@ namespace ArrowHeadWebService.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    public class FileUpload1Controller : ControllerBase
+    public class FileUploadController : ControllerBase
     {
         public static IWebHostEnvironment _environment;
         public static Settings _settings;
         
-        public FileUpload1Controller(IWebHostEnvironment environment, IConfiguration configuration)
+        public FileUploadController(IWebHostEnvironment environment, IConfiguration configuration)
         {
             _environment = environment;
             _settings = new Settings();
@@ -35,6 +35,10 @@ namespace ArrowHeadWebService.Controllers
         public class FileUploadAPI
         {
             public IFormFile files { get; set; }
+            public string fileuuid { get; set; }
+            public string commands { get; set; }
+            public string appUUID { get; set; }
+            public string delegateName { get; set; }
         }
 
         [HttpPost]
@@ -42,19 +46,29 @@ namespace ArrowHeadWebService.Controllers
         {
             try
             {
+               
+                if (objFile.fileuuid == null)
+                {
+                    return Content("{\"Status\":0,\"Message\":\"fileuuid missing\"}", "application/json");
+                }
                 if (objFile.files !=null)
                 {
+                    // _environment.WebRootPath = "D:\\Oxzion";
                     if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
                     {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
                     }
+                    Console.WriteLine("Project Directory : " + _environment.WebRootPath);
                     using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + objFile.files.FileName))
                     {
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
                     }
+                    _settings.commands = objFile.commands;
+                    _settings.appUUID = objFile.appUUID;
+                    _settings.delegateName = objFile.delegateName;
                     ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
-                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName); }).Start();                    
+                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName,objFile.fileuuid); }).Start();                    
                     return Content("{\"Status\":1,\"Message\":\"" + objFile.files.FileName+" file Uploaded\"}", "application/json");
                 }
                 else

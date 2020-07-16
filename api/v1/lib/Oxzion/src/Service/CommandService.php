@@ -355,7 +355,10 @@ class CommandService extends AbstractService
             }else if(isset($data['uuid'])){
                 $file = $this->fileService->updateFile($data, $data['uuid']);
             }else{
-                $file = $this->fileService->createFile($data);
+                $filedata = $data;
+                $file = $this->fileService->createFile($filedata);
+                $data['fileId'] = $filedata['uuid'];
+                $data['uuid'] = $filedata['uuid'];
             }
             return $data;
         } catch (Exception $e) {

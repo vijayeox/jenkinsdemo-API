@@ -19,7 +19,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2','business_padi'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -44,7 +44,7 @@
       <p id="nowdate" class="info uppercase">{$date}</p>
       <p></p>
       <p class="info uppercase">{$businessname}</p>
-      <p class="info uppercase">{$dba} <span>{$membernumber}</span></p>
+      <p class="info uppercase">{$dba} <span>{$business_padi}</span></p>
       <p></p>
       <div>Dear <span class="uppercase">{$contactname}</span></div>
     </div>

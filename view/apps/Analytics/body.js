@@ -78,7 +78,7 @@ class Body extends React.Component {
         sectionContent = <Query args={this.core} setTitle={this.setTitle} />;
         break;
       case SECTION_DASHBOARD:
-        sectionContent = <DashboardManager args={this.core} proc={this.props.proc} setTitle={this.setTitle} editDashboard={this.editDashboard} />;
+        sectionContent = <DashboardManager args={this.core} proc={this.props.proc} setTitle={this.setTitle} editDashboard={this.editDashboard} hideEdit={false} key={""}/>;
         break;
       case SECTION_WIDGET:
         sectionContent = <WidgetManager args={this.core} setTitle={this.setTitle} editDashboard={this.editDashboard} />;
@@ -97,7 +97,7 @@ class Body extends React.Component {
             <i className="fa fa-search" aria-hidden="true"></i> Query
                 </a>
           <a className="menu-item" onClick={(e) => { this.switchSection(SECTION_DASHBOARD, null) }}>
-            <i className="fa fa-tasks" aria-hidden="true"></i> Dashboard
+            <i className="fa fa-tasks" aria-hidden="true"></i> Operational Intelligence
                   </a>
           <a className="menu-item" onClick={(e) => { this.switchSection(SECTION_WIDGET, null) }}>
             <i className="fa fa-cubes" aria-hidden="true"></i> Widget Manager

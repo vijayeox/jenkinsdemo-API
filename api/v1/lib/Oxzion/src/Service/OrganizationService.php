@@ -505,7 +505,7 @@ class OrganizationService extends AbstractService
         $where = "";
         $sort = "ox_user.name";
 
-        $query = "SELECT ox_user.uuid,ox_user.name,oxup.email,ox_address.address1,ox_address.address2,ox_address.city,ox_address.state,ox_address.country,ox_address.zip,oxemp.designation,
+        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.username,oxup.email,ox_address.address1,ox_address.address2,ox_address.city,ox_address.state,ox_address.country,ox_address.zip,oxemp.designation,
         case when (ox_organization.contactid = ox_user.id)
         then 1
         end as is_admin";

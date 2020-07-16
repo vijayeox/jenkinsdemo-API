@@ -22,6 +22,7 @@ class QueryController extends AbstractApiController
         parent::__construct(null, __class__, Query::class);
         $this->setIdentifierName('queryUuid');
         $this->queryService = $queryService;
+        $this->log = $this->getLogger();
     }
 
     /**
@@ -67,9 +68,11 @@ class QueryController extends AbstractApiController
         try {
             $count = $this->queryService->updateQuery($uuid, $data);
         } catch (ValidationException $e) {
+            $this->log->error($e->getMessage(), $e);
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (VersionMismatchException $e) {
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         if ($count == 0) {
@@ -85,6 +88,7 @@ class QueryController extends AbstractApiController
             try {
                 $response = $this->queryService->deleteQuery($uuid, $params['version']);
             } catch (VersionMismatchException $e) {
+                $this->log->error($e->getMessage(), $e);
                 return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
@@ -154,12 +158,15 @@ class QueryController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->queryService->getQueryList($params);
+        if ($result == 0) {
+            return $this->getErrorResponse("Query not found", 404, ['params' => $params]);
+        }
         return $this->getSuccessResponseWithData($result);
     }
 
     public function previewQueryAction()
     {
-        $data   = $this->params()->fromPost();
+        $data = $this->params()->fromPost();
         $params = array_merge($data, $this->params()->fromRoute());
         try {
             $result = $this->queryService->previewQuery($params);

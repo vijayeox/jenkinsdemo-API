@@ -32,45 +32,108 @@ class UserCacheService extends AbstractService
 
     public function storeUserCache($appUuId, &$params)
     {
+        $this->logger->info("STORE USER CACHE DATA ---".print_r($params,true));
         if ($app = $this->getIdFromUuid('ox_app', $appUuId)) {
             $appId = $app;
         } else {
             $appId = $appUuId;
+        }
+        $workflowId = $formId = $activityInstanceId = $workflowInstanceId = null;
+        if(isset($params['formId'])) {
+            $formId = $this->getIdFromUuid('ox_form',$params['formId']);
+            // print_r($formId);exit;
+        }
+        if (isset($params['activityInstanceId'])) {
+            $select = "select ox_form.id, ox_activity_instance.id as activity_instance_id
+            from ox_form
+            inner join ox_activity_form on ox_form.id = ox_activity_form.form_id
+            inner join ox_activity on ox_activity_form.activity_id = ox_activity.id
+            inner join ox_activity_instance on ox_activity.id = ox_activity_instance.activity_id
+            where ox_activity_instance.activity_instance_id =:activityInstanceId";
+            $queryParams = array("activityInstanceId" => $params['activityInstanceId']);
+            $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+            $formId = $response[0]['id'];
+            $activityInstanceId = $response[0]['activity_instance_id'];
+        }
+
+        $workflowId = (isset($params['workflow_uuid']) && !empty($params['workflow_uuid']))?$params['workflow_uuid']:null;
+        $workflowId = (isset($params['workflowId']) && !empty($params['workflowId']))?$params['workflowId']:$workflowId;
+        $this->logger->info("STORE USER CACHE -- workflowId : $workflowId");
+        if($workflowId) {
+            $select = "select ox_form.id, ox_workflow.id as workflow_id
+            from ox_form
+            left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
+            left join ox_workflow on ox_workflow.id=ox_workflow_deployment.workflow_id
+            left join ox_app on ox_app.id=ox_workflow.app_id
+            where ox_workflow.uuid=:workflowId and ox_app.id=:appId;";
+            $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
+            $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+            $formId = $response[0]['id'];
+            $workflowId = $response[0]['workflow_id'];
+        }
+        if(!isset($formId)){
+            $this->logger->warn("Cache not stored as Form was not found");
+            return $params;
+        }
+
+        if(isset($params['workflowInstanceId'])) {
+            $select = "select ox_workflow_instance.id
+            from ox_workflow_instance
+            where ox_workflow_instance.process_instance_id =:workflowInstanceId";
+            $queryParams = array("workflowInstanceId" => $params['workflowInstanceId']);
+            $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+            $workflowInstanceId = $response[0]['id'];
         }
         if (isset($params['cacheId'])) {
             $obj = $this->table->get($params['cacheId'], array());
             if (count($obj->toArray()) > 0) {
                 $data['id'] = $params['cacheId'];
             }
-        } else {
-            $query = "select id from ox_user_cache where app_id = :appId and user_id = :userId and deleted = 0";
-            $queryParams = array("appId" => $appId, "userId" => AuthContext::get(AuthConstants::USER_ID));
-            $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (count($result) > 0) {
-                $data['id'] = $result[0]['id'];
-            }
         }
         $form = new UserCache();
         $data['app_id'] = $appId;
         $data['content'] = isset($params['content']) ? $params['content'] : json_encode($params);
         $data['user_id'] = isset($params['user_id']) ? $params['user_id'] : AuthContext::get(AuthConstants::USER_ID);
+        $data['workflow_id'] = $workflowId;
+        $data['workflow_instance_id'] = $workflowInstanceId;
+        $data['activity_instance_id'] = $activityInstanceId;
+        $data['date_created'] = date('Y-m-d H:i:s');
+        $data['form_id'] = $formId;
         $form->exchangeArray($data);
+        $this->logger->info("STORE USER CACHE -- Data : ".print_r($data,true));
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($form);
-            if (!isset($data['id'])) {
+            if ($count != 0 && !isset($data['id'])) {
                 $id = $this->table->getLastInsertValue();
-                $data['id'] = $id;
+                $params['cacheId'] = $id;
+            } else {
+                $id = $data['id'];
             }
+            if(is_string($data['content'])){
+              $content = json_decode($data['content'],true);
+            } else {
+              $content = $params['content'];
+            }
+            $content['cacheId'] = $id;
+            $params['cacheId'] = $id;
+            $this->updateCacheData($id, $content);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $data;
+        return $count;
+    }
+    private function updateCacheData($id, $data)
+    {
+        $query = "update ox_user_cache set content = :content where id = :id";
+        $params = array('content' => json_encode($data), 'id' => $id);
+        $result = $this->executeUpdateWithBindParameters($query, $params);
+        return $result->getAffectedRows() > 0;
     }
 
     public function updateUserCache($id, &$data)

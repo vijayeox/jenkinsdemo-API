@@ -34,7 +34,8 @@ class IndexerImpl implements Indexer
                     }
                 }
             }
-            $elasticService = new ElasticService($this->config);
+            $elasticService = new ElasticService();
+            $elasticService->setConfig($this->config);
             $response = $elasticService->index($index, $id, $body);
             return $response;
         } catch (Exception $e) {

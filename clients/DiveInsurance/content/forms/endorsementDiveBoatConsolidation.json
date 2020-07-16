@@ -267,13 +267,11 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "identifier_field",
 						"label": "identifier_field",
+						"key": "identifier_field",
 						"type": "hidden",
-						"defaultValue": "padi",
-						"lockKey": true,
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
@@ -8872,7 +8870,7 @@
 					"hideOnChildrenHidden": false
 				}, {
 					"label": "groupExcessLiabilityLimit",
-					"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '100000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '200000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '300000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '400000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '900000';\n}",
+					"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
 					"key": "groupExcessLiabilityLimit",
 					"type": "hidden",
 					"input": true,
@@ -9326,7 +9324,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 236,
+	"_vid": 238,
 	"title": "Endorsement - Dive Boat Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -9344,6 +9342,6 @@
 	"path": "endorsementdiveboatconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-25T13:01:34.879Z",
-	"modified": "2020-06-22T09:22:18.584Z",
+	"modified": "2020-07-06T01:58:58.097Z",
 	"machineName": "testdivehub:endorsementDiveBoatConsolidation"
 }

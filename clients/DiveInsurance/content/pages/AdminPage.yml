@@ -80,6 +80,12 @@ content:
                     field: carrier
                   - title: Policy Number
                     field: policy_number
+                  - title: Category
+                    field: category
+                    editable: false
+                  - title: State
+                    field: state
+                    editable: false
         - name: Surplus Lines
           icon: fad fa-flag-usa
           details:

@@ -33,7 +33,8 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
        "icon.png",
-       "icon_white.png"
+       "icon_white.png",
+       {from: path.resolve(__dirname, "../../../../../view/gui/src/ckeditor/")}
     ]),
     new MiniCssExtractPlugin({
       filename: "[name].css",

@@ -146,6 +146,7 @@ public function execute(array $data,Persistence $persistenceService)
         $endorsementNonOwnedAutoLiabilityPL = array();
         $endorsementLiabilityCoverageOption = array();
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
+        $data['upgradeStatus'] = true;
        if($data['initiatedByUser'] == false){
             $endorsementCoverage = array();
             $endorsementGroupCoverage = array();
@@ -168,6 +169,7 @@ public function execute(array $data,Persistence $persistenceService)
             $policy['groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
             $policy['previous_groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
             $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
+            $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
             $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
             $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
             $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
@@ -175,8 +177,8 @@ public function execute(array $data,Persistence $persistenceService)
             $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
             $policy['previous_propertyCoveragesTotalPL'] = $data['propertyCoveragesTotalPL'];
             $policy['previous_liabilityPropertyCoveragesTotalPL'] = $data['liabilityPropertyCoveragesTotalPL'];
-            $policy['previous_liabilityProRataPremium'] = $data['liabilityProRataPremium'];
-            $policy['previous_propertyProRataPremium'] = $data['propertyProRataPremium'];
+            $policy['previous_liabilityProRataPremium'] = isset($data['liabilityProRataPremium'])?$data['liabilityProRataPremium']:0;
+            $policy['previous_propertyProRataPremium'] = isset($data['propertyProRataPremium'])?$data['propertyProRataPremium']:0;
             $policy['previous_ProRataPremium'] = $data['ProRataPremium'];
             $policy['previous_PropTax'] = $data['PropTax'];
             $policy['previous_LiaTax'] = $data['LiaTax'];
@@ -279,6 +281,7 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($rate);
                 }
             }
+            
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
             $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
@@ -286,6 +289,8 @@ public function execute(array $data,Persistence $persistenceService)
             $data['endorsementNonOwnedAutoLiabilityPL'] = $endorsementNonOwnedAutoLiabilityPL;
             $data['endorsementLiabilityCoverageOption'] = $endorsementLiabilityCoverageOption;
             array_push($data['previous_policy_data'],$policy);
+            $data['initial_combinedSingleLimit'] = $data['previous_policy_data'][0]['previous_combinedSingleLimit'];
+            $data['initial_annualAggregate'] = $data['previous_policy_data'][0]['previous_annualAggregate'];
             $unsetOptions = $this->unsetOptions;
             for($i=0;$i< sizeof($unsetOptions);$i++){
                 if(isset($data[$unsetOptions[$i]])){
@@ -294,6 +299,7 @@ public function execute(array $data,Persistence $persistenceService)
             }
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
         }
+
         if(isset($data['paymentOptions'])){
             unset($data['paymentOptions']);
         }

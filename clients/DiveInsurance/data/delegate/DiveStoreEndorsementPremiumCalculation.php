@@ -35,7 +35,7 @@ class DiveStoreEndorsementPremiumCalculation extends AbstractAppDelegate
             if($policy['previous_liabilityCoverageOption'] == $data['liabilityCoverageOption']){
                 $data['increased_liability_limit'] = false;
             } else {
-                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND key = '".$data['liabilityCoverageOption']."' AND previous_key = '".$policy['previous_nonOwnedAutoLiabilityPL']."'";
+                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND `key` = '".$data['liabilityCoverageOption']."' AND previous_key = '".$policy['previous_nonOwnedAutoLiabilityPL']."'";
                 $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Store".$selectCoverage);
                 $resultCoverage = $persistenceService->selectQuery($selectCoverage);
                 while ($resultCoverage->next()) {
