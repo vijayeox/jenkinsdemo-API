@@ -286,7 +286,7 @@ namespace ProcessExcel
 
         private void PostFile(string folder, string fileName)
         {
-            Console.WriteLine(_settings.postURL);
+            LogProcess("Posting To URL  :" + _settings.postURL + "app/" + _settings.appId + "/delegate/TriggerTemplateService");
             var client = new RestClient(_settings.postURL + "app/" +  _settings.appId + "/delegate/TriggerTemplateService");
             client.Timeout = -1;
 
@@ -303,15 +303,13 @@ namespace ProcessExcel
                 _errorlist = this._errordetails
 
             }) ;
-            Console.WriteLine(postCallbackData);
             request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
 
             string fname = fileName.Replace(".", "-");
             LogProcess(postCallbackData);
             this._errordetails.Clear();
             IRestResponse response = client.Execute(request);
-            Console.WriteLine(response.Content);
-            LogProcess("Sending Post:" + fileName);
+            LogProcess("Reponse Recieved:" + response.Content);
         }
 
         private void PostError(string fileName, int errortype, string message)
