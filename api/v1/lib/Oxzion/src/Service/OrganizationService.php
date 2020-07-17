@@ -321,7 +321,7 @@ class OrganizationService extends AbstractService
     {
         $select = "SELECT * from ox_organization oxo inner join ox_organization_profile oxop on oxop.id = oxo.org_profile_id where oxo.id =:id and oxo.status=:status";
         $params = array("id" => $id, "status" => "Active");
-        $response = $this->executeUpdateWithBindParameters($select,$params)->toArray();
+        $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
         if (count($response) == 0) {
             return 0;
         }
