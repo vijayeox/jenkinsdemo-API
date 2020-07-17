@@ -5808,7 +5808,7 @@
 													"required": true,
 													"customMessage": "The year in which the building was built is required"
 												},
-												"key": "built_year",
+												"key": "built_year1",
 												"type": "select",
 												"indexeddb": {
 													"filter": {}
@@ -6107,11 +6107,7 @@
 											"collapsible": false,
 											"tableView": false,
 											"key": "ALpoolSupplementalForm1",
-											"conditional": {
-												"show": true,
-												"when": "additionalLocations.ALNonDivingPoolActivities",
-												"eq": "yes"
-											},
+											"customConditional": "if(row['ALNonDivingPoolActivities'] == \"yes\"){\n  show = true;\n}else{\n  show = false;\n}",
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
@@ -13762,7 +13758,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 295,
+	"_vid": 297,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13779,6 +13775,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-17T08:24:50.721Z",
+	"modified": "2020-07-17T09:29:31.954Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
