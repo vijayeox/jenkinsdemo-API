@@ -48,7 +48,7 @@
                 <p>
                 {if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
+                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupTaxAmount)}${$groupTaxAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
                 <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupPadiFeeAmount)}${$groupPadiFeeAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
             </div>
             <div class="sub_main">
