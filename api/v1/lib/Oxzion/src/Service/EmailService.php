@@ -156,8 +156,8 @@ class EmailService extends AbstractService
     {
         try {
             $userId = AuthContext::get(AuthConstants::USER_ID);
-            $queryString = "select email from ox_user";
-            $where = "where id = " . $userId;
+            $queryString = "select up.email from ox_user u inner join ox_user_profile up on up.id = u.user_profile_id";
+            $where = "where u.id = " . $userId;
             $resultSet = $this->executeQuerywithParams($queryString, $where)->toArray();
             $email = array_column($resultSet, 'email');
             $queryString = "select * from email_setting_user";

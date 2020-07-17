@@ -163,6 +163,7 @@ class EmailController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Unexpected Error occurred", 500);
         }
         if ($responseData == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
