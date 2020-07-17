@@ -271,7 +271,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT id from ox_app where uuid = '" . $appUuid . "'";
         $appId = $this->executeQueryTest($query);
         $appId = $appId[0]['id'];
-        $query = "SELECT count(name),status,uuid,id from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(op.name),o.status,o.uuid,o.id from ox_organization o inner join ox_organization_profile op on op.id = o.org_profile_id where op.name = '" . $yaml['org'][0]['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count from ox_app_registry where app_id = '" . $appId . "'";
         $appRegistryResult = $this->executeQueryTest($query);
@@ -524,7 +524,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(op.name),o.status,o.uuid from ox_organization o inner join ox_organization_profile op on op.id = o.org_profile_id where op.name = '" . $yaml['org'][0]['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
@@ -574,7 +574,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(op.name),o.status,o.uuid from ox_organization o inner join ox_organization_profile op on op.id = o.org_profile_id where op.name = '" . $yaml['org'][0]['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
@@ -667,7 +667,7 @@ class AppControllerTest extends ControllerTest
         $this->assertNotEmpty($yaml['org'][0]['contact']);
         $this->assertEquals($yaml['org'][0]['preferences'], '{}');
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(op.name),o.status,o.uuid from ox_organization o inner join ox_organization_profile op on op.id = o.org_profile_id where op.name = '" . $yaml['org'][0]['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
@@ -714,7 +714,7 @@ class AppControllerTest extends ControllerTest
         $queryString = "SELECT name FROM ox_privilege WHERE app_id = '" . $idresult[0]['id'] . "'";
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(op.name),o.status,o.uuid from ox_organization o inner join ox_organization_profile op on op.id = o.org_profile_id where op.name = '" . $yaml['org'][0]['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $this->assertEquals($privilegearray, $DBprivilege);
@@ -763,7 +763,7 @@ class AppControllerTest extends ControllerTest
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
         $list = "'" . implode("', '", $DBprivilege) . "'";
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(op.name),o.status,o.uuid from ox_organization o inner join ox_organization_profile op on op.id = o.org_profile_id where op.name = '" . $yaml['org'][0]['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $this->assertNotEquals($list, 'MANAGE');
