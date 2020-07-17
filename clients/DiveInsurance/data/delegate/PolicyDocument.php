@@ -187,7 +187,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
             }
 
-            if(isset($data['business_state'])){
+            if(isset($data['business_state']) && $data['business_state'] !=""){
                 $data['state_in_short'] = $this->getStateInShort($data['business_state'],$persistenceService);
             }
             $this->logger->info("Data------------------ ".print_r($data,true));
@@ -740,7 +740,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         protected function setPolicyInfo(&$data,$persistenceService,$endorsementOptions = null)
         {
                 if($this->type != "quote" && $this->type != "lapse" && $this->type != 'endorsementQuote'){
-                    $coi_number = $this->generateCOINumber($data,$persistenceService);
+                  if(isset($data['certificate_no'])){
+                    $coi_number = $data['certificate_no'];
+                  } else {
+                      $coi_number = $this->generateCOINumber($data,$persistenceService);
+                  }
                     if($this->type == 'endorsement'){
                         if($data['product'] == 'Dive Store'){
                             if(isset($data['documents']['endorsement_coi_document'])){
