@@ -76,7 +76,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $this->processId = 1;
         }
         $result = $this->workflowInstanceService->startWorkflow($params);
-        $sqlQuery = 'SELECT * FROM ox_user order by id DESC LIMIT 1';
+        $sqlQuery = 'SELECT * FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals('brian',$newQueryResult[0]['firstname']);
         $this->assertEquals('test',$newQueryResult[0]['lastname']);
