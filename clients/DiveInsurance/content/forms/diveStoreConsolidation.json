@@ -7274,11 +7274,7 @@
 											"collapsible": false,
 											"tableView": false,
 											"key": "ALpoolSupplementalForm1",
-											"conditional": {
-												"show": true,
-												"when": "additionalLocations.ALNonDivingPoolActivities",
-												"eq": "yes"
-											},
+											"customConditional": "if(row['ALNonDivingPoolActivities'] == \"yes\"){\n  show = true;\n}else{\n  show = false;\n}",
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
@@ -13426,7 +13422,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 544,
+	"_vid": 546,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13443,6 +13439,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-17T08:25:02.880Z",
+	"modified": "2020-07-17T09:01:41.549Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
