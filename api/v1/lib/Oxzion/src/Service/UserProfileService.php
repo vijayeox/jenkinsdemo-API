@@ -31,11 +31,15 @@ class UserProfileService extends AbstractService
         $this->logger->info("Adding UserProfile - " . print_r($data, true));
         $userProfileData = $data;
         $userProfileData['uuid'] = UuidUtil::uuid();
-        $userProfileData['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $userProfileData['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
         $userProfileData['date_created'] = date('Y-m-d H:i:s');
         $addressid = $this->addressService->addAddress($userProfileData);
         $userProfileData['address_id'] = $addressid;
         $userProfileData['org_id'] = $userProfileData['orgid'];
+        if (!isset($userProfileData['date_of_birth'])) {
+            $userProfileData['date_of_birth'] = date('Y-m-d');
+        }
+        
         $form = new UserProfile($userProfileData);
         $form->validate();
         $this->beginTransaction();

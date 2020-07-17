@@ -251,12 +251,6 @@ class UserService extends AbstractService
             if (isset($password)) {
                 $data['password'] = md5(sha1($password));
             }
-            if (!isset($data['date_of_join'])) {
-                $data['date_of_join'] = date('Y-m-d');
-            }
-            if (!isset($data['date_of_birth'])) {
-                $data['date_of_birth'] = date('Y-m-d');
-            }
             if (!isset($data['status'])) {
                 $data['status'] = 'Active';
             }

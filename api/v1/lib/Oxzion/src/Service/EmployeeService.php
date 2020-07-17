@@ -29,11 +29,18 @@ class EmployeeService extends AbstractService
         $this->logger->info("Adding Employee Record - " . print_r($data, true));
         $EmpData = $data;
         $EmpData['uuid'] = UuidUtil::uuid();
-        $EmpData['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $EmpData['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
         $EmpData['date_created'] = date('Y-m-d H:i:s');
         $EmpData['org_id'] = $EmpData['orgid'];
         $orgProfile = $this->getDataByParams('ox_organization', array('org_profile_id'), array('id' => $EmpData['orgid']))->toArray();
         $EmpData['org_profile_id'] = $orgProfile[0]['org_profile_id'];
+        if (!isset($EmpData['date_of_join'])) {
+            $EmpData['date_of_join'] = date('Y-m-d');
+        }
+        if (!isset($EmpData['designation'])) {
+            $EmpData['designation'] = "Staff";
+        }
+        
         $form = new Employee($EmpData);
         $form->validate();
         $this->beginTransaction();
