@@ -4,8 +4,7 @@ use Oxzion\AppDelegate\FileDelegate;
 
 class UpdatePolicyStatusOnExpiration extends FileDelegate{
 
-    public $template;
- 
+    
     public function __construct(){
         parent::__construct();
     }
@@ -34,6 +33,9 @@ class UpdatePolicyStatusOnExpiration extends FileDelegate{
                 $params['entityName'] = 'Dive Boat';
                 $this->updateFieldValueOnFiles($params,'policyStatus','In Force','Expired',$filterParams);
             }
+
+            
+            
         }
         catch(Exception $e){
             $this->logger->error($e->getMessage(),$e);

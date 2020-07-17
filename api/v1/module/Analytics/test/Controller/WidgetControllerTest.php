@@ -25,7 +25,6 @@ class WidgetControllerTest extends ControllerTest
 
     public function tearDown()  : void {
         parent::tearDown();
-        Mockery::close();
     }
 
     public function getDataSet()

@@ -36,7 +36,7 @@ namespace ProcessExcel
 
         private Settings _settings;
 
-        private string _fileuuid;
+        private string _fileId;
         private List<ErrorDetails> _errordetails = new List<ErrorDetails>();
 
         public ProcessExcel(Settings settings)
@@ -46,10 +46,10 @@ namespace ProcessExcel
 
 
 
-        public void processFile(string baseFolder, string filename, string fileuuid)
+        public void processFile(string baseFolder, string filename, string fileId)
         {
             Errorflag = false;
-            _fileuuid = fileuuid;
+            _fileId = fileId;
             this.baseDirectory = baseFolder;
             string fname = System.IO.Path.GetFileName(filename);
             string fnameSource = DateTime.Now.ToString("MMddyyyyhhmmss") + "-" + _settings.dwFile;
@@ -276,30 +276,30 @@ namespace ProcessExcel
 
         public class CallbackData
         {
+            public string appId { get; set; }
+            public string orgId { get; set; }
+            public string fileId { get; set; }
             public string filename { get; set; }
-            public string fileuuid { get; set; }
             public byte status { get; set; }
-            public string commands { get; set; }
             public List<ErrorDetails> _errorlist { get; set; }
         }
 
         private void PostFile(string folder, string fileName)
         {
-            Console.WriteLine(_settings.postURL);
-            var client = new RestClient(_settings.postURL + "app/" +  _settings.appUUID + "/pipeline");
-          //  var client = new RestClient(_settings.postURL);
+            LogProcess("Posting To URL  :" + _settings.postURL + "app/" + _settings.appId + "/delegate/TriggerTemplateService");
+            var client = new RestClient(_settings.postURL + "app/" +  _settings.appId + "/delegate/TriggerTemplateService");
             client.Timeout = -1;
 
             var request = new RestRequest(Method.POST);
-            request.AddFile("outputfile", folder + "\\" + fileName);
-            // request.AddHeader("Authorization", "Bearer " + _settings.token);
+            request.AddFile("file", folder + "\\" + fileName);
             request.AlwaysMultipartFormData = true;
             var postCallbackData = JsonSerializer.Serialize(new CallbackData()
             {
                 status = 1,
-                fileuuid = _fileuuid,
+                fileId = _fileId,
+                orgId = _settings.orgId,
+                appId =  _settings.appId,
                 filename = fileName,
-                commands = _settings.commands,
                 _errorlist = this._errordetails
 
             }) ;
@@ -309,8 +309,7 @@ namespace ProcessExcel
             LogProcess(postCallbackData);
             this._errordetails.Clear();
             IRestResponse response = client.Execute(request);
-            Console.WriteLine(response.Content);
-            LogProcess("Sending Post:" + fileName);
+            LogProcess("Reponse Recieved:" + response.Content);
         }
 
         private void PostError(string fileName, int errortype, string message)
@@ -329,9 +328,10 @@ namespace ProcessExcel
             var postCallbackData = JsonSerializer.Serialize(new CallbackData()
             {
                 status = 0,
-                fileuuid = _fileuuid,
-                filename = fileName,
-                commands = _settings.commands,
+                fileId = _fileId,
+                orgId = _settings.orgId,
+                appId =  _settings.appId,
+                filename = fileName,    
                 _errorlist = new List<ErrorDetails> { errordetail}
             });
             request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
