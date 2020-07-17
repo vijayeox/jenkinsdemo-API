@@ -317,7 +317,7 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is {if isset($PropDeductibleCredit)}${$PropDeductibleCredit}}.{else}$0.00{/if}
+                            Mechanical breakdown is $2500. All other perils is {if isset($PropDeductibleCredit)}${$PropDeductibleCredit}{else}$0.00{/if}
                             </td>
                     </tr>
                 </tbody>
