@@ -356,7 +356,7 @@ class AppServiceTest extends AbstractServiceTest
         $path = __DIR__ . '/../sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createOrg($data);
-        $sqlQuery = "SELECT count(name) as count FROM ox_organization WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
+        $sqlQuery = "SELECT count(id) as count FROM ox_organization WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);
