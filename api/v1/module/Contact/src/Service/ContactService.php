@@ -143,17 +143,26 @@ class ContactService extends AbstractService
                 $and1 = " AND (LOWER(oxc.first_name) like '%" . $filter . "%' OR LOWER(oxc.last_name) like '%" . $filter . "%' OR LOWER(oxc.email) like '%" . $filter . "%' OR lower(oxc.phone_1) like '%" . $filter . "%')";
             }
             $union = " UNION ";
-            $union = " UNION ";
             if ($column == "-1") {
-                $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,oa.address1,oa.address2,oa.city,oa.state,oa.country, oa.zip,'2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id inner join ox_address as oa on ou.address_id = oa.id";
+                $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, up.firstname as first_name, up.lastname as last_name, up.phone as phone_1, 
+                                 null as phone_list, up.email, null as email_list, op.name as company_name, null as icon_type, oe.designation,
+                                 oa.address1,oa.address2,oa.city,oa.state,oa.country, oa.zip,'2' as contact_type 
+                                 from ox_user as ou inner join ox_user_profile up on up.id = ou.user_profile_id
+                                 inner join ox_organization as org on ou.orgid = org.id 
+                                 inner join ox_organization_profile op on op.id = org.org_profile_id
+                                 Left join ox_employee oe on oe.user_profile_id = up.id and oe.org_id = org.id
+                                 left join ox_address as oa on up.address_id = oa.id";
             } else {
-                $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type  from ox_user as ou inner join ox_organization as org on ou.orgid = org.id";
+                $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, up.firstname as first_name, up.lastname as last_name,null as icon_type, 
+                                '2' as contact_type  
+                                from ox_user as ou inner join ox_user_profile up on up.id = ou.user_profile_id
+                                inner join ox_organization as org on ou.orgid = org.id";
             }
             $where2 = " WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
             if ($filter == null) {
                 $and2 = '';
             } else {
-                $and2 = " AND (LOWER(ou.firstname) like '%" . $filter . "%' OR LOWER(ou.lastname) like '%" . $filter . "%' OR LOWER(ou.email) like '%" . $filter . "%')";
+                $and2 = " AND (LOWER(up.firstname) like '%" . $filter . "%' OR LOWER(up.lastname) like '%" . $filter . "%' OR LOWER(up.email) like '%" . $filter . "%')";
             }
             $queryString4 = ") as a ORDER BY a.first_name, a.last_name";
             $finalQueryString = $queryString1 . $queryString2 . $where1 . $and1 . $union . $queryString3 . $where2 . $and2 . $queryString4;
