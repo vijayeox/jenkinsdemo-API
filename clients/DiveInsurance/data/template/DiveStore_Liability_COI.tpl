@@ -97,7 +97,7 @@
                             $1,000,000
 					</p>
 					<p class = "sec_title2">
-					{if isset($medicalPayment) && ($medicalPayment != "false" && $medicalPayment != false) }
+					{if isset($medicalPayment) && ($medicalPayment == "true"||$medicalPayment == true)}
                             <td>$5000</td>
                         {else}
                             <td>Excluded</td>{/if}
