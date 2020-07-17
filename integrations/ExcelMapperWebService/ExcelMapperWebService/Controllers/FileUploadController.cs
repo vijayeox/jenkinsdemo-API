@@ -35,10 +35,9 @@ namespace ArrowHeadWebService.Controllers
         public class FileUploadAPI
         {
             public IFormFile files { get; set; }
-            public string fileuuid { get; set; }
-            public string commands { get; set; }
-            public string appUUID { get; set; }
-            public string delegateName { get; set; }
+            public string fileId { get; set; }
+            public string orgId { get; set; }
+            public string appId { get; set; }
         }
 
         [HttpPost]
@@ -47,13 +46,13 @@ namespace ArrowHeadWebService.Controllers
             try
             {
                
-                if (objFile.fileuuid == null)
+                if (objFile.fileId == null)
                 {
-                    return Content("{\"Status\":0,\"Message\":\"fileuuid missing\"}", "application/json");
+                    return Content("{\"Status\":0,\"Message\":\"fileId missing\"}", "application/json");
                 }
                 if (objFile.files !=null)
                 {
-                    // _environment.WebRootPath = "D:\\Oxzion";
+                    _environment.WebRootPath = "C:\\OxzionRoot";
                     if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
                     {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
@@ -64,11 +63,10 @@ namespace ArrowHeadWebService.Controllers
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
                     }
-                    _settings.commands = objFile.commands;
-                    _settings.appUUID = objFile.appUUID;
-                    _settings.delegateName = objFile.delegateName;
+                    _settings.orgId = objFile.orgId;
+                    _settings.appId = objFile.appId;
                     ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
-                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName,objFile.fileuuid); }).Start();                    
+                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName,objFile.fileId); }).Start();                    
                     return Content("{\"Status\":1,\"Message\":\"" + objFile.files.FileName+" file Uploaded\"}", "application/json");
                 }
                 else

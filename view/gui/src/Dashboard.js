@@ -81,7 +81,6 @@ class Dashboard extends Component {
 
   componentDidMount() {
     if (this.uuid) {
-      let thiz = this;
       this.getDashboardHtmlDataByUuid(this.uuid).then(response => {
         if (response.status == "success") {
           this.setState({
@@ -91,7 +90,6 @@ class Dashboard extends Component {
           }
           );
           (this.props.drilldownDashboardFilter && this.props.drilldownDashboardFilter.length > 0) ? this.updateGraph(this.props.drilldownDashboardFilter) : this.updateGraph()
-
         } else {
           this.setState({
             htmlData: `<p>No Data</p>`
@@ -388,7 +386,13 @@ class Dashboard extends Component {
       let preparedFilter = filter ? this.preparefilter(this.state.preparedDashboardFilter, JSON.parse(filter)) : this.state.preparedDashboardFilter
       filter = preparedFilter
       url = url + '&filter=' + JSON.stringify(filter);
-    } else if (filter && ('' !== filter)) {
+    } else if(this.props.dashboardStack && this.props.dashboardStack.length>1){
+      let dashFilter=this.props.dashboardStack[this.props.dashboardStack.length -1]["drilldownDashboardFilter"]
+      let preparedFilter = filter ? this.preparefilter(dashFilter, JSON.parse(filter)) : dashFilter
+      filter = preparedFilter
+      url = url + '&filter=' + JSON.stringify(filter);
+
+    }else if (filter && ('' !== filter)) {
       url = url + '&filter=' + encodeURIComponent(filter);
     } else {
       url = url;
