@@ -156,7 +156,7 @@ class OrganizationControllerTest extends ControllerTest
         $roleResult = $this->executeQueryTest($select);
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='" . $content['data']['uuid'] . "')";
         $orgResult = $this->executeQueryTest($select);
-        $select = "SELECT * FROM ox_user where username ='" . $contact['username'] . "'";
+        $select = "SELECT ox_user.*,ox_user_profile.firstname,ox_user_profile.lastname,ox_user_profile.address_id,ox_employee.designation FROM ox_user inner join ox_user_profile on ox_user_profile.id = ox_user.user_profile_id inner join ox_employee on ox_employee.user_profile_id = ox_user_profile.id where ox_user.username ='" . $contact['username'] . "'";
         $usrResult = $this->executeQueryTest($select);
         $select = "SELECT ox_address.address1,ox_organization_profile.uuid,ox_organization.uuid,ox_organization_profile.name from ox_address join ox_organization_profile on ox_address.id = ox_organization_profile.address_id join ox_organization on ox_organization.org_profile_id=ox_organization_profile.id where name = 'ORGANIZATION'";
         $org = $this->executeQueryTest($select);
