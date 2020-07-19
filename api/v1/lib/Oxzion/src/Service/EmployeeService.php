@@ -9,6 +9,7 @@ use Oxzion\Service\AbstractService;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
+use Oxzion\Model\Organization;
 
 class EmployeeService extends AbstractService
 {
@@ -32,7 +33,10 @@ class EmployeeService extends AbstractService
         $EmpData['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
         $EmpData['date_created'] = date('Y-m-d H:i:s');
         $EmpData['org_id'] = $EmpData['orgid'];
-        $orgProfile = $this->getDataByParams('ox_organization', array('org_profile_id'), array('id' => $EmpData['orgid']))->toArray();
+        $orgProfile = $this->getDataByParams('ox_organization', array('org_profile_id', 'type'), array('id' => $EmpData['orgid']))->toArray();
+        if($orgProfile[0]['type'] != Organization::BUSINESS){
+            return 0;
+        }
         $EmpData['org_profile_id'] = $orgProfile[0]['org_profile_id'];
         if (!isset($EmpData['date_of_join'])) {
             $EmpData['date_of_join'] = date('Y-m-d');
