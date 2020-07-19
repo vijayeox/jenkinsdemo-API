@@ -30,7 +30,7 @@ class OrganizationService extends AbstractService
     static $projectField = array('name' => 'oxp.name', 'description' => 'oxp.description', 'date_created' => 'oxp.date_created');
     static $announcementField = array('name' => 'oxa.name', 'description' => 'oxa.description');
     static $roleField = array('name' => 'oxr.name', 'description' => 'oxr.description');
-    static $orgField = array('id' => 'og.id', 'uuid' => 'og.uuid', 'name' => 'oxop.name', 'preferences' => 'og.preferences', 'address1' => 'oa.address1', 'address2' => 'oa.address2', 'city' => 'oa.city', 'state' => 'oa.state', 'country' => 'oa.country', 'zip' => 'oa.zip', 'logo' => 'og.logo');
+    static $orgField = array('id' => 'og.id', 'uuid' => 'og.uuid', 'name' => 'og.name', 'preferences' => 'og.preferences', 'address1' => 'oa.address1', 'address2' => 'oa.address2', 'city' => 'oa.city', 'state' => 'oa.state', 'country' => 'oa.country', 'zip' => 'oa.zip', 'logo' => 'og.logo');
 
     public function setMessageProducer($messageProducer)
     {
@@ -81,14 +81,18 @@ class OrganizationService extends AbstractService
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
 
-        try {
-            if (isset($data['name'])) {
-                $this->orgProfileService->addOrganizationProfile($data);
-            }else{                
+        try{
+            $count = 0;
+            $this->beginTransaction();
+            if (isset($data['type']) && $data['type'] == Organization::INDIVIDUAL) {
+                $data['name'] = $data['contact']['firstname']. " ". $data['contact']['lastname'];
+            }else if(!isset($data['name'])){
                 throw new ValidaTionException("Organization name required");
-                
+            }else{
+                $this->orgProfileService->addOrganizationProfile($data);
+                $data['type'] = Organization::BUSINESS;        
             }
-            $select = "SELECT count(name),oxo.status,oxo.uuid from ox_organization oxo inner join ox_organization_profile oxop on oxop.id= oxo.org_profile_id where oxop.name = '" . $data['name'] . "'";
+            $select = "SELECT count(name),oxo.status,oxo.uuid from ox_organization oxo where oxo.name = '" . $data['name'] . "'";
             $result = $this->executeQuerywithParams($select)->toArray();
             if ($result[0]['count(name)'] > 0) {
                 if ($result[0]['status'] == 'Inactive') {
@@ -98,45 +102,48 @@ class OrganizationService extends AbstractService
                         $this->logger->info("Data modified before Organization Update - " . print_r($data, true));
                         $count = $this->updateOrganization($result[0]['uuid'], $data, $files);
                         $this->uploadOrgLogo($result[0]['uuid'], $files);
-                        if ($count == 1) {
-                            return 1;
-                        }
                     } else {
                         throw new ServiceException("Organization already exists would you like to reactivate?", "org.already.exists");
                     }
                 } else {
                     throw new ServiceException("Organization already exists", "org.exists");
                 }
+            }else{
+                $count = $this->saveOrganizationInternal($data, $files);
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $data['name'], 'status' => $data['status'])), 'ORGANIZATION_ADDED');
             }
-            $form = new Organization($data);
-            $form->validate();
-            $this->beginTransaction();
-            $count = 0;
-            $this->logger->info("Data modified before Organization Create - " . print_r($form, true));
-            $count = $this->table->save($form);
-            $this->logger->info("Data modified after Organization Create - " . print_r($data, true));
-            if ($count == 0) {
-                throw new ServiceException("Failed to create new entity", "failed.create.org");
-            }
-            $form->id = $this->table->getLastInsertValue();
-            $data['preferences'] = json_decode($data['preferences'], true);
-            $data['id'] = $form->id;
-            $userid['id'] = $this->setupBasicOrg($data, $data['contact'], $data['preferences']);
-            if (isset($userid['id'])) {
-                $update = "UPDATE `ox_organization` SET `contactid` = '" . $userid['id'] . "' where uuid = '" . $data['uuid'] . "'";
-                $resultSet = $this->executeQueryWithParams($update);
-            } else {
-                throw new ServiceException("Failed to create new entity", "failed.create.org");
-            }
-            $insert = "INSERT INTO ox_app_registry (`org_id`,`app_id`,`date_created`,`start_options`) SELECT " . $form->id . ",id,CURRENT_TIMESTAMP(),start_options from ox_app where isdefault = 1";
-            $resultSet = $this->executeQueryWithParams($insert);
-            $this->uploadOrgLogo($data['uuid'], $files);
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $data['name'], 'status' => $form->status)), 'ORGANIZATION_ADDED');
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
+        }    
+        
+        return $count;
+    }
+
+    private function saveOrganizationInternal(&$data, $files = NULL){
+        $form = new Organization($data);
+        $form->validate();
+        $count = 0;
+        $this->logger->info("Data modified before Organization Create - " . print_r($form, true));
+        $count = $this->table->save($form);
+        if ($count == 0) {
+            throw new ServiceException("Failed to create new Organization", "failed.create.org");
         }
+        $form->id = $this->table->getLastInsertValue();
+        $data['preferences'] = json_decode($data['preferences'], true);
+        $data['id'] = $form->id;
+        $userid['id'] = $this->setupBasicOrg($data, $data['contact'], $data['preferences']);
+        if (isset($userid['id'])) {
+            $update = "UPDATE `ox_organization` SET `contactid` = '" . $userid['id'] . "' where uuid = '" . $data['uuid'] . "'";
+            $resultSet = $this->executeQueryWithParams($update);
+        } else {
+            throw new ServiceException("Failed to create new Organization", "failed.create.org");
+        }
+        $insert = "INSERT INTO ox_app_registry (`org_id`,`app_id`,`date_created`,`start_options`) SELECT " . $form->id . ",id,CURRENT_TIMESTAMP(),start_options from ox_app where isdefault = 1";
+        $resultSet = $this->executeQueryWithParams($insert);
+        $this->uploadOrgLogo($data['uuid'], $files);
+        $data['status'] = $form->status;
         return $count;
     }
 
@@ -236,7 +243,6 @@ class OrganizationService extends AbstractService
         if (isset($data['contactid'])) {
             $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
         }
-        $oldOrgName = $this->getDataByParams('ox_organization_profile',array('name'),array('id' => $obj->org_profile_id))->toArray();
         $org = $obj->toArray();
         $form = new Organization();
         $changedArray = array_merge($obj->toArray(), $data);
@@ -271,11 +277,11 @@ class OrganizationService extends AbstractService
                     break;
             }
         }
-        if ($oldOrgName[0]['name'] != $data['name']) {
-            $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $oldOrgName[0]['name'], 'status' => $form->status)), 'ORGANIZATION_UPDATED');
+        if ($obj->name != $data['name']) {
+            $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name, 'status' => $form->status)), 'ORGANIZATION_UPDATED');
         }
         if ($form->status == 'InActive') {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $oldOrgName[0]['name'], 'status' => $form->status)), 'ORGANIZATION_DELETED');
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name, 'status' => $form->status)), 'ORGANIZATION_DELETED');
         }
         return $count;
     }
@@ -298,9 +304,7 @@ class OrganizationService extends AbstractService
         $originalArray['status'] = 'Inactive';
         $form->exchangeArray($originalArray);
         $result = $this->table->save($form);
-        $select = "SELECT name FROM ox_organization_profile where id='".$originalArray['org_profile_id']."'";
-        $res = $this->executeQuerywithParams($select)->toArray();
-        $this->messageProducer->sendTopic(json_encode(array('orgname' => $res[0]['name'], 'status' => $originalArray['status'])), 'ORGANIZATION_DELETED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'], 'status' => $originalArray['status'])), 'ORGANIZATION_DELETED');
         return $result;
     }
 
@@ -319,7 +323,8 @@ class OrganizationService extends AbstractService
      */
     public function getOrganization($id)
     {
-        $select = "SELECT * from ox_organization oxo inner join ox_organization_profile oxop on oxop.id = oxo.org_profile_id where oxo.id =:id and oxo.status=:status";
+        $select = "SELECT oxo.uuid, oxo.name, oxo.status, oxo.preferences, oxo.logo, oxo.theme from ox_organization oxo 
+                    where oxo.id =:id and oxo.status=:status";
         $params = array("id" => $id, "status" => "Active");
         $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
         if (count($response) == 0) {
@@ -355,7 +360,10 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizationByUuid($id)
     {
-        $select = "SELECT og.uuid,oxop.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid from ox_organization as og inner join ox_organization_profile oxop on oxop.id= og.org_profile_id join ox_address as oa on oxop.address_id = oa.id  WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences 
+                    from ox_organization as og inner join ox_organization_profile oxop on oxop.id= og.org_profile_id 
+                    join ox_address as oa on oxop.address_id = oa.id  
+                    WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -391,7 +399,7 @@ class OrganizationService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        $select = "SELECT og.uuid,oxop.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid";
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences";
         $from = " from ox_organization as og join ox_organization_profile as oxop on oxop.id = og.org_profile_id join ox_address as oa on oxop.address_id = oa.id";
         $cntQuery = "SELECT count(og.id) " . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {

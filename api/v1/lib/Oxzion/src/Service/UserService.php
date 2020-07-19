@@ -8,6 +8,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Model\User;
 use Oxzion\Model\UserTable;
+use Oxzion\Model\Organization;
 use Oxzion\Search\Elastic\IndexerImpl;
 use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
@@ -370,15 +371,16 @@ class UserService extends AbstractService
             "preferences" => json_encode($preferences),
             "username" => $contactPerson->username,
             "date_of_birth" => date('Y-m-d'),
-            "designation" => "Admin",
             "orgid" => $org['id'],
             "status" => "Active",
             "timezone" => $preferences['timezone'],
             "gender" => " ",
-            "managerid" => "1",
-            "date_of_join" => date('Y-m-d'),
             "password" => BosUtils::randomPassword(),
         );
+        if($org['type'] == Organization::BUSINESS){
+            $data["designation"] = "Admin";
+            $data["date_of_join"] = date('Y-m-d');
+        }
         $params['orgId'] = $org['uuid'];
         $password = $data['password'];
         $this->beginTransaction();
@@ -549,7 +551,7 @@ class UserService extends AbstractService
 
     private function getOrg($id)
     {
-        $select = "SELECT oxo.id,oxop.name from ox_organization oxo inner join ox_organization_profile oxop on oxop.id = oxo.org_profile_id where oxo.id =:id";
+        $select = "SELECT oxo.id,oxo.name from ox_organization oxo where oxo.id =:id";
         $params = array("id" => $id);
         $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
         if (count($response) == 0) {
@@ -743,7 +745,7 @@ class UserService extends AbstractService
 
     public function getActiveOrganization($id)
     {
-        $select = "SELECT oxo.id,oxo.uuid,oxop.name from ox_organization oxo inner join ox_organization_profile oxop on oxop.id = oxo.org_profile_id where oxo.id =:id";
+        $select = "SELECT oxo.id,oxo.uuid,oxo.name from ox_organization oxo where oxo.id =:id";
         $params = array("id" => $id);
         $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
         if (count($response) == 0) {
@@ -1015,10 +1017,7 @@ class UserService extends AbstractService
     {
         $this->logger->info("USERID--- $userId with ORG --- $organizationId");
         if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))->toArray()) {
-            $select = "select og.id,oxop.name from ox_organization og join ox_organization_profile oxop on oxop.id=og.org_profile_id where og.id=:id and og.status=:status";
-            $params = array("id" => $organizationId,"status"=>"Active");
-            $res = $this->executeQueryWithBindParameters($select,$params)->toArray();
-            if ($org = $res) {
+            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {
                     $data = array(array(
                         'user_id' => $userId,
@@ -1179,7 +1178,7 @@ class UserService extends AbstractService
         if (empty($id)) {
             $id = AuthContext::get(AuthConstants::USER_ID);
         }
-        $queryO = "Select org.id,oxop.name,org.uuid,oxa.address1,oxa.address2,oxa.city,oxa.state,oxa.country,oxa.zip,org.logo,oxop.labelfile,oxop.languagefile,org.status from ox_organization as org join ox_organization_profile oxop on oxop.id=org.org_profile_id join ox_address as oxa on oxa.id = oxop.address_id LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
+        $queryO = "Select org.id,org.name,org.uuid,oxa.address1,oxa.address2,oxa.city,oxa.state,oxa.country,oxa.zip,org.logo,oxop.labelfile,oxop.languagefile,org.status from ox_organization as org join ox_organization_profile oxop on oxop.id=org.org_profile_id join ox_address as oxa on oxa.id = oxop.address_id LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
         $where = "where uo.user_id =" . $id . " AND org.status='Active'";
         $resultSet = $this->executeQuerywithParams($queryO, $where);
         return $resultSet->toArray();
