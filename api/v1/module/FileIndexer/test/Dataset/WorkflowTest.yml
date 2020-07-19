@@ -1,15 +1,14 @@
 ox_organization_profile:
 -
     id: 3
-    name: 'Sample Organization'
     uuid: 'c7499a34-c100-4e41-bece-5822adca3844'
 -
     id: 4
-    name: 'Test Organization'
     uuid: 'c7499a34-c100-4e41-bece-5822adca3ccc'
 ox_organization:
 -
     id: 3
+    name: 'Sample Organization'
     uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
     status: 'Active'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
@@ -18,6 +17,7 @@ ox_organization:
 
 -
     id: 4
+    name: 'Test Organization'
     uuid: 'b6499a34-c100-4e41-bece-5822adca3ccc'
     status: 'Inactive'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'

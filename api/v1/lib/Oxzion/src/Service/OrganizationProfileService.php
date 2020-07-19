@@ -53,7 +53,7 @@ class OrganizationProfileService extends AbstractService
             throw $e;
         }
         $data['org_profile_id'] = $this->table->getLastInsertValue();
-        return $data;
+        return $count;
     }
 
     public function updateOrganizationProfile($id, $data)

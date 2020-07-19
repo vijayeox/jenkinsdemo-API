@@ -8,7 +8,6 @@ class OrganizationProfile extends Entity
     protected $data = array(
         'id' => null,
         'uuid' => null,
-        'name' => null,
         'address_id' => null,
         'labelfile' => null,
         'languagefile' => null,
@@ -28,7 +27,7 @@ class OrganizationProfile extends Entity
     public function validate()
     {
         $required = array(
-            'name'
+            'address_id'
         );
         $this->validateWithParams($required);
     }

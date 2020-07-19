@@ -20,17 +20,16 @@ ox_organization_profile:
   -
         id: 101
         uuid: '915d207e-ac75-11ea-bb37-0242ac130002'
-        name: 'Sample Organization'
         address_id: 8
   -
         id: 102
         uuid: '915d22cc-ac75-11ea-bb37-0242ac130002'
-        name: 'Test Organization'
         address_id: 9  
 
 ox_organization:
   -
         id: 3
+        name: 'Sample Organization'
         uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
         status: 'Active'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
@@ -39,6 +38,7 @@ ox_organization:
 
   -
         id: 4
+        name: 'Test Organization'
         uuid: 'b6499a34-c100-4e41-bece-5822adca3mnc'
         status: 'Inactive'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'

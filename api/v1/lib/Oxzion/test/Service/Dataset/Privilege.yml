@@ -9,9 +9,9 @@ ox_app:
 ox_organization_profile:
 -
     id: 120
-    name: "dummyOrg"
 ox_organization:
 -   id: 120
+    name: "dummyOrg"
     status: "active"
     org_profile_id: 120
 ox_app_registry:
