@@ -1,0 +1,57 @@
+- pageName: Coverage Selections
+  cell: I8
+  type: Checkbox
+  method: checkbox_X
+  key: websitecontent_noWebsiteStreamingVideoOrMusicContentBlog
+  value: 'true'
+- pageName: Crime (printable)
+  cell: J72
+  type: Checkbox
+  key: trainingbeenprovidedtoemployee
+  method: checkbox_X
+  value: 'true'
+- pageName: Garage Supplemental
+  cell: C5
+  key: minAge
+  value: '18'
+- pageName: Garage Supplemental
+  cell: C8
+  key: titleSearch
+  value: 'Yes'
+- pageName: Garage Supplemental
+  cell: C9
+  key: titleSearchDescription
+  value: Sample Description
+- pageName: Garage Supplemental
+  cell: B45
+  key: demoGrid
+  type: DataGrid
+  value:
+    - - ABC
+      - Father
+      - '2020-11-15'
+      - '12345'
+    - - KLM
+      - Mother
+      - '1995-11-25'
+      - '8565'
+    - - XYZ
+      - Brother
+      - '1856-10-15'
+      - A562B
+    - - PLM
+      - Son
+      - '2012-10-05'
+      - '#16ANC'
+- pageName: Garage Supplemental
+  cell: B5
+  type: SingleCellMultipleCheckboxs
+  multiItemIndex: 2
+  key: plannedRoute
+  value: 'true'
+- pageName: Garage Supplemental
+  cell: B112
+  type: SingleCellMultipleCheckboxs
+  multiItemIndex: 3
+  key: other
+  value: 'true'
