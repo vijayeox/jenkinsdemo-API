@@ -74,6 +74,15 @@ class Ratecard extends AbstractAppDelegate
             $data['captainX'] = isset($data['captainX']) ? "" : "";
         }
         if(isset($premiumRateCardDetails)){
+            if($data['product'] == 'Individual Professional Liability' && !isset($data['careerCoverageOptions'])){
+                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                while ($coverageLevels->next()) {
+                    $coverage = $coverageLevels->current();
+                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                }
+                $data['careerCoverageOptions'] = $coverageOptions;
+            }
             $this->logger->info("Rate Card ENd");
             $returnArray = array_merge($data,$premiumRateCardDetails);
             return $returnArray;
