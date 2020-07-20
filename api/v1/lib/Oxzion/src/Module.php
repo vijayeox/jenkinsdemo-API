@@ -573,7 +573,8 @@ class Module
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(Service\WorkflowService::class),
-                        $container->get(Service\UserService::class));
+                        $container->get(Service\UserService::class),
+                        $container->get(Service\UserCacheService::class));
                 },
                 Model\ServiceTaskInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\ServiceTaskInstanceTableGateway::class);

@@ -21,6 +21,9 @@ use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Service\UserCacheService;
+use Oxzion\Utils\ArrayUtils;
+
 class CommandService extends AbstractService
 {
     /**
@@ -31,6 +34,7 @@ class CommandService extends AbstractService
     private $workflowInstanceService;
     private $userService;
     private $jobService;
+    private $userCacheService;
     /**
      * @ignore __construct
      */
@@ -41,7 +45,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -54,6 +58,7 @@ class CommandService extends AbstractService
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
         $this->userService = $userService;
         $this->jobService = $jobService;
+        $this->userCacheService = $userCacheService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -92,7 +97,10 @@ class CommandService extends AbstractService
                 $isArray = is_array($value);
                 if (!$isArray) {
                     $commandJson = json_decode($value, true);
-                } else {
+                    if(empty($commandJson)){
+                        $commandJson = array("command" => $value);
+                    }
+                }else{
                     $commandJson = $value;
                 }
                 $this->logger->info("Command JSON------", print_r($commandJson, true));
@@ -127,6 +135,16 @@ class CommandService extends AbstractService
     {
         $this->logger->info("PROCESS COMMAND : command --- " . $command);
         switch ($command) {
+            case 'create_user':
+                return $this->createUser($data);
+                break;
+            case 'sign_in':
+                $data['auto_login'] = 1;
+                return $data;
+                break;
+            case 'store_cache_data':
+                return $this->storeCacheData($data);
+                break;
             case 'mail':
                 $this->logger->info("SEND MAIL");
                 return $this->sendMail($data);
@@ -210,6 +228,44 @@ class CommandService extends AbstractService
             default:
                 break;
         };
+    }
+
+    private function createUser($data) {
+        $success = $this->userService->checkAndCreateUser($data, $data, true);
+        if ($success) {
+            $params['user'] = $data;
+        } else {
+            throw new Exception("Error Creating User.", 1);
+        }
+        return $params;
+    }
+
+    private function storeCacheData($data){
+        $rawData = $data;
+
+        if (isset($data['user']) && is_array($data['user']) && ArrayUtils::isKeyDefined($data['user'], 'username')) {
+            $user = $this->userService->getUserDetailsbyUserName($data['user']['username']);
+        } elseif (ArrayUtils::isKeyDefined($data, 'username')) {
+            $user = $this->userService->getUserDetailsbyUserName($data['username']);
+        } else {
+            throw new Exception("username is required", 1);
+        }
+        if (!isset($user)) {
+            throw new Exception("Cache Creation Failed", 1);
+        }
+        if (isset($data['app_id'])) {
+            if ($app = $this->getIdFromUuid('ox_app', $data['app_id'])) {
+                $appId = $app;
+            }
+        } else {
+            $appId = null;
+        }
+        $rawData['user_id'] = $user['id'];
+        $rawData['app_id'] = $appId;
+        $userCache = $this->userCacheService->storeUserCache($appId, $rawData);
+        $cacheData = array('user_id' => $user['id'], 'content' => json_encode($userCache), 'app_id' => $appId);
+        $data['cache_data'] = $cacheData;
+        return $data;
     }
 
     private function enqueue($data,$topic, $queue = null){
