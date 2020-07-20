@@ -4804,6 +4804,19 @@
 				"type": "well",
 				"input": false,
 				"components": [{
+					"label": "Content",
+					"attrs": [{
+						"value": "",
+						"attr": ""
+					}],
+					"content": "<h5><b>If the policyholder is an employee of PADI. Please select the PADI Employee checkbox below.</b></h5>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "padiEmployeePanel",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
 					"label": "PADI Employee",
 					"tableView": false,
 					"clearOnHide": false,
@@ -4931,7 +4944,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 564,
+	"_vid": 568,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4952,6 +4965,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-20T06:00:05.337Z",
+	"modified": "2020-07-20T06:35:40.200Z",
 	"machineName": "testdivehub:csrInitiates"
 }
