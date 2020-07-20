@@ -2461,6 +2461,32 @@
 			"label": "Panel",
 			"path": "page3Panel3"
 		}, {
+			"title": "Excluded Operation",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "excludedOperationPanel",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Excluded Operation",
+			"input": false,
+			"components": [{
+				"label": "Text Area",
+				"autoExpand": false,
+				"hideLabel": true,
+				"tableView": true,
+				"key": "excludedOperation",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"type": "textarea",
+				"input": true
+			}]
+		}, {
 			"key": "page3Panel2",
 			"input": false,
 			"title": "Footnotes",
@@ -3428,15 +3454,16 @@
 			"next": true
 		}
 	}, {
-		"input": true,
 		"label": "Submit",
+		"showValidations": false,
 		"tableView": false,
 		"key": "submit",
-		"type": "button"
+		"type": "button",
+		"input": true
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 293,
+	"_vid": 300,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3457,6 +3484,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-07-09T08:26:10.438Z",
+	"modified": "2020-07-20T14:03:25.926Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

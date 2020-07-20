@@ -229,6 +229,12 @@
 			</p>
 
 
+			<hr></hr>
+			{if isset(excludedOperation) && $excludedOperation != ""}
+			<p style="margin-bottom: 5px;font-size: 15px;"><b>EXCLUDED OPERATION:</b></p>
+            		<p style="margin-top:1%;margin-left: 2%;text-align: justify;font-size: 13px;">{$excludedOperation}</p>
+        	{/if}
+			<hr></hr>
 			{if $state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/AK.tpl"}</b>

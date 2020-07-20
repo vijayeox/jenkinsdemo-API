@@ -3052,6 +3052,32 @@
 			}],
 			"path": "coverageOptions"
 		}, {
+			"title": "Excluded Operation",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "excludedOperationPanel",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Excluded Operation",
+			"input": false,
+			"components": [{
+				"label": "Text Area",
+				"autoExpand": false,
+				"hideLabel": true,
+				"tableView": true,
+				"key": "excludedOperation",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"type": "textarea",
+				"input": true
+			}]
+		}, {
 			"key": "page3Panel2",
 			"input": false,
 			"title": "Footnotes",
@@ -3453,8 +3479,7 @@
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"maxDate": "moment()"
-									},
-									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
+									}
 								}],
 								"width": 4,
 								"offset": 0,
@@ -4944,7 +4969,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 568,
+	"_vid": 571,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4965,6 +4990,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-20T06:35:40.200Z",
+	"modified": "2020-07-20T14:03:24.220Z",
 	"machineName": "testdivehub:csrInitiates"
 }
