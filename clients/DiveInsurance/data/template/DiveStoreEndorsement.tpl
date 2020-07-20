@@ -66,11 +66,12 @@
         {assign var=list value=$additionalInsured|json_decode:true}
         {foreach from=$list item=$additional}
           {if isset($additional.name) && ($additional.name != '')}
-          <p class = "ai_list">
+          <p class = "ai_list" style = "font-size:15px;text-transform: uppercase;">
             {$additional.name}
           </p>
       {/if}
         {/foreach}
+        <div style="margin-bottom: 5%"></div>
         <center><b>Additional Insured coverage applies only with respect to liability arising out of the operations of the named insureds</b></center>
       </div>
       {/if}
@@ -108,7 +109,7 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        {if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}                           ${$lossOfBusIncome|number_format}{else}$0{/if}
+                        <td>{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}                           ${$lossOfBusIncome|number_format}{else}$0{/if}</td>
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
@@ -156,6 +157,7 @@
                 </tbody>
             </table>
             <div class="clearfix"></div>
+            <div style ="margin-bottom: 5%"></div>
             <table class="deductible_table">
                 <tbody>
                     <tr>

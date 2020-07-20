@@ -3,32 +3,28 @@
 use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\ArtifactUtils;
-
+use Oxzion\Utils\YMLUtils;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 
 class GenerateWorkbook extends AbstractDocumentAppDelegate
 {
-    protected $type;
-    protected $template;
-    protected $carrierTemplateTypeMapping = array(
+    protected $carrierTemplateList = array(
         "harco" => array(
             "type" => "excel",
-            "template" => "Workbooktemplate.xlsx",
-            "sheets" => array("Dealer")
+            "template" => "harco.yaml"
         ),
-        "dealerGuard" => array(
+        "dealerGuard_ApplicationOpenLot" => array(
             "type" => "excel",
-            "template" => "Workbooktemplate.xlsx",
-            "sheets" => array("Dealer")
+            "template" => "dealerGuard_ApplicationOpenLot.yaml"
         ),
-        "schinnererFranchisedAutoDealer" => array(
+        "victor_FranchisedAutoDealer" => array(
             "type" => "excel",
-            "template" => "SchinnererAuto.xlsx"
+            "template" => "victor_FranchisedAutoDealer.yaml"
         ),
-        "schinnererDolApplication" => array(
+        "victor_AutoPhysDamage" => array(
             "type" => "excel",
-            "template" => "SchinnererGarage.xlsx"
+            "template" => "victor_AutoPhysDamage.yaml"
         ),
         "epli" => array(
             "type" => "pdf",
@@ -50,46 +46,46 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data));
-        // $temp = $data;
-        // foreach ($temp as $key => $value) {
-        //     if (is_array($temp[$key])) {
-        //         $temp[$key] = json_encode($value);
-        //     }
-        // }
-        // $data = $temp;
-        $fieldTypeMappingExcel = include(__DIR__ . "/fieldMappingExcel.php");
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
-        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : (isset($data['orgId']) ?
-            $data['orgId'] :
-            AuthContext::get(AuthConstants::ORG_UUID));
-        $dest =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
-        $this->logger->info("GenerateWorkbook Dest" . json_encode($dest));
-        $generatedDocumentspath = array();
-        $this->logger->info("Execute generate document ---------");
-        foreach (json_decode($data['workbooksToBeGenerated'], true) as  $key => $templateSelected) {
+        $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
+        $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
+        $this->logger->info("GenerateWorkbook Dest" . json_encode($fileDestination));
+        $generatedDocumentsList = array();
+        $excelData = array();
+
+        foreach ($this->checkJSON($data['workbooksToBeGenerated']) as  $key => $templateSelected) {
             if ($templateSelected) {
-                $selectedTemplate = $this->carrierTemplateTypeMapping[$key];
-                $docDest = $dest['absolutePath'] .  $selectedTemplate["template"];
+                $selectedTemplate = $this->carrierTemplateList[$key];
+                $documentDestination = $fileDestination['absolutePath'] .  $selectedTemplate["template"];
                 if ($selectedTemplate["type"] == "excel") {
-                    $excelData = array();
-                    foreach ($fieldTypeMappingExcel as  $fieldkey => $field) {
-                        $varFunction = $field["method"];
-                        $excelData[$fieldkey] = $this->$varFunction($data[$fieldkey]);
+                    $templateData = array();
+                    $fieldMappingExcel = file_get_contents(__DIR__ . "/../template/" . $selectedTemplate["template"]);
+                    $fieldMappingExcel = YMLUtils::ymlToArray($fieldMappingExcel);
+
+                    foreach ($fieldMappingExcel as $fieldConfig) {
+                        $formFieldKey = str_contains($fieldConfig["key"], "_") ?
+                            explode("_", $fieldConfig["key"])[0]
+                            : $fieldConfig["key"];
+                        if (isset($data[$formFieldKey]) && !empty($data[$formFieldKey]) && $data[$formFieldKey] !== "[]" ) {
+                            $userInputValue = $data[$formFieldKey];
+                            $tempFieldConfig = $fieldConfig;
+                            if (isset($fieldConfig["method"])) {
+                                $processMethod = $fieldConfig["method"];
+                                $tempFieldConfig['value'] = $this->$processMethod($userInputValue, $fieldConfig, $data);
+                                unset($tempFieldConfig['method']);
+                            } else {
+                                $tempFieldConfig['value'] = $userInputValue;
+                            }
+                            array_push($templateData, $tempFieldConfig);
+                        }
                     }
-                    $this->documentBuilder->fillExcelTemplate(
-                        $selectedTemplate["template"],
-                        $excelData,
-                        $docDest,
-                        $selectedTemplate["sheets"] ? $selectedTemplate["sheets"] : "Sheet1"
-                    );
+
                     array_push(
-                        $generatedDocumentspath,
+                        $excelData,
                         array(
-                            "fullPath" => $docDest,
-                            "file" => $dest['relativePath'] . $selectedTemplate["template"],
-                            "originalName" => $selectedTemplate["template"],
-                            "type" => "excel/xlsx"
+                            "template" => $selectedTemplate["template"],
+                            "mapping" => $templateData
                         )
                     );
                 } else {
@@ -115,11 +111,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                             if (isset($data[$fieldProps["parentKey"]]) && !empty($data[$fieldProps["parentKey"]])) {
                                 $fieldNamePDFData = $fieldProps["fieldname"];
                                 $fieldOptions = $fieldProps["options"];
-                                if (!is_array($data[$fieldProps["parentKey"]])) {
-                                    $parentValues = json_decode($data[$fieldProps["parentKey"]], true);
-                                } else {
-                                    $parentValues = $data[$fieldProps["parentKey"]];
-                                }
+                                $parentValues = $this->checkJSON($data[$fieldProps["parentKey"]]);
                                 if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == true) {
                                     $pdfData[$fieldNamePDFData] =  $fieldOptions["true"];
                                 } else {
@@ -139,11 +131,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                         }
                     }
                     if (isset($selectedTemplate["customData"])) {
-                        if (!is_array($data[$selectedTemplate["customData"]])) {
-                            $customTemplateData = json_decode($data[$selectedTemplate["customData"]], true);
-                        } else {
-                            $customTemplateData = $data[$selectedTemplate["customData"]];
-                        }
+                        $customTemplateData = $this->checkJSON($data[$selectedTemplate["customData"]]);
                         foreach ($customTemplateData as  $field => $value) {
                             $pdfData[$field] = $value;
                         }
@@ -152,13 +140,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     $this->documentBuilder->fillPDFForm(
                         $selectedTemplate["template"],
                         $pdfData,
-                        $docDest
+                        $documentDestination
                     );
                     array_push(
-                        $generatedDocumentspath,
+                        $generatedDocumentsList,
                         array(
-                            "fullPath" => $docDest,
-                            "file" => $dest['relativePath'] . $selectedTemplate["template"],
+                            "fullPath" => $documentDestination,
+                            "file" => $fileDestination['relativePath'] . $selectedTemplate["template"],
                             "originalName" => $selectedTemplate["template"],
                             "type" => "file/pdf"
                         )
@@ -166,21 +154,70 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 }
             }
         }
-        $data["status"] = "PDF_Generated";
-        $data["documents"] = json_encode($generatedDocumentspath);
+        // print_r($excelData);
+        // exit();
+        if(count($excelData) > 0) {
+            $data ["excelData"] = json_encode($excelData);
+        }
+        $data["status"] = "Queued";
+        $data["documents"] = json_encode($generatedDocumentsList);
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
     }
 
-    private function parseArray($data)
+    private function checkJSON($data)
     {
-        $temp = array();
         if (!is_array($data)) {
             $data = json_decode($data, true);
         }
-        foreach ($data as $tempItem) {
-            array_push($temp,  $tempItem ? "true" : "false");
+        return $data;
+    }
+
+    private function pulloutChild($data, $fieldConfig, $formData)
+    {
+        $childKey = explode("_", $fieldConfig["key"])[1];
+        if (isset($data[$childKey]) && !empty($data[$childKey])) {
+            $value = $data[$childKey];
+            $valueType = gettype($data[$childKey]);
+            if ($valueType == "boolean") {
+                $value = $value ? "true" : "false";
+            } else {
+                if ($value == 'true') {
+                    $value = 'true';
+                } else if ($value == 'false') {
+                    $value = 'false';
+                }
+            }
+            return $value;
+        } else {
+            return " ";
         }
-        return $temp;
+    }
+
+    private function checkbox_X($data, $fieldConfig, $formData)
+    {
+        if (str_contains($fieldConfig["key"], "_")) {
+            $childKey = explode("_", $fieldConfig["key"])[1];
+            if (isset($data[$childKey]) && !empty($data[$childKey])) {
+                $value = $data[$childKey];
+            } else {
+                return " ";
+            }
+        } else {
+            $formKey = $fieldConfig["key"];
+            $value = $formData[$formKey];
+        }
+
+        $valueType = gettype($value);
+        if ($valueType == "boolean") {
+            $value = $value ? "X" : " ";
+        } else {
+            if ($value == 'true') {
+                $value = 'X';
+            } else if ($value == 'false') {
+                $value = " ";
+            }
+        }
+        return $value;
     }
 }

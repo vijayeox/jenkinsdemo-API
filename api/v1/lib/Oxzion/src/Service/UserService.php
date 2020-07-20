@@ -273,6 +273,7 @@ class UserService extends AbstractService
                 'email' => $data['email'],
                 'orgId' => $orgid,
                 'password' => $password,
+                'uuid' => $data['uuid'],
                 'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
             )), 'USER_ADDED');

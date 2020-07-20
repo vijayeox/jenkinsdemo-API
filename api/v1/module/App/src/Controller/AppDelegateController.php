@@ -40,6 +40,9 @@ class AppDelegateController extends AbstractApiControllerHelper
         $appId = $this->params()->fromRoute()['appId'];
         $delegate = $this->params()->fromRoute()['delegate'];
         $data = array_merge($data, $this->params()->fromQuery());
+        if (isset($_FILES['file'])) {
+            $data['_FILES'] = $_FILES['file'];
+        }
         $this->log->info(__CLASS__ . "-> \n Execute Delegate Start - " . print_r($data, true));
         try {
             $this->appDelegateService->updateOrganizationContext($data);
