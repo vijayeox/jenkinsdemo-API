@@ -145,8 +145,8 @@ content:
                 title: 'Get Policy'
                 actions:
                     -
-                        name: IPL
-                        rule: "listData.every((i)=>{\n    if (i.entity_name == \"Individual Professional Liability\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
+                        name: 'Professional Liability'
+                        rule: "var count = 0;\nvar padiemp = 0;\nlistData.every((i)=>{\n    if (i.entity_name == \"Individual Professional Liability\") {\n count += 1;\n  if(i.padiEmployee == \"true\" || i.padiEmployee == true){ \n padiemp +=1;     \n}\n } if(count >= 2){\n return false;\n }else{\nif((count > 0 && padiemp == 0) || (padiemp > 1)){\n            return false;\n}else{\n return true;\n    }\n }\n });"
                         details:
                             -
                                 type: Form

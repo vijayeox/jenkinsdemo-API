@@ -1219,14 +1219,16 @@
 						"placeholder": " ",
 						"tableView": true,
 						"validate": {
+							"pattern": "^\\d+$",
 							"customMessage": "Please enter a valid Fax number"
 						},
 						"errorLabel": "Fax",
 						"key": "fax",
-						"type": "phoneNumber",
+						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"inputType": "tel"
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
@@ -1360,7 +1362,6 @@
 					"components": [{
 						"label": "Policy Start Date",
 						"displayInTimezone": "utc",
-						"useLocaleSettings": true,
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"tableView": false,
@@ -1376,9 +1377,8 @@
 						"timePicker": {
 							"showMeridian": false
 						},
-						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n  if((data.start_date && data.start_date != \"\") ){\n\tvalue = data.start_date;\n  }\n} else {\n  if ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-13')))) {\n\t\t\tvalue = moment('2020-06-30').format(\"MM-DD-YYYY\");\n\t}\n  if(value == \"\"){\n\tvalue = moment().format(\"MM-DD-YYYY\");\n  }\n}",
+						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n      if((data.start_date && data.start_date != \"\") ){\n\t    value = data.start_date;\n      }\n} else {\n  if (value == \"\" && (data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-15')))) {\n\n\t\t\tvalue = moment('2020-06-30');\n\n\t}\n\n  if(value == \"\"){\n\tvalue = moment();\n  }\n\n}",
 						"allowCalculateOverride": true,
 						"validate": {
 							"required": true,
@@ -1397,7 +1397,7 @@
 							"type": "calendar",
 							"displayInTimezone": "utc",
 							"language": "en",
-							"useLocaleSettings": true,
+							"useLocaleSettings": false,
 							"allowInput": false,
 							"mode": "single",
 							"enableTime": false,
@@ -1479,7 +1479,7 @@
 			}, {
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) {\n\tif (data.csrPolicyPeriod && moment(data.csrPolicyPeriod)) {\n\t\t\tvalue = moment(data.csrPolicyPeriod).format(\"YYYY-MM-DD\");\n\t}\n}else{\nvar startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1)\n\t&& (moment().isSameOrBefore(moment('2020-07-13')))) {\n\tvalue = startRange.format(\"YYYY-MM-DD\");\n} else {\n\tvalue = moment.max(today, startRange).format(\"YYYY-MM-DD\");\n}\n}",
+				"calculateValue": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) {\n\tif (data.csrPolicyPeriod && moment(data.csrPolicyPeriod)) {\n\t\t\tvalue = moment(data.csrPolicyPeriod).format(\"YYYY-MM-DD\");\n\t}\n}else{\nvar startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1)\n\t&& (moment().isSameOrBefore(moment('2020-07-15')))) {\n\tvalue = startRange.format(\"YYYY-MM-DD\");\n} else {\n\tvalue = moment.max(today, startRange).format(\"YYYY-MM-DD\");\n}\n}",
 				"key": "start_date",
 				"properties": {
 					"data_type": " Date"
@@ -1499,17 +1499,17 @@
 				"input": true,
 				"tableView": true,
 				"lockKey": true
-			}, {
-				"label": "setCsrPolicyPeriod",
-				"calculateValue": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\nvalue = true;\n}",
-				"key": "setCsrPolicyPeriod",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}],
 			"type": "panel",
 			"tooltip": "Select a valid policy period from the list",
 			"label": "Panel"
+		}, {
+			"label": "setCsrPolicyPeriod",
+			"calculateValue": "if (!value && data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\nvalue = true;\nreturn;\n}\nconsole.log(\"PRIVILGES NOT FOUND\");",
+			"key": "setCsrPolicyPeriod",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"title": "Coverage and Options",
 			"theme": "primary",
@@ -4783,6 +4783,40 @@
 				"hideOnChildrenHidden": false
 			}]
 		}, {
+			"title": "   ",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "panel2",
+			"type": "panel",
+			"label": "Panel",
+			"input": false,
+			"components": [{
+				"label": "padiempWell",
+				"tableView": false,
+				"key": "dfh",
+				"type": "well",
+				"input": false,
+				"components": [{
+					"label": "PADI Employee",
+					"tableView": false,
+					"clearOnHide": false,
+					"customDefaultValue": "value = false;",
+					"key": "padiEmployee",
+					"type": "checkbox",
+					"input": true,
+					"defaultValue": false,
+					"hideOnChildrenHidden": false
+				}],
+				"hideOnChildrenHidden": false
+			}]
+		}, {
 			"title": "Approve/Reject the Application",
 			"theme": "primary",
 			"breadcrumbClickable": false,
@@ -4897,7 +4931,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 552,
+	"_vid": 564,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4918,6 +4952,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-08T08:10:53.235Z",
+	"modified": "2020-07-20T06:00:05.337Z",
 	"machineName": "testdivehub:csrInitiates"
 }
