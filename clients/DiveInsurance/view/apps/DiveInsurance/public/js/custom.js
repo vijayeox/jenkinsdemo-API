@@ -1,26 +1,3 @@
-const localSecureStorage = new SecureStorage(localStorage, {
-    hash: function hash(key) {
-      key = CryptoJS.SHA256(key, SECRET_KEY);
-
-      return key.toString();
-    },
-    encrypt: function encrypt(data) {
-      data = CryptoJS.AES.encrypt(data, SECRET_KEY);
-
-      data = data.toString();
-
-      return data;
-    },
-    decrypt: function decrypt(data) {
-      data = CryptoJS.AES.decrypt(data, SECRET_KEY);
-
-      data = data.toString(CryptoJS.enc.Utf8);
-
-      return data;
-    }
-});
-
-
 $(".form")
   .find("input, textarea")
   .on("keyup blur focus", function(e) {
@@ -94,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var password = document.getElementById("password_field").value;
     if (username && password) {
       const formData = new FormData();
-      formData.append("username", username);
+      formData.append("username", getUsername(productName,username));
       formData.append("password", password);
       let response = fetch(baseUrl + "auth", {
         body: formData,
@@ -155,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
       showLoaderOnConfirm: true,
       preConfirm: login => {
         let formData = new FormData();
-        formData.append("username", login);
+        formData.append("username", getUsername(productName,login));
         return fetch(baseUrl + "user/me/forgotpassword", {
           method: "post",
           body: formData
@@ -197,25 +174,19 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function autoLogin(data) {
-    localSecureStorage.clear();
-    var obj = { key:data.username,timestamp: new Date().getTime()};
-    // localStorage.setItem(
-    //   "User",
-    //   JSON.stringify({ key: data.username, timestamp: new Date() })
-    // );
-    localSecureStorage.setItem("User",obj);
-    obj = { key: data.jwt, timestamp: new Date() };
-    // localStorage.setItem(
-    //   "AUTH_token",
-    //   JSON.stringify({ key: data.jwt, timestamp: new Date() })
-    // );
-    localSecureStorage.setItem("AUTH_token",obj);
-    // localStorage.setItem(
-    //   "REFRESH_token",
-    //   JSON.stringify({ key: data.refresh_token, timestamp: new Date() })
-    // );
-    var obj = { key: data.refresh_token, timestamp: new Date() };
-    localSecureStorage.setItem("REFRESH_token",obj);
+    localStorage.clear();
+    localStorage.setItem(
+      "User",
+      JSON.stringify({ key: data.username, timestamp: new Date() })
+    );
+    localStorage.setItem(
+      "AUTH_token",
+      JSON.stringify({ key: data.jwt, timestamp: new Date() })
+    );
+    localStorage.setItem(
+      "REFRESH_token",
+      JSON.stringify({ key: data.refresh_token, timestamp: new Date() })
+    );
     window.location.href = window.location.origin;
   }
 
