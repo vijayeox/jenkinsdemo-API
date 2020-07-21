@@ -943,7 +943,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -1232,7 +1231,6 @@
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
-						"spellcheck": false,
 						"tableView": false,
 						"validate": {
 							"required": true,
@@ -3052,6 +3050,32 @@
 			}],
 			"path": "coverageOptions"
 		}, {
+			"title": "Excluded Operation",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "excludedOperationPanel",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Excluded Operation",
+			"input": false,
+			"components": [{
+				"label": "Text Area",
+				"autoExpand": false,
+				"hideLabel": true,
+				"tableView": true,
+				"key": "excludedOperation",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"type": "textarea",
+				"input": true
+			}]
+		}, {
 			"key": "page3Panel2",
 			"input": false,
 			"title": "Footnotes",
@@ -3453,8 +3477,7 @@
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"maxDate": "moment()"
-									},
-									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
+									}
 								}],
 								"width": 4,
 								"offset": 0,
@@ -4072,8 +4095,17 @@
 										"label": "Training Agency",
 										"value": "trainingAgency"
 									}, {
-										"value": "other",
-										"label": "Other"
+										"value": "cruiseLine",
+										"label": "Cruise Line"
+									}, {
+										"label": "Land Owner",
+										"value": "landOwner"
+									}, {
+										"label": "Booking Agent",
+										"value": "bookingAgent"
+									}, {
+										"label": "Other",
+										"value": "other"
 									}]
 								},
 								"selectThreshold": 0.3,
@@ -4804,6 +4836,19 @@
 				"type": "well",
 				"input": false,
 				"components": [{
+					"label": "Content",
+					"attrs": [{
+						"value": "",
+						"attr": ""
+					}],
+					"content": "<h5><b>If the policyholder is an employee of PADI. Please select the PADI Employee checkbox below.</b></h5>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "padiEmployeePanel",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
 					"label": "PADI Employee",
 					"tableView": false,
 					"clearOnHide": false,
@@ -4893,7 +4938,6 @@
 				"input": false,
 				"components": [{
 					"label": "Reason for Rejection / On Hold",
-					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
 					"clearOnHide": false,
@@ -4931,7 +4975,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 564,
+	"_vid": 574,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4952,6 +4996,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-20T06:00:05.337Z",
+	"modified": "2020-07-21T05:59:24.645Z",
 	"machineName": "testdivehub:csrInitiates"
 }

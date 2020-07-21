@@ -3,7 +3,6 @@ const fs = require("fs");
 const React = require("react");
 const ReactDOMServer = require("react-dom/server");
 const Register = require("./public/register/Register");
-const SECRET_KEY = 'secret_key';
 
 module.exports = function(core, proc) {
   core.app.get(proc.resource("/register/:productName"), (req, res) => {
@@ -21,7 +20,6 @@ module.exports = function(core, proc) {
             productName: req.params.productName,
             proc: proc,
             core: core,
-            SECRET_KEY : SECRET_KEY,
           };
           const component = ReactDOMServer.renderToString(
             <Register {...params} />
@@ -42,13 +40,10 @@ module.exports = function(core, proc) {
                 var appId='${appId}';
                 var productName='${req.params.productName}';
                 var baseUrl="${core.config("api.url")}";
-                var SECRET_KEY = '${SECRET_KEY}';
               </script>
             </head>
             <body>
               <div id="root">${component}</div>
-              <script src="../js/crypto-js/crypto-js.js"></script>
-              <script src="../js/secure-web-storage/src/secure-storage.js"></script>
               <script src="../js/country.js"></script>
               <script src="../js/phonelist.js"></script>
               <script src="../js/jquery.min.js"></script>

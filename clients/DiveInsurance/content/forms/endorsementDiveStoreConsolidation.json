@@ -610,7 +610,6 @@
 				"input": false,
 				"components": [{
 					"label": "Legal Business Name",
-					"spellcheck": false,
 					"tableView": false,
 					"clearOnHide": false,
 					"calculateValue": "if(data['business_name'] && data['businessPadiVerified']===true){\n  value = data['business_name']\n}",
@@ -4531,8 +4530,17 @@
 											"label": "Training Agency",
 											"value": "trainingAgency"
 										}, {
-											"value": "other",
-											"label": "Other"
+											"value": "cruiseLine",
+											"label": "Cruise Line"
+										}, {
+											"label": "Land Owner",
+											"value": "landOwner"
+										}, {
+											"label": "Booking Agent",
+											"value": "bookingAgent"
+										}, {
+											"label": "Other",
+											"value": "other"
 										}]
 									},
 									"selectThreshold": 0.3,
@@ -6825,7 +6833,6 @@
 											"hideOnChildrenHidden": false
 										}, {
 											"label": "Please explain the equipment sales",
-											"spellcheck": false,
 											"tableView": true,
 											"clearOnHide": false,
 											"validate": {
@@ -10141,8 +10148,17 @@
 												"label": "Training Agency",
 												"value": "trainingAgency"
 											}, {
-												"value": "other",
-												"label": "Other"
+												"value": "cruiseLine",
+												"label": "Cruise Line"
+											}, {
+												"label": "Land Owner",
+												"value": "landOwner"
+											}, {
+												"label": "Booking Agent",
+												"value": "bookingAgent"
+											}, {
+												"label": "Other",
+												"value": "other"
 											}]
 										},
 										"selectThreshold": 0.3,
@@ -13758,7 +13774,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 297,
+	"_vid": 299,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13775,6 +13791,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-17T09:29:31.954Z",
+	"modified": "2020-07-21T06:07:17.270Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

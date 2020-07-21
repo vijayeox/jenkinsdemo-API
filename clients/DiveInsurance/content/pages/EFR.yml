@@ -1,0 +1,221 @@
+name: 'Dive Store'
+description: 'View Dive Store Policy'
+content:
+        -
+            type: ButtonAction
+            content:
+                    buttonList:
+                          -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                  -
+                                      type: Form
+                                      url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
+                                      workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                          -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                details:
+                                  -
+                                      type: Form
+                                      url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                      workflowInstanceId: '{{workflowInstanceId}}'
+                          -
+                                name: 'Reinstate Policy'
+                                details:
+                                  -
+                                      type: Form
+                                      url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
+                                      workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                icon: 'fa fa-repeat'
+                          -
+                                name: 'Upgrade To IPL'
+                                rule: '''{{policyStatus}}'' == ''In Force'''
+                                details:
+                                    -
+                                        type: Form
+                                        url: pipeline
+                                        urlPostParams:
+                                            appId: '{{appId}}'
+                                            workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
+                                            workflowInstanceId: '{{workflowInstanceId}}'
+                                            commands:
+                                                -
+                                                    command: startform
+                                                -
+                                                    command: file
+                                                -
+                                                    command: delegate
+                                                    delegate: EFRToIPLUpgrade
+        -
+            type: TabSegment
+            content:
+                    tabs:
+                          -
+                            name: 'General Information'
+                            uuid: 2de62aea-a24d-4006-8c36-e083f87d18b7
+                            content:
+                                    -
+                                        type: Document
+                                        content: '<div class="row">
+                                        <div class="col">
+                                                <div class="form-group">
+                                                    <label>Policy Status</label>
+                                                    <p> {{policyStatus}}</p>
+                                                </div></div></div><div class="row">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-header bg-primary text-white"><i class="fa fa-envelope"></i> Basic Information.
+                                                        </div>
+                                                        <div class="card-body">
+                                                                <div class="form-group">
+                                                                    <label>Store Number</label>
+                                                                    <p> {{business_padi}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Business Name</label>
+                                                                    <p> {{business_name}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Business Type</label>
+                                                                    <p class="uppercase"> {{entity_type}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Policy Period</label>
+                                                                    <p> {moment(''{{start_date}}'').format(''MM-DD-YYYY'')} - {moment(''{{end_date}}'').format(''MM-DD-YYYY'')}</p>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-4">
+                                                    <div class="card bg-light mb-3">
+                                                        <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
+                                                        <div class="card-body">
+                                                              <span class="uppercase">Contact: {{firstname}} {{lastname}}</span>
+                                                              <span class="uppercase">{{address1}},</span>
+                                                              <span class="uppercase">{{address2}},</span>
+                                                              <span class="uppercase">{{city}},</span>
+                                                              <span class="uppercase">{{state}}</span> <span class="uppercase">{{zip}}</span>
+
+                                                            <p>Email : {{email}}</p>
+                                                            <p>Tel. {{phone_number}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>'
+                                        useRowData: true
+                          -
+                            name: 'Property Information'
+                            uuid: 3de62aea-a24d-4006-8c36-e083f87d18b7
+                            content:
+                                    -
+                                        type: Document
+                                        content: '{data.propertyCoverageSelect == ''yes''?<div class="row">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-header bg-primary text-white"><i class="fa fa-envelope"></i> Basic Information.
+                                                        </div>
+                                                        <div class="card-body">
+                                                                <div class="form-group">
+                                                                    <label>Store Number</label>
+                                                                    <p> {{business_padi}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Business Name</label>
+                                                                    <p> {{business_name}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Business Type</label>
+                                                                    <p class="uppercase"> {{entity_type}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Policy Period</label>
+                                                                    <p> {moment(''{{start_date}}'').format(''MM-DD-YYYY'')} - {moment(''{{end_date}}'').format(''MM-DD-YYYY'')}</p>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-4">
+                                                    <div class="card bg-light mb-3">
+                                                        <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
+                                                        <div class="card-body">
+                                                              <div class="uppercase">Contact: {{firstname}} {{lastname}}</div>
+                                                              <div class="uppercase">{{address1}},</div>
+                                                              <div class="uppercase">{{address2}},</div>
+                                                              <div class="uppercase">{{city}},</div>
+                                                              <div class="uppercase">{{state}}</span> <span class="uppercase">{{zip}}</div>
+                                                            <p>Email : {{email}}</p>
+                                                            <p>Website : {{website}}</p>
+                                                            <p>Work Phone Number : {{phone_number}}</p>
+                                                            <p>Fax : {{fax}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>:<div class="row">
+                                            <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Property Coverage</label>
+                                                        <p> Not Applied</p>
+                                                    </div></div></div>}'
+                                        useRowData: true
+                          -
+                            name: 'Liability Information'
+                            uuid: 4de62aea-a24d-4006-8c36-e083f87d18b7
+                            content:
+                                    -
+                                        type: Document
+                                        content: '<div class="row">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-header bg-primary text-white">Coverages.
+                                                        </div>
+                                                        <div class="card-body">
+                                                                <div class="form-group">
+                                                                    <label>Primary Store Reciepts</label>
+                                                                    <p> ${{dsglestmonthretailreceipt}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Travel Agent E&O</label>
+                                                                    <p> {{travelAgentEOReceiptsPL}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Excess Liability</label>
+                                                                    <p class="uppercase"> {{entity_type}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Medical Expenses</label>
+                                                                    <p class="uppercase"> {data.medicalPayment == ''true''? "Yes" : "No" }</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Policy Period</label>
+                                                                    <p>  {data.doYouWantToApplyForNonOwnerAuto == ''true''? data.nonOwnedAutoLiabilityPL : No }</p>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div></div>'
+                                        useRowData: true
+                          -
+                            name: 'Documents'
+                            uuid: ef04efa6-de98-4e87-835a-dd495be9fd3c
+                            content:
+                                    -
+                                        type: DocumentViewer
+                                        content: 'file/{{uuid}}/document'
+                          -
+                            name: 'Comments'
+                            uuid: cd41818f-f0b4-4d7a-bd24-ed066f9b9b0e
+                            content:
+                                    -
+                                        type: Comment
+                                        content: '{{uuid}}'
+                          -
+                            name: 'Activity Log'
+                            uuid: 729fd977-5a69-49cf-a34c-2a28aaeb41ab
+                            content:
+                                    -
+                                        type: Page
+                                        page_id: '121ba91d-f17a-2034-a25f-86f108594637'
