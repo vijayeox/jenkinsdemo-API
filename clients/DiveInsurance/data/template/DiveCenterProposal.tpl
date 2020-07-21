@@ -12,7 +12,7 @@
   <center>
       <b>
         <p style="margin-top: 5px;" class="info">Store Location:
-        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false)}
+        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress == 'false')}
               <span class="uppercase">{$mailaddress1}</span>,
               <span class="uppercase">{$mailaddress2}</span>,
               <span class="uppercase">{$physical_city}</span>,
@@ -670,7 +670,7 @@
     </div>
         {if isset(excludedOperation) && $excludedOperation != ""}
             <center>
-            <p class ="exop notice" style="margin-top:1px;color:red;"><b>{$excludedOperation}</b></p>
+            <p class ="exop notice" style="margin-top:1px;color:red;""><b>{$excludedOperation}</b></p>
             </center>
         {/if}
 </body>
