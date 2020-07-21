@@ -76,12 +76,11 @@ content:
                                                     <div class="card bg-light mb-3">
                                                         <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
                                                         <div class="card-body">
-                                                              <span class="uppercase">Contact: {{firstname}} {{lastname}}</span>
-                                                              <span class="uppercase">{{address1}},</span>
-                                                              <span class="uppercase">{{address2}},</span>
-                                                              <span class="uppercase">{{city}},</span>
-                                                              <span class="uppercase">{{state}}</span> <span class="uppercase">{{zip}}</span>
-
+                                                              <div class="uppercase">Contact: {{firstname}} {{lastname}}</div>
+                                                              <div class="uppercase">{{address1}},</div>
+                                                              <div class="uppercase">{{address2}},</div>
+                                                              <div class="uppercase">{{city}},</div>
+                                                              <div class="uppercase">{{state}} <span class="uppercase">{{zip}}</span></div>
                                                             <p>Email : {{email}}</p>
                                                             <p>Tel. {{phone_number}}</p>
                                                         </div>
