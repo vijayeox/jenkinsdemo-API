@@ -23,7 +23,7 @@ content:
                             useRowData: true
                         -
                             type: List
-                            content: 
+                            content:
                                 route: delegate/ChangeLogDelegate
                                 groupable: true
                                 exportToPDF:
@@ -52,7 +52,7 @@ content:
                                             field: submittedValue
                                     margin:
                                         top: 3cm
-                                        left: 1cm
+                                        left: 1cm`
                                         right: 1cm
                                         bottom: 1cm
                                     fileNameTemplate: '"ChangeLog_" + new Date().getFullYear()'

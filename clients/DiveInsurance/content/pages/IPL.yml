@@ -1,0 +1,123 @@
+name: 'Dive Store'
+description: 'View Dive Store Policy'
+content:
+        -
+            type: RenderButtons
+            content:
+                    buttonList:
+                          -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''In Force'')'
+                                details:
+                                  -
+                                      type: Form
+                                      url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                      workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                          -
+                                name: 'Cancel Policy'
+                                icon: 'fa fa-ban'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                details:
+                                  -
+                                      type: Form
+                                      url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                      workflowInstanceId: '{{workflowInstanceId}}'
+                          -
+                                name: 'Reinstate Policy'
+                                details:
+                                  -
+                                      type: Form
+                                      url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
+                                      workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                icon: 'fa fa-repeat'
+        -
+            type: TabSegment
+            content:
+                    tabs:
+                          -
+                            name: 'General Information'
+                            uuid: 2de62aea-a24d-4006-8c36-e083f87d18b7
+                            content:
+                                    -
+                                        type: Document
+                                        content: '<div class="row">
+                                        <div class="col">
+                                                <div class="form-group">
+                                                    <label>Policy Status</label>
+                                                    <p> {{policyStatus}}</p>
+                                                </div></div></div><div class="row">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-header bg-primary text-white"><i class="fa fa-envelope"></i> Basic Information.
+                                                        </div>
+                                                        <div class="card-body">
+                                                                <div class="form-group">
+                                                                    <label>PADI Member</label>
+                                                                    <p> {{padi}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Insured Name</label>
+                                                                    <p> {{firstname}} {{lastname}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Coverage Premium</label>
+                                                                    <p class="uppercase"> {{careerCoveragePrice}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Cylinder Premium</label>
+                                                                    <p class="uppercase"> {{cylinderPrice}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Equipment Premium</label>
+                                                                    <p class="uppercase"> {{equipmentPrice}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Excess Liability Premium</label>
+                                                                    <p class="uppercase"> {{excessLiabilityPrice}}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Policy Period</label>
+                                                                    <p> {moment(''{{start_date}}'').format(''MM-DD-YYYY'')} - {moment(''{{end_date}}'').format(''MM-DD-YYYY'')}</p>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-4">
+                                                    <div class="card bg-light mb-3">
+                                                        <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
+                                                        <div class="card-body">
+                                                              <span class="uppercase">{{address1}},</span>
+                                                              <span class="uppercase">{{address2}},</span>
+                                                              <span class="uppercase">{{city}},</span>
+                                                              <span class="uppercase">{{state}}</span> <span class="uppercase">{{zip}}</span>
+
+                                                            <p>Email : {{email}}</p>
+                                                            <p>Tel. {{phone_number}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>'
+                                        useRowData: true
+                          -
+                            name: 'Documents'
+                            uuid: ef04efa6-de98-4e87-835a-dd495be9fd3c
+                            content:
+                                    -
+                                        type: DocumentViewer
+                                        content: 'file/{{uuid}}/document'
+                          -
+                            name: 'Comments'
+                            uuid: cd41818f-f0b4-4d7a-bd24-ed066f9b9b0e
+                            content:
+                                    -
+                                        type: Comment
+                                        content: '{{uuid}}'
+                          -
+                            name: 'Activity Log'
+                            uuid: 729fd977-5a69-49cf-a34c-2a28aaeb41ab
+                            content:
+                                    -
+                                        type: Page
+                                        page_id: '121ba91d-f17a-2034-a25f-86f108594637'

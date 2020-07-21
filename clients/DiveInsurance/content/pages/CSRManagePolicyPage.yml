@@ -9,7 +9,7 @@ content:
             forceDefaultFilters: true
             filterable: true
             resizable: true
-            sortable: 
+            sortable:
                 allowUnsort: true
                 mode: single
             pageable:
@@ -19,7 +19,7 @@ content:
                     - 20
                     - 50
                 info: true
-            exportToExcel: 
+            exportToExcel:
                 columnConfig:
                     -
                         title: PADI
@@ -80,7 +80,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: startform
                                     -
@@ -100,7 +100,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -120,7 +120,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: cb74d176-225a-11ea-978f-2e728ce88125
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -140,7 +140,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: cb99e634-de00-468d-9230-d6f77d241c5b
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -160,7 +160,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -202,15 +202,27 @@ content:
                 -
                     name: 'View Policy'
                     icon: 'fa fa-envelope-open'
-                    rule: '''{{policyStatus}}'' != ''Rejected'''
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Store'')'
                     details:
                         -
-                            type: Document
-                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period:{moment(data.start_date).format(''MM-DD-YYYY'')} - {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
-                            useRowData: true
+                            params:
+                                page_id: 'eb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
                         -
-                            type: DocumentViewer
-                            url: 'file/{{uuid}}/document'
+                            params:
+                                page_id: 'ab018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'bb018dfd-be95-4c53-9a97-042f615f3623'
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
@@ -283,14 +295,6 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     icon: 'fa fa-repeat'
-                -
-                    name: 'View Activity Log'
-                    details: 
-                        -
-                            params:
-                                page_id: '121ba91d-f17a-2034-a25f-86f108594637' 
-                    rule: 'true'
-                    icon: 'fa fa-list'
             columnConfig:
                 -
                     title: PADI
