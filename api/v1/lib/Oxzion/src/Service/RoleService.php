@@ -29,7 +29,7 @@ class RoleService extends AbstractService
     public function saveRole($params, &$data, $roleId = null)
     {
         if (isset($params['orgId'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
+            if (!AuthContext::get(AuthConstants::REGISTRATION) && !SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions create/update role");
             } else {
@@ -296,14 +296,14 @@ class RoleService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getRolesByOrgid($orgid)
+    public function getRolesByOrgid($orgid, $businessRoleId = NULL)
     {
-        return $this->getDataByParams('ox_role', array(), array('org_id' => $orgid));
+        return $this->getDataByParams('ox_role', array(), array('org_id' => $orgid, "business_role_id" => $businessRoleId));
     }
 
-    public function createBasicRoles($orgid)
+    public function createBasicRoles($orgid, $businessRoleId = NULL)
     {
-        $basicRoles = $this->getRolesByOrgid(null);
+        $basicRoles = $this->getRolesByOrgid(null, $businessRoleId);
         try {
             foreach ($basicRoles as $basicRole) {
                 unset($basicRole['id']);
@@ -326,6 +326,9 @@ class RoleService extends AbstractService
                         SELECT " . $role['id'] . ", rp.privilege_name,rp.permission," . $role['org_id'] .
                 ",rp.app_id from ox_role_privilege rp left join ox_role r on rp.role_id = r.id
                         where r.name = '" . $role['name'] . "' and r.org_id is NULL";
+            if(isset($role['business_role_id'])){
+                $query .= " AND r.business_role_id = ".$role['business_role_id'];
+            }
             $count = $this->runGenericQuery($query);
             if (!$count) {
                 throw new ServiceException("Failed to update role privileges", "failed.update.default.privileges");

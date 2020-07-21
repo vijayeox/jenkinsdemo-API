@@ -9,7 +9,7 @@ use Oxzion\InvalidParameterException;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
-use Oxzion\Service\UserService;
+use Oxzion\Service\OrganizationService;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Model\WorkflowInstance;
@@ -21,7 +21,7 @@ class WorkflowInstanceService extends AbstractService
     protected $workflowService;
     protected $fileService;
     protected $processEngine;
-    protected $userService;
+    protected $organizationService;
     protected $activityEngine;
 
     public function __construct(
@@ -29,7 +29,7 @@ class WorkflowInstanceService extends AbstractService
         $dbAdapter,
         WorkflowInstanceTable $table,
         FileService $fileService,
-        UserService $userService,
+        OrganizationService $organizationService,
         WorkflowService $workflowService,
         WorkflowFactory $workflowFactory,
         ActivityInstanceService $activityInstanceService
@@ -42,7 +42,7 @@ class WorkflowInstanceService extends AbstractService
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
         $this->activityEngine = $this->workFlowFactory->getActivity();
         $this->activityInstanceService = $activityInstanceService;
-        $this->userService = $userService;
+        $this->organizationService = $organizationService;
     }
     public function setProcessEngine($processEngine)
     {
@@ -272,7 +272,7 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("setupIdentityField");
         if (isset($params['identifier_field'])) {
             $data = $params;
-            $test = $this->userService->checkAndCreateUser(array(), $data, true);
+            $test = $this->organizationService->registerAccount($data);
         }
     }
 

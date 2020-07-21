@@ -66,7 +66,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
 
     public function testStartWorkflowSetupIdentityField() {
         $dataset = $this->dataset;
-        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4' ,'identifier_field' =>'id_field','id_field' => '2020', 'email' => 'brian@gmail.com', 'address1' => 'addr1',
+        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4' ,'identifier_field' =>'id_field','id_field' => '2020', 'email' => 'brian@gmail.com', 'address1' => 'addr1', 'type' => 'INDIVIDUAL', "business_role" => "Policy Holder",
           'address2' => "", 'city' => 'city', 'state' => 'state', 'country' => 'country', 'zip' => 2323 , 'firstname' => 'brian', 'lastname' => 'test');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -76,11 +76,20 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $this->processId = 1;
         }
         $result = $this->workflowInstanceService->startWorkflow($params);
-        $sqlQuery = 'SELECT * FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
+        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.orgid as org_id FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT * FROM ox_organization where id = '.$newQueryResult[0]['org_id'];
+        $orgResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT br.* FROM ox_org_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.org_id = '.$newQueryResult[0]['org_id'];
+        $bussRoleResult = $this->runQuery($sqlQuery);
+        
         $this->assertEquals('brian',$newQueryResult[0]['firstname']);
         $this->assertEquals('test',$newQueryResult[0]['lastname']);
         $this->assertEquals('brian@gmail.com',$newQueryResult[0]['email']);
+        $this->assertEquals($newQueryResult[0]['firstname']." ".$newQueryResult[0]['lastname'], $orgResult[0]['name']);
+        $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
+        $this->assertEquals($params['type'], $orgResult[0]['type']);
+        $this->assertEquals($params['business_role'], $bussRoleResult[0]['name']);
     }
 
     public function testStartWorkflowWithWrongAppId() {

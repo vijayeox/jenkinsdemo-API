@@ -17,6 +17,11 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 4
+ox_business_role:
+  - id: 100
+    uuid: "77b30b2d-d1da-427a-8e40-bc954b2b0f77"
+    name: "Policy Holder"
+    app_id: 99
 ox_app_entity:
   - id: 1
     name: "entity1"

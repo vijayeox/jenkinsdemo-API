@@ -147,7 +147,7 @@ class UserService extends AbstractService
         if (!$register) {
             if (isset($params['orgId']) && $params['orgId'] != '') {
                 if ((!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                    ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands'])) {
+                    ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !AuthContext::get(AuthConstants::REGISTRATION)) {
                     throw new AccessDeniedException("You do not have permissions create user");
                 } else {
                     $data['orgid'] = $this->getIdFromUuid('ox_organization', $params['orgId']);
@@ -1248,33 +1248,7 @@ class UserService extends AbstractService
         return $userData;
     }
 
-    public function checkAndCreateUser($params, &$data, $register = false)
-    {
-       $this->logger->info("CHECK AND CREATE USER ----".print_r($data,true));
-        if (!ArrayUtils::isKeyDefined($data, 'username')) {
-            $data['username'] = $data['email'];
-        }
-        if ($org = $this->getIdFromUuid('ox_organization', $data['orgId'])) {
-            $orgId = $org;
-        } else {
-            if ($data['orgId']) {
-                $orgId = $data['orgId'];
-            } else {
-                if (AuthContext::get(AuthConstants::ORG_ID) != null) {
-                    $orgId = AuthContext::get(AuthConstants::ORG_ID);
-                }
-            }
-        }
-        if (!isset($data['role'])) {
-            $query = "SELECT ox_role.uuid from ox_role
-                        where ox_role.default_role=:defaultRole
-                        and ox_role.org_id=:orgId";
-            $params = array("defaultRole" => 1, "orgId" => $orgId);
-            $resultSet = $this->executeQueryWithBindParameters($query, $params)->toArray();
-            if (isset($resultSet[0])) {
-                $data['role'] = array(['id' => $resultSet[0]['uuid']]);
-            }
-        }
+    public function checkUserExists($data){
         $from = "FROM ox_user as u INNER join ox_user_profile usrp on usrp.id = u.user_profile_id ";
         $where = "WHERE (username=:username OR email=:email)";
         $queryParams = array("username" => $data['username'],
@@ -1287,13 +1261,12 @@ class UserService extends AbstractService
                 $appId = $data['app_id'];
             }
             $from .= " INNER JOIN ox_wf_user_identifier ui ON ui.user_id = u.id";
-            $where .= " AND ui.app_id = :appId AND ui.org_id = :orgId
+            $where .= " AND ui.app_id = :appId 
                         OR (ui.identifier = :identifier AND ui.identifier_name = :identifierName)";
             $queryParams = array_merge($queryParams, array("appId" => $appId,
-                "orgId" => $orgId,
                 "identifier" => $data[$data['identifier_field']],
                 "identifierName" => $data['identifier_field']));
-            $handleUserIdentifier = true;
+            
         }
         if (isset($data['date_of_birth'])) {
             $data['date_of_birth'] = date_format(date_create($data['date_of_birth']), "Y-m-d");
@@ -1301,47 +1274,18 @@ class UserService extends AbstractService
         $query = "SELECT u.id,u.uuid,u.username,usrp.email $from $where";
         $this->logger->info("Check user query $query with Params" . json_encode($queryParams));
         $result = $this->executeQuerywithBindParameters($query, $queryParams)->toArray();
-        if (count($result) == 0) {
-            try {
-                $this->beginTransaction();
-                $result = $this->createUser($params, $data, $register);
-                $this->logger->info("HandleUserIdentifier");
-                if ($handleUserIdentifier) {
-                    $query = "select count(id) as count from ox_wf_user_identifier
-                                where app_id = :appId AND org_id = :orgId AND user_id = :userId";
-                    $queryParams = array("appId" => $appId,
-                        "orgId" => $orgId,
-                        "userId" => $data['id']);
-                    $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
-                    $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-                    if ($resultSet[0]['count'] == 0) {
-                        $this->logger->info("Middle - checkand Create INSERT");
-                        $query = "INSERT INTO ox_wf_user_identifier(`app_id`,`org_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:appId, :orgId, :userId, :identifierName, :identifier)";
-                        $queryParams = array_merge($queryParams,
-                            array("identifierName" => $data['identifier_field'],
-                                "identifier" => $data[$data['identifier_field']]));
-                        $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
-                        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams);
-                    }
-                }
-                $this->commit();
-                return $result;
-            } catch (Exception $e) {
-                $this->logger->error($e->getMessage(), $e);
-                $this->rollback();
-                throw $e;
+        if(count($result) > 0){
+            if ($data['username'] == $result[0]['username'] && 
+                    $data['email'] == $result[0]['email']) {
+                $data['username'] = $result[0]['username'];
+                $data['id'] = $result[0]['id'];
+                $data['uuid'] = $result[0]['uuid'];
+                return 1;
+            } else {
+                throw new ServiceException("Username/Email Used", "username.exists");
             }
         }
-        // print($data['username']);
-        // print_r($result);
-        if ($data['username'] == $result[0]['username']) {
-            $data['username'] = $result[0]['username'];
-            $data['id'] = $result[0]['id'];
-            $data['uuid'] = $result[0]['uuid'];
-            return 1;
-        } else {
-            throw new ServiceException("Username/Email Used", "username.exists");
-        }
+        return 0;
     }
 
     public function getUsersList($appUUid, $params)

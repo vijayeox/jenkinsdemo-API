@@ -22,6 +22,7 @@ use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Service\UserCacheService;
+use Oxzion\Service\OrganizationService;
 use Oxzion\Utils\ArrayUtils;
 
 class CommandService extends AbstractService
@@ -35,6 +36,7 @@ class CommandService extends AbstractService
     private $userService;
     private $jobService;
     private $userCacheService;
+    private $organizationService;
     /**
      * @ignore __construct
      */
@@ -45,7 +47,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService, OrganizationService $organizationService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -59,6 +61,7 @@ class CommandService extends AbstractService
         $this->userService = $userService;
         $this->jobService = $jobService;
         $this->userCacheService = $userCacheService;
+        $this->organizationService = $organizationService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -136,7 +139,7 @@ class CommandService extends AbstractService
         $this->logger->info("PROCESS COMMAND : command --- " . $command);
         switch ($command) {
             case 'create_user':
-                return $this->createUser($data);
+                return $this->registerAccount($data);
                 break;
             case 'sign_in':
                 $data['auto_login'] = 1;
@@ -230,10 +233,10 @@ class CommandService extends AbstractService
         };
     }
 
-    private function createUser($data) {
-        $success = $this->userService->checkAndCreateUser($data, $data, true);
+    private function registerAccount($data) {
+        $success = $this->organizationService->registerAccount($data);
         if ($success) {
-            $params['user'] = $data;
+            $params['user'] = $data['contact'];
         } else {
             throw new Exception("Error Creating User.", 1);
         }

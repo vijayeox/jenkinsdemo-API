@@ -31,7 +31,7 @@ class OrganizationProfileService extends AbstractService
         $this->logger->info("Adding OrganizationProfile - " . print_r($data, true));
         $orgProfileData = $data;
         $orgProfileData['uuid'] = UuidUtil::uuid();
-        $orgProfileData['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $orgProfileData['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
         $orgProfileData['date_created'] = date('Y-m-d H:i:s');
         $orgProfileData['labelfile'] = isset($data['labelfile'])?$data['labelfile']:'en';
         $orgProfileData['languagefile'] = isset($data['languagefile'])?$data['languagefile']:'en';
