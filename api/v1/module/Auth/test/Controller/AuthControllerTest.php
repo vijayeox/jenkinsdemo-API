@@ -424,7 +424,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testRegisterIndividualAccount()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder","identifier_field":"padi","padi":"12345", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $data = json_decode($data, true);
         $this->dispatch('/register', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -462,6 +462,14 @@ class AuthControllerTest extends ControllerTest
         }
         $this->assertEquals($data['data']['type'], $orgResult[0]['type']);
         $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
+        if(isset($data['data']['identifier_field'])){
+            $sqlQuery = "SELECT * FROM ox_wf_user_identifier where identifier_name = '".$data['data']['identifier_field']."' AND identifier = '".$data['data'][$data['data']['identifier_field']]."'";
+            $identifierResult = $this->runQuery($sqlQuery);
+            $this->assertEquals(1, count($identifierResult));
+            $this->assertEquals(100, $identifierResult[0]['app_id']);
+            $this->assertEquals($orgResult[0]['id'], $identifierResult[0]['org_id']);
+            $this->assertEquals($newQueryResult[0]['id'], $identifierResult[0]['user_id']);
+        }
         if(isset($data['data']['business_role'])){
             $this->assertEquals($data['data']['business_role'], $bussRoleResult[0]['name']);
             $this->assertEquals("Admin", $roleResult[0]['name']);
