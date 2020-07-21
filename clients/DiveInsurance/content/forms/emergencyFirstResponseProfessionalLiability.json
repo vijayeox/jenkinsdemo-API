@@ -911,7 +911,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -2361,8 +2360,7 @@
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"maxDate": "moment()"
-									},
-									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
+									}
 								}],
 								"width": 4,
 								"offset": 0,
@@ -2976,8 +2974,17 @@
 										"label": "Training Agency",
 										"value": "trainingAgency"
 									}, {
-										"value": "other",
-										"label": "Other"
+										"value": "cruiseLine",
+										"label": "Cruise Line"
+									}, {
+										"label": "Land Owner",
+										"value": "landOwner"
+									}, {
+										"label": "Booking Agent",
+										"value": "bookingAgent"
+									}, {
+										"label": "Other",
+										"value": "other"
 									}]
 								},
 								"selectThreshold": 0.3,
@@ -3766,7 +3773,6 @@
 				"input": false,
 				"components": [{
 					"label": "Reason for Rejection / On Hold",
-					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
 					"clearOnHide": false,
@@ -3806,7 +3812,7 @@
 		"path": "csrapprovalscreen"
 	}],
 	"revisions": "current",
-	"_vid": 616,
+	"_vid": 618,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -3890,7 +3896,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-07-14T11:17:19.541Z",
+	"modified": "2020-07-21T06:01:18.426Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

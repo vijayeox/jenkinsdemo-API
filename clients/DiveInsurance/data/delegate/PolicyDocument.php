@@ -187,7 +187,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
             }
 
-            if(isset($data['business_state'])){
+            if(isset($data['business_state']) && $data['business_state'] !=""){
                 $data['state_in_short'] = $this->getStateInShort($data['business_state'],$persistenceService);
             }
             $this->logger->info("Data------------------ ".print_r($data,true));
@@ -431,7 +431,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             else if($data['product'] == "Dive Store"){
 
                if($this->type != 'endorsementQuote' && $this->type != "quote"){
-
+                    $addLocations = $temp['additionalLocations'];   
+                    unset($temp['additionalLocations']);
                     if(isset($this->template[$temp['product']]['cover_letter'])){
                         $this->logger->info("DOCUMENT cover_letter");
                         $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
@@ -468,8 +469,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
 
                     if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
-                      $addLocations = $temp['additionalLocations'];
-                      unset($temp['additionalLocations']);
                         if(is_string($addLocations)){
                             $additionalLocations = json_decode($addLocations,true);
                         } else {
@@ -530,6 +529,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter',$i,0,true);
                         unset($temp["additionalLocationData"]);
                     }
+                    $data['quoteDocuments'] = $documents;
+                    if(is_string($data['csrApprovalAttachments'])){
+                        $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
+                    }
+                    $data['quoteDocuments'] = $documents;
                 }
             }else if($this->type == 'policy' && $data['product'] == 'Dive Store'){
                 $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
@@ -740,7 +744,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         protected function setPolicyInfo(&$data,$persistenceService,$endorsementOptions = null)
         {
                 if($this->type != "quote" && $this->type != "lapse" && $this->type != 'endorsementQuote'){
-                    $coi_number = $this->generateCOINumber($data,$persistenceService);
+                  if(isset($data['certificate_no'])){
+                    $coi_number = $data['certificate_no'];
+                  } else {
+                      $coi_number = $this->generateCOINumber($data,$persistenceService);
+                  }
                     if($this->type == 'endorsement'){
                         if($data['product'] == 'Dive Store'){
                             if(isset($data['documents']['endorsement_coi_document'])){
@@ -1313,10 +1321,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
-                if(is_string($temp['additionalLocations'])){
-                    $additionalLocations = json_decode($temp['additionalLocations'],true);
+                $addLocations = $temp['additionalLocations'];
+                unset($temp['additionalLocations']);
+                if(is_string($addLocations)){
+                    $additionalLocations = json_decode($addLocations,true);
                 } else {
-                    $additionalLocations = $temp['additionalLocations'];
+                    $additionalLocations = $addLocations;
                 }
                 for($i=0; $i<sizeof($additionalLocations);$i++){
                     $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");

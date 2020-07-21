@@ -50,6 +50,10 @@ trait FileTrait
         $this->fileService->completeBatchProcessing();
     }
 
+    protected function addAttachment($params, $file){
+        return $this->fileService->addAttachment($params, $file);
+    }
+
     protected function updateFieldValueOnFiles($data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams = null){
         $this->fileService->updateFieldValueOnFiles($this->appId,$data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams);
     }

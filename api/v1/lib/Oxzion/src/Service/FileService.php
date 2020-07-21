@@ -1678,6 +1678,9 @@ class FileService extends AbstractService
     private function processFileDataList(&$fileData,$searchKey,$data){
         $return = false;
         if (isset($fileData[$searchKey])) {
+            if(!is_array($fileData[$searchKey])) {
+                $fileData[$searchKey] = json_decode($fileData[$searchKey], true);
+            }
             array_push($fileData[$searchKey], $data);
             $return = true;
         }else{

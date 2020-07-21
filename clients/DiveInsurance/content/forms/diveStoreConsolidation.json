@@ -503,7 +503,6 @@
 			"input": false,
 			"components": [{
 				"label": "Legal Business Name",
-				"spellcheck": false,
 				"tableView": false,
 				"clearOnHide": false,
 				"calculateValue": "if(data['business_name'] && data['businessPadiVerified']===true){\n  value = data['business_name']\n}",
@@ -1132,7 +1131,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -3512,10 +3510,10 @@
 							"eq": "true"
 						},
 						"type": "textfield",
-						"input": true,
-						"lockKey": true,
 						"labelWidth": 30,
 						"labelMargin": 3,
+						"input": true,
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -5529,8 +5527,17 @@
 											"label": "Training Agency",
 											"value": "trainingAgency"
 										}, {
-											"value": "other",
-											"label": "Other"
+											"value": "cruiseLine",
+											"label": "Cruise Line"
+										}, {
+											"label": "Land Owner",
+											"value": "landOwner"
+										}, {
+											"label": "Booking Agent",
+											"value": "bookingAgent"
+										}, {
+											"label": "Other",
+											"value": "other"
 										}]
 									},
 									"selectThreshold": 0.3,
@@ -7274,11 +7281,7 @@
 											"collapsible": false,
 											"tableView": false,
 											"key": "ALpoolSupplementalForm1",
-											"conditional": {
-												"show": true,
-												"when": "additionalLocations.ALNonDivingPoolActivities",
-												"eq": "yes"
-											},
+											"customConditional": "if(row['ALNonDivingPoolActivities'] == \"yes\"){\n  show = true;\n}else{\n  show = false;\n}",
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
@@ -7996,7 +7999,6 @@
 											"hideOnChildrenHidden": false
 										}, {
 											"label": "Please explain the equipment sales",
-											"spellcheck": false,
 											"tableView": true,
 											"clearOnHide": false,
 											"validate": {
@@ -10650,7 +10652,7 @@
 										"showMeridian": false
 									},
 									"clearOnHide": false,
-									"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
+									"calculateValue": "value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
@@ -11073,8 +11075,17 @@
 												"label": "Training Agency",
 												"value": "trainingAgency"
 											}, {
-												"value": "other",
-												"label": "Other"
+												"value": "cruiseLine",
+												"label": "Cruise Line"
+											}, {
+												"label": "Land Owner",
+												"value": "landOwner"
+											}, {
+												"label": "Booking Agent",
+												"value": "bookingAgent"
+											}, {
+												"label": "Other",
+												"value": "other"
 											}]
 										},
 										"selectThreshold": 0.3,
@@ -13426,7 +13437,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 544,
+	"_vid": 550,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13443,6 +13454,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-17T08:25:02.880Z",
+	"modified": "2020-07-21T06:05:14.011Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
