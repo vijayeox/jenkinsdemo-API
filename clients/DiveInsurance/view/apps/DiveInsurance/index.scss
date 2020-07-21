@@ -80,7 +80,9 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     color: white;
   }
 
-
+.Navigation .appButtons .moduleBtn .block{
+    background-color: #053b6d;
+}
   .iframeDoc {
     height: 100% !important;
     min-height: 650px !important;
@@ -90,7 +92,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     width: -webkit-fill-available;
     width: -moz-available;
   }
-  
+
   #floater {
     position: fixed;
     bottom: 12px;
