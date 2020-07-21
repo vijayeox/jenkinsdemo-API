@@ -649,7 +649,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -1780,8 +1779,17 @@
 										"label": "Training Agency",
 										"value": "trainingAgency"
 									}, {
-										"value": "other",
-										"label": "Other"
+										"value": "cruiseLine",
+										"label": "Cruise Line"
+									}, {
+										"label": "Land Owner",
+										"value": "landOwner"
+									}, {
+										"label": "Booking Agent",
+										"value": "bookingAgent"
+									}, {
+										"label": "Other",
+										"value": "other"
 									}]
 								},
 								"selectThreshold": 0.3,
@@ -2284,7 +2292,6 @@
 				"input": false,
 				"components": [{
 					"label": "Reason for Rejection / On Hold",
-					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
 					"clearOnHide": false,
@@ -2321,7 +2328,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 208,
+	"_vid": 210,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2342,7 +2349,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-07-09T08:27:33.059Z",
+	"modified": "2020-07-21T06:02:01.801Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

@@ -946,7 +946,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -2903,8 +2902,17 @@
 										"label": "Training Agency",
 										"value": "trainingAgency"
 									}, {
-										"value": "other",
-										"label": "Other"
+										"value": "cruiseLine",
+										"label": "Cruise Line"
+									}, {
+										"label": "Land Owner",
+										"value": "landOwner"
+									}, {
+										"label": "Booking Agent",
+										"value": "bookingAgent"
+									}, {
+										"label": "Other",
+										"value": "other"
 									}]
 								},
 								"selectThreshold": 0.3,
@@ -3463,7 +3471,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 300,
+	"_vid": 302,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3484,6 +3492,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-07-20T14:03:25.926Z",
+	"modified": "2020-07-21T05:59:20.196Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

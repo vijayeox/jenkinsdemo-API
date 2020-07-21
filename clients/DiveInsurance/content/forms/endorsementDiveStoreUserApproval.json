@@ -88,61 +88,19 @@
 					"input": true,
 					"lockKey": true
 				}, {
-					"label": "Rejection Reason",
-					"reorder": false,
-					"addAnotherPosition": "bottom",
-					"defaultOpen": false,
-					"layoutFixed": false,
-					"enableRowGroups": false,
-					"hideLabel": true,
+					"label": "Could you let us know the Reason for Rejecting the Quote?",
+					"autoExpand": false,
 					"tableView": true,
-					"defaultValue": [{
-						"reason": ""
-					}],
-					"clearOnHide": false,
 					"validate": {
-						"minLength": 1
+						"required": true
 					},
-					"key": "rejectionReason",
+					"key": "userRejectionReason",
 					"conditional": {
 						"show": true,
-						"when": "approved",
-						"eq": "rejected"
+						"when": "userApproved",
+						"eq": "false"
 					},
-					"type": "datagrid",
-					"input": true,
-					"components": [{
-						"label": "",
-						"tableView": true,
-						"key": "rejectionReasonssswell",
-						"type": "well",
-						"input": false,
-						"components": [{
-							"label": "Reason for Rejection",
-							"spellcheck": false,
-							"tableView": false,
-							"case": "mixed",
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"customMessage": "Rejection reason is required"
-							},
-							"key": "reason",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}]
-					}]
-				}, {
-					"label": "Additional Notes",
-					"tableView": true,
-					"key": "additionalNotes",
-					"conditional": {
-						"show": true,
-						"when": "approved",
-						"eq": "accepted"
-					},
-					"type": "textfield",
+					"type": "textarea",
 					"input": true
 				}],
 				"path": "well4",
@@ -663,6 +621,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-07-08T11:48:37.665Z",
+	"modified": "2020-07-21T05:50:03.625Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

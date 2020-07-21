@@ -670,7 +670,7 @@
     </div>
         {if isset(excludedOperation) && $excludedOperation != ""}
             <center>
-            <p class ="exop notice" style="margin-top:1px;color:red;""><b>{$excludedOperation}</b></p>
+            <p class ="exop notice" style="margin-top:1px;color:red;"><b>{$excludedOperation}</b></p>
             </center>
         {/if}
 </body>
