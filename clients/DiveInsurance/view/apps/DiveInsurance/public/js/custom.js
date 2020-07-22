@@ -166,13 +166,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  function getUsername(productName,username){
-    if(productName == 'DiveStore' && !username.startsWith('S')){
-        username = 'S'+username;
-    }
-    return username;
-  }
-
   function autoLogin(data) {
     localStorage.clear();
     localStorage.setItem(
