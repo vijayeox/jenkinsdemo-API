@@ -114,9 +114,11 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.firstname + " " + item.lastname}</td>'
                     multiFieldFilter:
                         - lastname
+                        - business_name
+                        - name
                 -
                     title: Policy Status
                     field: policyStatus
@@ -124,6 +126,7 @@ content:
                         type: dropdown
                         listItems:
                             - 'Pending Approval'
+                            - 'Quote Approval Pending'
                             - 'Rejected'
                             - 'On Hold'
                         placeholder: 'Select Status'

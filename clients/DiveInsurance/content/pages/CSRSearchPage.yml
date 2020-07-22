@@ -138,6 +138,7 @@ content:
                 - padi
                 - firstname
                 - lastname
+                - name
                 - product
                 - phone
                 - business_name
@@ -188,6 +189,7 @@ content:
                     multiFieldFilter:
                         - lastname
                         - business_name
+                        - name
                 -
                     title: Product
                     field: entity_name
