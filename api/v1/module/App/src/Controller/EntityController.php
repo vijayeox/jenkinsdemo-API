@@ -106,9 +106,12 @@ class EntityController extends AbstractApiController
         } catch (EntityNotFoundException $e) {
             $response = ['data' => $data, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Entity Not Found", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }catch (ServiceException $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }

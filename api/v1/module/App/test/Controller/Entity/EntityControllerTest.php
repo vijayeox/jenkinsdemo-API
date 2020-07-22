@@ -135,7 +135,7 @@ class EntityControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/122', 'PUT', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(403);
         $this->assertModuleName('App');
         $this->assertControllerName(EntityController::class); // as specified in router's controller name alias
         $this->assertControllerClass('EntityController');

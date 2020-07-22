@@ -31,6 +31,9 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
+        if ($this->getName() == 'testGetListActivityLogByFileIdWithOutWorkflow') {
+            $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/FileWithoutWorkflow.yml");
+        }
         return $dataset;
     }
 
@@ -329,32 +332,34 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_array($content['data']), true);
     }
-    // NEED TO ADD FEW MORE TEST CASES  - SADHITHA
-    //     public function testGetListActivityLogByFileId()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145b/activitylog', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->assertModuleName('Workflow');
-    //     $this->assertControllerName(WorkflowInstanceController::class);
-    //     $this->assertControllerClass('WorkflowInstanceController');
-    //     $this->assertMatchedRouteName('activitylog');
-    //     $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    // }
+    public function testGetListActivityLogByFileIdWithOutWorkflow()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-22e9-adc5-308d99c9145c/activitylog', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('activitylog');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $select = "select * from ox_file_audit_log WHERE uuid IN ('d13d0c68-98c9-22e9-adc5-308d99c9145c')";
+        $query = $this->executeQueryTest($select);
+        $this->assertEquals($content['data'][0]['data'], $query[0]['data']);
 
-    // public function testGetListActivityLogByActivityInstanceId()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/activity/3f6622fd-0124-11ea-a8a0-22e8105c0778', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->assertModuleName('Workflow');
-    //     $this->assertControllerName(WorkflowInstanceController::class);
-    //     $this->assertControllerClass('WorkflowInstanceController');
-    //     $this->assertMatchedRouteName('fielddiff');
-    //     $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    // }
+    }
+    public function testGetListActivityLogByActivityInstanceId()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/activity/3f6622fd-0124-11ea-a8a0-22e8105c0778', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('fielddiff');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
 }

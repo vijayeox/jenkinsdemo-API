@@ -15,7 +15,7 @@ use Oxzion\ValidationException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
-
+use Oxzion\VersionMismatchException;
 
 class FileController extends AbstractApiController
 {
@@ -55,6 +55,8 @@ class FileController extends AbstractApiController
         }
         try {
             $count = $this->fileService->createFile($data);
+            $data['version'] = 0;
+            // $count = 1;
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -96,10 +98,11 @@ class FileController extends AbstractApiController
         }
         try {
             $count = $this->fileService->updateFile($data, $id);
-            // var_dump($count);exit;
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         catch (EntityNotFoundException $e) {
             $response = ['data' => $data, 'errors' => $e->getMessage()];
@@ -120,15 +123,20 @@ class FileController extends AbstractApiController
      */
     public function delete($id)
     {
-        try {
-            $response = $this->fileService->deleteFile($id);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+        $params = $this->params()->fromQuery();
+        if (isset($params['version'])) {
+            try {
+                $response = $this->fileService->deleteFile($id,$params['version']);
+            }catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            }
+            if ($response == 0) {
+                return $this->getErrorResponse("File not found", 404, ['id' => $id]);
+            }
+            return $this->getSuccessResponse();
+        } else {
+            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['id' => $id]);
         }
-        if ($response == 0) {
-            return $this->getErrorResponse("File not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
     }
     /**
      * GET File API

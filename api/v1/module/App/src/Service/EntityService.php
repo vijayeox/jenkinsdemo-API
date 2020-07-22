@@ -22,23 +22,20 @@ class EntityService extends AbstractService
         $this->workflowService = $workflowService;
     }
 
-    public function saveEntity($appUuid, &$data, $id = null)
+    public function saveEntity($appUuid, &$data)
     {
         $count = 0;
         $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $entity = new Entity();
+        $resultSet = $this->getEntity($data['app_id'],$data['uuid']);
+        $this->logger->info(__CLASS__ . "-> \n Resultsert----- - " . print_r($resultSet, true));
         try {
-            if (!isset($data['id'])) {
+            if ($resultSet == 0) {
                 $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
                 $data['date_created'] = date('Y-m-d H:i:s');
             } else {
-                $querySelect = "SELECT * from ox_app_entity where app_id = '" . $data['app_id'] . "' AND id = " . $data['id'];
-                $queryResult = $this->executeQuerywithParams($querySelect)->toArray();
-                if (count($queryResult) == 0) {
-                    throw new EntityNotFoundException("Entity not found for -" . $data['id'] . " for app $appUuid");
-                }
-                $data = array_merge($queryResult[0], $data);
+                $data = array_merge($resultSet, $data);
                 $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
                 $data['date_modified'] = date('Y-m-d H:i:s');
             }
@@ -60,7 +57,7 @@ class EntityService extends AbstractService
                 throw new ServiceException("Entity save failed", 'entity.save.failed');
             }
             $this->commit();
-        } catch (Exception $e) {
+        } catch (Exception $e) {     
             $this->rollback();
             throw $e;
         }
@@ -108,8 +105,11 @@ class EntityService extends AbstractService
     public function getEntity($appId, $id)
     {
         try {
-            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where (ox_app.id=? or ox_app.uuid=?) AND (ox_app_entity.id=? or ox_app_entity.uuid=?)";
-            $queryParams = array($appId, $appId, $id, $id);
+            $where = is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ?";
+            $where.= " AND ".(is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?");
+            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where $where";
+            $queryParams = array($appId, $id);
+            $this->logger->info("STATEMENT $query".print_r($queryParams,true));
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultSet) == 0) {
                 return 0;

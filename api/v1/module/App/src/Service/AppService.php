@@ -263,6 +263,7 @@ class AppService extends AbstractService
             $orgUuid = $data['uuid'];
             $appUuid = $yamlData['app'][0]['uuid'];
             $result = $this->createAppRegistry($appUuid, $yamlData['org'][0]['uuid']);
+            
         }
     }
 
@@ -1009,13 +1010,8 @@ class AppService extends AbstractService
             foreach ($yamlData['entity'] as &$entityData) {
                 $entity = $entityData;
                 $entity['assoc_id'] = $assoc_id;
-                $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
-                if (!$entityRec || $entityRec['assoc_id'] != $assoc_id) {
-                    $result = $this->entityService->saveEntity($appId, $entity);
-                } else {
-                    $entity['id'] = $entityRec['id'];
-                    $entity['uuid'] = $entityRec['uuid'];
-                }
+                $result = $this->entityService->saveEntity($appId, $entity);
+                $entityData['uuid'] = $entity['uuid'];
                 if(isset($entity['identifiers'])){
                     $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);
                 }

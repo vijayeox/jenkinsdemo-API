@@ -1,0 +1,92 @@
+ox_app:
+  - id: 131
+    name: "SampleApp1"
+    uuid: "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce3"
+    category: "OTHERS"
+    date_created: "2019-06-26 00:00:00"
+    type: 2
+    status: 1
+    created_by: 1
+ox_app_entity:
+  - id: 1111
+    name: "entity1"
+    app_id: 131
+    date_created: "2019-06-26 00:00:00"
+    uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
+ox_field:
+  - id: 31
+    name: "fax"
+    text: "Fax"
+    app_id: 131
+    data_type: "numeric"
+    type: "integer"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 2
+    entity_id: 1111
+  - id: 32
+    name: "age"
+    text: "Age"
+    app_id: 131
+    type: "integer"
+    data_type: "numeric"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 1
+    entity_id: 1111
+ox_form:
+  - id: 81
+    app_id: 131
+    name: "Task"
+    description: "Form Description"
+    entity_id: 1111
+    created_by: 1
+    date_created: "2019-03-05 09:57:08"
+ox_form_field:
+  - id: 91
+    form_id: 81
+    field_id: 31
+  - id: 92
+    form_id: 81
+    field_id: 32
+ox_file:
+  - id: 71
+    org_id: 1
+    data: "New File Data Without Workflow"
+    uuid: "d13d0c68-98c9-22e9-adc5-308d99c9145c"
+    date_created: "2019-06-28 00:00:00"
+    entity_id: 1111
+    is_active: 1
+    form_id: 1
+ox_file_attribute:
+  - id: 1222
+    file_id: 71
+    org_id: 1
+    field_value: 1
+    field_id: 31
+  - id: 1223
+    file_id: 71
+    org_id: 1
+    field_value: 1
+    field_id: 32
+ox_app_menu:
+  - id: 133
+    uuid: "menu1"
+    name: "menu1"
+    app_id: 131
+    parent_id: 0
+    icon: "new data"
+    sequence: 1
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+ox_app_page:
+  - id: 144
+    name: "page1"
+    uuid: "page1"
+    app_id: 131
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+ox_app_registry:
+  - org_id: 1
+    app_id: 131
