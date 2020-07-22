@@ -309,6 +309,7 @@ content:
                     multiFieldFilter:
                         - lastname
                         - business_name
+                        - name
                 -
                     title: Product
                     field: product

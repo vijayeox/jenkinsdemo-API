@@ -118,6 +118,7 @@ content:
                     multiFieldFilter:
                         - lastname
                         - business_name
+                        - name
                 -
                     title: Policy Status
                     field: policyStatus
