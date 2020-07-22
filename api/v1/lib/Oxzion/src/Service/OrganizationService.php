@@ -146,11 +146,7 @@ class OrganizationService extends AbstractService
         $params = $data;
         $params['preferences'] = array();
         if (isset($params['app_id'])){
-            if ($app = $this->getIdFromUuid('ox_app', $data['app_id'])) {
-                $appId = $app;
-            } else {
-                $appId = $data['app_id'];
-            }
+            $appId = $this->getAppId($params['app_id']);
             $params['app_id'] = $appId;
         }
         try{
@@ -158,17 +154,7 @@ class OrganizationService extends AbstractService
             AuthContext::put(AuthConstants::REGISTRATION, TRUE);
             $result = $this->createOrganization($params, NULL);
             $data['orgId'] = $params['uuid'];
-            if (isset($params['app_id']) && isset($params['identifier_field'])) {
-                $this->logger->info("Add identifier for Account");
-                $query = "INSERT INTO ox_wf_user_identifier(`app_id`,`org_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:appId, :orgId, :userId, :identifierName, :identifier)";
-                $queryParams = array("appId" => $appId,
-                                        "orgId" => $params['id'],
-                                        "userId" => $params['contact']['id'],
-                                        "identifierName" => $params['identifier_field'],
-                                        "identifier" => $params[$params['identifier_field']]);
-                $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
-                $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
-            }
+            $this->addIdentifierForOrg($appId, $params);
             $this->commit();
             
         }catch(Exception $e){
@@ -178,6 +164,65 @@ class OrganizationService extends AbstractService
         }
 
         return $result;
+    }
+
+    private function getAppId($appId){
+        if ($app = $this->getIdFromUuid('ox_app', $appId)) {
+            $appId = $app;
+        } 
+
+        return $appId;
+    }
+    private function setupBusinessRole(&$params){
+        if (!isset($params['app_id']) || !isset($params['business_role'])){
+            return;
+        }
+        $appId = $this->getAppId($params['app_id']);
+        $query = "delete from ox_org_business_role where org_id = :orgId";
+        $queryParams = ["orgId" => $params['id']];
+        $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
+        if(is_string($params['business_role'])){
+            $businessRole = json_decode($params['business_role'], true);
+            $businessRole = [$params['business_role']];
+        }
+        $businessRole = $businessRole ? $businessRole : $params['business_role'];
+        $bRole = "";
+        $queryParams = ['appId'=> $appId];
+        foreach ($businessRole as $key => $value) {
+            if($bRole != "") {
+                $bRole .= ", ";     
+            }else{
+                $bRole = "(";
+            }
+            $bRole.=":param$key";
+            $queryParams["param$key"] = $value;
+        }
+        $bRole .=")";
+        $query = "INSERT INTO ox_org_business_role (org_id, business_role_id)
+                    SELECT ".$params['id'].", id from ox_business_role 
+                    WHERE app_id = :appId and name in $bRole";
+        $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
+        $this->executeUpdateWithBindParameters($query, $queryParams);
+        $query = "SELECT business_role_id from ox_org_business_role where org_id = :orgId";
+        $queryParams = ["orgId" => $params['id']];
+        $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        $params['business_role_id'] = array();
+        foreach ($result as $value) {
+            $params['business_role_id'][] = $value['business_role_id'];
+        }
+    }
+    private function addIdentifierForOrg($appId, $params){
+        if (isset($params['app_id']) && isset($params['identifier_field'])) {
+            $this->logger->info("Add identifier for Account");
+            $query = "INSERT INTO ox_wf_user_identifier(`app_id`,`org_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:appId, :orgId, :userId, :identifierName, :identifier)";
+            $queryParams = array("appId" => $appId,
+                                    "orgId" => $params['id'],
+                                    "userId" => $params['contact']['id'],
+                                    "identifierName" => $params['identifier_field'],
+                                    "identifier" => $params[$params['identifier_field']]);
+            $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
+            $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
+        }
     }
     private function saveOrganizationInternal(&$data, $files = NULL){
         $form = new Organization($data);
@@ -191,20 +236,7 @@ class OrganizationService extends AbstractService
         $form->id = $this->table->getLastInsertValue();
         $data['preferences'] = json_decode($data['preferences'], true);
         $data['id'] = $form->id;
-        if(isset($data['business_role'])){
-            $query = "SELECT id from ox_business_role where name = :businessRole and app_id = :appId";
-            $params = ["businessRole" => $data['business_role'], 'appId' => $data['app_id']];
-            $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-            if(count($result) > 0){
-                $bussRoleId = $result[0]['id'];
-                $query = "INSERT INTO ox_org_business_role (org_id, business_role_id) VALUES
-                            ( ".$data['id'].", $bussRoleId)";
-                $this->executeUpdateWithBindParameters($query);    
-                $data['business_role_id'] = $bussRoleId;
-            }
-            
-
-        }
+        $this->setupBusinessRole($data);
         $userId = $this->setupBasicOrg($data, $data['contact'], $data['preferences']);
         unset($data['business_role_id']);
         if (isset($userId)) {

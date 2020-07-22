@@ -296,12 +296,30 @@ class RoleService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getRolesByOrgid($orgid, $businessRoleId = NULL)
+    public function getRolesByOrgid($orgid, array $businessRoleId = NULL)
     {
-        return $this->getDataByParams('ox_role', array(), array('org_id' => $orgid, "business_role_id" => $businessRoleId));
+        if(!$businessRoleId || ($businessRoleId && count($businessRoleId) == 1)){
+            return $this->getDataByParams('ox_role', array(), array('org_id' => $orgid, "business_role_id" => $businessRoleId ? $businessRoleId[0] : $businessRoleId));
+        }else{
+            $bRole = "";
+            $queryParams = ["orgId" => $orgId];
+            foreach ($businessRoleId as $key => $value) {
+                if($bRole != ""){
+                    $bRole .= ", ";
+                }else{
+                    $bRole ="(";
+                }
+                $bRole.=":param$key";
+                $queryParams["param$key"] = $value;
+            }   
+            $bRole .= ")";
+            $query = "select * from ox_role where org_id = :orgId and business_role_id in $bRole";
+            $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            return $result;
+        }
     }
 
-    public function createBasicRoles($orgid, $businessRoleId = NULL)
+    public function createBasicRoles($orgid, array $businessRoleId = NULL)
     {
         $basicRoles = $this->getRolesByOrgid(null, $businessRoleId);
         try {
