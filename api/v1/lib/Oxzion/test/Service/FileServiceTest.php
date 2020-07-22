@@ -646,9 +646,8 @@ class FileServiceTest extends AbstractServiceTest
         $dataset = $this->dataset;
         $fileId = $dataset['ox_file'][0]['uuid'];
         $appUuid = $dataset['ox_app'][0]['uuid'];
-        $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId, 'workflow_instance_id' => 1);
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid, 'workflow_instance_id' => 1);
         $result = $this->fileService->updateFile($data, $fileId);
         $sqlQuery = "SELECT data FROM ox_file where uuid ='".$fileId."'";
         $queryResult = $this->runQuery($sqlQuery);
@@ -726,9 +725,8 @@ class FileServiceTest extends AbstractServiceTest
         $dataset = $this->dataset;
         $fileId = $dataset['ox_file'][0]['uuid'];
         $appUuid = $dataset['ox_app'][0]['uuid'];
-        $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid);
         $result = $this->fileService->updateFile($data, $fileId);
         $sqlQuery = 'SELECT uuid FROM ox_file where id = 11';
         $sqlQueryResult = $this->runQuery($sqlQuery);
@@ -763,7 +761,7 @@ class FileServiceTest extends AbstractServiceTest
         $fileId = $dataset['ox_file'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
         $appUuid = $dataset['ox_app'][0]['uuid'];
-        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'form_id' => $formId,'workflowInstanceId' => 'something','app_id' => $appUuid);
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'workflowInstanceId' => 'something','app_id' => $appUuid);
         $result = $this->fileService->updateFile($data, $fileId);
         $sqlQuery = 'SELECT * FROM ox_file where id = 11';
         $sqlQueryResult = $this->runQuery($sqlQuery);

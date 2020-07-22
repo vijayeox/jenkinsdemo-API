@@ -29,18 +29,27 @@ ox_app_entity:
     date_created: "2019-06-26 00:00:00"
     uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    start_date_field: start_date
+    end_date_field: end_date
+    status_field: status
   - id: 2
     name: "entity2"
     app_id: 100
     date_created: "2019-06-26 00:00:00"
     uuid: "e13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    start_date_field: start_date
+    end_date_field: end_date
+    status_field: status
   - id: 3
     name: "entity3"
     app_id: 101
     date_created: "2019-06-26 00:00:00"
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    start_date_field: start_date
+    end_date_field: end_date
+    status_field: status
 ox_app_registry:
   - org_id: 1
     app_id: 99

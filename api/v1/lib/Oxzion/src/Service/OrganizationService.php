@@ -289,15 +289,16 @@ class OrganizationService extends AbstractService
             if ($create) {
                 $result = $this->createOrganization($orgData, null);
             }
-            // YET TO BE IMPLEMENTED
-            // if (isset($orgData['associations'])){
-            //     $this->setUpOrgAssociationRelation($orgData);
-            // }
         } catch (ServiceException $e) {
             if ($e->getMessageCode() != 'could.not.create.org') {
                 throw $e;
             }
         }
+
+            // YET TO BE IMPLEMENTED
+        // if (isset($orgData['associations'])){
+        //     $this->setUpOrgAssociationRelation($orgData);
+        // }
         return $result;
     }
 
@@ -882,7 +883,7 @@ class OrganizationService extends AbstractService
     //             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
     //             $params['associationName'] = $orgAssociation['name'];
     //             if (count($result) == 0) {
-    //                 $query = "INSERT INTO `ox_association` (`uuid`,`name`,`org_id`) VALUES (:uuid,:associationName,:orgId)";
+    //                 $query = "INSERT INTO `ox_association` (`uuid`,`name`,`org_id`,`user_identifier_field`,`org_identifier_field`) VALUES (:uuid,:associationName,:orgId,:usserIdentifier,:orgIdentifier)";
     //             }else{
     //                 $query = "UPDATE ox_association SET name=:associationName WHERE uuid=:uuid";
     //                 unset($params['orgId']);

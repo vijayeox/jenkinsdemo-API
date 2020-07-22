@@ -132,7 +132,7 @@ class Migration extends AbstractService
             $result = $statement1->execute();
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());exit;
+            // print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }

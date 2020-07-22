@@ -76,6 +76,9 @@ class FileService extends AbstractService
                 $entityId = $result[0]['id'];
             }
         }
+        $selectQuery = "SELECT start_date_field,end_date_field,status_field from ox_app_entity WHERE id =:entityId";
+        $parameters = array('entityId' => $entityId);
+        $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         unset($data['uuid']);
         $oldData = $data;
         $fields = $data = $this->cleanData($data);
@@ -92,11 +95,16 @@ class FileService extends AbstractService
         $data['entity_id'] = $entityId;
         $data['data'] = $jsonData;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
+        if (count($resultQuery) > 0) {        
+            $data['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
+            $data['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
+            $data['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
+        }
         $file = new File();
         if(isset($data['id'])){
             unset($data['id']);
         }
-        $file->exchangeArray($data);
+        $file->exchangeWithSpecificKey($data, 'value');
         //$this->logger->info("Data From Fileservice - " . print_r($data, true));
         $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
         // $fields = array_diff_assoc($data, $file->toArray());
@@ -105,7 +113,7 @@ class FileService extends AbstractService
 
         $count = 0;
         try {
-            $count = $this->table->save($file);
+            $count = $this->table->save2($file);
 
             $this->logger->info("COUNT  FILE DATA----" . $count);
             if ($count == 0) {
@@ -115,6 +123,7 @@ class FileService extends AbstractService
             $this->logger->info("FILE ID DATA" . $id);
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- " . json_encode($data));
+            $fileVersion = $file->toArray();
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
             $this->logger->debug("Check Fields Data ----- " . print_r($validFields,true));
             $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
@@ -122,7 +131,7 @@ class FileService extends AbstractService
             unset($validFields['indexedFields']['data']);
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
             $data['data'] = $fields;
-            $file->exchangeArray($data);
+            $file->exchangeWithSpecificKey($data, 'value');
             $this->updateFileData($id, $fields);
             if (!$validFields || empty($validFields)) {
                 $this->logger->info("FILE Validation ----- ");
@@ -197,8 +206,8 @@ class FileService extends AbstractService
         if (isset($data['islatest']) && $data['islatest'] == 0) {
             $latestcheck = 1;
         }
-
-        $fileObject = json_decode($obj['data'], true);
+        
+        $fileObject = is_string($obj['data']) ? json_decode($obj['data'], true) : $obj['data'];
 
         foreach ($fileObject as $key => $fileObjectValue) {
             if (is_array($fileObjectValue)) {
@@ -217,10 +226,12 @@ class FileService extends AbstractService
             throw new ServiceException("Invalid Entity", "entity.invalid");
         }
 
-
         $fields = $this->processMergeData($entityId, $fileObject, $data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
+        $selectQuery = "SELECT ox_app_entity.start_date_field,ox_app_entity.end_date_field,ox_app_entity.status_field,ox_file.version from ox_app_entity inner join ox_file on ox_file.entity_id = ox_app_entity.id WHERE ox_file.id =:fileId";
+        $parameters = array('fileId' => $id);
+        $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         $validFields = $this->checkFields($entityId ,$fields, $id);
         $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
         unset($validFields['validFields']['data']);
@@ -232,6 +243,9 @@ class FileService extends AbstractService
         $fileObject['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
+        $fileObject['start_date'] = date_format(date_create(isset($dataArray[$resultQuery[0]['start_date_field']])?$dataArray[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
+        $fileObject['end_date'] = date_format(date_create(isset($dataArray[$resultQuery[0]['start_date_field']])?$dataArray[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
+        $fileObject['status'] = isset($dataArray[$resultQuery[0]['status_field']])?$dataArray[$resultQuery[0]['status_field']]:null;
         if (isset($data['last_workflow_instance_id'])) {
            $fileObject['last_workflow_instance_id'] = $data['last_workflow_instance_id'];
         }
@@ -239,19 +253,12 @@ class FileService extends AbstractService
         $count = 0;
         try {
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
-
-            $file->exchangeArray($fileObject);
+            $file->exchangeWithSpecificKey($fileObject, 'value');
+            $file->exchangeWithSpecificKey($data, 'value', true);
             $file->validate();
-            $count = $this->table->save($file);
+            $count = $this->table->save2($file);
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
-                $query = "delete from ox_file_attribute where file_id = :fileId";
-                $queryWhere = array("fileId" => $id);
-                $result = $this->executeQueryWithBindParameters($query, $queryWhere);
-
-                $queryIndexed = "delete from ox_indexed_file_attribute where file_id = :fileId";
-                $resultIndexed = $this->executeQueryWithBindParameters($queryIndexed, $queryWhere);
-
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields['validFields']);
                 $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
                 if(count($validFields['indexedFields']) > 0 ){
@@ -294,7 +301,7 @@ class FileService extends AbstractService
         if ($override_data) {
             $fields = $data;
         } else {
-            $fields = array_merge($fileObject, $data);
+            $fields = array_merge($fileObject,$data);
         }
         return $fields;
     }
@@ -305,24 +312,32 @@ class FileService extends AbstractService
      * @param $id ID of File to Delete
      * @return array success|failure response
      */
-    public function deleteFile($id)
+    public function deleteFile($id,$version)
     {
-        $params['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $sql = $this->getSqlObject();
-        $params = array();
+        $obj = $this->table->getByUuid($id, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        if (!isset($version)) {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $data = array('version' => $version, 'is_active' => 0);
+        $file = new File();
+        $file->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $file->exchangeWithSpecificKey($data, 'value', true);
+        $file->updateValidate($data);
+        $count = 0;
         try {
-            $params['uuid'] = $id;
-            $update = $sql->update();
-            $update->table('ox_file')
-                ->set(array('is_active' => 0))
-                ->where($params);
-            $response = $this->executeUpdate($update);
-            $id = $this->getIdFromUuid('ox_file', $id);
-            // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
-            if (isset($id)) {
-                $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_DELETED');
+            $count = $this->table->save2($file);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
             }
-
+            $fileInfo = $file->toArray();
+            // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
+            if (isset($fileInfo['id'])) {
+                $this->messageProducer->sendTopic(json_encode(array('id' => $fileInfo['id'])), 'FILE_DELETED');
+            }
             return 1;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
@@ -401,6 +416,7 @@ class FileService extends AbstractService
         }
     }
 
+// TODO: Additional Insured - Difference cannot be found. fileAttribute ->index column
     /**
      * @ignore checkFields
      */
@@ -441,6 +457,7 @@ class FileService extends AbstractService
                 } else {
                     $keyValueFields[$i]['id'] = null;
                 }
+                // CHECK DIVESTORE
                 if ($field['index'] != 0) {
                     $indexedField = array();
                     $indexedField['file_id'] = $fileId;
@@ -892,7 +909,7 @@ class FileService extends AbstractService
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 $countQuery = "SELECT FOUND_ROWS();";
-                $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
+                $this->logger->info("Executing Filei listquery - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 if (isset($filterParams['columns'])) {
                     $filterParams['columns'] = json_decode($filterParams['columns'],true);
@@ -1141,7 +1158,7 @@ class FileService extends AbstractService
         return $result;
     }
 
-    public function getChangeLog($entityId,$startData,$completionData,$labelMapping){
+    public function getChangeLog($entityId,$startData,$completionData,$labelMapping=null){
         $fieldSelect = "SELECT ox_field.name,ox_field.template,ox_field.type,ox_field.text,ox_field.data_type,COALESCE(parent.name,'') as parentName,COALESCE(parent.text,'') as parentText,parent.data_type as parentDataType FROM ox_field 
                     left join ox_field as parent on ox_field.parent_id = parent.id WHERE ox_field.entity_id=:entityId AND ox_field.type NOT IN ('hidden','file','document','documentviewer') ORDER BY parentName, ox_field.name ASC";
                     
@@ -1551,41 +1568,22 @@ class FileService extends AbstractService
                                     if(isset($val['filter']['filters'])){
                                         foreach ($val['filter']['filters'] as $subFilter) {
                                             $filterOperator = $this->processFilters($subFilter);
-                                            $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
-                                            $fieldNamesArray[] = '"'.$subFilter['field'].'"';
-
-                                            $subQuery .= " (CASE WHEN (fileAttributes.field_value_type='TEXT') THEN fileAttributes.field_value_text $queryString ";
-
-                                            if (date('Y-m-d', strtotime($subFilter['value'])) === $subFilter['value']) {
-                                                $subQuery .= "  WHEN (fileAttributes.field_value_type='DATE') THEN fileAttributes.field_value_date $queryString ";
-                                            }
-                                            if(is_numeric($subFilter['value'])){
-                                                $subQuery .= " WHEN (fileAttributes.field_value_type='NUMERIC') THEN fileAttributes.field_value_numeric $queryString ";
-                                            }
-                                            if(is_bool($subFilter['value'])){
-                                                $subQuery .= " WHEN (fileAttributes.field_value_type='BOOLEAN') THEN fileAttributes.field_value_boolean $queryString  ";  
-                                            }
-
-                                            $subQuery .= " END ) $subFilterLogic ";
+                                            $fileFiltersVal = $this->processFileFilters($subFilter,$filterOperator,$subFilterLogic,$whereQuery); 
+                                            if ($fileFiltersVal) {
+                                                continue;
+                                            } 
+                                            $this->generateQueryString($filterOperator,$subFilter,$subQuery,$subFilterLogic);
                                         }
                                         $subQuery = rtrim($subQuery, $subFilterLogic." ");
                                         $whereQuery .= " ( ".$subQuery." ) $filterlogic ";
                                     }
                                 } else {
                                     $filterOperator = $this->processFilters($val);
-                                    $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
-                                    $fieldNamesArray[] = '"'.$val['field'].'"';
-                                    $whereQuery .= " (CASE WHEN (fileAttributes.field_value_type='TEXT' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_text $queryString ";
-                                    if (date('Y-m-d', strtotime($val['value'])) === $val['value']) {
-                                        $whereQuery .= " WHEN (fileAttributes.field_value_type='DATE' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_date $queryString ";
-                                    }
-                                    if(is_numeric($val['value'])){
-                                        $whereQuery .= " WHEN (fileAttributes.field_value_type='NUMERIC' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_numeric $queryString ";
-                                    }
-                                    if(is_bool($val['value'])){
-                                        $whereQuery .= " WHEN (fileAttributes.field_value_type='BOOLEAN' AND fieldsTable.name = '".$val['field']."' ) THEN fileAttributes.field_value_boolean $queryString ";  
-                                    }
-                                    $whereQuery .= " END ) $filterlogic ";
+                                    $fileFiltersVal = $this->processFileFilters($val,$filterOperator,$filterLogic,$whereQuery); 
+                                    if ($fileFiltersVal) {
+                                        continue;
+                                    }  
+                                    $this->generateQueryString($filterOperator,$val,$whereQuery,$filterlogic);
                                 }
                             }
                         }
@@ -1606,6 +1604,10 @@ class FileService extends AbstractService
                                         $subFromQuery = "";
                                         foreach ($val['filter']['filters'] as $subFilter) {
                                             $filterOperator = $this->processFilters($subFilter);
+                                            $fileFiltersVal = $this->processFileFilters($subFilter,$filterOperator,$subFilterLogic,$whereQuery); 
+                                            if ($fileFiltersVal) {
+                                                continue;
+                                            }
                                             $subTablePrefix = $tablePrefix.$subFilter['field'];
                                             $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
                                             if($subFilterLogic=='or'){
@@ -1644,9 +1646,13 @@ class FileService extends AbstractService
                                         $subQuery = rtrim($subQuery, $subFilterLogic." ");
                                         $whereQuery .= " ( ".$subQuery." ) $filterlogic ";
                                     }
-                                } else {
-                                    $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
+                                } else {                                    
                                     $filterOperator = $this->processFilters($val);
+                                    $fileFiltersVal = $this->processFileFilters($val,$filterOperator,$filterlogic,$whereQuery); 
+                                    if ($fileFiltersVal) {
+                                        continue;
+                                    }
+                                    $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
                                     $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                                     $whereQuery .= " (CASE  WHEN (" .$tablePrefix . ".field_value_type='TEXT') THEN " . $tablePrefix . ".field_value_text $queryString ";
 
@@ -1698,6 +1704,89 @@ class FileService extends AbstractService
             }
         }       
         return $return;
+    }
+
+      public function getAuditLog($fileId){
+        try{
+            $select = " SELECT ofal.data,ofal.created_by,ofal.modified_by,ofal.date_modified,ofal.date_created,ofal.id as fileId FROM ox_file_audit_log ofal WHERE ofal.uuid = :uuid";
+            $params = array('uuid' => $fileId);
+            $resultSet = $this->executeQuerywithBindParameters($select,$params)->toArray();
+            if (count($resultSet) == 0) {
+                return 0;
+            }
+            return $resultSet;
+        }catch(Exception $e){
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+
+    public function getFileVersionChangeLog($fileId,$version){
+        try{
+            $previousFileVersion = $version - 1;
+            // $selectQuery = " SELECT * FROM ox_file_audit_log ofal WHERE ofal.uuid = :uuid and ofal.version =:version";
+            // $params = array('uuid' => $fileId,'version'=>$version);
+            // $this->logger->info("getFileVersionChangeLog----$select".print_r($params,true));
+            // $resultSet = $this->executeQuerywithBindParameters($selectQuery,$params)->toArray();
+            // print_r($resultSet);exit;
+            $select = " SELECT ofal.entity_id,ofal.data,ofal.created_by,ofal.modified_by,ofal.date_modified,ofal.date_created FROM ox_file_audit_log ofal WHERE ofal.uuid = :uuid and ofal.version =:version";
+            $params = array('uuid' => $fileId,'version'=>$version);
+            $this->logger->info("getFileVersionChangeLog----$select".print_r($params,true));
+            $resultSet = $this->executeQuerywithBindParameters($select,$params)->toArray();
+// echo "-----\n";print_r($resultSet);
+            $selectQuery = " SELECT ofal.entity_id,ofal.data,ofal.created_by,ofal.modified_by,ofal.date_modified,ofal.date_created FROM ox_file_audit_log ofal WHERE (ofal.id = :fileId or ofal.uuid = :uuid) and ofal.version =:version";
+            $paramsQuery = array('fileId' => $fileId,'uuid' => $fileId,'version'=>$previousFileVersion);
+            $resultQuery = $this->executeQuerywithBindParameters($selectQuery,$paramsQuery)->toArray();
+
+            if (count($resultSet) > 0) {
+                $entityId = $resultSet[0]['entity_id'];
+                $completionData = json_decode($resultSet[0]['data'],true);
+            }            
+            if (count($resultQuery) > 0 ) {
+                $startData = json_decode($resultQuery[0]['data'],true);
+            }else{
+                $startData = json_decode($resultSet[0]['data'],true);
+            }
+          // print_r("expression---\n");  print_r($completionData);
+            $resultData = $this->getChangeLog($entityId,$startData,$completionData);
+            return $resultData;
+        }catch(Exception $e){
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+
+    private function processFileFilters($val,$filterOperator,$filterLogic,&$whereQuery){
+        if ($val['field'] == 'status') {
+            $whereQuery .= " of.status " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "' $filterLogic";
+            return true;
+        }
+        if ($val['field'] == 'start_date') {
+            $whereQuery .= " of.start_date " . $filterOperator["operation"] . $val['value'] . " $filterLogic";
+            return true;
+        }
+        if ($val['field'] == 'end_date') {
+            $whereQuery .= " of.end_date " . $filterOperator["operation"] . $val['value'] . " $filterLogic";
+            return true;
+        }
+        return false;
+    }
+
+    private function generateQueryString($filterOperator,$subFilter,&$subQuery,$subFilterLogic){
+        $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $subFilter['value'] . "" . $filterOperator["operator2"] . "'";
+        $fieldNamesArray[] = '"'.$subFilter['field'].'"';
+        $subQuery .= " (CASE WHEN (fileAttributes.field_value_type='DATE') THEN fileAttributes.field_value_date $queryString";
+        if (date('Y-m-d', strtotime($subFilter['value'])) === $subFilter['value']) {
+            $subQuery .= "  WHEN (fileAttributes.field_value_type='DATE') THEN fileAttributes.field_value_date $queryString ";
+        }
+        if(is_numeric($subFilter['value'])){
+            $subQuery .= " WHEN (fileAttributes.field_value_type='NUMERIC') THEN fileAttributes.field_value_numeric $queryString ";
+        }
+        if(is_bool($subFilter['value'])){
+            $subQuery .= " WHEN (fileAttributes.field_value_type='BOOLEAN') THEN fileAttributes.field_value_boolean $queryString  ";  
+        }
+
+        $subQuery .= " END ) $subFilterLogic ";
     }
 
 }

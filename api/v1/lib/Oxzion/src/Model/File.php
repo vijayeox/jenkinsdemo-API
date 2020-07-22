@@ -1,29 +1,39 @@
 <?php
 
 namespace Oxzion\Model;
+use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
 
 class File extends Entity
 {
     protected $data = array(
-        'id'=> null,
-        'org_id' => 0,
-        'uuid' => null,
-        'data' => null,
-        'form_id' => null,
-        'created_by' => null,
-        'modified_by' => null,
-        'date_created' => null,
-        'date_modified' => null,
-        'entity_id'=>null,
-        'assoc_id'=>null,
-        'is_active'=>1,
-        'last_workflow_instance_id'=>null
+        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
+        'org_id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => FALSE, 'required' => TRUE),
+        'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE, 'required' => TRUE),
+        'data' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'form_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
+        'created_by' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => TRUE),
+        'modified_by' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'date_created' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => TRUE),
+        'date_modified' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'entity_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'assoc_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
+        'is_active' => array('type' => parent::BOOLEANVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE),
+        'last_workflow_instance_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
+        'start_date' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'end_date' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'status' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
+        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE)
     );
-    protected $attributes = array();
 
-    public function validate()
+
+        public function validate()
     {
-        $required = array('uuid', 'org_id','data', 'created_by', 'date_created', 'entity_id');
-        $this->validateWithParams($required);
+        $this->completeValidation();
+    }
+
+    public function updateValidate()
+    {
+        $this->typeChecker();
     }
 }

@@ -179,6 +179,7 @@ abstract class Entity implements Countable
                             $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::UUIDVAL);
                             break;
                         case 'timestamp':
+                            $data[$key]['value'] = date_format(date_create($data[$key]['value']),'Y-m-d H:i:s');
                             $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::TIMESTAMPVAL);
                             break;
                         case 'string':
@@ -193,6 +194,7 @@ abstract class Entity implements Countable
                     }
                 }
             } catch (InvalidInputException $e) {
+                // print_r($e->getMessage());exit;
                 array_push($errors, array('message' => $e->getMessage(), 'messageCode' => $e->getMessageCode()));
             }
         }
