@@ -117,6 +117,10 @@ entity:
                 data_type: date
                 index: true
             -
+                name: business_name
+                data_type: text
+                index: true
+            -
                 name: end_date
                 data_type: date
                 index: true
