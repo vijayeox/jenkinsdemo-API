@@ -185,7 +185,7 @@ class OrganizationService extends AbstractService
             $businessRole = json_decode($params['business_role'], true);
             $businessRole = [$params['business_role']];
         }
-        $businessRole = $businessRole ? $businessRole : $params['business_role'];
+        $businessRole = isset($businessRole) ? $businessRole : $params['business_role'];
         $bRole = "";
         $queryParams = ['appId'=> $appId];
         foreach ($businessRole as $key => $value) {
