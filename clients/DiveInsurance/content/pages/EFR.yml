@@ -65,7 +65,7 @@ content:
                                         <div class="col">
                                                 <div class="form-group">
                                                     <label>Policy Status</label>
-                                                    <p> {{policyStatus}}</p>
+                                                    <p> {data.policyStatus}</p>
                                                 </div></div></div><div class="row">
                                                 <div class="col">
                                                     <div class="card">
@@ -74,19 +74,19 @@ content:
                                                         <div class="card-body">
                                                                 <div class="form-group">
                                                                     <label>Store Number</label>
-                                                                    <p> {{business_padi}}</p>
+                                                                    <p> {data.business_padi}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Business Name</label>
-                                                                    <p> {{business_name}}</p>
+                                                                    <p> {data.business_name}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Business Type</label>
-                                                                    <p class="uppercase"> {{entity_type}}</p>
+                                                                    <p class="uppercase"> {data.entity_type}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Policy Period</label>
-                                                                    <p> {moment(''{{start_date}}'').format(''MM-DD-YYYY'')} - {moment(''{{end_date}}'').format(''MM-DD-YYYY'')}</p>
+                                                                    <p> {moment(data.start_date).format("MM-DD-YYYY")} - {moment(data.end_date).format("MM-DD-YYYY")}</p>
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -95,14 +95,14 @@ content:
                                                     <div class="card bg-light mb-3">
                                                         <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
                                                         <div class="card-body">
-                                                              <span class="uppercase">Contact: {{firstname}} {{lastname}}</span>
-                                                              <span class="uppercase">{{address1}},</span>
-                                                              <span class="uppercase">{{address2}},</span>
-                                                              <span class="uppercase">{{city}},</span>
-                                                              <span class="uppercase">{{state}}</span> <span class="uppercase">{{zip}}</span>
+                                                              <span class="uppercase">Contact: {data.firstname} {data.lastname}</span>
+                                                              <span class="uppercase">{data.address1},</span>
+                                                              <span class="uppercase">{data.address2},</span>
+                                                              <span class="uppercase">{data.city},</span>
+                                                              <span class="uppercase">{data.state}</span> <span class="uppercase">{data.zip}</span>
 
-                                                            <p>Email : {{email}}</p>
-                                                            <p>Tel. {{phone_number}}</p>
+                                                            <p>Email : {data.email}</p>
+                                                            <p>Tel. {data.phone_number}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -122,19 +122,19 @@ content:
                                                         <div class="card-body">
                                                                 <div class="form-group">
                                                                     <label>Store Number</label>
-                                                                    <p> {{business_padi}}</p>
+                                                                    <p> {data.business_padi}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Business Name</label>
-                                                                    <p> {{business_name}}</p>
+                                                                    <p> {data.business_name}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Business Type</label>
-                                                                    <p class="uppercase"> {{entity_type}}</p>
+                                                                    <p class="uppercase"> {data.entity_type}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Policy Period</label>
-                                                                    <p> {moment(''{{start_date}}'').format(''MM-DD-YYYY'')} - {moment(''{{end_date}}'').format(''MM-DD-YYYY'')}</p>
+                                                                    <p> {moment(data.start_date).format("MM-DD-YYYY")} - {moment(data.end_date).format("MM-DD-YYYY")}</p>
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -143,15 +143,15 @@ content:
                                                     <div class="card bg-light mb-3">
                                                         <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
                                                         <div class="card-body">
-                                                              <div class="uppercase">Contact: {{firstname}} {{lastname}}</div>
-                                                              <div class="uppercase">{{address1}},</div>
-                                                              <div class="uppercase">{{address2}},</div>
-                                                              <div class="uppercase">{{city}},</div>
-                                                              <div class="uppercase">{{state}}</span> <span class="uppercase">{{zip}}</div>
-                                                            <p>Email : {{email}}</p>
-                                                            <p>Website : {{website}}</p>
-                                                            <p>Work Phone Number : {{phone_number}}</p>
-                                                            <p>Fax : {{fax}}</p>
+                                                              <div class="uppercase">Contact: {data.firstname} {data.lastname}</div>
+                                                              <div class="uppercase">{data.address1},</div>
+                                                              <div class="uppercase">{data.address2},</div>
+                                                              <div class="uppercase">{data.city},</div>
+                                                              <div class="uppercase">{data.state}</span> <span class="uppercase">{data.zip}</div>
+                                                            <p>Email : {data.email}</p>
+                                                            <p>Website : {data.website}</p>
+                                                            <p>Work Phone Number : {data.phone_number}</p>
+                                                            <p>Fax : {data.fax}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,15 +176,15 @@ content:
                                                         <div class="card-body">
                                                                 <div class="form-group">
                                                                     <label>Primary Store Reciepts</label>
-                                                                    <p> ${{dsglestmonthretailreceipt}}</p>
+                                                                    <p> ${data.dsglestmonthretailreceipt}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Travel Agent E&O</label>
-                                                                    <p> {{travelAgentEOReceiptsPL}}</p>
+                                                                    <p> {data.travelAgentEOReceiptsPL}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Excess Liability</label>
-                                                                    <p class="uppercase"> {{entity_type}}</p>
+                                                                    <p class="uppercase"> {data.entity_type}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Medical Expenses</label>
