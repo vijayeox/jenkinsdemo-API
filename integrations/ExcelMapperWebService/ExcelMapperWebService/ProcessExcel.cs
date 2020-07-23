@@ -1,5 +1,4 @@
-﻿using Microsoft.Office.Core;
-using Microsoft.Office.Interop.Excel;
+﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.IO;
 using System.Diagnostics;
@@ -23,6 +22,7 @@ namespace ProcessExcel
         public string destinationrange { get; set; }
         public string message { get; set; }
         public string file { get; set; }
+        public string folder { get; set; }
         public int errortype { get; set; }
 
         public static implicit operator List<object>(ErrorDetails v)
@@ -60,21 +60,20 @@ namespace ProcessExcel
         {
             Errorflag = false;
             this.baseDirectory = baseFolder;
-            string jsontext = jsonbody.ToString();
-            JObject parsedJson = JObject.Parse(jsontext);
-            string carrierfile = parsedJson["mapping"]["filename"].ToString();
-            
-            
-            _callback = new CallbackData();
-            _callback.filename = carrierfile;
-            _callback.fileid = parsedJson["fileId"].ToString();
-            _callback.appid = parsedJson["appId"].ToString();
-            _callback.orgid = parsedJson["orgId"].ToString();
-            _callback.errorlist = new List<ErrorDetails>();
-            object data = parsedJson["mapping"]["data"];
-            IList<JToken> mappingdata = parsedJson["mapping"]["data"].Children().ToList();
+            string carrierfile = "";
             try
             {
+                string jsontext = jsonbody.ToString();
+                JObject parsedJson = JObject.Parse(jsontext);
+                carrierfile = parsedJson["mapping"]["filename"].ToString();            
+                _callback = new CallbackData();
+                _callback.filename = carrierfile;
+                _callback.fileid = parsedJson["fileId"].ToString();
+                _callback.appid = parsedJson["appId"].ToString();
+                _callback.orgid = parsedJson["orgId"].ToString();
+                _callback.errorlist = new List<ErrorDetails>();
+                object data = parsedJson["mapping"]["data"];
+                IList<JToken> mappingdata = parsedJson["mapping"]["data"].Children().ToList();
                 MapData(carrierfile, mappingdata);
             }
             catch (Exception e)
@@ -163,6 +162,7 @@ namespace ProcessExcel
             {
                 ErrorDetails errordetail = new ErrorDetails();
                 errordetail.file = wbCarrier.Name;
+                errordetail.folder = this.baseDirectory;
                 errordetail.worksheet = vDestSheet;
                 errordetail.message = e.ToString();
                 errordetail.destinationrange = vDestRange;
@@ -174,21 +174,27 @@ namespace ProcessExcel
 
         public void CopyTable(Workbook wbCarrier, string vDestSheet, string vDestRange,  List<List<string>> values)
         {
-            int rowindex  = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Row;
-            int colindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Column;
-            foreach (List<string> row in values )
+            try
             {
-                int i = colindex;
-                foreach(string value in row)
+                int rowindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Row;
+                int colindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Column;
+                foreach (List<string> row in values)
                 {
-                    if (value!="")
+                    int i = colindex;
+                    foreach (string value in row)
                     {
-                        (wbCarrier.Worksheets[vDestSheet] as Worksheet).Cells[rowindex, i] = value;
+                        if (value != "")
+                        {
+                            (wbCarrier.Worksheets[vDestSheet] as Worksheet).Cells[rowindex, i] = value;
+                        }
+
+                        i++;
                     }
-                    
-                    i++;
+                    rowindex++;
                 }
-                rowindex++;
+            } catch 
+            {
+                throw;
             }
         }
 
@@ -226,42 +232,55 @@ namespace ProcessExcel
 
         private void PostFile(string folder, string fileName)
         {
-            Console.WriteLine(_settings.postURL);
-     //        var client = new RestClient(_settings.postURL + "app/" +  _callback.appid + "/pipeline");
-            var client = new RestClient(_settings.postURL);
-            client.Timeout = -1;
+            try
+            {
+                Console.WriteLine(_settings.postURL);
+                var client = new RestClient(_settings.postURL + "app/" + _callback.appid + "/pipeline");
+                //       var client = new RestClient(_settings.postURL);
+                client.Timeout = -1;
 
-            var request = new RestRequest(Method.POST);
-            request.AddFile("outputfile", folder + "\\" + fileName);
-            // request.AddHeader("Authorization", "Bearer " + _settings.token);
-            request.AlwaysMultipartFormData = true;
-            _callback.status = 1;
-            var postCallbackData = JsonSerializer.Serialize(_callback);
-            request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
-            string fname = fileName.Replace(".", "-");
-            LogProcess(postCallbackData);
-            IRestResponse response = client.Execute(request);
-            LogProcess("Sending Post:" + fileName);
+                var request = new RestRequest(Method.POST);
+                request.AddFile("outputfile", folder + "\\" + fileName);
+                // request.AddHeader("Authorization", "Bearer " + _settings.token);
+                request.AlwaysMultipartFormData = true;
+                _callback.status = 1;
+                var postCallbackData = JsonSerializer.Serialize(_callback);
+                request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                string fname = fileName.Replace(".", "-");
+                LogProcess(postCallbackData);
+                IRestResponse response = client.Execute(request);
+                LogProcess("Sending Post:" + fileName);
+            } catch (Exception e) {
+                Logerror(e.Message, fileName);
+            }
         }
 
         private void PostError(string fileName, int errortype, string message)
         {
-            var client = new RestClient(_settings.postURL);
-            client.Timeout = -1;
-            var request = new RestRequest(Method.POST);
-            ErrorDetails errordetail = new ErrorDetails()
+            try
             {
-                file = fileName,
-                destinationrange = "",
-                message = message,
-                worksheet = "",
-                errortype = errortype
-            };
-            _callback.errorlist = new List<ErrorDetails> { errordetail };
-            var postCallbackData = JsonSerializer.Serialize(_callback);
-            
-            request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
+                var client = new RestClient(_settings.postURL);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                ErrorDetails errordetail = new ErrorDetails()
+                {
+                    file = fileName,
+                    folder = this.baseDirectory,
+                    destinationrange = "",
+                    message = message,
+                    worksheet = "",
+                    errortype = errortype
+                };
+                _callback.errorlist = new List<ErrorDetails> { errordetail };
+                var postCallbackData = JsonSerializer.Serialize(_callback);
+
+                request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+            }
+            catch (Exception e)
+            {
+                Logerror(e.Message, fileName);
+            }
         }
 
     }
