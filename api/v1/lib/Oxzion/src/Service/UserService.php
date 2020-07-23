@@ -389,7 +389,14 @@ class UserService extends AbstractService
             $result = $this->createUser($params, $data);
             $select = "SELECT id from `ox_user` where username = '" . $data['username'] . "'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
-            $this->addUserRole($resultSet[0]['id'], 'ADMIN');
+            $response = $this->addUserRole($resultSet[0]['id'], 'ADMIN');
+            if($response == 2){
+                //Did not find admin role so add Add all roles of organization
+                $roles = $this->getDataByParams('ox_role', array('name'), array('org_id' => $org['id']))->toArray();
+                foreach ($roles as $key => $value) {
+                    $this->addUserRole($resultSet[0]['id'], $value);
+                }
+            }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
