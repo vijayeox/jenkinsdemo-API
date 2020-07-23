@@ -623,7 +623,7 @@
                 {elseif $state == 'Utah'}
                 <center>
                     <p class="notice">
-                        <b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+                        <b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
                     </p>
                 </center>
                 {elseif $state == 'Virginia'}
@@ -672,7 +672,7 @@
 
         <!-- Second Page -->
     </div>
-        
+
 </body>
 
 </html>
