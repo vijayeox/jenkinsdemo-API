@@ -40,7 +40,7 @@ class PipelineControllerTest extends ControllerTest
     public function testPipelineMailExecution()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['command' => 'mail', 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body', 'subject' => 'NewSubject'];
+        $data = ['command' => 'mail', 'to' => 'admintest@myvamla.com', 'body' => 'create a new body', 'subject' => 'NewSubject'];
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -55,7 +55,7 @@ class PipelineControllerTest extends ControllerTest
     public function testPipelineWithoutSubjectExecution()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['command' => 'mail', 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body'];
+        $data = ['command' => 'mail', 'to' => 'admintest@myvamla.com', 'body' => 'create a new body'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);

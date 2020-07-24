@@ -333,7 +333,7 @@ class AuthControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['username'], 'Admin Test');
         $this->assertContains('user/profile/', $content['data']['profileUrl']);
     }
 
@@ -349,7 +349,7 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('userprof');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['username'], 'Admin Test');
         $this->assertContains('user/profile/', $content['data']['profileUrl']);
     }
 
@@ -428,7 +428,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterWithOnlyCacheCommand()
     {
-        $data = '{"data":{"username":"bharatgtest","commands":"[\"store_cache_data\"]"},"username":"bharatgtest","dummdata":"dummy"}';
+        $data = '{"data":{"username":"admintest","commands":"[\"store_cache_data\"]"},"username":"admintest","dummdata":"dummy"}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -456,7 +456,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterUserExistsInOtherOrg()
     {
-        $data = '{"data":{"orgId":"b0971de7-0387-48ea-8f29-5d3704d96a46","app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgtest","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"orgId":"b0971de7-0387-48ea-8f29-5d3704d96a46","app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"admintest","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);

@@ -272,7 +272,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testcompleteActivityInstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0723', 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'bharatgtest', 'type' => 'assignee')), 'processInstanceId' => "3f20b5c5-0124-11ea-a8a0-22e8105c0998", 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => "Task_1s7qzh3", 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'orgid' => $this->testOrgId)];
+        $data = ['activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0723', 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => "3f20b5c5-0124-11ea-a8a0-22e8105c0998", 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => "Task_1s7qzh3", 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'orgid' => $this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activitycomplete', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -288,7 +288,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testcompleteActivityInstanceFail()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' => 'csasdassd', 'activityId' => 1, 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'bharatgtest', 'type' => 'assignee')), 'processInstanceId' => 1, 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => 1, 'processVariables' => array('workflowId' => 1, 'orgid' => $this->testOrgId)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' => 'csasdassd', 'activityId' => 1, 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => 1, 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => 1, 'processVariables' => array('workflowId' => 1, 'orgid' => $this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activitycomplete'
             , 'POST', $data);

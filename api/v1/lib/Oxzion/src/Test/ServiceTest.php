@@ -19,11 +19,11 @@ use Oxzion\Auth\AuthConstants;
 
 class ServiceTest extends TestCase
 {
-    protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
+    protected $adminUser = 'admintest'; //TODO Need to put as global setup
     protected $adminUserId = 1;
-    protected $employeeUser = 'rakshithtest';
+    protected $employeeUser = 'employeetest';
     protected $employeeUserId = 2;
-    protected $managerUser = 'karantest';
+    protected $managerUser = 'managertest';
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;
