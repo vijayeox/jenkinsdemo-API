@@ -8280,7 +8280,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    value = ((parseFloat(data[\"medicalExpense\"])||0)/10).toFixed(0);\n  }\n  else{\n    value = 0;\n  }\n}",
 													"key": "ALMedicalExpenseFP",
 													"type": "number",
 													"input": true,
@@ -9098,7 +9098,6 @@
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
-						"redrawOn": "data",
 						"clearOnHide": false,
 						"calculateValue": "if(data[\"groupCoverageSelect\"]){\n  value = parseFloat(data[data[\"groupCoverageSelect\"]]).toFixed(0);\n} else {\n  value = 0;\n}",
 						"key": "groupCoverage",
@@ -9246,9 +9245,7 @@
 						"destinationDataKey": "groupPL",
 						"valueKey": "padi",
 						"validationKey": "membersPadiVerified",
-						"clearSource": "true",
-						"additionalKey": "effectiveDate",
-						"additionalKeyValue": "update_date"
+						"clearSource": "true"
 					},
 					"type": "button",
 					"event": "callDelegate",
@@ -9563,8 +9560,20 @@
 							"columns": [{
 								"components": [{
 									"label": "Effective Date",
-									"format": "MM-dd-yyyy",
+									"suffix": "<i style=\"\" class=\"fa fa-calendar\" ref=\"icon\"></i>",
+									"spellcheck": false,
 									"disabled": true,
+									"tableView": false,
+									"customDefaultValue": "if(row.effectiveDate){\n  value =row.effectiveDate;\n}",
+									"key": "existingEffectiveDate",
+									"customConditional": "if(row.effectiveDate && row.effectiveDate != \"\"){\n  show = true;\n} else {\n  show = false;\n}",
+									"type": "textfield",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "Effective Date",
+									"displayInTimezone": "utc",
+									"format": "MM-dd-yyyy",
 									"tableView": false,
 									"enableMinDateInput": false,
 									"datePicker": {
@@ -9573,40 +9582,22 @@
 									},
 									"enableMaxDateInput": false,
 									"enableTime": false,
-									"timePicker": {
-										"showMeridian": false
-									},
-									"clearOnHide": false,
-									"calculateValue": "if((!row.effectiveDate || row.effectiveDate == \"\") && row.padi != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
+									"customDefaultValue": "value = moment(data['update_date']).format(\"YYYY-MM-DD\");",
+									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
 										"customMessage": "Effective date is required",
 										"custom": "if(data.effectiveDate){\n  valid = (moment(data.effectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}"
 									},
-									"key": "effectiveDate",
-									"logic": [{
-										"name": "enable",
-										"trigger": {
-											"type": "javascript",
-											"javascript": "result = false;\nif(row.padi == \"\" || (moment(row.effectiveDate) >= moment(data.update_date))){\n  result = true;\n}"
-										},
-										"actions": [{
-											"name": "enable",
-											"type": "property",
-											"property": {
-												"label": "Disabled",
-												"value": "disabled",
-												"type": "boolean"
-											},
-											"state": false
-										}]
-									}],
+									"key": "newMembereffectiveDate",
+									"customConditional": "if(!row.effectiveDate || row.effectiveDate == \"\"){\n  show = true;\n} else {\n  show =false;\n}",
 									"type": "datetime",
+									"noCalendar": false,
 									"input": true,
 									"widget": {
 										"type": "calendar",
-										"displayInTimezone": "viewer",
+										"displayInTimezone": "utc",
 										"language": "en",
 										"useLocaleSettings": false,
 										"allowInput": true,
@@ -9616,12 +9607,19 @@
 										"format": "MM-dd-yyyy",
 										"hourIncrement": 1,
 										"minuteIncrement": 1,
-										"time_24hr": true,
+										"time_24hr": false,
 										"minDate": null,
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"maxDate": null
 									},
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "effectiveDate",
+									"key": "effectiveDate",
+									"type": "hidden",
+									"input": true,
+									"tableView": false,
 									"hideOnChildrenHidden": false
 								}],
 								"offset": 0,
@@ -9632,7 +9630,7 @@
 							}, {
 								"components": [{
 									"label": "start_date",
-									"calculateValue": "value = moment(row['effectiveDate']).format(\"YYYY-MM-DD\");",
+									"calculateValue": "if(row['effectiveDate']){\n  value = moment(row['effectiveDate']).format(\"YYYY-MM-DD\");\n} else {\n  value = moment(row['newMembereffectiveDate']).format(\"YYYY-MM-DD\");\n}",
 									"key": "start_date",
 									"type": "hidden",
 									"input": true,
@@ -10614,7 +10612,6 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"customDefaultValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
 							"calculateValue": "function getValue(states) {\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = parseFloat(getValue(stateTaxData))||0.00;",
@@ -10677,9 +10674,8 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = (parseFloat(data[\"groupCoverage\"]) || 0) * (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100",
+							"calculateValue": "value = (((parseFloat(data[\"groupCoverage\"]) || 0) + (parseFloat(data[\"groupExcessLiabilityAmount\"]) ||0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100);",
 							"key": "groupTaxAmount",
 							"type": "number",
 							"input": true,
@@ -10792,9 +10788,8 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = ((parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00)).toFixed(0)",
+							"calculateValue": "value = ((parseFloat(data[\"groupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00) - (parseFloat(data['groupSurchargeDeductionsAmount'])||0)).toFixed(2)",
 							"key": "groupTotalAmount",
 							"type": "number",
 							"input": true,
@@ -11373,11 +11368,12 @@
 				"type": "columns",
 				"hideLabel": true
 			}, {
+				"label": "medicalExpense",
+				"calculateValue": "value = 72",
+				"key": "medicalExpense",
+				"type": "hidden",
 				"input": true,
 				"tableView": true,
-				"key": "medicalExpense",
-				"label": "medicalExpense",
-				"type": "hidden",
 				"lockKey": true
 			}, {
 				"label": "Columns",
@@ -12111,11 +12107,11 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
+						"calculateValue": "if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\nvalue= data[\"medicalExpense\"]\n}\nelse{\nvalue = 0;\n}",
 						"key": "MedicalExpenseFP",
 						"conditional": {
 							"show": true,
-							"when": "medicalExpensePLCheckBox",
+							"when": "medicalPayment",
 							"eq": "true"
 						},
 						"type": "number",
@@ -12542,21 +12538,19 @@
 						"label": "ProRata Prem",
 						"prefix": "%",
 						"mask": false,
-						"spellcheck": true,
-						"disabled": true,
-						"tableView": true,
+						"spellcheck": false,
+						"tableView": false,
 						"defaultValue": 0,
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "var selectedDate = new Date(data[\"policyPeriod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
 						"key": "proRataPercentage",
 						"type": "number",
+						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 3
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -12735,7 +12729,6 @@
 						"prefix": "%",
 						"mask": false,
 						"spellcheck": true,
-						"disabled": true,
 						"tableView": true,
 						"defaultValue": 0,
 						"delimiter": false,
@@ -12745,10 +12738,10 @@
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data[\"stateTaxData\"]){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "propertyTaxPL",
 						"type": "number",
+						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 3
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -12814,7 +12807,6 @@
 						"prefix": "%",
 						"mask": false,
 						"spellcheck": true,
-						"disabled": true,
 						"tableView": true,
 						"defaultValue": 0,
 						"delimiter": false,
@@ -12824,10 +12816,10 @@
 						"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data[\"state\"] &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data[\"stateTaxData\"]){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"key": "liabilityTaxPL",
 						"type": "number",
+						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 3
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -13129,7 +13121,6 @@
 						"prefix": "%",
 						"mask": false,
 						"spellcheck": true,
-						"disabled": true,
 						"tableView": true,
 						"defaultValue": "0.00",
 						"delimiter": false,
@@ -13139,10 +13130,10 @@
 						"calculateValue": "value = ((data[data[\"propertyDeductibles\"]]||0)).toFixed(0)",
 						"key": "propertyDeductiblesPercentage",
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 2
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -13235,7 +13226,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.previous_groupProfessionalLiabilitySelect == 'yes'){\n  value = value = data['previous_policy_data'][data['previousPolicyLength']]['previous_groupProfessionalLiabilitySelect'];\n} else {\n  value = 0;\n}",
+						"calculateValue": "value = data['previous_groupTotalAmount'];",
 						"key": "previous_groupProfessionalLiability",
 						"type": "number",
 						"input": true,
@@ -13773,7 +13764,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 300,
+	"_vid": 316,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13790,6 +13781,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-21T08:44:11.368Z",
+	"modified": "2020-07-24T07:56:31.740Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

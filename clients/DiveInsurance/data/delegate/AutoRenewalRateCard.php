@@ -524,7 +524,7 @@ else {
     $data['nonDivingPoolAmount'] = 0;
 }
 
-if($data["medicalExpensePLCheckBox"] == "true" || $data["medicalExpensePLCheckBox"] == true){
+if($data["medicalPayment"] == "true" || $data["medicalPayment"] == true){
     $data['MedicalExpenseFP'] = (isset($data["medicalExpense"])?$data["medicalExpense"]:0);
 }
 else{
