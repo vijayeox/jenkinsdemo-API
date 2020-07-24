@@ -8280,7 +8280,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    value = ((parseFloat(data[\"medicalExpense\"])||0)/10).toFixed(0);\n  }\n  else{\n    value = 0;\n  }\n}",
 													"key": "ALMedicalExpenseFP",
 													"type": "number",
 													"input": true,
@@ -11368,11 +11368,12 @@
 				"type": "columns",
 				"hideLabel": true
 			}, {
+				"label": "medicalExpense",
+				"calculateValue": "value = 72",
+				"key": "medicalExpense",
+				"type": "hidden",
 				"input": true,
 				"tableView": true,
-				"key": "medicalExpense",
-				"label": "medicalExpense",
-				"type": "hidden",
 				"lockKey": true
 			}, {
 				"label": "Columns",
@@ -12106,11 +12107,11 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
+						"calculateValue": "if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\nvalue= data[\"medicalExpense\"]\n}\nelse{\nvalue = 0;\n}",
 						"key": "MedicalExpenseFP",
 						"conditional": {
 							"show": true,
-							"when": "medicalExpensePLCheckBox",
+							"when": "medicalPayment",
 							"eq": "true"
 						},
 						"type": "number",
@@ -13763,7 +13764,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 315,
+	"_vid": 316,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13780,6 +13781,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-23T05:20:46.096Z",
+	"modified": "2020-07-24T07:56:31.740Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
