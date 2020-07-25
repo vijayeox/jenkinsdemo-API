@@ -97,7 +97,7 @@
                             $1,000,000
 					</p>
 					<p class = "sec_title2">
-					{if isset($medicalPayment) && ($medicalPayment == "true"||$medicalPayment == true)}
+					{if isset($medicalPayment) && ($medicalPayment != "false" && $medicalPayment != false) }
                             <td>$5000</td>
                         {else}
                             <td>Excluded</td>{/if}
@@ -343,7 +343,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
 				<center><p class = "notice">

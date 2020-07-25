@@ -230,7 +230,7 @@
                     </tr>
                     <tr>
                         <td>Medical Expense:</td>
-                        {if isset($medicalPayment) && ($medicalPayment == "true"||$medicalPayment == true)}
+                        {if isset($medicalPayment) && ($medicalPayment != "false" && $medicalPayment != false) }
                             <td>$5000</td>
                         {else}
                             <td>Excluded</td>{/if}

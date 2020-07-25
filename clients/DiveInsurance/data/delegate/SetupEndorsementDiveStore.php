@@ -175,7 +175,7 @@ public function execute(array $data,Persistence $persistenceService)
             $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
             $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
             $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
-            $policy['previous_propertyCoveragesTotalPL'] = $data['propertyCoveragesTotalPL'];
+            $policy['previous_propertyCoveragesTotalPL'] = isset($data['propertyCoveragesTotalPL'])?$data['propertyCoveragesTotalPL']:0;
             $policy['previous_liabilityPropertyCoveragesTotalPL'] = $data['liabilityPropertyCoveragesTotalPL'];
             $policy['previous_liabilityProRataPremium'] = isset($data['liabilityProRataPremium'])?$data['liabilityProRataPremium']:0;
             $policy['previous_propertyProRataPremium'] = isset($data['propertyProRataPremium'])?$data['propertyProRataPremium']:0;
@@ -191,7 +191,7 @@ public function execute(array $data,Persistence $persistenceService)
             if(isset($data['PAORFee'])){
                 $policy['previous_PAORFee'] = $data['PAORFee'];
             }
-            $policy['previous_totalAmount'] = $data['totalAmount'];
+            $policy['previous_totalAmount'] = isset($data['totalAmount'])?$data['totalAmount']:0;
             if(isset($policy['previous_groupCoverageSelect'])){
                 $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_groupCoverageSelect']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Group Coverage - Dive Store".$selectCoverage);
@@ -281,7 +281,7 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($rate);
                 }
             }
-            
+
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
             $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
@@ -299,7 +299,7 @@ public function execute(array $data,Persistence $persistenceService)
             }
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
         }
-    
+
         if(isset($data['groupPL'])){
             if($data['groupPL'] != ""){
                 foreach ($data['groupPL'] as $key => $value) {
