@@ -1,430 +1,458 @@
-- Source Worksheet: Producer
-  pageName: Application
-  key: producerdate
-  type: ""
-  Cell: "F8:P8"
-- Source Worksheet: Named Insured
-  pageName: Application
-  key: namedInsured
-  type: ""
-  Cell: "D2:Z2"
-- Source Worksheet: DBA (if any)
-  pageName: Application
-  key: dba
-  type: ""
-  Cell: "B3:Z3"
-- Source Worksheet: Mailing Address
-  pageName: Application
-  key: mailingAddress
-  type: ""
-  Cell: "C5:K5"
-- Source Worksheet: City
-  pageName: Application
-  key: city
-  type: ""
-  Cell: "N5:T5"
-- Source Worksheet: State
-  pageName: Application
-  key: state
-  type: ""
-  Cell: "W5:X5"
-- Source Worksheet: Zip
-  pageName: Application
-  key: zip
-  type: ""
-  Cell: Z5
-- Source Worksheet: "FIEN/Soc Sec #"
-  pageName: Application
-  key: socialsecNum
-  type: ""
-  Cell: "Y4:Z4"
-- Source Worksheet: "Business Phone:"
-  pageName: Application
-  key: businessPhone
-  type: ""
-  Cell: "C6:K6"
-- Source Worksheet: "Business Fax:"
-  pageName: Application
-  key: businessFax
-  type: ""
-  Cell: "N6:S6"
-- Source Worksheet: "Business Email:"
-  pageName: Application
-  key: businessEmail
-  type: ""
-  Cell: "W7:Z7"
-- Source Worksheet: "Website:"
-  pageName: Application
-  key: website
-  type: ""
-  Cell: "W6:Z6"
-- Source Worksheet: "Dealer Name:"
-  pageName: Application
-  key: dealerName
-  type: ""
-  Cell: "D2:Z2"
-- Source Worksheet: Insurance Contact
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: "G7:S7"
-- Source Worksheet: "Email:"
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: "W7:Z7"
-- Source Worksheet: "Effective Date:"
-  pageName: Application
-  key: effectiveDate
-  type: ""
-  Cell: "O10:R10"
-- Source Worksheet: "Need by Date:"
-  pageName: Application
-  key: needByDate
-  type: ""
-  Cell: "D10:G10"
-- Source Worksheet: DOL Target Premium
-  pageName: Application
-  key: dolTargetPremium
-  type: ""
-  Cell: "N12:V12"
-- Source Worksheet: "Number of years in business under current ownership:"
-  pageName: Application
-  key: numYearsOfOwnership
-  type: ""
-  Cell: "J4:T4"
-- Source Worksheet: >-
-    Any policy or coverage declined, cancelled or non-renewed during the
-    prior 10 years for any premises or operations?
-  pageName: Application
-  key: policyDeclined
-  type: ""
-  Cell: B49
-  Special: Checkbox
-- Source Worksheet: F/T employees Furnished an Auto
-  pageName: Application
-  key: tempFullTimeEmployees
-  type: ""
-  Cell: O46
-  __EMPTY: "Note: This will sum cell B5 (F/T Employees furnished an Auto) + cell B6 (P/T Employees furnished with an Auto) to Sheet!Application O46\r\n\r\nFor Example: If a producer enters 40 F/T Employees furnished with an auto and 20 P/T Employees furnished with an auto the system will map 60 to Sheet!Application O46"
-- Source Worksheet: P/T employees furnished an auto
-  pageName: Application
-  key: tempPartTimeEmployees
-  type: ""
-  Cell: O46
-  __EMPTY: "Note: This will sum cell B5 (F/T Employees furnished an Auto) + cell B6 (P/T Employees furnished with an Auto) to Sheet!Application O46\r\n\r\nFor Example: If a producer enters 40 F/T Employees furnished with an auto and 20 P/T Employees furnished with an auto the system will map 60 to Sheet!Application O46"
-- Source Worksheet: Non-Employees under the age of 25 furnished an auto
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: T46
-  __EMPTY: "\r\nNote: This will sum cell B11 (Non Employees under the age of 25 furnished an auto) + cell B12 (Non Employees older than 25 furnished an auto) to Sheet!Application T46"
-- Source Worksheet: Non-Employees 25 years old or older furnished an auto
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: T46
-  __EMPTY: "\r\nNote: This will sum cell B11 (Non Employees under the age of 25 furnished an auto) + cell B12 (Non Employees older than 25 furnished an auto) to Sheet!Application T46"
-- Source Worksheet: Employee deductible participation?
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: B47
-- Source Worksheet: >-
-    Formal safety meetings:( If at least quarterly, please attach copy of
-    minutes from last meeting)
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: A44
-  Notes: "Pre Condition: If Formal Safety Meetings  = Quarterly or Monthly then map \"X\"to:\r\n\r\nSheet!Application A44"
-- Source Worksheet: Test drives always accompanied by employee?
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: B33
-  Special: "Checkbox "
-- Source Worksheet: "Test Drive Procedures:"
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: B34
-  Special: "Checkbox "
-  Notes: >-
-    Note: If Copy of Drivers License is checked the system will map "X"to
-    Sheet!Application B34
-- Source Worksheet: Customer Service Loaner Rental Program?
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: B48
-  Special: "Checkbox "
-- Source Worksheet: Number of vehicles in fleet?
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: "Y24:Z24"
-- Source Worksheet: 
-    Is a Loaner  or Rental contract used? Please include a copy of contract
-    used.
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: B48
-  Special: "Checkbox "
-- Source Worksheet: Insured Through Floor Plan - New
-  pageName: Application
-  key: locationScheduleGridData_insuredThroughFloorPlanNew
-  type: ""
-  Notes: >-
-    Note:Mapping has not been done as they have not specified the cell
-    range or the location in the raw file
-- Source Worksheet: 12 Month Avg  Used
-  pageName: Application
-  key: locationScheduleGridData_monthAvgUsed
-  type: ""
-- Source Worksheet: Insured Through Floor Plan - Used
-  pageName: Application
-  key: locationScheduleGridData_insuredThroughFloorPlanUsed
-  type: ""
-  Notes: >-
-    Note:Mapping has not been done as they have not specified the cell
-    range or the location in the raw file
-- Source Worksheet: "12 Month Avg  Road/Demos / Furnished Autos "
-  pageName: Application
-  key: locationScheduleGridData_monthAvgRoadDemosFurnishedAutos
-  type: ""
-  Notes: >-
-    Note:Mapping has not been done as they have not specified the cell
-    range or the location in the raw file
-- Source Worksheet: Insured Through Floor Plan - Road
-  pageName: Application
-  key: locationScheduleGridData_insuredThroughFloorPlanRoad
-  type: ""
-  Notes: >-
-    Note:Mapping has not been done as they have not specified the cell
-    range or the location in the raw file
-- Source Worksheet: 12 Month Avg  Road/ Loaners / Shop / Service
-  pageName: Application
-  key: locationScheduleGridData_monthAvgRoadLoanersShopService
-  type: ""
-  Notes: >-
-    Note:Mapping has not been done as they have not specified the cell
-    range or the location in the raw file
-- Source Worksheet: Insured Through Floor Plan - Road
-  pageName: Application
-  key: ""
-  type: ""
-  Notes: >-
-    Note:Mapping has not been done as they have not specified the cell
-    range or the location in the raw file
-- Source Worksheet: Vehicles purchased and/or sold through brokers?
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: B35
-- Source Worksheet: "Any vehicles valued in excess of $100,000 per unit?\r\n\r\n If YES, attach a current schedule"
-  pageName: Application
-  key: ""
-  type: ""
-  Cell: B42
-- Source Worksheet: "\r\n\r\nSpot Delivery Procedures:"
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: B41
-  Notes: >-
-    Note: If written insurance verification is selected the system will map
-    "X"to Sheet!Application B41
-- Source Worksheet: "Vehicle inventory taken:"
-  pageName: "Application "
-  key: dolvehicleinevtorytaken
-  type: ""
-  Cell: "B43:S43"
-  Special: checkbox
-- Source Worksheet: Vehicles only stored at scheduled locations?
-  pageName: "Application "
-  key: dolvehstrschedloc
-  type: ""
-  Cell: B50
-  Special: checkbox
-- Source Worksheet: "All Locations (does not include Vacant Land or Bldg Leased to Others):"
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: P40
-  Notes: "1. If Daily Key Inventory is selected  the system needs to map \"X\"to Sheet!Application P40\r\n\r\n2. If Computerized Key Vault is selected the system needs to map \"X\"to Automated Key Machines\r\nSheet!Application B39\r\n\r\n3. If Lockbox is selected the system needs to map \"X\"to Sheet!Application B37"
-- Source Worksheet: "All Locations (does not include Vacant Land or Bldg Leased to Others):"
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: B39
-  Notes: "1. If Daily Key Inventory is selected  the system needs to map \"X\"to Sheet!Application P40\r\n\r\n2. If Computerized Key Vault is selected the system needs to map \"X\"to Automated Key Machines\r\nSheet!Application B39\r\n\r\n3. If Lockbox is selected the system needs to map \"X\"to Sheet!Application B37"
-- Source Worksheet: "All Locations (does not include Vacant Land or Bldg Leased to Others):"
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: B37
-  Notes: "1. If Daily Key Inventory is selected  the system needs to map \"X\"to Sheet!Application P40\r\n\r\n2. If Computerized Key Vault is selected the system needs to map \"X\"to Automated Key Machines\r\nSheet!Application B39\r\n\r\n3. If Lockbox is selected the system needs to map \"X\"to Sheet!Application B37"
-- Source Worksheet: "Location 1:"
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: "P40,B39,B37"
-  Notes: "1. If Daily Key Inventory is selected  the system needs to map \"X\"to Sheet!Application P40\r\n\r\n2. If Computerized Key Vault is selected the system needs to map \"X\"to Automated Key Machines\r\nSheet!Application B39\r\n\r\n3. If Lockbox is selected the system needs to map \"X\"to Sheet!Application B37"
-- Source Worksheet: "Location 2:"
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: "P40,B39,B37"
-  Notes: "1. If Daily Key Inventory is selected  the system needs to map \"X\"to Sheet!Application P40\r\n\r\n2. If Computerized Key Vault is selected the system needs to map \"X\"to Automated Key Machines\r\nSheet!Application B39\r\n\r\n3. If Lockbox is selected the system needs to map \"X\"to Sheet!Application B37"
-- Source Worksheet: "Location 3:"
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: "P40,B39,B37"
-  Notes: "1. If Daily Key Inventory is selected  the system needs to map \"X\"to Sheet!Application P40\r\n\r\n2. If Computerized Key Vault is selected the system needs to map \"X\"to Automated Key Machines\r\nSheet!Application B39\r\n\r\n3. If Lockbox is selected the system needs to map \"X\"to Sheet!Application B37"
-- Source Worksheet: "Comp Deductible:"
-  pageName: "Application "
-  key: dolcompdeduc
-  type: ""
-  Cell: "C27:M27,C29:M29"
-- Source Worksheet: "Wind/Hail Deductible: "
-  pageName: "Application "
-  key: dolwindhaildeduc
-  type: ""
-  Cell: "O27:X27\r\n O29:X29"
-  Notes: "\r\nNote: 1,000/No Agg is the same as $1,000 deductible. "
-- Source Worksheet: "Max Value/ Per vehicle held for sale limit:"
-  pageName: "Application "
-  key: dolmaxvalpervehicle
-  type: ""
-  Cell: Z10
-- Source Worksheet: "False Pretense Limit:"
-  pageName: "Application "
-  key: falsePretenseNumber
-  type: ""
-  Cell: "Y22:Z22"
-  Special: Table
-- Source Worksheet: New - Comp
-  pageName: "Application "
-  key: requestedCoverageQuestions_newComp
-  type: ""
-  Cell: F15
-  Special: Table
-- Source Worksheet: New - Collision
-  pageName: "Application "
-  key: requestedCoverageQuestions_newCollision
-  type: ""
-  Cell: F15
-  Special: Table
-- Source Worksheet: New - False Pretense
-  pageName: "Application "
-  key: requestedCoverageQuestions_newFalsePretense
-  type: ""
-  Cell: T15
-  Special: Table
-- Source Worksheet: "Used - Comp "
-  pageName: "Application "
-  key: requestedCoverageQuestions_usedComp
-  type: ""
-  Cell: F16
-  Special: Table
-- Source Worksheet: Used - Collision
-  pageName: "Application "
-  key: requestedCoverageQuestions_usedCollision
-  type: ""
-  Cell: F16
-  Special: Table
-- Source Worksheet: Used - False Pretense
-  pageName: "Application "
-  key: requestedCoverageQuestions_usedFalsePretense
-  type: ""
-  Cell: T16
-  Special: Table
-- Source Worksheet: Demo Furnished - Comp
-  pageName: "Application "
-  key: requestedCoverageQuestions_demoFurnishedComp
-  type: ""
-  Cell: F17
-  Special: Table
-- Source Worksheet: Demo Furnished - Collision
-  pageName: "Application "
-  key: requestedCoverageQuestions_demoFurnishedCollision
-  type: ""
-  Cell: F17
-  Special: Table
-- Source Worksheet: Demo Furnished - False Pretense
-  pageName: "Application "
-  key: requestedCoverageQuestions_demoFurnishedFalsePretense
-  type: ""
-  Cell: T17
-  Special: Table
-- Source Worksheet: Service Loaners - Comp
-  pageName: "Application "
-  key: requestedCoverageQuestions_serviceLoanersComp
-  type: ""
-  Cell: F18
-  Special: Table
-- Source Worksheet: Service Loaners - Collison
-  pageName: "Application "
-  key: requestedCoverageQuestions_serviceLoanersCollision
-  type: ""
-  Cell: F18
-  Special: Table
-- Source Worksheet: Service Loaners - False Pretense
-  pageName: "Application "
-  key: requestedCoverageQuestions_serviceLoanersFalsePretense
-  type: ""
-  Cell: T18
-  Special: Table
-- Source Worksheet: Other - Owned - Comp
-  pageName: "Application "
-  key: requestedCoverageQuestions_otherOwnedComp
-  type: ""
-  Cell: F19
-  Special: Table
-- Source Worksheet: Other - Owned - Collision
-  pageName: "Application "
-  key: requestedCoverageQuestions_otherOwnedCollision
-  type: ""
-  Cell: F19
-  Special: Table
-- Source Worksheet: Other - Owned - False Pretense
-  pageName: "Application "
-  key: requestedCoverageQuestions_otherOwnedFalsePretense
-  type: ""
-  Cell: T19
-  Special: Table
-- Source Worksheet: Other - Non-Owned - Comp
-  pageName: "Application "
-  key: requestedCoverageQuestions_otherNonOwnedComp
-  type: ""
-  Cell: F20
-  Special: Table
-- Source Worksheet: Other - Non-Owned - Collision
-  pageName: "Application "
-  key: requestedCoverageQuestions_otherNonOwnedCollision
-  type: ""
-  Cell: F20
-  Special: Table
-- Source Worksheet: Other - Non-Owned - False Pretense
-  pageName: "Application "
-  key: requestedCoverageQuestions_otherNonOwnedFalsePretense
-  type: ""
-  Cell: T20
-  Special: Table
-- Source Worksheet: "Total number of demos/furnished auto provided: "
-  pageName: "Application "
-  key: doltotalnoofdemos
-  type: ""
-  Cell: "Y23:Z23"
-  Notes: >-
-    Note: If a value is provided for this question the portal needs to
-    select an "X"for Sheet!Application B46
-- Source Worksheet: Security Guards
-  pageName: "Application "
-  key: ""
-  type: ""
-  Cell: B36
-  Notes: "\r\nPre-Condition: \r\nIf Occupancy Type/Building Description = Sales & Service & security guards = Yes then map \"X\"to:\r\nSheet!Application B36"
+-
+   Source Worksheet: Producer
+   pageName: APPLICATION
+   key: producerdate
+   cell: 'F8'
+-
+   Source Worksheet: Named Insured
+   pageName: APPLICATION
+   key: namedInsured
+   cell: 'D2'
+-
+   Source Worksheet: DBA (if any)
+   pageName: APPLICATION
+   key: dba
+   cell: 'B3'
+-
+   Source Worksheet: Mailing Address
+   pageName: APPLICATION
+   key: mailingAddress
+   cell: 'C5'
+-
+   Source Worksheet: City
+   pageName: APPLICATION
+   key: city
+   cell: 'N5'
+-
+   Source Worksheet: State
+   pageName: APPLICATION
+   key: state
+   cell: 'W5'
+-
+   Source Worksheet: Zip
+   pageName: APPLICATION
+   key: zip
+   cell: Z5
+-
+   Source Worksheet: 'FIEN/Soc Sec #'
+   pageName: APPLICATION
+   key: socialsecNum
+   cell: 'Y4'
+-
+   Source Worksheet: 'Business Phone:'
+   pageName: APPLICATION
+   key: businessPhone
+   cell: 'C6'
+-
+   Source Worksheet: 'Business Fax:'
+   pageName: APPLICATION
+   key: businessFax
+   cell: 'N6'
+-
+   Source Worksheet: 'Business Email:'
+   pageName: APPLICATION
+   key: businessEmail
+   cell: 'W7'
+-
+   Source Worksheet: 'Website:'
+   pageName: APPLICATION
+   key: website
+   cell: 'W6'
+-
+   Source Worksheet: 'Dealer Name:'
+   pageName: APPLICATION
+   key: dealerName
+   cell: 'D2'
+-
+   Source Worksheet: Insurance Contact
+   pageName: APPLICATION
+   method: pulloutChild
+   key: 'dealerguardOpenLot_checkGenFullName'
+   cell: 'G7'
+-
+   Source Worksheet: 'Email:'
+   pageName: APPLICATION
+   method: pulloutChild
+   key: 'dealerguardOpenLot_checkGenEmail'
+   cell: 'W7'
+-
+   Source Worksheet: 'Effective Date:'
+   pageName: APPLICATION
+   key: effectiveDate
+   cell: 'O10'
+-
+   Source Worksheet: 'Need by Date:'
+   pageName: APPLICATION
+   key: needByDate
+   cell: 'D10'
+-
+   Source Worksheet: DOL Target Premium
+   pageName: APPLICATION
+   key: dolTargetPremium
+   cell: 'N12'
+-
+   Source Worksheet: 'Number of years in business under current ownership:'
+   pageName: APPLICATION
+   key: numYearsOfOwnership
+   cell: 'J4'
+-
+   Source Worksheet: Any policy or coverage declined, cancelled or non-renewed during the prior
+      10 years for any premises or operations?
+   pageName: APPLICATION
+   key: policyDeclined
+   method: checkbox_X
+   cell: B49
+-
+   Source Worksheet: Employees
+   pageName: APPLICATION
+   key: ''
+   cell: O46
+   Note: This will sum cell B5 (F/T Employees furnished an Auto) + cell B6 (P/T Employees furnished with an Auto) to Sheet!APPLICATION O46\r\n\r\nFor Example If a producer enters 40 F/T Employees furnished with an auto and 20 P/T Employees furnished with an auto the system will map 60 to Sheet!APPLICATION O46
+-
+   Source Worksheet: Employee deductible participation?
+   pageName: APPLICATION
+   key: employeedeductibleparticipation
+   method: checkbox_X
+   cell: B47
+-
+   Source Worksheet: >-
+      Formal safety meetings:( If at least quarterly, please attach copy of
+      minutes from last meeting)
+   pageName: APPLICATION
+   key: formalsafetymeetings
+   cell: A44
+   Notes: "Pre Condition: If Formal Safety Meetings  = Quarterly or Monthly then map \"X\"to:\r\n\r\nSheet!APPLICATION A44"
+-
+   Source Worksheet: Test drives always accompanied by employee?
+   pageName: APPLICATION
+   key: testdrivesalwaysaccompanied
+   method: checkbox_X
+   cell: B33
+-
+   Source Worksheet: 'Test Drive Procedures:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checktestdriveprocedures
+   method: checkbox_X
+   cell: B34
+-
+   Source Worksheet: Customer Service Loaner Rental Program?
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkcustomerserviceloanerrentalprogram
+   method: checkbox_X
+   cell: B48
+-
+   Source Worksheet: Number of vehicles in fleet?
+   pageName: APPLICATION
+   key: numberofvehiclesinfleet
+   cell: 'Y24:Z24'
+-
+   Source Worksheet: Vehicles purchased and/or sold through brokers?
+   pageName: APPLICATION
+   key: dolvehiclespurchasedorsold
+   method: checkbox_X
+   cell: B35
+-
+   Source Worksheet: >-
+      Any vehicles valued in excess of $100,000 per unit? If YES, attach a
+      current schedule
+   pageName: APPLICATION
+   key: dolVehicleValuedInExcess
+   method: checkbox_X
+   cell: B42
+-
+   Source Worksheet: 'Spot Delivery Procedures:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkdolspotdeliveryprocedures
+   method: checkbox_X
+   cell: B41
+-
+   Source Worksheet: 'Vehicle inventory taken:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkVehicleInventoryTaken
+   method: checkbox_X
+   cell: B43
+-
+   Source Worksheet: 'Weekly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkVehicleInventoryTakenWeekly
+   method: checkbox_X
+   cell: J43
+-
+   Source Worksheet: 'Biweekly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkVehicleInventoryTakenBiweekly
+   method: checkbox_X
+   cell: N43
+-
+   Source Worksheet: 'Monthly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkVehicleInventoryTakenMonthly
+   method: checkbox_X
+   cell: S43
+-
+   Source Worksheet: 'Monthly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkVehicleInventoryTakenMonthly
+   method: checkbox_X
+   cell: S43
+-
+   Source Worksheet: Vehicles only stored at scheduled locations?
+   pageName: APPLICATION
+   key: dolvehstrschedloc
+   method: checkbox_X
+   cell: B50
+-
+   Source Worksheet: Daily Key Inventory
+   pageName: APPLICATION
+   method : pulloutChild
+   key: dealerguardOpenLot_checkDailyKeyInventory
+   cell: P40
+-
+   Source Worksheet: Computerized Key Vault
+   pageName: APPLICATION
+   method: checkbox_X
+   key: dealerguardOpenLot_checkComputerizedKeyVault
+   cell: B39
+-
+   Source Worksheet: Lockbox
+   pageName: APPLICATION
+   method: checkbox_X
+   key: dealerguardOpenLot_checkLockbox
+   cell: B37
+-
+   Source Worksheet: 'Comp Deductible:'
+   pageName: APPLICATION
+   key: dolcompdeduc
+   cell: 'C27'
+-
+   Source Worksheet: 'Comp Deductible:'
+   pageName: APPLICATION
+   key: dolcompdeduc
+   cell: 'C29'
+-
+   Source Worksheet: 'Wind/Hail Deductible: '
+   pageName: APPLICATION
+   key: dolwindhaildeduc
+   cell: 'O27'
+-
+   Source Worksheet: 'Wind/Hail Deductible: '
+   pageName: APPLICATION
+   key: dolwindhaildeduc
+   cell: 'O29'
+-
+   Source Worksheet: 'Max Value/ Per vehicle held for sale limit:'
+   pageName: APPLICATION
+   key: dolmaxvalpervehicle
+   cell: Z10
+-
+   Source Worksheet: 'False Pretense Limit:'
+   pageName: APPLICATION
+   key: falsePretenseNumber
+   cell: 'Y22'
+-
+   Source Worksheet: New - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_newComp
+   cell: F15
+-
+   Source Worksheet: New - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_newCollision
+   cell: F15
+-
+   Source Worksheet: New - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_newFalsePretense
+   cell: T15
+-
+   Source Worksheet: 'Used - Comp '
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_usedComp
+   cell: F16
+-
+   Source Worksheet: 'Used - Coll'
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_usedCollision
+   cell: F16
+-
+   Source Worksheet: Used - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_usedFalsePretense
+   cell: T16
+-
+   Source Worksheet: Demo Furnished - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_demoFurnishedComp
+   cell: F17
+-
+   Source Worksheet: Demo Furnished - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_demoFurnishedCollision
+   cell: F17
+-
+   Source Worksheet: Demo Furnished - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_demoFurnishedFalsePretense
+   cell: T17
+-
+   Source Worksheet: Service Loaners - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_serviceLoanersComp
+   cell: F18
+-
+   Source Worksheet: Service Loaners - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_serviceLoanersCollision
+   cell: F18
+-
+   Source Worksheet: Service Loaners - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_serviceLoanersFalsePretense
+   cell: T18
+-
+   Source Worksheet: Other - Owned - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherOwnedComp
+   cell: F19
+-
+   Source Worksheet: Other - Owned - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherOwnedCollision
+   cell: F19
+-
+   Source Worksheet: Other - Owned - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherOwnedFalsePretense
+   cell: T19
+-
+   Source Worksheet: Other - Non-Owned - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherNonOwnedComp
+   cell: F20
+-
+   Source Worksheet: Other - Non-Owned - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherNonOwnedCollision
+   cell: F20
+-
+   Source Worksheet: Other - Non-Owned - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherNonOwnedFalsePretense
+   cell: T20
+-
+   Source Worksheet: 'Total number of demos/furnished auto provided: '
+   pageName: APPLICATION
+   key: doltotalnoofdemos
+   cell: 'Y23'
+-
+   Source Worksheet: 'Total number of demos/furnished auto provided: '
+   pageName: APPLICATION
+   key: dealerguardOpenLot_checkDOLTotalNoOfDemos
+   method: checkbox_X
+   cell: B46
+-
+   Source Worksheet: 'Is there a written flood emergency plan in place?'
+   pageName: APPLICATION
+   key: dolisthremergncypln
+   method: checkbox_X
+   cell: B45
+-
+   Source Worksheet: 'Are keys removed over the night?'
+   pageName: APPLICATION
+   key: dolarekeysremovnigh
+   method: checkbox_X
+   cell: B38
+-
+   Source Worksheet: 'Are keys removed over the night?'
+   pageName: APPLICATION
+   key: dolarekeysremovnigh
+   method: checkbox_X
+   cell: B40
+-
+   Source Worksheet: Security Guards
+   pageName: Application
+   key: dealerguardOpenLot_checkSecurityGuards
+   cell: B36
+   method: checkbox_X
+   Notes: "\r\nPre-Condition: \r\nIf Occupancy Type/Building Description = Sales & Service & security guards = Yes then map \"X\"to:\r\nSheet!Application B36"
+-
+   pageName: SOV
+   skip: "25_3"
+   key: locationSchedule_address
+   method: simpleDatagrid
+   type: DataGrid
+   cell: D5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: locationSchedule_city
+   method: simpleDatagrid
+   type: DataGrid
+   cell: E5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: locationSchedule_state
+   method: simpleDatagrid
+   type: DataGrid
+   cell: F5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: locationSchedule_zip
+   method: simpleDatagrid
+   type: DataGrid
+   cell: G5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: dealerguardOpenLot_SOV12MothAverage
+   method: pulloutChild
+   type: DataGrid
+   cell: H5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: locationSchedule_maxvalueanytime
+   method: simpleDatagrid
+   type: DataGrid
+   cell: L5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: locationSchedule_maxcountanytime
+   method: simpleDatagrid
+   type: DataGrid
+   cell: M5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: locationSchedule_maxvalueindoors
+   method: simpleDatagrid
+   type: DataGrid
+   cell: N5
+-
+   pageName: ADDITIONAL INTEREST
+   skip: "1_8"
+   key: namedInsuredSchedule_namedInsuredScheduleName
+   method: simpleDatagrid
+   type: DataGrid
+   cell: "D12"
