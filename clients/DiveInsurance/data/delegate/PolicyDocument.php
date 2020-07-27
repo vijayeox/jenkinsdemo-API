@@ -530,10 +530,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         unset($temp["additionalLocationData"]);
                     }
                     $data['quoteDocuments'] = $documents;
-                    if(is_string($data['csrApprovalAttachments'])){
-                        $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
-                    }
-                    $data['quoteDocuments'] = $documents;
+                }
+                if(is_string($data['csrApprovalAttachments'])){
+                    $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
                 }
             }else if($this->type == 'policy' && $data['product'] == 'Dive Store'){
                 $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');

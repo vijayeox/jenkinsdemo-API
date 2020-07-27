@@ -12,7 +12,7 @@
   <center>
       <b>
         <p style="margin-top: 5px;" class="info">Store Location:
-        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress == 'false')}
+        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress === "false" || $sameasmailingaddress == 0)}
               <span class="uppercase">{$mailaddress1}</span>,
               <span class="uppercase">{$mailaddress2}</span>,
               <span class="uppercase">{$physical_city}</span>,
@@ -230,7 +230,7 @@
                     </tr>
                     <tr>
                         <td>Medical Expense:</td>
-                        {if isset($medicalPayment) && ($medicalPayment != "false" && $medicalPayment != false) }
+                        {if isset($medicalPayment) && ($medicalPayment == "true" || $medicalPayment == true || $medicalPayment == 1) }
                             <td>$5000</td>
                         {else}
                             <td>Excluded</td>{/if}

@@ -206,7 +206,7 @@ class FileService extends AbstractService
             }
         }
         foreach ($data as $key => $dataelement) {
-            if (is_array($dataelement) || is_bool($dataelement)) {
+            if (is_array($dataelement)) {
                 $data[$key] = json_encode($dataelement);
             }
         }
