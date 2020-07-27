@@ -22,7 +22,23 @@ class RenderButtons extends React.Component {
       } else {
         showButton = true;
       }
-      var pageDetails = {title:currentValue.name,pageContent:currentValue.details,pageId:currentValue.pageId,icon:currentValue.icon,parentPage:this.pageId}
+      var copyPageContent = [];
+      var that = this;
+      var rowData = this.fileData;
+      if(currentValue.details && currentValue.details.length > 0){
+        currentValue.details.every(async (item, index) => {
+            if (item.params && item.params.page_id) {
+              copyPageContent.pageId =item.params.page_id;
+            } else if(item.pageId){
+              copyPageContent.pageId =item.page_id;
+            } else {
+              var pageContentObj=item;
+              pageContentObj = that.replaceParams(item, rowData);
+              copyPageContent.push(pageContentObj);
+            }
+        });
+      }
+      var pageDetails = {title:currentValue.name,pageContent:copyPageContent,pageId:currentValue.pageId,icon:currentValue.icon,parentPage:this.pageId}
       if(showButton){
         adminItems.push(
           <div
@@ -67,7 +83,7 @@ class RenderButtons extends React.Component {
             if (item == "appId") {
               final_route[item] = this.appId;
             }else {
-              final_route[item] = null;
+              final_route[item] = route[item];
             }
           }
         } else {
@@ -107,7 +123,18 @@ class RenderButtons extends React.Component {
       return route;
     }
   }
-
+  updateActionHandler(details, rowData) {
+    var that = this;
+    return new Promise((resolve) => {
+      var queryRoute = that.replaceParams(details.params.url, rowData);
+      that.updateCall(queryRoute, rowData).then((response) => {
+        that.setState({
+          showLoader: false
+        });
+        resolve(response);
+      });
+    });
+  }
   render() {
     return <div className="appButtons">{this.createTiles()}</div>;
   }

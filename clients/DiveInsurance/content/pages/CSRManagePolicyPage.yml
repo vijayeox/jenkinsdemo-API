@@ -35,7 +35,7 @@ content:
                     -
                         title: Name
                         field: firstname
-                        cell: 'data.firstname + " " +data.lastname'
+                        cell: 'data.product == "Dive Store" ? data.business_name : data.firstname + " " + data.lastname'
                     -
                         title: Product
                         field: product
@@ -305,9 +305,11 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.firstname + " " + item.lastname}</td>'
                     multiFieldFilter:
                         - lastname
+                        - business_name
+                        - name
                 -
                     title: Product
                     field: product

@@ -12,7 +12,7 @@
   <center>
       <b>
         <p style="margin-top: 5px;" class="info">Store Location:
-        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false)}
+        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress == 'false')}
               <span class="uppercase">{$mailaddress1}</span>,
               <span class="uppercase">{$mailaddress2}</span>,
               <span class="uppercase">{$physical_city}</span>,
@@ -623,7 +623,7 @@
                 {elseif $state == 'Utah'}
                 <center>
                     <p class="notice">
-                        <b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+                        <b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
                     </p>
                 </center>
                 {elseif $state == 'Virginia'}
@@ -663,16 +663,16 @@
                     </p>
                 </center>
                 {/if}
-
+                {if isset(excludedOperation) && $excludedOperation != ""}
+                    <center>
+                    <p class ="exop notice" style="margin-top:1px;color:red;font-size: 20px;text-align: justify;text-transform: uppercase;"><b>{$excludedOperation}</b></p>
+                    </center>
+                {/if}
         </div>
 
         <!-- Second Page -->
     </div>
-        {if isset(excludedOperation) && $excludedOperation != ""}
-            <center>
-            <p class ="exop notice" style="margin-top:1px;color:red;"><b>{$excludedOperation}</b></p>
-            </center>
-        {/if}
+
 </body>
 
 </html>

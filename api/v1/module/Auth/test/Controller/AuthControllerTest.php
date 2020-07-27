@@ -353,7 +353,7 @@ class AuthControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['username'], 'Admin Test');
         $this->assertContains('user/profile/', $content['data']['profileUrl']);
     }
 
@@ -369,7 +369,7 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('userprof');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['username'], 'Admin Test');
         $this->assertContains('user/profile/', $content['data']['profileUrl']);
     }
 
@@ -544,7 +544,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterWithOnlyCacheCommand()
     {
-        $data = '{"data":{"username":"bharatgtest","commands":"[\"store_cache_data\"]"},"username":"bharatgtest","dummdata":"dummy"}';
+        $data = '{"data":{"username":"admintest","commands":"[\"store_cache_data\"]"},"username":"admintest","dummdata":"dummy"}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);

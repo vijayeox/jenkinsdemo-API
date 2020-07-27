@@ -300,6 +300,15 @@ public function execute(array $data,Persistence $persistenceService)
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
         }
 
+        if(isset($data['groupPL'])){
+            if($data['groupPL'] != ""){
+                foreach ($data['groupPL'] as $key => $value) {
+                    if(!isset($value['effectiveDate'])){
+                        $data['groupPL'][$key]['effectiveDate'] = date_format(date_create($data['start_date']),'m-d-Y');
+                    }
+                }
+            }
+        }
         if(isset($data['paymentOptions'])){
             unset($data['paymentOptions']);
         }

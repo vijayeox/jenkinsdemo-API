@@ -31,6 +31,9 @@ class PageContent extends React.Component {
       this.extGUICompoents = response.guiComponent
         ? response.guiComponent
         : undefined;
+        this.setState({
+          showLoader: false
+        });
     });
     this.contentDivID = "content_" + this.appId + "_" + this.props.pageId;
     this.state = {
@@ -60,6 +63,11 @@ class PageContent extends React.Component {
     if (this.props.pageContent !== prevProps.pageContent) {
       var PageRenderDiv = document.querySelector(".PageRender");
       this.loader.show(PageRenderDiv);
+      this.fetchExternalComponents().then((response) => {
+        this.extGUICompoents = response.guiComponent
+          ? response.guiComponent
+          : undefined;
+      });
       this.setState({pageContent:this.props.pageContent});
     }
   }
@@ -68,6 +76,8 @@ class PageContent extends React.Component {
     var actionButtons = [];
     Object.keys(action).map(function (key, index) {
       var string = this.replaceParams(action[key].rule, e);
+      var _moment = moment;
+      string = string.replace(/moment/g,'_moment');
       var showButton = eval(string);
       var buttonStyles = action[key].icon
         ? {
@@ -123,7 +133,6 @@ class PageContent extends React.Component {
   }
   loadPage(pageId, icon, hideLoader,name,currentRow,pageContent) {
    var parentPage = this.pageId;
-   console.log(this.props)
    if(this.isTab=="true"){
      parentPage = this.parentPage;
    }
@@ -136,7 +145,6 @@ class PageContent extends React.Component {
  }
 
   async buttonAction(action, rowData) {
-    console.log(action);
     if (action.page_id) {
       this.loadPage(action.page_id);
     } else if (action.details) {
@@ -174,13 +182,9 @@ class PageContent extends React.Component {
               pageId=item.params.page_id;
               copyPageContent = [];
             } else {
-              if (item.url) {
-                item.url = that.replaceParams(item.url, rowData);
-              }
-              if (item.urlPostParams) {
-                item.urlPostParams = that.replaceParams(item.urlPostParams,rowData);
-              }
-              copyPageContent.push(item);
+              var pageContentObj={};
+              pageContentObj = this.replaceParams(item,rowData);
+              copyPageContent.push(pageContentObj);
             }
           }
         });
@@ -220,7 +224,7 @@ class PageContent extends React.Component {
             } else if (item == "fileId" && this.state.fileId) {
               final_route[item] = this.state.fileId;
             } else {
-              final_route[item] = null;
+              final_route[item] = route[item];
             }
           }
         } else {
@@ -358,7 +362,6 @@ class PageContent extends React.Component {
             isDraft={item.isDraft}
             activityInstanceId={activityInstanceId}
             parentWorkflowInstanceId={workflowInstanceId}
-            postSubmitCallback={this.props.stepBackBreadcrumb}
           />
         );
       } else if (item.type == "List") {
@@ -480,7 +483,6 @@ class PageContent extends React.Component {
             appId={this.appId}
             key={i}
             core={this.core}
-            postSubmitCallback={this.props.stepBackBreadcrumb}
             url={url}
           />
         );
@@ -494,7 +496,6 @@ class PageContent extends React.Component {
             tabs={item.content.tabs}
             pageId={this.state.pageId}
             currentRow={this.state.currentRow}
-            postSubmitCallback={this.props.stepBackBreadcrumb}
           />
         );
       } else if (item.type == "Dashboard") {
@@ -522,47 +523,39 @@ class PageContent extends React.Component {
           />
         );
       } else if (item.type == "Document" || item.type == "HTMLViewer") {
-        var url;
-        var data;
-        var fileData;
-        if(item.useRowData){
-          data = this.state.currentRow
-        }
-        if(item.content){
-          data = this.replaceParams(item.content, this.state.currentRow);
-        }
-        if(item.url){
-          url = this.replaceParams(item.url, this.state.currentRow);
-        }
-        if(this.state.currentRow){
-          fileData = this.state.currentRow
-        }
         content.push(
           <HTMLViewer
             key={i}
             core={this.core}
             key={i}
             appId={this.appId}
-            url={url}
-            content={data}
-            fileData={fileData}
+            url={
+              item.url
+                ? this.replaceParams(item.url, this.state.currentRow)
+                : undefined
+            }
+            content={item.content ? item.content : ""}
+            fileData={this.state.currentRow}
           />
         );
       } else {
-        this.externalComponent = this.extGUICompoents[item.type];
-        let guiComponent =
-          this.extGUICompoents && this.extGUICompoents[item.type] ? (
-            <this.externalComponent
-              {...item}
-              key={i}
-              components={OxzionGUIComponents}
-              appId={this.appId}
-              core={this.core}
-            ></this.externalComponent>
-          ) : (
-              <h3 key={i}>The component used is not available.</h3>
-            );
-        content.push(guiComponent);
+        if(this.extGUICompoents && this.extGUICompoents[item.type]){
+          this.externalComponent = this.extGUICompoents[item.type];
+          let guiComponent = this.extGUICompoents && this.extGUICompoents[item.type] ? (
+              <this.externalComponent
+                {...item}
+                key={i}
+                components={OxzionGUIComponents}
+                appId={this.appId}
+                core={this.core}
+              ></this.externalComponent>
+            ) : (
+                <h3 key={i}>The component used is not available.</h3>
+              );
+          content.push(guiComponent);
+        } else {
+          content.push(<h3 key={i}>The component used is not available.</h3>);
+        }
       }
     });
     if (content.length > 0) {

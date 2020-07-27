@@ -458,11 +458,11 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['data'][1]['uuid'], 'd9890624-8f42-4201-bbf9-675ec5dc8400');
         $this->assertEquals($content['data'][1]['name'], 'Deepak S');
         $this->assertEquals($content['data'][2]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][2]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][2]['name'], 'Manager Test');
     }
 
     public function testGetListWithSort()
@@ -476,9 +476,9 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['uuid'], '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e');
-        $this->assertEquals($content['data'][0]['name'], 'rohan kumar');
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Test');
         $this->assertEquals($content['data'][1]['uuid'], '4fd9f04d-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
+        $this->assertEquals($content['data'][1]['name'], 'Employee Test');
     }
 
     public function testGetListWithSortForCountry()
@@ -492,7 +492,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['uuid'], '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e');
-        $this->assertEquals($content['data'][0]['name'], 'rohan kumar');
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Test');
         $this->assertEquals($content['data'][1]['uuid'], 'd9890624-8f42-4201-bbf9-675ec5dc8400');
         $this->assertEquals($content['data'][1]['name'], 'Deepak S');
     }
@@ -508,9 +508,9 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'], 'Manager Test');
         $this->assertEquals($content['data'][1]['uuid'], '4fd9f04d-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
+        $this->assertEquals($content['data'][1]['name'], 'Employee Test');
     }
 
      public function testGetListWithMultipleFilter()
@@ -537,7 +537,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'], 'Manager Test');
     }
 
     public function testGetListwithQueryParameters()
@@ -551,7 +551,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'], 'Manager Test');
         $this->assertEquals($content['total'],1);
     }
 
@@ -566,7 +566,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['total'],1);
     }
 
@@ -581,7 +581,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
     }
 
     public function testGetListwithQueryPageNo()
@@ -596,7 +596,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['uuid'], 'd9890624-8f42-4201-bbf9-675ec5dc8400');
         $this->assertEquals($content['data'][0]['name'], 'Deepak S');
         $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][1]['name'], 'Manager Test');
       }
 
 
@@ -609,7 +609,7 @@ class UserControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'], $this->adminUser);
-        $this->assertEquals($content['data']['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['name'], 'Admin Test');
         $this->assertEquals($content['data']['country'], 'Germany');
     }
 
@@ -993,7 +993,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['data']['username'], $this->adminUser);
-        $this->assertEquals($content['data']['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['name'], 'Admin Test');
     }
 
    public function testLoggedInUserCompleteDetails()
@@ -1148,7 +1148,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('usersList');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'],'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'],'Manager Test');
     }
 
 
@@ -1173,8 +1173,8 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('usersList');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'],'Bharat Gogineni');
-        $this->assertEquals($content['data'][1]['name'],'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'],'Admin Test');
+        $this->assertEquals($content['data'][1]['name'],'Manager Test');
         $this->assertEquals($content['data'][2]['name'],'Deepak S');
     }    
 
@@ -1185,7 +1185,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('getuserdetaillist');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'],'Bharat Gogineni');
+        $this->assertEquals($content['data']['name'],'Admin Test');
         $this->assertEquals($content['data']['role'][0]['name'],'ADMIN');
         $this->assertEquals($content['data']['role'][1]['name'],'MANAGER');
     }

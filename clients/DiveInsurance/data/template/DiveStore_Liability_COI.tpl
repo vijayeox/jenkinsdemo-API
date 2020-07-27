@@ -138,7 +138,7 @@
 			<div class="section_col1" style="border-style: solid">
 				<p class ="title">SECTION II: EXCLUDED DESIGNATED OPERATION</p>
 			</div>
-			<p class ="exop" style="margin-top:1px;">{$excludedOperation}</p>
+			<p class ="exop" style="margin-top:1px;font-size: 15px;">{$excludedOperation}</p>
 		{/if}
 
 		<hr class="addIn"></hr>
@@ -343,7 +343,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
 				<center><p class = "notice">

@@ -41,7 +41,7 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskMailExecution()
     {
         $this->initAuthToken($this->adminUser);
-        $data['variables'] = ['command' => 'mail', 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body', 'subject' => 'NewSubject'];
+        $data['variables'] = ['command' => 'mail', 'to' => 'admintest@myvamla.com', 'body' => 'create a new body', 'subject' => 'NewSubject'];
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -55,7 +55,7 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskWithoutSubjectExecution()
     {
         $this->initAuthToken($this->adminUser);
-        $data['variables'] = ['command' => 'mail', 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body'];
+        $data['variables'] = ['command' => 'mail', 'to' => 'admintest@myvamla.com', 'body' => 'create a new body'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
