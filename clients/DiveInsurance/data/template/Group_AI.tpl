@@ -30,6 +30,12 @@
 		    			   Dive Store
 		    			{elseif $additional.businessRelation == "trainingAgency"} 
 		    			   Training Agency
+		    			{elseif $additional.businessRelation == "cruiseLine"} 
+		    			   Cruise Line
+		    			{elseif $additional.businessRelation == "landOwner"} 
+		    			   Land Owner
+		    			{elseif $additional.businessRelation == "bookingAgent"} 
+		    			   Booking Agent
 		    			{elseif $additional.businessRelation == "other"} 									   {$additional.businessRelationOther}
 		    			{/if})
 		    			{/if}

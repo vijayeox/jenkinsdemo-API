@@ -92,6 +92,11 @@ entity:
                 name: product
                 data_type: text
                 index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
         identifiers:
@@ -112,6 +117,10 @@ entity:
                 data_type: date
                 index: true
             -
+                name: business_name
+                data_type: text
+                index: true
+            -
                 name: end_date
                 data_type: date
                 index: true
@@ -129,6 +138,11 @@ entity:
                 index: true
             -
                 name: business_padi
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
                 data_type: text
                 index: true
     -
@@ -171,6 +185,11 @@ entity:
                 name: business_padi
                 data_type: text
                 index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
         identifiers:
@@ -208,6 +227,11 @@ entity:
                 index: true
             -
                 name: product
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
                 data_type: text
                 index: true
     -
@@ -257,6 +281,11 @@ entity:
                 name: product
                 data_type: text
                 index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
 pages:
     -
         page_name: UserHomePage.yml
@@ -297,6 +326,15 @@ pages:
     -
         page_name: AdminPage.yml
         uuid: c869ce1d-022c-40b8-8214-86ba3d6442e4
+    -
+        page_name: DiveStore.yml
+        uuid: eb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: IPL.yml
+        uuid: ab018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: EFR.yml
+        uuid: bb018dfd-be95-4c53-9a97-042f615f3623
 menu:
     -
         name: Home

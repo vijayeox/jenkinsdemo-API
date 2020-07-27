@@ -225,7 +225,7 @@ class OrganizationControllerTest extends ControllerTest
         $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
-        $contact = array('username' => 'bharatgtest', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'goku@myvamla.com', 'phone' => '1234567890');
+        $contact = array('username' => 'admintest', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'goku@myvamla.com', 'phone' => '1234567890');
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
         $data = array('name' => 'ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
@@ -552,7 +552,7 @@ class OrganizationControllerTest extends ControllerTest
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'abc134')), 'USERTOORGANIZATION_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'bharatgtest')), 'USERTOORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'admintest')), 'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
@@ -593,10 +593,10 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(4, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd99e8e-758f-11e9-b2d5-68ecc57cde45");
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['data'][0]['is_admin'], 1);
         $this->assertEquals($content['data'][1]['uuid'], "4fd9ce37-758f-11e9-b2d5-68ecc57cde45");
-        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][1]['name'], 'Manager Test');
         $this->assertEquals($content['total'], 4);
     }
 
@@ -610,9 +610,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(2, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd9ce37-758f-11e9-b2d5-68ecc57cde45");
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'], 'Manager Test');
         $this->assertEquals($content['data'][1]['uuid'], "4fd9f04d-758f-11e9-b2d5-68ecc57cde45");
-        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
+        $this->assertEquals($content['data'][1]['name'], 'Employee Test');
         $this->assertEquals($content['total'], 4);
     }
 
@@ -626,9 +626,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(2, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd9f04d-758f-11e9-b2d5-68ecc57cde45");
-        $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
+        $this->assertEquals($content['data'][0]['name'], 'Employee Test');
         $this->assertEquals($content['data'][1]['uuid'], "768d1fb9-de9c-46c3-8d5c-23e0e484ce2e");
-        $this->assertEquals($content['data'][1]['name'], 'rohan kumar');
+        $this->assertEquals($content['data'][1]['name'], 'Cleveland Test');
         $this->assertEquals($content['total'], 4);
     }
 
@@ -642,7 +642,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd99e8e-758f-11e9-b2d5-68ecc57cde45");
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['total'], 1);
     }
 
@@ -656,7 +656,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd9ce37-758f-11e9-b2d5-68ecc57cde45");
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'], 'Manager Test');
         $this->assertEquals($content['total'], 2);
     }
 
@@ -670,7 +670,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['total'], 1);
     }
 
@@ -684,7 +684,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a');
-        $this->assertEquals($content['data'][0]['name'], 'rakesh kumar');
+        $this->assertEquals($content['data'][0]['name'], 'Golden Test');
         $this->assertEquals($content['total'], 1);
     }
 

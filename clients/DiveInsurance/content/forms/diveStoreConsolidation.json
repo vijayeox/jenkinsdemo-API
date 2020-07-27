@@ -503,7 +503,6 @@
 			"input": false,
 			"components": [{
 				"label": "Legal Business Name",
-				"spellcheck": false,
 				"tableView": false,
 				"clearOnHide": false,
 				"calculateValue": "if(data['business_name'] && data['businessPadiVerified']===true){\n  value = data['business_name']\n}",
@@ -947,23 +946,51 @@
 									"label": "",
 									"value": ""
 								}],
-								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
+								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['country']);\nif(obj){\nvalues = obj.states;\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"refreshOn": "country",
 							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
 							"validate": {
 								"required": true
 							},
-							"key": "state",
+							"key": "us_state",
+							"conditional": {
+								"show": true,
+								"when": "country",
+								"eq": "United States of America"
+							},
 							"type": "select",
 							"indexeddb": {
 								"filter": {}
 							},
 							"input": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "State",
+							"tableView": true,
+							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
+							"key": "non_us_state",
+							"conditional": {
+								"show": false,
+								"when": "country",
+								"eq": "United States of America"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "state",
+							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
+							"key": "state",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
@@ -979,10 +1006,36 @@
 							"validate": {
 								"required": true
 							},
-							"key": "zip",
+							"key": "us_zip",
+							"conditional": {
+								"show": true,
+								"when": "country",
+								"eq": "United States of America"
+							},
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip Code",
+							"tableView": true,
+							"clearOnHide": false,
+							"key": "non_us_zip",
+							"conditional": {
+								"show": false,
+								"when": "country",
+								"eq": "United States of America"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "zip",
+							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_zip;\n} else {\n  value = data.non_us_zip;\n}",
+							"key": "zip",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"size": "md",
@@ -1078,7 +1131,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -1129,25 +1181,59 @@
 						"components": [{
 							"label": "State",
 							"widget": "choicesjs",
-							"tableView": false,
+							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
-								"values": [{}],
-								"custom": "let obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}"
+								"values": [{
+									"label": "",
+									"value": ""
+								}],
+								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states;\n}"
 							},
 							"template": "<span>{{ item }}</span>",
+							"refreshOn": "country",
+							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
 							"validate": {
 								"required": true
 							},
-							"key": "physical_state",
+							"key": "physical_us_state",
+							"conditional": {
+								"show": true,
+								"when": "physical_country",
+								"eq": "United States of America"
+							},
 							"type": "select",
-							"refreshOn": "physical_country",
+							"indexeddb": {
+								"filter": {}
+							},
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"clearOnRefresh": true
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "State",
+							"tableView": true,
+							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
+							"key": "physical_non_us_state",
+							"conditional": {
+								"show": false,
+								"when": "physical_country",
+								"eq": "United States of America"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "physical_state",
+							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
+							"key": "physical_state",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1158,15 +1244,40 @@
 						"components": [{
 							"label": "Zip Code",
 							"spellcheck": false,
-							"tableView": true,
-							"clearOnHide": false,
+							"tableView": false,
 							"validate": {
 								"required": true
 							},
-							"key": "physical_zip",
+							"key": "physical_us_zip",
+							"conditional": {
+								"show": true,
+								"when": "country",
+								"eq": "United States of America"
+							},
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip Code",
+							"tableView": true,
+							"clearOnHide": false,
+							"key": "physical_non_us_zip",
+							"conditional": {
+								"show": false,
+								"when": "country",
+								"eq": "United States of America"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "physical_zip",
+							"calculateValue": "if(data.physical_country && data.physical_country == \"United States of America\"){\n  value = data.physical_us_zip;\n} else {\n  value = data.physical_non_us_zip;\n}",
+							"key": "physical_zip",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"size": "md",
@@ -3399,10 +3510,10 @@
 							"eq": "true"
 						},
 						"type": "textfield",
-						"input": true,
-						"lockKey": true,
 						"labelWidth": 30,
 						"labelMargin": 3,
+						"input": true,
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -5416,8 +5527,17 @@
 											"label": "Training Agency",
 											"value": "trainingAgency"
 										}, {
-											"value": "other",
-											"label": "Other"
+											"value": "cruiseLine",
+											"label": "Cruise Line"
+										}, {
+											"label": "Land Owner",
+											"value": "landOwner"
+										}, {
+											"label": "Booking Agent",
+											"value": "bookingAgent"
+										}, {
+											"label": "Other",
+											"value": "other"
 										}]
 									},
 									"selectThreshold": 0.3,
@@ -7161,11 +7281,7 @@
 											"collapsible": false,
 											"tableView": false,
 											"key": "ALpoolSupplementalForm1",
-											"conditional": {
-												"show": true,
-												"when": "additionalLocations.ALNonDivingPoolActivities",
-												"eq": "yes"
-											},
+											"customConditional": "if(row['ALNonDivingPoolActivities'] == \"yes\"){\n  show = true;\n}else{\n  show = false;\n}",
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
@@ -7883,7 +7999,6 @@
 											"hideOnChildrenHidden": false
 										}, {
 											"label": "Please explain the equipment sales",
-											"spellcheck": false,
 											"tableView": true,
 											"clearOnHide": false,
 											"validate": {
@@ -9325,7 +9440,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);\n}",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    value = ((parseFloat(data[\"medicalExpense\"])||0)/10).toFixed(0);\n  }\n  else{\n    value = 0;\n  }\n}",
 													"key": "ALMedicalExpenseFP",
 													"type": "number",
 													"input": true,
@@ -10537,7 +10652,7 @@
 										"showMeridian": false
 									},
 									"clearOnHide": false,
-									"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
+									"calculateValue": "console.log(data['policyPeriod']);\nvalue = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\nconsole.log(value);",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
@@ -10960,14 +11075,23 @@
 												"label": "Training Agency",
 												"value": "trainingAgency"
 											}, {
-												"value": "other",
-												"label": "Other"
+												"value": "cruiseLine",
+												"label": "Cruise Line"
+											}, {
+												"label": "Land Owner",
+												"value": "landOwner"
+											}, {
+												"label": "Booking Agent",
+												"value": "bookingAgent"
+											}, {
+												"label": "Other",
+												"value": "other"
 											}]
 										},
 										"selectThreshold": 0.3,
 										"validate": {
 											"required": true,
-											"customMessage": "Please select the Business Relation with the Additional Insured"
+											"customMessage": "Please select the business relation with the additional insured"
 										},
 										"errorLabel": "Additional Insured Business Relation",
 										"key": "businessRelation",
@@ -11849,7 +11973,7 @@
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
+							"calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <=50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
 							"validate": {
 								"required": true
 							},
@@ -11897,7 +12021,7 @@
 					"hideLabel": true
 				}, {
 					"label": "totalReceiptsAmount",
-					"calculateValue": "var receiptsAmount = (parseFloat(data['dsglestmonthretailreceipt'])||0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvalue =receiptsAmount;",
+					"calculateValue": "console.log(data['dsglestmonthretailreceipt']);\nvar receiptsAmount = (parseFloat(data['dsglestmonthretailreceipt'])||0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvalue =receiptsAmount;\nconsole.log(value);",
 					"key": "totalReceiptsAmount",
 					"type": "hidden",
 					"input": true,
@@ -11968,11 +12092,11 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
+						"calculateValue": "if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\nvalue= data[\"medicalExpense\"]\n}\nelse{\nvalue = 0;\n}",
 						"key": "MedicalExpenseFP",
 						"conditional": {
 							"show": true,
-							"when": "medicalExpensePLCheckBox",
+							"when": "medicalPayment",
 							"eq": "true"
 						},
 						"type": "number",
@@ -12030,7 +12154,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
+						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
 						"key": "TravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -13313,7 +13437,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 533,
+	"_vid": 557,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13330,6 +13454,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-16T10:34:13.776Z",
+	"modified": "2020-07-27T09:34:16.847Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
 </head>
 <body onload = "agentInfo()">
-	<div class ="body_div"> 
+	<div class ="body_div">
 		<div>&nbsp</div>
 		<div class = "content">
 			<div class ="content1">
@@ -152,7 +152,7 @@
 						</table>
 				</div>
 			</div>
-    	
+
 			<div class="policy_notice_div">
 				<hr class="hrtag"></hr>
 					<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day of uninterrupted coverage,whichever is earlier (refer to section VI of the policy). However, in no case will the retro date be prior to 6/30/1992. In the event of a claim which invokes a Retroactive Date prior to {$start_date}, the Certificate Holder must submit proof of uninterrupted insurance coverage dating prior to the date that the alleged negligent act, error, or omission occurred.
@@ -179,7 +179,7 @@
 			{/if}
 			{/foreach}
 			{if $hasEndorsement == 1}
-				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>	
+				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if isset($previousPolicyData) && !empty($previousPolicyData)}
 
 					{foreach from=$previousPolicyData item=$upgradeData}
@@ -219,7 +219,7 @@
 				{/if}
 			{/if}
 			{/if}
-				
+
 			<hr></hr>
 			<p class = "policy_notice">
 				The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688. The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description of the terms, conditions and exclusions of the policy. This certificate does not amend, alter or extend the coverage afforded by the policy referenced on this certificate.
@@ -229,6 +229,12 @@
 			</p>
 
 
+			<hr></hr>
+			{if isset($excludedOperation) && $excludedOperation != ""}
+			<p style="margin-bottom: 5px;font-size: 15px;"><b>EXCLUDED OPERATION:</b></p>
+            		<p style="margin-top:1%;margin-left: 2%;text-align: justify;font-size: 13px;">{$excludedOperation}</p>
+        	{/if}
+			<hr></hr>
 			{if $state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/AK.tpl"}</b>
@@ -418,11 +424,11 @@
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
-				<center><p class = "notice">both of 
+				<center><p class = "notice">both of
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
-				<center><p class = "notice">both of 
+				<center><p class = "notice">both of
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Vermont'}
@@ -450,4 +456,3 @@
 	</div>
 </body>
 </html>
-
