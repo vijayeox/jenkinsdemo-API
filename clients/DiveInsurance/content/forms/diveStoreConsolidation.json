@@ -11973,7 +11973,7 @@
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
+							"calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <=50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
 							"validate": {
 								"required": true
 							},
@@ -12021,7 +12021,7 @@
 					"hideLabel": true
 				}, {
 					"label": "totalReceiptsAmount",
-					"calculateValue": "var receiptsAmount = (parseFloat(data['dsglestmonthretailreceipt'])||0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvalue =receiptsAmount;",
+					"calculateValue": "console.log(data['dsglestmonthretailreceipt']);\nvar receiptsAmount = (parseFloat(data['dsglestmonthretailreceipt'])||0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvalue =receiptsAmount;\nconsole.log(value);",
 					"key": "totalReceiptsAmount",
 					"type": "hidden",
 					"input": true,
@@ -12154,7 +12154,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
+						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
 						"key": "TravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -13437,7 +13437,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 554,
+	"_vid": 559,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13454,6 +13454,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-24T07:46:41.892Z",
+	"modified": "2020-07-27T09:53:30.746Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
