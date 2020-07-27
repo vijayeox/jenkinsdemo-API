@@ -12168,7 +12168,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
+						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
 						"key": "TravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -13763,7 +13763,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 319,
+	"_vid": 321,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13780,6 +13780,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-27T09:34:24.390Z",
+	"modified": "2020-07-27T11:39:13.334Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }

@@ -12116,7 +12116,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
+						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true || data.doYouWantToApplyForNonOwnerAuto == \"true\"){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
 						"key": "Non-OwnedAutoFP",
 						"type": "number",
 						"input": true,
@@ -12154,7 +12154,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
+						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
 						"key": "TravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -13437,7 +13437,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 559,
+	"_vid": 561,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13454,6 +13454,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-27T09:53:30.746Z",
+	"modified": "2020-07-27T11:39:02.750Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
