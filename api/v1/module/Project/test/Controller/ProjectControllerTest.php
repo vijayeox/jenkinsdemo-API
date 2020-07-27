@@ -630,13 +630,13 @@ class ProjectControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'projectname' => 'Test Project 1', 'username' => $this->adminUser)), 'USERTOPROJECT_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'projectname' => 'Test Project 1', 'username' => $this->employeeUser)), 'USERTOPROJECT_ADDED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->adminUser, 'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')), 'DELETION_USERFROMPROJECT')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')), 'ADDITION_USERTOPROJECT')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'firstname' => 'Employee', 'lastname' => 'Test', 'email' => 'admin3@eoxvantage.in', 'timezone' => 'United States/New York', 'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')), 'ADDITION_USERTOPROJECT')->once()->andReturn();
         }
 
         $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -649,7 +649,7 @@ class ProjectControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'projectname' => 'Test Project 1', 'username' => $this->adminUser)), 'USERTOPROJECT_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'projectname' => 'Test Project 1', 'username' => $this->employeeUser)), 'USERTOPROJECT_ADDED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->adminUser, 'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')), 'DELETION_USERFROMPROJECT')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')), 'ADDITION_USERTOPROJECT')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'firstname' => 'Employee', 'lastname' => 'Test', 'email' => 'admin3@eoxvantage.in', 'timezone' => 'United States/New York', 'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')), 'ADDITION_USERTOPROJECT')->once()->andReturn();
         }
 
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save', 'POST', $data);
@@ -792,7 +792,7 @@ class ProjectControllerTest extends ControllerTest
     public function testGetListOfUsersWithQuery()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/users?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"al"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/users?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"r Test"}]},"sort":[{"field":"id","dir":"desc"}],"skip":0,"take":1}]
     ', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -821,7 +821,7 @@ class ProjectControllerTest extends ControllerTest
     public function testGetListOfUsersWithQueryParameter()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/users?filter=[{"filter":{"filters":[{"field":"name","operator":"startswith","value":"karan"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/users?filter=[{"filter":{"filters":[{"field":"name","operator":"startswith","value":"Manager"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);

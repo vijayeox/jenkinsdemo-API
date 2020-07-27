@@ -150,12 +150,13 @@ class EmailControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/email/1/default', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        print_r($content);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['id'], 1);
-        $this->assertEquals($content['data'][0]['email'], 'bharatg@myvamla.com');
+        $this->assertEquals($content['data'][0]['email'], 'admin1@eoxvantage.in');
     }
 
     public function testEmailDefaultNotFound()
