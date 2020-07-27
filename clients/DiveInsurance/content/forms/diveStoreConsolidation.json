@@ -12135,7 +12135,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(data[data[\"excessLiabilityCoverage\"]]||0)",
+						"calculateValue": "if(data.excessLiabilityCoveragePrimarylimit1000000PL == \"true\" || data.excessLiabilityCoveragePrimarylimit1000000PL == true){\n value=(data[data[\"excessLiabilityCoverage\"]]||0); \n}else{\n  value = 0;\n}",
 						"key": "ExcessLiabilityFP",
 						"type": "number",
 						"input": true,
@@ -13437,7 +13437,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 561,
+	"_vid": 564,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13454,6 +13454,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-27T11:39:02.750Z",
+	"modified": "2020-07-27T15:53:58.445Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }

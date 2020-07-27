@@ -12149,7 +12149,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(data[data[\"excessLiabilityCoverage\"]]||0)",
+						"calculateValue": "if(data.excessLiabilityCoveragePrimarylimit1000000PL == \"true\" || data.excessLiabilityCoveragePrimarylimit1000000PL == true){\n value=(data[data[\"excessLiabilityCoverage\"]]||0); \n}else{\n  value = 0;\n}",
 						"key": "ExcessLiabilityFP",
 						"type": "number",
 						"input": true,
@@ -13763,7 +13763,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 321,
+	"_vid": 322,
 	"title": "Endorsement Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13780,6 +13780,6 @@
 	"path": "endorsementdivestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T13:40:41.846Z",
-	"modified": "2020-07-27T11:39:13.334Z",
+	"modified": "2020-07-27T15:54:38.846Z",
 	"machineName": "testdivehub:endorsementDiveStoreConsolidation"
 }
