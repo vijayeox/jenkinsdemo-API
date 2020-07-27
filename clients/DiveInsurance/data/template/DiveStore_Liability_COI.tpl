@@ -103,7 +103,7 @@
                             <td>Excluded</td>{/if}
                         </p>
 					<p class = "sec_title2">
-										{if isset($doYouWantToApplyForNonOwnerAuto) && $doYouWantToApplyForNonOwnerAuto == true}
+										{if isset($doYouWantToApplyForNonOwnerAuto) && $doYouWantToApplyForNonOwnerAuto == true && $doYouWantToApplyForNonOwnerAuto == "true"}
 										{if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
 												<td>$100,000</td>
 										{else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
