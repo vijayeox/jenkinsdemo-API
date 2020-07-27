@@ -21,7 +21,7 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
     }
 
     public function setConfig($config){
-        $this->config;
+        $this->config=$config;
     }
 
     public function runQuery($app_name,$entity_name,$parameters){
