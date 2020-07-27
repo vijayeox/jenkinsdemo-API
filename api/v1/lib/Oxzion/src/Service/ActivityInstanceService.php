@@ -110,6 +110,8 @@ class ActivityInstanceService extends AbstractService
                     $tempValue = json_decode($value,true);
                     if(isset($tempValue)){
                         $data[$key] = $tempValue;
+                    }else if($value === "false"){
+                        $data[$key] = 0;
                     }
                 }
             }
