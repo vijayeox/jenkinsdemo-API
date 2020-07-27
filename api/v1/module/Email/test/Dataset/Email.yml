@@ -1,7 +1,7 @@
 email_setting_user:
   - id: 1
     userid: 1
-    email: "bharatg@myvamla.com"
+    email: "admin1@eoxvantage.in"
     password: "hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9"
     token: '{"access_token":"f5af9f51-07e6-4332-8f1a-c0c11c1e3728","token_type":"bearer", "refresh_token":"f725f747-3a65-49f6-a231-3e8944ce464d","expires_in":631138518, "scope":"/activities/update/read-limited","name":"Sofia Garcia","orcid":"0000-0001-2345-6789"}'
     host: "myvamla.com"

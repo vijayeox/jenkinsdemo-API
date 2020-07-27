@@ -218,7 +218,7 @@ class AuthControllerTest extends ControllerTest
         $rToken = $content['data']['refresh_token'];
         $jToken = $content['data']['jwt'];
         $this->reset();
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NjA0MTgzMzgsImp0aSI6ImEyVUlTRkY4dXZMRTBVQnlMSDFxdDF1TldRUW14U29QXC81Skc2d085NEhvPSIsIm5iZiI6MTU2MDQxODMzOCwiZXhwIjoxNTYwNDE4MzQ4LCJkYXRhIjp7InVzZXJuYW1lIjoiYmhhcmF0Z3Rlc3QiLCJvcmdpZCI6IjEifX0.7rTurKwUph5WA9rB--5EVHHg3E_M0tVd5boshuuoPVwZgarCCymuqs8voA06aFuwM6I00tDmpYApG-dIA3BDzQ', 'refresh_token' => $rToken];
+        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1OTU4NDQzNTUsImp0aSI6IkdzNzRLOGZNK1pvVjNtc2xrTlVSXC9BTk9MSXJDVXFmcUEzbWdSUUZLcW9VPSIsIm5iZiI6MTU5NTg0NDM1NSwiZXhwIjoxNTk1OTE2MzU1LCJkYXRhIjp7InVzZXJuYW1lIjoiYWRtaW50ZXN0Iiwib3JnaWQiOiIxIn19.8Umw1UsWissBEaZfrSCp0KnG68JQq3VXIv5qP8mPDt5rZ3owGqpKuFjU8rYX0gapwZlovK6g0UxpdfIBbUGTmg', 'refresh_token' => $rToken];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -226,7 +226,8 @@ class AuthControllerTest extends ControllerTest
         $this->assertControllerClass('AuthController');
         $this->assertMatchedRouteName('refreshtoken');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $responseContent = (array) json_decode($this->getResponse()->getContent(), true);
+        $content = $this->getResponse()->getContent();
+        $responseContent = (array) json_decode($content, true);
         $this->assertEquals($responseContent['status'], 'success');
         $this->assertNotEquals($responseContent['data']['jwt'], $jToken);
         $this->assertEquals($responseContent['data']['refresh_token'], $rToken);
@@ -359,7 +360,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testValidProfileEmail()
     {
-        $data = ['username' => 'bharatg@myvamla.com'];
+        $data = ['username' => 'admin1@eoxvantage.in'];
         $this->dispatch('/userprof', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);

@@ -156,6 +156,7 @@ class EmailController extends AbstractApiController
     {
         $id = $this->params()->fromRoute()['emailId'];
         $this->log->info(__CLASS__ . "-> Default email action - " . json_encode($id, true));
+
         try {
             $responseData = $this->emailService->emailDefault($id);
         } catch (ValidationException $e) {
