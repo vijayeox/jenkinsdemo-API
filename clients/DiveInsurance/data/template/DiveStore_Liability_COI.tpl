@@ -34,60 +34,60 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $10,000,000
                         {else}
                             $1,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                         	$4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $10,000,000
                         {else}
                             $1,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $6,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $11,000,000
                         {else}
                             $2,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $6,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && ($excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false")}
                             $11,000,000
                          {else}
                             $2,000,000

@@ -162,15 +162,15 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$10,000,000</td>
                         {else}
                             <td>$1,000,000</td>
@@ -178,15 +178,15 @@
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$10,000,000</td>
                         {else}
                             <td>$1,000,000</td>
@@ -194,15 +194,15 @@
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$6,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$11,000,000</td>
                         {else}
                             <td>$2,000,000</td>
@@ -210,15 +210,15 @@
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$6,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$11,000,000</td>
                         {else}
                             <td>$2,000,000</td>
