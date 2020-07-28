@@ -182,6 +182,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
 
+            if (isset($data['regeneratePolicy'])){
+                if(!is_null($data['regeneratePolicy']) && !empty($data['regeneratePolicy']) && !isset($data['endorsement_options']) ) {
+                    $coiDocument = $dest['absolutePath'].'ProfessionalLiabilityCOI.pdf';
+                    if (file_exists($coiDocument)) {
+                        FileUtils::deleteFile('ProfessionalLiabilityCOI.pdf',$dest['absolutePath']);
+                    }
+                }else{
+                        if(is_null($endorsementOptions)){
+                            $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
+                            if( count($workflowInstUuid) > 0 && (isset($workflowInstUuid[0]['process_instance_id']))){
+                                $dest['absolutePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
+                                $dest['relativePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
+                                FileUtils::deleteFile('ProfessionalLiabilityCOI.pdf',$dest['absolutePath']);
+                            }
+                        }
+                }
+            }
 
             if(isset($data['state'])){
                 $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
@@ -300,40 +317,54 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['additionalInsured_document'] = array($this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter'));
                 }
 
-                if(isset($this->template[$temp['product']]['blanketForm'])){
-                    $this->logger->info("DOCUMENT blanketForm");
-                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                 if(isset($this->template[$temp['product']]['blanketForm'])){
+                    if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
+                        $this->logger->info("DOCUMENT blanketForm");
+                        $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                    }else{
+                        $existingBlanketForm = $dest['relativePath'].$this->template[$temp['product']]['blanketForm'];
+                        $this->logger->info("D::::".print_r($existingBlanketForm,true));
+                        $this->logger->info("DOCUMENTS::::".print_r(file_exists($existingBlanketForm),true));
+                        $documents['blanket_document'] = $existingBlanketForm;
+                    }
                 }
+                $this->logger->info("DOCUMENT blanketForm".print_r($documents,true));
                 if(isset($this->template[$temp['product']]['card'])){
-                    $this->logger->info("generate pocket card");
-                    $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                    $template = $this->template[$temp['product']]['card'];
-                    $options = array();
-                    $docDest = $dest['absolutePath'].$template.'.pdf';
-                    $NewData = array();
-                    $NewData[0]['email'] = $data['email'];
-                    $NewData[0]['padi'] = $data['padi'];
-                    $NewData[0]['certificate_no'] = $data['certificate_no'];
-                    $NewData[0]['start_date'] = $data['start_date'];
-                    $NewData[0]['end_date'] = $data['end_date'];
-                    $NewData[0]['firstname'] = $data['firstname'];
-                    $NewData[0]['lastname'] = $data['lastname'];
-                    $NewData[0]['address1'] = $data['address1'];
-                    $NewData[0]['address2'] = isset($data['address2']) ? $data['address2'] : '';
-                    $NewData[0]['city'] = $data['city'];
-                    $NewData[0]['state'] = $data['state'];
-                    $NewData[0]['zip'] = $data['zip'];
-                    $NewData[0]['country'] = $data['country'];
-                    $NewData[0]['product'] = $data['product'];
-                    $NewData[0]['product_email_id'] = $data['product_email_id'];
-                    $NewData[0]['entity_name'] = 'Pocket Card Job';
-                    $newData = json_encode($NewData);
-                    $docdata = array('data' => $newData);
-                    unset($NewData);
-                    unset($newData);
-                    $this->logger->info("Data is: ".print_r($docdata, true));
-                    $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
-                    $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
+                    if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
+                        $this->logger->info("generate pocket card");
+                        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
+                        $template = $this->template[$temp['product']]['card'];
+                        $options = array();
+                        $docDest = $dest['absolutePath'].$template.'.pdf';
+                        $NewData = array();
+                        $NewData[0]['email'] = $data['email'];
+                        $NewData[0]['padi'] = $data['padi'];
+                        $NewData[0]['certificate_no'] = $data['certificate_no'];
+                        $NewData[0]['start_date'] = $data['start_date'];
+                        $NewData[0]['end_date'] = $data['end_date'];
+                        $NewData[0]['firstname'] = $data['firstname'];
+                        $NewData[0]['lastname'] = $data['lastname'];
+                        $NewData[0]['address1'] = $data['address1'];
+                        $NewData[0]['address2'] = isset($data['address2']) ? $data['address2'] : '';
+                        $NewData[0]['city'] = $data['city'];
+                        $NewData[0]['state'] = $data['state'];
+                        $NewData[0]['zip'] = $data['zip'];
+                        $NewData[0]['country'] = $data['country'];
+                        $NewData[0]['product'] = $data['product'];
+                        $NewData[0]['product_email_id'] = $data['product_email_id'];
+                        $NewData[0]['entity_name'] = 'Pocket Card Job';
+                        $newData = json_encode($NewData);
+                        $docdata = array('data' => $newData);
+                        unset($NewData);
+                        unset($newData);
+                        $this->logger->info("Data is: ".print_r($docdata, true));
+                        $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
+                        $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
+                    }else{
+                        $existingPocketCard = $dest['relativePath'].$this->template[$temp['product']]['card'].'.pdf';
+                        $this->logger->info("PocketCard::::".print_r(file_exists($existingPocketCard),true));
+                        $documents['PocketCard'] = $existingPocketCard;                        
+                    }
                 }
             }
             else if($data['product'] == "Dive Boat"){
@@ -564,7 +595,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if ($temp['product'] == 'Individual Professional Liability') {
                  $check = $this->endorsementOptionsFlag($temp);
              }
-             // print_r($check);exit;
+
              if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
                 $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 if(is_array($policyDocuments)){
@@ -605,15 +636,30 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
                 $docs = array();
-                if(isset($data['documents'])){
-                    if(is_string($data['documents'])) {
-                        $docs = json_decode($data['documents'],true);
+
+                if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
+
+                    if(isset($data['documents'])){
+                        if(is_string($data['documents'])) {
+                            $docs = json_decode($data['documents'],true);
+                        } else {
+                            $docs = $data['documents'];
+                        }
                     } else {
+                        $data['documents'] = array();
                         $docs = $data['documents'];
                     }
-                } else {
-                    $data['documents'] = array();
+                }
+                else{
+                    if(isset($data['regeneratePolicy']) && !empty($data['regeneratePolicy']) && isset($data['endorsement_options']) && empty($data['endorsement_options'])) {
+                    if(is_string($data['documents'])) {
+                            $docs = json_decode($data['documents'],true);
+                    }else{
+                        $docs = $data['documents'];
+                    }
+                }else{
                     $docs = $data['documents'];
+                }
                 }
                 $checkFlag = $this->endorsementOptionsFlag($temp);
                  if(!isset($documents['coi_document'])){
@@ -625,10 +671,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->addWaterMark($destinationForWatermark,"INVALID");
                     }
                     foreach ($docs['coi_document'] as $key => $value) {
-                        array_push($documents['coi_document'],$docs['coi_document'][$key]);
+                        if (!in_array($docs['coi_document'][$key], $documents['coi_document'],true)) {
+                            array_push($documents['coi_document'],$docs['coi_document'][$key]);
+                        }
                     }
                 }
-
                 if(!isset($documents['additionalInsured_document']) && isset($docs['additionalInsured_document'])){
                     $documents['additionalInsured_document'] = array();
                 }
@@ -732,6 +779,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $comments = array();
                 $comments['text'] = $data['additionalNotes'];
                 $this->createComment($comments,$data['fileId']);
+            }
+            if(isset($data['regeneratePolicy'])){
+                $data['regeneratePolicy'] = "";
             }
 
 
