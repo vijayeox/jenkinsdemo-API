@@ -12130,7 +12130,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
+						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true || data.doYouWantToApplyForNonOwnerAuto == \"true\"){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
 						"key": "Non-OwnedAutoFP",
 						"type": "number",
 						"input": true,

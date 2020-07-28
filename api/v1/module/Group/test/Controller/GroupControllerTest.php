@@ -210,8 +210,8 @@ class GroupControllerTest extends ControllerTest
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group 4', 'orgname' => 'Cleveland Black', "new_groupname" => "Test Group 4")), 'GROUP_UPDATED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group 4', 'orgname' => 'Cleveland Black', "username" => "bharatgtest")), 'USERTOGROUP_ADDED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group 4', "usernames" => array("bharatgtest"))), 'USERTOGROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group 4', 'orgname' => 'Cleveland Black', "username" => "admintest")), 'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group 4', "usernames" => array("admintest"))), 'USERTOGROUP_UPDATED')->once()->andReturn();
 
         }
         $this->dispatch('/group', 'POST', $data);
@@ -615,7 +615,7 @@ class GroupControllerTest extends ControllerTest
         $data = ['userid' => array(['id' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['id' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname' => 'Cleveland Black', 'username' => 'bharatgtest')), 'USERTOGROUP_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname' => 'Cleveland Black', 'username' => 'admintest')), 'USERTOGROUP_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'usernames' => array($this->managerUser, $this->employeeUser))), 'USERTOGROUP_UPDATED')->once()->andReturn();
         }
@@ -678,9 +678,9 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][1]['name'], 'Manager Test');
         $this->assertEquals($content['total'], 2);
     }
 
@@ -694,9 +694,9 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][1]['name'], 'Manager Test');
         $this->assertEquals($content['total'], 2);
     }
 
@@ -710,9 +710,9 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][1]['name'], 'Manager Test');
         $this->assertEquals($content['total'], 2);
     }
 
@@ -760,14 +760,14 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'], 'Manager Test');
         $this->assertEquals($content['total'], 2);
     }
 
     public function testgetuserlistWithPageNo()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"contains","value":"go"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"contains","value":"mi"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]
 ', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -775,21 +775,21 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['name'], 'Admin Test');
         $this->assertEquals($content['total'], 1);
     }
 
     public function testgetuserlistWithQueryFieldParameter()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"startswith","value":"ka"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"startswith","value":"Ma"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][0]['name'], 'Manager Test');
         $this->assertEquals($content['total'], 1);
     }
 

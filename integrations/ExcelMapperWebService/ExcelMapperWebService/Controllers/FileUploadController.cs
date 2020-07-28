@@ -41,17 +41,16 @@ namespace ArrowHeadWebService.Controllers
         [HttpPost]
         public ContentResult Post([FromBody] JsonElement jsonbody)
         {
-            // Process the jsonbody 
-//             if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
-//                    {
- //                        Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
- //                    }
-                      Console.WriteLine("Project Directory : " + _environment.WebRootPath);
-
-            string jsontext = jsonbody.ToString();
-            ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
-            new Task(() => { pExcel.processFile(_environment.WebRootPath, jsonbody); }).Start();                    
-            return Content("{\"Status\":1,\"Message\":\"" +"File Sent For Processing\"}", "application/json");
+            try
+            {
+                string jsontext = jsonbody.ToString();
+                ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
+                new Task(() => { pExcel.processFile(_environment.WebRootPath, jsonbody); }).Start();
+                return Content("{\"Status\":1,\"Message\":\"" + "File Sent For Processing\"}", "application/json");
+            } catch (Exception e)
+            {
+                return Content("{\"Status\":0,\"Message\":\"" + e.Message + "\"}", "application/json");
+            }
         }
 
     }

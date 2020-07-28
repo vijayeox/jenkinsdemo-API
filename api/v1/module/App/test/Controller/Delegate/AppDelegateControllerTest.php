@@ -85,7 +85,7 @@ class AppDelegateControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], "Bharat Gogineni");
+        $this->assertEquals($content['data'][0]['name'], "Admin Test");
     }
 
     public function testUserListWrongOrg()
