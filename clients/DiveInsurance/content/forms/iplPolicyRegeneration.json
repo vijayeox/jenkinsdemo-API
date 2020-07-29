@@ -1238,6 +1238,7 @@
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
+						"disabled": true,
 						"tableView": false,
 						"validate": {
 							"required": true,
@@ -3177,6 +3178,6 @@
 	"path": "iplpolicyregeneration",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-22T07:22:25.090Z",
-	"modified": "2020-07-29T06:46:59.175Z",
+	"modified": "2020-07-29T08:03:31.222Z",
 	"machineName": "testdivehub:iplPolicyRegeneration"
 }
