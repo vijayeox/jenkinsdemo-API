@@ -1,54 +1,593 @@
-- pageName: Coverage Selections
-  cell: I8
-  type: Checkbox
-  key: propertyYes
-  value: 'true'
-- pageName: Crime (printable)
-  cell: J72
-  type: Checkbox
-  key: semiAnual
-  value: 'true'
-- pageName: Garage Supplemental
-  cell: C5
-  key: minAge
-  value: '18'
-- pageName: Garage Supplemental
-  cell: C8
-  key: titleSearch
-  value: 'Yes'
-- pageName: Garage Supplemental
-  cell: C9
-  key: titleSearchDescription
-  value: Sample Description
-- pageName: Garage Supplemental
-  cell: B45
-  type: DataGrid
-  value:
-    - - ABC
-      - Father
-      - '2020-11-15'
-      - '12345'
-    - - KLM
-      - Mother
-      - '1995-11-25'
-      - '8565'
-    - - XYZ
-      - Brother
-      - '1856-10-15'
-      - A562B
-    - - PLM
-      - Son
-      - '2012-10-05'
-      - '#16ANC'
-- pageName: Garage Supplemental
-  cell: B5
-  type: SingleCellMultipleCheckboxs
-  multiItemIndex: 2
-  key: plannedRoute
-  value: 'true'
-- pageName: Garage Supplemental
-  cell: B112
-  type: SingleCellMultipleCheckboxs
-  multiItemIndex: 3
-  key: other
-  value: 'true'
+-
+   key: namedInsured
+   Source Worksheet: Named Insured
+   pageName: Insured Information
+   cell: 'E15:Q15'
+   Note: Wrongly mapped shows E14 in requirement sheet
+-
+   key: dba
+   Source Worksheet: DBA (if any)
+   pageName: Insured Information
+   cell: 'E16:Q16'
+-
+   key: mailingAddress
+   Source Worksheet: Mailing Address
+   pageName: Insured Information
+   cell: 'E17:Q17'
+-
+   key: city
+   Source Worksheet: City
+   pageName: Insured Information
+   cell: 'E18:Q18'
+-
+   key: state
+   Source Worksheet: State
+   pageName: Insured Information
+   cell: 'E20'
+-
+   key: zip
+   Source Worksheet: Zip
+   pageName: Insured Information
+   cell: 'E21'
+-
+   key: county
+   Source Worksheet: County
+   pageName: Insured Information
+   cell: 'E19'
+-
+   key: socialsecNum
+   Source Worksheet: 'FIEN/Soc Sec #'
+   pageName: Insured Information
+   cell: M22
+-
+   key: businessPhone
+   Source Worksheet: 'Business Phone:'
+   pageName: Insured Information
+   cell: E22
+-
+   key: businessFax
+   Source Worksheet: 'Business Fax:'
+   pageName: Insured Information
+   cell: 'G22:K22'
+-
+   key: businessEmail
+   Source Worksheet: 'Business Email:'
+   pageName: Insured Information
+   cell: 'P23:Q23'
+-
+   key: insurancecontactdataGrid_genfullName
+   Source Worksheet: Insurance Contact
+   method: simpleDatagrid
+   type: DataGrid
+   pageName: Insured Information
+   cell: 'D23'
+-
+   key: insurancecontactdataGrid_genphone
+   Source Worksheet: 'Phone:'
+   pageName: Insured Information
+   method: simpleDatagrid
+   type: DataGrid
+   cell: E22
+-
+   key: insurancecontactdataGrid_genemail
+   Source Worksheet: 'Email:'
+   pageName: Insured Information
+   method: simpleDatagrid
+   type: DataGrid
+   cell: 'P23'
+-
+   key: effectiveDate
+   Source Worksheet: 'Effective Date:'
+   pageName: Insured Information
+   cell: E14
+   Note: Wrongly mapped shows E15 in requirement sheet
+-
+   key: policyDeclined
+   Source Worksheet: >-
+      Any policy or coverage declined, cancelled or non-renewed during the prior
+      10 years for any premises or operations?
+   pageName: 'Underwriting Survey'
+   cell: D14
+-
+   key: policyDeclinedExplain
+   Source Worksheet: 'If YES, please explain:'
+   pageName: 'Underwriting Survey'
+   cell: 'I14:N14'
+   Note: Wrongly mapped shows I14 in requirement sheet
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_locationNum
+   method: simpleDatagrid
+   Source Worksheet: Location Details
+   pageName: Locations
+   cell: B69
+   type: DataGrid
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_DOLOccupancy
+   method: simpleDatagrid
+   Source Worksheet: Location Details
+   pageName: Locations
+   cell: C69
+   type: DataGrid
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_address
+   method: simpleDatagrid
+   Source Worksheet: Location Details
+   pageName: Locations
+   cell: D69
+   type: DataGrid
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_city
+   method: simpleDatagrid
+   Source Worksheet: Location Details
+   pageName: Locations
+   cell: E69
+   type: DataGrid
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_county1
+   method: simpleDatagrid
+   Source Worksheet: Location Details
+   pageName: Locations
+   cell: F69
+   type: DataGrid
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_state
+   method: simpleDatagrid
+   Source Worksheet: Location Details
+   pageName: Locations
+   cell: G69
+   type: DataGrid
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_zip
+   method: simpleDatagrid
+   Source Worksheet: Location Details
+   pageName: Locations
+   cell: H69
+   type: DataGrid
+-
+   key: ''
+   Source Worksheet: F/T employees Furnished an Auto
+   pageName: Underwriting Survey
+   cell: D63
+-
+   key: ''
+   Source Worksheet: P/T employees furnished an auto
+   pageName: Underwriting Survey
+   cell: D63
+-
+   key: mvrsonalldriversreviewedannually
+   Source Worksheet: MVR's on all drivers reviewed annually?
+   pageName: 'Underwriting Survey'
+   cell: D60
+-
+   key: avgOfTimesContractDriversUsedPerMonth
+   Source Worksheet: 'Avg # of times contract drivers used per month at any one location?'
+   pageName: 'Underwriting Survey'
+   cell: D65
+-
+   key: avgnumberofcontractdrivers
+   Source Worksheet: 'Avg # of contract drivers over age 80 or younger than 20:'
+   pageName: 'Underwriting Survey'
+   cell: D67
+-
+   key: testdrivesalwaysaccompanied
+   Source Worksheet: Test drives always accompanied by employee?
+   pageName: 'Underwriting Survey'
+   cell: J37
+-
+   key: testdriveprocedures_salespersonAlwaysAccompanies
+   method: checkInArray
+   Source Worksheet: 'Test Drive Procedures:sales person'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 126
+   Special: Checkbox
+-
+   key: testdriveprocedures_copyOfDriversLicense
+   method: checkInArray
+   Source Worksheet: 'Test Drive Procedures:driver''s licence'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 123
+   Special: Checkbox
+-
+   key: testdriveprocedures_copyOfInsuranceCard
+   method: checkInArray
+   Source Worksheet: 'Test Drive Procedures:insurance'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 124
+   Special: Checkbox
+-
+   key: testdriveprocedures_plannedRoute
+   method: checkInArray
+   Source Worksheet: 'Test Drive Procedures:planned route'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 125
+   Special: Checkbox
+-
+   key: minage
+   Source Worksheet: Min/Max age reqs.?
+   pageName: 'Underwriting Survey'
+   cell: N37
+   Note: >-
+      Note: The system will only map the Min Age. Max age is not on the
+      Schinnerer DOL Carrier App
+-
+   key: customerserviceloanerrentalprogram
+   Source Worksheet: Customer Service Loaner Rental Program?
+   pageName: 'Underwriting Survey'
+   cell: D69
+-
+   key: numberofvehiclesinfleet
+   Source Worksheet: Number of vehicles in fleet?
+   pageName: 'Underwriting Survey'
+   cell: D71
+-
+   key: inhouseprograminsuredelsewhere
+   Source Worksheet: 'If in house program, insured elsewhere?'
+   pageName: 'Underwriting Survey'
+   cell: D70
+-
+   key: loanerrentalcontractused
+   Source Worksheet: >-
+      Is a Loaner  or Rental contract used? Please include a copy of contract
+      used.
+   pageName: 'Underwriting Survey'
+   cell: D75
+-
+   key: doesinsuredrentvehicles
+   Source Worksheet: >-
+      Does Insured rent vehicles other than rentals in conjunction with service
+      operations?
+   pageName: 'Underwriting Survey'
+   cell: D72
+-
+   key: numberofvehiclesindailyrentalfleet
+   Source Worksheet: Number of vehicles in daily rental fleet
+   pageName: 'Underwriting Survey'
+   cell: D74
+-
+   key: rentalcontractused
+   Source Worksheet: Is Rental contract used? Please include a copy of contract used.
+   pageName: 'Underwriting Survey'
+   cell: D75
+-
+   key: dolspotdeliveryprocedures_copyOfDriversLicense
+   method: checkInArray
+   Source Worksheet: 'Spot Delivery Procedures:licence'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 127
+-
+   key: dolspotdeliveryprocedures_insuranceVerification
+   method: checkInArray
+   Source Worksheet: 'Spot Delivery Procedures:insurance veri'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 128
+-
+   key: dolspotdeliveryprocedures_creditCheck
+   method: checkInArray
+   Source Worksheet: 'Spot Delivery Procedures:credit'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 129
+-
+   key: dolspotdeliveryprocedures_managementApproval
+   method: checkInArray
+   Source Worksheet: 'Spot Delivery Procedures:management approval'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 130
+-
+   key: ''
+   Source Worksheet: >-
+      Vehicle inventory taken:None - when this question is not answered || mark
+      it as others and mention no ????????
+   pageName: 'Underwriting Survey'
+   cell: Check Box 118
+   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+-
+   key: ''
+   Source Worksheet: 'Vehicle inventory taken:Daily'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 119
+   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+-
+   key: ''
+   Source Worksheet: 'Vehicle inventory taken:Weekly'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 120
+   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+-
+   key: ''
+   Source Worksheet: 'Vehicle inventory taken:other'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 123
+   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+-
+   key: ''
+   Source Worksheet: 'Vehicle inventory taken:monthly'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 121
+   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+-
+   key: ''
+   Source Worksheet: 'Vehicle inventory taken:Quarterly'
+   pageName: 'Underwriting Survey'
+   cell: Check Box 122
+   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+-
+   key: dolvehstrschedloc
+   returnBoolean: Yes|No
+   Source Worksheet: Vehicles only stored at scheduled locations?
+   pageName: 'Underwriting Survey'
+   cell: D31
+-
+   key: dolflodlossdescib
+   Source Worksheet: 'If any flood losses, please describe:'
+   pageName: 'Underwriting Survey'
+   cell: D78
+   Note: >-
+      Note: If this question is filled out the system needs to map "Yes" to
+      Sheet!Underwriting Survey D77
+-
+   key: dolflodlossdescib
+   returnBoolean: Yes|No
+   Source Worksheet: 'If any flood losses, please describe:'
+   pageName: 'Underwriting Survey'
+   cell: D77
+   Note: >-
+      Note: If this question is filled out the system needs to map "Yes" to
+      Sheet!Underwriting Survey D77
+-
+   key: dolkeycntrlsameallloc
+   Source Worksheet: Are key  controls the same for all locations?
+   pageName: 'Underwriting Survey'
+   cell: D48
+   Note: Wrongly mapped shows B48 in requirement sheet
+-
+   key: ''
+   Source Worksheet: 'All Locations (does not include Vacant Land or Bldg Leased to Others):'
+   pageName: 'Underwriting Survey'
+   Note: >-
+      Note:Mapping has not been done as they have not specified the cell range
+      or the location in the raw file
+-
+   key: ''
+   Source Worksheet: 'Location 1:'
+   pageName: 'Underwriting Survey'
+   cell: D49
+   Note: "Notes: System should map the location # and the Key Control selected.For Example: Location 1: Lockbox, Daily Key Inventory\r\nLocation 2: Computerized Key Vault"
+-
+   key: dolmanagersmstapprove
+   Source Worksheet: Managers must approve/record the dupl. of keys?
+   pageName: 'Underwriting Survey'
+   cell: D50
+-
+   key: dolextrasetskeyslocked
+   Source Worksheet: Extra sets of keys locked away with lmtd. access?
+   pageName: 'Underwriting Survey'
+   cell: D52
+-
+   key: dolarethrowndautos
+   Source Worksheet: Are there owned autos within 300 ft. of a Rock Aggregate Roof?
+   pageName: 'Underwriting Survey'
+   cell: D57
+-
+   key: dolareanyvehiparked
+   Source Worksheet: 'Are any vehicles parked in Parking Garages '
+   pageName: 'Underwriting Survey'
+   cell: D58
+   Note: >-
+      Note: If the producer answers "Yes" to "Are any vehicles parked in Parking
+      Garages" and "No"  to "Any Vehicles parked on roof tops ?" the system will
+      map YES to Sheet!Underwriting Survey D58.f the producer answers "No" to
+      "Are any vehicles parked in Parking Garages" and "Yes" to "Any Vehicles
+      parked on roof tops ?" the system will map YES to Sheet!Underwriting
+      Survey D58.
+-
+   key: dolcompdeduc
+   Source Worksheet: 'Comp Deductible:'
+   pageName: 'Underwriting Survey'
+   cell: C26
+-
+   key: dolcompdeduc
+   Source Worksheet: 'Comp Deductible:'
+   pageName: 'Underwriting Survey'
+   cell: I26
+-
+   key: dolcompdeduc
+   Source Worksheet: 'Comp Deductible:'
+   pageName: Exposures and Deductibles
+   cell: L69
+-
+   key: dolcollisiondeduc
+   Source Worksheet: 'Collision Deductible:'
+   pageName: Exposures and Deductibles
+   cell: M69
+-
+   key: dolcollisiondeduc
+   Source Worksheet: 'Collision Deductible:'
+   pageName: 'Underwriting Survey'
+   cell: D29
+-
+   key: dolrepairpercenlabor
+   Source Worksheet: 'Repair % - Labor:'
+   pageName: Exposures and Deductibles
+   cell: O69
+-
+   key: dolrepairpercenparts
+   Source Worksheet: 'Repair % - Parts:'
+   pageName: Exposures and Deductibles
+   cell: N69
+-
+   key: dolwindhaildeduc
+   Source Worksheet: 'Wind/Hail Deductible: '
+   pageName: 'Underwriting Survey'
+   cell: D27
+-
+   key: dolflooddeduc
+   Source Worksheet: 'Flood Deductible:'
+   pageName: 'Underwriting Survey'
+   cell: D28
+-
+   key: dolmaxvalpervehicle
+   Source Worksheet: 'Max Value/ Per vehicle held for sale limit:'
+   pageName: 'Underwriting Survey'
+   cell: D33
+-
+   key: ''
+   Source Worksheet: Comp
+   pageName: 'Underwriting Survey'
+   cell: ''
+   Special: Checkbox
+   Note: >-
+      Notes: In the Auto Workbook it is broken out by Vehicle Class: New, Used,
+      Demo, Service, Other Road and Non-Owned. If coverage is selected for at
+      least one of the vehicle class types the system needs to select the
+      coverage box in Sheet!Underwriting Survey D21:I24 - Floor Plan Coverage
+      Provided
+-
+   key: ''
+   Source Worksheet: Coll
+   pageName: 'Underwriting Survey'
+   cell: ''
+   Special: Checkbox
+   Note: >-
+      Notes: In the Auto Workbook it is broken out by Vehicle Class: New, Used,
+      Demo, Service, Other Road and Non-Owned. If coverage is selected for at
+      least one of the vehicle class types the system needs to select the
+      coverage box in Sheet!Underwriting Survey D21:I24 - Floor Plan Coverage
+      Provided
+-
+   key: ''
+   Source Worksheet: Comp
+   pageName: 'Underwriting Survey'
+   cell: ''
+   Special: Checkbox
+   Note: >-
+      Notes: In the Auto Workbook it is broken out by Vehicle Class: New, Used,
+      Demo, Service, Other Road and Non-Owned. If coverage is selected for at
+      least one of the vehicle class types the system needs to select the
+      coverage box in Sheet!Underwriting Survey D21:I24 - Floor Plan Coverage
+      Provided
+-
+   key: ''
+   Source Worksheet: Service Loaners - Collison
+   pageName: 'Underwriting Survey'
+   cell: 'D21:I24'
+   Special: Checkbox
+   Note: >-
+      Notes: In the Auto Workbook it is broken out by Vehicle Class: New, Used,
+      Demo, Service, Other Road and Non-Owned. If coverage is selected for at
+      least one of the vehicle class types the system needs to select the
+      coverage box in Sheet!Underwriting Survey D21:I24 - Floor Plan Coverage
+      Provided
+-
+   key: doltotalnoofdemos
+   Source Worksheet: 'Total number of demos/furnished auto provided: '
+   pageName: 'Underwriting Survey'
+   cell: D63
+-
+   key: franchisedAutoDealer*dolaftrhrslighting
+   Source Worksheet: After Hours Lighting
+   pageName: 'Underwriting Survey'
+   cell: Check Box 221
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkSecurityGuards
+   Source Worksheet: Security Guards
+   pageName: 'Underwriting Survey'
+   cell: Check Box 223
+   type: Checkbox
+   Note: Wrongly mapped shows K53 in requirement sheet
+-
+   key: franchisedAutoDealer*checkNotMonitoredSurveillanceCamera
+   Source Worksheet: Surveill. Cameras not monitored
+   pageName: 'Underwriting Survey'
+   cell: Check Box 222
+   type: Checkbox
+   Note: >-
+      Note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes" to the applicable carrier app.
+-
+   key: franchisedAutoDealer*checkMonitoredSurveillanceCamera
+   Source Worksheet: Surveill. Cameras monitored / intruder notification
+   pageName: 'Underwriting Survey'
+   cell: Check Box 222
+   type: Checkbox
+   Note: >-
+      Note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes" to the applicable carrier app.
+-
+   key: franchisedAutoDealer*checkdolpostnchain
+   Source Worksheet: Post & Chain
+   pageName: 'Underwriting Survey'
+   cell: Check Box 220
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkdolflyfencdpremises
+   Source Worksheet: Fully Fenced Premises
+   pageName: 'Underwriting Survey'
+   cell: Check Box 219
+   type: Checkbox
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_DOLOccupancy
+   method: simpleDatagrid
+   Source Worksheet: 12 Month Avg  New
+   pageName: 'Valuation Survey '
+   cell: 'G5:G104'
+   type: DataGrid
+   Note: "Flag for discussion:\r\n1. All the locations and buildings from the property need to map over and allow the user to enter in the following SOV fields.\r\n2. Producer can remove any locations that they don’t need.\r\n3. For each unique location the data would need to add everything together.For Example:\r\n12 Month Average New:\r\n-Location 1 Bld 1 =  12 Month Avg New $15,500,000\r\n-Location 1 Bld 2 = 12 Month Avg New $500,000\r\n-Location 1 Bld 3 = 12 Month Avg New $1,000,0000Step 1. SUM the 12 Month Average New value from each of the locations = $17,000,000Insured Through Floor Plan:\r\n-Location 1 Bld 1 =  Insured Through Floor Plan - New $2,000,000\r\n-Location 1 Bld 2 = Insured Through Floor Plan - New $200,000\r\n-Location 1 Bld 3 = Insured Through Floor Plan - New $500,000Step 2. SUM the Insured Through Floor Plan values listed  at each of the locations = $2,700,000Step 3. Calculate the total location difference between  the 12 month average new and the Insured Through Floor Plan.$17,000,000-$2,700,000= $14,300,000 needs to map to Sheet!SOVH5"
+-
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_DOLOccupancy
+   method: simpleDatagrid
+   Source Worksheet: Insured Through Floor Plan - New
+   pageName: 'Valuation Survey '
+   cell: 'K5:K104'
+   type: DataGrid
+-
+   key: 'victorAutoPhysicalDamage*DealershipStorageLocationsArray_monthAvgUsed'
+   method: simpleDatagrid
+   Source Worksheet: 12 Month Avg  Used
+   pageName: 'Valuation Survey '
+   cell: 'J5:J104'
+   type: DataGrid
+   Note: "Flag for discussion:\r\n1. All the locations and buildings from the property need to map over and allow the user to enter in the following SOV fields.\r\n2. Producer can remove any locations that they don’t need.\r\n3. For each unique location the data would need to aFor Example:\r\n12 Month Average Used:\r\n-Location 1 Bld 1 =  12 Month Avg Used $12,000,000\r\n-Location 1 Bld 2 = 12 Month Avg Used $500,000\r\n-Location 1 Bld 3 = 12 Month Avg Used $1,000,0000Step 1. SUM the value from each of the locations = $13,500,000Insured Through Floor Plan - Used \r\n-Location 1 Bld 1 = Insured Through Floor Plan - Used $5,000,000\r\n-Location 1 Bld 2 = Insured Through Floor Plan - Used $100,000\r\n-Location 1 Bld 3 = Insured Through Floor Plan - Used $500,000Step 2. SUM the value from each of the locations = $5,600,000Step 3: Calculate the difference of the total Location 12 Month Average used and the total location Insured Through Floor Plan Used:  $7,900,000"
+-
+   key: 'victorAutoPhysicalDamage*DealershipStorageLocationsArray_insuredThroughFloorPlanUsed'
+   method: simpleDatagrid
+   Source Worksheet: Insured Through Floor Plan - Used
+   pageName: 'Valuation Survey '
+   cell: 'K5:K104'
+   type: DataGrid
+   Note: "Flag for Discussion:\r\nThe Insured through floor plan limits should never be greater than the 12 Month Average limits. If a producer enters an Insured to Floor Plan limit that is greater than the 12 Month Average an error message will trigger."
+-
+   key: 'victorAutoPhysicalDamage*DealershipStorageLocationsArray_monthAvgRoadDemosFurnishedAutos'
+   method: simpleDatagrid
+   Source Worksheet: '12 Month Avg  Road/Demos / Furnished Autos '
+   pageName: 'Valuation Survey '
+   cell: 'M5:M104'
+   type: DataGrid
+   Note: "Flag for discussion:\r\n1. All the locations and buildings from the property need to map over and allow the user to enter in the following SOV fields.\r\n2. Producer can remove any locations that they don’t need.\r\n3. For each unique location the data would need to aFor Example:\r\n12 Month Average Road (Demos/Furnished Auto)\r\n-Location 1 Bld 1 =  12 Month Avg Road - Demos/Furnished Autos - $5,000,000\r\n-Location 1 Bld 2 = 12 Month Avg Road - Demos/Furnished Autos - $3,000.000\r\n-Location 1 Bld 3 = 12 Month Avg Road - Demos/Furnished Autos - $1,000,000Step 1: Sum the total 12 month Avg Road (Demos/furnished  Auto) at Location 1 =$9,000,000Insured Through Floor Plan - Road\r\n-Location 1 Bld 1 =  Insured Through Floor Plan - Road  - $2,000,000\r\n-Location 1 Bld 2 = Insured Through Floor Plan - Road - $1,000,000\r\n-Location 1 Bld 3 = Insured Through Floor Plan - Road - $0Step 2: Sum the total Insured Through Floor Plan - Road at location 1 = $3,000,00012 Month Average Road (Loaners/Shop/Service)\r\n-Location 1 Bld 1 =  12 Month Avg Road - (Loaners/Shops/Service) - $4,000,000\r\n-Location 1 Bld 2 = 12 Month Avg Road - (Loaners/Shops/Service) - $700,000\r\n-Location 1 Bld 3 = 12 Month Avg Road - (Loaners/Shops/Service) - $200,000Step 3: Sum the total 12 Month Average Road (Loaners/Shop/Service) at Location 1 = $4,900,000Insured Through Floor Plan - Road\r\n-Location 1 Bld 1 =  12 Month Avg Road - Demos/Furnished Autos - $2,000,000\r\n-Location 1 Bld 2 = 12 Month Avg Road - Demos/Furnished Autos - $500,000\r\n-Location 1 Bld 3 = 12 Month Avg Road - Demos/Furnished Autos - $0Step 4: Sum the total Insured Through Floor Plan - Road at Location 1 = $2,500,000Step 5: Add AL16 (12 Month Average Road - Demos/Furnished Autos) - AO16 (Insured Through Floor Plan - Road) + AR16 (12 Month Average Road Loaners/Shop/Service) - AS16 (Insured Through Floor Plan -Road) = $8,400,000\r\n"
+-
+   key: 'victorAutoPhysicalDamage*DealershipStorageLocationsArray_insuredThroughFloorPlanRoad'
+   method: simpleDatagrid
+   Source Worksheet: Insured Through Floor Plan - Road
+   pageName: 'Valuation Survey '
+   cell: 'N5:N104'
+   type: DataGrid
+-
+   key: 'victorAutoPhysicalDamage*DealershipStorageLocationsArray_monthAvgRoadLoanersShopService'
+   method: simpleDatagrid
+   Source Worksheet: 12 Month Avg  Road/ Loaners / Shop / Service
+   pageName: 'Valuation Survey '
+   cell: 'P5:P104'
+   type: DataGrid
+-
+   key: 'victorAutoPhysicalDamage*DealershipStorageLocationsArray_insuredThroughFloorPlan'
+   method: simpleDatagrid
+   Source Worksheet: Insured Through Floor Plan - Road
+   pageName: 'Valuation Survey '
+   cell: 'Q5:Q104'
+   type: DataGrid
+-
+   pageName: Additional Named Insured
+   key: namedInsuredSchedule_namedInsuredScheduleName
+   method: simpleDatagrid
+   type: DataGrid
+   cell: G9
