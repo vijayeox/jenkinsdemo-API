@@ -15,6 +15,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "panel",
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"propertyPanel\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
 		"type": "panel",
 		"label": "Primary Contact",
 		"components": [{
@@ -260,7 +261,7 @@
 						"properties": {
 							"commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
 						},
-						"customConditional": "if ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") && (data['businessPadiVerified']!==true && data['businessPadiVerified']!=='true')) {\n    show = false;\n} else {\n    show = true;\n}",
+						"customConditional": "console.log(data['padiNotApplicable']);\nif ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") && (data['padiNotApplicable'] === false || data['padiNotApplicable'] === 'false')) {\n    show = false;\n} else {\n    show = true;\n}",
 						"logic": [{
 							"name": "disable field",
 							"trigger": {
@@ -337,6 +338,21 @@
 						"tableView": false,
 						"key": "panelColumnsContent4",
 						"customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==true||data['policy_exists']=='true') )",
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Content",
+						"attrs": [{
+							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
+							"attr": "style"
+						}],
+						"content": "PADI Membership not Applicable for this Program",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "panelColumnsContent3",
+						"customConditional": "show = (data['padiNotApplicable'] === true || data['padiNotApplicable']=='true');",
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
@@ -3960,6 +3976,7 @@
 					"tableView": true,
 					"defaultValue": false,
 					"clearOnHide": false,
+					"allowCalculateOverride": true,
 					"key": "travelAgentEoPL",
 					"type": "checkbox",
 					"input": true,
@@ -12529,7 +12546,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=((parseFloat(data[\"liabilityPropertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
+						"calculateValue": "value=(((parseFloat(data[\"liabilityProRataPremium\"])||0) + (parseFloat(data[\"propertyProRataPremium\"])||0))).toFixed(0)",
 						"key": "ProRataPremium",
 						"type": "number",
 						"input": true,
@@ -13437,7 +13454,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 564,
+	"_vid": 571,
 	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
@@ -13454,6 +13471,6 @@
 	"path": "divestoreconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-27T15:53:58.445Z",
+	"modified": "2020-07-29T06:01:34.287Z",
 	"machineName": "testdivehub:diveStoreConsolidation"
 }
