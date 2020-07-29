@@ -9,7 +9,7 @@ class QuoteDocument extends PolicyDocument
         parent::__construct();
         $this->type = 'quote';
         $this->template = array(
-        'Dive Boat' 
+        'Dive Boat'
             => array(
                      'cover_letter' => 'Dive_Boat_Quote_Cover_Letter',
                      'lheader' => 'letter_header.html',
@@ -36,11 +36,11 @@ class QuoteDocument extends PolicyDocument
                      'waterAcknowledgement' => 'CREW_EXCLUSION_ACKNOWLEDGEMENT_InWater.pdf',
                      'hurricaneQuestionnaire' => 'PADI_Hurricane_Questionnaire.pdf',
                      'groupExclusions' => 'Group_Exclusions.pdf'),
-        'Dive Store' 
+        'Dive Store'
             => array(
-                     'template' => 'DiveCenterProposal', 
+                     'template' => 'DiveCenterProposal',
                      'header' => 'DiveCenterProposal_header.html',
-                     'footer' => 'DiveCenterProposal_footer.html', 
+                     'footer' => 'DiveCenterProposal_footer.html',
                      'psTemplate' => 'DiveStore_Proposal_Premium_Summary',
                      'cover_letter' => 'DS_Quote_Cover_Letter',
                      'lheader' => 'letter_header.html',
@@ -73,7 +73,27 @@ class QuoteDocument extends PolicyDocument
                      'rosterFooter' => 'Roster_footer.html',
                      'rosterPdf' => 'Roster.pdf',
                      'businessIncomeWorksheet'=>'DS_Business_Income_Worksheet.pdf'
+                    ),
+        'Group Professional Liability'
+            => array(
+                     'psTemplate' => 'Group_Proposal_Premium_Summary',
+                     'header' => 'DiveCenterProposal_header.html',
+                     'footer' => 'DiveCenterProposal_footer.html',
+                     'nTemplate' => 'Group_PL_NI',
+                     'nheader' => 'Group_NI_header.html',
+                     'nfooter' => 'Group_NI_footer.html',
+                     'gtemplate' => 'Group_PL_COI',
+                     'gheader' => 'Group_header.html',
+                     'gfooter' => 'Group_footer.html',
+                     'gaitemplate' => 'Group_AI',
+                     'gaiheader' => 'Group_Quote_AI_header.html',
+                     'gaifooter' => 'Group_AI_footer.html',
+                     'groupExclusions' => 'Group_Exclusions.pdf',
+                     'roster' => 'Roster_Certificate',
+                     'rosterHeader' => 'Roster_header_DS.html',
+                     'rosterFooter' => 'Roster_footer.html',
+                     'rosterPdf' => 'Roster.pdf'
                     ));
-        
+
     }
 }

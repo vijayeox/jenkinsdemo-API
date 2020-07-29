@@ -351,7 +351,7 @@ return [
             'startform' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/workflow/:workflowId/startform',
+                    'route' => '/app/:appId/[entity/:entityId/]workflow/:workflowId/startform',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'workflowId' => UuidUtil::UUID_PATTERN,

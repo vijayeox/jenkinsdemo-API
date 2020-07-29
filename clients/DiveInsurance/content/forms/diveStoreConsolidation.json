@@ -1,8 +1,8 @@
 {
-	"_id": "5e731f8b7270c4852406e562",
+	"_id": "5f200c28dcfccc296eb532c9",
 	"type": "form",
 	"tags": [],
-	"owner": "5e1f430cb451f91416ebd5cd",
+	"owner": "5d934bbfa6b700b319f8ad1d",
 	"components": [{
 		"title": "Primary Contact",
 		"theme": "primary",
@@ -15,7 +15,6 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "panel",
-		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"propertyPanel\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
 		"type": "panel",
 		"label": "Primary Contact",
 		"components": [{
@@ -191,7 +190,6 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "product",
-						"calculateValue": "value = \"Dive Store\";",
 						"key": "product",
 						"type": "hidden",
 						"input": true,
@@ -199,7 +197,6 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "entity_name",
-						"calculateValue": "value = \"Dive Store\"",
 						"key": "entity_name",
 						"type": "hidden",
 						"input": true,
@@ -261,7 +258,7 @@
 						"properties": {
 							"commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
 						},
-						"customConditional": "console.log(data['padiNotApplicable']);\nif ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") && (data['padiNotApplicable'] === false || data['padiNotApplicable'] === 'false')) {\n    show = false;\n} else {\n    show = true;\n}",
+						"customConditional": "if ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") && (data['businessPadiVerified']!==true && data['businessPadiVerified']!=='true')) {\n    show = false;\n} else {\n    show = true;\n}",
 						"logic": [{
 							"name": "disable field",
 							"trigger": {
@@ -322,7 +319,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data['businessPadiVerified'] === true || data['businessPadiVerified'] === 'true') &&\n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
@@ -338,21 +335,6 @@
 						"tableView": false,
 						"key": "panelColumnsContent4",
 						"customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==true||data['policy_exists']=='true') )",
-						"type": "htmlelement",
-						"input": false,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Content",
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "PADI Membership not Applicable for this Program",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "panelColumnsContent3",
-						"customConditional": "show = (data['padiNotApplicable'] === true || data['padiNotApplicable']=='true');",
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
@@ -1666,6 +1648,930 @@
 				"type": "columns",
 				"hideLabel": true,
 				"path": "panelColumns"
+			}, {
+				"label": "well",
+				"hidden": true,
+				"tableView": false,
+				"key": "rateCard",
+				"type": "well",
+				"clearOnHide": false,
+				"input": false,
+				"components": [{
+					"input": true,
+					"tableView": true,
+					"key": "liability",
+					"label": "liability",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "true"
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "property",
+					"label": "property",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "true"
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "limitOver500000CoverBuildingCat",
+							"label": "limitOver500000CoverBuildingCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBuildingCat",
+							"label": "limitOver250000CoverBuildingCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBuildingCat",
+							"label": "limitOver100000CoverBuildingCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBuildingCat",
+							"label": "limitOver0CoverBuildingCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "limitOver500000CoverBuildingNonCat",
+							"persistent": "client-only",
+							"key": "limitOver500000CoverBuildingNonCat",
+							"type": "hidden",
+							"input": true,
+							"tableView": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBuildingNonCat",
+							"label": "limitOver250000CoverBuildingNonCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBuildingNonCat",
+							"label": "limitOver100000CoverBuildingNonCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBuildingNonCat",
+							"label": "limitOver0CoverBuildingNonCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "limitOver500000CoverBusIncomeCat",
+							"label": "limitOver500000CoverBusIncomeCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBusIncomeCat",
+							"label": "limitOver250000CoverBusIncomeCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBusIncomeCat",
+							"label": "limitOver100000CoverBusIncomeCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBusIncomeCat",
+							"label": "limitOver0CoverBusIncomeCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver500000CoverBusIncomeNonCat",
+							"label": "limitOver500000CoverBusIncomeNonCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBusIncomeNonCat",
+							"label": "limitOver250000CoverBusIncomeNonCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBusIncomeNonCat",
+							"label": "limitOver100000CoverBusIncomeNonCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBusIncomeNonCat",
+							"label": "limitOver0CoverBusIncomeNonCat",
+							"protected": true,
+							"persistent": false,
+							"type": "hidden",
+							"lockKey": true,
+							"defaultValue": "0.00997272",
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns3",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverageUpTo50000",
+							"label": "standardCoverageUpTo50000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage50001To100000",
+							"label": "standardCoverage50001To100000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage100001To200000",
+							"label": "standardCoverage100001To200000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage200001To350000",
+							"label": "standardCoverage200001To350000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage350001To500000",
+							"label": "standardCoverage350001To500000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage500001To1M",
+							"label": "standardCoverage500001To1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage1MAndOver",
+							"label": "standardCoverage1MAndOver",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnlyUpTo50000",
+							"label": "liabilityOnlyUpTo50000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly50001To100000",
+							"label": "liabilityOnly50001To100000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly100001To200000",
+							"label": "liabilityOnly100001To200000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly200001To350000",
+							"label": "liabilityOnly200001To350000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly350001To500000",
+							"label": "liabilityOnly350001To500000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly500001To1M",
+							"label": "liabilityOnly500001To1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly1MAndOver",
+							"label": "liabilityOnly1MAndOver",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "discontinuedOperation",
+							"label": "discontinuedOperation",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "medicalExpense",
+					"label": "medicalExpense",
+					"type": "hidden",
+					"lockKey": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns4",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "nonOwnedAutoLiability100K",
+							"label": "NON-Owned Auto Liability 100k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "page5PanelColumns4HiddenField",
+							"label": "NON-Owned Auto Liability 1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideLabel": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns5",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage1M",
+							"label": "excessLiabilityCoverage1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage2M",
+							"label": "excessLiabilityCoverage2M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage3M",
+							"label": "excessLiabilityCoverage3M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage4M",
+							"label": "excessLiabilityCoverage4M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage9M",
+							"label": "excessLiabilityCoverage9M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "TAEOunder100k",
+							"label": "TAEOunder100k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "TAEO100kTo500k",
+							"label": "TAEO100kTo500k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns6",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "poolLiabilityOver0",
+							"label": "poolLiabilityOver0",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "poolLiabilityOver20k",
+							"label": "poolLiabilityOver20k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "poolLiabilityOver50k",
+							"label": "poolLiabilityOver50k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns7",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsJan",
+							"label": "proRataFactorsJan",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsApr",
+							"label": "proRataFactorsApr",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsJul",
+							"label": "proRataFactorsJul",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsOct",
+							"label": "proRataFactorsOct",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsFeb",
+							"label": "proRataFactorsFeb",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsMay",
+							"label": "proRataFactorsMay",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsAug",
+							"label": "proRataFactorsAug",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsNov",
+							"label": "proRataFactorsNov",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsMar",
+							"label": "proRataFactorsMar",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsJun",
+							"label": "proRataFactorsJun",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsSep",
+							"label": "proRataFactorsSep",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsDec",
+							"label": "proRataFactorsDec",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "padiFee",
+					"label": "padiFee",
+					"type": "hidden",
+					"lockKey": true
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "stateTaxData",
+					"label": "stateTaxData",
+					"type": "hidden",
+					"lockKey": true,
+					"protected": true,
+					"persistent": false
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns8",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan25000",
+							"label": "groupCoverageMoreThan25000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan50000",
+							"label": "groupCoverageMoreThan50000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan200000",
+							"label": "groupCoverageMoreThan200000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan100000",
+							"label": "groupCoverageMoreThan100000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan150000",
+							"label": "groupCoverageMoreThan150000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan0",
+							"label": "groupCoverageMoreThan0",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan250000",
+							"label": "groupCoverageMoreThan250000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan350000",
+							"label": "groupCoverageMoreThan350000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan500000",
+							"label": "groupCoverageMoreThan500000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns9",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability1M",
+							"label": "groupExcessLiability1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability4M",
+							"label": "groupExcessLiability4M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability2M",
+							"label": "groupExcessLiability2M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability9M",
+							"label": "groupExcessLiability9M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability3M",
+							"label": "groupExcessLiability3M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "combinedSingleLimit",
+							"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
+							"key": "combinedSingleLimit",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "annualAggregate",
+							"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
+							"key": "annualAggregate",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "groupExcessLiabilityLimit",
+							"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
+							"key": "groupExcessLiabilityLimit",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "groupPadiFee",
+					"label": "groupPadiFee",
+					"type": "hidden",
+					"lockKey": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns10",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "propertyDeductibles1000",
+							"label": "propertyDeductibles1000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "propertyDeductibles2500",
+							"label": "propertyDeductibles2500",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "propertyDeductibles5000",
+							"label": "propertyDeductibles5000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true
+				}],
+				"hideLabel": true,
+				"lockKey": true,
+				"hideOnChildrenHidden": false
 			}]
 		}, {
 			"label": "Do you want to apply Property Coverage?",
@@ -1688,6 +2594,11 @@
 			},
 			"errorLabel": "Property Coverage",
 			"key": "propertyCoverageSelect",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "select",
 			"indexeddb": {
 				"filter": {}
@@ -2379,8 +3290,24 @@
 		},
 		"collapsible": false
 	}, {
-		"type": "panel",
 		"title": "General Liability Information/Claims Information",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "pageNaN",
+		"conditional": {
+			"show": false,
+			"when": "product",
+			"eq": "Group Professional Liability"
+		},
+		"type": "panel",
+		"label": "General Liability Information/Claims Information",
 		"components": [{
 			"title": "General Liability Information",
 			"theme": "primary",
@@ -3923,18 +4850,7 @@
 			}],
 			"path": "pageNaNPanel3"
 		}],
-		"input": false,
-		"key": "pageNaN",
-		"theme": "primary",
-		"tableView": false,
-		"label": "GENERAL LIABILITY INFORMATION/CLAIMS INFORMATION",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false
+		"input": false
 	}, {
 		"title": "Optional Coverages",
 		"theme": "primary",
@@ -3947,8 +4863,13 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "page4PanelPanelPanel",
+		"conditional": {
+			"show": false,
+			"when": "product",
+			"eq": "Group Professional Liability"
+		},
 		"type": "panel",
-		"label": "OPTIONAL COVERAGE'S",
+		"label": "Optional Coverages",
 		"input": false,
 		"components": [{
 			"label": "Optional Liability Coverage",
@@ -4306,934 +5227,26 @@
 				"hideLabel": true,
 				"label": "Table"
 			}]
-		}, {
-			"label": "well",
-			"hidden": true,
-			"tableView": false,
-			"key": "rateCard",
-			"type": "well",
-			"clearOnHide": false,
-			"input": false,
-			"components": [{
-				"input": true,
-				"tableView": true,
-				"key": "liability",
-				"label": "liability",
-				"type": "hidden",
-				"lockKey": true,
-				"defaultValue": "true"
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "property",
-				"label": "property",
-				"type": "hidden",
-				"lockKey": true,
-				"defaultValue": "true"
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBuildingCat",
-						"label": "limitOver500000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBuildingCat",
-						"label": "limitOver250000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBuildingCat",
-						"label": "limitOver100000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBuildingCat",
-						"label": "limitOver0CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "limitOver500000CoverBuildingNonCat",
-						"persistent": "client-only",
-						"key": "limitOver500000CoverBuildingNonCat",
-						"type": "hidden",
-						"input": true,
-						"tableView": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBuildingNonCat",
-						"label": "limitOver250000CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBuildingNonCat",
-						"label": "limitOver100000CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBuildingNonCat",
-						"label": "limitOver0CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBusIncomeCat",
-						"label": "limitOver500000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBusIncomeCat",
-						"label": "limitOver250000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBusIncomeCat",
-						"label": "limitOver100000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBusIncomeCat",
-						"label": "limitOver0CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBusIncomeNonCat",
-						"label": "limitOver500000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBusIncomeNonCat",
-						"label": "limitOver250000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBusIncomeNonCat",
-						"label": "limitOver100000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBusIncomeNonCat",
-						"label": "limitOver0CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"defaultValue": "0.00997272",
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns3",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverageUpTo50000",
-						"label": "standardCoverageUpTo50000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage50001To100000",
-						"label": "standardCoverage50001To100000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage100001To200000",
-						"label": "standardCoverage100001To200000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage200001To350000",
-						"label": "standardCoverage200001To350000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage350001To500000",
-						"label": "standardCoverage350001To500000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage500001To1M",
-						"label": "standardCoverage500001To1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage1MAndOver",
-						"label": "standardCoverage1MAndOver",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnlyUpTo50000",
-						"label": "liabilityOnlyUpTo50000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly50001To100000",
-						"label": "liabilityOnly50001To100000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly100001To200000",
-						"label": "liabilityOnly100001To200000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly200001To350000",
-						"label": "liabilityOnly200001To350000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly350001To500000",
-						"label": "liabilityOnly350001To500000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly500001To1M",
-						"label": "liabilityOnly500001To1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly1MAndOver",
-						"label": "liabilityOnly1MAndOver",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "discontinuedOperation",
-						"label": "discontinuedOperation",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "medicalExpense",
-				"label": "medicalExpense",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns4",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "nonOwnedAutoLiability100K",
-						"label": "NON-Owned Auto Liability 100k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "page5PanelColumns4HiddenField",
-						"label": "NON-Owned Auto Liability 1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns5",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage1M",
-						"label": "excessLiabilityCoverage1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage2M",
-						"label": "excessLiabilityCoverage2M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage3M",
-						"label": "excessLiabilityCoverage3M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage4M",
-						"label": "excessLiabilityCoverage4M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage9M",
-						"label": "excessLiabilityCoverage9M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "TAEOunder100k",
-						"label": "TAEOunder100k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "TAEO100kTo500k",
-						"label": "TAEO100kTo500k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns6",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "poolLiabilityOver0",
-						"label": "poolLiabilityOver0",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "poolLiabilityOver20k",
-						"label": "poolLiabilityOver20k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "poolLiabilityOver50k",
-						"label": "poolLiabilityOver50k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns7",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsJan",
-						"label": "proRataFactorsJan",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsApr",
-						"label": "proRataFactorsApr",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsJul",
-						"label": "proRataFactorsJul",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsOct",
-						"label": "proRataFactorsOct",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsFeb",
-						"label": "proRataFactorsFeb",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsMay",
-						"label": "proRataFactorsMay",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsAug",
-						"label": "proRataFactorsAug",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsNov",
-						"label": "proRataFactorsNov",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsMar",
-						"label": "proRataFactorsMar",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsJun",
-						"label": "proRataFactorsJun",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsSep",
-						"label": "proRataFactorsSep",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsDec",
-						"label": "proRataFactorsDec",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "padiFee",
-				"label": "padiFee",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "stateTaxData",
-				"label": "stateTaxData",
-				"type": "hidden",
-				"lockKey": true,
-				"protected": true,
-				"persistent": false
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns8",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan25000",
-						"label": "groupCoverageMoreThan25000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan50000",
-						"label": "groupCoverageMoreThan50000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan200000",
-						"label": "groupCoverageMoreThan200000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan100000",
-						"label": "groupCoverageMoreThan100000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan150000",
-						"label": "groupCoverageMoreThan150000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan0",
-						"label": "groupCoverageMoreThan0",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan250000",
-						"label": "groupCoverageMoreThan250000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan350000",
-						"label": "groupCoverageMoreThan350000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan500000",
-						"label": "groupCoverageMoreThan500000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns9",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability1M",
-						"label": "groupExcessLiability1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability4M",
-						"label": "groupExcessLiability4M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability2M",
-						"label": "groupExcessLiability2M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability9M",
-						"label": "groupExcessLiability9M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability3M",
-						"label": "groupExcessLiability3M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "combinedSingleLimit",
-						"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
-						"key": "combinedSingleLimit",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "annualAggregate",
-						"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
-						"key": "annualAggregate",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "groupExcessLiabilityLimit",
-						"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
-						"key": "groupExcessLiabilityLimit",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "groupPadiFee",
-				"label": "groupPadiFee",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns10",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "propertyDeductibles1000",
-						"label": "propertyDeductibles1000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "propertyDeductibles2500",
-						"label": "propertyDeductibles2500",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "propertyDeductibles5000",
-						"label": "propertyDeductibles5000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}],
-			"hideLabel": true,
-			"lockKey": true,
-			"hideOnChildrenHidden": false
 		}]
 	}, {
-		"type": "panel",
 		"title": "Additional",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page4",
+		"conditional": {
+			"show": false,
+			"when": "product",
+			"eq": "Group Professional Liability"
+		},
+		"type": "panel",
+		"label": "Panel",
 		"components": [{
 			"key": "page4Panel",
 			"input": false,
@@ -10079,11 +10092,7 @@
 				}]
 			}]
 		}],
-		"input": false,
-		"key": "page4",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel"
+		"input": false
 	}, {
 		"title": "Group Professional Liability",
 		"theme": "primary",
@@ -11970,9 +11979,6 @@
 			"columns": [{
 				"components": [{
 					"label": "Columns",
-					"input": false,
-					"tableView": false,
-					"key": "page5PanelColumns2Columns4",
 					"columns": [{
 						"components": [{
 							"label": "Coverage",
@@ -12034,8 +12040,16 @@
 						"pull": 0,
 						"size": "md"
 					}],
+					"hideLabel": true,
+					"tableView": false,
+					"key": "page5PanelColumns2Columns4",
+					"conditional": {
+						"show": false,
+						"when": "product",
+						"eq": "Group Professional Liability"
+					},
 					"type": "columns",
-					"hideLabel": true
+					"input": false
 				}, {
 					"label": "totalReceiptsAmount",
 					"calculateValue": "console.log(data['dsglestmonthretailreceipt']);\nvar receiptsAmount = (parseFloat(data['dsglestmonthretailreceipt'])||0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvalue =receiptsAmount;\nconsole.log(value);",
@@ -12075,8 +12089,13 @@
 					"collapsible": false,
 					"tableView": false,
 					"key": "liabilityCoverages",
+					"conditional": {
+						"show": false,
+						"when": "product",
+						"eq": "Group Professional Liability"
+					},
 					"type": "panel",
-					"label": "Panel",
+					"label": "Liability Coverages",
 					"input": false,
 					"components": [{
 						"label": "Non-Diving Pool",
@@ -12309,17 +12328,23 @@
 			"rows": [
 				[{
 					"components": [{
-						"key": "page5PanelPanelTableLiabilityCoveragesTotal",
 						"label": "Liability Coverages Total",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Liability Coverages Total",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelTableLiabilityCoveragesTotal",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12339,6 +12364,11 @@
 						"clearOnHide": false,
 						"calculateValue": "value=((parseFloat(data[\"CoverageFP\"])||0)+(parseFloat(data[\"nonDivingPoolAmount\"])||0)+(parseFloat(data[\"MedicalExpenseFP\"])||0)+(parseFloat(data[\"Non-OwnedAutoFP\"]||0))+(parseFloat(data[\"ExcessLiabilityFP\"])||0)+(parseFloat(data[\"TravelAgentEOFP\"])||0)).toFixed(0)",
 						"key": "liabilityCoveragesTotalPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -12347,17 +12377,23 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTablePropertyCoveragesTotal",
 						"label": "Property Coverages Total",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Property Coverages Total",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelTablePropertyCoveragesTotal",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12377,6 +12413,11 @@
 						"clearOnHide": false,
 						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  value=(parseFloat(data[\"ContentsFP\"])||0)+(parseFloat(data[\"LossofBusIncomeFP\"])||0)+(parseFloat(data[\"BuildingLimitFP\"])||0)-(parseFloat(data[\"PropDeductibleCredit\"])||0)\n} else {\n  value =0;\n}",
 						"key": "propertyCoveragesTotalPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -12385,17 +12426,23 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTableLiabilityPropertyCoveragesTotal",
 						"label": "Liability Property Coverages Total",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Liability Property Coverages Total",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelTableLiabilityPropertyCoveragesTotal",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12415,6 +12462,11 @@
 						"clearOnHide": false,
 						"calculateValue": "value=((parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)+(parseFloat(data[\"propertyCoveragesTotalPL\"])||0)).toFixed(0)",
 						"key": "liabilityPropertyCoveragesTotalPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -12423,17 +12475,23 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTableLiabilityProRataPremium",
 						"label": "Liability ProRata Premium",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Liability ProRata Premium",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelTableLiabilityProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12451,6 +12509,11 @@
 						"calculateValue": "var selectedDate = new Date(data[\"policyPeriod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
 						"allowCalculateOverride": true,
 						"key": "proRataPercentage",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"decimalLimit": 3,
 						"input": true,
@@ -12472,6 +12535,11 @@
 						"clearOnHide": false,
 						"calculateValue": "value=((parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
 						"key": "liabilityProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -12480,17 +12548,23 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTablePropertyProRataPremium",
 						"label": "Property ProRata Premium",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Property ProRata Premium",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelTablePropertyProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12546,8 +12620,13 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(((parseFloat(data[\"liabilityProRataPremium\"])||0) + (parseFloat(data[\"propertyProRataPremium\"])||0))).toFixed(0)",
+						"calculateValue": "value=((parseFloat(data[\"liabilityPropertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
 						"key": "ProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -12556,17 +12635,23 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelColumnsPropTax",
 						"label": "Prop Tax",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Prop Tax",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelColumnsPropTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12584,6 +12669,11 @@
 						"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"allowCalculateOverride": true,
 						"key": "propertyTaxPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"decimalLimit": 3,
 						"input": true,
@@ -12605,6 +12695,11 @@
 						"clearOnHide": false,
 						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  value = ((parseFloat(data[\"propertyProRataPremium\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100);\n} else {\n  value =0;\n}",
 						"key": "PropTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"decimalLimit": 2,
 						"input": true,
@@ -12614,17 +12709,23 @@
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTableLiaTax",
 						"label": "Lia Tax",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Lia Tax",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelTableLiaTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12642,6 +12743,11 @@
 						"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
 						"allowCalculateOverride": true,
 						"key": "liabilityTaxPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"decimalLimit": 3,
 						"input": true,
@@ -12663,11 +12769,16 @@
 						"clearOnHide": false,
 						"calculateValue": "value = ((parseFloat(data[\"liabilityProRataPremium\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100);",
 						"key": "LiaTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 2
+						"lockKey": true
 					}]
 				}],
 				[{
@@ -12682,6 +12793,11 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page5PanelPanelTableAddILocPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true
@@ -12703,6 +12819,11 @@
 						"clearOnHide": false,
 						"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\n  var additionalLocationArrayLength = data[additionalLocationArray].length;\n  value = 0;\n  for (var i = 0; i < additionalLocationArrayLength; i++) {\n    value += (parseFloat(data[additionalLocationArray][i].ALProRataPremium)||0);\n  }\n} else {\n  value = 0;\n}",
 						"key": "AddILocPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -12721,6 +12842,11 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page5PanelPanelTableAddILocTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true
@@ -12742,6 +12868,11 @@
 						"clearOnHide": false,
 						"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray = \"additionalLocations\";\n  var additionalLocationArrayLength = data[additionalLocationArray].length;\n  var value = 0;\n  for (var i = 0; i < additionalLocationArrayLength; i++) {\n    value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n  }\n} else {\n  value = 0;\n}",
 						"key": "AddILocTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"decimalLimit": 2,
 						"input": true,
@@ -12837,6 +12968,11 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page5PanelPanelTablePropDeductibleCredit",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true
@@ -12856,11 +12992,16 @@
 						"calculateValue": "if(data['propertyDeductibles'] && data[data['propertyDeductibles']]) {\n  value = (data[data[\"propertyDeductibles\"]]||0)\n}",
 						"allowCalculateOverride": true,
 						"key": "propertyDeductiblesPercentage",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
+						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 3
+						"lockKey": true
 					}]
 				}, {
 					"components": [{
@@ -12877,26 +13018,37 @@
 						"clearOnHide": false,
 						"calculateValue": "value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100).toFixed(2)",
 						"key": "PropDeductibleCredit",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true,
-						"decimalLimit": 2
+						"lockKey": true
 					}]
 				}],
 				[{
 					"components": [{
-						"key": "page5PanelPanelTablePaorFee",
 						"label": "PA/OR Fee",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "PA/OR Fee",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
+						"key": "page5PanelPanelTablePaorFee",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
 						"hideLabel": true
 					}]
 				}, {
@@ -12915,6 +13067,11 @@
 						"clearOnHide": false,
 						"calculateValue": "var amount=0.00;\nif(data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nvalue = amount",
 						"key": "PAORFee",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -12951,7 +13108,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) ).toFixed(2);",
+						"calculateValue": "if(data['product'] == 'Group Professional Liability') {\n  value = ((parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"groupProfessionalLiability\"])||0)).toFixed(2);  \n} else {\n  value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) ).toFixed(2);  \n}",
 						"key": "totalAmount",
 						"type": "number",
 						"input": true,
@@ -13107,8 +13264,8 @@
 						"hideOnChildrenHidden": false,
 						"defaultValue": {
 							"marineSurveyCompletedWithinThePast12MonthsVesselsFive5YearsOrOlderAreRequiredToProvideCurrentConditionAndValuationSurveyWithConfirmationThatAllRecommendationsAreCompletedXxx": false,
-							"Signed Finance Agreement with down payment if not paying in full.": false,
-							"Certificate of Inspection.": false,
+							"Signed Finance Agreement with down payment if not paying in full": false,
+							"Certificate of Inspection": false,
 							"Signed Proposal": false,
 							"Other": false
 						}
@@ -13452,25 +13609,25 @@
 		}],
 		"input": false
 	}],
-	"controller": "",
-	"revisions": "current",
-	"_vid": 571,
-	"title": "Dive Store Consolidation",
+	"revisions": "",
+	"_vid": 0,
+	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
 		"type": "read_all"
 	}],
 	"submissionAccess": [],
-	"settings": {},
+	"controller": "",
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
 		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
+	"settings": {},
 	"name": "diveStoreConsolidation",
-	"path": "divestoreconsolidation",
+	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
-	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-29T06:01:34.287Z",
-	"machineName": "testdivehub:diveStoreConsolidation"
+	"created": "2020-07-28T11:29:44.022Z",
+	"modified": "2020-07-29T03:59:18.961Z",
+	"machineName": "testdivehub:diveStoreConsolidation3"
 }
