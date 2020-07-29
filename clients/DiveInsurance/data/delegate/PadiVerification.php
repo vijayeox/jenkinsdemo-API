@@ -160,6 +160,7 @@ class PadiVerification extends AbstractAppDelegate
                     $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = true;
                     $returnArray['padiNotFound'] = false;
+                    $returnArray['padiNotApplicable'] = false;
                 } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
                     $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = false;
@@ -169,6 +170,7 @@ class PadiVerification extends AbstractAppDelegate
                     $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = false;
                     $returnArray['padiNotFound'] = true;
+                    $returnArray['padiNotApplicable'] = false;
                 }
             } else {
                 if(isset($response[0]['firstname']) && $response[0]['firstname'] != '' && $response[0]['firstname'] != null ){
