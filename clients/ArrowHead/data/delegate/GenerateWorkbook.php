@@ -7,24 +7,39 @@ use Oxzion\Utils\YMLUtils;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 
+use Oxzion\AppDelegate\HttpClientTrait;
+use Oxzion\AppDelegate\HTTPMethod;
+
 class GenerateWorkbook extends AbstractDocumentAppDelegate
 {
+
+    use HttpClientTrait;
+    protected $ExcelTemplateMapperServiceURL = "http://54.161.224.59:5000/api/FileUpload";
+
     protected $carrierTemplateList = array(
         "harco" => array(
             "type" => "excel",
-            "template" => "harco.yaml"
+            "excelFile" => "Harco.xlsm",
+            "template" => "harco.yaml",
+            "customData" => "harcoExcelData"
         ),
         "dealerGuard_ApplicationOpenLot" => array(
             "type" => "excel",
-            "template" => "dealerGuard_ApplicationOpenLot.yaml"
+            "template" => "dealerGuard_ApplicationOpenLot.yaml",
+            "excelFile" => "DealerGuard_Application_Open_Lot.xlsx",
+            "customData" => "dealerguardOpenLot"
         ),
         "victor_FranchisedAutoDealer" => array(
             "type" => "excel",
-            "template" => "victor_FranchisedAutoDealer.yaml"
+            "template" => "victor_FranchisedAutoDealer.yaml",
+            "excelFile" => "Victor_FranchisedAutoDealer.xls",
+            "customData" => "franchisedAutoDealer"
         ),
         "victor_AutoPhysDamage" => array(
             "type" => "excel",
-            "template" => "victor_AutoPhysDamage.yaml"
+            "template" => "victor_AutoPhysDamage.yaml",
+            "excelFile" => "Victor_AutoPhysDamage.xls",
+            "customData" => "victorAutoPhysicalDamage"
         ),
         "epli" => array(
             "type" => "pdf",
@@ -53,6 +68,16 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $this->logger->info("GenerateWorkbook Dest" . json_encode($fileDestination));
         $generatedDocumentsList = array();
         $excelData = array();
+        if (isset($data['genericData'])) {
+            foreach ($this->checkJSON(
+                $data['genericData']
+            ) as $customKey => $customValue) {
+                if (isset($customValue) && !empty($customValue) && !isset($data[$customKey])) {
+                    $data["genericData" . "*" . $customKey] = $customValue;
+                }
+            }
+            unset($data["genericData"]);
+        }
 
         foreach ($this->checkJSON($data['workbooksToBeGenerated']) as  $key => $templateSelected) {
             if ($templateSelected) {
@@ -62,31 +87,88 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     $templateData = array();
                     $fieldMappingExcel = file_get_contents(__DIR__ . "/../template/" . $selectedTemplate["template"]);
                     $fieldMappingExcel = YMLUtils::ymlToArray($fieldMappingExcel);
-
+                    if (isset($data[$selectedTemplate["customData"]])) {
+                        foreach ($this->checkJSON(
+                            $data[$selectedTemplate["customData"]]
+                        ) as $customKey => $customValue) {
+                            if (isset($customValue) && !empty($customValue) && !isset($data[$customKey])) {
+                                $data[$selectedTemplate["customData"] . "*" . $customKey] = $customValue;
+                            }
+                        }
+                        unset($data[$selectedTemplate["customData"]]);
+                    }
                     foreach ($fieldMappingExcel as $fieldConfig) {
+                        
                         $formFieldKey = str_contains($fieldConfig["key"], "_") ?
                             explode("_", $fieldConfig["key"])[0]
                             : $fieldConfig["key"];
-                        if (isset($data[$formFieldKey]) && !empty($data[$formFieldKey]) && $data[$formFieldKey] !== "[]" ) {
+                        if (isset($data[$formFieldKey]) && !empty($data[$formFieldKey]) && $data[$formFieldKey] !== "[]") {
                             $userInputValue = $data[$formFieldKey];
                             $tempFieldConfig = $fieldConfig;
                             if (isset($fieldConfig["method"])) {
                                 $processMethod = $fieldConfig["method"];
                                 $tempFieldConfig['value'] = $this->$processMethod($userInputValue, $fieldConfig, $data);
-                                unset($tempFieldConfig['method']);
+                            } else if (isset($fieldConfig['returnBoolean'])) {
+                                $trueValue = explode("|", $fieldConfig["returnBoolean"])[0];
+                                $falseValue = explode("|", $fieldConfig["returnBoolean"])[1];
+                                $valueType = gettype($userInputValue);
+                                if ($valueType == "boolean") {
+                                    $tempFieldConfig['value'] =  $userInputValue ? $trueValue : $falseValue;
+                                } else {
+                                    if ($userInputValue == 'true' || $userInputValue ==  'yes') {
+                                        $tempFieldConfig['value'] = $trueValue;
+                                    } else if ($userInputValue == 'false' || $userInputValue ==  'no') {
+                                        $tempFieldConfig['value'] = $falseValue;
+                                    } else {
+                                        $tempFieldConfig['value'] = $trueValue;
+                                    }
+                                }
                             } else {
                                 $tempFieldConfig['value'] = $userInputValue;
                             }
-                            array_push($templateData, $tempFieldConfig);
+                            if (!isset($tempFieldConfig['type'])) {
+                                $tempFieldConfig['type'] = "";
+                            }
+                            if (!$tempFieldConfig['value'] == "") {
+                                array_push($templateData, [
+                                    "pageName" => $tempFieldConfig['pageName'],
+                                    "cell" => $tempFieldConfig['cell'],
+                                    "key" => $tempFieldConfig['key'],
+                                    "type" => $tempFieldConfig['type'],
+                                    "value" => $tempFieldConfig['value']
+                                ]);
+                            }
+                            // array_push($templateData, [
+                            //     "pageName" => $tempFieldConfig['pageName'],
+                            //     "cell" => $tempFieldConfig['cell'],
+                            //     "key" => $tempFieldConfig['key'],
+                            //     "type" => $tempFieldConfig['type'],
+                            //     "value" => $tempFieldConfig['value']
+                            // ]);
                         }
                     }
 
                     array_push(
                         $excelData,
                         array(
-                            "template" => $selectedTemplate["template"],
-                            "mapping" => $templateData
+                            "filename" => $selectedTemplate["excelFile"],
+                            "data" => $templateData
                         )
+                    );
+
+                    $response = $this->makeRequest(
+                        HTTPMethod::POST,
+                        $this->ExcelTemplateMapperServiceURL,
+                        [
+                            "fileId" => "82924c30-0026-45ae-91a7-9417827fc151",
+                            "appId" => "da8f0152-b8d3-43bf-8090-40103bb98d5e",
+                            "orgId" => "34bf01ab-79ca-42df-8284-965d8dbf290e",
+                            "mapping" => [
+                                "filename" => $selectedTemplate["excelFile"],
+                                "data" => $templateData
+                            ]
+
+                        ]
                     );
                 } else {
                     $pdfData = array();
@@ -123,11 +205,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     if (isset($fieldTypeMappingPDF[$key]["date"])) {
                         foreach ($fieldTypeMappingPDF[$key]["date"] as  $formField => $pdfField) {
                             isset($data[$formField]) ?
-                                $pdfData[$pdfField] = date(
-                                    "m-d-Y",
-                                    strtotime($data[$formField])
-                                )
-                                : null;
+                                $pdfData[$pdfField] = $this->formatDate($data[$formField]) : null;
                         }
                     }
                     if (isset($selectedTemplate["customData"])) {
@@ -154,12 +232,29 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 }
             }
         }
-        // print_r($excelData);
-        // exit();
-        if(count($excelData) > 0) {
-            $data ["excelData"] = json_encode($excelData);
+
+
+
+        print_r(json_encode($excelData, JSON_PRETTY_PRINT));
+        exit();
+
+        if (count($excelData) > 0) {
+            $data["excelData"] = json_encode($excelData, JSON_PRETTY_PRINT);
+            file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", $data["excelData"]);
+            array_push(
+                $generatedDocumentsList,
+                array(
+                    "fullPath" => $fileDestination['absolutePath'] . "excelMapperInput.json",
+                    "file" => $fileDestination['relativePath'] . "excelMapperInput.json",
+                    "originalName" => "excelMapperInput.json",
+                    "type" => "file/json"
+                )
+            );
+
+            $data["status"] = "Generated";
+        } else {
+            $data["status"] = "Generated";
         }
-        $data["status"] = "Queued";
         $data["documents"] = json_encode($generatedDocumentsList);
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
@@ -173,35 +268,109 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         return $data;
     }
 
+    private function formatDate($data, $fieldConfig = null, $formData = null)
+    {
+        return date(
+            "m-d-Y",
+            strtotime($data)
+        );
+    }
+
+    private function checkInArray($data, $fieldConfig, $formData)
+    {
+        $childValue = explode("_", $fieldConfig["key"])[1];
+        if (in_array($childValue, $this->checkJSON($data))) {
+            if (isset($fieldConfig['returnBoolean'])) {
+                $trueValue = explode("|", $fieldConfig["returnBoolean"])[0];
+                return $trueValue;
+            }
+            return 'true';
+        } else {
+            if (isset($fieldConfig['returnBoolean'])) {
+                $falseValue = explode("|", $fieldConfig["returnBoolean"])[1];
+                return $falseValue;
+            }
+            return "";
+        }
+    }
+
     private function pulloutChild($data, $fieldConfig, $formData)
     {
+        $data = $this->checkJSON($data);
         $childKey = explode("_", $fieldConfig["key"])[1];
+
+        if (isset($fieldConfig['returnBoolean'])) {
+            $trueValue = explode("|", $fieldConfig["returnBoolean"])[0];
+            $falseValue = explode("|", $fieldConfig["returnBoolean"])[1];
+        }
+
         if (isset($data[$childKey]) && !empty($data[$childKey])) {
             $value = $data[$childKey];
             $valueType = gettype($data[$childKey]);
             if ($valueType == "boolean") {
-                $value = $value ? "true" : "false";
-            } else {
-                if ($value == 'true') {
+                if (isset($fieldConfig['returnBoolean'])) {
+                    $value = $value ? $trueValue : $falseValue;
+                } else {
+                    $value = $value ? "true" : "false";
+                }
+            } else if ($value == 'true' || $value ==  'yes') {
+                if (isset($fieldConfig['returnBoolean'])) {
+                    $value = $trueValue;
+                } else {
                     $value = 'true';
-                } else if ($value == 'false') {
+                }
+            } else if ($value == 'false' || $value ==  'no') {
+                if (isset($fieldConfig['returnBoolean'])) {
+                    $value = $falseValue;
+                } else {
                     $value = 'false';
                 }
             }
             return $value;
         } else {
-            return " ";
+            return "";
         }
+    }
+
+    private function simpleDatagrid($data, $fieldConfig, $formData)
+    {
+        if (str_contains($fieldConfig["key"], "_")) {
+            $childKey = explode("_", $fieldConfig["key"])[1];
+        } else {
+            return [];
+        }
+        if (isset($fieldConfig["skip"]) && str_contains($fieldConfig["skip"], "_")) {
+            $rows = explode("_", $fieldConfig["skip"])[0];
+            $skip = explode("_", $fieldConfig["skip"])[1];
+            $tempSkip = $skip;
+        }
+        $parsedData = array();
+        foreach ($this->checkJSON($data) as  $key => $value) {
+            if (isset($rows) && (!$key == 0) && ($key % $rows == 0)) {
+                while ($tempSkip > 0) {
+                    array_push($parsedData, []);
+                    --$tempSkip;
+                }
+                $tempSkip = $skip;
+            }
+            if (isset($value[$childKey]) && !empty($value[$childKey])) {
+                array_push($parsedData, [$value[$childKey].""]);
+            } else {
+                array_push($parsedData, []);
+            }
+        }
+        return $parsedData;
     }
 
     private function checkbox_X($data, $fieldConfig, $formData)
     {
+        $data = $this->checkJSON($data);
         if (str_contains($fieldConfig["key"], "_")) {
             $childKey = explode("_", $fieldConfig["key"])[1];
             if (isset($data[$childKey]) && !empty($data[$childKey])) {
                 $value = $data[$childKey];
             } else {
-                return " ";
+                return "";
             }
         } else {
             $formKey = $fieldConfig["key"];
@@ -210,12 +379,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
         $valueType = gettype($value);
         if ($valueType == "boolean") {
-            $value = $value ? "X" : " ";
+            $value = $value ? "X" : "";
         } else {
-            if ($value == 'true') {
+            $value = trim($value);
+            if ($value == 'true' || $value ==  'yes') {
                 $value = 'X';
-            } else if ($value == 'false') {
-                $value = " ";
+            } else if ($value == 'false' || $value ==  'no') {
+                $value = "";
             }
         }
         return $value;
