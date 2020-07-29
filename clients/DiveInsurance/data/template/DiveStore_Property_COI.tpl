@@ -74,7 +74,7 @@
 			<div class="deduct"><b>Deductible:</b><br/>
 				<p class ="deduct1">Wind/Hail is 5% of Insured Values per location, $5000 minimum, for Florida, Hawaii, Puerto Rico, USVI, Guam and all Tier 1
 locations (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North Carolina and all Harris
-County Texas locations. Mechanical breakdown is $2500. All other perils is $1000.</p></div>
+County Texas locations. Mechanical breakdown is $2500. All other perils is {if isset($PropDeductibleCredit)}${$PropDeductibleCredit}{else}$0.00{/if}.</p></div>
 		<hr></hr>
 		<b><center><p class="addIn">{if !empty($lossPayees)}
 			Certificate has Loss Payees (See Attached)
@@ -277,7 +277,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
 				<center><p class = "notice">
