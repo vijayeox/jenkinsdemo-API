@@ -5,8 +5,7 @@
 </head>
 <body>
 	<div class ="body_div_endo">
-	     <hr></hr>
-       {if isset($increased_liability)}
+	     {if isset($increased_liability)}
        <div class = "box">
           <b><u>+Policy has been changed to Liability only {$increased_liability} as of the Effective date of this Endorsement</u></b>
           <center><table>
@@ -157,7 +156,7 @@
                 </tbody>
             </table>
             <div class="clearfix"></div>
-            <div style ="margin-bottom: 5%"></div>
+            <div style ="margin-bottom: 5%;"></div>
             <table class="deductible_table">
                 <tbody>
                     <tr>
@@ -166,7 +165,7 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is ${$PropDeductibleCredit}}.</td>
+                            Mechanical breakdown is $2500. All other perils is ${$PropDeductibleCredit}.</td>
                     </tr>
                 </tbody>
             </table>
