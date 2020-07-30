@@ -321,8 +321,9 @@ class WorkflowInstanceService extends AbstractService
         if (isset($existingFile[0])) {
             $this->logger->info(WorkflowInstanceService::class . "FILE UPDATE-----" . print_r($existingFile, true));
             $file = $this->fileService->updateFile($params, $existingFile[0]['uuid']);
-            $updateQuery = "UPDATE ox_activity_instance SET completion_data=:completionData,submitted_date=:submittedDate,modified_by=:modifiedBy where workflow_instance_id=:workflowInstanceId";
-            $updateQueryParams = array('completionData'=>json_encode($params),'submittedDate'=>date('Y-m-d H:i:s'),'modifiedBy'=>AuthContext::get(AuthConstants::USER_ID),'workflowInstanceId' => $workflowInstance[0]['id']);
+            $updateQuery = "UPDATE ox_activity_instance SET completion_data=:completionData,submitted_date=:submittedDate,modified_by=:modifiedBy where workflow_instance_id=:workflowInstanceId and id = :activityInstanceId";
+            $updateQueryParams = array('completionData'=>json_encode($params),'submittedDate'=>date('Y-m-d H:i:s'),'modifiedBy'=>AuthContext::get(AuthConstants::USER_ID),'workflowInstanceId' => $workflowInstance[0]['id'],
+                "activityInstanceId" => $activityInstance['id']);
             $updateQueryResult = $this->executeUpdateWithBindParameters($updateQuery,$updateQueryParams);
             $workflowInstanceId = $this->activityEngine->completeActivity($activityId, $params);
 
