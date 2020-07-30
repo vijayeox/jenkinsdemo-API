@@ -187,23 +187,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $startDate = $data['start_date'];
             $endDate = $data['end_date'];
 
-            $month = date_format(date_create($data['end_date']),"m");
-            $year = date_format(date_create($data['end_date']),"Y");
-
-
-            if($data['product'] != 'Dive Boat'){
-                if($month < 7){
-                    $data['surplusLineYear'] = $year - 1;
-                }else{
-                    $data['surplusLineYear'] = $year;
-                }
-            }else{
-                if($month < 8){
-                    $data['surplusLineYear'] = $year - 1;
-                }else{
-                    $data['surplusLineYear'] = $year;
-                }
-            }
+            $this->processSurplusYear($data);
 
             if(isset($data['update_date'])){
                 $updateDate = $data['update_date'];
@@ -259,11 +243,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
 
             $temp = $data;
-            foreach ($temp as $key => $value) {
-                if(is_array($temp[$key])){
-                    $temp[$key] = json_encode($value);
-                }
-            }
+            $this->processData($temp);
+			if($data['product'] == 'Dive Store'){
+				$this->getDSLiabilityPolicyDetails($data,$temp,$persistenceService);
+			}
 
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
                 if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['excessLiability'])){
@@ -560,7 +543,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
 
                     if($this->type == 'policy'){
-                        $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
+                    	$this->generateDiveStorePremiumSummary($temp,$documents,$dest,$options);
                     }
                 }
                 if($data['groupProfessionalLiabilitySelect'] == 'yes'){
@@ -612,7 +595,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
                 }
             }else if($this->type == 'policy' && $data['product'] == 'Dive Store'){
-                $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+                $this->generateDiveStoreLiabilityDocument($data,$documents,$temp,$dest,$options,$persistenceService);
                 if($temp['propertyCoverageSelect'] == 'yes'){
                     $this->logger->info("DOCUMENT property_coi_document");
                     $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
@@ -1485,7 +1468,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          return $dest;
          }
 
-         private function processDate(&$data){
+         protected function processDate(&$data){
             $date=date_create($data['start_date']);
             $data['start_date'] = date_format($date,"m/d/Y");
             $date=date_create($data['end_date']);
@@ -1505,7 +1488,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             return $orgUuid;
          }
 
-         private function documentsLocation($endorsementOptions,&$data,$orgUuid){
+         protected function documentsLocation($endorsementOptions,&$data,$orgUuid){
             $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
             if(!is_null($endorsementOptions)){
                 $dest = $this->endorsedDocumentsLoc($data,$dest);
@@ -1513,4 +1496,51 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['dest'] = $dest;
             return $dest;
          }
+
+         protected function processSurplusYear(&$data){
+			$month = date_format(date_create($data['end_date']),"m");
+			$year = date_format(date_create($data['end_date']),"Y");
+
+
+			if($data['product'] != 'Dive Boat'){
+				if($month < 7){
+					$data['surplusLineYear'] = $year - 1;
+				}else{
+					$data['surplusLineYear'] = $year;
+				}
+			}else{
+				if($month < 8){
+					$data['surplusLineYear'] = $year - 1;
+				}else{
+					$data['surplusLineYear'] = $year;
+				}
+			}
+		 }
+
+
+		 protected function generateDiveStoreLiabilityDocument(&$data,&$documents,$temp,$dest,$options,$persistenceService){
+			$this->getDSLiabilityPolicyDetails($data,$temp,$persistenceService);
+			$documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+		}
+
+		private function getDSLiabilityPolicyDetails(&$data,&$temp,$persistenceService){
+			$liabilityPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'LIABILITY');
+			if($liabilityPolicyDetails){
+			   $temp['liability_policy_id'] = $data['liability_policy_id'] = $liabilityPolicyDetails['policy_number'];
+			   $temp['liability_carrier'] = $data['liability_carrier'] = $liabilityPolicyDetails['carrier'];
+			}
+		}
+
+		protected function processData(&$temp){
+			foreach ($temp as $key => $value) {
+				if(is_array($temp[$key])){
+					$temp[$key] = json_encode($value);
+				}
+			}
+		}
+
+		protected function generateDiveStorePremiumSummary($temp,$documents,$dest,$options){
+			$documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
+		}
+
 }
