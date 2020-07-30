@@ -328,6 +328,14 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_array($content['data']), true);
+        $query = "select * from ox_activity_instance where workflow_instance_id = 1 order by submitted_date";
+        $result = $this->executeQueryTest($query);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals(4, $result[0]['id']);
+        $this->assertEquals("2019-06-27 00:00:00", $result[0]['submitted_date']);
+        $this->assertEquals(1, $result[1]['id']);
+        $this->assertEquals(date('Y-m-d'), date_format(date_create($result[1]['submitted_date']), 'Y-m-d'));
+           
     }
     // NEED TO ADD FEW MORE TEST CASES  - SADHITHA
     //     public function testGetListActivityLogByFileId()
