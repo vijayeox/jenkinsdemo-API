@@ -6,7 +6,7 @@ use Oxzion\AppDelegate\AppDelegateTrait;
 
 require_once __DIR__."/PolicyDocument.php"; 
 
-class RegenarateDocuments extends PolicyDocument
+class RegenerateDocuments extends PolicyDocument
 {
     use FileTrait;
     use AppDelegateTrait;
