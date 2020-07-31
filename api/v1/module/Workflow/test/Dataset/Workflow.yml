@@ -259,6 +259,15 @@ ox_workflow_instance:
     created_by: 1
     file_id: 11
     start_data: ""
+  - id: 5
+    workflow_deployment_id: 1
+    app_id: 99
+    org_id: 1
+    status: "In Progress"
+    file_id: 0
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+    start_data: ""
 ox_file_attribute:
   - id: 1
     file_id: 11
