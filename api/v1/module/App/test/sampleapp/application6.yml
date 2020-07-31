@@ -1,22 +1,43 @@
 app:
-    { name: 'DiveInsuranceSample', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
+  name: DiveInsuranceSample
+  uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641
+  category: EXAMPLE_CATEGORY
 org:
-    { name: 'Vincencia & Buckley', uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe, email: testhub07@gmail.com, contact: { username: csradmin, firstname: CSR, lastname: admin, email: testhub07@gmail.com, phone: '' }, address1: '6 bCenterpoint', address2: Dr., city: 'La Palma', state: CA, zip: 90623, country: 'United States' }
+  name: Vincencia & Buckley
+  uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe
+  email: testhub07@gmail.com
+  contact:
+    username: csradmin
+    firstname: CSR
+    lastname: admin
+    email: testhub07@gmail.com
+    phone: ''
+  address1: 6 bCenterpoint
+  address2: Dr.
+  city: La Palma
+  state: CA
+  zip: 90623
+  country: United States
 privilege:
-    - { name: 'MANAGE_POLICY_APPROVAL', permission: 3 }
-    - { name: 'MANAGE_MY_POLICY', permission: 3 }
-    - { name: 'MANAGE_M', permission: 3 }
-    - { name: 'MANAGE_p', permission: 3 }
+  - name: MANAGE_POLICY_APPROVAL
+    permission: 3
+  - name: MANAGE_MY_POLICY
+    permission: 3
+  - name: MANAGE_M
+    permission: 3
+  - name: MANAGE_p
+    permission: 3
 dashboard:
-    - { name: Dashboard, content: content/Dashboard.txt }
+  - name: Dashboard
+    content: content/Dashboard.txt
 job:
-    -
-        uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
-        name: 'Import Padi'
-        url: /workflow/f0efea9e-7863-4368-a9b2-baa1a1603067
-        cron: '0 4 12 18 * ? 2020'
-        data:
-            EFR2M: 204
-            padi: 2165
-            padiVerified: true
-            internationalNonteachingSupervisoryInstructor: 99
+  - uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
+    name: Import Padi
+    url: /workflow/f0efea9e-7863-4368-a9b2-baa1a1603067
+    cron: 0 4 12 18 * ? 2020
+    data:
+      EFR2M: 204
+      padi: 2165
+      padiVerified: true
+      internationalNonteachingSupervisoryInstructor: 99
+

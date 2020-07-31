@@ -1,38 +1,136 @@
 app:
-    { name: 'DiveInsuranceSample', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
+  name: DiveInsuranceSample
+  uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641
+  category: EXAMPLE_CATEGORY
 org:
-    { name: 'Vincencia & Buckley',
-        uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe,
-        email: testhub07@gmail.com,
-        address1: '6 bCenterpoint',
-        address2: Dr.,
-        city: 'La Palma',
-        state: CA,
-        zip: 90623,
-        contact: { username: csradmin, firstname: CSR, lastname: admin, email: testhub07@gmail.com, phone: '' },
-        preferences: { currency: INR, timezone: Kolkata, dateformat: dd/mm/yy },
-        country: 'United States' }
+  name: Vincencia & Buckley
+  uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe
+  email: testhub07@gmail.com
+  address1: 6 bCenterpoint
+  address2: Dr.
+  city: La Palma
+  state: CA
+  zip: 90623
+  contact:
+    username: csradmin
+    firstname: CSR
+    lastname: admin
+    email: testhub07@gmail.com
+    phone: ''
+  preferences:
+    currency: INR
+    timezone: Kolkata
+    dateformat: dd/mm/yy
+  country: United States
 privilege:
-    - { name: 'MANAGE_POLICY_APPROVAL', permission: 1 }
-    - { name: 'MANAGE_MY_POLICY', permission: 1 }
+  - name: MANAGE_POLICY_APPROVAL
+    permission: 1
+  - name: MANAGE_MY_POLICY
+    permission: 1
 role:
-    - {name: 'Policy Holder', default: true, privileges: [{privilege_name: 'MANAGE_MY_POLICY', permission: 1}]}
+  - name: Policy Holder
+    default: true
+    privileges:
+      - privilege_name: MANAGE_MY_POLICY
+        permission: 1
 dashboard:
-    - { name: Dashboard, content: content/Dashboard.txt }
+  - name: Dashboard
+    content: content/Dashboard.txt
 workflow:
-    - { name: 'Individual Liability', uuid: f0efea9e-7863-4368-a9b2-baa1a1603067, bpmn_file: Individual Professional Liability/SampleBPMN.bpmn, entity: dummyEntity1 }
-    - { name: 'Dive Store', uuid: cb99e634-de00-468d-9230-d6f77d241c5b, bpmn_file: Dive Store/SampleBPMN.bpmn, entity: dummyEntity3 }
-    - { name: 'Dive Boat', uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1, bpmn_file: Dive Boat/SampleBPMN.bpmn }
+  - name: Individual Liability
+    uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
+    bpmn_file: Individual Professional Liability/SampleBPMN.bpmn
+    entity: dummyEntity1
+  - name: Dive Store
+    uuid: cb99e634-de00-468d-9230-d6f77d241c5b
+    bpmn_file: Dive Store/SampleBPMN.bpmn
+    entity: dummyEntity3
+  - name: Dive Boat
+    uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+    bpmn_file: Dive Boat/SampleBPMN.bpmn
 form:
-    - { description: description, template: {"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":[]},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":[],"properties":[],"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleFormForTests"}, entity: Padi}
+  - description: description
+    template:
+      _id: 5d3afa5ccc5f75b982967721
+      type: form
+      tags: []
+      owner: 5cd2e0d62363f67ddc9489c6
+      components:
+        - autofocus: false
+          input: true
+          tableView: true
+          inputType: text
+          inputMask: ''
+          label: Name
+          key: name
+          placeholder: ''
+          prefix: ''
+          suffix: ''
+          multiple: false
+          defaultValue: ''
+          protected: false
+          unique: false
+          persistent: true
+          hidden: false
+          clearOnHide: true
+          spellcheck: true
+          validate:
+            required: false
+            minLength: ''
+            maxLength: ''
+            pattern: ''
+            custom: ''
+            customPrivate: false
+          conditional:
+            show: ''
+            when: null
+            eq: ''
+          type: textfield
+          labelPosition: top
+          inputFormat: plain
+          tags: []
+          properties: []
+        - autofocus: false
+          input: true
+          label: Submit
+          tableView: false
+          key: submit
+          size: md
+          leftIcon: ''
+          rightIcon: ''
+          block: false
+          action: submit
+          disableOnInvalid: false
+          theme: primary
+          type: button
+      revisions: ''
+      _vid: 0
+      title: SampleFormForTests
+      display: form
+      access:
+        - roles:
+            - 5ce43aa430776b950569301d
+            - 5ce43aa430776b4a5969301e
+            - 5ce43aa430776bdfb569301f
+          type: read_all
+      submissionAccess: []
+      settings: []
+      properties: []
+      name: sampleFormForTests
+      path: sampleformfortests
+      project: 5ce43aa430776b2aff69301c
+      created: '2019-07-26T13:04:28.211Z'
+      modified: '2019-07-26T13:04:28.214Z'
+      machineName: 'testdivehub:sampleFormForTests'
+    entity: Padi
 job:
-    -
-        uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
-        name: 'Import Padi'
-        url: /workflow/f0efea9e-7863-4368-a9b2-baa1a1603067
-        cron: '0 4 12 18 * ? 2020'
-        data:
-            EFR2M: 204
-            padi: 2165
-            padiVerified: true
-            internationalNonteachingSupervisoryInstructor: 99
+  - uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
+    name: Import Padi
+    url: /workflow/f0efea9e-7863-4368-a9b2-baa1a1603067
+    cron: 0 4 12 18 * ? 2020
+    data:
+      EFR2M: 204
+      padi: 2165
+      padiVerified: true
+      internationalNonteachingSupervisoryInstructor: 99
+

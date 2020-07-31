@@ -1,99 +1,190 @@
 app:
-    { name: 'DiveInsuranceSample', category: EXAMPLE_CATEGORY }
+  name: DiveInsuranceSample
+  category: EXAMPLE_CATEGORY
 org:
-    { name: 'Vincencia & Buckley',
-        email: testhub07@gmail.com,
-        address1: '6 bCenterpoint',
-        address2: Dr.,
-        city: 'La Palma',
-        state: CA,
-        zip: 90623,
-        country: 'United States' }
+  name: Vincencia & Buckley
+  email: testhub07@gmail.com
+  address1: 6 bCenterpoint
+  address2: Dr.
+  city: La Palma
+  state: CA
+  zip: 90623
+  country: United States
 privilege:
-    - { name: 'MANAGE_POLICY_APPROVAL', permission: 3 }
-    - { name: 'MANAGE_MY_POLICY', permission: 3 }
+  - name: MANAGE_POLICY_APPROVAL
+    permission: 3
+  - name: MANAGE_MY_POLICY
+    permission: 3
 dashboard:
-    - { name: Dashboard, content: content/Dashboard.txt }
+  - name: Dashboard
+    content: content/Dashboard.txt
 menu:
   - name: Home
-    privilege: "MANAGE_MY_POLICY_WRITE"
-    icon: 'fa-home'
+    privilege: MANAGE_MY_POLICY_WRITE
+    icon: fa-home
     page:
-      name: "My Policies"
-      description: "Shows a list of users policies"
+      name: My Policies
+      description: Shows a list of users policies
       content:
         - type: Document
-          content: "<p><h2>Personal Policies</h2></p><p></p>"
+          content: <p><h2>Personal Policies</h2></p><p></p>
         - type: List
           content:
-            route: "app/{{app_id}}/file"
+            route: 'app/{{app_id}}/file'
             filterable: true
             reorderable: true
             resizable: true
             pageable:
-              buttonCount: 3 
-              pageSizes: [10, 20, 50]
+              buttonCount: 3
+              pageSizes:
+                - 10
+                - 20
+                - 50
               info: true
               actions:
                 - name: View
-                  page_id: "1"
-                  icon: "fas fa-envelope-open-text"
-                - name: Claim 
-                  page_id: "2"
-                  icon: "fas fa-plus-circle"
+                  page_id: '1'
+                  icon: fas fa-envelope-open-text
+                - name: Claim
+                  page_id: '2'
+                  icon: fas fa-plus-circle
                 - name: Cancel
-                  page_id: "3"
-                  icon: "far fa-window-close"
+                  page_id: '3'
+                  icon: far fa-window-close
               columnConfig:
                 - title: Name
                   field: name
                 - title: Status
                   field: status
-                - title: Data 
+                - title: Data
                   field: data
-  - name: "My History"
-    privilege: "MANAGE_MY_POLICY_READ"
+  - name: My History
+    privilege: MANAGE_MY_POLICY_READ
     page:
-      name: "All Policies"
-      description: "Shows all the policies"
-      content: [{ type: List, content: { route: "app/{{app_id}}/file" } }]
-  - name: "Verify PADI details"
-    page:
-      name: "Verify PADI details"
-      description: "Lets CSR to input and check PADI Data"
+      name: All Policies
+      description: Shows all the policies
       content:
-        [
-          { content: "<h3>Verify PADI Details</h3>", type: "Document" },
-          { form_id: "750", type: "Form" },
-        ]
+        - type: List
+          content:
+            route: 'app/{{app_id}}/file'
+  - name: Verify PADI details
+    page:
+      name: Verify PADI details
+      description: Lets CSR to input and check PADI Data
+      content:
+        - content: <h3>Verify PADI Details</h3>
+          type: Document
+        - form_id: '750'
+          type: Form
   - name: Home
     privilege: MANAGE_POLICY_APPROVAL_READ
     page:
       name: Dashboard
-      description: "Shows dashboard"
-      content: [{ type: Dashboard, dashboard: Dashboard }]
+      description: Shows dashboard
+      content:
+        - type: Dashboard
+          dashboard: Dashboard
   - name: Requests
     privilege: MANAGE_POLICY_APPROVAL_WRITE
     page:
       name: Requests
-      description: "Shows requests"
-      content: [{ type: List, content: { route: "" } }]
-  - name: "Manage Policies"
+      description: Shows requests
+      content:
+        - type: List
+          content:
+            route: ''
+  - name: Manage Policies
     privilege: MANAGE_POLICY_APPROVAL_WRITE
     page:
-      name: "Manage Policies"
-      description: "Page to manage policies"
-      content: [{ type: List, content: { route: "" } }]
+      name: Manage Policies
+      description: Page to manage policies
+      content:
+        - type: List
+          content:
+            route: ''
 form:
-  - { description: description, template: {"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":[]},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":[],"properties":[],"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleFormForTests"}, entity: Padi}
+  - description: description
+    template:
+      _id: 5d3afa5ccc5f75b982967721
+      type: form
+      tags: []
+      owner: 5cd2e0d62363f67ddc9489c6
+      components:
+        - autofocus: false
+          input: true
+          tableView: true
+          inputType: text
+          inputMask: ''
+          label: Name
+          key: name
+          placeholder: ''
+          prefix: ''
+          suffix: ''
+          multiple: false
+          defaultValue: ''
+          protected: false
+          unique: false
+          persistent: true
+          hidden: false
+          clearOnHide: true
+          spellcheck: true
+          validate:
+            required: false
+            minLength: ''
+            maxLength: ''
+            pattern: ''
+            custom: ''
+            customPrivate: false
+          conditional:
+            show: ''
+            when: null
+            eq: ''
+          type: textfield
+          labelPosition: top
+          inputFormat: plain
+          tags: []
+          properties: []
+        - autofocus: false
+          input: true
+          label: Submit
+          tableView: false
+          key: submit
+          size: md
+          leftIcon: ''
+          rightIcon: ''
+          block: false
+          action: submit
+          disableOnInvalid: false
+          theme: primary
+          type: button
+      revisions: ''
+      _vid: 0
+      title: SampleFormForTests
+      display: form
+      access:
+        - roles:
+            - 5ce43aa430776b950569301d
+            - 5ce43aa430776b4a5969301e
+            - 5ce43aa430776bdfb569301f
+          type: read_all
+      submissionAccess: []
+      settings: []
+      properties: []
+      name: sampleFormForTests
+      path: sampleformfortests
+      project: 5ce43aa430776b2aff69301c
+      created: '2019-07-26T13:04:28.211Z'
+      modified: '2019-07-26T13:04:28.214Z'
+      machineName: 'testdivehub:sampleFormForTests'
+    entity: Padi
 job:
-    -
-        uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
-        name: 'Import Padi'
-        url: /workflow/f0efea9e-7863-4368-a9b2-baa1a1603067
-        cron: '0 4 12 18 * ? 2020'
-        data:
-            EFR2M: 204
-            padi: 2165
-            padiVerified: true
-            internationalNonteachingSupervisoryInstructor: 99
+  - uuid: 129dfbe2-151d-49c8-81e9-a4b7582df65e
+    name: Import Padi
+    url: /workflow/f0efea9e-7863-4368-a9b2-baa1a1603067
+    cron: 0 4 12 18 * ? 2020
+    data:
+      EFR2M: 204
+      padi: 2165
+      padiVerified: true
+      internationalNonteachingSupervisoryInstructor: 99
+
