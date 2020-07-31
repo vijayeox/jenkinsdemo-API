@@ -1,31 +1,29 @@
 app:
-    -
-        name: DiveInsuranceSample
-        uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641
-        category: EXAMPLE_CATEGORY
-        type: 2
-        autostart: 'true'
+    name: DiveInsuranceSample
+    uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
 org:
-    -
-        name: 'Vincencia & Buckley'
-        uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe
+    name: 'Vincencia & Buckley'
+    uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe
+    email: testhub07@gmail.com
+    address1: '6 bCenterpoint'
+    address2: Dr.
+    city: 'La Palma'
+    state: CA
+    zip: 90623
+    country: 'United States'
+    contact:
+        username: csradmin
+        firstname: CSR
+        lastname: admin
         email: testhub07@gmail.com
-        address1: '6 bCenterpoint'
-        address2: Dr.
-        city: 'La Palma'
-        state: CA
-        zip: 90623
-        contact:
-            username: csradmin
-            firstname: CSR
-            lastname: admin
-            email: testhub07@gmail.com
-            phone: ''
-        preferences:
-            currency: INR
-            timezone: Kolkata
-            dateformat: dd/mm/yy
-        country: 'United States'
+        phone: ''
+    preferences:
+        currency: INR
+        timezone: Kolkata
+        dateformat: dd/mm/yy
 privilege:
     -
         name: MANAGE_POLICY_APPROVAL

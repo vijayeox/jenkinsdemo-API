@@ -1,7 +1,7 @@
 app:
-    - { name: 'DiveInsuranceSample', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
+    { name: 'DiveInsuranceSample', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
 org:
-    - { name: 'Vincencia & Buckley',
+    { name: 'Vincencia & Buckley',
         email: testhub07@gmail.com,
         address1: '6 bCenterpoint',
         address2: Dr.,

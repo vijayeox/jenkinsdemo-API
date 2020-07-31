@@ -1,5 +1,5 @@
 org:
-    - { name: 'Vincencia & Buckley', uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609, email: testhub07@gmail.com, contact: { username: csradmin, firstname: CSR, lastname: admin, email: testhub07@gmail.com, phone: '' }, preferences: { currency: INR, timezone: Kolkata, dateformat: dd/mm/yy }, address1: '6 bCenterpoint', address2: Dr., city: 'La Palma', state: CA, zip: 90623, country: 'United States' }
+    { name: 'Vincencia & Buckley', uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609, email: testhub07@gmail.com, contact: { username: csradmin, firstname: CSR, lastname: admin, email: testhub07@gmail.com, phone: '' }, preferences: { currency: INR, timezone: Kolkata, dateformat: dd/mm/yy }, address1: '6 bCenterpoint', address2: Dr., city: 'La Palma', state: CA, zip: 90623, country: 'United States' }
 privilege:
     - { name: 'MANAGE_POLICY_APPROVAL', permission: 3 }
     - { name: 'MANAGE_MY_POLICY', permission: 3 }

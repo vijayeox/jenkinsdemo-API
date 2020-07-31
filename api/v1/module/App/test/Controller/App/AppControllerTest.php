@@ -260,8 +260,8 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $query = "SELECT name from ox_app where name = '" . $appName . "'";
         $appname = $this->executeQueryTest($query);
         $query = "SELECT uuid from ox_app where name = '" . $appName . "'";
@@ -271,7 +271,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT id from ox_app where uuid = '" . $appUuid . "'";
         $appId = $this->executeQueryTest($query);
         $appId = $appId[0]['id'];
-        $query = "SELECT count(name),status,uuid,id from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(name),status,uuid,id from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count from ox_app_registry where app_id = '" . $appId . "'";
         $appRegistryResult = $this->executeQueryTest($query);
@@ -299,7 +299,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($role[0]['count'], 5);
         $this->assertEquals($privilege[0]['count'], 3);
         $this->assertEquals($rolePrivilege[0]['count'], 6);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $this->assertEquals($appname[0]['name'], $appName);
         $this->assertEquals($appUuid, $YmlappUuid);
         $this->assertEquals($appUuidCount, 1);
@@ -333,10 +333,10 @@ class AppControllerTest extends ControllerTest
     }
     private function clean($path, $yaml, $appName, $YmlappUuid){
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
         $deletdirectoryPath = __DIR__ . '/../../../../';
         $deletenpm = $deletdirectoryPath . '.npm';
         if (file_exists($deletenpm)) {
@@ -366,8 +366,8 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $query = "SELECT name, uuid from ox_app where name = '" . $appName . "'";
         $appdata = $this->executeQueryTest($query);
         $this->assertEquals($appdata[0]['name'], $appName);
@@ -412,8 +412,8 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $this->clean($path, $yaml, $appName, $YmlappUuid);
         
     }
@@ -458,8 +458,8 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $query = "SELECT name, uuid from ox_app where name = '" . $appName . "'";
         $appdata = $this->executeQueryTest($query);
         $this->assertEquals($appdata[0]['name'], $appName);
@@ -477,7 +477,7 @@ class AppControllerTest extends ControllerTest
             }
         }
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appname);
@@ -517,28 +517,28 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $query = "SELECT name, uuid from ox_app where name = '" . $appName . "'";
         $appdata = $this->executeQueryTest($query);
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
-        if (!isset($yaml['org'][0]['uuid'])) {
-            $yaml['org'][0]['uuid'] = null;
+        if (!isset($yaml['org']['uuid'])) {
+            $yaml['org']['uuid'] = null;
         }
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase()
@@ -566,26 +566,26 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $this->assertEquals(isset($yaml['app'][0]['uuid']), true);
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $this->assertEquals(isset($yaml['app']['uuid']), true);
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $query = "SELECT name, uuid from ox_app where name = '" . $appName . "'";
         $appdata = $this->executeQueryTest($query);
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppNoDirectory()
@@ -661,24 +661,24 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
-        $this->assertNotEmpty($yaml['org'][0]['uuid']);
-        $this->assertNotEmpty($yaml['org'][0]['contact']);
-        $this->assertEquals($yaml['org'][0]['preferences'], '{}');
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
+        $this->assertNotEmpty($yaml['org']['uuid']);
+        $this->assertNotEmpty($yaml['org']['contact']);
+        $this->assertEquals($yaml['org']['preferences'], '{}');
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppAddExtraPrivilegesInDatabaseFromYml()
@@ -706,17 +706,17 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $privilegearray = array_unique(array_column($yaml['privilege'], 'name'));
-        $appid = "SELECT id FROM ox_app WHERE name = '" . $yaml['app'][0]['name'] . "'";
+        $appid = "SELECT id FROM ox_app WHERE name = '" . $yaml['app']['name'] . "'";
         $idresult = $this->executeQueryTest($appid);
         $queryString = "SELECT name FROM ox_privilege WHERE app_id = '" . $idresult[0]['id'] . "'";
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $this->assertEquals($privilegearray, $DBprivilege);
         $this->assertEquals($content['status'], 'success');
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
@@ -724,10 +724,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml()
@@ -755,17 +755,17 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
-        $appid = "SELECT id FROM ox_app WHERE name = '" . $yaml['app'][0]['name'] . "'";
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
+        $appid = "SELECT id FROM ox_app WHERE name = '" . $yaml['app']['name'] . "'";
         $idresult = $this->executeQueryTest($appid);
         $queryString = "SELECT name FROM ox_privilege WHERE app_id = '" . $idresult[0]['id'] . "'";
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
         $list = "'" . implode("', '", $DBprivilege) . "'";
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org'][0]['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $this->assertNotEquals($list, 'MANAGE');
         $this->assertEquals($content['status'], 'success');
         $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
@@ -773,10 +773,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppWithNoEntityInYml()
@@ -808,14 +808,14 @@ class AppControllerTest extends ControllerTest
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app'][0]['name'];
-        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
         $this->assertEquals($content['status'], 'success');
         unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app'][0]['name'];
+        $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testUpdate()
