@@ -184,6 +184,7 @@ public function execute(array $data,Persistence $persistenceService)
             $policy['previous_LiaTax'] = $data['LiaTax'];
             $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
             $policy['previous_AddILocTax'] = $data['AddILocTax'];
+            $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
             $policy['previous_padiFeePL'] = $data['padiFeePL'];
             $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
             $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
