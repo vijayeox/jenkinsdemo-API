@@ -97,6 +97,18 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     background-color: $secondary;
   }
 
+  .formio-component-modal-wrapper.formio-component-modal-wrapper-panel{
+    .formio-dialog-close.float-right.btn.btn-secondary{
+      background-color:$primary-color;
+      border: solid 4px lightgray;
+    }
+    .formio-dialog-close:before{
+      font-size:25px;
+      font-weight:bolder;
+      color:white;
+    }
+  }
+
   #floater {
     position: fixed;
     bottom: 10px;
