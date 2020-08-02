@@ -61,6 +61,10 @@ entity:
                 text: 'Generic Data Massaging'
                 data_type: json
             -
+                name: locationSchedule
+                text: 'Location Schedule'
+                data_type: json
+            -
                 name: franchisedAutoDealer
                 text: 'Franchised Auto Dealer'
                 data_type: json
