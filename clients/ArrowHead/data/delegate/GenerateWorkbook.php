@@ -276,6 +276,24 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         );
     }
 
+    private function checkValue($data, $fieldConfig, $formData)
+    {
+        $childValue = explode("_", $fieldConfig["key"])[1];
+        if ($childValue == $data) {
+            if (isset($fieldConfig['returnBoolean'])) {
+                $trueValue = explode("|", $fieldConfig["returnBoolean"])[0];
+                return $trueValue;
+            }
+            return 'true';
+        } else {
+            if (isset($fieldConfig['returnBoolean'])) {
+                $falseValue = explode("|", $fieldConfig["returnBoolean"])[1];
+                return $falseValue;
+            }
+            return "";
+        }
+    }
+
     private function checkInArray($data, $fieldConfig, $formData)
     {
         $childValue = explode("_", $fieldConfig["key"])[1];
