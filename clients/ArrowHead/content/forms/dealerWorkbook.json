@@ -7,7 +7,7 @@
     {
       "title": "General Information",
       "theme": "primary",
-      "breadcrumb": "none",
+      "breadcrumbClickable": true,
       "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "tableView": false,
@@ -350,7 +350,7 @@
                     {
                       "components": [
                         {
-                          "label": "FIEN/Social Security #",
+                          "label": "FEIN/Social Security #",
                           "mask": false,
                           "spellcheck": true,
                           "tableView": true,
@@ -432,6 +432,7 @@
                           "label": "Business Phone",
                           "placeholder": " ",
                           "tableView": true,
+                          "validateOn": "blur",
                           "validate": {
                             "required": true,
                             "customMessage": "Please enter a valid Business Phone"
@@ -455,6 +456,7 @@
                           "label": "Business Fax",
                           "placeholder": " ",
                           "tableView": true,
+                          "validateOn": "blur",
                           "validate": {
                             "customMessage": "Please enter a valid Fax number"
                           },
@@ -476,6 +478,7 @@
                         {
                           "label": "Business Email",
                           "tableView": true,
+                          "validateOn": "blur",
                           "validate": {
                             "required": true,
                             "customMessage": "Please enter Business Email"
@@ -507,6 +510,7 @@
                         {
                           "label": "Website",
                           "tableView": true,
+                          "validateOn": "blur",
                           "key": "website",
                           "type": "url",
                           "input": true,
@@ -663,7 +667,7 @@
                     {
                       "label": "Full Name",
                       "calculateValue": "value = row.genfirstname + \" \" + row.genlastname;",
-                      "key": "fullName",
+                      "key": "genfullName",
                       "type": "hidden",
                       "input": true,
                       "tableView": false
@@ -677,10 +681,11 @@
                               "label": "Phone",
                               "placeholder": " ",
                               "tableView": true,
+                              "validateOn": "blur",
                               "validate": {
                                 "customMessage": "Please enter a valid Phone"
                               },
-                              "key": "phone",
+                              "key": "genphone",
                               "type": "phoneNumber",
                               "input": true,
                               "lockKey": true,
@@ -698,10 +703,11 @@
                             {
                               "label": "Email",
                               "tableView": true,
+                              "validateOn": "blur",
                               "validate": {
                                 "customMessage": "Please enter valid Email"
                               },
-                              "key": "email",
+                              "key": "genemail",
                               "type": "email",
                               "input": true,
                               "hideOnChildrenHidden": false,
@@ -834,11 +840,10 @@
                       "dataSrc": "custom",
                       "data": {
                         "values": [{ "label": "", "value": "" }],
-                        "custom": "values = [];\nif(data.insurancecontactdataGrid){\n  if(data.insurancecontactdataGrid.length > 0){\n    values = data.insurancecontactdataGrid.map(item =>  item.fullName);\n  }\n}"
+                        "custom": "values = [];\nif(data.insurancecontactdataGrid){\n  if(data.insurancecontactdataGrid.length > 0){\n    values = data.insurancecontactdataGrid.map(item =>  item.genfullName);\n  }\n}"
                       },
                       "refreshOn": "insurancecontactdataGrid",
                       "selectThreshold": 0.3,
-                      "calculateValue": "if (data.insurancecontactdataGrid) {\n  if (data.insurancecontactdataGrid.length > 0) {\n    var userExists = data.insurancecontactdataGrid.filter(\n      (item) => value == item.fullName\n    );\n    value = userExists.length == 0 ? \"\" : value ;\n  }\n}",
                       "validate": { "required": true },
                       "key": "hrRepresentative",
                       "type": "select",
@@ -1057,17 +1062,19 @@
           "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
-          "key": "newBusinessChecklist",
+          "key": "newBusinessChecklistPanel",
           "type": "panel",
           "label": "New Business Checklist",
           "input": false,
           "components": [
             {
-              "label": "New Business Checklist",
+              "label": "business Checklist",
               "optionsLabelPosition": "right",
               "hideLabel": true,
               "tableView": false,
               "defaultValue": {
+                "": false,
+                "a": false,
                 "narrative": false,
                 "dealerSov": false,
                 "employeeNonEmployeeList": false,
@@ -1454,7 +1461,7 @@
                         ]
                       },
                       "selectThreshold": 0.3,
-                      "validate": { "multiple": true },
+                      "validate": { "required": true, "multiple": true },
                       "key": "accidentInvestigationIfYesCheckAllThatApply",
                       "conditional": {
                         "show": true,
@@ -1680,6 +1687,15 @@
                           "input": true
                         },
                         {
+                          "label": "Location UUID",
+                          "customDefaultValue": "function uuidv4() {\n  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>\n    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n  );\n}\n\nvalue = uuidv4();",
+                          "key": "locationUUID",
+                          "type": "hidden",
+                          "input": true,
+                          "tableView": false,
+                          "hideOnChildrenHidden": false
+                        },
+                        {
                           "label": "Columns",
                           "input": false,
                           "tableView": false,
@@ -1689,7 +1705,9 @@
                               "components": [
                                 {
                                   "label": "Location #",
+                                  "disabled": true,
                                   "tableView": true,
+                                  "calculateValue": "if(data.locationSchedule){\n  if(data.locationSchedule.length > 0){\n    data.locationSchedule.map((item, index) =>{\n      if(item.locationUUID == row.locationUUID){\n        value = index + 1;\n      }\n    })\n  }\n}",
                                   "validate": {
                                     "required": true,
                                     "customMessage": "Please enter Location #"
@@ -1705,6 +1723,46 @@
                                   "tableView": true,
                                   "validate": { "required": true },
                                   "key": "county1",
+                                  "logic": [
+                                    {
+                                      "name": "check disabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "clear field",
+                                          "type": "value",
+                                          "value": "if(value == data.county1){\n  value = \"\";\n}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "check enabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = row.isTheLocationAddressSameAsMailingAddress"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "disable field",
+                                          "type": "property",
+                                          "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                          },
+                                          "state": true
+                                        },
+                                        {
+                                          "name": "set value",
+                                          "type": "value",
+                                          "value": "if(value!=data.county)\n{value = data.county;}"
+                                        }
+                                      ]
+                                    }
+                                  ],
                                   "type": "textfield",
                                   "input": true,
                                   "hideOnChildrenHidden": false
@@ -1778,6 +1836,7 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
+                                    "values": [{ "label": "", "value": "" }],
                                     "custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === \"United States of America\");\nif(obj){\nvalues = obj.states\n}"
                                   },
                                   "template": "<span>{{ item }}</span>",
@@ -1786,6 +1845,46 @@
                                   "clearOnHide": false,
                                   "validate": { "required": true },
                                   "key": "state",
+                                  "logic": [
+                                    {
+                                      "name": "check disabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "clear field",
+                                          "type": "value",
+                                          "value": "if(value == data.state){\n  value = \"\";\n}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "check enabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = row.isTheLocationAddressSameAsMailingAddress"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "disable field",
+                                          "type": "property",
+                                          "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                          },
+                                          "state": true
+                                        },
+                                        {
+                                          "name": "set value",
+                                          "type": "value",
+                                          "value": "if(value!=data.state)\n{value = data.state;}"
+                                        }
+                                      ]
+                                    }
+                                  ],
                                   "type": "select",
                                   "indexeddb": { "filter": {} },
                                   "input": true,
@@ -1810,6 +1909,51 @@
                                     "customMessage": "Please enter City"
                                   },
                                   "key": "city",
+                                  "logic": [
+                                    {
+                                      "name": "check disabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "clear field",
+                                          "type": "value",
+                                          "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                          },
+                                          "value": "if(value == data.city){\n  value = \"\";\n}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "check enabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = row.isTheLocationAddressSameAsMailingAddress;"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "disable field",
+                                          "type": "property",
+                                          "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                          },
+                                          "state": true
+                                        },
+                                        {
+                                          "name": "set value",
+                                          "type": "value",
+                                          "value": "if(value!=data.city)\n{value = data.city;}"
+                                        }
+                                      ]
+                                    }
+                                  ],
                                   "type": "textfield",
                                   "input": true,
                                   "hideOnChildrenHidden": false,
@@ -1824,6 +1968,46 @@
                                     "custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
                                   },
                                   "key": "zip",
+                                  "logic": [
+                                    {
+                                      "name": "check disabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "clear field",
+                                          "type": "value",
+                                          "value": "if(value == data.zip){\n  value = \"\";\n}"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "check enabled",
+                                      "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "result = row.isTheLocationAddressSameAsMailingAddress"
+                                      },
+                                      "actions": [
+                                        {
+                                          "name": "disable field",
+                                          "type": "property",
+                                          "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                          },
+                                          "state": true
+                                        },
+                                        {
+                                          "name": "set value",
+                                          "type": "value",
+                                          "value": "if(value!=data.zip)\n{value = data.zip;}"
+                                        }
+                                      ]
+                                    }
+                                  ],
                                   "type": "textfield",
                                   "input": true,
                                   "lockKey": true,
@@ -1899,7 +2083,7 @@
                                               "label": "Location #",
                                               "disabled": true,
                                               "tableView": true,
-                                              "calculateValue": "console.log(data.locationSchedule);\n\nvar locationResult = data.locationSchedule.find((item) => {\n  if (item.buildingDetails) {\n    if (item.buildingDetails.length > 0) {\n      return (\n        item.buildingDetails.filter(\n          (buildingData) => buildingData.buildingUuid == row.buildingUuid\n        ).length > 0\n      );\n    }\n  }\n});\n\nvalue = locationResult ? locationResult.locationNum : \"\";",
+                                              "calculateValue": "var locationResult = data.locationSchedule.find((item) => {\n  if (item.buildingDetails) {\n    if (item.buildingDetails.length > 0) {\n      return (\n        item.buildingDetails.filter(\n          (buildingData) => buildingData.buildingUuid == row.buildingUuid\n        ).length > 0\n      );\n    }\n  }\n});\n\nvalue = locationResult ? locationResult.locationNum : \"\";",
                                               "key": "locationDuplicate",
                                               "type": "textfield",
                                               "input": true,
@@ -1916,7 +2100,9 @@
                                           "components": [
                                             {
                                               "label": "Building #",
+                                              "disabled": true,
                                               "tableView": true,
+                                              "calculateValue": "if (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    var locationIndex = row.locationDuplicate - 1;\n    if (typeof locationIndex == \"number\") {\n      var currentLocation = data.locationSchedule[locationIndex];\n      console.log(currentLocation);\n      currentLocation.buildingDetails.map((item, index) => {\n        if (item.buildingUuid == row.buildingUuid) {\n          value = index + 1;\n        }\n      });\n    }\n  }\n}",
                                               "validate": {
                                                 "required": true,
                                                 "customMessage": "Please enter Building #"
@@ -2099,7 +2285,7 @@
                                                 "values": [
                                                   { "label": "", "value": "" }
                                                 ],
-                                                "custom": "var OEMList = [\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo\"\n]\nvalues = OEMList.map(item => {\n  return row.primaryOEM != item ? item : false \n})"
+                                                "custom": "var OEMList = [\n  \"None\",\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo\"\n]\nvalues = OEMList.map(item => {\n  return row.primaryOEM != item ? item : false \n})"
                                               },
                                               "valueProperty": "item",
                                               "dataType": "object",
@@ -2172,16 +2358,17 @@
                                                   "values": [
                                                     {
                                                       "label": "Owned",
-                                                      "value": "owned",
+                                                      "value": "buildinginterestowned",
                                                       "shortcut": ""
                                                     },
                                                     {
                                                       "label": "Leased",
-                                                      "value": "leased",
+                                                      "value": "buildinginterestleased",
                                                       "shortcut": ""
                                                     }
                                                   ],
                                                   "dataType": "auto",
+                                                  "calculateValue": "if(row.occupancyType === 'bldgLeasedToOthers'){\n  value = 'buildinginterestleased';\n}",
                                                   "validate": {
                                                     "required": true
                                                   },
@@ -2423,7 +2610,7 @@
                                                   "inputFormat": "plain",
                                                   "validate": {
                                                     "required": true,
-                                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                                    "custom": "valid =\r\n  Number.isInteger(input) && (input > 1950 || input == 0) && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
                                                   },
                                                   "key": "wiringyear",
                                                   "type": "number",
@@ -2460,7 +2647,7 @@
                                                   "inputFormat": "plain",
                                                   "validate": {
                                                     "required": true,
-                                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                                    "custom": "valid =\r\n  Number.isInteger(input) && (input > 1950 || input == 0) && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
                                                   },
                                                   "key": "roofingyear",
                                                   "type": "number",
@@ -2487,7 +2674,7 @@
                                                   "inputFormat": "plain",
                                                   "validate": {
                                                     "required": true,
-                                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                                    "custom": "valid =\r\n  Number.isInteger(input) && (input > 1950 || input == 0) && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
                                                   },
                                                   "key": "plumbingyear",
                                                   "type": "number",
@@ -2514,7 +2701,7 @@
                                                   "inputFormat": "plain",
                                                   "validate": {
                                                     "required": true,
-                                                    "custom": "valid =\r\n  Number.isInteger(input) && input > 1950 && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
+                                                    "custom": "valid =\r\n  Number.isInteger(input) && (input > 1950 || input == 0) && input < moment().format(\"YYYY\")\r\n    ? true\r\n    : \"Please Enter a valid Year\";"
                                                   },
                                                   "key": "heatingyear",
                                                   "type": "number",
@@ -2555,6 +2742,9 @@
                                                       "shortcut": ""
                                                     }
                                                   ],
+                                                  "validate": {
+                                                    "required": true
+                                                  },
                                                   "key": "boiler",
                                                   "type": "radio",
                                                   "input": true,
@@ -3772,7 +3962,8 @@
                                                   "delimiter": true,
                                                   "requireDecimal": true,
                                                   "inputFormat": "plain",
-                                                  "calculateValue": "var calculateValue = row.totalAverageSales * (row.coinsuranceamount / 100);\nvalue = calculateValue ? calculateValue : 0;",
+                                                  "redrawOn": "locationSchedule.buildingDetails.coinsuranceamount",
+                                                  "calculateValue": "var calculateValue = (row.totalAverageSales * 12) * (row.coinsuranceamount / 100);\nvalue = calculateValue ? calculateValue : 0;",
                                                   "key": "recommendedbuisness",
                                                   "customConditional": "show = row.coinsuranceamount;",
                                                   "type": "number",
@@ -4565,6 +4756,7 @@
                                       "label": "gliab",
                                       "tableView": false,
                                       "key": "gliab",
+                                      "customConditional": "show =\n  row.occupancyType == \"vacantLand\" ||\n  row.occupancyType == \"bldgLeasedToOthers\";",
                                       "type": "well",
                                       "input": false,
                                       "components": [
@@ -4581,69 +4773,6 @@
                                           "tableView": false,
                                           "key": "html6",
                                           "type": "htmlelement",
-                                          "input": false
-                                        },
-                                        {
-                                          "label": "Columns",
-                                          "columns": [
-                                            {
-                                              "components": [
-                                                {
-                                                  "label": "HTML",
-                                                  "tag": "table",
-                                                  "className": "staticLimitTable",
-                                                  "attrs": [
-                                                    {
-                                                      "attr": "style",
-                                                      "value": "font-size:16px; margin:10px;"
-                                                    }
-                                                  ],
-                                                  "content": "<tr>\n    <td>Limit</td>\n    <td>$ 1,000,000</td>\n  </tr>\n  <tr>\n    <td>Each Occurrence</td>\n    <td>$ 1,000,000</td>\n  </tr>\n  <tr>\n    <td>General Aggregate</td>\n    <td>$ 1,000,000</td>\n  </tr>\n  <tr>\n    <td>Products & Completed Ops. Aggregate</td>\n    <td>$ 1,000,000</td>\n  </tr>",
-                                                  "refreshOnChange": false,
-                                                  "tableView": false,
-                                                  "key": "html4",
-                                                  "type": "htmlelement",
-                                                  "input": false,
-                                                  "hideOnChildrenHidden": false
-                                                }
-                                              ],
-                                              "width": 6,
-                                              "offset": 0,
-                                              "push": 0,
-                                              "pull": 0,
-                                              "size": "md"
-                                            },
-                                            {
-                                              "components": [
-                                                {
-                                                  "label": "HTML",
-                                                  "tag": "table",
-                                                  "className": "staticLimitTable",
-                                                  "attrs": [
-                                                    {
-                                                      "attr": "style",
-                                                      "value": "font-size:16px; margin:10px;"
-                                                    }
-                                                  ],
-                                                  "content": "<tr>\n    <td>Personal & Advertising Injury</td>\n    <td>$ 1,000,000</td>\n  </tr>\n  <tr>\n    <td>Medical Expense</td>\n    <td>$ 1,000,000</td>\n  </tr>\n  <tr>\n    <td>Damage To Rented Premised</td>\n    <td>No Coverage</td>\n  </tr>",
-                                                  "refreshOnChange": false,
-                                                  "tableView": false,
-                                                  "key": "html5",
-                                                  "type": "htmlelement",
-                                                  "input": false,
-                                                  "hideOnChildrenHidden": false
-                                                }
-                                              ],
-                                              "width": 6,
-                                              "offset": 0,
-                                              "push": 0,
-                                              "pull": 0,
-                                              "size": "md"
-                                            }
-                                          ],
-                                          "tableView": false,
-                                          "key": "columns27",
-                                          "type": "columns",
                                           "input": false
                                         },
                                         {
@@ -4730,7 +4859,7 @@
                                                     ]
                                                   },
                                                   "selectThreshold": 0.3,
-                                                  "calculateValue": "if(data.generaldescription == \"vacantLandForProfit\"){\r\n  value = \"49451\";\r\n}\r\n\r\nelse\r\nif(data.generaldescription == \"bldgLeasedToOthersdes\"){\r\n  value = \"61212\";\r\n}",
+                                                  "calculateValue": "if (row.occupancyType == \"vacantLand\") {\r\n  value = \"49451\";\r\n}\r\nif (row.occupancyType == \"bldgLeasedToOthers\") {\r\n  value = \"61212\";\r\n}",
                                                   "validate": {
                                                     "required": true,
                                                     "customMessage": "Please select Class Code",
@@ -4755,6 +4884,7 @@
                                                   "label": "Rating Basis",
                                                   "widget": "choicesjs",
                                                   "placeholder": "Please Select",
+                                                  "disabled": true,
                                                   "tableView": true,
                                                   "data": {
                                                     "values": [
@@ -4769,7 +4899,7 @@
                                                     ]
                                                   },
                                                   "selectThreshold": 0.3,
-                                                  "calculateValue": "if(row.occupancyType == \"vacantLand\"){\r\n  value = \"eachAcres\";\r\n}\r\n\r\nelse\r\nif(row.occupancyType == \"bldgLeasedToOthers\"){\r\n  value = \"squareFeet\";\r\n}",
+                                                  "calculateValue": "if(row.occupancyType == \"vacantLand\"){\r\n  value = \"acres\";\r\n}\r\n\r\nelse\r\nif(row.occupancyType == \"bldgLeasedToOthers\"){\r\n  value = \"squareFeet\";\r\n}",
                                                   "validate": {
                                                     "required": true,
                                                     "customMessage": "Please select the Rating Basis"
@@ -4802,7 +4932,6 @@
                                               "components": [
                                                 {
                                                   "label": "Exposure Amount",
-                                                  "prefix": "$",
                                                   "mask": false,
                                                   "spellcheck": true,
                                                   "tableView": false,
@@ -5119,7 +5248,8 @@
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
-                                              "hideOnChildrenHidden": false
+                                              "hideOnChildrenHidden": false,
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -5148,7 +5278,8 @@
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
-                                              "hideOnChildrenHidden": false
+                                              "hideOnChildrenHidden": false,
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -5175,9 +5306,10 @@
                                               },
                                               "key": "fISales",
                                               "type": "number",
-                                              "input": true,
                                               "decimalLimit": 2,
-                                              "hideOnChildrenHidden": false
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -5214,9 +5346,10 @@
                                               },
                                               "key": "rentalLeasingSales",
                                               "type": "number",
-                                              "input": true,
                                               "decimalLimit": 2,
-                                              "hideOnChildrenHidden": false
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -5243,9 +5376,10 @@
                                               },
                                               "key": "serviceRepairSales",
                                               "type": "number",
-                                              "input": true,
                                               "decimalLimit": 2,
-                                              "hideOnChildrenHidden": false
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -5272,9 +5406,10 @@
                                               },
                                               "key": "autoBodySales",
                                               "type": "number",
-                                              "input": true,
                                               "decimalLimit": 2,
-                                              "hideOnChildrenHidden": false
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -5311,9 +5446,10 @@
                                               },
                                               "key": "partsSales",
                                               "type": "number",
-                                              "input": true,
                                               "decimalLimit": 2,
-                                              "hideOnChildrenHidden": false
+                                              "input": true,
+                                              "hideOnChildrenHidden": false,
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -5329,19 +5465,21 @@
                                               "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
+                                              "disabled": true,
                                               "tableView": false,
+                                              "defaultValue": 0,
                                               "delimiter": true,
                                               "requireDecimal": true,
                                               "inputFormat": "plain",
+                                              "calculateValue": "{\nvalue = ((row.newcarsales)? row.newcarsales : 0) + ((row.usedCarSales)? row.usedCarSales : 0) + ((row.fISales)? row.fISales : 0) + ((row.rentalLeasingSales)? row.rentalLeasingSales : 0) + ((row.serviceRepairSales)? row.serviceRepairSales : 0) + ((row.autoBodySales)? row.autoBodySales : 0) + ((row.partsSales)? row.partsSales : 0);\n}",
                                               "validate": {
-                                                "required": true,
                                                 "customMessage": "Please enter Total Location Sales/Revenue",
                                                 "min": 0
                                               },
                                               "key": "totalLocationSalesRevenue",
                                               "type": "number",
-                                              "input": true,
                                               "decimalLimit": 2,
+                                              "input": true,
                                               "hideOnChildrenHidden": false
                                             }
                                           ],
@@ -5356,62 +5494,6 @@
                                       "hideLabel": true
                                     }
                                   ]
-                                }
-                              ]
-                            },
-                            {
-                              "label": "Key Controls",
-                              "key": "keyControls",
-                              "components": [
-                                {
-                                  "label": "Key controls for the Location:",
-                                  "optionsLabelPosition": "right",
-                                  "tableView": true,
-                                  "defaultValue": {
-                                    "lockbox": false,
-                                    "computerizedKeyVault": false,
-                                    "lockingKeyCabinet": false,
-                                    "dailyKeyInventory": false,
-                                    "lockedInManagersOffice": false
-                                  },
-                                  "values": [
-                                    {
-                                      "value": "lockbox",
-                                      "label": "Lockbox",
-                                      "shortcut": ""
-                                    },
-                                    {
-                                      "value": "computerizedKeyVault",
-                                      "label": "Computerized Key Vault",
-                                      "shortcut": ""
-                                    },
-                                    {
-                                      "value": "lockingKeyCabinet",
-                                      "label": "Locking Key Cabinet",
-                                      "shortcut": ""
-                                    },
-                                    {
-                                      "value": "dailyKeyInventory",
-                                      "label": "Daily Key Inventory",
-                                      "shortcut": ""
-                                    },
-                                    {
-                                      "value": "lockedInManagersOffice",
-                                      "label": "Locked in manager's office",
-                                      "shortcut": ""
-                                    }
-                                  ],
-                                  "key": "dolkeycntrlsameallloc1",
-                                  "conditional": {
-                                    "show": true,
-                                    "when": "dolkeycntrlsameallloc",
-                                    "eq": "no"
-                                  },
-                                  "type": "selectboxes",
-                                  "input": true,
-                                  "hideOnChildrenHidden": false,
-                                  "inputType": "checkbox",
-                                  "lockKey": true
                                 }
                               ]
                             }
@@ -5618,25 +5700,26 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
                                               "label": "Guard Rail",
+                                              "optionsLabelPosition": "right",
+                                              "inline": true,
+                                              "tableView": true,
+                                              "values": [
+                                                {
+                                                  "value": "yes",
+                                                  "label": "Yes",
+                                                  "shortcut": ""
+                                                },
+                                                {
+                                                  "value": "no",
+                                                  "label": "No",
+                                                  "shortcut": ""
+                                                }
+                                              ],
+                                              "validate": { "required": true },
                                               "key": "dolguardrail",
-                                              "values": [
-                                                {
-                                                  "value": "yes",
-                                                  "label": "Yes",
-                                                  "shortcut": ""
-                                                },
-                                                {
-                                                  "value": "no",
-                                                  "label": "No",
-                                                  "shortcut": ""
-                                                }
-                                              ],
-                                              "validate": { "required": true },
                                               "type": "radio",
-                                              "optionsLabelPosition": "right",
+                                              "input": true,
                                               "hideOnChildrenHidden": false,
                                               "lockKey": true
                                             }
@@ -5650,10 +5733,10 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
                                               "label": "After Hours Lighting",
-                                              "key": "dolaftrhrslighting",
+                                              "optionsLabelPosition": "right",
+                                              "inline": true,
+                                              "tableView": true,
                                               "values": [
                                                 {
                                                   "value": "yes",
@@ -5667,8 +5750,9 @@
                                                 }
                                               ],
                                               "validate": { "required": true },
+                                              "key": "dolaftrhrslighting",
                                               "type": "radio",
-                                              "optionsLabelPosition": "right",
+                                              "input": true,
                                               "hideOnChildrenHidden": false,
                                               "lockKey": true
                                             }
@@ -5682,10 +5766,10 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
                                               "label": "Security Guards",
-                                              "key": "dolsecguards",
+                                              "optionsLabelPosition": "right",
+                                              "inline": true,
+                                              "tableView": true,
                                               "values": [
                                                 {
                                                   "value": "yes",
@@ -5699,8 +5783,9 @@
                                                 }
                                               ],
                                               "validate": { "required": true },
+                                              "key": "dolsecguards",
                                               "type": "radio",
-                                              "optionsLabelPosition": "right",
+                                              "input": true,
                                               "hideOnChildrenHidden": false,
                                               "lockKey": true
                                             }
@@ -5724,10 +5809,10 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
                                               "label": "Alarm System",
-                                              "key": "dolalrmsys",
+                                              "optionsLabelPosition": "right",
+                                              "inline": true,
+                                              "tableView": true,
                                               "values": [
                                                 {
                                                   "value": "yes",
@@ -5741,8 +5826,9 @@
                                                 }
                                               ],
                                               "validate": { "required": true },
+                                              "key": "dolalrmsys",
                                               "type": "radio",
-                                              "optionsLabelPosition": "right",
+                                              "input": true,
                                               "hideOnChildrenHidden": false,
                                               "lockKey": true
                                             }
@@ -5756,10 +5842,10 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
                                               "label": "Surveill. Cameras not monitored",
-                                              "key": "dolsurcamnotmoniotrd",
+                                              "optionsLabelPosition": "right",
+                                              "inline": true,
+                                              "tableView": true,
                                               "values": [
                                                 {
                                                   "value": "yes",
@@ -5773,8 +5859,9 @@
                                                 }
                                               ],
                                               "validate": { "required": true },
+                                              "key": "dolsurcamnotmoniotrd",
                                               "type": "radio",
-                                              "optionsLabelPosition": "right",
+                                              "input": true,
                                               "hideOnChildrenHidden": false,
                                               "lockKey": true
                                             }
@@ -5798,10 +5885,10 @@
                                         {
                                           "components": [
                                             {
-                                              "input": true,
-                                              "tableView": true,
                                               "label": "Surveill. Cameras monitored / intruder notification",
-                                              "key": "dolsurvcammoniintrunotifi",
+                                              "optionsLabelPosition": "right",
+                                              "inline": true,
+                                              "tableView": true,
                                               "values": [
                                                 {
                                                   "value": "yes",
@@ -5815,8 +5902,9 @@
                                                 }
                                               ],
                                               "validate": { "required": true },
+                                              "key": "dolsurvcammoniintrunotifi",
                                               "type": "radio",
-                                              "optionsLabelPosition": "right",
+                                              "input": true,
                                               "hideOnChildrenHidden": false,
                                               "lockKey": true
                                             }
@@ -5832,7 +5920,7 @@
                                             {
                                               "label": "Guard Dogs",
                                               "optionsLabelPosition": "right",
-                                              "inline": false,
+                                              "inline": true,
                                               "tableView": true,
                                               "values": [
                                                 {
@@ -6206,18 +6294,20 @@
                                           "components": [
                                             {
                                               "label": "12 Month Avg  New",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "monthAvgNew",
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "inputType": "number"
+                                              "inputType": "number",
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -6230,18 +6320,20 @@
                                           "components": [
                                             {
                                               "label": "Insured Through Floor Plan - New",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "insuredThroughFloorPlanNew",
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "inputType": "number"
+                                              "inputType": "number",
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -6254,18 +6346,20 @@
                                           "components": [
                                             {
                                               "label": "12 Month Avg  Used",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "monthAvgUsed",
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "inputType": "number"
+                                              "inputType": "number",
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -6288,18 +6382,20 @@
                                           "components": [
                                             {
                                               "label": "Insured Through Floor Plan - Used",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "insuredThroughFloorPlanUsed",
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "inputType": "number"
+                                              "inputType": "number",
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -6312,11 +6408,13 @@
                                           "components": [
                                             {
                                               "label": "12 Month Avg- Demos/Furnished Autos",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "defaultValue": 0,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "monthAvgRoadDemosFurnishedAutos",
                                               "type": "number",
@@ -6336,18 +6434,20 @@
                                           "components": [
                                             {
                                               "label": "Insured Through Floor Plan Demos/Furnished Autos",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "insuredThroughFloorPlanRoad",
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "inputType": "number"
+                                              "inputType": "number",
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -6370,18 +6470,20 @@
                                           "components": [
                                             {
                                               "label": "12 Month Avg - Loaners/ Shop/ Service",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "monthAvgRoadLoanersShopService",
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "inputType": "number"
+                                              "inputType": "number",
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -6394,18 +6496,20 @@
                                           "components": [
                                             {
                                               "label": "Insured Through Floor Plan - Loaners/Shop/Service",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "tableView": false,
-                                              "delimiter": false,
-                                              "requireDecimal": false,
+                                              "delimiter": true,
+                                              "requireDecimal": true,
                                               "inputFormat": "plain",
                                               "key": "insuredThroughFloorPlan",
                                               "type": "number",
                                               "decimalLimit": 2,
                                               "input": true,
                                               "hideOnChildrenHidden": false,
-                                              "inputType": "number"
+                                              "inputType": "number",
+                                              "defaultValue": 0
                                             }
                                           ],
                                           "width": 4,
@@ -6418,14 +6522,16 @@
                                           "components": [
                                             {
                                               "label": "12 Month Avg Location Total - REQUESTED",
+                                              "prefix": "$",
                                               "mask": false,
                                               "spellcheck": true,
                                               "disabled": true,
                                               "tableView": false,
+                                              "defaultValue": 0,
                                               "delimiter": true,
                                               "requireDecimal": true,
                                               "inputFormat": "plain",
-                                              "calculateValue": "value=(data.monthAvgNew)+(data.insuredThroughFloorPlanNew)+(data.monthAvgUsed)+(data.insuredThroughFloorPlanUsed)+(data.monthAvgRoadDemosFurnishedAutos)+(data.insuredThroughFloorPlanRoad)+(data.monthAvgRoadLoanersShopService)+(data.insuredThroughFloorPlanRoad)",
+                                              "calculateValue": "{\n    value = (row.monthAvgNew ? row.monthAvgNew : 0) + (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0) + (row.monthAvgUsed ? row.monthAvgUsed : 0) + (row.insuredThroughFloorPlanUsed ? row.insuredThroughFloorPlanUsed : 0) + (row.monthAvgRoadDemosFurnishedAutos ? row.monthAvgRoadDemosFurnishedAutos : 0) + (row.insuredThroughFloorPlanRoad ? row.insuredThroughFloorPlanRoad : 0) + (row.monthAvgRoadLoanersShopService ? row.monthAvgRoadLoanersShopService : 0) + (row.insuredThroughFloorPlan ? row.insuredThroughFloorPlan : 0)\n}",
                                               "key": "avgLocationtotalrequested",
                                               "type": "number",
                                               "decimalLimit": 2,
@@ -6557,6 +6663,63 @@
                                   ]
                                 }
                               ]
+                            },
+                            {
+                              "label": "Key Controls",
+                              "key": "keyControls",
+                              "components": [
+                                {
+                                  "label": "Key controls for the Location:",
+                                  "optionsLabelPosition": "right",
+                                  "tableView": true,
+                                  "defaultValue": {
+                                    "lockbox": false,
+                                    "computerizedKeyVault": false,
+                                    "lockingKeyCabinet": false,
+                                    "dailyKeyInventory": false,
+                                    "lockedInManagersOffice": false
+                                  },
+                                  "values": [
+                                    {
+                                      "value": "lockbox",
+                                      "label": "Lockbox",
+                                      "shortcut": ""
+                                    },
+                                    {
+                                      "value": "computerizedKeyVault",
+                                      "label": "Computerized Key Vault",
+                                      "shortcut": ""
+                                    },
+                                    {
+                                      "value": "lockingKeyCabinet",
+                                      "label": "Locking Key Cabinet",
+                                      "shortcut": ""
+                                    },
+                                    {
+                                      "value": "dailyKeyInventory",
+                                      "label": "Daily Key Inventory",
+                                      "shortcut": ""
+                                    },
+                                    {
+                                      "value": "lockedInManagersOffice",
+                                      "label": "Locked in manager's office",
+                                      "shortcut": ""
+                                    }
+                                  ],
+                                  "validate": { "required": true },
+                                  "key": "locationGarageLiabilityKeyControls",
+                                  "conditional": {
+                                    "show": true,
+                                    "when": "dolkeycntrlsameallloc",
+                                    "eq": "no"
+                                  },
+                                  "type": "selectboxes",
+                                  "input": true,
+                                  "hideOnChildrenHidden": false,
+                                  "inputType": "checkbox",
+                                  "lockKey": true
+                                }
+                              ]
                             }
                           ],
                           "tableView": false,
@@ -6654,6 +6817,15 @@
                                         {
                                           "components": [
                                             {
+                                              "label": "Storage Tank UUID",
+                                              "customDefaultValue": "function uuidv4() {\n  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>\n    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n  );\n}\n\nvalue = uuidv4();",
+                                              "key": "storageTankUuid",
+                                              "type": "hidden",
+                                              "input": true,
+                                              "tableView": false,
+                                              "hideOnChildrenHidden": false
+                                            },
+                                            {
                                               "label": "Columns",
                                               "columns": [
                                                 {
@@ -6701,9 +6873,6 @@
                                             },
                                             {
                                               "label": "Columns",
-                                              "input": false,
-                                              "tableView": false,
-                                              "key": "pageNaNColumns23",
                                               "columns": [
                                                 {
                                                   "components": [
@@ -6717,11 +6886,11 @@
                                                       "lockKey": true
                                                     }
                                                   ],
-                                                  "width": 4,
                                                   "offset": 0,
                                                   "push": 0,
                                                   "pull": 0,
-                                                  "size": "md"
+                                                  "size": "md",
+                                                  "width": 4
                                                 },
                                                 {
                                                   "components": [
@@ -6764,11 +6933,11 @@
                                                       "hideOnChildrenHidden": false
                                                     }
                                                   ],
-                                                  "width": 4,
                                                   "offset": 0,
                                                   "push": 0,
                                                   "pull": 0,
-                                                  "size": "md"
+                                                  "size": "md",
+                                                  "width": 4
                                                 },
                                                 {
                                                   "components": [
@@ -6789,15 +6958,18 @@
                                                       "hideOnChildrenHidden": false
                                                     }
                                                   ],
-                                                  "width": 4,
+                                                  "size": "md",
                                                   "offset": 0,
                                                   "push": 0,
                                                   "pull": 0,
-                                                  "size": "md"
+                                                  "width": 4
                                                 }
                                               ],
+                                              "hideLabel": true,
+                                              "tableView": false,
+                                              "key": "pageNaNColumns23",
                                               "type": "columns",
-                                              "hideLabel": true
+                                              "input": false
                                             }
                                           ],
                                           "width": 12,
@@ -7956,6 +8128,7 @@
                       "label": "If YES, how often",
                       "tableView": true,
                       "validate": {
+                        "required": true,
                         "customMessage": "Please enter how often is a complete physical inventory made."
                       },
                       "key": "howoftenisphysicalinventorymade",
@@ -8038,6 +8211,7 @@
                     {
                       "label": "If not, who signs the controls?",
                       "tableView": true,
+                      "validate": { "required": true },
                       "key": "signsthecontrols",
                       "conditional": {
                         "show": true,
@@ -9380,6 +9554,257 @@
       "label": "Garage Liability",
       "components": [
         {
+          "label": "Table",
+          "cellAlignment": "left",
+          "tableView": false,
+          "key": "table",
+          "type": "table",
+          "input": false,
+          "rows": [
+            [
+              {
+                "components": [
+                  {
+                    "label": "Limit",
+                    "prefix": "$",
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": false,
+                    "defaultValue": 1000000,
+                    "delimiter": true,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "key": "garageLiabilityLimit",
+                    "type": "number",
+                    "decimalLimit": 2,
+                    "input": true
+                  }
+                ]
+              },
+              {
+                "components": [
+                  {
+                    "label": "Each Occurance",
+                    "prefix": "$",
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": false,
+                    "defaultValue": 1000000,
+                    "delimiter": true,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "key": "garageLiabilityEachOccurance",
+                    "type": "number",
+                    "decimalLimit": 2,
+                    "input": true
+                  }
+                ]
+              },
+              {
+                "components": [
+                  {
+                    "label": "General Aggregate",
+                    "prefix": "$",
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": false,
+                    "defaultValue": 1000000,
+                    "delimiter": true,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "key": "garageLiabilityGeneralAggregate",
+                    "type": "number",
+                    "decimalLimit": 2,
+                    "input": true
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "components": [
+                  {
+                    "label": "Products & Completed Ops. Aggregate",
+                    "prefix": "$",
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": false,
+                    "defaultValue": 1000000,
+                    "delimiter": true,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "key": "garageLiabilityProductsAggregate",
+                    "type": "number",
+                    "decimalLimit": 2,
+                    "input": true
+                  }
+                ]
+              },
+              {
+                "components": [
+                  {
+                    "label": "Personal & Advertising Injury",
+                    "prefix": "$",
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": false,
+                    "defaultValue": 1000000,
+                    "delimiter": true,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "key": "generalLiabilityPersonalAdvertisingInjury",
+                    "type": "number",
+                    "decimalLimit": 2,
+                    "input": true
+                  }
+                ]
+              },
+              {
+                "components": [
+                  {
+                    "label": "Damage to Rented Premises",
+                    "disabled": true,
+                    "tableView": true,
+                    "defaultValue": "No Coverage",
+                    "key": "garageLiabilityDamagetoRentedPremises",
+                    "type": "textfield",
+                    "input": true
+                  }
+                ]
+              }
+            ],
+            [
+              { "components": [] },
+              {
+                "components": [
+                  {
+                    "label": "Medical Expense",
+                    "prefix": "$",
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": false,
+                    "delimiter": true,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "key": "garageLiabilityMedicalExpense",
+                    "type": "number",
+                    "decimalLimit": 2,
+                    "input": true,
+                    "defaultValue": 1000000
+                  }
+                ]
+              },
+              { "components": [] }
+            ]
+          ]
+        },
+        {
+          "label": "Columns",
+          "columns": [
+            {
+              "components": [
+                {
+                  "label": "Deductible",
+                  "widget": "choicesjs",
+                  "placeholder": "Please Select",
+                  "tableView": true,
+                  "data": {
+                    "values": [
+                      { "value": "none", "label": "None" },
+                      { "value": "2500", "label": "$2,500" },
+                      { "value": "5000", "label": "$5,000" },
+                      { "value": "10000", "label": "$10,000" },
+                      { "value": "20000", "label": "$20,000" },
+                      { "value": "25000", "label": "$25,000" },
+                      { "value": "50000", "label": "$50,000" },
+                      { "value": "75000", "label": "$75,000" },
+                      { "value": "100000", "label": "$100,000" },
+                      { "value": "125000", "label": "$125,000" }
+                    ]
+                  },
+                  "selectThreshold": 0.3,
+                  "validate": { "required": true },
+                  "key": "medicalexpensedeductible",
+                  "type": "select",
+                  "indexeddb": { "filter": {} },
+                  "input": true,
+                  "hideOnChildrenHidden": false,
+                  "lockKey": true
+                }
+              ],
+              "offset": 0,
+              "push": 0,
+              "pull": 0,
+              "size": "md",
+              "width": 4
+            },
+            {
+              "components": [
+                {
+                  "label": "Agent's E/O",
+                  "optionsLabelPosition": "right",
+                  "inline": true,
+                  "tableView": true,
+                  "values": [
+                    { "value": "yes", "label": "Yes", "shortcut": "" },
+                    { "value": "no", "label": "No", "shortcut": "" }
+                  ],
+                  "validate": { "required": true },
+                  "key": "agentseo",
+                  "type": "radio",
+                  "input": true,
+                  "hideOnChildrenHidden": false,
+                  "lockKey": true
+                }
+              ],
+              "offset": 0,
+              "push": 0,
+              "pull": 0,
+              "size": "md",
+              "width": 4
+            },
+            {
+              "components": [
+                {
+                  "label": "If Yes, Gross Sales",
+                  "prefix": "$",
+                  "disabled": true,
+                  "tableView": true,
+                  "calculateValue": "if(data.locationSchedule){\n  if(data.locationSchedule.length > 0){\n    data.locationSchedule.map(item => {\n      if(item.totalLocationSalesRevenue && item.totalLocationSalesRevenue > 0 ){\n        value += item.totalLocationSalesRevenue;\n      }\n    })\n  }\n}\nconsole.log('gross Sales: ');\nconsole.log(value);",
+                  "validate": {
+                    "customMessage": "Please enter the Gross Sales"
+                  },
+                  "key": "entergrosssales",
+                  "conditional": {
+                    "show": true,
+                    "when": "agentseo",
+                    "eq": "yes"
+                  },
+                  "type": "textfield",
+                  "input": true,
+                  "hideOnChildrenHidden": false,
+                  "lockKey": true
+                }
+              ],
+              "size": "md",
+              "offset": 0,
+              "push": 0,
+              "pull": 0,
+              "width": 4
+            }
+          ],
+          "tableView": false,
+          "key": "columns42",
+          "type": "columns",
+          "input": false
+        },
+        {
           "title": "Garage Liability Underwriting Information - General Questions",
           "theme": "primary",
           "breadcrumbClickable": true,
@@ -10106,7 +10531,7 @@
                 {
                   "components": [
                     {
-                      "label": "Employees who have NOT furnished a company vehicle are allowed to take vehicles home overnight?",
+                      "label": "Employees who have NOT been furnished a company vehicle are allowed to take vehicles home overnight?",
                       "optionsLabelPosition": "right",
                       "inline": true,
                       "tableView": true,
@@ -10659,7 +11084,7 @@
                 {
                   "components": [
                     {
-                      "label": "Does applicant reposess their own vehicles?",
+                      "label": "Does applicant repossess their own vehicles?",
                       "optionsLabelPosition": "right",
                       "inline": true,
                       "tableView": true,
@@ -10702,7 +11127,7 @@
                       "hideOnChildrenHidden": false
                     },
                     {
-                      "label": "If No, who performs the reposessions?",
+                      "label": "If No, who performs the repossessions?",
                       "tableView": true,
                       "validate": {
                         "required": true,
@@ -13390,9 +13815,14 @@
                   "mask": false,
                   "spellcheck": true,
                   "tableView": false,
+                  "defaultValue": 1000000,
                   "delimiter": true,
                   "requireDecimal": true,
                   "inputFormat": "plain",
+                  "validate": {
+                    "custom": "valid = ((input % 1000000) == 0)? true : 'Only limits in increments of $1,000,000 are available.';",
+                    "min": 1000000
+                  },
                   "key": "umbrellalimit",
                   "type": "number",
                   "decimalLimit": 2,
@@ -13430,21 +13860,24 @@
         },
         {
           "label": "Existing Users",
-          "disableAddingRemovingRows": true,
           "reorder": false,
           "addAnotherPosition": "bottom",
           "defaultOpen": false,
           "layoutFixed": false,
           "enableRowGroups": false,
+          "hideLabel": true,
           "tableView": false,
           "defaultValue": [
             {
               "name": "",
               "applicableUser": false,
               "ownershipPercentage": "",
-              "nameofdrivertobecovered": ""
+              "nameofdrivertobecovered": "",
+              "nameofdrivertobecovered1": "",
+              "applicableUser1": false
             }
           ],
+          "redrawOn": "driveothercarcoverage",
           "calculateValue": "if(data.driverOtherCargrid){\n  if(data.driverOtherCargrid.length >0){\n    value = data.driverOtherCargrid;    \n  }\n}",
           "key": "umbrellaCoverageExisting",
           "type": "datagrid",
@@ -13533,12 +13966,10 @@
           "defaultOpen": false,
           "layoutFixed": false,
           "enableRowGroups": false,
+          "hideLabel": true,
           "tableView": false,
-          "defaultValue": [{ "name": "" }],
+          "defaultValue": [{ "umbrellaCoverageAdditionalName": "" }],
           "validateOn": "blur",
-          "validate": {
-            "custom": "if(data.UmbrellaCoverageAdditional){\n  console.log(\"umbrella\");\n  if(data.UmbrellaCoverageAdditional.length > 0){\n    var unique = data.UmbrellaCoverageAdditional.filter((v, i, a) => a.indexOf(v) === i);\n    valid = unique.length == data.UmbrellaCoverageAdditional.length ? true : \"You can only enter a name once.\"\n  }\n}"
-          },
           "key": "UmbrellaCoverageAdditional",
           "type": "datagrid",
           "input": true,
@@ -13550,7 +13981,7 @@
                 "required": true,
                 "customMessage": "Please enter the Name"
               },
-              "key": "name",
+              "key": "umbrellaCoverageAdditionalName",
               "type": "textfield",
               "input": true,
               "lockKey": true,
@@ -13572,6 +14003,19 @@
               "input": true
             }
           ]
+        },
+        {
+          "label": "Text Field",
+          "hideLabel": true,
+          "disabled": true,
+          "tableView": true,
+          "defaultValue": "Please Note : Insured names must be unique and total Ownership Percentage must not exceed 100%",
+          "validate": {
+            "custom": "var sumUsers = [];\nif (data.umbrellaCoverageExisting) {\n  if (data.umbrellaCoverageExisting.length > 0) {\n    sumUsers = sumUsers.concat(data.umbrellaCoverageExisting);\n  }\n}\n\nif (data.UmbrellaCoverageAdditional) {\n  if (data.UmbrellaCoverageAdditional.length > 0) {\n    sumUsers = sumUsers.concat(data.UmbrellaCoverageAdditional);\n    valid =\n      sumUsers.map((i) => i.ownershipPercentage).reduce((a, b) => a + b) <= 100\n        ? true\n        : \"Total Ownership Percentage of all the insured cannot exceed 100%\";\n    if (valid == true) {\n      valid =\n        sumUsers.length ==\n        new Set(sumUsers.map((i) => i.umbrellaCoverageAdditionalName)).size\n          ? true\n          : \"You can only enter a name once.\";\n    }\n  }\n}\n\nconsole.log(sumUsers);\nconsole.log(valid);"
+          },
+          "key": "umbrellaWarning",
+          "type": "textfield",
+          "input": true
         }
       ],
       "input": false
@@ -15429,7 +15873,7 @@
                 { "label": "Yes", "value": "yes", "shortcut": "" },
                 { "label": "No", "value": "no", "shortcut": "" }
               ],
-              "key": "desTheApplicantCurrentlyHaveAnyInsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
+              "key": "InsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
               "type": "radio",
               "input": true
             },
@@ -15447,7 +15891,7 @@
               "key": "currentOrPriorEmploymentPracticesLiabilityInsuranceStandAloneOrIncorporatedIntoSomeOtherCoverage",
               "conditional": {
                 "show": true,
-                "when": "desTheApplicantCurrentlyHaveAnyInsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
+                "when": "InsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
                 "eq": "yes"
               },
               "type": "panel",
@@ -15631,7 +16075,7 @@
                       "key": "noticetoinsurer",
                       "conditional": {
                         "show": true,
-                        "when": "desTheApplicantCurrentlyHaveAnyInsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
+                        "when": "InsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
                         "eq": "yes"
                       },
                       "type": "radio",
@@ -15701,7 +16145,7 @@
                       "key": "nonrenewedcoverage",
                       "conditional": {
                         "show": true,
-                        "when": "desTheApplicantCurrentlyHaveAnyInsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
+                        "when": "InsuranceCoverageForPrivacyNetworkSecurityAndMediaLiability",
                         "eq": "yes"
                       },
                       "type": "radio",
@@ -16368,8 +16812,9 @@
               "enableRowGroups": false,
               "hideLabel": true,
               "tableView": false,
+              "defaultValue": [{ "pollutionname": "" }],
               "validate": { "minLength": 0 },
-              "key": "epaNumber",
+              "key": "epaDetails",
               "type": "datagrid",
               "input": true,
               "components": [
@@ -16391,7 +16836,7 @@
                   "requireDecimal": false,
                   "inputFormat": "plain",
                   "validate": { "required": true },
-                  "key": "epaNumber1",
+                  "key": "epaNumber",
                   "type": "number",
                   "input": true
                 }
@@ -16645,7 +17090,7 @@
                       "delimiter": false,
                       "requireDecimal": false,
                       "inputFormat": "plain",
-                      "key": "pollutionepa",
+                      "key": "pollutionDealerEPA",
                       "type": "number",
                       "input": true,
                       "hideOnChildrenHidden": false
@@ -16718,7 +17163,7 @@
                         { "value": "no", "label": "No", "shortcut": "" }
                       ],
                       "validate": { "required": true },
-                      "key": "dolvehclsprchsd",
+                      "key": "dolvehiclespurchasedorsold",
                       "type": "radio",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -16761,7 +17206,7 @@
                         { "value": "no", "label": "No", "shortcut": "" }
                       ],
                       "validate": { "required": true },
-                      "key": "dolvehclevalexcess",
+                      "key": "dolVehicleValuedInExcess",
                       "type": "radio",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -16786,17 +17231,18 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
+                      "validate": { "required": true },
                       "key": "dolattachschedule",
                       "conditional": {
                         "show": true,
-                        "when": "dolvehclevalexcess",
+                        "when": "dolVehicleValuedInExcess",
                         "eq": "yes"
                       },
                       "type": "file",
+                      "url": "/file/attachment",
                       "input": true,
                       "hideOnChildrenHidden": false,
-                      "lockKey": true,
-                      "url": "/file/attachment"
+                      "lockKey": true
                     }
                   ],
                   "width": 6,
@@ -16842,7 +17288,7 @@
                       },
                       "selectThreshold": 0.3,
                       "validate": { "required": true, "multiple": true },
-                      "key": "dolsptdeliproce",
+                      "key": "dolspotdeliveryprocedures",
                       "type": "select",
                       "indexeddb": { "filter": {} },
                       "input": true,
@@ -16874,7 +17320,7 @@
                       },
                       "selectThreshold": 0.3,
                       "validate": { "required": true },
-                      "key": "dolvehclinvtkn",
+                      "key": "dolvehicleinevtorytaken",
                       "type": "select",
                       "indexeddb": { "filter": {} },
                       "input": true,
@@ -16900,7 +17346,7 @@
                         { "value": "no", "label": "No", "shortcut": "" }
                       ],
                       "validate": { "required": true },
-                      "key": "dollocwthdesigfloodzone",
+                      "key": "dollocwithdesignatedfloodzone",
                       "type": "radio",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -17081,16 +17527,20 @@
                           { "label": "None", "value": "none" },
                           { "label": "Lock Boxes", "value": "lockBoxes" },
                           {
-                            "label": "Computerized Key Vault / Key Machine",
-                            "value": "computerizedKeyVaultKeyMachine"
+                            "label": "Computerized Key Vault",
+                            "value": "computerizedKeyVault"
                           },
                           {
                             "label": "Locked Key Cabinet",
                             "value": "lockedKeyCabinet"
                           },
                           {
-                            "label": "Locked Nightly in Mgr's Office",
-                            "value": "lockedNightlyInMgrsOffice"
+                            "label": "Daily Key Inventory",
+                            "value": "dailyKeyInventory"
+                          },
+                          {
+                            "label": "Locked Nightly in Manager's Office",
+                            "value": "lockedNightlyInManagersOffice"
                           },
                           { "label": "Keys in Cars", "value": "keysInCars" }
                         ]
@@ -17356,7 +17806,7 @@
                       "delimiter": true,
                       "requireDecimal": false,
                       "inputFormat": "plain",
-                      "validate": { "min": 0 },
+                      "validate": { "required": true, "min": 0 },
                       "key": "dolifysavgnoone",
                       "conditional": {
                         "show": true,
@@ -17409,6 +17859,7 @@
                       "delimiter": true,
                       "requireDecimal": false,
                       "inputFormat": "plain",
+                      "validate": { "required": true },
                       "key": "avgnumberofvehiclesparkedonrooftop",
                       "conditional": {
                         "show": true,
@@ -17497,6 +17948,7 @@
                         {
                           "label": "Hail net manufacturer",
                           "tableView": true,
+                          "validate": { "required": true },
                           "key": "dolhainetmanuf",
                           "type": "textfield",
                           "input": true,
@@ -17531,6 +17983,7 @@
                             "hourStep": 0,
                             "minuteStep": 0
                           },
+                          "validate": { "required": true },
                           "key": "doldateinstorlstreplcd",
                           "type": "datetime",
                           "input": true,
@@ -17572,7 +18025,7 @@
                           "delimiter": true,
                           "requireDecimal": false,
                           "inputFormat": "plain",
-                          "validate": { "min": 0 },
+                          "validate": { "required": true, "min": 0 },
                           "key": "dolavgnoofvehicls",
                           "type": "number",
                           "input": true,
@@ -17917,15 +18370,15 @@
                   "value": "usedFalsePretense"
                 },
                 {
-                  "label": "Demo Furnished - Comp",
+                  "label": "Demo/Furnished Autos - Comp",
                   "value": "demoFurnishedComp"
                 },
                 {
-                  "label": "Demo Furnished - Collision",
+                  "label": "Demo/Furnished Autos - Collision",
                   "value": "demoFurnishedCollision"
                 },
                 {
-                  "label": "Demo Furnished - False Pretense",
+                  "label": "Demo/Furnished Autos - False Pretense",
                   "value": "demoFurnishedFalsePretense"
                 },
                 {
@@ -17988,15 +18441,15 @@
                   "value": "usedFalsePretense"
                 },
                 {
-                  "label": "Demo Furnished - Comp",
+                  "label": "Demo/Furnished Autos - Comp",
                   "value": "demoFurnishedComp"
                 },
                 {
-                  "label": "Demo Furnished - Collision",
+                  "label": "Demo/Furnished Autos - Collision",
                   "value": "demoFurnishedCollision"
                 },
                 {
-                  "label": "Demo Furnished - False Pretense",
+                  "label": "Demo/Furnished Autos - False Pretense",
                   "value": "demoFurnishedFalsePretense"
                 },
                 {
@@ -18440,6 +18893,7 @@
                 {
                   "label": "If \"Yes\" please explain",
                   "tableView": true,
+                  "validate": { "required": true },
                   "key": "natureofsizeexplain",
                   "conditional": {
                     "show": true,
@@ -18998,6 +19452,7 @@
                 {
                   "label": "If other, please specify",
                   "tableView": true,
+                  "validate": { "required": true },
                   "key": "backingupandstorageother",
                   "conditional": {
                     "show": true,
@@ -19105,6 +19560,7 @@
                     { "value": "yes", "label": "Yes", "shortcut": "" },
                     { "value": "no", "label": "No", "shortcut": "" }
                   ],
+                  "validate": { "required": true },
                   "key": "offsitetransportation",
                   "conditional": {
                     "show": true,
@@ -19119,6 +19575,7 @@
                 {
                   "label": "If stored onsite, please describe physical security controls",
                   "tableView": true,
+                  "validate": { "required": true },
                   "key": "physicalsecurity",
                   "conditional": {
                     "show": true,
@@ -19326,6 +19783,7 @@
                     { "value": "yes", "label": "Yes", "shortcut": "" },
                     { "value": "no", "label": "No", "shortcut": "" }
                   ],
+                  "validate": { "required": true },
                   "key": "trademarkservice",
                   "conditional": {
                     "show": true,
@@ -19383,6 +19841,7 @@
                 {
                   "label": "If YES, please provide details",
                   "tableView": true,
+                  "validate": { "required": true },
                   "key": "proposedinsureddetails",
                   "conditional": {
                     "show": true,
@@ -19552,6 +20011,7 @@
                     {
                       "label": "If YES, please provide details of any such action, notification, investigation or subpoena",
                       "tableView": true,
+                      "validate": { "required": true },
                       "key": "actionnotification",
                       "conditional": {
                         "show": true,
@@ -19596,7 +20056,7 @@
       "label": "Generate Workbooks",
       "components": [
         {
-          "label": "Choose Workbooks to be generated:",
+          "label": "Choose Carrier Templates to be generated:",
           "optionsLabelPosition": "right",
           "tableView": false,
           "defaultValue": {
@@ -19614,11 +20074,31 @@
             "gaicEpli": false,
             "rpsCyber": false,
             "epli": false,
-            "exceltemplate": false
+            "exceltemplate": false,
+            "excelTemplates": false,
+            "dealerGuard_ApplicationOpenLot": false,
+            "victor_franchisedAutoDealer": false,
+            "victor_AutoPhysDamage": false
           },
           "values": [
             { "label": "EPLI", "value": "epli", "shortcut": "" },
-            { "label": "RPS Cyber", "value": "rpsCyber", "shortcut": "" }
+            { "label": "RPS Cyber", "value": "rpsCyber", "shortcut": "" },
+            { "label": "Harco", "value": "harco", "shortcut": "" },
+            {
+              "label": "DealerGuard Application Open Lot",
+              "value": "dealerGuard_ApplicationOpenLot",
+              "shortcut": ""
+            },
+            {
+              "label": "Victor Franchised Auto Dealer",
+              "value": "victor_FranchisedAutoDealer",
+              "shortcut": ""
+            },
+            {
+              "label": "Victor Auto Physical Damage",
+              "value": "victor_AutoPhysDamage",
+              "shortcut": ""
+            }
           ],
           "validate": { "required": true, "minSelectedCount": 1 },
           "key": "workbooksToBeGenerated",
@@ -19628,26 +20108,18 @@
         },
         {
           "label": "Generic Data Massaging",
-          "calculateValue": "var tempLocationArray = [];\nvar tempStorageTankArray = [];\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      let temp = { ...locationItem };\n      delete temp.buildingDetails;\n      delete temp.storageTankGrid;\n      locationItem.buildingDetails.map(buildingItem => {\n        tempLocationArray.push({ ...temp, ...buildingItem });\n      });\n      locationItem.storageTankGrid.map((storageTankItem, tankIndex) => {\n        tempStorageTankArray.push({\n          ...storageTankItem,\n          locationTankNumber: locationIndex + 1 + \" - \" + (tankIndex + 1)\n        });\n      });\n    });\n  }\n}\n\nvalue = {\n  locationSchedule: tempLocationArray,\n  storageTankGridData: tempStorageTankArray\n};\n\nconsole.log(value);",
+          "calculateValue": "var tempLocationArray = [];\nvar tempStorageTankArray = [];\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      let temp = { ...locationItem };\n      delete temp.buildingDetails;\n      delete temp.storageTankGrid;\n      locationItem.buildingDetails.map(buildingItem => {\n        tempLocationArray.push({ ...temp, ...buildingItem });\n      });\n      locationItem.storageTankGrid.map((storageTankItem, tankIndex) => {\n        tempStorageTankArray.push({\n          ...storageTankItem,\n          locationTankNumber: locationIndex + 1 + \" - \" + (tankIndex + 1)\n        });\n      });\n    });\n  }\n}\n\nvalue = {\n  locationScheduleGridData: tempLocationArray,\n  storageTankGridData: tempStorageTankArray\n};\n\nconsole.log(value);",
           "key": "genericData",
+          "properties": { "data_type": "json" },
           "type": "hidden",
           "input": true,
           "tableView": false
         },
         {
-          "label": "Harco EXCEL Data",
+          "label": "RPS Cyber PDF Data",
           "redrawOn": "workbooksToBeGenerated",
-          "calculateValue": "value = {\n  \"CPAYes\" : (data.auditperformed.cpa == \"yes\")? 'yes' : 'no',\n  \"CrimeDeductible\" : Math.min(data.theftofmoneydeductible, data.outsidethepremisesdeductible, data.burglaryofotherpropertydeductible),\n  \"CrimeLimit\" : Math.max(data.computerlimit, data.fundslimit),\n}",
-          "key": "harcoExcelData",
-          "type": "hidden",
-          "input": true,
-          "tableView": false
-        },
-        {
-          "label": "Franchised Auto Dealer",
-          "redrawOn": "workbooksToBeGenerated",
-          "calculateValue": "value = {\n  \"CityStateZip\": data.city + \",\" + data.state + \",\" + data.zip,\n  \"InsuranceContactNameandPhone\" : row.insurancecontactdataGrid[0].genfirstname + \" \" + row.insurancecontactdataGrid[0].genlastname + \",\" + row.insurancecontactdataGrid[0].phone,\n}",
-          "key": "franchisedAutoDealer",
+          "calculateValue": "var tempAllEmployees = 0;\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map((buildingItem) => {\n        tempAllEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees +\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n      });\n    });\n  }\n}\n\nvalue = {\n  \" of Employees\": tempAllEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership ? data.numYearsOfOwnership : 0\n};\n\nconsole.log(value);",
+          "key": "rpsCyberPDFData",
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -19662,10 +20134,35 @@
           "tableView": false
         },
         {
-          "label": "RPS Cyber PDF Data",
+          "label": "Dealerguard Open Lot",
+          "calculateValue": "value = {\n    checkVehicleInventoryTaken:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"biWeekly\" ||\n      data.dolvehicleinevtorytaken == \"monthly\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenWeekly:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"daily\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenBiweekly:\n      data.dolvehicleinevtorytaken == \"biWeekly\" ? \"true\" : \"false\",\n    checkVehicleInventoryTakenMonthly:\n      data.dolvehicleinevtorytaken == \"monthly\" ||\n      data.dolvehicleinevtorytaken == \"quarterly\"\n        ? \"true\"\n        : \"false\",\n    checkcustomerserviceloanerrentalprogram:\n      data.customerserviceloanerrentalprogram == \"no\"\n        ? \"false\"\n        : data.loanerrentalcontractused == \"yes\"\n        ? \"true\"\n        : \"false\",\n    checkDOLTotalNoOfDemos: data.doltotalnoofdemos > 0 ? \"true\" : \"false\",\n    checkGenFullName: data.insurancecontactdataGrid[0].genfullName,\n    checkGenEmail: data.insurancecontactdataGrid[0].genemail,\n    checkLockbox: data.dolalllocdoesnotincld\n      ? data.dolalllocdoesnotincld.includes(\"lockBoxes\")\n        ? \"true\"\n        : \"\"\n      : data.genericData.locationScheduleGridData.some((locationItem) => {\n          if (locationItem.locationGarageLiabilityKeyControls) {\n            if (locationItem.locationGarageLiabilityKeyControls.lockbox) {\n              return true;\n            } else {\n              return false;\n            }\n          } else {\n            return false;\n          }\n        }),\n    checkDailyKeyInventory: data.dolalllocdoesnotincld\n      ? data.dolalllocdoesnotincld.includes(\"dailyKeyInventory\")\n        ? \"Yes\"\n        : \"No\"\n      : data.genericData.locationScheduleGridData.some((locationItem) => {\n          if (locationItem.locationGarageLiabilityKeyControls) {\n            if (\n              locationItem.locationGarageLiabilityKeyControls.dailyKeyInventory\n            ) {\n              return true;\n            } else {\n              return false;\n            }\n          } else {\n            return false;\n          }\n        })\n      ? \"Yes\"\n      : \"No\",\n    checkComputerizedKeyVault: data.dolalllocdoesnotincld\n      ? data.dolalllocdoesnotincld.includes(\"computerizedKeyVault\")\n        ? \"true\"\n        : \"\"\n      : data.genericData.locationScheduleGridData.some((locationItem) => {\n          if (locationItem.locationGarageLiabilityKeyControls) {\n            if (\n              locationItem.locationGarageLiabilityKeyControls.computerizedKeyVault\n            ) {\n              return true;\n            } else {\n              return false;\n            }\n          } else {\n            return false;\n          }\n        }),\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (\n          locationItem.occupancyType == \"serviceRepair\" &&\n          locationItem.dolsecguards == \"yes\"\n        ) {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    SOV12MothAverage: data.locationSchedule.map(\n      (locationItem) => {\n        var individualResult = [];\n        if (locationItem.monthAvgNew && locationItem.insuredThroughFloorPlanNew) {\n          individualResult.push(\n            locationItem.monthAvgNew - locationItem.insuredThroughFloorPlanNew\n          );\n        } else {\n          individualResult.push(\"\");\n        }\n        if (\n          locationItem.monthAvgUsed &&\n          locationItem.insuredThroughFloorPlanUsed\n        ) {\n          individualResult.push(\n            locationItem.monthAvgUsed - locationItem.insuredThroughFloorPlanUsed\n          );\n        } else {\n          individualResult.push(\"\");\n        }\n  \n        if (\n          locationItem.monthAvgRoadDemosFurnishedAutos &&\n          locationItem.insuredThroughFloorPlanRoad &&\n          locationItem.monthAvgRoadLoanersShopService &&\n          locationItem.insuredThroughFloorPlan\n        ) {\n          individualResult.push(\n            locationItem.monthAvgRoadDemosFurnishedAutos -\n              locationItem.insuredThroughFloorPlanRoad +\n              locationItem.monthAvgRoadLoanersShopService -\n              locationItem.insuredThroughFloorPlan\n          );\n        } else {\n          individualResult.push(\"\");\n        }\n        return individualResult;\n      }\n    )\n  };\n  \n  console.log(value);",
+          "key": "dealerguardOpenLot",
+          "type": "hidden",
+          "input": true,
+          "tableView": false
+        },
+        {
+          "label": "Franchised Auto Dealer",
           "redrawOn": "workbooksToBeGenerated",
-          "calculateValue": "var tempAllEmployees = 0;\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map((buildingItem) => {\n        tempAllEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees +\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n      });\n    });\n  }\n}\n\nvalue = {\n  \" of Employees\": tempAllEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership ? data.numYearsOfOwnership : 0\n};\n\nconsole.log(value);",
-          "key": "rpsCyberPDFData",
+          "calculateValue": "value = {\n  CityStateZip: data.city + \",\" + data.state + \",\" + data.zip,\n  InsuranceContactNameandPhone: data.insurancecontactdataGrid\n    ? data.insurancecontactdataGrid[0].genfirstname +\n      \" \" +\n      data.insurancecontactdataGrid[0].genlastname +\n      \",\" +\n      data.insurancecontactdataGrid[0].phone\n    : \"\",\n  checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsecguards == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolpostnchain == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolflyfencdpremises == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checknumberofservicebays: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.numberofservicebays == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  formalsafetymeetingsNone: data.formalsafetymeetings == \"none\" ? \"No\" : \"Yes\",\n  formalsafetymeetingsMonthly:\n    data.formalsafetymeetings == \"monthly\" ? \"true\" : \"false\",\n  checkrepairpercentlabor:\n    data.repairpercentlabor == 95 || data.repairpercentlabor == 85\n      ? 90\n      : data.repairpercentlabor,\n  checkauditfrequencyannual: data.auditfrequency == \"annual\" ? \"true\" : \"false\",\n  checkauditfrequencysemiAnnual:\n    data.auditfrequency == \"semiAnnual\" ? \"true\" : \"false\",\n  checkauditfrequencyquarterly:\n    data.auditfrequency == \"quarterly\" ? \"true\" : \"false\",\n  checkauditreportissenttoowners:\n    data.auditreportissentto == \"owners\" ? \"true\" : \"false\",\n  checkauditreportissenttopartners:\n    data.auditreportissentto == \"partners\" ? \"true\" : \"false\",\n  checkauditreportissenttoboardOfDirectors:\n    data.auditreportissentto == \"boardOfDirectors\" ? \"true\" : \"false\",\n  checkwhodeliversvehiclesonemployee:\n    data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\n  checkwhodeliversvehiclesonindependentContractor:\n    data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\"\n};\nconsole.log(value);",
+          "key": "franchisedAutoDealer",
+          "type": "hidden",
+          "input": true,
+          "tableView": false
+        },
+        {
+          "label": "Victor Auto Physical Damage",
+          "calculateValue": "var sumNonEmployeesfurnishedAuto = 0;\nvalue = {\n  checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsecguards == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolaftrhrslighting == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolpostnchain == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolflyfencdpremises == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkfloodloss: data.dolflodlossdescib\n    ? data.dolflodlossdescib.length > 0\n      ? \"true\"\n      : \"false\"\n    : \"\",\n  DealershipStorageLocationsArray: data.locationSchedule\n    .map((locationItem) => {\n      var resultOccupancyType = \"\";\n      locationItem.buildingDetails.some((buildingItem) => {\n        if (\n          buildingItem.occupancyType == \"autoSalesAndService\" ||\n          buildingItem.occupancyType == \"newCarShowroomAndSales\"\n        ) {\n          resultOccupancyType = \"Dealership\";\n          return true;\n        } else if (\n          buildingItem.occupancyType == \"vehicleStorageParkingGarage\" ||\n          buildingItem.occupancyType == \"autoStorageLot\"\n        ) {\n          resultOccupancyType = \"Storage\";\n        } else {\n          resultOccupancyType =\n            resultOccupancyType == \"\" ? undefined : resultOccupancyType;\n        }\n      });\n      var furnishedAutoEmployee = 0;\n      var nonEmployeesfurnishedAuto = 0;\n      locationItem.buildingDetails.map((building) => {\n        furnishedAutoEmployee +=\n          building.fTEmployeesFurnishedAnAuto +\n          building.pTEmployeesFurnishedAnAuto +\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n        nonEmployeesfurnishedAuto +=\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n      });\n      resultOccupancyType\n        ? (sumNonEmployeesfurnishedAuto += nonEmployeesfurnishedAuto)\n        : null;\n      return resultOccupancyType\n        ? {\n            ...locationItem,\n            DOLOccupancy: resultOccupancyType,\n            furnishedAutoEmployee: furnishedAutoEmployee,\n            nonEmployeesfurnishedAuto: nonEmployeesfurnishedAuto\n          }\n        : false;\n    })\n    .filter((filterItem) => (filterItem ? filterItem : false)),\n    sumNonEmployeesfurnished: sumNonEmployeesfurnishedAuto\n};\n\nconsole.log(value);",
+          "key": "victorAutoPhysicalDamage",
+          "type": "hidden",
+          "input": true,
+          "tableView": false
+        },
+        {
+          "label": "Harco EXCEL Data",
+          "redrawOn": "workbooksToBeGenerated",
+          "calculateValue": "value = {\n  \"CPAYes\" : (data.auditperformed.cpa == \"yes\")? 'yes' : 'no',\n  \"CrimeDeductible\" : Math.min(data.theftofmoneydeductible, data.outsidethepremisesdeductible, data.burglaryofotherpropertydeductible),\n  \"CrimeLimit\" : Math.max(data.computerlimit, data.fundslimit),\n}",
+          "key": "harcoExcelData",
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -19674,9 +20171,9 @@
       "input": false
     }
   ],
-  "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: true\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n            )\n            .dispatchEvent(ev);\n        };\n        var dataGridDeleteIcons = document.getElementsByClassName(\n          \"fa-times-circle-o\"\n        );\n        dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n        if (dataGridDeleteIcons.length > 0) {\n          dataGridDeleteIcons.map((item) => {\n            item.classList.add(\"fa-times-circle\");\n            item.classList.remove(\"fa-times-circle-o\");\n          });\n        }\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
+  "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          var closeForm = confirm(\n            \"Do you want to close the form after saving the data?\"\n          );\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: closeForm,\n              notification: \"Form saved successfully\"\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
   "revisions": "original",
-  "_vid": 409,
+  "_vid": 561,
   "title": "Dealer Workbook",
   "display": "wizard",
   "access": [
@@ -19724,6 +20221,6 @@
   "path": "dealerworkbook",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-06-25T07:04:35.147Z",
-  "modified": "2020-07-10T12:59:59.577Z",
+  "modified": "2020-08-01T22:47:19.903Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
