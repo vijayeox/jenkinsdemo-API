@@ -35,10 +35,10 @@ namespace ProcessExcel
     public class CallbackData
     {
         public string filename { get; set; }
-        public string fileid { get; set; }
+        public string fileId { get; set; }
         public byte status { get; set; }
-        public string appid { get; set; }
-        public string orgid { get; set; }
+        public string appId { get; set; }
+        public string orgId { get; set; }
         public List<ErrorDetails> errorlist { get; set; }
     }
     class ProcessExcel
@@ -68,9 +68,9 @@ namespace ProcessExcel
                 carrierfile = parsedJson["mapping"]["filename"].ToString();            
                 _callback = new CallbackData();
                 _callback.filename = carrierfile;
-                _callback.fileid = parsedJson["fileId"].ToString();
-                _callback.appid = parsedJson["appId"].ToString();
-                _callback.orgid = parsedJson["orgId"].ToString();
+                _callback.fileId = parsedJson["fileId"].ToString();
+                _callback.appId = parsedJson["appId"].ToString();
+                _callback.orgId = parsedJson["orgId"].ToString();
                 _callback.errorlist = new List<ErrorDetails>();
                 List<string> myvariables = new List<string>();
                 string mystr = _settings.postURL;
