@@ -98,7 +98,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                         unset($data[$selectedTemplate["customData"]]);
                     }
                     foreach ($fieldMappingExcel as $fieldConfig) {
-                        
+
                         $formFieldKey = str_contains($fieldConfig["key"], "_") ?
                             explode("_", $fieldConfig["key"])[0]
                             : $fieldConfig["key"];
@@ -138,13 +138,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                     "value" => $tempFieldConfig['value']
                                 ]);
                             }
-                            // array_push($templateData, [
-                            //     "pageName" => $tempFieldConfig['pageName'],
-                            //     "cell" => $tempFieldConfig['cell'],
-                            //     "key" => $tempFieldConfig['key'],
-                            //     "type" => $tempFieldConfig['type'],
-                            //     "value" => $tempFieldConfig['value']
-                            // ]);
                         }
                     }
 
@@ -160,9 +153,9 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                         HTTPMethod::POST,
                         $this->ExcelTemplateMapperServiceURL,
                         [
-                            "fileId" => "82924c30-0026-45ae-91a7-9417827fc151",
-                            "appId" => "da8f0152-b8d3-43bf-8090-40103bb98d5e",
-                            "orgId" => "34bf01ab-79ca-42df-8284-965d8dbf290e",
+                            "fileId" => $fileUUID,
+                            "appId" => $data['appId'],
+                            "orgId" => $orgUuid,
                             "mapping" => [
                                 "filename" => $selectedTemplate["excelFile"],
                                 "data" => $templateData
@@ -170,6 +163,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
                         ]
                     );
+                    $this->logger->info("Excel Mapper POST Request\n" . $response);
                 } else {
                     $pdfData = array();
                     foreach ($fieldTypeMappingPDF[$key]["text"] as  $formField => $pdfField) {
@@ -214,6 +208,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                             $pdfData[$field] = $value;
                         }
                     }
+                    $pdfData = array_filter($pdfData);
                     $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT));
                     $this->documentBuilder->fillPDFForm(
                         $selectedTemplate["template"],
@@ -233,13 +228,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
         }
 
-
-
-        print_r(json_encode($excelData, JSON_PRETTY_PRINT));
-        exit();
+        // print_r(json_encode($excelData, JSON_PRETTY_PRINT));
+        // exit();
 
         if (count($excelData) > 0) {
-            $data["excelData"] = json_encode($excelData, JSON_PRETTY_PRINT);
+            $data["excelData"] = $excelData;
             file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", $data["excelData"]);
             array_push(
                 $generatedDocumentsList,
@@ -250,12 +243,12 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     "type" => "file/json"
                 )
             );
-
-            $data["status"] = "Generated";
+            $data['documentsToBeGenerated'] = count($excelData);
+            $data["status"] = "Processing";
         } else {
             $data["status"] = "Generated";
         }
-        $data["documents"] = json_encode($generatedDocumentsList);
+        $data["documents"] = $generatedDocumentsList;
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
     }
@@ -372,7 +365,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 $tempSkip = $skip;
             }
             if (isset($value[$childKey]) && !empty($value[$childKey])) {
-                array_push($parsedData, [$value[$childKey].""]);
+                array_push($parsedData, [$value[$childKey] . ""]);
             } else {
                 array_push($parsedData, []);
             }
