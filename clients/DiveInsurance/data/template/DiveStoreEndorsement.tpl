@@ -21,11 +21,35 @@
               <td>Commercial General Liability (per Occurance)
               <br></br>
               (Including Personal Injury and Products and Completed Operations)</td>
+              {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$2,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$3,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$4,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$5,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$10,000,000</td>
+              {else}
               <td>$1,000,000</td>
+              {/if}
             </tr>
             <tr>
               <td>General and Products and Completed Operations Aggregate</td>
+              {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$3,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$4,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$5,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$6,000,000</td>
+              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+              <td>$11,000,000</td>
+              {else}
               <td>$2,000,000</td>
+              {/if}
             </tr>
             <tr>
               <td>Travel Agent E & O (Each wrongful act $ Aggregate)
@@ -41,18 +65,17 @@
       </div>
       {/if}
 
-      {if isset($liabilityChanges)}
+      {if isset($liabilityChanges) && $liabilityChanges == true}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
-          {if isset($new_auto_liability)}
+          {if isset($increased_auto_liability)}
             <p>+NON-Owned Auto Liability now applies as of the Effective date on this Endorsement ($1,000,000 Limit)</p>
           {/if}
 
-          {if isset($increased_liability_limit)}
+          {if isset($increased_liability_limit) && $increased_liability_limit == true}
             <p>+Liability Limits have been increased by {$increased_liability_limit} as of the Effective date of this Endorsement</p>
           {/if}
-
-          {if isset($travelAgentEoPL)}
+          {if isset($increased_travelEnO)}
             <p>Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
           {/if}
       </div>
@@ -137,7 +160,7 @@
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        {if isset($poolLiability) && ((int)$poolLiability > 0)}
+                        {if isset($nonDivingPoolAmount) && (int)$nonDivingPoolAmount > 0}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -147,7 +170,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if isset($travelAgentEOReceiptsPL) && ((int)$travelAgentEOReceiptsPL > 0)}
+                        {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -165,7 +188,15 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is ${$PropDeductibleCredit}.</td>
+                            Mechanical breakdown is $2500. All other perils is {if $propertyDeductibles == "propertyDeductibles1000"}
+                           $1,000
+                        {elseif $propertyDeductibles == "propertyDeductibles2500"}
+                           $2,500
+                        {elseif $propertyDeductibles == "propertyDeductibles5000"}
+                           $5,000
+                        {else}
+                           $0.00
+                        {/if}.</td>
                     </tr>
                 </tbody>
             </table>

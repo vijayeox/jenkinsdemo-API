@@ -23,7 +23,7 @@
 		    		<tr>
 						<td class = 't_title' align = "left">{$value.padi}</td>
 						<td class = 't_title' align = "left">{$value.firstname}&nbsp{$value.lastname}</td>
-						<td class = 't_title' align = "left">{$certificateLevel[$value.status]}</td>
+						<td class = 't_title' align = "left">{if isset($certificateLevel[$value.status])}{$certificateLevel[$value.status]}{else}{$value.status}{/if}</td>
 						<td class = 't_title' align = "left">{$value.start_date|date_format:"%m/%d/%Y"}</td>
 						<td class = 't_title' align = "left">{if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
 					      Yes{else}No{/if}</td>

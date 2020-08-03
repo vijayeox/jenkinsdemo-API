@@ -574,8 +574,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     // $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 }
             }else if($data['product'] == 'Dive Store' && $this->type == 'endorsementQuote'){
+                $this->diveStoreEndorsement($data,$temp);
                 $this->diveStoreEnorsementQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
             }else if($data['product'] == 'Dive Store' && $this->type == 'endorsement'){
+                $this->diveStoreEndorsement($data,$temp);
                 $documents['endorsement_coi_document'] = isset($documents['endorsement_coi_document']) ? $documents['endorsement_coi_document'] : array();
                 $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 array_push($documents['endorsement_coi_document'], $endorsementDoc);
@@ -1327,7 +1329,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
          }
 
-        private function diveStoreEnorsementQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
+        protected function diveStoreEnorsementQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
             $data['quoteDocuments'] = array();
             $documents = array();
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
@@ -1339,7 +1341,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          }
 
 
-         private function diveStoreQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
+         protected function diveStoreQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
             $data['quoteDocuments'] = array();
             $documents = array();
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
@@ -1394,5 +1396,63 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             $data['quoteDocuments'] = $documents;
+         }
+         protected function diveStoreEndorsement(&$data,&$temp){
+                $policy = array();
+                if(is_string($data['previous_policy_data'])){
+                    $policy = json_decode($data['previous_policy_data'],true);
+                } else {
+                    $policy = $data['previous_policy_data'];
+                }
+                $length = sizeof($policy) - 1;
+                $policy =  $policy[$length];
+                unset($data['increased_liability'],$data['new_auto_liability'],$data['paymentVerified'],$data['premiumFinanceSelect'],$data['finalAmountPayable'],$data['paymentOptions'],$data['chequeNumber'],$data['orderId']);
+                $data['update_date'] = $policy['update_date'];
+                if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
+                    if($policy['previous_nonOwnedAutoLiabilityPL'] == 'no' && $data['nonOwnedAutoLiabilityPL'] !='no'){
+                        $data['new_auto_liability'] = true;
+                    }
+                }
+                $temp['liabilityChanges'] = false;
+                if(isset($data['excessLiabilityCoverage']) && isset($policy['previous_excessLiabilityCoverage'])){
+                    if($policy['previous_excessLiabilityCoverage'] == $data['excessLiabilityCoverage']){
+                        $data['increased_liability_limit'] = false;
+                    } else {
+                        $temp['liabilityChanges'] = true;
+                        if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
+                            $temp['increased_liability_limit'] = "$1,000,000";
+                        } else if($data['excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
+                            $temp['increased_liability_limit'] = "$2,000,000";
+                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
+                            $temp['increased_liability_limit'] = "$3,000,000";
+                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
+                            $temp['increased_liability_limit'] = "$4,000,000";
+                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
+                            $temp['increased_liability_limit'] = "$9,000,000";
+                        }
+                    }
+                }
+                if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
+                    if($policy['previous_nonOwnedAutoLiabilityPL'] == $data['nonOwnedAutoLiabilityPL']){
+                        $data['increased_non_owned_liability_limit'] = false;
+                    } else {
+                        $temp['liabilityChanges'] = true;
+                        if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability1M'){
+                            $temp['increased_non_owned_liability_limit'] = "$1,000,000";
+                        } else if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability100K'){
+                            $temp['increased_non_owned_liability_limit'] = "$100,000";
+                        }
+                    }
+                }
+                if(isset($data['travelAgentEoPL']) && isset($policy['previous_travelEnO'])){
+                    if($policy['previous_travelEnO'] == $data['travelAgentEoPL']){
+                        $data['increased_travelEnO'] = false;
+                    } else {
+                        $temp['liabilityChanges'] = true;
+                        if($data['travelAgentEoPL']){
+                            $temp['increased_travelEnO'] = "$1,000,000";
+                        }
+                    }
+                }
          }
 }
