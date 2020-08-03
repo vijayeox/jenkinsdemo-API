@@ -197,6 +197,15 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     icon: 'fa fa-pencil'
                 -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Group Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
                     name: Comment
                     rule: 'true'
                     details:

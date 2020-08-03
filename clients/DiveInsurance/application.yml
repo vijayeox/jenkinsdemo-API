@@ -546,7 +546,9 @@ workflow:
         name: 'Dive Store Endorsement'
         uuid: 2bc1caaa-9628-486d-8b42-104534625994
         bpmn_file: 'Dive Store/DiveStoreEndorsement.bpmn'
-        entity: 'Dive Store'
+        entity:
+            - 'Dive Store'
+            - 'Group Professional Liability'
 form:
     -
         name: 'PADI Verification'

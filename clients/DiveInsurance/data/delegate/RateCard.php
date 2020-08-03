@@ -62,10 +62,10 @@ class Ratecard extends AbstractAppDelegate
             }
         }
 
-        if($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store'){
+        if($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
             $premiumRateCardDetails['stateTaxData'] = $this->getStateTaxData($data,$persistenceService);
         }
-            
+
         if(isset($data["quote_due_date"]) || isset($data['quoteRequirement'])){
             $data['quote_due_date'] = '';
             $data['quoteInfo'] = "";
@@ -87,7 +87,7 @@ class Ratecard extends AbstractAppDelegate
         $year = date('Y');
         if($data['product'] == 'Dive Boat'){
             $selectTax = "Select state, coverage, percentage FROM state_tax WHERE coverage = 'group' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."' and `year` = ".$year;
-        }else if($data['product'] == 'Dive Store'){
+        }else if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
             $selectTax = "Select state, coverage, percentage FROM state_tax WHERE start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."' and `year` = ".$year;
         }
         $stateTaxResult = $persistenceService->selectQuery($selectTax);
