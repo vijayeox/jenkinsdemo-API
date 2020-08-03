@@ -168,27 +168,34 @@
                     </tr>
                     <tr>
                           <td class = "info">NON-Owned Auto:</td>
-                          {if isset($doYouWantToApplyForNonOwnerAuto) && $doYouWantToApplyForNonOwnerAuto == true}
+                          {if isset($doYouWantToApplyForNonOwnerAuto) && ($doYouWantToApplyForNonOwnerAuto == true || $doYouWantToApplyForNonOwnerAuto == "true")}
                           {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
-                              <td>$100,000</td>
+                          <td>$100,000</td>
                           {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
-                              <td>$1,000,000</td>
+                          <td>$1,000,000</td>
                           {else}
-                              <td>Not Included</td>
+                          <td>Not Included</td>
                           {/if}
                           {else}
-                              <td>Not Included</td>
-                              {/if}
+                          <td>Not Included</td>
+                          {/if}
                     </tr>
                     <tr>
                         <td class = "info">Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if isset($travelAgentEOReceiptsPL) && (int)$travelAgentEOReceiptsPL > 0}
-                            <td>$1,000,000</td>
+                        {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
+                                <td>$1,000,000</td>
                         {else}
-                            <td>Not Included</td>
+                                <td>Not Included</td>
                         {/if}
+                    </tr>
+                    <tr>
+                        <td class = "info">Medical Expenses:</td>
+                    {if isset($medicalPayment) && ($medicalPayment == "true" || $medicalPayment == true || $medicalPayment == 1) }
+                            <td>$5000</td>
+                        {else}
+                            <td>Excluded</td>{/if}
                     </tr>
                 </tbody>
             </table>
