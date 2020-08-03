@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-       <!--  <testsuite name="Messaging Fixtures Fixtures">
+        <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
         </testsuite>
         <testsuite name="Attachment Fixtures">
             <directory>./module/Attachment/test</directory>
             <directory>./module/Resource/test</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Analytics Fixtures">
             <directory>./module/Analytics/test</directory>
-            <!-- <directory>./module/FileIndexer/test</directory> -->
+            <directory>./module/FileIndexer/test</directory>
         </testsuite>
-        <!-- <testsuite name="Home Page Fixtures">
+        <testsuite name="Home Page Fixtures">
             <directory>./module/Auth/test</directory>
             <directory>./module/Announcement/test</directory>
             <directory>./module/Project/test</directory>
@@ -52,40 +52,25 @@
             <directory>./module/Search/test</directory>
             <directory>./module/ProspectResearch/test</directory>
             <directory>./module/PaymentGateway/test</directory>
-        </testsuite>
+        </testsuite> 
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
-        </testsuite> -->
-        <!-- <testsuite name="Dive Insurance Fixtures">
-            <directory>../../clients/DiveInsurance/test/</directory>
         </testsuite>
-        <testsuite name="BridgeMed Fixtures">
-            <directory>../../clients/BridgeMed/test/</directory>
-        </testsuite> -->
-    </testsuites>
-        <!-- <testsuite name="Analytics Fixtures">
-            <directory>./module/Analytics/test</directory>
-            <directory>./module/FileIndexer/test</directory>
-        </testsuite>
-
-        <testsuite name="Core Fixtures">
-            <directory>./lib/Oxzion/test</directory>
-            <directory>./module/Mlet/test</directory>
-        </testsuite> -->
+    </testsuites> 
     <php>
         <ini name="memory_limit" value="500M" />
-        <const name="enableNLP" value="0" />
-        <const name="enableCamunda" value="0" />
-        <const name="enableElastic" value="1" />
-        <const name="enableMattermost" value="0" />
-        <const name="enableActiveMQ" value="0" />
-        <const name="enableCamel" value="0" />
-        <const name="enableProspectResearch" value="0" />
-        <const name="enableCamundaForDeployApp" value="0" />
-        <const name="enableExecUtils" value="0" />
+        <const name="enableNLP" value="0"/>
+        <const name="enableCamunda" value="0"/>
+        <const name="enableElastic" value="0"/>
+        <const name="enableMattermost" value="0"/>
+        <const name="enableActiveMQ" value="0"/>
+        <const name="enableCamel" value="0"/>
+        <const name="enableProspectResearch" value="0"/>
+        <const name="enableCamundaForDeployApp" value="0"/>
+        <const name="enableExecUtils" value="0"/>
     </php>
     <listeners>
-        <listener class="\MyBuilder\PhpunitAccelerator\TestListener" />
+        <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>
         <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
     </listeners>
 </phpunit>
