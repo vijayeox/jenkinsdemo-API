@@ -1920,11 +1920,6 @@
                                         {
                                           "name": "clear field",
                                           "type": "value",
-                                          "property": {
-                                            "label": "Disabled",
-                                            "value": "disabled",
-                                            "type": "boolean"
-                                          },
                                           "value": "if(value == data.city){\n  value = \"\";\n}"
                                         }
                                       ]
@@ -2192,6 +2187,10 @@
                                                   {
                                                     "value": "vehicleStorageParkingGarage",
                                                     "label": "Vehicle Storage/Parking Garage"
+                                                  },
+                                                  {
+                                                    "label": "Parts Warehouse/Storage",
+                                                    "value": "partsWarehouseStorage"
                                                   }
                                                 ]
                                               },
@@ -4433,7 +4432,7 @@
                                                     {
                                                       "components": [
                                                         {
-                                                          "label": "Awaningss & Canopies",
+                                                          "label": "Awanings & Canopies",
                                                           "prefix": "$",
                                                           "mask": false,
                                                           "spellcheck": true,
@@ -4785,6 +4784,7 @@
                                               "components": [
                                                 {
                                                   "label": "Description",
+                                                  "disabled": true,
                                                   "tableView": true,
                                                   "redrawOn": "locationSchedule.buildingDetails.occupancyType",
                                                   "calculateValue": "if (row.occupancyType == \"vacantLand\") {\n  value = \"Vacant Land (For - Profit)\";\n}\nif (row.occupancyType == \"bldgLeasedToOthers\") {\n  value = \"Bldg Leased to Others\";\n}",
@@ -4792,41 +4792,6 @@
                                                     "required": true
                                                   },
                                                   "key": "description",
-                                                  "logic": [
-                                                    {
-                                                      "name": "Check Occupancy Type",
-                                                      "trigger": {
-                                                        "type": "javascript",
-                                                        "javascript": "result = ( row.occupancyType == \"vacantLand\" || \n           row.occupancyType == \"bldgLeasedToOthers\");"
-                                                      },
-                                                      "actions": [
-                                                        {
-                                                          "name": "Disable Field",
-                                                          "type": "property",
-                                                          "property": {
-                                                            "label": "Disabled",
-                                                            "value": "disabled",
-                                                            "type": "boolean"
-                                                          },
-                                                          "state": true
-                                                        }
-                                                      ]
-                                                    },
-                                                    {
-                                                      "name": "Check to clear",
-                                                      "trigger": {
-                                                        "type": "javascript",
-                                                        "javascript": "result = ( row.occupancyType !== \"vacantLand\" && \n           row.occupancyType !== \"bldgLeasedToOthers\");"
-                                                      },
-                                                      "actions": [
-                                                        {
-                                                          "name": "Clear",
-                                                          "type": "value",
-                                                          "value": "if(value == \"Bldg Leased to Others\" || value == \"Vacant Land (For - Profit)\"){\n  value = \"\";\n}"
-                                                        }
-                                                      ]
-                                                    }
-                                                  ],
                                                   "type": "textfield",
                                                   "input": true,
                                                   "hideOnChildrenHidden": false
@@ -4842,32 +4807,14 @@
                                               "components": [
                                                 {
                                                   "label": "Class Code",
-                                                  "widget": "choicesjs",
-                                                  "placeholder": "Please choose all that apply",
+                                                  "disabled": true,
                                                   "tableView": true,
-                                                  "multiple": true,
-                                                  "data": {
-                                                    "values": [
-                                                      {
-                                                        "label": "61212",
-                                                        "value": "61212"
-                                                      },
-                                                      {
-                                                        "label": "49451",
-                                                        "value": "49451"
-                                                      }
-                                                    ]
-                                                  },
-                                                  "selectThreshold": 0.3,
                                                   "calculateValue": "if (row.occupancyType == \"vacantLand\") {\r\n  value = \"49451\";\r\n}\r\nif (row.occupancyType == \"bldgLeasedToOthers\") {\r\n  value = \"61212\";\r\n}",
                                                   "validate": {
-                                                    "required": true,
-                                                    "customMessage": "Please select Class Code",
-                                                    "multiple": true
+                                                    "required": true
                                                   },
                                                   "key": "classcode",
-                                                  "type": "select",
-                                                  "indexeddb": { "filter": {} },
+                                                  "type": "textfield",
                                                   "input": true,
                                                   "hideOnChildrenHidden": false
                                                 }
@@ -4883,7 +4830,6 @@
                                                 {
                                                   "label": "Rating Basis",
                                                   "widget": "choicesjs",
-                                                  "placeholder": "Please Select",
                                                   "disabled": true,
                                                   "tableView": true,
                                                   "data": {
@@ -8972,7 +8918,7 @@
                 {
                   "components": [
                     {
-                      "label": "Computer Fraud Coverage",
+                      "label": "Computer Fraud and Funds Transfer Coverage",
                       "optionsLabelPosition": "right",
                       "inline": true,
                       "tableView": true,
@@ -8996,7 +8942,7 @@
                 {
                   "components": [
                     {
-                      "label": "Computer Fraud Limit",
+                      "label": "Computer Fraud and Funds Transfer Limit",
                       "widget": "choicesjs",
                       "placeholder": "Please Select",
                       "tableView": true,
@@ -9012,7 +8958,7 @@
                       "selectThreshold": 0.3,
                       "key": "computerlimit",
                       "conditional": {
-                        "show": "true",
+                        "show": true,
                         "when": "computercoverage",
                         "eq": "yes"
                       },
@@ -9032,7 +8978,7 @@
                 {
                   "components": [
                     {
-                      "label": "Computer Fraud Deductible",
+                      "label": "Computer Fraud and Funds Transfer Deductible",
                       "widget": "choicesjs",
                       "placeholder": "Please Select",
                       "tableView": true,
@@ -9047,113 +8993,8 @@
                       "selectThreshold": 0.3,
                       "key": "computerdeductible",
                       "conditional": {
-                        "show": "true",
+                        "show": true,
                         "when": "computercoverage",
-                        "eq": "yes"
-                      },
-                      "type": "select",
-                      "indexeddb": { "filter": {} },
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "type": "columns",
-              "hideLabel": true
-            },
-            {
-              "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "page5Columns8",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Funds Transfer Fraud Coverage",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "key": "fundscoverage",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Funds Transfer Fraud Limit",
-                      "widget": "choicesjs",
-                      "placeholder": "Please Select",
-                      "tableView": true,
-                      "data": {
-                        "values": [
-                          { "value": "10000", "label": "$10,000" },
-                          { "value": "25000", "label": "$25,000" },
-                          { "value": "50000", "label": "$50,000" },
-                          { "value": "100000", "label": "$100,000" },
-                          { "label": "$250,000", "value": "250000" }
-                        ]
-                      },
-                      "selectThreshold": 0.3,
-                      "key": "fundslimit",
-                      "conditional": {
-                        "show": "true",
-                        "when": "fundscoverage",
-                        "eq": "yes"
-                      },
-                      "type": "select",
-                      "indexeddb": { "filter": {} },
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 4,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [
-                    {
-                      "label": "Funds Transfer Fraud Deductible",
-                      "widget": "choicesjs",
-                      "placeholder": "Please Select",
-                      "tableView": true,
-                      "data": {
-                        "values": [
-                          { "value": "1000", "label": "$1,000" },
-                          { "value": "2500", "label": "$2,500" },
-                          { "value": "5000", "label": "$5,000" },
-                          { "value": "10000", "label": "$10,000" }
-                        ]
-                      },
-                      "selectThreshold": 0.3,
-                      "key": "fundsdeductible",
-                      "conditional": {
-                        "show": "true",
-                        "when": "fundscoverage",
                         "eq": "yes"
                       },
                       "type": "select",
@@ -9458,9 +9299,27 @@
                   "size": "md"
                 },
                 {
+                  "components": [],
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md"
+                }
+              ],
+              "hideLabel": true,
+              "tableView": false,
+              "key": "page5Columns13",
+              "type": "columns",
+              "input": false
+            },
+            {
+              "label": "Columns",
+              "columns": [
+                {
                   "components": [
                     {
-                      "label": "Name of Plan/Address",
+                      "label": "Name of Plan",
                       "tableView": true,
                       "key": "nameofplan",
                       "type": "textfield",
@@ -9474,11 +9333,28 @@
                   "push": 0,
                   "pull": 0,
                   "size": "md"
+                },
+                {
+                  "components": [
+                    {
+                      "label": "Address",
+                      "tableView": true,
+                      "key": "nameofplanAddress",
+                      "type": "textfield",
+                      "input": true,
+                      "hideOnChildrenHidden": false,
+                      "lockKey": true
+                    }
+                  ],
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md"
                 }
               ],
-              "hideLabel": true,
               "tableView": false,
-              "key": "page5Columns13",
+              "key": "columns43",
               "type": "columns",
               "input": false
             },
@@ -11067,7 +10943,7 @@
           "input": false
         },
         {
-          "title": "Repossessions/Towing",
+          "title": "Repossessions",
           "theme": "primary",
           "breadcrumbClickable": true,
           "buttonSettings": { "previous": true, "cancel": true, "next": true },
@@ -11772,7 +11648,6 @@
                           "fileTypes": [{ "label": "", "value": "" }],
                           "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                           "fileMaxSize": "10MB",
-                          "validate": { "required": true },
                           "key": "copyOfContractUsed",
                           "conditional": {
                             "show": true,
@@ -11918,9 +11793,6 @@
           "components": [
             {
               "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "pageNaNColumns11",
               "columns": [
                 {
                   "components": [
@@ -11941,12 +11813,30 @@
                       "lockKey": true
                     }
                   ],
-                  "width": 4,
                   "offset": 0,
                   "push": 0,
                   "pull": 0,
-                  "size": "md"
+                  "size": "md",
+                  "width": 6
                 },
+                {
+                  "components": [],
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "width": 6
+                }
+              ],
+              "hideLabel": true,
+              "tableView": false,
+              "key": "pageNaNColumns11",
+              "type": "columns",
+              "input": false
+            },
+            {
+              "label": "Columns",
+              "columns": [
                 {
                   "components": [
                     {
@@ -11969,7 +11859,7 @@
                       "hideOnChildrenHidden": false
                     }
                   ],
-                  "width": 4,
+                  "width": 6,
                   "offset": 0,
                   "push": 0,
                   "pull": 0,
@@ -11996,15 +11886,17 @@
                       "lockKey": true
                     }
                   ],
-                  "width": 4,
+                  "width": 6,
                   "offset": 0,
                   "push": 0,
                   "pull": 0,
                   "size": "md"
                 }
               ],
+              "tableView": false,
+              "key": "columns44",
               "type": "columns",
-              "hideLabel": true
+              "input": false
             },
             {
               "label": "Columns",
@@ -12022,6 +11914,11 @@
                       ],
                       "validate": { "required": true },
                       "key": "rentalcontractused",
+                      "conditional": {
+                        "show": true,
+                        "when": "doesinsuredrentvehicles",
+                        "eq": "yes"
+                      },
                       "type": "radio",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -12087,6 +11984,11 @@
                       "inputFormat": "plain",
                       "validate": { "required": true, "min": 0 },
                       "key": "minimumagerequiredforadailyrental",
+                      "conditional": {
+                        "show": true,
+                        "when": "doesinsuredrentvehicles",
+                        "eq": "yes"
+                      },
                       "type": "number",
                       "input": true,
                       "hideOnChildrenHidden": false
@@ -12111,6 +12013,11 @@
                       ],
                       "validate": { "required": true },
                       "key": "aredriverslicenseandinsurance",
+                      "conditional": {
+                        "show": true,
+                        "when": "doesinsuredrentvehicles",
+                        "eq": "yes"
+                      },
                       "type": "radio",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -12361,48 +12268,6 @@
                       "lockKey": true
                     }
                   ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }
-              ],
-              "type": "columns",
-              "hideLabel": true
-            },
-            {
-              "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "pageNaNColumns16",
-              "columns": [
-                {
-                  "components": [
-                    {
-                      "label": "Has training been provided to employees in Sales and Finance & Insurance on Regulations?",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "tableView": true,
-                      "values": [
-                        { "value": "yes", "label": "Yes", "shortcut": "" },
-                        { "value": "no", "label": "No", "shortcut": "" }
-                      ],
-                      "key": "hastrainingbeenprovided",
-                      "type": "radio",
-                      "input": true,
-                      "hideOnChildrenHidden": false,
-                      "lockKey": true
-                    }
-                  ],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                },
-                {
-                  "components": [],
                   "width": 6,
                   "offset": 0,
                   "push": 0,
@@ -12844,6 +12709,7 @@
                         "customMessage": "Please enter the # of licensed agents"
                       },
                       "key": "numberoflicensedagents",
+                      "customConditional": "show = (data.doesTheInsuredSellAnyOfTheFollowingProducts.creditLifeOrAH ||\ndata.doesTheInsuredSellAnyOfTheFollowingProducts.physicalDamageCoverage ||\ndata.doesTheInsuredSellAnyOfTheFollowingProducts.personalAutoCoverage) ? true : false ;",
                       "type": "textfield",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -12869,6 +12735,7 @@
                         "multiple": true
                       },
                       "key": "listcompaniesrepresented",
+                      "customConditional": "show = (data.doesTheInsuredSellAnyOfTheFollowingProducts.creditLifeOrAH ||\ndata.doesTheInsuredSellAnyOfTheFollowingProducts.physicalDamageCoverage ||\ndata.doesTheInsuredSellAnyOfTheFollowingProducts.personalAutoCoverage) ? true : false ;",
                       "type": "textfield",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -13935,7 +13802,7 @@
                     {
                       "name": "Auto Fill",
                       "type": "value",
-                      "value": "if (data.driverOtherCargrid) {\n  if (data.driverOtherCargrid.length > 0) {\n    value = JSON.parse(\n      JSON.stringify(\n        data.driverOtherCargrid.map((i) => {\n          return {\n            umbrellaCoverageAdditionalName: i.nameofdrivertobecovered,\n            ownershipPercentage: \"\"\n          };\n        })\n      )\n    );\n  }\n}"
+                      "value": "if (\n  confirm(\n    \"Warning : This will replace all the Designated Persons currently present in the list below.\"\n  )\n) {\n  if (data.driverOtherCargrid) {\n    if (data.driverOtherCargrid.length > 0) {\n      value = JSON.parse(\n        JSON.stringify(\n          data.driverOtherCargrid.map(i => {\n            return {\n              umbrellaCoverageAdditionalName: i.nameofdrivertobecovered,\n              ownershipPercentage: \"\"\n            };\n          })\n        )\n      );\n    }\n  }\n}"
                     }
                   ]
                 }
@@ -14080,9 +13947,6 @@
             },
             {
               "label": "Columns",
-              "input": false,
-              "tableView": false,
-              "key": "page1Columns2",
               "columns": [
                 {
                   "components": [
@@ -14103,11 +13967,35 @@
                       "lockKey": true
                     }
                   ],
-                  "width": 6,
                   "offset": 0,
                   "push": 0,
                   "pull": 0,
-                  "size": "md"
+                  "size": "md",
+                  "width": 4
+                },
+                {
+                  "components": [
+                    {
+                      "label": "Drug Testing Programs ?",
+                      "optionsLabelPosition": "right",
+                      "inline": true,
+                      "tableView": false,
+                      "values": [
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
+                      ],
+                      "validate": { "required": true },
+                      "key": "drugTestingProgram",
+                      "type": "radio",
+                      "input": true,
+                      "hideOnChildrenHidden": false
+                    }
+                  ],
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "width": 4
                 },
                 {
                   "components": [
@@ -14124,28 +14012,35 @@
                             "value": "preEmployment"
                           },
                           { "label": "Random", "value": "random" },
-                          { "label": "Post-Accident", "value": "postAccident" },
-                          { "label": "None", "value": "none" }
+                          { "label": "Post-Accident", "value": "postAccident" }
                         ]
                       },
                       "selectThreshold": 0.3,
                       "validate": { "required": true, "multiple": true },
                       "key": "drugTestingPrograms",
+                      "conditional": {
+                        "show": true,
+                        "when": "drugTestingProgram",
+                        "eq": "yes"
+                      },
                       "type": "select",
                       "indexeddb": { "filter": {} },
                       "input": true,
                       "hideOnChildrenHidden": false
                     }
                   ],
-                  "width": 6,
+                  "size": "md",
                   "offset": 0,
                   "push": 0,
                   "pull": 0,
-                  "size": "md"
+                  "width": 4
                 }
               ],
+              "hideLabel": true,
+              "tableView": false,
+              "key": "page1Columns2",
               "type": "columns",
-              "hideLabel": true
+              "input": false
             },
             {
               "label": "Columns",
@@ -14291,7 +14186,6 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
-                      "validate": { "required": true },
                       "key": "applicantsresponse",
                       "conditional": {
                         "show": true,
@@ -14829,7 +14723,6 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
-                      "validate": { "required": true },
                       "key": "proposalform",
                       "conditional": {
                         "show": true,
@@ -14939,7 +14832,6 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
-                      "validate": { "required": true },
                       "key": "attachedproposalform",
                       "conditional": {
                         "show": true,
@@ -15049,7 +14941,6 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
-                      "validate": { "required": true },
                       "key": "companypolicy",
                       "conditional": {
                         "show": true,
@@ -15116,7 +15007,6 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
-                      "validate": { "required": true },
                       "key": "hrproposalform",
                       "conditional": {
                         "show": true,
@@ -15247,7 +15137,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailsAboutComplianceWithTheAmericanWithDisabilitiesAct",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .complianceWithTheAmericansWithDisabilitiesAct == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15265,7 +15154,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailsAboutComplianceWithTitleVIIOfTheCivilRightsAct",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .complianceWithTitleViiOfTheCivilRightsActOf1964AndThe1992CivilRightsAct == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15283,7 +15171,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailAboutComplianceWithFamilyAct",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .complianceWithTheFamilyMedicalLeaveAct == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15301,7 +15188,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailAboutprohibitedDiscriminatoryPracticesInHiringPromotionAndCompensation",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .prohibitedDiscriminatoryPracticesInHiringPromotionAndCompensation == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15319,7 +15205,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailAboutemployeePerformanceEvaluations",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .employeePerformanceEvaluations == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15337,7 +15222,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailAboutemployeeDisciplinaryActionsAndDischarge",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .employeeDisciplinaryActionsAndDischarge == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15355,7 +15239,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailAboutsexualHarassmentAndTheWorkEnvironment",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .sexualHarassmentAndTheWorkEnvironment == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15373,7 +15256,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "detailAboutemployeeGrievanceReportingAndResolutionProcesses",
               "customConditional": "show = false;\nif (data.HRManualPoliciesandProcedures) {\n  if (\n    data.HRManualPoliciesandProcedures\n      .employeeGrievanceReportingAndResolutionProcesses == \"no\"\n  ) {\n    show = true;\n  }\n}",
               "type": "file",
@@ -15441,7 +15323,6 @@
                           "fileTypes": [{ "label": "", "value": "" }],
                           "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                           "fileMaxSize": "10MB",
-                          "validate": { "required": true },
                           "key": "CopyofHRManual",
                           "conditional": {
                             "show": true,
@@ -15506,7 +15387,6 @@
                           "fileTypes": [{ "label": "", "value": "" }],
                           "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                           "fileMaxSize": "10MB",
-                          "validate": { "required": true },
                           "key": "receivedtraininginimplementation",
                           "conditional": {
                             "show": true,
@@ -15575,7 +15455,6 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
-                      "validate": { "required": true },
                       "key": "policyprocedureattachment",
                       "conditional": {
                         "show": true,
@@ -15674,7 +15553,6 @@
                           "fileTypes": [{ "label": "", "value": "" }],
                           "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                           "fileMaxSize": "10MB",
-                          "validate": { "required": true },
                           "key": "casesAgainstCompanyorSubsidiaries",
                           "conditional": {
                             "show": true,
@@ -15738,7 +15616,6 @@
                           "fileTypes": [{ "label": "", "value": "" }],
                           "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                           "fileMaxSize": "10MB",
-                          "validate": { "required": true },
                           "key": "allegations",
                           "conditional": {
                             "show": true,
@@ -15789,7 +15666,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "insuranceAllegingattachment",
               "conditional": {
                 "show": true,
@@ -15825,7 +15701,6 @@
               "fileTypes": [{ "label": "", "value": "" }],
               "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
               "fileMaxSize": "10MB",
-              "validate": { "required": true },
               "key": "empclaimproposalform",
               "conditional": {
                 "show": true,
@@ -16072,7 +15947,6 @@
                       "storage": "url",
                       "webcam": false,
                       "fileTypes": [{ "label": "", "value": "" }],
-                      "validate": { "required": true },
                       "key": "claimornoticetoinsurer",
                       "conditional": {
                         "show": true,
@@ -16145,7 +16019,6 @@
                       "fileTypes": [{ "label": "", "value": "" }],
                       "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                       "fileMaxSize": "10MB",
-                      "validate": { "required": true },
                       "key": "liabilityinsuranceform",
                       "conditional": {
                         "show": true,
@@ -18303,6 +18176,7 @@
                       "prefix": "$",
                       "mask": false,
                       "spellcheck": true,
+                      "disabled": true,
                       "tableView": false,
                       "defaultValue": 25000,
                       "delimiter": true,
@@ -18783,7 +18657,6 @@
               "components": [
                 {
                   "label": "# of Records containing Personably Identifiable Information (PII) in electronic format?  (PII is non-public personal information such as  social security number, financial information, driver's license #, etc.)",
-                  "prefix": "$",
                   "mask": false,
                   "spellcheck": true,
                   "tableView": false,
@@ -18792,9 +18665,9 @@
                   "inputFormat": "plain",
                   "key": "ofRecordsContaining",
                   "type": "number",
+                  "decimalLimit": 2,
                   "input": true,
-                  "hideOnChildrenHidden": false,
-                  "decimalLimit": 2
+                  "hideOnChildrenHidden": false
                 }
               ],
               "width": 6,
@@ -20032,43 +19905,30 @@
           "label": "Choose Carrier Templates to be generated:",
           "optionsLabelPosition": "right",
           "tableView": false,
-          "defaultValue": {
-            "afDealer": false,
-            "DGApplication": false,
-            "SchinnererAuto": false,
-            "SchinnererGarage": false,
-            "HarcoDealerPackApplication": false,
-            "HarcoEEList": false,
-            "AFDealer": false,
-            "harco": false,
-            "dealerGuard": false,
-            "schinnererFranchisedAutoDealer": false,
-            "schinnererDolApplication": false,
-            "gaicEpli": false,
-            "rpsCyber": false,
-            "epli": false,
-            "exceltemplate": false,
-            "excelTemplates": false,
-            "dealerGuard_ApplicationOpenLot": false,
-            "victor_franchisedAutoDealer": false,
-            "victor_AutoPhysDamage": false
-          },
           "values": [
-            { "label": "EPLI", "value": "epli", "shortcut": "" },
-            { "label": "RPS Cyber", "value": "rpsCyber", "shortcut": "" },
-            { "label": "Harco", "value": "harco", "shortcut": "" },
             {
-              "label": "DealerGuard Application Open Lot",
+              "label": "Great American - EPLI",
+              "value": "epli",
+              "shortcut": ""
+            },
+            { "label": "RPS Cyber", "value": "rpsCyber", "shortcut": "" },
+            {
+              "label": "Harco - Commercial Package",
+              "value": "harco",
+              "shortcut": ""
+            },
+            {
+              "label": "DealerGuard - Dealer Open Lot",
               "value": "dealerGuard_ApplicationOpenLot",
               "shortcut": ""
             },
             {
-              "label": "Victor Franchised Auto Dealer",
+              "label": "Victor - Commercial Package",
               "value": "victor_FranchisedAutoDealer",
               "shortcut": ""
             },
             {
-              "label": "Victor Auto Physical Damage",
+              "label": "Victor - Dealer Open Lot",
               "value": "victor_AutoPhysDamage",
               "shortcut": ""
             }
@@ -20093,6 +19953,7 @@
           "redrawOn": "workbooksToBeGenerated",
           "calculateValue": "var tempAllEmployees = 0;\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map((buildingItem) => {\n        tempAllEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees +\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n      });\n    });\n  }\n}\n\nvalue = {\n  \" of Employees\": tempAllEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership ? data.numYearsOfOwnership : 0\n};\n\nconsole.log(value);",
           "key": "rpsCyberPDFData",
+          "properties": { "data_type": "json" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -20102,6 +19963,7 @@
           "redrawOn": "workbooksToBeGenerated",
           "calculateValue": "var tempFullTimeEmployees = 0;\nvar tempPartTimeEmployees = 0;\nvar tempContractDrivers = 0;\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map(buildingItem => {\n        tempFullTimeEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees;\n        tempPartTimeEmployees +=\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n        tempContractDrivers += buildingItem.contractDriversNonEmployees;\n      });\n    });\n  }\n}\n\nvalue = {\n  \"City, State, Zip\": data.city + \",\" + data.state + \",\" + data.zip,\n  \"a  full time employees\": tempFullTimeEmployees,\n  \"b  part time employees\": tempPartTimeEmployees,\n  Name: data.hrRepresentative,\n  \"c leasedcontract employees\": tempContractDrivers,\n  Date: moment().format(\"YYYY-MM-DD\"),\n  Group25:\n    data.noticetoinsurer == \"notApplicable\"\n      ? \"Choice1\"\n      : data.noticetoinsurer == \"yes\"\n      ? \"2\"\n      : \"3\",\n  Group26:\n    data.nonrenewedcoverage == \"notApplicable\"\n      ? \"Choice1\"\n      : data.nonrenewedcoverage == \"yes\"\n      ? \"2\"\n      : \"Choice3\"\n};",
           "key": "gaicEpliPdfData",
+          "properties": { "data_type": "json" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -20110,6 +19972,7 @@
           "label": "Dealerguard Open Lot",
           "calculateValue": "value = {\n    checkVehicleInventoryTaken:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"biWeekly\" ||\n      data.dolvehicleinevtorytaken == \"monthly\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenWeekly:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"daily\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenBiweekly:\n      data.dolvehicleinevtorytaken == \"biWeekly\" ? \"true\" : \"false\",\n    checkVehicleInventoryTakenMonthly:\n      data.dolvehicleinevtorytaken == \"monthly\" ||\n      data.dolvehicleinevtorytaken == \"quarterly\"\n        ? \"true\"\n        : \"false\",\n    checkcustomerserviceloanerrentalprogram:\n      data.customerserviceloanerrentalprogram == \"no\"\n        ? \"false\"\n        : data.loanerrentalcontractused == \"yes\"\n        ? \"true\"\n        : \"false\",\n    checkDOLTotalNoOfDemos: data.doltotalnoofdemos > 0 ? \"true\" : \"false\",\n    checkGenFullName: data.insurancecontactdataGrid[0].genfullName,\n    checkGenEmail: data.insurancecontactdataGrid[0].genemail,\n    checkLockbox: data.dolalllocdoesnotincld\n      ? data.dolalllocdoesnotincld.includes(\"lockBoxes\")\n        ? \"true\"\n        : \"\"\n      : data.genericData.locationScheduleGridData.some((locationItem) => {\n          if (locationItem.locationGarageLiabilityKeyControls) {\n            if (locationItem.locationGarageLiabilityKeyControls.lockbox) {\n              return true;\n            } else {\n              return false;\n            }\n          } else {\n            return false;\n          }\n        }),\n    checkDailyKeyInventory: data.dolalllocdoesnotincld\n      ? data.dolalllocdoesnotincld.includes(\"dailyKeyInventory\")\n        ? \"Yes\"\n        : \"No\"\n      : data.genericData.locationScheduleGridData.some((locationItem) => {\n          if (locationItem.locationGarageLiabilityKeyControls) {\n            if (\n              locationItem.locationGarageLiabilityKeyControls.dailyKeyInventory\n            ) {\n              return true;\n            } else {\n              return false;\n            }\n          } else {\n            return false;\n          }\n        })\n      ? \"Yes\"\n      : \"No\",\n    checkComputerizedKeyVault: data.dolalllocdoesnotincld\n      ? data.dolalllocdoesnotincld.includes(\"computerizedKeyVault\")\n        ? \"true\"\n        : \"\"\n      : data.genericData.locationScheduleGridData.some((locationItem) => {\n          if (locationItem.locationGarageLiabilityKeyControls) {\n            if (\n              locationItem.locationGarageLiabilityKeyControls.computerizedKeyVault\n            ) {\n              return true;\n            } else {\n              return false;\n            }\n          } else {\n            return false;\n          }\n        }),\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (\n          locationItem.occupancyType == \"serviceRepair\" &&\n          locationItem.dolsecguards == \"yes\"\n        ) {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    SOV12MothAverage: data.locationSchedule.map(\n      (locationItem) => {\n        var individualResult = [];\n        if (locationItem.monthAvgNew && locationItem.insuredThroughFloorPlanNew) {\n          individualResult.push(\n            locationItem.monthAvgNew - locationItem.insuredThroughFloorPlanNew\n          );\n        } else {\n          individualResult.push(\"\");\n        }\n        if (\n          locationItem.monthAvgUsed &&\n          locationItem.insuredThroughFloorPlanUsed\n        ) {\n          individualResult.push(\n            locationItem.monthAvgUsed - locationItem.insuredThroughFloorPlanUsed\n          );\n        } else {\n          individualResult.push(\"\");\n        }\n  \n        if (\n          locationItem.monthAvgRoadDemosFurnishedAutos &&\n          locationItem.insuredThroughFloorPlanRoad &&\n          locationItem.monthAvgRoadLoanersShopService &&\n          locationItem.insuredThroughFloorPlan\n        ) {\n          individualResult.push(\n            locationItem.monthAvgRoadDemosFurnishedAutos -\n              locationItem.insuredThroughFloorPlanRoad +\n              locationItem.monthAvgRoadLoanersShopService -\n              locationItem.insuredThroughFloorPlan\n          );\n        } else {\n          individualResult.push(\"\");\n        }\n        return individualResult;\n      }\n    )\n  };\n  \n  console.log(value);",
           "key": "dealerguardOpenLot",
+          "properties": { "data_type": "json" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -20119,6 +19982,7 @@
           "redrawOn": "workbooksToBeGenerated",
           "calculateValue": "value = {\n  CityStateZip: data.city + \",\" + data.state + \",\" + data.zip,\n  InsuranceContactNameandPhone: data.insurancecontactdataGrid\n    ? data.insurancecontactdataGrid[0].genfirstname +\n      \" \" +\n      data.insurancecontactdataGrid[0].genlastname +\n      \",\" +\n      data.insurancecontactdataGrid[0].phone\n    : \"\",\n  checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsecguards == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolpostnchain == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolflyfencdpremises == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checknumberofservicebays: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.numberofservicebays == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  formalsafetymeetingsNone: data.formalsafetymeetings == \"none\" ? \"No\" : \"Yes\",\n  formalsafetymeetingsMonthly:\n    data.formalsafetymeetings == \"monthly\" ? \"true\" : \"false\",\n  checkrepairpercentlabor:\n    data.repairpercentlabor == 95 || data.repairpercentlabor == 85\n      ? 90\n      : data.repairpercentlabor,\n  checkauditfrequencyannual: data.auditfrequency == \"annual\" ? \"true\" : \"false\",\n  checkauditfrequencysemiAnnual:\n    data.auditfrequency == \"semiAnnual\" ? \"true\" : \"false\",\n  checkauditfrequencyquarterly:\n    data.auditfrequency == \"quarterly\" ? \"true\" : \"false\",\n  checkauditreportissenttoowners:\n    data.auditreportissentto == \"owners\" ? \"true\" : \"false\",\n  checkauditreportissenttopartners:\n    data.auditreportissentto == \"partners\" ? \"true\" : \"false\",\n  checkauditreportissenttoboardOfDirectors:\n    data.auditreportissentto == \"boardOfDirectors\" ? \"true\" : \"false\",\n  checkwhodeliversvehiclesonemployee:\n    data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\n  checkwhodeliversvehiclesonindependentContractor:\n    data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\"\n};\nconsole.log(value);",
           "key": "franchisedAutoDealer",
+          "properties": { "data_type": "json" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -20127,6 +19991,7 @@
           "label": "Victor Auto Physical Damage",
           "calculateValue": "var sumNonEmployeesfurnishedAuto = 0;\nvalue = {\n  checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsecguards == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolaftrhrslighting == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolpostnchain == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n    (locationItem) => {\n      if (locationItem.dolflyfencdpremises == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }\n  ),\n  checkfloodloss: data.dolflodlossdescib\n    ? data.dolflodlossdescib.length > 0\n      ? \"true\"\n      : \"false\"\n    : \"\",\n  DealershipStorageLocationsArray: data.locationSchedule\n    .map((locationItem) => {\n      var resultOccupancyType = \"\";\n      locationItem.buildingDetails.some((buildingItem) => {\n        if (\n          buildingItem.occupancyType == \"autoSalesAndService\" ||\n          buildingItem.occupancyType == \"newCarShowroomAndSales\"\n        ) {\n          resultOccupancyType = \"Dealership\";\n          return true;\n        } else if (\n          buildingItem.occupancyType == \"vehicleStorageParkingGarage\" ||\n          buildingItem.occupancyType == \"autoStorageLot\"\n        ) {\n          resultOccupancyType = \"Storage\";\n        } else {\n          resultOccupancyType =\n            resultOccupancyType == \"\" ? undefined : resultOccupancyType;\n        }\n      });\n      var furnishedAutoEmployee = 0;\n      var nonEmployeesfurnishedAuto = 0;\n      locationItem.buildingDetails.map((building) => {\n        furnishedAutoEmployee +=\n          building.fTEmployeesFurnishedAnAuto +\n          building.pTEmployeesFurnishedAnAuto +\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n        nonEmployeesfurnishedAuto +=\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n      });\n      resultOccupancyType\n        ? (sumNonEmployeesfurnishedAuto += nonEmployeesfurnishedAuto)\n        : null;\n      return resultOccupancyType\n        ? {\n            ...locationItem,\n            DOLOccupancy: resultOccupancyType,\n            furnishedAutoEmployee: furnishedAutoEmployee,\n            nonEmployeesfurnishedAuto: nonEmployeesfurnishedAuto\n          }\n        : false;\n    })\n    .filter((filterItem) => (filterItem ? filterItem : false)),\n    sumNonEmployeesfurnished: sumNonEmployeesfurnishedAuto\n};\n\nconsole.log(value);",
           "key": "victorAutoPhysicalDamage",
+          "properties": { "data_type": "json" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -20136,6 +20001,7 @@
           "redrawOn": "workbooksToBeGenerated",
           "calculateValue": "value = {\n  \"CPAYes\" : (data.auditperformed.cpa == \"yes\")? 'yes' : 'no',\n  \"CrimeDeductible\" : Math.min(data.theftofmoneydeductible, data.outsidethepremisesdeductible, data.burglaryofotherpropertydeductible),\n  \"CrimeLimit\" : Math.max(data.computerlimit, data.fundslimit),\n}",
           "key": "harcoExcelData",
+          "properties": { "data_type": "json" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -20146,7 +20012,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          var closeForm = confirm(\n            \"Do you want to close the form after saving the data?\"\n          );\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: closeForm,\n              notification: \"Form saved successfully\"\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
   "revisions": "original",
-  "_vid": 573,
+  "_vid": 595,
   "title": "Dealer Workbook",
   "display": "wizard",
   "access": [
@@ -20194,6 +20060,6 @@
   "path": "dealerworkbook",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-06-25T07:04:35.147Z",
-  "modified": "2020-08-02T21:24:27.105Z",
+  "modified": "2020-08-03T12:43:04.631Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
