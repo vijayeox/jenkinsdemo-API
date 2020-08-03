@@ -836,7 +836,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }else{
                                 $length = 1;
                             }
-                            $data['certificate_no'] = $data['certificate_no'].' - '.$length;
+                            $certificate_no = explode("-",$data['certificate_no']);
+                            $data['certificate_no'] = $certificate_no[0].' - '.$length;
                         }else if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
                             if(isset($data['documents']['endorsement_coi_document'])){
                                 $length = sizeof($data['documents']['endorsement_coi_document']) + 1;
@@ -866,7 +867,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                     $length = 1;
                                 }
                                 if(isset($data['group_certificate_no'])){
-                                    $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;
+                                	$grp_certificate_no = explode("-",$data['group_certificate_no']);
+                                    $data['group_certificate_no'] = $grp_certificate_no[0].' - '.$length;
                                 }else{
                                     $data['group_certificate_no'] = 'S'.$data['certificate_no'];
                                 }
