@@ -608,7 +608,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->diveStoreEnorsementQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
             }else if($data['product'] == 'Dive Store' && $this->type == 'endorsement'){
                 $this->diveStoreEndorsement($data,$temp);
-                $documents['endorsement_coi_document'] = isset($documents['endorsement_coi_document']) ? $documents['endorsement_coi_document'] : array();
+                $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
                 $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 array_push($documents['endorsement_coi_document'], $endorsementDoc);
             }else if($data['product'] == 'Dive Boat' && ($this->type == 'endorsement' || $this->type == 'endorsementQuote')){
@@ -829,6 +829,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $coi_number = $data['certificate_no'];
                   } else {
                       $coi_number = $this->generateCOINumber($data,$persistenceService);
+                  }
+                  if(is_string($data['documents'])){
+                    $data['documents'] = json_decode($data['documents'],true);
                   }
                     if($this->type == 'endorsement'){
                         if($data['product'] == 'Dive Store'){
