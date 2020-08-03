@@ -53,6 +53,26 @@ entity:
                 index: true
                 data_type: text
             -
+                name: producername
+                text: Producer
+                index: true
+                data_type: text
+            -
+                name: namedInsured
+                text: 'Named Insured'
+                index: true
+                data_type: text
+            -
+                name: effectiveDate
+                text: 'Effective Date'
+                index: true
+                data_type: datetime
+            -
+                name: producerdate
+                text: Date
+                index: true
+                data_type: datetime
+            -
                 name: documents
                 text: Documents
                 data_type: document
