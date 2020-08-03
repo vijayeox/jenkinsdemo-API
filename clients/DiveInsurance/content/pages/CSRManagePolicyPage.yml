@@ -52,6 +52,15 @@ content:
                         cell: 'formatDateWithoutTimezone(data.end_date)'
             actions:
                 -
+                    name: Policy Regeneration
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            form_id: db82e118-cbef-11ea-87d0-0242ac130003
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-file'
+                -
                     name: Endorsement
                     rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                     details:

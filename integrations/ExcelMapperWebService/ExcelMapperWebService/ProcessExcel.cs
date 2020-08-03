@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace ProcessExcel
 {
@@ -34,10 +35,10 @@ namespace ProcessExcel
     public class CallbackData
     {
         public string filename { get; set; }
-        public string fileid { get; set; }
+        public string fileId { get; set; }
         public byte status { get; set; }
-        public string appid { get; set; }
-        public string orgid { get; set; }
+        public string appId { get; set; }
+        public string orgId { get; set; }
         public List<ErrorDetails> errorlist { get; set; }
     }
     class ProcessExcel
@@ -48,7 +49,6 @@ namespace ProcessExcel
         private Settings _settings;
 
         private CallbackData _callback;
-
         public ProcessExcel(Settings settings)
         {
             _settings = settings;
@@ -68,10 +68,19 @@ namespace ProcessExcel
                 carrierfile = parsedJson["mapping"]["filename"].ToString();            
                 _callback = new CallbackData();
                 _callback.filename = carrierfile;
-                _callback.fileid = parsedJson["fileId"].ToString();
-                _callback.appid = parsedJson["appId"].ToString();
-                _callback.orgid = parsedJson["orgId"].ToString();
+                _callback.fileId = parsedJson["fileId"].ToString();
+                _callback.appId = parsedJson["appId"].ToString();
+                _callback.orgId = parsedJson["orgId"].ToString();
                 _callback.errorlist = new List<ErrorDetails>();
+                List<string> myvariables = new List<string>();
+                string mystr = _settings.postURL;
+                while (mystr.Contains("{"))
+                {
+                    string variable = mystr.Split('{', '}')[1];
+                    string prop = (string)_callback.GetType().GetProperty(variable).GetValue(_callback, null);
+                    mystr = mystr.Replace("{" + variable + "}", prop);
+                };
+                _settings.postURL = mystr;
                 object data = parsedJson["mapping"]["data"];
                 IList<JToken> mappingdata = parsedJson["mapping"]["data"].Children().ToList();
                 MapData(carrierfile, mappingdata);
@@ -80,18 +89,19 @@ namespace ProcessExcel
             {
                 PostError(carrierfile, 0,e.Message);
             }
-            finally
-            {
-                Process[] excelProcs = Process.GetProcessesByName("EXCEL");
-                foreach (Process proc in excelProcs)
-                {
-                    proc.Kill();
-                }
-
-            }
+    //        finally
+    //        {
+    //            Process[] excelProcs = Process.GetProcessesByName("EXCEL");
+    //           foreach (Process proc in excelProcs)
+   //             {
+   //                 proc.Kill();
+   //             }
+    //        }
 
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetWindowThreadProcessId(HandleRef handle, out int processId);
 
         private void MapData(string carrierfile, IList<JToken> mappingdata)
         {
@@ -100,7 +110,11 @@ namespace ProcessExcel
             string fCarrier = DateTime.Now.ToString("MMddyyyyhhmmss") + "-" + carrierfile;
             File.Copy(vFolder + "\\" + carrierfile, vFolder + "\\" + fCarrier);
             Workbook wbCarrier = excel.Workbooks.Open(vFolder + "\\" + fCarrier);
+            HandleRef hwnd = new HandleRef(excel, (IntPtr)excel.Hwnd);
+            int pid;
+            GetWindowThreadProcessId(hwnd, out pid);
             wbCarrier.Activate();
+
             try
             {
                 foreach(JToken mapdata in mappingdata)
@@ -111,8 +125,6 @@ namespace ProcessExcel
                 wbCarrier.Close();
                 PostFile(vFolder, fCarrier);
                 File.Move(vFolder + "\\" + fCarrier, this.baseDirectory + "\\Processed\\" + fCarrier);
-                excel.Quit();
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
             }
             catch (Exception e)
             {
@@ -121,8 +133,15 @@ namespace ProcessExcel
                //     Logerror("Error:" + e, wbCarrier.Name);
                     wbCarrier.Close();
                 }
-                excel.Quit();
+
                 PostError(carrierfile, 1,e.Message);
+            }
+            finally
+            {
+                excel.Quit();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
+                Process excelProcs = Process.GetProcessById(pid);
+                excelProcs.Kill();
             }
         }
 

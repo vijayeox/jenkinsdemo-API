@@ -173,4 +173,18 @@ class EntityService extends AbstractService
             throw $e;
         }
     }
+
+    public function updateUuid($entityId,$uuid) {
+        try{
+            $this->beginTransaction();
+            $update = "UPDATE ox_app_entity SET uuid=:uuid where id=:entityId";
+            $params = array("uuid" => $uuid,"entityId" => $entityId);
+            $result = $this->executeUpdateWithBindParameters($update, $params);
+            $this->commit();
+        }
+        catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+    }
 }

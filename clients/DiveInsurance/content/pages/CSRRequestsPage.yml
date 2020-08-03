@@ -45,7 +45,20 @@ content:
                         details:
                             -
                                 type: Form
-                                url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                url: entity/80b2d1f8-6929-49a6-8e46-4e027f681b77/workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                data:
+                                    product: 'Dive Store'
+                                    entity_name: 'Dive Store'
+                    -
+                        name: 'Group Professional Liability'
+                        rule: 'true'
+                        details:
+                            -
+                                type: Form
+                                url: entity/62e68b3f-abd0-4938-a82e-2ca42db1ae19/workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                data:
+                                    product: 'Group Professional Liability'
+                                    entity_name: 'Group Professional Liability'
             actions:
                 -
                     name: Review
@@ -140,6 +153,7 @@ content:
                             - 'Dive Boat'
                             - 'Dive Store'
                             - 'Emergency First Response'
+                            - 'Group Professional Liability'
                         placeholder: 'Select Policy'
                 -
                     title: 'Policy Start Date'

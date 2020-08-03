@@ -156,7 +156,8 @@ class StorePreviewDocument extends PolicyDocument
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
         if ($this->type != 'endorsement') {
-            $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+            if($temp['product'] == 'Dive Store')
+                $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
             if($temp['propertyCoverageSelect'] == 'yes'){
                 $this->logger->info("DOCUMENT property_coi_document");
                 $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');

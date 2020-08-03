@@ -99,6 +99,7 @@ entity:
                 index: true
     -
         name: 'Dive Store'
+        uuid: 80b2d1f8-6929-49a6-8e46-4e027f681b77
         identifiers:
             -
                 identifier: business_padi
@@ -279,6 +280,55 @@ entity:
                 index: true
             -
                 name: product
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+    -
+        name: 'Group Professional Liability'
+        uuid: 62e68b3f-abd0-4938-a82e-2ca42db1ae19
+        identifiers:
+            -
+                identifier: business_padi
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+                index: true
+            -
+                name: documents
+                text: 'Policy Documents'
+                data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: business_name
+                data_type: text
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: business_padi
                 data_type: text
                 index: true
             -
@@ -488,7 +538,9 @@ workflow:
         name: 'Dive Store'
         uuid: cb99e634-de00-468d-9230-d6f77d241c5b
         bpmn_file: 'Dive Store/NewApplication.bpmn'
-        entity: 'Dive Store'
+        entity:
+            - 'Dive Store'
+            - 'Group Professional Liability'
     -
         name: 'Dive Store Endorsement'
         uuid: 2bc1caaa-9628-486d-8b42-104534625994
@@ -507,6 +559,12 @@ form:
         description: 'Lets CSR generate and view Pocket Cards'
         template_file: pocketCard.json
         entity: 'Pocket Card Job'
+    -
+        name: 'Policy Regeneration'
+        uuid: db82e118-cbef-11ea-87d0-0242ac130003
+        description: 'Lets CSR regenerate the policy document'
+        template_file: iplPolicyRegeneration.json
+        entity: 'Individual Professional Liability'
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03

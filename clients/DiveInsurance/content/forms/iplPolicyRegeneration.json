@@ -1,5 +1,5 @@
 {
-	"_id": "5e6729933c3337c8e1ca238b",
+	"_id": "5f17e93169801d7617663ae1",
 	"type": "form",
 	"tags": [],
 	"owner": "5e147f8c6225ae0c3b3440f9",
@@ -114,8 +114,61 @@
 					"size": "md"
 				}, {
 					"components": [{
+						"label": "Certificate Number",
+						"autofocus": true,
+						"disabled": true,
+						"tableView": false,
+						"clearOnHide": false,
+						"validate": {
+							"required": true,
+							"min": 0,
+							"step": "any"
+						},
+						"key": "certificate_no",
+						"logic": [{
+							"name": "Check disableUserInfoEdit value",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "if (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") {\n    result = true;\n  } else {\n    result = false;\n  }"
+							},
+							"actions": [{
+								"name": "DIsable Component",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}, {
+							"name": "Check PADI Verified",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "if (((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) ||\n    (data.verified !== true && data.verified != \"true\") || \n    (data['businessPadiVerified'] === true || data['businessPadiVerified'] == 'true')) {\n    result = false;\n} else {\n    result = true;\n}"
+							},
+							"actions": [{
+								"name": "Disable",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
+						"decimalLimit": 0,
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
 						"label": "PADI Number",
 						"autofocus": true,
+						"disabled": true,
 						"tableView": false,
 						"clearOnHide": false,
 						"validate": {
@@ -126,6 +179,58 @@
 							"step": "any"
 						},
 						"key": "padi",
+						"logic": [{
+							"name": "Check disableUserInfoEdit value",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "if (data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") {\n    result = true;\n  } else {\n    result = false;\n  }"
+							},
+							"actions": [{
+								"name": "DIsable Component",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}, {
+							"name": "Check PADI Verified",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "if (((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) ||\n    (data.verified !== true && data.verified != \"true\") || \n    (data['businessPadiVerified'] === true || data['businessPadiVerified'] == 'true')) {\n    result = false;\n} else {\n    result = true;\n}"
+							},
+							"actions": [{
+								"name": "Disable",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}]
+						}],
+						"type": "textfield",
+						"delimiter": false,
+						"requireDecimal": false,
+						"decimalLimit": 0,
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Policy Number",
+						"autofocus": true,
+						"disabled": true,
+						"tableView": false,
+						"clearOnHide": false,
+						"validate": {
+							"required": true,
+							"min": 0,
+							"step": "any"
+						},
+						"key": "policy_id",
 						"logic": [{
 							"name": "Check disableUserInfoEdit value",
 							"trigger": {
@@ -181,68 +286,6 @@
 						"hideOnChildrenHidden": false,
 						"hideLabel": true
 					}, {
-						"label": "Validate PADI Membership",
-						"action": "event",
-						"showValidations": false,
-						"theme": "success",
-						"customClass": "alignCenter",
-						"tableView": false,
-						"key": "panelColumnsValidatePadiMembership",
-						"properties": {
-							"commands": "[{\"command\":\"delegate\",\"delegate\":\"PolicyCheck\"},{\"command\":\"delegate\",\"delegate\":\"PadiVerification\"}]"
-						},
-						"customConditional": "if ((data.verified === true || data.verified == \"true\") &&\n        (data.policy_exists === false || data.policy_exists == \"false\" || data.policy_exists === \"\") && (data['businessPadiVerified']!==true && data['businessPadiVerified']!=='true')) {\n    show = false;\n} else {\n    show = true;\n}",
-						"logic": [{
-							"name": "disable field",
-							"trigger": {
-								"type": "javascript",
-								"javascript": "result = (!data.padi || data.padi === '') ? true : false;"
-							},
-							"actions": [{
-								"name": "disable field",
-								"type": "property",
-								"property": {
-									"label": "Disabled",
-									"value": "disabled",
-									"type": "boolean"
-								},
-								"state": true
-							}]
-						}],
-						"overlay": {
-							"style": "text-align:center"
-						},
-						"type": "button",
-						"event": "callPipeline",
-						"input": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Change PADI Number",
-						"action": "event",
-						"showValidations": false,
-						"theme": "warning",
-						"customClass": "alignCenter",
-						"tableView": false,
-						"key": "changePadi",
-						"customConditional": "if(data.isRenewalFlow && data.isRenewalFlow == true){\n\tshow = false;\n}else if (data.isRenewalFlow != true || data.isRenewalFlow != \"true\" || data.isRenewalFlow == \"\") {\n\n\tif ((data.disableUserInfoEdit === true || data.disableUserInfoEdit == \"true\") ||\n\t\t((data.CSRReviewRequired === true || data.CSRReviewRequired == 'true') && (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ||\n\t\t((data.verified === true || data.verified == \"true\") && (data.policy_exists === true || data.policy_exists == \"true\")) ||\n\t\t(data.verified !== true && data.verified != \"true\") || (data['businessPadiVerified'] === true || data['businessPadiVerified'] == 'true')) {\n\t\tshow = false;\n\t} else {\n\t\tshow = true;\n\t}\n\n} else {\n\tshow = false;\n}",
-						"logic": [{
-							"name": "Event Handler",
-							"trigger": {
-								"type": "event",
-								"event": "triggerFormChange"
-							},
-							"actions": [{
-								"name": "Reset Form",
-								"type": "value",
-								"value": "data.padiVerified = undefined;\ndata.verified = undefined;\ndata.policy_exists = undefined;\ndata.padiNotFound = undefined;"
-							}]
-						}],
-						"type": "button",
-						"event": "triggerFormChange",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}, {
 						"label": "product",
 						"customDefaultValue": "value =\"Individual Professional Liability\";",
 						"key": "product",
@@ -283,6 +326,14 @@
 						"label": "isRenewalFlow",
 						"calculateValue": "if(data.policyStatus && data.policyStatus == 'Renewal Approval Pending'){\n  value = true;\n}",
 						"key": "isRenewalFlow",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "regeneratePolicy",
+						"calculateValue": "value = true;",
+						"key": "regeneratePolicy",
 						"type": "hidden",
 						"input": true,
 						"tableView": false,
@@ -347,51 +398,7 @@
 					"pull": 0,
 					"size": "md"
 				}, {
-					"components": [{
-						"label": "Content",
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "PADI Membership not Applicable for this Program",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "panelColumnsContent3",
-						"customConditional": "show = (data['businessPadiVerified']===true || data['businessPadiVerified']=='true') && \n(data['product'] == 'Individual Professional Liability' || data['product']=='Emergency First Response');",
-						"type": "htmlelement",
-						"input": false,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Content",
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "Your PADI membership may not be valid at this moment.  You may continue to complete an application for the PADI Endorsed Professional Liability coverage, however, an active PADI membership is required before coverage can be approved.  Please be sure validate your membership with PADI.",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "panelColumnsContent2",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n    (data['verified'] === true || data['verified']=='true') && \n    data.privileges['MANAGE_MY_POLICY_READ'] &&\n    (data.policy_exists !== 'true' && data.policy_exists !== true));",
-						"type": "htmlelement",
-						"input": false,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"key": "panelColumnsContent4",
-						"label": "Content",
-						"input": false,
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "Policy exists for given PADI Number",
-						"type": "htmlelement",
-						"hideLabel": true,
-						"customConditional": "show = ((data['verified'] == true || data['verified']=='true') && (data['policy_exists']==true||data['policy_exists']=='true') )",
-						"hideOnChildrenHidden": false,
-						"tableView": false
-					}],
+					"components": [],
 					"width": 6,
 					"offset": 0,
 					"push": 0,
@@ -1231,6 +1238,7 @@
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
+						"disabled": true,
 						"tableView": false,
 						"validate": {
 							"required": true,
@@ -1262,6 +1270,7 @@
 						"label": "Additional Email",
 						"tableView": true,
 						"multiple": true,
+						"calculateValue": "if(typeof value === 'string'){\n  value = JSON.parse(value);\n}\nconsole.log(value);",
 						"validate": {
 							"customMessage": "Please enter your email address in format: yourname@example.com",
 							"multiple": true
@@ -1321,37 +1330,6 @@
 			"theme": "primary",
 			"tableView": false,
 			"components": [{
-				"label": "Policy Period",
-				"widget": "choicesjs",
-				"autofocus": true,
-				"tableView": false,
-				"dataSrc": "custom",
-				"data": {
-					"values": [{
-						"value": "",
-						"label": ""
-					}],
-					"custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n\t        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}\nif(moment().year() == 2020 && moment().month() == 5 && moment().date() <= 30){\nvalues.shift();\n}"
-				},
-				"selectThreshold": 0.3,
-				"clearOnHide": false,
-				"validate": {
-					"required": true,
-					"customMessage": "Please select a policy period from the list"
-				},
-				"key": "start_date_range",
-				"properties": {
-					"delegate": "RateCard",
-					"post_delegate_refresh": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
-				},
-				"customConditional": "if (data.setCsrPolicyPeriod && (data.setCsrPolicyPeriod == true || data.setCsrPolicyPeriod == \"true\")){\n  show = false;\n}\nelse{\n  show = true;\n}",
-				"type": "select",
-				"indexeddb": {
-					"filter": {}
-				},
-				"input": true,
-				"lockKey": true
-			}, {
 				"label": "Columns",
 				"input": false,
 				"tableView": false,
@@ -1503,7 +1481,7 @@
 			"label": "Panel"
 		}, {
 			"label": "setCsrPolicyPeriod",
-			"calculateValue": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n value = true;\n}",
+			"calculateValue": "if ((!value || value == \"\") && data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\nvalue = true;\n}\nconsole.log(\"PRIVILGES NOT FOUND\");",
 			"key": "setCsrPolicyPeriod",
 			"type": "hidden",
 			"input": true,
@@ -3174,1828 +3152,32 @@
 				"input": true,
 				"tableView": false
 			}]
-		}, {
-			"key": "page3Panel4",
-			"input": false,
-			"title": "In Lieu of Signature",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"label": "By checking this box",
-				"tableView": false,
-				"defaultValue": false,
-				"validate": {
-					"required": true,
-					"customMessage": "Please accept these declarations"
-				},
-				"key": "page3Panel4Bycheckingthisbox",
-				"logic": [{
-					"name": "disableFieldEdit",
-					"trigger": {
-						"type": "javascript",
-						"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
-					},
-					"actions": [{
-						"name": "diableField",
-						"type": "property",
-						"property": {
-							"label": "Disabled",
-							"value": "disabled",
-							"type": "boolean"
-						},
-						"state": true
-					}]
-				}],
-				"type": "checkbox",
-				"input": true,
-				"dataGridLabel": false
-			}, {
-				"label": "Content",
-				"attrs": [{
-					"value": "",
-					"attr": ""
-				}],
-				"content": "<ol>\n<li>I hereby declare that I have read, understand and accept the Exclusions included with this renewal. <i>\n<a href=\"/apps/DiveInsurance/public/docs/Exclusions.pdf\" target=\"_blank\">[Read Exclusions] &nbsp; </a></i></li>\n&nbsp\n<li>I hearby declare that I am the applicant listed in Step 1, and the premium is fully earned, and no refund will be given if I cancel the policy.</li>",
-				"refreshOnChange": false,
-				"tableView": false,
-				"key": "page3Panel4Content",
-				"type": "htmlelement",
-				"input": false,
-				"hideLabel": true
-			}],
-			"type": "panel",
-			"label": "Panel"
 		}],
 		"input": false,
 		"lockKey": true
-	}, {
-		"type": "panel",
-		"title": "Special Notice",
-		"components": [{
-			"key": "page4Content",
-			"label": "Content",
-			"input": false,
-			"attrs": [{
-				"value": "",
-				"attr": ""
-			}],
-			"content": "<b>READ CAREFULLY BEFORE COMPLETING </b></br>\n</br>\nInsurance coverage is only provided if the insurance company is put on notice of a possible claim through one of its authorized agents or PADI.",
-			"type": "htmlelement",
-			"hideLabel": true,
-			"tableView": false
-		}, {
-			"clearOnHide": false,
-			"key": "page4Well",
-			"input": false,
-			"components": [{
-				"key": "page4Panel",
-				"input": false,
-				"title": "Section 1",
-				"theme": "primary",
-				"tableView": false,
-				"components": [{
-					"label": "Section1Content",
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "I, {{data.firstname}} {{data.lastname}}, have no knowledge of an incident, accident, occurrence, act, error, or omission not previously reported to PADI, or reported to PADI while I was NOT insured with Vicencia & Buckley, that might lead to, or already has led to, a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
-					"refreshOnChange": false,
-					"tableView": false,
-					"key": "page4PanelSection1Content",
-					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true
-				}, {
-					"label": "I Agree",
-					"autofocus": true,
-					"tableView": false,
-					"defaultValue": "false",
-					"validate": {
-						"customMessage": "Please let us know if any incidents have occured in the past!",
-						"custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)"
-					},
-					"key": "section1Agreement",
-					"properties": {
-						"negate": "section2Agreement"
-					},
-					"logic": [{
-						"name": "disableFieldEdit",
-						"trigger": {
-							"type": "javascript",
-							"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
-						},
-						"actions": [{
-							"name": "disableFieldEdit",
-							"type": "property",
-							"property": {
-								"label": "Disabled",
-								"value": "disabled",
-								"type": "boolean"
-							},
-							"state": true
-						}]
-					}],
-					"type": "checkbox",
-					"input": true,
-					"dataGridLabel": false,
-					"lockKey": true
-				}],
-				"type": "panel",
-				"label": "Panel"
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page4Columns",
-				"columns": [{
-					"components": [],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "agreementSection",
-						"label": "agreementSection",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"key": "page4Content2",
-						"label": "Content",
-						"input": false,
-						"tag": "b",
-						"attrs": [{
-							"value": "",
-							"attr": ""
-						}],
-						"content": "<h4 align=\"center\"><b>OR</b></h4>",
-						"type": "htmlelement",
-						"hideLabel": true,
-						"hideOnChildrenHidden": false,
-						"tableView": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"key": "page4Panel2",
-				"input": false,
-				"title": "Section 2",
-				"theme": "primary",
-				"tableView": false,
-				"components": [{
-					"label": "Content",
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "I, {{data.firstname}} {{data.lastname}}, have knowledge of an incident, accident, occurrence, act, error, or omission not previously reported to PADI, or reported to PADI while I was NOT insured with Vicencia & Buckley, that might lead to, or already has led to, a legal action or claim for my supervisory or instructional activities. I understand that I must report any incident, accident, occurrence, act, error, or omission to any previous insurer and that this policy does not cover any known incidents, accidents, occurrences, acts, errors, or omissions. By applying for this insurance, I hereby authorize PADI to release information to the insurance company pertinent to the investigation of insurance claims.",
-					"refreshOnChange": false,
-					"tableView": false,
-					"key": "page4Panel2Content",
-					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true,
-					"lockKey": true
-				}, {
-					"label": "Incidents",
-					"reorder": false,
-					"addAnother": "Add More",
-					"addAnotherPosition": "bottom",
-					"defaultOpen": false,
-					"layoutFixed": false,
-					"enableRowGroups": false,
-					"hideLabel": true,
-					"tableView": true,
-					"defaultValue": [{
-						"nameofpersoninjured": "",
-						"date_of_incident": "",
-						"locationofincident": "",
-						"reportcanbeobtained": "",
-						"briefSummary": "",
-						"page4Panel2ColumnsIncidentreportfiled": "",
-						"page4Panel2Columns2Fatality": "",
-						"page4Panel2Columns2SeriousInjury": "",
-						"page4Panel2ColumnsInTraining": ""
-					}],
-					"validate": {
-						"minLength": 1
-					},
-					"key": "dataGrid",
-					"conditional": {
-						"show": true,
-						"when": "section2Agreement",
-						"eq": "true"
-					},
-					"type": "datagrid",
-					"input": true,
-					"components": [{
-						"label": "Well",
-						"tableView": false,
-						"key": "well1",
-						"type": "well",
-						"input": false,
-						"components": [{
-							"label": "Columns",
-							"columns": [{
-								"components": [{
-									"label": "Name of person injured",
-									"autofocus": true,
-									"tableView": true,
-									"clearOnHide": false,
-									"validate": {
-										"required": true
-									},
-									"key": "nameofpersoninjured",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Date of incident",
-									"allowInput": false,
-									"format": "MM-dd-yyyy",
-									"tableView": false,
-									"datePicker": {
-										"maxDate": "moment()",
-										"disableWeekends": false,
-										"disableWeekdays": false,
-										"datepickerMode": "day"
-									},
-									"enableTime": false,
-									"timePicker": {
-										"showMeridian": false
-									},
-									"clearOnHide": false,
-									"validate": {
-										"required": true,
-										"custom": "if(row['date_of_incident'] && row['date_of_incident'] != ''){\n  valid = (moment(row['date_of_incident']) < moment(data['start_date'])) ? true : 'Please choose the date before '+moment(data.start_date).format('MM-DD-YYYY')+' (Policy Start Date)';\n}"
-									},
-									"key": "date_of_incident",
-									"type": "datetime",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"widget": {
-										"type": "calendar",
-										"displayInTimezone": "viewer",
-										"language": "en",
-										"useLocaleSettings": false,
-										"allowInput": false,
-										"mode": "single",
-										"enableTime": false,
-										"noCalendar": false,
-										"format": "MM-dd-yyyy",
-										"hourIncrement": 1,
-										"minuteIncrement": 1,
-										"time_24hr": true,
-										"minDate": null,
-										"disableWeekends": false,
-										"disableWeekdays": false,
-										"maxDate": "moment()"
-									}
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Location of incident",
-									"tableView": true,
-									"clearOnHide": false,
-									"key": "locationofincident",
-									"type": "textfield",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}],
-							"tableView": false,
-							"key": "columns",
-							"type": "columns",
-							"input": false,
-							"hideLabel": true
-						}, {
-							"label": "Columns",
-							"columns": [{
-								"components": [{
-									"label": "Report Details",
-									"autoExpand": false,
-									"tableView": true,
-									"inputFormat": "plain",
-									"clearOnHide": false,
-									"key": "reportcanbeobtained",
-									"type": "textarea",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 6,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Brief Summary",
-									"autoExpand": false,
-									"tableView": true,
-									"inputFormat": "plain",
-									"clearOnHide": false,
-									"key": "briefSummary",
-									"type": "textarea",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 6,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}],
-							"hideLabel": true,
-							"tableView": false,
-							"key": "columns1",
-							"type": "columns",
-							"input": false
-						}, {
-							"label": "Columns",
-							"columns": [{
-								"components": [{
-									"label": "Incident report filed?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": true,
-									"values": [{
-										"value": "yes",
-										"label": "Yes",
-										"shortcut": ""
-									}, {
-										"value": "no",
-										"label": "No",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"key": "page4Panel2ColumnsIncidentreportfiled",
-									"type": "radio",
-									"labelWidth": 30,
-									"labelMargin": 3,
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 3,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Fatality?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": true,
-									"values": [{
-										"value": "yes",
-										"label": "Yes",
-										"shortcut": ""
-									}, {
-										"value": "no",
-										"label": "No",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"key": "page4Panel2Columns2Fatality",
-									"type": "radio",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 3,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Serious Injury?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": true,
-									"values": [{
-										"value": "yes",
-										"label": "Yes",
-										"shortcut": ""
-									}, {
-										"value": "no",
-										"label": "No",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"key": "page4Panel2Columns2SeriousInjury",
-									"type": "radio",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 3,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "In Training?",
-									"optionsLabelPosition": "right",
-									"inline": false,
-									"tableView": false,
-									"values": [{
-										"value": "yes",
-										"label": "Yes",
-										"shortcut": ""
-									}, {
-										"value": "no",
-										"label": "No",
-										"shortcut": ""
-									}],
-									"clearOnHide": false,
-									"key": "page4Panel2ColumnsInTraining",
-									"type": "radio",
-									"input": true,
-									"lockKey": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 3,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}],
-							"tableView": false,
-							"key": "columns2",
-							"type": "columns",
-							"input": false,
-							"hideLabel": true
-						}],
-						"inDataGrid": true,
-						"clearOnHide": false,
-						"hideLabel": true
-					}],
-					"path": "dataGrid"
-				}, {
-					"label": "I Agree",
-					"tableView": false,
-					"defaultValue": false,
-					"validate": {
-						"customMessage": "Please let us know if any incidents have occured in the past!",
-						"custom": "valid = (data.section1Agreement == true || data.section2Agreement == true)"
-					},
-					"key": "section2Agreement",
-					"properties": {
-						"negate": "section1Agreement"
-					},
-					"logic": [{
-						"name": "disableFieldEdit",
-						"trigger": {
-							"type": "javascript",
-							"simple": {
-								"show": true
-							},
-							"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
-						},
-						"actions": [{
-							"name": "diableField",
-							"type": "property",
-							"property": {
-								"label": "Disabled",
-								"value": "disabled",
-								"type": "boolean"
-							},
-							"state": true
-						}]
-					}],
-					"type": "checkbox",
-					"input": true,
-					"dataGridLabel": false,
-					"lockKey": true
-				}],
-				"type": "panel",
-				"lockKey": true,
-				"label": "Panel",
-				"path": "page4Panel2"
-			}],
-			"tableView": false,
-			"type": "well",
-			"hideLabel": true,
-			"label": ""
-		}, {
-			"key": "page4Panel2Panel",
-			"input": false,
-			"title": "GDPR Agreement",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"key": "page4Panel2PanelContent",
-				"label": "Content",
-				"input": false,
-				"attrs": [{
-					"value": "",
-					"attr": ""
-				}],
-				"content": "HUB International Insurance will use the information you provide on this form to be in touch with you and to provide updates and marketing. We will treat your information with respect. For more information about our privacy practices please visit our website. By checking this box, you agree that we may process your information in accordance with these terms.",
-				"type": "htmlelement",
-				"hideLabel": true,
-				"lockKey": true,
-				"tableView": false
-			}, {
-				"label": "I Agree",
-				"tableView": true,
-				"defaultValue": false,
-				"validate": {
-					"required": true,
-					"customMessage": "Please acknowledge the GDPR Agreement"
-				},
-				"key": "page4Panel2PanelIagree",
-				"logic": [{
-					"name": "disableFieldEdit",
-					"trigger": {
-						"type": "javascript",
-						"javascript": "result = false;\nif(data['CSRReviewRequired'] === true){\n  result = true;\n}"
-					},
-					"actions": [{
-						"name": "disableField",
-						"type": "property",
-						"property": {
-							"label": "Disabled",
-							"value": "disabled",
-							"type": "boolean"
-						},
-						"state": true
-					}]
-				}],
-				"type": "checkbox",
-				"input": true,
-				"dataGridLabel": false,
-				"lockKey": true
-			}],
-			"type": "panel",
-			"label": "Panel"
-		}],
-		"input": false,
-		"key": "page4",
-		"theme": "primary",
-		"tableView": false,
-		"collapsible": false,
-		"collapsed": false,
-		"lockKey": true,
-		"label": "Special Notice",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		}
-	}, {
-		"type": "panel",
-		"title": "Additional Insured",
-		"components": [{
-			"label": "AdditionalInsureds",
-			"attrs": [{
-				"value": "",
-				"attr": ""
-			}],
-			"content": "<ol>\n<li>Additional Insureds are only added if required by written contract.</li>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
-			"refreshOnChange": false,
-			"tableView": false,
-			"key": "page4PanelAdditionalInsureds",
-			"type": "htmlelement",
-			"input": false,
-			"hideLabel": true
-		}, {
-			"clearOnHide": false,
-			"key": "page4PanelWell",
-			"input": false,
-			"components": [{
-				"label": "Please select if you would like to Add Additional Insured",
-				"optionsLabelPosition": "right",
-				"inline": false,
-				"tableView": false,
-				"defaultValue": "noAdditionalInsureds",
-				"values": [{
-					"value": "addAdditionalInsureds",
-					"label": "Add Additional Insureds",
-					"shortcut": ""
-				}, {
-					"value": "noAdditionalInsureds",
-					"label": "No Additional Insureds",
-					"shortcut": ""
-				}],
-				"clearOnHide": false,
-				"validate": {
-					"required": true,
-					"customMessage": "Please choose an option"
-				},
-				"errorLabel": "Additional Insured",
-				"key": "AdditionalInsuredOption",
-				"type": "radio",
-				"input": true,
-				"lockKey": true
-			}],
-			"tableView": false,
-			"type": "well",
-			"hideLabel": true,
-			"label": ""
-		}, {
-			"title": "Information for each Additional Insured is required as follows",
-			"theme": "primary",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"tableView": false,
-			"key": "page4PanelPanel",
-			"conditional": {
-				"show": true,
-				"when": "AdditionalInsuredOption",
-				"eq": "addAdditionalInsureds"
-			},
-			"type": "panel",
-			"label": "Information for each Additional Insured is required as follows",
-			"input": false,
-			"components": [{
-				"label": "Additional Insured",
-				"reorder": false,
-				"addAnotherPosition": "bottom",
-				"defaultOpen": false,
-				"layoutFixed": false,
-				"enableRowGroups": false,
-				"hideLabel": true,
-				"tableView": true,
-				"defaultValue": [{
-					"name": "",
-					"address": "",
-					"city": "",
-					"country": "",
-					"state": {},
-					"zip": "",
-					"businessRelation": "",
-					"businessRelationOther": "",
-					"additionalInformation": ""
-				}],
-				"clearOnHide": false,
-				"validate": {
-					"required": true,
-					"minLength": 1
-				},
-				"key": "additionalInsured",
-				"type": "datagrid",
-				"input": true,
-				"components": [{
-					"clearOnHide": false,
-					"key": "page4PanelPanelWell",
-					"input": false,
-					"components": [{
-						"label": "Columns",
-						"input": false,
-						"tableView": false,
-						"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
-						"columns": [{
-							"components": [{
-								"label": "Name",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please enter the Name of the Additional Insured"
-								},
-								"errorLabel": "Additional Insured Name",
-								"key": "name",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "Address",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please enter the Address of the Additional Insured"
-								},
-								"errorLabel": "Additional Insured Address",
-								"key": "address",
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "City",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please enter the City of the Additional Insured"
-								},
-								"errorLabel": "Additional Insured City",
-								"key": "city",
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"type": "columns",
-						"inDataGrid": true,
-						"hideLabel": true
-					}, {
-						"label": "Columns",
-						"columns": [{
-							"components": [{
-								"label": "Country",
-								"widget": "choicesjs",
-								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{
-										"value": "",
-										"label": ""
-									}],
-									"custom": "values = data['countryList'];"
-								},
-								"valueProperty": "country",
-								"template": "<span>{{ item.country }}</span>",
-								"selectThreshold": 0.3,
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please select the Country of the Additional Insured"
-								},
-								"errorLabel": "Additional Insured Country",
-								"key": "country",
-								"properties": {
-									"clear_field": "state"
-								},
-								"type": "select",
-								"indexeddb": {
-									"filter": {}
-								},
-								"input": true,
-								"lockKey": true,
-								"source": "5d347da33e9be31e15d3b115",
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "State",
-								"widget": "choicesjs",
-								"tableView": true,
-								"dataSrc": "custom",
-								"data": {
-									"values": [{
-										"label": "",
-										"value": ""
-									}],
-									"custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
-								},
-								"template": "<span>{{ item }}</span>",
-								"refreshOn": "row.country",
-								"clearOnRefresh": true,
-								"selectThreshold": 0.3,
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please select the State of the Additional Insured"
-								},
-								"errorLabel": "Additional Insured State",
-								"key": "state",
-								"customConditional": "show = (row.country)",
-								"type": "select",
-								"indexeddb": {
-									"filter": {}
-								},
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "Zip Code",
-								"spellcheck": false,
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please enter the Zip Code of the Additional Insured",
-									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
-								},
-								"errorLabel": "Additional Insured Zip Code",
-								"key": "zip",
-								"type": "textfield",
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 4,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"hideLabel": true,
-						"tableView": false,
-						"key": "additionalInsuredPanelColumns2",
-						"type": "columns",
-						"input": false
-					}, {
-						"label": "Columns",
-						"columns": [{
-							"components": [{
-								"label": "Business Relation",
-								"widget": "choicesjs",
-								"tableView": false,
-								"data": {
-									"values": [{
-										"value": "confinedWaterTrainingLocation",
-										"label": "Confined Water Training Location"
-									}, {
-										"value": "openWaterTrainingLocation",
-										"label": " Open Water Training Location"
-									}, {
-										"label": "Dive Boat Owner",
-										"value": "diveBoatOwner"
-									}, {
-										"label": "Mortgagee / Loss Payee",
-										"value": "mortgageeLossPayee"
-									}, {
-										"label": "Landlord",
-										"value": "landlord"
-									}, {
-										"label": " Government Entity – Permit Requirement",
-										"value": "governmentEntityPermitRequirement"
-									}, {
-										"label": "Dive Store",
-										"value": "diveStore"
-									}, {
-										"label": "Training Agency",
-										"value": "trainingAgency"
-									}, {
-										"value": "cruiseLine",
-										"label": "Cruise Line"
-									}, {
-										"label": "Land Owner",
-										"value": "landOwner"
-									}, {
-										"label": "Booking Agent",
-										"value": "bookingAgent"
-									}, {
-										"label": "Other",
-										"value": "other"
-									}]
-								},
-								"selectThreshold": 0.3,
-								"validate": {
-									"required": true,
-									"customMessage": "Please select the Business Relation with the Additional Insured"
-								},
-								"errorLabel": "Additional Insured Business Relation",
-								"key": "businessRelation",
-								"type": "select",
-								"indexeddb": {
-									"filter": {}
-								},
-								"input": true,
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}, {
-								"label": "Provide description to be reviewed by underwriting",
-								"tableView": true,
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please specify the Business Relation"
-								},
-								"errorLabel": "Additonal Insured Business Relation Details",
-								"key": "businessRelationOther",
-								"conditional": {
-									"show": true,
-									"when": "businessRelation",
-									"eq": "other"
-								},
-								"type": "textfield",
-								"input": true,
-								"style": {
-									"margin-top": "4px"
-								},
-								"lockKey": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}, {
-							"components": [{
-								"label": "Additional Information",
-								"autoExpand": false,
-								"tableView": true,
-								"inputFormat": "plain",
-								"clearOnHide": false,
-								"validate": {
-									"customMessage": "Please enter Additional Information about the Additional Insured"
-								},
-								"errorLabel": "Additional Insured Additional Information",
-								"key": "additionalInformation",
-								"type": "textarea",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}],
-							"width": 6,
-							"offset": 0,
-							"push": 0,
-							"pull": 0,
-							"size": "md"
-						}],
-						"tableView": false,
-						"key": "columns2",
-						"type": "columns",
-						"input": false
-					}, {
-						"label": "Do you have a Written Contract?",
-						"optionsLabelPosition": "right",
-						"inline": false,
-						"tableView": false,
-						"values": [{
-							"label": "Yes",
-							"value": "yes",
-							"shortcut": ""
-						}, {
-							"label": "No",
-							"value": "no",
-							"shortcut": ""
-						}],
-						"validate": {
-							"required": true
-						},
-						"key": "doYouHaveAWrittenContract",
-						"type": "radio",
-						"input": true
-					}, {
-						"label": "Content",
-						"attrs": [{
-							"value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;",
-							"attr": "style"
-						}],
-						"content": "Additional Insureds can only be added when required by written contract",
-						"refreshOnChange": false,
-						"tableView": false,
-						"key": "panelColumnsContent5",
-						"customConditional": "show = (row['doYouHaveAWrittenContract']=='no')?true:false",
-						"type": "htmlelement",
-						"input": false,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Additional Insured Attachments",
-						"tableView": false,
-						"storage": "url",
-						"webcam": false,
-						"fileTypes": [{
-							"label": "",
-							"value": ""
-						}],
-						"multiple": true,
-						"clearOnHide": false,
-						"validate": {
-							"multiple": true
-						},
-						"key": "additionalInsuredAttachments",
-						"type": "file",
-						"url": "/file/attachment",
-						"input": true
-					}],
-					"tableView": false,
-					"type": "well",
-					"inDataGrid": true,
-					"hideLabel": true,
-					"label": ""
-				}],
-				"lockKey": true
-			}]
-		}],
-		"input": false,
-		"key": "page4",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false
-	}, {
-		"title": "Payment Information",
-		"theme": "primary",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false,
-		"tableView": false,
-		"key": "page6",
-		"customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}",
-		"type": "panel",
-		"label": "Payment Information",
-		"components": [{
-			"key": "page6Panel",
-			"input": false,
-			"title": "Automatic Renewal",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"label": "Content",
-				"attrs": [{
-					"value": "",
-					"attr": ""
-				}],
-				"content": "<h4><b>PADI  has made membership renewal simple.\nVicencia & Buckley is making AUTOMATIC RENEWAL for Professional Liability Insurance a reality!</b></h4>",
-				"refreshOnChange": false,
-				"tableView": false,
-				"key": "page6PanelContent",
-				"type": "htmlelement",
-				"input": false,
-				"hideLabel": true
-			}, {
-				"label": "YES!  Sign me up for AUTOMATIC RENEWAL.",
-				"tableView": true,
-				"defaultValue": false,
-				"key": "automatic_renewal",
-				"type": "checkbox",
-				"input": true,
-				"dataGridLabel": false,
-				"lockKey": true
-			}],
-			"type": "panel",
-			"breadcrumb": "none",
-			"label": "Panel"
-		}, {
-			"type": "document",
-			"key": "documents",
-			"dtype": "document",
-			"datype": "document",
-			"dattype": "document",
-			"datatype": "document",
-			"data_type": "document",
-			"label": "Documents",
-			"hideLabel": true,
-			"inputType": "document",
-			"input": 1,
-			"tableView": false
-		}, {
-			"key": "page6Panel2",
-			"input": false,
-			"title": "Payment Details",
-			"theme": "primary",
-			"tableView": false,
-			"components": [{
-				"label": "amountPayable",
-				"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balance) > 0){\n    value = (parseFloat(data.balance)||0).toFixed(0);\n  }else{\n    value = \"0\";\n  }\n}else{\n  value = (parseFloat(data.finalAmount) || 0).toFixed(0);\n}",
-				"key": "amountPayable",
-				"properties": {
-					"render": "columns"
-				},
-				"type": "hidden",
-				"input": true,
-				"tableView": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "transaction_id",
-				"label": "transaction_id",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "transaction_status",
-				"label": "transaction_status",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"label": "transaction_reference_number",
-				"key": "transaction_reference_number",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}, {
-				"label": "payment_fields",
-				"calculateValue": "value = JSON.stringify({\"description\":data.padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinanceSelect,\"policy_type\":\"New\",\"installment_amount\":data.installmentAmount,\"downpayment_amount\":data.downPaymentAmount,\"total_amount\":data.amountPayable});",
-				"key": "payment_fields",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Final Amount Payable",
-						"prefix": "$",
-						"mask": false,
-						"spellcheck": false,
-						"disabled": true,
-						"tableView": false,
-						"delimiter": true,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"redrawOn": "amountPayable",
-						"clearOnHide": false,
-						"calculateValue": "value = (parseFloat(data.amountPayable)||0).toFixed(2);",
-						"key": "finalAmountPayable",
-						"type": "number",
-						"input": true,
-						"inputType": "text",
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "billing_amount",
-						"calculateValue": "if(data.premiumFinanceSelect == 'yes'){\n    value = (parseFloat(data.downPayment)||0).toFixed(2);\n} else {\n  value = (parseFloat(data.amountPayable)||0).toFixed(2);\n}",
-						"key": "billing_amount",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Would you like to enroll for installment billing?",
-						"optionsLabelPosition": "right",
-						"inline": false,
-						"tableView": false,
-						"values": [{
-							"label": "Yes",
-							"value": "yes",
-							"shortcut": ""
-						}, {
-							"label": "No",
-							"value": "no",
-							"shortcut": ""
-						}],
-						"clearOnHide": false,
-						"validate": {
-							"required": true
-						},
-						"key": "premiumFinanceSelect",
-						"properties": {
-							"render": "columns"
-						},
-						"customConditional": "if(data[data['careerCoverage']+'_installments'] > 0){\n  show = true;\n} else {\n  show = false;\n}",
-						"type": "radio",
-						"input": true,
-						"hideOnChildrenHidden": false,
-						"keyModified": true,
-						"defaultValue": "no"
-					}, {
-						"title": "Installments",
-						"theme": "primary",
-						"breadcrumbClickable": true,
-						"buttonSettings": {
-							"previous": true,
-							"cancel": true,
-							"next": true
-						},
-						"collapsible": false,
-						"tableView": false,
-						"key": "installments",
-						"conditional": {
-							"show": true,
-							"when": "premiumFinanceSelect",
-							"eq": "yes"
-						},
-						"type": "panel",
-						"label": "Installments",
-						"input": false,
-						"components": [{
-							"label": "Down Payment",
-							"prefix": "$",
-							"mask": false,
-							"spellcheck": false,
-							"disabled": true,
-							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"clearOnHide": false,
-							"calculateValue": "value = (parseFloat(data['careerCoverageDownPayment'])||0) + (parseFloat(data['excessLiabilityDownPayment'])||0)+(parseFloat(data['scubaFitDownPayment'])||0)+(parseFloat(data['cylinderDownPayment'])||0)+(parseFloat(data['equipmentDownPayment'])||0)",
-							"key": "downPayment",
-							"type": "number",
-							"input": true
-						}, {
-							"label": "Installment Amount",
-							"prefix": "$",
-							"mask": false,
-							"spellcheck": false,
-							"disabled": true,
-							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"clearOnHide": false,
-							"calculateValue": "value = parseFloat(parseFloat(data['careerCoverageInstallmentAmount'])||0)+parseFloat(parseFloat(data['scubaFitInstallmentAmount'])||0)+parseFloat(parseFloat(data['cylinderInstallmentAmount'])||0) + parseFloat(parseFloat(data['excessLiabilityInstallmentAmount'])||0) + parseFloat(parseFloat(data['equipmentInstallmentAmount'])||0)",
-							"key": "installmentAmount",
-							"type": "number",
-							"input": true
-						}, {
-							"label": "HTML",
-							"attrs": [{
-								"attr": "",
-								"value": ""
-							}],
-							"content": "<h5>Your installment will be automatically charged on the effective date of each installment</h5>",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "html10",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 2){\n  show = true;\n}",
-							"type": "htmlelement",
-							"input": false
-						}, {
-							"label": "HTML",
-							"attrs": [{
-								"attr": "",
-								"value": ""
-							}],
-							"content": "<h5>Number of Installments would be {{data[data['careerCoverage']+'_installments']}}</h5>",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "html6",
-							"type": "htmlelement",
-							"input": false,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "HTML",
-							"attrs": [{
-								"attr": "",
-								"value": ""
-							}],
-							"content": "<h5>Installment Dates are 15/09/2020,15/12/2020 and 15/03/2021</h5>",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "html7",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 3){\n  show = true;\n} else {\n  show =false;\n}",
-							"type": "htmlelement",
-							"input": false
-						}, {
-							"label": "HTML",
-							"attrs": [{
-								"attr": "",
-								"value": ""
-							}],
-							"content": "<h5>Installment Dates are 15/12/2020 and 15/03/2021</h5>",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "html8",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 2){\n  show = true;\n} else {\n  show = false;\n}",
-							"type": "htmlelement",
-							"input": false
-						}, {
-							"label": "HTML",
-							"attrs": [{
-								"attr": "",
-								"value": ""
-							}],
-							"content": "<h5>Installment Dates are 15/03/2021</h5>",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "html9",
-							"customConditional": "if(data[data['careerCoverage']+'_installments'] == 1){\n  show = true;\n} else {\n  show = false;\n}",
-							"type": "htmlelement",
-							"input": false
-						}],
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "Payment Options",
-						"optionsLabelPosition": "right",
-						"inline": false,
-						"tableView": false,
-						"values": [{
-							"label": "Money Order",
-							"value": "moneyOrder",
-							"shortcut": ""
-						}, {
-							"label": "Check",
-							"value": "check",
-							"shortcut": ""
-						}, {
-							"label": "Credit Card",
-							"value": "creditCard",
-							"shortcut": ""
-						}, {
-							"label": "Other",
-							"value": "other",
-							"shortcut": ""
-						}],
-						"clearOnHide": false,
-						"validate": {
-							"required": true,
-							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
-						},
-						"key": "paymentOptions",
-						"properties": {
-							"render": "columns"
-						},
-						"logic": [{
-							"name": "Disable on Installment Payment",
-							"trigger": {
-								"type": "simple",
-								"simple": {
-									"show": true,
-									"when": "premiumFinanceSelect",
-									"eq": "yes"
-								}
-							},
-							"actions": [{
-								"name": "Select Credit Card",
-								"type": "value",
-								"property": {},
-								"value": "return \"creditCard\""
-							}, {
-								"name": "Disable Options",
-								"type": "property",
-								"property": {
-									"label": "Disabled",
-									"value": "disabled",
-									"type": "boolean"
-								},
-								"state": true
-							}]
-						}],
-						"type": "radio",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"title": "Check Details",
-						"theme": "primary",
-						"collapsible": false,
-						"tableView": false,
-						"key": "checkDetails",
-						"conditional": {
-							"show": true,
-							"when": "paymentOptions",
-							"eq": "check"
-						},
-						"type": "panel",
-						"label": "Check Details",
-						"input": false,
-						"components": [{
-							"label": "Check Number",
-							"mask": false,
-							"spellcheck": true,
-							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"clearOnHide": false,
-							"key": "chequeNumber",
-							"type": "number",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "HTML",
-							"attrs": [{
-								"attr": "",
-								"value": ""
-							}],
-							"content": "Please Submit the Consent form found <a target=\"_blank\" href=\"https://diveinsurance.eoxvantage.com/apps/DiveInsurance/public/docs/CheckConsentform.pdf\" >here</a> back to us",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "html5",
-							"type": "htmlelement",
-							"input": false
-						}, {
-							"label": "Upload Consent Form",
-							"tableView": false,
-							"storage": "url",
-							"webcam": false,
-							"fileTypes": [{
-								"label": "",
-								"value": ""
-							}],
-							"clearOnHide": false,
-							"key": "chequeConsentFile",
-							"type": "file",
-							"input": true,
-							"url": "/file/attachment"
-						}],
-						"hideOnChildrenHidden": false
-					}, {
-						"title": "Card Details",
-						"theme": "primary",
-						"collapsible": false,
-						"tableView": false,
-						"key": "cardDetails",
-						"conditional": {
-							"show": true,
-							"when": "paymentOptions",
-							"eq": "creditCard"
-						},
-						"type": "panel",
-						"label": "Card Details",
-						"input": false,
-						"components": [{
-							"label": "Transaction Reference Number",
-							"spellcheck": false,
-							"disabled": true,
-							"tableView": false,
-							"clearOnHide": false,
-							"calculateValue": "value = data.transaction_reference_number",
-							"key": "transactionReferenceNumber",
-							"customConditional": "if (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n  show = true;\n} else {\n  show = false;\n}",
-							"type": "textfield",
-							"input": true
-						}, {
-							"type": "convergepay",
-							"key": "creditcardPayment",
-							"amount_field": "billing_amount",
-							"refreshOn": "billing_amount",
-							"redrawOn": "billing_amount",
-							"description": "payment_fields",
-							"label": "custom",
-							"input": true,
-							"tableView": false,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Content",
-							"attrs": [{
-								"value": "",
-								"attr": ""
-							}],
-							"content": "</br><b><font color=\"red\">If you click \"Confirm Order\", your credit card will be charged for the amount shown above.</b></font>",
-							"refreshOnChange": false,
-							"tableView": false,
-							"key": "page7Content",
-							"conditional": {
-								"show": true,
-								"when": "paymentOptions",
-								"eq": "creditCard"
-							},
-							"type": "htmlelement",
-							"input": false,
-							"hideLabel": true,
-							"hideOnChildrenHidden": false
-						}],
-						"hideOnChildrenHidden": false
-					}, {
-						"title": "Money Order Details",
-						"theme": "primary",
-						"collapsible": false,
-						"tableView": false,
-						"key": "moneyOrderDetai",
-						"conditional": {
-							"show": true,
-							"when": "paymentOptions",
-							"eq": "moneyOrder"
-						},
-						"type": "panel",
-						"label": "Money Order Details",
-						"input": false,
-						"hideOnChildrenHidden": false,
-						"components": [{
-							"label": "Order ID",
-							"tableView": true,
-							"clearOnHide": false,
-							"key": "orderId",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}]
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"tableView": false,
-				"key": "columns",
-				"properties": {
-					"payment_confirmation_page": "true"
-				},
-				"type": "columns",
-				"input": false,
-				"keyModified": true
-			}],
-			"type": "panel",
-			"breadcrumb": "none",
-			"label": "Panel"
-		}],
-		"input": false
-	}, {
-		"input": false,
-		"label": "Approval",
-		"tableView": false,
-		"key": "csrapprovalscreen",
-		"type": "panel",
-		"size": "md",
-		"block": false,
-		"action": "submit",
-		"disableOnInvalid": false,
-		"theme": "primary",
-		"dataGridLabel": true,
-		"title": "Approval",
-		"components": [{
-			"label": "Please process the payment and approve",
-			"attrs": [{
-				"attr": "",
-				"value": ""
-			}],
-			"content": "<h4>Please process the payment of <b>${{data.balance}}</b> and approve</h4>",
-			"refreshOnChange": false,
-			"tableView": false,
-			"key": "page6Pleaseprocessthepaymentandapprove",
-			"customConditional": "show = (parseFloat(data.balance) > 0);",
-			"type": "htmlelement",
-			"input": false
-		}, {
-			"label": "aw",
-			"tableView": false,
-			"key": "aw",
-			"customConditional": "show =(data.padiNotFound == true || data.padiNotFound == \"true\")?true:false;",
-			"type": "well",
-			"input": false,
-			"components": [{
-				"label": "Please process the payment and approve",
-				"tag": "h4",
-				"attrs": [{
-					"attr": "style",
-					"value": "background-color:#FFEB3B;font-size:20px; padding:10px;font-weight:400"
-				}],
-				"content": "The PADI used for the policy could not be verified by the system. </br>\nPlease check with the PADI Office and select the PADI Verified checkbox below.",
-				"refreshOnChange": false,
-				"tableView": false,
-				"key": "page6Pleaseprocessthepaymentandapprove1",
-				"type": "htmlelement",
-				"input": false
-			}, {
-				"label": "PADI Verified",
-				"customClass": "bigText",
-				"tableView": false,
-				"defaultValue": false,
-				"clearOnHide": false,
-				"validate": {
-					"required": true,
-					"customMessage": "Please check if the PADI Member is Valid",
-					"custom": "if(data.padiVerifiedCSRCheck === true){\n  data.padiVerified = true;\n} else {\n  data.padiVerified = false;\n}"
-				},
-				"errorLabel": "PADI Verification",
-				"key": "padiVerifiedCSRCheck",
-				"type": "checkbox",
-				"input": true,
-				"hideOnChildrenHidden": false
-			}]
-		}, {
-			"title": "   ",
-			"theme": "primary",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"tableView": false,
-			"key": "panel2",
-			"type": "panel",
-			"label": "Panel",
-			"input": false,
-			"components": [{
-				"label": "padiempWell",
-				"tableView": false,
-				"key": "dfh",
-				"type": "well",
-				"input": false,
-				"components": [{
-					"label": "Content",
-					"attrs": [{
-						"value": "",
-						"attr": ""
-					}],
-					"content": "<h5><b>If the policyholder is an employee of PADI. Please select the PADI Employee checkbox below.</b></h5>",
-					"refreshOnChange": false,
-					"tableView": false,
-					"key": "padiEmployeePanel",
-					"type": "htmlelement",
-					"input": false,
-					"hideLabel": true
-				}, {
-					"label": "PADI Employee",
-					"tableView": false,
-					"clearOnHide": false,
-					"customDefaultValue": "value = false;",
-					"key": "padiEmployee",
-					"type": "checkbox",
-					"input": true,
-					"defaultValue": false,
-					"hideOnChildrenHidden": false
-				}],
-				"hideOnChildrenHidden": false
-			}]
-		}, {
-			"title": "Approve/Reject the Application",
-			"theme": "primary",
-			"breadcrumbClickable": false,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"tableView": false,
-			"key": "page77Panel",
-			"type": "panel",
-			"label": "Approve/Reject the Application",
-			"input": false,
-			"components": [{
-				"label": "Approve/Reject the Application",
-				"optionsLabelPosition": "top",
-				"inline": true,
-				"hideLabel": true,
-				"autofocus": true,
-				"tableView": true,
-				"values": [{
-					"label": "Approved",
-					"value": "accepted",
-					"shortcut": ""
-				}, {
-					"label": "Rejected",
-					"value": "rejected",
-					"shortcut": ""
-				}, {
-					"label": "On Hold",
-					"value": "onHold",
-					"shortcut": ""
-				}],
-				"validate": {
-					"required": true,
-					"customMessage": "Please Approve/Reject the Application"
-				},
-				"key": "approved",
-				"type": "radio",
-				"input": true
-			}],
-			"path": "page77Panel"
-		}, {
-			"label": "Rejection Reason",
-			"reorder": false,
-			"addAnotherPosition": "bottom",
-			"defaultOpen": false,
-			"layoutFixed": false,
-			"enableRowGroups": false,
-			"hideLabel": true,
-			"tableView": true,
-			"defaultValue": [{
-				"reason": ""
-			}],
-			"clearOnHide": false,
-			"validate": {
-				"minLength": 1
-			},
-			"key": "rejectionReason",
-			"conditional": {
-				"show": true,
-				"when": "approved",
-				"eq": "rejected"
-			},
-			"customConditional": "show = (data.approved == \"rejected\" || data.approved == \"onHold\")",
-			"type": "datagrid",
-			"input": true,
-			"components": [{
-				"label": "",
-				"tableView": true,
-				"key": "rejectionReasonssswell",
-				"type": "well",
-				"input": false,
-				"components": [{
-					"label": "Reason for Rejection / On Hold",
-					"tableView": false,
-					"case": "mixed",
-					"clearOnHide": false,
-					"validate": {
-						"required": true,
-						"customMessage": "Rejection reason is required"
-					},
-					"key": "reason",
-					"type": "textfield",
-					"input": true,
-					"hideOnChildrenHidden": false
-				}]
-			}]
-		}, {
-			"label": "Additional Notes",
-			"tableView": true,
-			"key": "additionalNotes",
-			"conditional": {
-				"show": true,
-				"when": "approved",
-				"eq": "accepted"
-			},
-			"type": "textfield",
-			"input": true
-		}],
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false,
-		"path": "csrapprovalscreen",
-		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
-	"controller": "",
-	"revisions": "current",
-	"_vid": 578,
-	"title": "CSR Initiates - IPL",
+	"revisions": "",
+	"_vid": 0,
+	"title": "IPL - Policy Regeneration",
 	"display": "wizard",
 	"access": [{
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
 		"type": "read_all"
 	}],
 	"submissionAccess": [],
-	"settings": {},
+	"controller": "",
 	"properties": {
 		"showCancel": "true",
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
-		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]",
-		"commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
+		"submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"PolicyDocument\"},{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"DispatchNewPolicy\"}]"
 	},
-	"name": "csrInitiatesIpl",
-	"path": "csrinitiatesipl",
+	"settings": {},
+	"name": "iplPolicyRegeneration",
+	"path": "iplpolicyregeneration",
 	"project": "5ce43aa430776b2aff69301c",
-	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-29T06:41:21.711Z",
-	"machineName": "testdivehub:csrInitiates"
+	"created": "2020-07-22T07:22:25.090Z",
+	"modified": "2020-07-29T08:03:31.222Z",
+	"machineName": "testdivehub:iplPolicyRegeneration"
 }
