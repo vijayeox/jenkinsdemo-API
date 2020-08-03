@@ -80,6 +80,9 @@ class StoreQuoteDocuments extends PolicyDocument
                     ),
         'Group Professional Liability'
             => array(
+                     'cover_letter' => 'Group_Professional_liability_Cover_Letter',
+                     'lheader' => 'letter_header.html',
+                     'lfooter' => 'letter_footer.html',
                      'psTemplate' => 'Group_Proposal_Premium_Summary',
                      'header' => 'DiveCenterProposal_header.html',
                      'footer' => 'DiveCenterProposal_footer.html',

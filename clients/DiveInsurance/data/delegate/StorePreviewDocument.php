@@ -12,6 +12,7 @@ class StorePreviewDocument extends PolicyDocument
     public function execute(array $data,Persistence $persistenceService)
     {
         $originalData = $data;
+        $this->processSurplusYear($data);
         $options = array();
         if(isset($data['endorsement_options'])){
             $endorsementOptions = is_array($data['endorsement_options']) ?  $data['endorsement_options'] : json_decode($data['endorsement_options'],true);
