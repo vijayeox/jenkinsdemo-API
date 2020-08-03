@@ -116,6 +116,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'rosterPdf' => 'Roster.pdf'),
             'Group Professional Liability'
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
+                        'cover_letter' => 'Group_Professional_liability_Cover_Letter',
+                        'lheader' => 'letter_header.html',
+                        'lfooter' => 'letter_footer.html',
                         'header' => 'DiveStoreHeader.html',
                         'footer' => 'DiveStoreFooter.html',
                         'propertyHeader' => 'DiveStorePropertyHeader.html',
@@ -126,8 +129,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'card' => 'PocketCard',
                         'slWording' => 'SL_Wording.pdf',
                         'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
-                        'lheader' => 'letter_header.html',
-                        'lfooter' => 'letter_footer.html',
                         'aiTemplate' => 'DiveStore_AI',
                         'aiheader' => 'DiveStore_AI_header.html',
                         'aifooter' => 'DiveStore_AI_footer.html',
@@ -1106,7 +1107,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 				if(is_array($docDest)){
 					$generatedDocuments = array();
 					foreach($docDest as $key => $doc){
-						if(file_exists($docDest)){
+						if(file_exists($doc)){
 							$docName = basename($doc);
 							FileUtils::deleteFile($docName,$dest['absolutePath']);
 						}
@@ -1379,8 +1380,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          protected function diveStoreQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
             $data['quoteDocuments'] = array();
             $documents = array();
+            $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
             if($data['product'] == 'Dive Store') {
-                $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
                 $documents['coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             }
             if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
@@ -1581,7 +1582,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          protected function processSurplusYear(&$data){
             $month = date_format(date_create($data['end_date']),"m");
             $year = date_format(date_create($data['end_date']),"Y");
-
 
             if($data['product'] != 'Dive Boat'){
                 if($month < 7){

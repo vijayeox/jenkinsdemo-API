@@ -99,7 +99,6 @@ entity:
                 index: true
     -
         name: 'Dive Store'
-        uuid: 80b2d1f8-6929-49a6-8e46-4e027f681b77
         identifiers:
             -
                 identifier: business_padi
@@ -289,7 +288,6 @@ entity:
                 index: true
     -
         name: 'Group Professional Liability'
-        uuid: 62e68b3f-abd0-4938-a82e-2ca42db1ae19
         identifiers:
             -
                 identifier: business_padi
