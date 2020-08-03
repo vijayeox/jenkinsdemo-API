@@ -807,7 +807,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }else{
                                 $length = 1;
                             }
-                            $data['certificate_no'] = $data['certificate_no'].' - '.$length;
+                            $certificate_no = explode("-",$data['certificate_no']);
+                            $data['certificate_no'] = $certificate_no[0].' - '.$length;
                         }else if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true)){
                             if(isset($data['documents']['endorsement_coi_document'])){
                                 $length = sizeof($data['documents']['endorsement_coi_document']) + 1;
@@ -837,7 +838,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                     $length = 1;
                                 }
                                 if(isset($data['group_certificate_no'])){
-                                    $data['group_certificate_no'] = $data['group_certificate_no'].' - '.$length;
+                                	$grp_certificate_no = explode("-",$data['group_certificate_no']);
+                                    $data['group_certificate_no'] = $grp_certificate_no[0].' - '.$length;
                                 }else{
                                     $data['group_certificate_no'] = 'S'.$data['certificate_no'];
                                 }
@@ -1069,32 +1071,40 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($headerKey) && $footerKey !=null){
                 $options['footer'] =  $this->template[$data['product']][$footerKey];
             }
-            if(!is_array($docDest) && !file_exists($docDest)){
-                $generatedDocument = $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
-            } else {
-                if(is_array($docDest)){
-                    $generatedDocuments = array();
-                    foreach($docDest as $key => $doc){
-                        $generatedDocuments[] = $this->documentBuilder->generateDocument($key,$data,$doc,$options);
-                    }
-                }
-            }
+            if(!is_array($docDest)){
+				if(file_exists($docDest)){
+					$docName = basename($docDest);
+					FileUtils::deleteFile($docName,$dest['absolutePath']);
+				}
+				$generatedDocument = $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
+			} else {
+				if(is_array($docDest)){
+					$generatedDocuments = array();
+					foreach($docDest as $key => $doc){
+						if(file_exists($docDest)){
+							$docName = basename($doc);
+							FileUtils::deleteFile($docName,$dest['absolutePath']);
+						}
+						$generatedDocuments[] = $this->documentBuilder->generateDocument($key,$data,$doc,$options);
+					}
+				}
+			}
             if($this->type == 'lapse'){
                 $data['documents']['lapse_document'] = $dest['relativePath'].$template.'.pdf';
                 return $data;
             }
-                if(is_array($docDest)){
-                    $filesCreated = array();
-                    foreach($docDest as $key => $doc){
-                        $filesCreated[$key] = $dest['relativePath'].$key.'.pdf';
-                    }
-                    return $filesCreated;
-                } else {
-                    if($multiple){
-                        return $dest['relativePath'].$template.$indexKey.'.pdf';
-                    }
-                    return $dest['relativePath'].$template.'.pdf';
+            if(is_array($docDest)){
+                $filesCreated = array();
+                foreach($docDest as $key => $doc){
+                    $filesCreated[$key] = $dest['relativePath'].$key.'.pdf';
                 }
+                return $filesCreated;
+            } else {
+                if($multiple){
+                    return $dest['relativePath'].$template.$indexKey.'.pdf';
+                }
+                return $dest['relativePath'].$template.'.pdf';
+            }
         }
         protected function copyDocuments(&$data,$dest,$fileKey,$indexKey =null){
             if(isset($indexKey)){
