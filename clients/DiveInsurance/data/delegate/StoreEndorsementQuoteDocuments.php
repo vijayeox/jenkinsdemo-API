@@ -72,7 +72,6 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
          ),
         'Group Professional Liability' 
             => array(
-             'template' => 'DiveStoreEndorsement', 
              'header' => 'DiveStoreEndorsement_header.html',
              'footer' => 'DiveStoreEndorsement_footer.html', 
              'cover_letter' => 'GPL_Quote_Cover_Letter',

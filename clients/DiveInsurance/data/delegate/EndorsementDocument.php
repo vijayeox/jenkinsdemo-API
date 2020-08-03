@@ -83,7 +83,6 @@ class EndorsementDocument extends PolicyDocument
            'cover_letter' => 'Group_Professional_liability_Cover_Letter',
            'lheader' => 'letter_header.html',
            'lfooter' => 'letter_footer.html',
-           'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
            'aiTemplate' => 'DiveStore_AI',
            'aiheader' => 'DiveStore_AI_header.html',
            'aifooter' => 'DiveStore_AI_footer.html',
