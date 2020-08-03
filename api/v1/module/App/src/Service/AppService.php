@@ -1020,9 +1020,6 @@ class AppService extends AbstractService
                     $result = $this->entityService->saveEntity($appId, $entity);
                 } else {
                     $entity['id'] = $entityRec['id'];
-                    if(isset($entity['uuid']) && !empty($entity['uuid'])){
-                        $this->entityService->updateUuid($entity['id'],$entity['uuid']);
-                    }
                     $entity['uuid'] = $entityRec['uuid'];
                 }
                 if(isset($entity['identifiers'])){
