@@ -93,17 +93,29 @@ content:
                             isDraft: true
                     icon: 'fa fa-pencil'
                 -
-                    name: Comment
-                    rule: 'true'
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{entity_name}}'' == ''Dive Store'')'
                     details:
                         -
-                            type: Document
-                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
-                            useRowData: true
+                            params:
+                                page_id: 'eb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
                         -
-                            type: Comment
-                            url: '{{uuid}}'
-                    icon: 'far fa-comment'
+                            params:
+                                page_id: 'ab018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'bb018dfd-be95-4c53-9a97-042f615f3623'
             columnConfig:
                 -
                     title: PADI
