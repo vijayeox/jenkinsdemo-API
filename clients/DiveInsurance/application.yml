@@ -380,6 +380,9 @@ pages:
         page_name: DiveStore.yml
         uuid: eb018dfd-be95-4c53-9a97-042f615f3623
     -
+        page_name: Group.yml
+        uuid: fb018dfd-be95-4c53-9a97-042f615f3623
+    -
         page_name: IPL.yml
         uuid: ab018dfd-be95-4c53-9a97-042f615f3623
     -

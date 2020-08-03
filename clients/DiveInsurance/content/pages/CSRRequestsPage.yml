@@ -129,6 +129,14 @@ content:
                         -
                             params:
                                 page_id: 'bb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Group Professional Liability'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'fb018dfd-be95-4c53-9a97-042f615f3623'
             columnConfig:
                 -
                     title: PADI
