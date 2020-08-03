@@ -30,10 +30,10 @@ public class TwillioSms extends RouteBuilder {
 	@Autowired
 	private Environment env
 
-    @PostConstruct
-	public void init() {
+    //@PostConstruct
+	//public void init() {
 		//Twilio.init(env.getProperty("twillio.accountSid"), env.getProperty("twillio.authToken"))
-	}
+	//}
 	
 	@Override
 	public void configure() {

@@ -77,8 +77,27 @@ class StoreQuoteDocuments extends PolicyDocument
                      'rosterFooter' => 'Roster_footer.html',
                      'rosterPdf' => 'Roster.pdf',
                      'businessIncomeWorksheet'=>'DS_Business_Income_Worksheet.pdf'
+                    ),
+        'Group Professional Liability'
+            => array(
+                     'psTemplate' => 'Group_Proposal_Premium_Summary',
+                     'header' => 'DiveCenterProposal_header.html',
+                     'footer' => 'DiveCenterProposal_footer.html',
+                     'nTemplate' => 'Group_PL_NI',
+                     'nheader' => 'Group_NI_header.html',
+                     'nfooter' => 'Group_NI_footer.html',
+                     'gtemplate' => 'Group_PL_COI',
+                     'gheader' => 'Group_header.html',
+                     'gfooter' => 'Group_footer.html',
+                     'gaitemplate' => 'Group_AI',
+                     'gaiheader' => 'Group_Quote_AI_header.html',
+                     'gaifooter' => 'Group_AI_footer.html',
+                     'groupExclusions' => 'Group_Exclusions.pdf',
+                     'roster' => 'Roster_Certificate',
+                     'rosterHeader' => 'Roster_header_DS.html',
+                     'rosterFooter' => 'Roster_footer.html',
+                     'rosterPdf' => 'Roster.pdf'
                     ));
-        
     }
 
     public function execute(array $data,Persistence $persistenceService)

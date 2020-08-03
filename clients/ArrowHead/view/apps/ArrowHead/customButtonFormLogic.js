@@ -17,13 +17,17 @@ s.onload = function (e) {
         clone.children[0].id = "saveDraftCustomButton";
         insertAfter($("ul[id*=nav]").children()[0], clone);
         saveDraftCustomButton.onclick = function () {
+          var closeForm = confirm(
+            "Do you want to close the form after saving the data?"
+          );
           let ev = new CustomEvent("customButtonAction", {
             detail: {
               timerVariable: appendCustomButtonTimer,
               formData: data,
               commands:
                 '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
-              exit: true
+              exit: closeForm,
+              notification: "Form saved successfully"
             },
             bubbles: false
           });
@@ -33,16 +37,16 @@ s.onload = function (e) {
             )
             .dispatchEvent(ev);
         };
-        var dataGridDeleteIcons = document.getElementsByClassName(
-          "fa-times-circle-o"
-        );
-        dataGridDeleteIcons = Array.from(dataGridDeleteIcons);
-        if (dataGridDeleteIcons.length > 0) {
-          dataGridDeleteIcons.map((item) => {
-            item.classList.add("fa-times-circle");
-            item.classList.remove("fa-times-circle-o");
-          });
-        }
+      }
+      var dataGridDeleteIcons = document.getElementsByClassName(
+        "fa-times-circle-o"
+      );
+      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);
+      if (dataGridDeleteIcons.length > 0) {
+        dataGridDeleteIcons.map((item) => {
+          item.classList.add("fa-times-circle");
+          item.classList.remove("fa-times-circle-o");
+        });
       }
     } else {
       appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;

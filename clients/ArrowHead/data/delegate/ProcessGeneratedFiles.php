@@ -21,12 +21,13 @@ class ProcessGeneratedFiles
                         // $fileData['_errorList'] = $data['_errorList'];
                         // Do error log stuff
                     }
-                } else if ($data['status'] == 0) {
+                } else {
                     // Do error log stuff
 
                 }
             }
         } catch (\Throwable $e) {
+            print_r($e->getMessage());
             throw new Exception("Error Processing Request", 1);
         }
         return $data;
@@ -37,14 +38,16 @@ class ProcessGeneratedFiles
         $data['fieldLabel'] = "documents";
         $this->addAttachment($data, $data['_FILES']);
         $fileData = $this->getFile($data['fileId'],  true, $data['orgId'])['data'];
-        if (isset($fileData['filesToBeGenerated'])) {
-            if ($fileData['filesToBeGenerated'] == 1) {
-                $fileData['filesToBeGenerated'] = 0;
+        if (isset($fileData['documentsToBeGenerated'])) {
+            if ($fileData['documentsToBeGenerated'] == 1) {
+                $fileData['documentsToBeGenerated'] = 0;
                 $fileData['status'] = 'Generated';
             } else {
-                $fileData['filesToBeGenerated'] = $fileData['filesToBeGenerated'] - 1;
+                $fileData['documentsToBeGenerated'] = $fileData['documentsToBeGenerated'] - 1;
             }
         } else {
+            // print_r($e->getMessage());
+
             throw new Exception("Error Processing Request", 1);
         }
         return $fileData;

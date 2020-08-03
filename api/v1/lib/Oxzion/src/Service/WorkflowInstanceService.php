@@ -404,8 +404,14 @@ class WorkflowInstanceService extends AbstractService
         if ($processInstanceId) {
             $this->logger->info("SET UP Workflow Instance (ProcessInstanceID) --- " . $processInstanceId);
             if (isset($params['workflow_instance_id'])) {
-                $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
+                $fileId = isset($params['fileId']) ? $params['fileId'] : (isset($params['uuid']) ? $params['uuid'] : NULL);
                 $updateParams = array('process_instance_id' => $processInstanceId, 'workflowInstanceId' => $params['workflow_instance_id']);
+                $fileSet = "";
+                if($fileId){
+                    $fileSet = ", file_id = :fileId";
+                    $updateParams["fileId"] = $this->getIdFromUuid('ox_file', $fileId);
+                }
+                $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id $fileSet where id = :workflowInstanceId";
                 $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
             }
             $query = "select * from ox_workflow_instance where process_instance_id=?";
@@ -419,14 +425,31 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("SET UP Workflow Instance (CREATE NEW WORKFLOW INSTANCE)");
         $form = new WorkflowInstance();
         $dateCreated = date('Y-m-d H:i:s');
-        $query = "select w.app_id, wd.id from ox_workflow as w
-        inner join ox_workflow_deployment as wd on w.id = wd.workflow_id 
-        where w.uuid=:uuid and wd.latest=:latest";
+        $query = "select w.app_id, w.entity_id, wd.id from ox_workflow as w
+                    inner join ox_workflow_deployment as wd on w.id = wd.workflow_id 
+                    where w.uuid=:uuid and wd.latest=:latest";
         $queryParams = array("uuid" => $workflowId,"latest" => 1);
         $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        $entityId = null;
+        if(isset($params['entity_name'])){
+            $select  = "SELECT ox_app_entity.id from ox_app_entity WHERE ox_app_entity.name = :name";
+            $queryParams = array('name' => $params['entity_name']);
+            $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
+            if(isset($result[0]['id'])) {
+                $entityId = $result[0]['id'];
+            } else {
+                throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed");
+            }
+        }
+        elseif(isset($workflowResultSet) && !empty($workflowResultSet)){
+            $entityId = $workflowResultSet[0]['entity_id'];
+        }
+        else {
+            throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed");
+        }
 
         if (count($workflowResultSet)) {
-            $data = array('workflow_deployment_id' => $workflowResultSet[0]['id'], 'app_id' => $workflowResultSet[0]['app_id'], 'org_id' => $orgId, 'process_instance_id' => $processInstanceId, 'status' => "In Progress", 'date_created' => $dateCreated, 'created_by' => $createdBy);
+            $data = array('workflow_deployment_id' => $workflowResultSet[0]['id'], 'app_id' => $workflowResultSet[0]['app_id'], 'org_id' => $orgId, 'process_instance_id' => $processInstanceId, 'status' => "In Progress", 'date_created' => $dateCreated, 'created_by' => $createdBy, 'entity_id' => $entityId);
             if (isset($params['parentWorkflowInstanceId'])) {
                 $resultParentWorkflow = $this->getIdFromProcessInstanceId($params['parentWorkflowInstanceId']);
                 if (count($resultParentWorkflow) > 0) {

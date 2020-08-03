@@ -24,7 +24,7 @@ content:
                             value: Generated
                 sort:
                     -
-                        field: date_modified
+                        field: date_created
                         dir: desc     
             resizable: true
             pageable:
