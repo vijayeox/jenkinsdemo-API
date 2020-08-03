@@ -944,51 +944,23 @@
 									"label": "",
 									"value": ""
 								}],
-								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['country']);\nif(obj){\nvalues = obj.states;\n}"
+								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"refreshOn": "country",
 							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
 							"validate": {
 								"required": true
 							},
-							"key": "us_state",
-							"conditional": {
-								"show": true,
-								"when": "country",
-								"eq": "United States of America"
-							},
+							"key": "state",
 							"type": "select",
 							"indexeddb": {
 								"filter": {}
 							},
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "State",
-							"tableView": true,
-							"clearOnHide": false,
-							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
-							"key": "non_us_state",
-							"conditional": {
-								"show": false,
-								"when": "country",
-								"eq": "United States of America"
-							},
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "state",
-							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
-							"key": "state",
-							"type": "hidden",
-							"input": true,
-							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
@@ -1004,36 +976,10 @@
 							"validate": {
 								"required": true
 							},
-							"key": "us_zip",
-							"conditional": {
-								"show": true,
-								"when": "country",
-								"eq": "United States of America"
-							},
+							"key": "zip",
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Zip Code",
-							"tableView": true,
-							"clearOnHide": false,
-							"key": "non_us_zip",
-							"conditional": {
-								"show": false,
-								"when": "country",
-								"eq": "United States of America"
-							},
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "zip",
-							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_zip;\n} else {\n  value = data.non_us_zip;\n}",
-							"key": "zip",
-							"type": "hidden",
-							"input": true,
-							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"size": "md",
@@ -1179,59 +1125,25 @@
 						"components": [{
 							"label": "State",
 							"widget": "choicesjs",
-							"tableView": true,
+							"tableView": false,
 							"dataSrc": "custom",
 							"data": {
-								"values": [{
-									"label": "",
-									"value": ""
-								}],
-								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states;\n}"
+								"values": [{}],
+								"custom": "let obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}"
 							},
 							"template": "<span>{{ item }}</span>",
-							"refreshOn": "country",
-							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
 							"validate": {
 								"required": true
 							},
-							"key": "physical_us_state",
-							"conditional": {
-								"show": true,
-								"when": "physical_country",
-								"eq": "United States of America"
-							},
+							"key": "physical_state",
 							"type": "select",
-							"indexeddb": {
-								"filter": {}
-							},
+							"refreshOn": "physical_country",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "State",
-							"tableView": true,
-							"clearOnHide": false,
-							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
-							"key": "physical_non_us_state",
-							"conditional": {
-								"show": false,
-								"when": "physical_country",
-								"eq": "United States of America"
-							},
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "physical_state",
-							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
-							"key": "physical_state",
-							"type": "hidden",
-							"input": true,
-							"tableView": false,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"clearOnRefresh": true
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1242,40 +1154,15 @@
 						"components": [{
 							"label": "Zip Code",
 							"spellcheck": false,
-							"tableView": false,
+							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true
 							},
-							"key": "physical_us_zip",
-							"conditional": {
-								"show": true,
-								"when": "country",
-								"eq": "United States of America"
-							},
+							"key": "physical_zip",
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "Zip Code",
-							"tableView": true,
-							"clearOnHide": false,
-							"key": "physical_non_us_zip",
-							"conditional": {
-								"show": false,
-								"when": "country",
-								"eq": "United States of America"
-							},
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}, {
-							"label": "physical_zip",
-							"calculateValue": "if(data.physical_country && data.physical_country == \"United States of America\"){\n  value = data.physical_us_zip;\n} else {\n  value = data.physical_non_us_zip;\n}",
-							"key": "physical_zip",
-							"type": "hidden",
-							"input": true,
-							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"size": "md",
@@ -11117,7 +11004,7 @@
 										"selectThreshold": 0.3,
 										"validate": {
 											"required": true,
-											"customMessage": "Please select the business relation with the additional insured"
+											"customMessage": "Please select the Business Relation with the Additional Insured"
 										},
 										"errorLabel": "Additional Insured Business Relation",
 										"key": "businessRelation",
@@ -13609,9 +13496,10 @@
 		}],
 		"input": false
 	}],
-	"revisions": "",
-	"_vid": 0,
-	"title": "diveStoreConsolidation3",
+	"controller": "",
+	"revisions": "current",
+	"_vid": 533,
+	"title": "Dive Store Consolidation",
 	"display": "wizard",
 	"access": [{
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
@@ -13627,7 +13515,7 @@
 	"name": "diveStoreConsolidation",
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
-	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-07-30T02:03:16.705Z",
-	"machineName": "testdivehub:diveStoreConsolidation3"
+	"created": "2020-03-19T07:30:19.830Z",
+	"modified": "2020-07-16T10:34:13.776Z",
+	"machineName": "testdivehub:diveStoreConsolidation"
 }

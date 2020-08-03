@@ -175,6 +175,7 @@ class FileService extends AbstractService
      */
     public function updateFile(&$data, $id)
     {
+        $this->logger->info("FILE DATA -------" . print_r($data,true) . "\n");
         $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         if (isset($data['workflow_instance_id'])) {
             $select = "SELECT ox_file.* from ox_file join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where ox_workflow_instance.id = " . $data['workflow_instance_id'];
@@ -205,6 +206,7 @@ class FileService extends AbstractService
                 $fileObject[$key] = json_encode($fileObjectValue);
             }
         }
+
         foreach ($data as $key => $dataelement) {
             if (is_array($dataelement)) {
                 $data[$key] = json_encode($dataelement);
@@ -930,7 +932,7 @@ class FileService extends AbstractService
 
     public function getFileDocumentList($params)
     {
-        $selectQuery = 'select distinct ox_field.text,ox_field.type, ox_file_attribute.* from ox_file
+        $selectQuery = 'select distinct ox_field.text, ox_file_attribute.* from ox_file
         inner join ox_file_attribute on ox_file_attribute.file_id = ox_file.id
         inner join ox_field on ox_field.id = ox_file_attribute.field_id
         inner join ox_app on ox_field.app_id = ox_app.id
@@ -969,9 +971,9 @@ class FileService extends AbstractService
                             $this->parseDocumentData($parseDocData,$document);
                         }
                     }
-                   $documentsArray[$key] =array('value' => $parseDocData,'type' => isset($document) ? 'document' : 'file');
+                   $documentsArray[$key] =$parseDocData;
                    } else {
-                    $documentsArray[$key] =array('value' => $docItem,'type' => 'file');
+                    $documentsArray[$key] =$docItem;
                 }
             }
             return $documentsArray;
@@ -1297,7 +1299,7 @@ class FileService extends AbstractService
                                         'rowNumber' => $rowNumber);
         }
     }
-    public function addAttachment($params,$file)
+    public function addAttachment($data,$file)
     {
         $fileArray = array();
         $data = array();
@@ -1310,20 +1312,13 @@ class FileService extends AbstractService
         $data['name'] = $tempname.".".$ext;
         $data['originalName'] = $tempname.".".$ext;
         $data['extension'] = $ext;
+        $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
         $form = new FileAttachment();
         $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
+        $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
+        $data['path'] = $path;
         $data['type'] = $file['type'];
-        if (!isset($params['fileId'])) {
-            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
-            $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
-            $data['path'] = $path;
-            $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
-        }else{
-            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/';
-            $data['file'] = AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-            $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-            $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
-        }
+        $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
         $form->exchangeArray($data);
         $form->validate();
         $count = $this->attachmentTable->save($form);
