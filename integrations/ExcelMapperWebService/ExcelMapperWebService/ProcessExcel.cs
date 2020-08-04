@@ -81,22 +81,15 @@ namespace ProcessExcel
                     mystr = mystr.Replace("{" + variable + "}", prop);
                 };
                 _settings.postURL = mystr;
+                LogProcess("Post URL Set to :" + _settings.postURL);
                 object data = parsedJson["mapping"]["data"];
                 IList<JToken> mappingdata = parsedJson["mapping"]["data"].Children().ToList();
                 MapData(carrierfile, mappingdata);
             }
             catch (Exception e)
             {
-                PostError(carrierfile, 0,e.Message);
+                PostError(carrierfile, 0,e.StackTrace);
             }
-    //        finally
-    //        {
-    //            Process[] excelProcs = Process.GetProcessesByName("EXCEL");
-    //           foreach (Process proc in excelProcs)
-   //             {
-   //                 proc.Kill();
-   //             }
-    //        }
 
         }
 
@@ -134,7 +127,7 @@ namespace ProcessExcel
                     wbCarrier.Close();
                 }
 
-                PostError(carrierfile, 1,e.Message);
+                PostError(carrierfile, 1,e.StackTrace);
             }
             finally
             {
@@ -253,22 +246,25 @@ namespace ProcessExcel
         {
             try
             {
-                Console.WriteLine(_settings.postURL);
-                var client = new RestClient(_settings.postURL + "app/" + _callback.appid + "/pipeline");
-                //       var client = new RestClient(_settings.postURL);
+                var client = new RestClient(_settings.postURL);
                 client.Timeout = -1;
-
                 var request = new RestRequest(Method.POST);
-                request.AddFile("outputfile", folder + "\\" + fileName);
+                request.AddFile("file", folder + "\\" + fileName);
                 // request.AddHeader("Authorization", "Bearer " + _settings.token);
                 request.AlwaysMultipartFormData = true;
                 _callback.status = 1;
-                var postCallbackData = JsonSerializer.Serialize(_callback);
-                request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                //  var postCallbackData = JsonSerializer.Serialize(_callback);
+                //  request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                request.AddParameter("orgId", _callback.orgId);
+                request.AddParameter("filename", _callback.filename);
+                request.AddParameter("fileId", _callback.fileId);
+                request.AddParameter("status", _callback.status);
+                request.AddParameter("errorlist", JsonSerializer.Serialize(_callback.errorlist));
+                LogProcess("Parameters:"+ JsonSerializer.Serialize(request.Parameters));
                 string fname = fileName.Replace(".", "-");
-                LogProcess(postCallbackData);
                 IRestResponse response = client.Execute(request);
-                LogProcess("Sending Post:" + fileName);
+                LogProcess("Sending Post:" + fileName + " to " + _settings.postURL);
+                LogProcess("Response:" + response.Content);
             } catch (Exception e) {
                 Logerror(e.Message, fileName);
             }
@@ -290,11 +286,19 @@ namespace ProcessExcel
                     worksheet = "",
                     errortype = errortype
                 };
+                _callback.status = 0;
                 _callback.errorlist = new List<ErrorDetails> { errordetail };
-                var postCallbackData = JsonSerializer.Serialize(_callback);
-
-                request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                //          var postCallbackData = JsonSerializer.Serialize(_callback);
+                //          LogProcess(postCallbackData);
+                //          request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                request.AddParameter("orgId", _callback.orgId);
+                request.AddParameter("filename", _callback.filename);
+                request.AddParameter("fileId", _callback.fileId);
+                request.AddParameter("status", _callback.status);
+                request.AddParameter("errorlist", JsonSerializer.Serialize(_callback.errorlist));
+                LogProcess("Parameters:" + JsonSerializer.Serialize(request.Parameters));
                 IRestResponse response = client.Execute(request);
+                LogProcess("Sending Error Post:" + fileName + " to " + _settings.postURL);
             }
             catch (Exception e)
             {
