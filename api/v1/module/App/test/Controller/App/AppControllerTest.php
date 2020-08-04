@@ -354,7 +354,7 @@ class AppControllerTest extends ControllerTest
             FileUtils::deleteDirectoryContents($deleteconfig);
         }
     }
-    public function testDeplayAppWithFieldValidation(){
+    public function testDeployAppWithFieldValidation(){
         $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
@@ -394,7 +394,7 @@ class AppControllerTest extends ControllerTest
         $this->clean($path, $yaml, $appName, $YmlappUuid);
     }
 
-    public function testDeplayAppWithFieldValidationErrors(){
+    public function testDeployAppWithFieldValidationErrors(){
         $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
         if (is_dir($directoryName)) {
             FileUtils::deleteDirectoryContents($directoryName);
