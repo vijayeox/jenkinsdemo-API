@@ -109,6 +109,8 @@
       <p>See the Certificate for Primary Liability coverages.</p>
       <p>These coverages apply to this location only.</p>
     </div></center>
+
+    <div style = "margin-bottom: 5%;"></div>
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>

@@ -8,8 +8,8 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name1">{$business_name}</p>
-			<p class="name1">{if isset($dba) && $dba !=""}
+			<p class="name">{$business_name}</p>
+			<p class="name">{if isset($dba) && $dba !=""}
 								DBA : {$dba} 
 							{/if}</p>
 			<p class="name">{$address1}</p>

@@ -114,6 +114,9 @@ class StoreQuoteDocuments extends PolicyDocument
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));
         $data['orgUuid'] = $orgUuid;
+        $this->processSurplusYear($data);
+        $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+	    $data['license_number'] = $this->getLicenseNumber($data,$persistenceService);
         $liabilityPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'LIABILITY');
         if($liabilityPolicyDetails){
             $data['liability_policy_id'] = $liabilityPolicyDetails['policy_number'];

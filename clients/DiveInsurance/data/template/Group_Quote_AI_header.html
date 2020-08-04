@@ -17,7 +17,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section','business_name', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','state_in_short','country','zipcode','group_certificate_no','padi','end_date','group_policy_id','address1','address2','group_carrier','business_padi'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section','business_name', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','state_in_short','country','zipcode','group_certificate_no','padi','end_date','group_policy_id','address1','address2','group_carrier','business_padi','dba'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -36,6 +36,11 @@
                 moment(vars[css_selector_classes[css_class]]).format(
                   "D MMMM YYYY"
                 ) + " - 12:01:00 AM";
+            }
+            if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
             }
           }
       }
@@ -67,11 +72,12 @@
             <p class = "info">License #: <span class = "license_number"></span></p>
           </div>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
-          <p class = "details"><span class ="business_name"></span></p>
-          <p class = "details"><span class ="address1"></span></p>
-          <p class = "details"><span class ="address2"></span></p>
-          <p class = "details"><span class ="city"></span>, <span class ="state_in_short"></span>&nbsp<span class ="zip"></span></p>
-          <p class = "details"><span class ="country"></span></p>
+          <p class = "details"><span class ="business_name uppercase"></span></p>
+           <p class = "details" id = "dbaName" style = "display:none;">DBA:<span class ="dba uppercase"></span></p>
+          <p class = "details"><span class ="address1 uppercase"></span></p>
+          <p class = "details"><span class ="address2 uppercase"></span></p>
+          <p class = "details"><span class ="city uppercase"></span>, <span class ="state_in_short uppercase"></span>&nbsp<span class ="zip"></span></p>
+          <p class = "details"><span class ="country uppercase"></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -85,15 +91,12 @@
           <p class = "p_margin"><span class ="end_date"></span></p>
         </div>
         <div>
-          <hr></hr>
-          <p class = "p_margin">Policy issued by <span class ="group_carrier"></span></p>
-          <p class = "p_margin">Policy #: <span class ="group_policy_id"></span></p>
           <hr style = "margin-bottom:20%"></hr>
         </div>
       </div>
       </div>
     </div>
-    <div style = "margin-top:10%">&nbsp</div>
+    <div style = "margin-bottom:15%;">&nbsp</div>
     <hr class="hr_value"></hr>
     <div>&nbsp</div>
 </body>
