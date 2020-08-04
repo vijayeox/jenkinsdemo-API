@@ -39,6 +39,23 @@ return [
                     ],
                 ],
             ],
+            'deployApplication' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/deploy',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'method' => 'POST',
+                        'action' => 'deployApplication',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'appinstall' => [
                 'type' => Segment::class,
                 'options' => [

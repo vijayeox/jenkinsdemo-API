@@ -27,9 +27,16 @@ class AppControllerTest extends ControllerTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
-        if ($this->getName() == 'testDeployAppWithWrongUuidInDatabase' || $this->getName() == 'testDeployAppWithWrongNameInDatabase' || $this->getName() == 'testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase' || $this->getName() == 'testDeployAppAddExtraPrivilegesInDatabaseFromYml' || $this->getName() == 'testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml') {
-            $dataset->addYamlFile(dirname(__FILE__) . "/../../Dataset/App2.yml");
+        switch($this->getName()) {
+            case 'testDeployAppWithWrongUuidInDatabase':
+            case 'testDeployAppWithWrongNameInDatabase':
+            case 'testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase':
+            case 'testDeployAppAddExtraPrivilegesInDatabaseFromYml':
+            case 'testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml':
+                $dataset->addYamlFile(dirname(__FILE__) . "/../../Dataset/App2.yml");
+            break;
         }
+
         return $dataset;
     }
 
@@ -817,6 +824,76 @@ class AppControllerTest extends ControllerTest
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
+
+    public function testDeployApplication()
+    {
+        $appName = 'SampleApp';
+        $config = $this->getApplicationConfig();
+        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . $appName;
+        $appDestDir = $config['EOX_APP_DEPLOY_DIR'] . $appName;
+        try {
+            $this->initAuthToken($this->adminUser);
+            if (file_exists($appSourceDir)) {
+                FileUtils::deleteDirectoryContents($appSourceDir);
+                mkdir($appSourceDir);
+            }
+            $eoxSampleApp = dirname(__FILE__) . '/../../Dataset/SampleApp';
+            FileUtils::copyDir($eoxSampleApp, $appSourceDir);
+            $this->testDeployApp();
+        }
+        catch (\Exception $e) {
+            throw $e;
+        }
+        finally {
+            try {
+                if (file_exists($appSourceDir)) {
+                FileUtils::deleteDirectoryContents($appSourceDir);
+                }
+            }
+            catch(\Exception $e) {
+                print($e);
+            }
+            try {
+                if (file_exists($appDestDir)) {
+                FileUtils::deleteDirectoryContents($appDestDir);
+                }
+            }
+            catch(\Exception $e) {
+                print($e);
+            }
+        }
+    }
+
+    public function testDeployApplicationWithoutAppInDatabase() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/98f2b17e-65dc-440f-8cc2-7df0cf94e434/deploy', 'POST');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(406);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Application with APP ID 98f2b17e-65dc-440f-8cc2-7df0cf94e434 not found.');
+    }
+
+    public function testDeployApplicationWithoutAppDir() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deploy', 'POST');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(406);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Application source directory not found.');
+    }
+
+//-----------------------------------------------------------------------------------------------
+//IMPORTANT: This test is not implemented because it needs intrusive changes (deleting/moving) 
+//to the template application.
+//-----------------------------------------------------------------------------------------------
+//    public function testDeployApplicationWithoutTemplateApp() {
+//        $this->initAuthToken($this->adminUser);
+//        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deploy', 'POST');
+//        $this->assertResponseStatusCode(406);
+//        $content = (array) json_decode($this->getResponse()->getContent(), true);
+//        $this->assertEquals($content['status'], 'error');
+//        $this->assertEquals($content['message'], 'Template application not found.');
+//    }
 
     public function testUpdate()
     {

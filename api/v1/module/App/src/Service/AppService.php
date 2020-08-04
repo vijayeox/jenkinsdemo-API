@@ -243,6 +243,44 @@ class AppService extends AbstractService
         }
     }
 
+    /**
+     * Deploy App service for AppBuilder. AppBuilder creates the application in <EOX_APP_SOURCE_DIR> 
+     * on the server and assigns a UUID for the application in OX_APP table in database. This service  
+     * uses the UUID of the application for deployment. This service copies the application from 
+     * <EOX_APP_SOURCE_DIR> to <EOX_APP_DEPLOY_DIR> and then calls deployApp method of this service 
+     * to deploy the application.
+     */
+    public function deployApplication($appId)
+    {
+        $query = 'SELECT name, description FROM ox_app WHERE uuid=:appId';
+        $queryParams = array('appId' => $appId);
+        $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        if(!isset($result) || empty($result) || (count($result) != 1)) {
+            $this->logger->error("Application with APP ID ${appId} not found.");
+            throw new ServiceException("Application with APP ID ${appId} not found.", 'E_NOT_FOUND_APP_ID', 0);
+        }
+        $appName = $result[0]['name'];
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . $appName;
+        if (!file_exists($appSourceDir)) {
+            $this->logger->error("Application source directory ${appSourceDir} not found.");
+            throw new ServiceException('Application source directory not found.', 'E_NOT_FOUND_APP_SRC_DIR', 0);
+        }
+        $appDestDir = $this->config['EOX_APP_DEPLOY_DIR'] . $appName;
+        if (!file_exists($appDestDir)) {
+            if (!mkdir($appDestDir)) {
+                $this->logger->error("Failed to create application deployment directory ${appDestDir}.");
+                throw new ServiceException('Failed to create application deployment directory.', 'E_APP_DEPLOY_DIR_CREATE_FAIL', 0);
+            }
+            $appTemplateDir = $this->config['DATA_FOLDER'] . '/eoxapps';
+            if (!file_exists($appTemplateDir)) {
+                throw new ServiceException('Template application not found.', 'E_NOT_FOUND_TEMPLATE_APP', 0);
+            }
+            FileUtils::copyDir($appTemplateDir, $appDestDir);
+        }
+        FileUtils::copyDir($appSourceDir, $appDestDir);
+        $this->deployApp($appDestDir);
+    }
+
     private function processApp(&$yamlData, $path){
         $appData = $this->collectappfieldsdata($yamlData['app']);
         $appUuid = $this->checkAppExists($yamlData['app']);

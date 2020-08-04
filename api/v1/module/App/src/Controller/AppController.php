@@ -331,6 +331,45 @@ class AppController extends AbstractApiController
         }
     }
 
+    /**
+     * Deploy App API for AppBuilder. AppBuilder creates the application in <EOX_APP_SOURCE_DIR> on
+     * the server and assigns a UUID for the application in OX_APP table in database. This action 
+     * uses the UUID of the application for deployment.
+     *
+     * @api
+     * @method POST.
+     * @param  $appId - UUID application id.
+     * @return array Returns a JSON Response with Status Code.</br>
+     * <code> status : "success|error"
+     * </code>
+     */
+    public function deployApplicationAction()
+    {
+        $routeParams = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . '-> \n Deploy Application - ' . $routeParams['appId'], true);
+        if (!isset($routeParams['appId'])) {
+            $this->log->error('Application ID not provided.');
+            return $this->getErrorResponse('Invalid parameters', 400);
+        }
+
+        try {
+            $this->appService->deployApplication($routeParams['appId']);
+            return $this->getSuccessResponse(200);
+        }
+        catch (ValidationException $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }
+        catch (ServiceException $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 406);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
+        }
+    }
 
     public function delegateCommandAction()
     {
