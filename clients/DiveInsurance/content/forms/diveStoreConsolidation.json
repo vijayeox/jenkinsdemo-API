@@ -1619,10 +1619,9 @@
 				"path": "panelColumns"
 			}, {
 				"label": "well",
-				"hidden": true,
 				"tableView": false,
 				"key": "rateCard",
-				"type": "well",
+				"type": "fieldset",
 				"clearOnHide": false,
 				"input": false,
 				"components": [{
@@ -10752,7 +10751,7 @@
 							"dtype": "documentviewer",
 							"datype": "documentviewer",
 							"dattype": "documentviewer",
-							"customConditional": "if (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+							"customConditional": "if (data.privileges){\n if((typeof row.documentattach != 'string') && row.has('documentattach') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
 							"datatype": "documentviewer",
 							"data_type": "documentviewer",
 							"label": " ",
@@ -11940,9 +11939,6 @@
 		"input": false,
 		"components": [{
 			"label": "Columns",
-			"input": false,
-			"tableView": false,
-			"key": "page5PanelColumns2",
 			"columns": [{
 				"components": [{
 					"label": "Columns",
@@ -12039,8 +12035,16 @@
 				"pull": 0,
 				"size": "md"
 			}],
+			"hideLabel": true,
+			"tableView": false,
+			"key": "page5PanelColumns2",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
-			"hideLabel": true
+			"input": false
 		}, {
 			"label": "Columns",
 			"columns": [{
@@ -12280,6 +12284,11 @@
 			}],
 			"tableView": false,
 			"key": "columns24",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12352,6 +12361,11 @@
 			}],
 			"tableView": false,
 			"key": "columns26",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12424,6 +12438,11 @@
 			}],
 			"tableView": false,
 			"key": "columns27",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12496,6 +12515,11 @@
 			}],
 			"tableView": false,
 			"key": "columns28",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12593,6 +12617,11 @@
 			}],
 			"tableView": false,
 			"key": "columns29",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12665,6 +12694,11 @@
 			}],
 			"tableView": false,
 			"key": "columns31",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12737,6 +12771,11 @@
 			}],
 			"tableView": false,
 			"key": "columns33",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12835,6 +12874,11 @@
 			}],
 			"tableView": false,
 			"key": "columns32",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -12933,6 +12977,11 @@
 			}],
 			"tableView": false,
 			"key": "columns30",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -13000,6 +13049,11 @@
 			}],
 			"tableView": false,
 			"key": "columns35",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -13068,6 +13122,11 @@
 			}],
 			"tableView": false,
 			"key": "columns34",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -13288,6 +13347,11 @@
 			}],
 			"tableView": false,
 			"key": "columns38",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -13359,6 +13423,11 @@
 			}],
 			"tableView": false,
 			"key": "columns40",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
@@ -13925,10 +13994,10 @@
 		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"settings": {},
-	"name": "diveStoreConsolidation",
+	"name": "diveStoreConsolidation3",
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-08-04T06:10:19.980Z",
+	"modified": "2020-08-04T08:43:32.313Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
