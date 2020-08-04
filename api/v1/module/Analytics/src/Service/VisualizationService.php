@@ -32,7 +32,7 @@ class VisualizationService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
-        $form->validateType($data['name']);
+        $form->validateType($data['type']);
         $this->beginTransaction();
         $count = 0;
         try {

@@ -33,7 +33,7 @@ class Visualization extends Entity
 
     public function validateType($type)
     {
-        if($type == 'Aggregate' || $type == 'Bar' || $type == 'Line' || $type == 'Pie')
+        if($type == 'chart' || $type == 'inline' || $type == 'table' || $type == 'html')
             return;
         else
         {
