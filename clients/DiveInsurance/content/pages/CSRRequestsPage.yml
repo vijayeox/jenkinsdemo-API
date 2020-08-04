@@ -180,19 +180,19 @@ content:
                     field: start_date
                     cell: '<td>{formatDateWithoutTimezone(item.start_date)}</td>'
                     filter: date
-                    filterFormat: MM-DD-YYYY
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Policy End Date'
                     field: end_date
                     cell: '<td>{formatDateWithoutTimezone(item.end_date)}</td>'
                     filter: date
-                    filterFormat: MM-DD-YYYY
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Submitted Date'
                     field: created_date
                     cell: '<td>{formatDateWithoutTimezone(item.created_date)}</td>'
                     filter: date
-                    filterFormat: MM-DD-YYYY
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Assigned to'
                     field: assigned_user
