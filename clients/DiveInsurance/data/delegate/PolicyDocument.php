@@ -221,7 +221,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if (isset($data['regeneratePolicy']) && $data['regeneratePolicy'] == 'true'){   
-                $this->regenerationIPL($data,$previous_data,$persistenceService);  
+                $this->regenerationIPL($data,$previous_data,$persistenceService,$dest);  
             }
 
             if(isset($data['state'])){
@@ -242,7 +242,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
-                $this->setCoverageDetails($data,$previous_data,$temp,$documents,$persistenceService);           
+                $this->setCoverageDetails($data,$previous_data,$temp,$documents,$persistenceService,$dest);           
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
@@ -1373,7 +1373,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
          }
 
-        private function regenerationIPL($data,$previous_data,$persistenceService){   
+        private function regenerationIPL($data,$previous_data,$persistenceService,$destinationLocation){   
             $options = array(); 
             $documents = array();   
             if(is_string($data['documents'])) { 
@@ -1395,7 +1395,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }   
                 unset($data['dest']); 
                 $temp = $data;
-                $this->setCoverageDetails($data,$previous_data,$temp,$documents,$persistenceService);    
+                $this->setCoverageDetails($data,$previous_data,$temp,$documents,$persistenceService,$destinationLocation);    
                 $policyDocuments = $this->generateDocuments($temp,$fileDest,$options,'template','header','footer'); 
                 $this->policyCOI($policyDocuments,$data,$documents);    
             }   
@@ -1525,7 +1525,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }   
         }
 
-        protected function setCoverageDetails($data,$previous_data,&$temp,&$documents,$persistenceService){
+        protected function setCoverageDetails($data,$previous_data,&$temp,&$documents,$persistenceService,$dest=null){
               if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['excessLiability'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
