@@ -494,13 +494,6 @@
    pageName: Garage Supplemental
    cell: C19
 -
-   key: trainingbeenprovidedtoemployee
-   Source Worksheet: Has training been provided to employees in Sales and F&I on Regulations M
-      and Z?
-   pageName: Garage Supplemental
-   returnBoolean: "Yes|No"
-   cell: C11
--
    key: dealerrequiresbeingadded
    Source Worksheet: Dealer requires being added as Additional Insured on sub-contractors' and
       vendors' insurance policies?

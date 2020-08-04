@@ -232,8 +232,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         // exit();
 
         if (count($excelData) > 0) {
-            $data["excelData"] = $excelData;
-            file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", $data["excelData"]);
+            file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", json_encode($excelData, JSON_PRETTY_PRINT));
             array_push(
                 $generatedDocumentsList,
                 array(

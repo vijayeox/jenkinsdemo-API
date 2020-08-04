@@ -69,6 +69,38 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
              'rosterPdf' => 'Roster.pdf',
              'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
              'groupExclusions' => 'Group_Exclusions.pdf'
+         ),
+        'Group Professional Liability' 
+            => array(
+             'header' => 'DiveStoreEndorsement_header.html',
+             'footer' => 'DiveStoreEndorsement_footer.html', 
+             'cover_letter' => 'GPL_Quote_Cover_Letter',
+             'aiTemplate' => 'DiveStore_AI',
+             'aiheader' => 'DiveStore_AI_header.html',
+             'lpTemplate' => 'DiveStore_LP',
+             'lpheader' => 'DiveStore_Quote_LP_header.html',
+             'lpfooter' => 'DiveStore_LP_footer.html',
+             'aifooter' => 'DiveStore_AI_footer.html',
+             'lheader' => 'letter_header.html',
+             'lfooter' => 'letter_footer.html',
+             'nTemplate' => 'Group_PL_NI',
+             'nheader' => 'Group_DS_NI_header.html',
+             'nfooter' => 'Group_NI_footer.html',
+             'gaitemplate' => 'Group_AI',
+             'gaiheader' => 'Group_Quote_AI_header.html',
+             'gaifooter' => 'Group_AI_footer.html',
+             'aniTemplate' => 'DiveStore_ANI',
+             'aniheader' => 'DS_Quote_ANI_header.html',
+             'anifooter' => null,
+             'alheader' => 'DiveStore_AL_Proposal_header.html',
+             'alfooter' => 'DiveStore_AL_footer.html',
+             'alTemplate' => 'DiveStore_AdditionalLocations',
+             'roster' => 'Roster_Certificate',
+             'rosterHeader' => 'Roster_header_DS.html',
+             'rosterFooter' => 'Roster_footer.html',
+             'rosterPdf' => 'Roster.pdf',
+             'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
+             'groupExclusions' => 'Group_Exclusions.pdf'
          ));   
     }
 

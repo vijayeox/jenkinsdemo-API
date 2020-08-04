@@ -206,30 +206,22 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $endorsementOptions = null;
             }
 
-            $this->setPolicyInfo($data,$persistenceService,$endorsementOptions);
-            $dest = $data['dest'];
+            if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){  
+                $this->setPolicyInfo($data,$persistenceService,$endorsementOptions);    
+                $dest = $data['dest'];  
+            }else{  
+                $orgUuid = $this->processDate($data);                   
+                $dest = $this->documentsLocation($endorsementOptions,$data,$orgUuid);   
+            }
+
             if($this->type == 'quote' || $this->type == 'endorsementQuote'){
                 FileUtils::deleteDirectoryContents($dest['absolutePath'].'Quote/');
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
 
-            if (isset($data['regeneratePolicy'])){
-                if(!is_null($data['regeneratePolicy']) && !empty($data['regeneratePolicy']) && !isset($data['endorsement_options']) ) {
-                    $coiDocument = $dest['absolutePath'].'ProfessionalLiabilityCOI.pdf';
-                    if (file_exists($coiDocument)) {
-                        FileUtils::deleteFile('ProfessionalLiabilityCOI.pdf',$dest['absolutePath']);
-                    }
-                }else{
-                        if(is_null($endorsementOptions)){
-                            $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
-                            if( count($workflowInstUuid) > 0 && (isset($workflowInstUuid[0]['process_instance_id']))){
-                                $dest['absolutePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
-                                $dest['relativePath'] .= $workflowInstUuid[0]['process_instance_id']."/";
-                                FileUtils::deleteFile('ProfessionalLiabilityCOI.pdf',$dest['absolutePath']);
-                            }
-                        }
-                }
+            if (isset($data['regeneratePolicy']) && $data['regeneratePolicy'] == 'true'){   
+                $this->regenerationIPL($data,$previous_data,$persistenceService);  
             }
 
             if(isset($data['state'])){
@@ -250,155 +242,52 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if($data['product'] == "Individual Professional Liability" || $data['product'] == "Emergency First Response"){
-                if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['excessLiability'])){
-                    $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
-                    $coverageList = array();
-                    if($data['product'] == "Individual Professional Liability"){
-                        array_push($coverageList,$data['careerCoverage']);
-                        if(isset($data['scubaFit']) && ($data['scubaFit'] == "scubaFitInstructor" || $data['scubaFit'] == "scubaFitInstructorDeclined")){
-                            if($data['scubaFit'] == "scubaFitInstructor"){
-                                $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
-                            }
-                            array_push($coverageList,$data['scubaFit']);
-                        }
-                        if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInspectionInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
-                            $documents['cylinder_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplCylinder');
-                            array_push($coverageList,$data['cylinder']);
-                        }
-                        if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
-                            $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
-                        }
-
-                        if(isset($data['excessLiability'])){
-                            array_push($coverageList,$data['excessLiability']);
-                        }
-                        if(isset($data['tecRecEndorsment'])){
-                            array_push($coverageList,$data['tecRecEndorsment']);
-                        }
-                        if(isset($data['equipment'])){
-                            array_push($coverageList,$data['equipment']);
-                        }
-                    }
-                    if($data['product'] == "Emergency First Response"){
-                        if(isset($data['excessLiability'])){
-                            array_push($coverageList,$data['excessLiability']);
-                        }
-                    }
-                    $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
-                    $result = json_decode($result,true);
-                    if($data['product'] == "Individual Professional Liability"){
-                        if(isset($result[$data['scubaFit']])){
-                            $temp['scubaFitVal'] = $result[$data['scubaFit']];
-                        }
-                        if(isset($result[$data['tecRecEndorsment']])){
-                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
-                        }
-                        if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
-                            $temp['cylinderPriceVal'] = $result[$data['cylinder']];
-                        }
-                        if(isset($result[$data['excessLiability']])){
-                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
-                        }
-                        if(isset($result[$data['tecRecEndorsment']])){
-                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
-                        }
-                        if(isset($result[$data['equipment']])){
-                            $temp['equipmentVal'] = $result[$data['equipment']];
-                        }
-                        $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
-                    }
-                    if($data['product'] == "Emergency First Response"){
-                        if(isset($result[$data['excessLiability']])){
-                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
-                        }
-                    }
-
-                    if(!empty($previous_data)) {
-                        $policy =array();
-                        $policy =  $previous_data[0];
-                        if(is_string($data['previous_policy_data'])){
-                                $data['previous_policy_data'] = json_decode($data['previous_policy_data'],true);
-                        }
-
-                        if($data['product'] == "Individual Professional Liability"){
-                            $this->processUpgradeCoverages($data,$policy,$result,'previous_careerCoverage','careerCoverageName','careerCoverage',array());
-
-                            $this->processUpgradeCoverages($data,$policy,$result,'previous_scubaFit','scubaCoverageName','scubaFit',array());
-
-                            $this->processUpgradeCoverages($data,$policy,$result,'previous_cylinder','cylinderCoverageName','cylinder',array());
-
-                            $this->processUpgradeCoverages($data,$policy,$result,'previous_equipment','equipmentCoverageName','equipment',array());
-
-                            $this->processUpgradeCoverages($data,$policy,$result,'previous_tecRecEndorsment','tecRecCoverageName','tecRecEndorsment',array());
-                        }
-
-                        //  Common for both IPL and EFR
-                        if($policy['prevSingleLimit'] != $data['single_limit']){
-                                $upgrade = array("upgraded_single_limit" => $data['single_limit'],"upgraded_annual_aggregate" => $data['annual_aggregate']);
-                                $data['previous_policy_data'][0] = array_merge($data['previous_policy_data'][0],$upgrade);
-                        }
-
-                        $temp['previous_policy_data'] = json_encode($data['previous_policy_data']);
-                    }
-                }
-
+                $this->setCoverageDetails($data,$previous_data,$temp,$documents,$persistenceService);           
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
                     $documents['additionalInsured_document'] = array($this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter'));
                 }
 
-                 if(isset($this->template[$temp['product']]['blanketForm'])){
-                    if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
-                        $this->logger->info("DOCUMENT blanketForm");
-                        $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
-                    }else{
-                        $existingBlanketForm = $dest['relativePath'].$this->template[$temp['product']]['blanketForm'];
-                        $this->logger->info("D::::".print_r($existingBlanketForm,true));
-                        $this->logger->info("DOCUMENTS::::".print_r(file_exists($existingBlanketForm),true));
-                        $documents['blanket_document'] = $existingBlanketForm;
-                    }
+                if(isset($this->template[$temp['product']]['blanketForm'])){    
+                    $this->logger->info("DOCUMENT blanketForm");     
+                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');   
                 }
+
                 $this->logger->info("DOCUMENT blanketForm".print_r($documents,true));
-                if(isset($this->template[$temp['product']]['card'])){
-                    if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
-                        $this->logger->info("generate pocket card");
-                        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                        $template = $this->template[$temp['product']]['card'];
-                        $options = array();
-                        $docDest = $dest['absolutePath'].$template.'.pdf';
-                        $NewData = array();
-                        $NewData[0]['email'] = $data['email'];
-                        $NewData[0]['padi'] = $data['padi'];
-                        $NewData[0]['certificate_no'] = $data['certificate_no'];
-                        $NewData[0]['start_date'] = $data['start_date'];
-                        $NewData[0]['end_date'] = $data['end_date'];
-                        $NewData[0]['firstname'] = $data['firstname'];
-                        $NewData[0]['lastname'] = $data['lastname'];
-                        $NewData[0]['address1'] = $data['address1'];
-                        $NewData[0]['address2'] = isset($data['address2']) ? $data['address2'] : '';
-                        $NewData[0]['city'] = $data['city'];
-                        $NewData[0]['state'] = $data['state'];
-                        $NewData[0]['zip'] = $data['zip'];
-                        $NewData[0]['country'] = $data['country'];
-                        $NewData[0]['product'] = $data['product'];
-                        $NewData[0]['product_email_id'] = $data['product_email_id'];
-                        $NewData[0]['entity_name'] = 'Pocket Card Job';
-                        $newData = json_encode($NewData);
-                        $docdata = array('data' => $newData);
-                        unset($NewData);
-                        unset($newData);
-                        $this->logger->info("Data is: ".print_r($docdata, true));
-                        $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
-                        $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
-                    }else{
-                        $existingPocketCard = $dest['relativePath'].$this->template[$temp['product']]['card'].'.pdf';
-                        $this->logger->info("PocketCard::::".print_r(file_exists($existingPocketCard),true));
-                        $documents['PocketCard'] = $existingPocketCard;                        
-                    }
-                }
-            }
-            else if($data['product'] == "Dive Boat"){
+                if(isset($this->template[$temp['product']]['card'])){   
+                        $this->logger->info("generate pocket card");    
+                        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));  
+                        $template = $this->template[$temp['product']]['card'];  
+                        $options = array(); 
+                        $docDest = $dest['absolutePath'].$template.'.pdf';  
+                        $NewData = array(); 
+                        $NewData[0]['email'] = $data['email'];  
+                        $NewData[0]['padi'] = $data['padi'];    
+                        $NewData[0]['certificate_no'] = $data['certificate_no'];    
+                        $NewData[0]['start_date'] = $data['start_date'];    
+                        $NewData[0]['end_date'] = $data['end_date'];    
+                        $NewData[0]['firstname'] = $data['firstname'];  
+                        $NewData[0]['lastname'] = $data['lastname'];    
+                        $NewData[0]['address1'] = $data['address1'];    
+                        $NewData[0]['address2'] = isset($data['address2']) ? $data['address2'] : '';    
+                        $NewData[0]['city'] = $data['city'];    
+                        $NewData[0]['state'] = $data['state'];  
+                        $NewData[0]['zip'] = $data['zip'];  
+                        $NewData[0]['country'] = $data['country'];  
+                        $NewData[0]['product'] = $data['product'];  
+                        $NewData[0]['product_email_id'] = $data['product_email_id'];    
+                        $NewData[0]['entity_name'] = 'Pocket Card Job'; 
+                        $newData = json_encode($NewData);   
+                        $docdata = array('data' => $newData);   
+                        unset($NewData);    
+                        unset($newData);    
+                        $this->logger->info("Data is: ".print_r($docdata, true));   
+                        $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);  
+                        $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';  
+                }   
+            }   
+                else if($data['product'] == "Dive Boat"){
                 if(isset($this->template[$data['product']]['instruct'])){
                     $this->logger->info("DOCUMENT instruct");
                     $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
@@ -626,23 +515,16 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else{
                 if ($temp['product'] == 'Individual Professional Liability') {
                  $check = $this->endorsementOptionsFlag($temp);
-             }
+                }
 
-             if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
-                $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-                if(is_array($policyDocuments)){
-                    foreach ($policyDocuments as $key => $value) {
-                        $documents[$key] = $value;
-                    }
-                }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
-                    $documents['coi_document']  = array($policyDocuments);
-                }else if($temp['product'] == 'Dive Store'){
-                    $documents['liability_coi_document']  = $policyDocuments;
-                }else{
-                    $documents['coi_document']  = $policyDocuments;
+                if ((!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) ))) {
+                    if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
+                        $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                        $this->policyCOI($policyDocuments,$temp,$documents);
+                     }
+
                 }
             }
-        }
                 // if($this->type != 'quote' && $this->type != 'endorsementQuote')
                 // {
                 //     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
@@ -681,18 +563,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $data['documents'] = array();
                         $docs = $data['documents'];
                     }
-                }
-                else{
-                    if(isset($data['regeneratePolicy']) && !empty($data['regeneratePolicy']) && isset($data['endorsement_options']) && empty($data['endorsement_options'])) {
-                    if(is_string($data['documents'])) {
-                            $docs = json_decode($data['documents'],true);
-                    }else{
-                        $docs = $data['documents'];
-                    }
-                }else{
-                    $docs = $data['documents'];
-                }
-                }
                 $checkFlag = $this->endorsementOptionsFlag($temp);
                  if(!isset($documents['coi_document'])){
                     $documents['coi_document'] = array();
@@ -714,11 +584,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($checkFlag['aICheck'] == 1 && isset($docs['additionalInsured_document'][0])){
                     $destinationForWatermark = $dest['absolutePath'].'../../../'.$docs['additionalInsured_document'][0];
                     $this->addWaterMark($destinationForWatermark,"INVALID");
-                    foreach ($docs['additionalInsured_document'] as $key => $value) {
-                            array_push($documents['additionalInsured_document'],$docs['additionalInsured_document'][$key]);
+                    foreach ($docs['additionalInsured_document'] as $key => $value) {                    
+                        if (!in_array($docs['additionalInsured_document'][$key], $documents['additionalInsured_document'],true)) {
+                                array_push($documents['additionalInsured_document'],$docs['additionalInsured_document'][$key]);
+                        }
                     }
                 }
                 $data['documents'] = $documents;
+            }
             }else if($this->type == 'endorsement' || $this->type == 'endorsementQuote'){
                 $data['documents'] = is_string($data['documents']) ? json_decode($data['documents'],true) : $data['documents'];
                 if($this->type == 'endorsement'){
@@ -830,7 +703,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                   } else {
                       $coi_number = $this->generateCOINumber($data,$persistenceService);
                   }
-                  if(is_string($data['documents'])){
+                  if(isset($data['documents']) && is_string($data['documents'])){
                     $data['documents'] = json_decode($data['documents'],true);
                   }
                     if($this->type == 'endorsement'){
@@ -1372,7 +1245,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['quoteDocuments'] = array();
             $documents = array();
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
-            $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            if($data['product'] == 'Dive Store'){
+                $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            }
             if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
             }
@@ -1497,50 +1372,59 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
          }
 
-         private function regenerationIPL($data,$dest){
-            if(is_string($data['documents'])) {
-                $docs = json_decode($data['documents'],true);
-            }else{
-                $docs = $data['documents'];
-            }
- 
-            if (isset($docs['coi_document']) && isset($docs['coi_document'][0])) {
-                $fileName = substr($docs['coi_document'][0], strrpos($docs['coi_document'][0], '/') + 1);
-                $destinationForCOIRegeneration = $dest['absolutePath'].$fileName;
-                if (file_exists($destinationForCOIRegeneration)) {
-                    // unlink($destinationForCOIRegeneration);
-                    FileUtils::deleteFile($fileName,$dest['absolutePath']);
-                }
-            }
-            if (isset($docs['PocketCard'])) {
-                $fileName = substr($docs['PocketCard'], strrpos($docs['PocketCard'], '/') + 1);
-                $destinationForPCRegeneration = $dest['absolutePath'].$fileName;
-                if (file_exists($destinationForPCRegeneration)) {
-                    // unlink($destinationForPCRegeneration);
-                    FileUtils::deleteFile($fileName,$dest['absolutePath']);
-                }
-            }
-
-            if (isset($docs['blanket_document'])) {
-                $fileName = substr($docs['blanket_document'], strrpos($docs['blanket_document'], '/') + 1);
-                $destinationForBlanketRegeneration = $dest['absolutePath'].$fileName;
-                if (file_exists($destinationForBlanketRegeneration)) {
-                    // unlink($destinationForBlanketRegeneration);
-                    FileUtils::deleteFile($fileName,$dest['absolutePath']);
-                }
-            }
-
-            if (isset($data['AdditionalInsuredOption']) && ($data['AdditionalInsuredOption'] == 'addAdditionalInsureds')) {
-                if (isset($docs['additionalInsured_document']) && isset($docs['additionalInsured_document'][0])) {
-                    $fileName = substr($docs['additionalInsured_document'][0], strrpos($docs['additionalInsured_document'][0], '/') + 1);
-                    $destinationForAIRegeneration = $dest['absolutePath'].$fileName;
-                    if (file_exists($destinationForAIRegeneration)) {
-                        // unlink($destinationForAIRegeneration);
-                        FileUtils::deleteFile($fileName,$dest['absolutePath']);
-                    }
-                }
-            }
-         }
+        private function regenerationIPL($data,$previous_data,$persistenceService){   
+            $options = array(); 
+            $documents = array();   
+            if(is_string($data['documents'])) { 
+                $docs = json_decode($data['documents'],true);   
+            }else{  
+                $docs = $data['documents']; 
+            }   
+            $dest = $this->destination;     
+            $fileDest = array()   ; 
+            if (isset($docs['coi_document']) && isset($docs['coi_document'][0])) {  
+                $fileName = substr($docs['coi_document'][0], strrpos($docs['coi_document'][0], '/') + 1);   
+                $fileDest['absolutePath'] = $dest.dirname($docs['coi_document'][0]).'/';    
+                $fileDest['relativePath'] = dirname($docs['coi_document'][0]).'/';  
+                $destinationForCOIRegeneration = $dest.$docs['coi_document'][0];    
+                $this->logger->info("destinationForCOIRegeneration----".print_r($destinationForCOIRegeneration,true));  
+                if (file_exists($destinationForCOIRegeneration)) {  
+                    unlink($destinationForCOIRegeneration); 
+                            // FileUtils::deleteFile($fileName,$dest);  
+                }   
+                unset($data['dest']); 
+                $temp = $data;
+                $this->setCoverageDetails($data,$previous_data,$temp,$documents,$persistenceService);    
+                $policyDocuments = $this->generateDocuments($temp,$fileDest,$options,'template','header','footer'); 
+                $this->policyCOI($policyDocuments,$data,$documents);    
+            }   
+            if (isset($docs['PocketCard'])) {   
+                $fileName = substr($docs['PocketCard'], strrpos($docs['PocketCard'], '/') + 1); 
+                $destinationForPCRegeneration = $dest.$docs['PocketCard'];  
+                if (file_exists($destinationForPCRegeneration)) {   
+                    FileUtils::deleteFile($fileName,$dest.dirname($docs['PocketCard']).'/');    
+                            // unlink($destinationForPCRegeneration);   
+                }   
+            }   
+            if (isset($docs['blanket_document'])) { 
+                $fileName = substr($docs['blanket_document'], strrpos($docs['blanket_document'], '/') + 1); 
+                $destinationForBlanketRegeneration = $dest.$docs['blanket_document'];   
+                if (file_exists($destinationForBlanketRegeneration)) {  
+                    FileUtils::deleteFile($fileName,$dest.dirname($docs['blanket_document']).'/');  
+                            // unlink($destinationForBlanketRegeneration);      
+                }   
+            }   
+            if (isset($data['AdditionalInsuredOption']) && ($data['AdditionalInsuredOption'] == 'addAdditionalInsureds')) { 
+                if (isset($docs['additionalInsured_document']) && isset($docs['additionalInsured_document'][0])) {  
+                    $fileName = substr($docs['additionalInsured_document'][0], strrpos($docs['additionalInsured_document'][0], '/') + 1);   
+                    $destinationForAIRegeneration = $dest.$docs['additionalInsured_document'][0];   
+                    if (file_exists($destinationForAIRegeneration)) {   
+                                // FileUtils::deleteFile($fileName,$dest);  
+                        unlink($destinationForAIRegeneration);      
+                    }   
+                }   
+            }   
+        }
 
          private function endorsedDocumentsLoc($data,$dest){            
             $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
@@ -1625,6 +1509,113 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
         protected function generateDiveStorePremiumSummary($temp,$documents,$dest,$options){
             $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
+        }
+        private function policyCOI($policyDocuments,$temp,&$documents){ 
+           if(is_array($policyDocuments)){  
+                foreach ($policyDocuments as $key => $value) {  
+                    $documents[$key] = $value;  
+                }   
+            }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){    
+                $documents['coi_document']  = array($policyDocuments);  
+            }else if($temp['product'] == 'Dive Store'){ 
+                $documents['liability_coi_document']  = $policyDocuments;   
+            }else{  
+                $documents['coi_document']  = $policyDocuments; 
+            }   
+        }
+
+        private function setCoverageDetails($data,$previous_data,&$temp,&$documents,$persistenceService){
+              if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['excessLiability'])){
+                    $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
+                    $coverageList = array();
+                    if($data['product'] == "Individual Professional Liability"){
+                        array_push($coverageList,$data['careerCoverage']);
+                        if(isset($data['scubaFit']) && ($data['scubaFit'] == "scubaFitInstructor" || $data['scubaFit'] == "scubaFitInstructorDeclined")){
+                            if($data['scubaFit'] == "scubaFitInstructor"){
+                                $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
+                            }
+                            array_push($coverageList,$data['scubaFit']);
+                        }
+                        if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInspectionInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
+                            $documents['cylinder_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplCylinder');
+                            array_push($coverageList,$data['cylinder']);
+                        }
+                        if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
+                            $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
+                        }
+
+                        if(isset($data['excessLiability'])){
+                            array_push($coverageList,$data['excessLiability']);
+                        }
+                        if(isset($data['tecRecEndorsment'])){
+                            array_push($coverageList,$data['tecRecEndorsment']);
+                        }
+                        if(isset($data['equipment'])){
+                            array_push($coverageList,$data['equipment']);
+                        }
+                    }
+                    if($data['product'] == "Emergency First Response"){
+                        if(isset($data['excessLiability'])){
+                            array_push($coverageList,$data['excessLiability']);
+                        }
+                    }
+                    $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
+                    $result = json_decode($result,true);
+                    if($data['product'] == "Individual Professional Liability"){
+                        if(isset($result[$data['scubaFit']])){
+                            $temp['scubaFitVal'] = $result[$data['scubaFit']];
+                        }
+                        if(isset($result[$data['tecRecEndorsment']])){
+                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
+                        }
+                        if(isset($result[$data['cylinder']]) && !isset($temp['cylinderPriceVal'])){
+                            $temp['cylinderPriceVal'] = $result[$data['cylinder']];
+                        }
+                        if(isset($result[$data['excessLiability']])){
+                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
+                        }
+                        if(isset($result[$data['tecRecEndorsment']])){
+                            $temp['tecRecVal'] = $result[$data['tecRecEndorsment']];
+                        }
+                        if(isset($result[$data['equipment']])){
+                            $temp['equipmentVal'] = $result[$data['equipment']];
+                        }
+                        $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
+                    }
+                    if($data['product'] == "Emergency First Response"){
+                        if(isset($result[$data['excessLiability']])){
+                            $temp['excessLiabilityVal'] = $result[$data['excessLiability']];
+                        }
+                    }
+
+                    if(!empty($previous_data)) {
+                        $policy =array();
+                        $policy =  $previous_data[0];
+                        if(is_string($data['previous_policy_data'])){
+                                $data['previous_policy_data'] = json_decode($data['previous_policy_data'],true);
+                        }
+
+                        if($data['product'] == "Individual Professional Liability"){
+                            $this->processUpgradeCoverages($data,$policy,$result,'previous_careerCoverage','careerCoverageName','careerCoverage',array());
+
+                            $this->processUpgradeCoverages($data,$policy,$result,'previous_scubaFit','scubaCoverageName','scubaFit',array());
+
+                            $this->processUpgradeCoverages($data,$policy,$result,'previous_cylinder','cylinderCoverageName','cylinder',array());
+
+                            $this->processUpgradeCoverages($data,$policy,$result,'previous_equipment','equipmentCoverageName','equipment',array());
+
+                            $this->processUpgradeCoverages($data,$policy,$result,'previous_tecRecEndorsment','tecRecCoverageName','tecRecEndorsment',array());
+                        }
+
+                        //  Common for both IPL and EFR
+                        if($policy['prevSingleLimit'] != $data['single_limit']){
+                                $upgrade = array("upgraded_single_limit" => $data['single_limit'],"upgraded_annual_aggregate" => $data['annual_aggregate']);
+                                $data['previous_policy_data'][0] = array_merge($data['previous_policy_data'][0],$upgrade);
+                        }
+
+                        $temp['previous_policy_data'] = json_encode($data['previous_policy_data']);
+                    }
+                }
         }
 
 }
