@@ -504,6 +504,14 @@
 					"input": true,
 					"tableView": false,
 					"hideOnChildrenHidden": false
+				}, {
+					"label": "entity_name",
+					"calculateValue": "if(productName == 'IPLRegister'){\n  value = 'Individual Professional Liability'\n}else if(productName == 'EFR'){\n  value = 'Emergency First Response'\n}else if(productName == 'DiveStore'){\n  value = 'Dive Store'\n}",
+					"key": "entity_name",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}],
 				"width": 4,
 				"offset": 0,
@@ -1481,7 +1489,7 @@
 							"tableView": false,
 							"validate": {
 								"pattern": "^\\d+$",
-								"customMessage": "Please enter a valid Phone Number",
+								"customMessage": "Please enter valid phone number",
 								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
 								"step": "any"
 							},
@@ -1530,15 +1538,6 @@
 										"type": "string"
 									},
 									"text": "Home or Work Phone"
-								}, {
-									"name": "Unset required",
-									"type": "property",
-									"property": {
-										"label": "Required",
-										"value": "validate.required",
-										"type": "boolean"
-									},
-									"state": false
 								}]
 							}],
 							"type": "textfield",
@@ -1649,14 +1648,16 @@
 					"placeholder": " ",
 					"tableView": true,
 					"validate": {
+						"pattern": "^\\d+$",
 						"customMessage": "Please enter a valid Fax number"
 					},
 					"errorLabel": "Fax",
 					"key": "fax",
-					"type": "phoneNumber",
+					"type": "textfield",
 					"input": true,
 					"lockKey": true,
-					"hideOnChildrenHidden": false
+					"hideOnChildrenHidden": false,
+					"inputType": "tel"
 				}, {
 					"label": "Email",
 					"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
@@ -1705,7 +1706,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 171,
+	"_vid": 190,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1719,6 +1720,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-07-21T05:53:28.193Z",
+	"modified": "2020-08-03T12:52:38.826Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }
