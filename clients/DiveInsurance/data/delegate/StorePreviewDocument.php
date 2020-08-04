@@ -13,6 +13,8 @@ class StorePreviewDocument extends PolicyDocument
     {
         $originalData = $data;
         $this->processSurplusYear($data);
+        $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+        $data['license_number'] = $this->getLicenseNumber($data,$persistenceService);
         $options = array();
         if(isset($data['endorsement_options'])){
             $endorsementOptions = is_array($data['endorsement_options']) ?  $data['endorsement_options'] : json_decode($data['endorsement_options'],true);
