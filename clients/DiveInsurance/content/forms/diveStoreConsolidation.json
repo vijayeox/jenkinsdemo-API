@@ -9882,6 +9882,7 @@
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"allowCalculateOverride": true,
 											"validate": {
 												"max": 100
 											},
@@ -9943,6 +9944,7 @@
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"allowCalculateOverride": true,
 											"validate": {
 												"max": 100
 											},
@@ -13927,6 +13929,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-08-04T04:53:46.665Z",
+	"modified": "2020-08-04T06:10:19.980Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
