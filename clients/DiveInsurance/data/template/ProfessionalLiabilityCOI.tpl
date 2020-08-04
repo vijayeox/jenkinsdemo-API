@@ -78,10 +78,10 @@
 								<td><p class = "ins_font">Insured's Status: 
 										{if isset($initialTecRec)}
 											{if $initialTecRec != "tecRecDeclined"}
-											<span> TecRec and </span>
+											<span> TecRec </span>
 											{/if}
 										{else}
-											{if $tecRecEndorsment != "tecRecDeclined"} <span> TecRec and </span>
+											{if $tecRecEndorsment != "tecRecDeclined"} <span> TecRec </span>
 											{/if}
 										{/if}
 										{if isset($careerCov)}
