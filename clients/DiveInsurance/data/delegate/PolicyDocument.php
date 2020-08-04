@@ -747,7 +747,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 	$grp_certificate_no = explode("-",$data['group_certificate_no']);
                                     $data['group_certificate_no'] = $grp_certificate_no[0].' - '.$length;
                                 }else{
-                                    $data['group_certificate_no'] = 'S'.$data['certificate_no'];
+                                    $product = $data['product'];
+                                    $data['product'] = 'Group Professional Liability';
+                                    $data['group_certificate_no'] = 'S'.$this->generateCOINumber($data,$persistenceService);
+                                    $data['product'] = $product;
                                 }
                              }
                             }
@@ -1125,8 +1128,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $policy = array();
                     $policy =  $previous_data[$length - 1];
                     $upgrade = array();
-
-
                     if(isset($data['upgradeGroupLiability'])){
                         $data['upgradeGroupLiability'] = is_array($data['upgradeGroupLiability']) ? $data['upgradeGroupLiability'] : json_decode($data['upgradeGroupLiability'],true);
                     }else{
@@ -1139,23 +1140,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);
                     $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
                     $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
-                    $documents['endorsement_group_coi_document'] = isset($documents['endorsement_group_coi_document']) ? $documents['endorsement_group_coi_document'] : array();
+                    $documents['endorsement_group_coi_document'] = isset($data['documents']['endorsement_group_coi_document']) ? $data['documents']['endorsement_group_coi_document'] : array();
                     $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
                     array_push($documents['endorsement_group_coi_document'], $endorsementDoc);
 
-                    $documents['endorsement_group_ni_document'] = isset($documents['endorsement_group_ni_document']) ? $documents['endorsement_group_ni_document'] : array();
+                    $documents['endorsement_group_ni_document'] = isset($data['documents']['endorsement_group_ni_document']) ? $data['documents']['endorsement_group_ni_document'] : array();
                     $endorsementNIDoc = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
                     array_push($documents['endorsement_group_ni_document'], $endorsementNIDoc);
 
                     if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
-                        $documents['endorsement_group_ani_document'] = isset($documents['endorsement_group_ani_document']) ? $documents['endorsement_group_ani_document'] : array();
+                        $documents['endorsement_group_ani_document'] = isset($data['documents']['endorsement_group_ani_document']) ? $data['documents']['endorsement_group_ani_document'] : array();
                         $this->logger->info("DOCUMENT namedInsured");
                         $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
                         array_push($documents['endorsement_group_ani_document'], $endorsementDoc);
                     }
 
                     if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
-                        $documents['endorsement_group_ai_document'] = isset($documents['endorsement_group_ai_document']) ? $documents['endorsement_group_ai_document'] : array();
+                        $documents['endorsement_group_ai_document'] = isset($data['documents']['endorsement_group_ai_document']) ? $data['documents']['endorsement_group_ai_document'] : array();
                         $this->logger->info("DOCUMENT namedInsured");
                         $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
                         array_push($documents['endorsement_group_ai_document'], $endorsementDoc);
