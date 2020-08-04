@@ -47,7 +47,7 @@ class RegenerateDocuments extends PolicyDocument
             if (is_string($documents)) {
                 $documents = json_decode($documents,true);
             }
-            $this->setCoverageDetails($data,$previous_data,$temp,$documents,$persistenceService);    
+            $this->setCoverageDetails($fileData,$previous_data,$temp,$documents,$persistenceService); 
             $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             $this->policyCOI($policyDocuments,$temp,$documents); 
 
