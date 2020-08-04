@@ -1511,7 +1511,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         protected function generateDiveStorePremiumSummary($temp,$documents,$dest,$options){
             $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         }
-        private function policyCOI($policyDocuments,$temp,&$documents){ 
+        protected function policyCOI($policyDocuments,$temp,&$documents){ 
            if(is_array($policyDocuments)){  
                 foreach ($policyDocuments as $key => $value) {  
                     $documents[$key] = $value;  
@@ -1525,7 +1525,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }   
         }
 
-        private function setCoverageDetails($data,$previous_data,&$temp,&$documents,$persistenceService){
+        protected function setCoverageDetails($data,$previous_data,&$temp,&$documents,$persistenceService){
               if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['excessLiability'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
