@@ -8740,19 +8740,64 @@
 										}]
 									}, {
 										"components": [{
+											"label": "Over Ride Liability Tax",
+											"tableView": false,
+											"defaultValue": false,
+											"clearOnHide": false,
+											"key": "overRideLiabilityTax",
+											"type": "checkbox",
+											"input": true
+										}, {
 											"label": "Liability Tax Percentage",
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
 											"spellcheck": false,
-											"tableView": true,
+											"disabled": true,
+											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == row.state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"validate": {
+												"max": 100
+											},
 											"key": "ALliabilityTaxPercentage",
+											"logic": [{
+												"name": "Enable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRideLiabilityTax",
+														"eq": "true"
+													},
+													"javascript": "if(row.overRideLiabilityTax == true){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Enable Manual Override",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
+												}]
+											}, {
+												"name": "Disable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRideLiabilityTax",
+														"eq": "true"
+													},
+													"javascript": "if(row.overRideLiabilityTax == false){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Disable Manual Over ride",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
+												}]
+											}],
 											"type": "number",
 											"decimalLimit": 3,
 											"input": true,
@@ -8797,19 +8842,63 @@
 										}]
 									}, {
 										"components": [{
-											"label": "Property Tax Percentage",
+											"label": "Over Ride Property Tax",
+											"tableView": false,
+											"defaultValue": false,
+											"key": "overRidePropertyTax",
+											"type": "checkbox",
+											"input": true
+										}, {
+											"label": "Liability Tax Percentage",
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
 											"spellcheck": false,
-											"tableView": true,
+											"disabled": true,
+											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == row.state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"validate": {
+												"max": 100
+											},
 											"key": "ALPropertyTaxPercentage",
+											"logic": [{
+												"name": "Enable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRidePropertyTax",
+														"eq": "true"
+													},
+													"javascript": "if(row.overRidePropertyTax == true){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Enable Manual Override",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "schema = { allowCalculateOverride:true ,disabled:false}"
+												}]
+											}, {
+												"name": "Disable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRidePropertyTax",
+														"eq": ""
+													},
+													"javascript": "if(row.overRidePropertyTax == false){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Disable Manual Over ride",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true}"
+												}]
+											}],
 											"type": "number",
 											"decimalLimit": 3,
 											"input": true,
@@ -10664,25 +10753,66 @@
 						}]
 					}, {
 						"components": [{
-							"label": "Tax Percentage",
+							"label": "Over Ride Tax",
+							"tableView": false,
+							"clearOnHide": false,
+							"key": "overRideGroupTax",
+							"type": "checkbox",
+							"input": true,
+							"defaultValue": false
+						}, {
+							"label": "Group Tax Percentage",
 							"prefix": "%",
 							"hideLabel": true,
 							"mask": false,
-							"spellcheck": true,
+							"spellcheck": false,
 							"disabled": true,
-							"tableView": true,
+							"tableView": false,
+							"defaultValue": "0",
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"customDefaultValue": "function getValue(states) {\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == data.state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nvalue = getValue(stateTaxData);",
-							"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+							"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"validate": {
 								"max": 100
 							},
 							"key": "groupTaxPercentage",
+							"logic": [{
+								"name": "Enable Custom Tax",
+								"trigger": {
+									"type": "javascript",
+									"simple": {
+										"show": true,
+										"when": "additionalLocations.overRidePropertyTax",
+										"eq": "true"
+									},
+									"javascript": "if(data.overRideGroupTax == true){\n  result = true\n} else {\n  result = false\n}"
+								},
+								"actions": [{
+									"name": "Enable Manual Override",
+									"type": "mergeComponentSchema",
+									"schemaDefinition": "schema = { allowCalculateOverride:true ,disabled:false}"
+								}]
+							}, {
+								"name": "Disable Custom Tax",
+								"trigger": {
+									"type": "javascript",
+									"simple": {
+										"show": true,
+										"when": "additionalLocations.overRidePropertyTax",
+										"eq": ""
+									},
+									"javascript": "if(row.overRideGroupTax == false){\n  result = true\n} else {\n  result = false\n}"
+								},
+								"actions": [{
+									"name": "Disable Manual Over ride",
+									"type": "mergeComponentSchema",
+									"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true}"
+								}]
+							}],
 							"type": "number",
-							"decimalLimit": 2,
+							"decimalLimit": 3,
 							"input": true,
 							"inputType": "number",
 							"lockKey": true
@@ -13001,18 +13131,69 @@
 				"width": 3
 			}, {
 				"components": [{
-					"label": "Property Tax",
+					"label": "Over Ride Tax",
+					"tableView": false,
+					"defaultValue": false,
+					"clearOnHide": false,
+					"key": "overRideStorePropertyTax",
+					"type": "checkbox",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "Property Tax Percentage",
 					"prefix": "%",
 					"mask": false,
-					"spellcheck": true,
-					"tableView": true,
-					"defaultValue": 0,
+					"spellcheck": false,
+					"disabled": true,
+					"tableView": false,
+					"defaultValue": "0",
 					"delimiter": false,
 					"requireDecimal": true,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
+					"validate": {
+						"max": 100
+					},
 					"key": "propertyTaxPL",
+					"conditional": {
+						"show": false,
+						"when": "product",
+						"eq": "Group Professional Liability"
+					},
+					"logic": [{
+						"name": "Enable Custom Tax",
+						"trigger": {
+							"type": "javascript",
+							"simple": {
+								"show": true,
+								"when": "additionalLocations.overRideLiabilityTax",
+								"eq": "true"
+							},
+							"javascript": "if(data.overRideStorePropertyTax == true){\n  result = true\n} else {\n  result = false\n}"
+						},
+						"actions": [{
+							"name": "Enable Manual Override",
+							"type": "mergeComponentSchema",
+							"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
+						}]
+					}, {
+						"name": "Disable Custom Tax",
+						"trigger": {
+							"type": "javascript",
+							"simple": {
+								"show": true,
+								"when": "additionalLocations.overRideLiabilityTax",
+								"eq": "true"
+							},
+							"javascript": "if(data.overRideStorePropertyTax == false){\n  result = true\n} else {\n  result = false\n}"
+						},
+						"actions": [{
+							"name": "Disable Manual Over ride",
+							"type": "mergeComponentSchema",
+							"schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
+						}]
+					}],
 					"type": "number",
 					"decimalLimit": 3,
 					"input": true,
@@ -13114,18 +13295,69 @@
 				"width": 3
 			}, {
 				"components": [{
-					"label": "Liability Tax",
+					"label": "Over Ride Tax",
+					"tableView": false,
+					"defaultValue": false,
+					"clearOnHide": false,
+					"key": "overRideStoreLiabilityTax",
+					"type": "checkbox",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "Liability Tax Percentage",
 					"prefix": "%",
 					"mask": false,
-					"spellcheck": true,
-					"tableView": true,
-					"defaultValue": 0,
+					"spellcheck": false,
+					"disabled": true,
+					"tableView": false,
+					"defaultValue": "0",
 					"delimiter": false,
 					"requireDecimal": true,
 					"inputFormat": "plain",
 					"clearOnHide": false,
 					"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
+					"validate": {
+						"max": 100
+					},
 					"key": "liabilityTaxPL",
+					"conditional": {
+						"show": false,
+						"when": "product",
+						"eq": "Group Professional Liability"
+					},
+					"logic": [{
+						"name": "Enable Custom Tax",
+						"trigger": {
+							"type": "javascript",
+							"simple": {
+								"show": true,
+								"when": "additionalLocations.overRideLiabilityTax",
+								"eq": "true"
+							},
+							"javascript": "if(data.overRideStoreLiabilityTax == true){\n  result = true\n} else {\n  result = false\n}"
+						},
+						"actions": [{
+							"name": "Enable Manual Override",
+							"type": "mergeComponentSchema",
+							"schemaDefinition": "schema = {\"allowCalculateOverride\":true,\"disabled\":false}"
+						}]
+					}, {
+						"name": "Disable Custom Tax",
+						"trigger": {
+							"type": "javascript",
+							"simple": {
+								"show": true,
+								"when": "additionalLocations.overRideLiabilityTax",
+								"eq": "true"
+							},
+							"javascript": "if(data.overRideStoreLiabilityTax == false){\n  result = true\n} else {\n  result = false\n}"
+						},
+						"actions": [{
+							"name": "Disable Manual Over ride",
+							"type": "mergeComponentSchema",
+							"schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
+						}]
+					}],
 					"type": "number",
 					"decimalLimit": 3,
 					"input": true,
@@ -14381,6 +14613,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-05T11:29:44.749Z",
+	"modified": "2020-08-05T16:21:01.069Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
