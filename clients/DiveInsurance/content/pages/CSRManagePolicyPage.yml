@@ -215,7 +215,7 @@ content:
                             useRowData: true
                         -
                             type: Comment
-                            url: '{{uuid}}'
+                            content: '{{uuid}}'
                     icon: 'far fa-comment'
                 -
                     name: 'View Policy'
