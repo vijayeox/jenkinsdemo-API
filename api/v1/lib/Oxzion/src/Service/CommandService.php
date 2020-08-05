@@ -542,8 +542,9 @@ class CommandService extends AbstractService
         if (isset($data['workflow_id']) && isset($data['appId'])) {
             $workFlowId = $data['workflow_id'];
             $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
-            // print_r($result);exit;
-            $data['template'] = $result['template'];
+            if(isset($result['template'])){
+                $data['template'] = $result['template'];
+            }
             $data['formName'] = $result['formName'];
             $data['id'] = $result['id'];
             return $data;
