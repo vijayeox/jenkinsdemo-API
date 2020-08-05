@@ -31,6 +31,10 @@ class CancelPolicy extends PolicyDocument
         'Dive Store' 
             => array('template' => 'Cancellation_Approval',
                      'header' => 'Cancellation_header.html',
+                     'footer' => 'Cancellation_footer.html'),
+        'Group Professional Liability' 
+            => array('template' => 'Cancellation_Approval',
+                     'header' => 'Cancellation_header.html',
                      'footer' => 'Cancellation_footer.html'));
     }
 
