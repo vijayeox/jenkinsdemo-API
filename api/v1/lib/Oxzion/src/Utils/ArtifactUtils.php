@@ -11,7 +11,7 @@ class ArtifactUtils
     public static function getTemplatePath($config, $template, $params = array())
     {
         $templateDir = $config['TEMPLATE_FOLDER']; 
-        $orgUuid = isset($params['orgUuid']) ? $params['orgUuid'] : isset($params['orgId']) ? $params['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
+        $orgUuid = isset($params['orgUuid']) ? $params['orgUuid'] : (isset($params['orgId']) ? $params['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
         self::$logger->info("Org Uuid - $orgUuid");
         if (isset($orgUuid)) {
             $path = $orgUuid."/".$template;
