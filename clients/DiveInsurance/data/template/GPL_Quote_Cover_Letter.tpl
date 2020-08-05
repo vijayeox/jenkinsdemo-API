@@ -22,19 +22,10 @@
 		<div class = "line_space">
 		<p>We are pleased to enclose your PADI Endorsed Dive Center proposal. Our program includes:</p>
 		<ul class ="order">
-			<li>Damage to Premise you rent includes water damage and smoke and explosion in addition to fire damage.</li>
-			<li>Contingent Professional Liability - See policy for coverage terms.</li>
-			<li>No coinsurance penalty on property coverage.</li>
-			<li>Accidental Compressor Breakdown (excluding wear and tear and normal maintenance).</li>
-			<li>Optional Group Professional Liability.</li>
 			<li>U.S. A++ XV rated insurer.</li>
 			<li>Unlimited defense costs for covered claims.</li>
-			<li>Non-motorized watercraft less than 20 feet in length.</li>
 			<li>No liability deductible.</li>
 			<li>Worldwide liability coverage - except where not allowed by law.</li>
-			<li>Optional Travel Agents Liability.</li>
-			<li>Optional higher Property Deductible of $2,500.00 or $5,000.00.</li>
-			<li>Please note:Ssupervision and instruction of swimmers can only be covered by an individual or group professional liability policy.</li>
 		</ul>
 
 		<p>To purchase your insurance coverage, please provide us with the following items:</p>
@@ -67,4 +58,3 @@
 	</div>
 </body>
 </html>
-
