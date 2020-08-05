@@ -191,7 +191,6 @@ class FileService extends AbstractService
                 return $this->createFile($data);
             }
             $obj = $obj->toArray();
-
         }
         $latestcheck = 0;
         if (isset($data['islatest']) && $data['islatest'] == 0) {
@@ -373,7 +372,7 @@ class FileService extends AbstractService
             $where = "ox_workflow_instance.id=:workflowInstanceId";
         }
         try {
-            $select = "SELECT ox_file.id,ox_file.uuid as fileId,ox_file.data from ox_file
+            $select = "SELECT ox_file.id,ox_file.uuid as fileId, ox_file.data, ox_file.last_workflow_instance_id from ox_file
             inner join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id
             where ox_file.org_id=:orgId and $where and ox_file.is_active =:isActive";
             $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),

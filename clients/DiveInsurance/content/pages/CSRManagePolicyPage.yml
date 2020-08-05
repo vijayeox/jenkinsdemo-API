@@ -346,6 +346,7 @@ content:
                             - 'Dive Boat'
                             - 'Dive Store'
                             - 'Emergency First Response'
+                            - 'Group Professional Liability'
                         placeholder: 'Select Product'
                 -
                     title: 'Policy Status'

@@ -7,6 +7,7 @@ namespace Workflow\Controller;
 use Exception;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\EntityNotFoundException;
+use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
 use Oxzion\ValidationException;
 use Oxzion\Workflow\Camunda\WorkflowException;
@@ -49,6 +50,10 @@ class WorkflowInstanceController extends AbstractApiController
         } catch (EntityNotFoundException $e) {
             $response = ['data' => $params, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Entity Not Found", 404, $response);
+        } catch (ServiceException $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 412, $response);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             $response = ['data' => $params, 'errors' => $e->getMessage()];

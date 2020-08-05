@@ -18,6 +18,7 @@ class CsrRejection extends DispatchNotification {
             'Individual Professional Liability' => 'CsrRejectionTemplate',
             'Dive Boat' => 'CsrRejectionTemplate',
             'Dive Store' => 'CsrRejectionTemplate',
+            'Group Professional Liability' => 'CsrRejectionTemplate',
             'Emergency First Response' => 'CsrRejectionTemplate');
         parent::__construct();
     }
@@ -26,7 +27,7 @@ class CsrRejection extends DispatchNotification {
     {
         $this->logger->info("Rejection Policy Notification");
         $data['template'] = $this->template[$data['product']];
-        if($data['product'] == 'Dive Store'){
+        if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
             $subject = 'Dive Store Insurance Application on Hold - '.$data['business_padi'];
             $data['productType'] = 'Dive Store';
         }else if($data['product'] == 'Dive Boat'){

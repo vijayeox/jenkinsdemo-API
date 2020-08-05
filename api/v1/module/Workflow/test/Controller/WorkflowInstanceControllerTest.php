@@ -102,6 +102,164 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
+    public function testCreateWithParentWorkflowInstance()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343", 'parentWorkflowInstanceId' => '3f20b5c5-0124-11ea-a8a0-22e8105c0798'];
+        $query = "update ox_file set last_workflow_instance_id = 2 where id = 12";
+        $result = $this->executeUpdate($query);
+        $fileCount = $this->getConnection()->getRowCount('ox_file');
+        $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
+        $this->setJsonContent(json_encode($data));
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id' => 1));
+            $workflowService->setProcessEngine($mockProcessEngine);
+            $this->processId = 1;
+        }
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($fileAttributeCount+2, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $newFileCount = $this->getConnection()->getRowCount('ox_file');
+        $this->assertEquals($fileCount, $newFileCount);
+        $query = "select * from ox_workflow_instance where id > 5";
+        $result = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(12, $result[0]['file_id']);
+        $workflowInstanceId = $result[0]['id'];
+        $query = "select * from ox_file where id = 12";
+        $result = $this->executeQueryTest($query);
+        $this->assertEquals($workflowInstanceId, $result[0]['last_workflow_instance_id']);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('workflowInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testCreateWithParentWorkflowInstanceExistingProcess()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343", 'parentWorkflowInstanceId' => '3f20b5c5-0124-11ea-a8a0-22e8105c0790'];
+        $query = "update ox_file set last_workflow_instance_id = 3 where id = 11";
+        $result = $this->executeUpdate($query);
+        $fileCount = $this->getConnection()->getRowCount('ox_file');
+        $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
+        $this->setJsonContent(json_encode($data));
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id' => 1));
+            $workflowService->setProcessEngine($mockProcessEngine);
+            $this->processId = 1;
+        }
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(412);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('workflowInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+    }
+
+    public function testCreateByLinkingToExistingFile()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343", 'uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9146d'];
+        $fileCount = $this->getConnection()->getRowCount('ox_file');
+        $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
+        $this->setJsonContent(json_encode($data));
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id' => 1));
+            $workflowService->setProcessEngine($mockProcessEngine);
+            $this->processId = 1;
+        }
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($fileAttributeCount+2, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $newFileCount = $this->getConnection()->getRowCount('ox_file');
+        $this->assertEquals($fileCount, $newFileCount);
+        $query = "select * from ox_workflow_instance where id > 5";
+        $result = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(14, $result[0]['file_id']);
+        $workflowInstanceId = $result[0]['id'];
+        $query = "select * from ox_file where id = 14";
+        $result = $this->executeQueryTest($query);
+        $this->assertEquals($workflowInstanceId, $result[0]['last_workflow_instance_id']);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('workflowInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testCreateByLinkingToExistingFileWithOngoingProcess()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343", 'uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b'];
+        $query = "update ox_file set last_workflow_instance_id = 3 where id = 11";
+        $result = $this->executeUpdate($query);
+        $fileCount = $this->getConnection()->getRowCount('ox_file');
+        $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
+        $this->setJsonContent(json_encode($data));
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id' => 1));
+            $workflowService->setProcessEngine($mockProcessEngine);
+            $this->processId = 1;
+        }
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(412);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('workflowInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+    }
+
+    public function testCreateWithOngoingProcess()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343", "identifier_field" => "padi_number", "padi_number" => "1234"];
+        $query = "update ox_file set last_workflow_instance_id = 3 where id = 11";
+        $result = $this->executeUpdate($query);
+        $fileCount = $this->getConnection()->getRowCount('ox_file');
+        $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
+        $this->setJsonContent(json_encode($data));
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id' => 1));
+            $workflowService->setProcessEngine($mockProcessEngine);
+            $this->processId = 1;
+        }
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(412);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('workflowInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+    }
+
 // Code commented
     //     public function testUpdate(){
     //         $this->initAuthToken($this->adminUser);
