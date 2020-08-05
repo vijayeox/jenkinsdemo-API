@@ -252,7 +252,7 @@ class AppService extends AbstractService
      */
     public function deployApplication($appId)
     {
-        $query = 'SELECT name, description FROM ox_app WHERE uuid=:appId';
+        $query = 'SELECT name, uuid, description FROM ox_app WHERE uuid=:appId';
         $queryParams = array('appId' => $appId);
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if(!isset($result) || empty($result) || (count($result) != 1)) {
@@ -260,12 +260,13 @@ class AppService extends AbstractService
             throw new ServiceException("Application with APP ID ${appId} not found.", 'E_NOT_FOUND_APP_ID', 0);
         }
         $appName = $result[0]['name'];
-        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . $appName;
+        $uuid = $result[0]['uuid'];
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . $appName . '_' . $uuid;
         if (!file_exists($appSourceDir)) {
             $this->logger->error("Application source directory ${appSourceDir} not found.");
             throw new ServiceException('Application source directory not found.', 'E_NOT_FOUND_APP_SRC_DIR', 0);
         }
-        $appDestDir = $this->config['EOX_APP_DEPLOY_DIR'] . $appName;
+        $appDestDir = $this->config['EOX_APP_DEPLOY_DIR'] . $appName . '_' . $uuid;
         if (!file_exists($appDestDir)) {
             if (!mkdir($appDestDir)) {
                 $this->logger->error("Failed to create application deployment directory ${appDestDir}.");

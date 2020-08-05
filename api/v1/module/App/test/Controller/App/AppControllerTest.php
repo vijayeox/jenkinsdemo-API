@@ -827,12 +827,12 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployApplication()
     {
+        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         $appName = 'SampleApp';
         $config = $this->getApplicationConfig();
-        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . $appName;
-        $appDestDir = $config['EOX_APP_DEPLOY_DIR'] . $appName;
+        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
+        $appDestDir = $config['EOX_APP_DEPLOY_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
         try {
-            $this->initAuthToken($this->adminUser);
             if (file_exists($appSourceDir)) {
                 FileUtils::deleteDirectoryContents($appSourceDir);
                 mkdir($appSourceDir);
@@ -847,7 +847,7 @@ class AppControllerTest extends ControllerTest
         finally {
             try {
                 if (file_exists($appSourceDir)) {
-                FileUtils::deleteDirectoryContents($appSourceDir);
+                    FileUtils::deleteDirectoryContents($appSourceDir);
                 }
             }
             catch(\Exception $e) {
@@ -855,7 +855,7 @@ class AppControllerTest extends ControllerTest
             }
             try {
                 if (file_exists($appDestDir)) {
-                FileUtils::deleteDirectoryContents($appDestDir);
+                    FileUtils::deleteDirectoryContents($appDestDir);
                 }
             }
             catch(\Exception $e) {
@@ -866,16 +866,31 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployApplicationWithoutAppInDatabase() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/98f2b17e-65dc-440f-8cc2-7df0cf94e434/deploy', 'POST');
+        $notExistingAppUuid = '11111111-1111-1111-1111-111111111111';
+        $this->dispatch("/app/${notExistingAppUuid}/deploy", 'POST');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Application with APP ID 98f2b17e-65dc-440f-8cc2-7df0cf94e434 not found.');
+        $this->assertEquals($content['message'], "Application with APP ID ${notExistingAppUuid} not found.");
     }
 
     public function testDeployApplicationWithoutAppDir() {
+        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+        $appName = 'SampleApp';
+        $config = $this->getApplicationConfig();
+        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
+        //Ensure souyrce directory does not exist.
+        try {
+            if (file_exists($appSourceDir)) {
+                FileUtils::deleteDirectoryContents($appSourceDir);
+            }
+        }
+        catch(\Exception $e) {
+            print($e);
+        }
+
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deploy', 'POST');
+        $this->dispatch("/app/${sampleAppUuidFromWorkflowYml}/deploy", 'POST');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->assertEquals($content['status'], 'error');
@@ -887,8 +902,9 @@ class AppControllerTest extends ControllerTest
 //to the template application.
 //-----------------------------------------------------------------------------------------------
 //    public function testDeployApplicationWithoutTemplateApp() {
+//        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
 //        $this->initAuthToken($this->adminUser);
-//        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deploy', 'POST');
+//        $this->dispatch("/app/${sampleAppUuidFromWorkflowYml}/deploy", 'POST');
 //        $this->assertResponseStatusCode(406);
 //        $content = (array) json_decode($this->getResponse()->getContent(), true);
 //        $this->assertEquals($content['status'], 'error');
