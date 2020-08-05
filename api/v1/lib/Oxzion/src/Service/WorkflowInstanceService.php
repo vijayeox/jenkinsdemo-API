@@ -221,6 +221,9 @@ class WorkflowInstanceService extends AbstractService
             $fileData['last_workflow_instance_id'] = $workflowInstance['id'];
             if (isset($workflowInstance['parent_workflow_instance_id'])) {
                 $fileDataResult = $this->fileService->getFileByWorkflowInstanceId($workflowInstance['parent_workflow_instance_id'], false);
+                if($this->checkIfWorkflowInProgress($fileDataResult['last_workflow_instance_id'])){
+                    throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+                }
                 $oldFileData = json_decode($fileDataResult['data'], true);
                 $fileData = array_merge($oldFileData, $fileData);
                 $file = $this->fileService->updateFile($fileData,$fileDataResult['fileId']);
@@ -230,17 +233,23 @@ class WorkflowInstanceService extends AbstractService
                 $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
             }else{
                 if(isset($fileData['uuid'])){
-                    $select  = "SELECT of.id from ox_file as of join ox_workflow_instance as owi on owi.file_id = of.id WHERE of.uuid = :fileId";
+                    $select  = "SELECT of.id, of.last_workflow_instance_id from ox_file as of join ox_workflow_instance as owi on owi.id = of.last_workflow_instance_id WHERE of.uuid = :fileId";
                     $queryParams = array('fileId' => $fileData['uuid']);
                     $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
                     if(count($result) == 0){
                         $file = $this->fileService->updateFile($fileData,$fileData['uuid']);
                         $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
                     }else{
+                        if($this->checkIfWorkflowInProgress($result[0]['last_workflow_instance_id'])){
+                            throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+                        }
                         unset($fileData['uuid']);
                     }
                 }
                 if(!isset($fileData['uuid'])){
+                    if($this->checkIfWorkflowInProgress(null, $fileData)){
+                        throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+                    }
                     $file = $this->fileService->createFile($fileData);    
                 }
             }
@@ -267,6 +276,25 @@ class WorkflowInstanceService extends AbstractService
         return $file;
     }
 
+    private function checkIfWorkflowInProgress($workflowInstanceId, $fileData = null){
+        if($workflowInstanceId){
+            $query = "select id from ox_workflow_instance where id = :workflowInstanceId and status = 'In Progress'";
+            $params = array("workflowInstanceId" => $workflowInstanceId);
+            $result = $this->executeQueryWithBindParameters($query, $params);
+        }else if($fileData && isset($fileData['identifier_field'])){
+            $query = "select wi.id from ox_file as f 
+                      inner join ox_indexed_file_attribute fa on fa.file_id = f.id
+                      inner join ox_field fd on fd.id = fa.field_id
+                      inner join ox_workflow_instance wi on wi.id = f.last_workflow_instance_id
+                      where fd.name = :identifierField and fa.field_value_text = :identifier and wi.status = 'In Progress'";
+            $params = array("identifierField" => $fileData['identifier_field'],
+                            "identifier" => $fileData[$fileData['identifier_field']]);
+            $result = $this->executeQueryWithBindParameters($query, $params);
+        }else{
+            return false;
+        }
+        return count($result) == 1;
+    }
     private function setupIdentityField($params)
     {
         $this->logger->info("setupIdentityField");
