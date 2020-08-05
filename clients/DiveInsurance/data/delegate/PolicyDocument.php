@@ -1307,7 +1307,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $length = sizeof($policy) - 1;
                 $policy =  $policy[$length];
-                unset($data['increased_liability'],$data['new_auto_liability'],$data['paymentVerified'],$data['premiumFinanceSelect'],$data['finalAmountPayable'],$data['paymentOptions'],$data['chequeNumber'],$data['orderId']);
+                unset($data['increased_liability'],$data['new_auto_liability']);
                 $data['update_date'] = $policy['update_date'];
                 if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
                     if($policy['previous_nonOwnedAutoLiabilityPL'] == 'no' && $data['nonOwnedAutoLiabilityPL'] !='no'){

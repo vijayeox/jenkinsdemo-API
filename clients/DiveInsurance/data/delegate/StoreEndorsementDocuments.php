@@ -88,6 +88,7 @@ class StoreEndorsementDocuments extends EndorsementDocument
             $length = 0;
         }
 
+        $this->diveStoreEndorsement($data,$temp);
         if(isset($this->template[$temp['product']]['cover_letter'])){
             $this->logger->info("DOCUMENT cover_letter");
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');

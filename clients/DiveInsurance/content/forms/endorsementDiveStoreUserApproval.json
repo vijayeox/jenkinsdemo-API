@@ -547,7 +547,7 @@
 		"tableView": false,
 		"key": "DocumentPreview",
 		"properties": {
-			"commands": "[{\"command\" : \"delegate\", \"delegate\":\"DiveStoreEndorsementPremiumCalculation\"},{\"command\" : \"delegate\",\"delegate\":\"StoreEndorsementDocuments\"}]"
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"StoreEndorsementDocuments\"}]"
 		},
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
@@ -623,6 +623,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-08-05T10:55:21.928Z",
+	"modified": "2020-08-05T11:43:23.903Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
