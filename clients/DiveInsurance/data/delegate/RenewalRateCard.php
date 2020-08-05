@@ -74,6 +74,7 @@ class RenewalRateCard extends RateCard
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
         }else if($data['form_data']['product'] == 'Dive Store'){
+            $data['form_data']['entity_name'] = 'Dive Store';
             $data['form_data']['workflowId'] = 'cb99e634-de00-468d-9230-d6f77d241c5b';
             $data['form_data']['start_date'] = $startYear."-06-30";
             $data['form_data']['end_date'] = $endYear."-06-30";

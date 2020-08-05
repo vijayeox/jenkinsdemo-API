@@ -286,6 +286,15 @@ content:
                             url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
+                    name: 'Cancel Policy'
+                    icon: 'fa fa-ban'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                -
                     name: 'Reinstate Policy'
                     details:
                         -
