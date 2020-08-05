@@ -1492,7 +1492,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
 
-        protected function generateDiveStorePremiumSummary($temp,$documents,$dest,$options){
+        protected function generateDiveStorePremiumSummary($temp,&$documents,$dest,$options){
             $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         }
         protected function policyCOI($policyDocuments,$temp,&$documents){ 
