@@ -1,54 +1,1570 @@
-- pageName: Coverage Selections
-  cell: I8
-  type: Checkbox
-  key: propertyYes
-  value: 'true'
-- pageName: Crime (printable)
-  cell: J72
-  type: Checkbox
-  key: semiAnual
-  value: 'true'
-- pageName: Garage Supplemental
-  cell: C5
-  key: minAge
-  value: '18'
-- pageName: Garage Supplemental
-  cell: C8
-  key: titleSearch
-  value: 'Yes'
-- pageName: Garage Supplemental
-  cell: C9
-  key: titleSearchDescription
-  value: Sample Description
-- pageName: Garage Supplemental
-  cell: B45
-  type: DataGrid
-  value:
-    - - ABC
-      - Father
-      - '2020-11-15'
-      - '12345'
-    - - KLM
-      - Mother
-      - '1995-11-25'
-      - '8565'
-    - - XYZ
-      - Brother
-      - '1856-10-15'
-      - A562B
-    - - PLM
-      - Son
-      - '2012-10-05'
-      - '#16ANC'
-- pageName: Garage Supplemental
-  cell: B5
-  type: SingleCellMultipleCheckboxs
-  multiItemIndex: 2
-  key: plannedRoute
-  value: 'true'
-- pageName: Garage Supplemental
-  cell: B112
-  type: SingleCellMultipleCheckboxs
-  multiItemIndex: 3
-  key: other
-  value: 'true'
+-
+   Source Worksheet: Producer
+   pageName: A-Gen
+   cell: 'J8'
+   key: producername
+-
+   Source Worksheet: Named Insured
+   pageName: A-Gen
+   cell: 'C10'
+   key: namedInsured
+-
+   Source Worksheet: Legal Entity
+   pageName: A-Gen
+   cell: 'I16'
+   key: legalEntity
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Mailing Address
+   pageName: A-Gen
+   cell: 'C12'
+   key: mailingAddress
+-
+   Source Worksheet: City
+   pageName: A-Gen
+   cell: 'F12'
+   key: city
+-
+   Source Worksheet: State
+   pageName: A-Gen
+   cell: J12
+   key: state
+-
+   Source Worksheet: Zip
+   pageName: A-Gen
+   cell: K12
+   key: zip
+-
+   Source Worksheet: 'Type (Auto, Truck, etc.)'
+   pageName: A-Gen
+   cell: 'F16'
+   key: type
+-
+   Source Worksheet: Business Phone
+   pageName: A-Gen
+   cell: 'C14'
+   key: businessPhone
+-
+   Source Worksheet: 'Website:'
+   pageName: A-Gen
+   cell: 'F14'
+   key: website
+-
+   Source Worksheet: 'Dealer Name:'
+   pageName: A-Gen
+   cell: 'D21'
+   key: dealerName
+-
+   Source Worksheet: '% of ownership'
+   pageName: A-Gen
+   cell: 'K21'
+   key: dealerOwnershipPercentage
+-
+   Source Worksheet: 'Effective Date:'
+   pageName: A-Gen
+   cell: J10
+   key: effectiveDate
+-
+   Source Worksheet: 'Need by Date:'
+   key:  needByDate
+   pageName: A-Gen
+   cell: K10
+# -
+#    pageName: A-Gen
+#    key:
+#    cell: E18
+#    Note: The primary OEM selected for Location 1 will map to cell E18  on the A-Gen
+#       sheet on the harco app.
+# -
+#    pageName: A-Gen
+#    cell: 'F18'
+#    key: 
+#    method: simpleDatagrid
+#    type: DataGrid
+#    Note: The secondary OEMs will map to the Franchise/Occupancy Comments section
+#       for each building.
+# -
+#    Source Worksheet: Other
+#    pageName: A-Gen
+#    cell: 'I18'
+#    key: 
+#    method: simpleDatagrid
+#    type: DataGrid
+#    Note: the first 2 selected Secondary OEMs will map to the Secondary and Other
+#       drop down listed in the Harco App. Sheet!A-Gen F18 and Sheet!A-Gen I8.
+-
+   Source Worksheet: Description of Operations
+   pageName: A-Gen
+   cell: 'E19'
+   key: namedInsuredSchedule_descriptionOfOperations
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Applicable Locations
+   pageName: A-Gen
+   cell: 'E19'
+   key: namedInsuredSchedule_applicableLocations
+   method: simpleDatagrid
+   type: DataGrid
+   Note: Wronlgy mapped. Its not mapped in A-Gen
+-
+   Source Worksheet: 'Location #'
+   pageName: C-Locs&AIs
+   cell: 'G11'
+   key: genericData*locationScheduleGridData_locationNum
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Building #'
+   pageName: C-Locs&AIs
+   cell: 'H11'
+   key: genericData*locationScheduleGridData_buildingNumber
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Location Address
+   pageName: C-Locs&AIs
+   cell: 'I11'
+   key: genericData*locationScheduleGridData_address
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: City
+   pageName: C-Locs&AIs
+   cell: 'K11'
+   key: genericData*locationScheduleGridData_city
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: State
+   pageName: C-Locs&AIs
+   cell: 'L11'
+   key: genericData*locationScheduleGridData_state
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Zip Code
+   pageName: C-Locs&AIs
+   cell: 'M11'
+   key: genericData*locationScheduleGridData_zip
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: County
+   pageName: C-Locs&AIs
+   cell: 'N11'
+   key: genericData*locationScheduleGridData_county1
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: "\r\nOccupancy Type"
+   pageName: C-Locs&AIs
+   cell: 'V11'
+   key: genericData*locationScheduleGridData_occupancyType
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Primary OEM
+   pageName: C-Locs&AIs
+   cell: 'W11'
+   key: genericData*locationScheduleGridData_primaryOEM
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Secondary OEM
+   pageName: C-Locs&AIs
+   cell: 'W11'
+   key: genericData*locationScheduleGridData_secondaryOEM
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Building Interest - Owner or Tenant
+   pageName: C-Locs&AIs
+   cell: 'O11'
+   key: genericData*locationScheduleGridData_buildinginterest
+   Note: 'Its drop down in form, Goes to table'
+-
+   Source Worksheet: Construction Type
+   pageName: C-Locs&AIs
+   cell: 'S11'
+   key: genericData*locationScheduleGridData_constructiontype
+   method: simpleDatagrid
+   type: DataGrid
+   Note: Goes table
+-
+   Source Worksheet: Year Built
+   pageName: C-Locs&AIs
+   cell: 'P11'
+   key: genericData*locationScheduleGridData_yearBuilt
+   method: simpleDatagrid
+   type: DataGrid
+   Note: Goes table
+-
+   Source Worksheet: Building Square Footage
+   pageName: C-Locs&AIs
+   cell: 'U11'
+   key: genericData*locationScheduleGridData_buildingsquarefootage
+   method: simpleDatagrid
+   type: DataGrid
+   Note: Goes table
+# -
+#    Source Worksheet: '% Sprinkler Protected'
+#    pageName: C-Locs&AIs
+#    cell: 'T11'
+#    key: genericData*locationScheduleGridData_sprinklerprotected
+#    Note: If the producer selects 25% the system will select the option Partial(2-49%) 
+#    If the producer selects 50% or 75% the system will select the
+#       option Full(50-100%) If the producer selects "None" the system will
+#       select the None(0%) option
+-
+   Source Worksheet: Roofing Year
+   pageName: C-Locs&AIs
+   cell: 'R11'
+   key: genericData*locationScheduleGridData_roofingyear
+   method: simpleDatagrid
+   type: DataGrid
+   Note: Goes table
+-
+   Source Worksheet: Insurance Contact
+   pageName: Contacts
+   cell: C7
+   key: insurancecontactdataGrid_genfirstname
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Insurance Contact
+   pageName: Contacts
+   cell: E7
+   key: insurancecontactdataGrid_genlastname
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Insurance Contact Phone:'
+   pageName: Contacts
+   cell: H7
+   key: insurancecontactdataGrid_genphone
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Insurance Contact Email:'
+   pageName: Contacts
+   cell: J7
+   key: insurancecontactdataGrid_genemail
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: L7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnBoolean: "P|C"
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: M7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnBoolean: "P|"
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: N7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnBoolean: "P|"
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: O7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnBoolean: "P|"
+-
+   Source Worksheet: BPP Co-Insurance %
+   pageName: E-Prop
+   cell: I8
+   key: bppcoinsurance
+-
+   Source Worksheet: Building Co-Insurance %
+   pageName: E-Prop
+   cell: 'G8'
+   key: buildingCoinsurance
+-
+   Source Worksheet: Deductible
+   pageName: E-Prop
+   cell: 'G7'
+   key: propertyCoverageDeductible
+-
+   Source Worksheet: Blanket Coverage BPP
+   pageName: E-Prop
+   cell: 'L20'
+   key: genericData*locationScheduleGridData_blanketcoveragebpp1
+   method: simpleDatagrid
+   type: DataGrid
+   returnBoolean: "Yes|No"
+   Note: It’s a table in template
+-
+   Source Worksheet: Blanket Coverage Business Income
+   pageName: E-Prop
+   cell: 'M20'
+   key: genericData*locationScheduleGridData_income1
+   method: simpleDatagrid
+   type: DataGrid
+   returnBoolean: "Yes|No"
+-
+   Source Worksheet: Equipment Breakdown
+   pageName: E-Prop
+   cell: 'I11'
+   key: genericData*locationScheduleGridData_equipmentBreakdown
+   returnBoolean: "Yes|No"
+# -
+#    Source Worksheet: 'Wind Deductible:'
+#    pageName: E-Prop
+#    cell: F33
+#    key: genericData*locationScheduleGridData_windDeductible
+#    note:  Map the Wind/Hail Ded selected to the Additional comments section.
+#       It should read Wind Hail Deductible <Insert amount>  
+-
+   Source Worksheet: 'Earthquake Coverage:'
+   pageName: E-Prop
+   cell: G10
+   key: genericData*locationScheduleGridData_earthquakecoverage
+-
+   pageName: E-Prop
+   key: genericData*locationScheduleGridData_earthquakecoverage
+   cell: I10
+-
+   pageName: E-Prop
+   key: genericData*locationScheduleGridData_earthquakecoverage
+   cell: M10
+   returnBoolean: "Yes|No"
+# -
+#    Source Worksheet: 'Earthquake Deductibles:'
+#    pageName: E-Prop
+#    cell: J10
+#    key: genericData*locationScheduleGridData_earthquakedeductibles1
+# -
+#    pageName: E-Prop
+#    key: genericData*locationScheduleGridData_earthquakedeductibles1
+#    cell: H10
+# -
+#    Source Worksheet: Building Limit
+#    key:  genericData*locationScheduleGridData_buildingLimit
+#    pageName: E-Prop
+#    cell: 'F20'
+#    method: simpleDatagrid
+#    type: DataGrid
+-
+   Source Worksheet: Business Personal Property Limit
+   pageName: E-Prop
+   cell: 'I20'
+   key: genericData*locationScheduleGridData_businesspersonal
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Business Income Limit
+   pageName: E-Prop
+   cell: 'K20'
+   key: genericData*locationScheduleGridData_businessincomelimit
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Bi Monthly Limitation
+   pageName: E-Prop
+   cell: 'M9'
+   key: genericData*locationScheduleGridData_bimonthlylimitation
+-
+   Source Worksheet: Damage to Rented Premises*
+   pageName: E-Prop
+   cell: 'J20'
+   key: garageLiabilityDamagetoRentedPremises
+   method: simpleDatagrid
+   type: DataGrid
+# -
+#    Source Worksheet: 'Utilities Options:'
+#    pageName: F
+#    cell: 'J20'
+#    key: 
+#    type: Checkbox
+#    Note: 'Checkbox in form, in template its separate fields'
+# -
+#    Source Worksheet: Utility Services Time Element
+#    pageName: F
+#    Note: Wrongly mapped
+# -
+#    Source Worksheet: Business Electronic Equipment Hardware
+#    pageName: F
+#    cell: 'O33'
+#    key: 
+#    method: simpleDatagrid
+#    type: DataGrid
+#    Note: Wronlgy mapped
+-
+   Source Worksheet: Ordinance/Law Coverage
+   pageName: F
+   cell: 'G20'
+   key: genericData*locationScheduleGridData_ordinancelawcoverage
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Fences
+   pageName: F
+   cell: 'F9'
+   key: genericData*locationScheduleGridData_fences
+   method: simpleDatagrid
+   type: DataGrid
+   Note: Wrongly mapped
+-
+   Source Worksheet: Sign(s) > 10k attached to the bldg
+   pageName: F
+   cell: 'F20'
+   key: genericData*locationScheduleGridData_signsGreaterThan
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Employee Tools
+   pageName: G-IM
+   cell: 'F14'
+   key: genericData*locationScheduleGridData_employeetools
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Signs - not attached to the bldg
+   pageName: G-IM
+   cell: 'J30'
+   key: genericData*locationScheduleGridData_signsnotattached
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Valulable Paers
+   pageName: G-IM
+   cell: 'K14'
+   key: genericData*locationScheduleGridData_valulablePaers
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Accounts Receivable
+   pageName: G-IM
+   cell: 'I14'
+   key: genericData*locationScheduleGridData_accountsreceivable
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: '# of Owners/Officers:'
+   pageName: H-Crime
+   cell: F23
+   key: numberOfOwners
+-
+   key: numberofemployeeshandling
+   Source Worksheet: '# of Employees handling $:'
+   pageName: H-Crime
+   cell: G23
+-
+   key: totalemployees
+   Source Worksheet: 'Total # of Employees:'
+   pageName: H-Crime
+   cell: H25
+-
+   key: theftblanketlimit
+   Source Worksheet: Employee Theft Blanket Limit
+   pageName: H-Crime
+   cell: F9
+-
+   key: theftblanketdeductible
+   Source Worksheet: Employee Theft Blanket Deductible
+   pageName: H-Crime
+   cell: G9
+-
+   key: alterationlimit
+   Source Worksheet: Forgery or Alteration Limit
+   pageName: H-Crime
+   cell: H9
+-
+   key: alterationdeductible
+   Source Worksheet: Forgery or Alteration Deductible
+   pageName: H-Crime
+   cell: I9
+-
+   key: theftofmoneylimit
+   Source Worksheet: Theft of Money/Securities Limit
+   pageName: H-Crime
+   cell: I23
+# -
+#    Source Worksheet: Theft of Money/Securities Deductible
+#    pageName: H-Crime
+#    cell: H18
+#    key: theftofmoneydeductible
+#    note:  On the Harco App the following crime coverages share the same
+#       deductible field. Inside theft of Money and Securities, Outside the
+#       Premises Insuring Agreement and Inside Robbery or Safe Burglary of Other
+#       Property. If the producer selects a different deductible amount for each
+#       of these coverages, the system will map over the lowest deductible option
+#       selected to the Harco App in Sheet!H-Crime H18
+-
+   key: burglaryofotherpropertylimit
+   Source Worksheet: Robbery/Burglary of Other Property Limit
+   pageName: H-Crime
+   cell: H23
+-
+   key: burglaryofotherpropertydeductible
+   Source Worksheet: Robbery/Burglary of Other Property Deductible
+   pageName: H-Crime
+   cell: H18
+-
+   key: outsidethepremiseslimit
+   Source Worksheet: Outside the Premises Limit
+   pageName: H-Crime
+   cell: J23
+-
+   key: outsidethepremisesdeductible
+   Source Worksheet: 'Outside the Premises Deductible '
+   pageName: H-Crime
+   cell: H18
+-
+   key: propertylimit
+   Source Worksheet: Money/Securities/Other Property Limit
+   pageName: H-Crime
+   cell: J23
+-
+   key: propertydeductible
+   Source Worksheet: Money/Securities/Other Property Deductible
+   pageName: H-Crime
+   cell: J18
+   key:  Wrongly mapped
+-
+   Source Worksheet: Computer Fraud Limit
+   pageName: H-Crime
+   cell: J9
+   key: computerlimit
+   note:  If the limit for Computer Fraud and Funds Transfer Fraud are
+      different. Map the highest limit to the Harco App.
+-
+   Source Worksheet: Computer Fraud Deductible
+   pageName: H-Crime
+   cell: K9
+   key: computerdeductible
+-
+   key: counterfeitpaperlimit
+   Source Worksheet: Money Orders/Counterfeit Paper Curr. Limit
+   pageName: H-Crime
+   cell: L9
+-
+   key: counterfeitpapercurrentdeductible
+   Source Worksheet: Money Orders/Counterfeit Paper Curr. Deductible
+   pageName: H-Crime
+   cell: M9
+-
+   Source Worksheet: 'Name of Plan'
+   pageName: H-Crime
+   cell: 'J12'
+   key: nameofplan
+-
+   key: thirdpartyadmin
+   Source Worksheet: '3rd Party Admin:'
+   pageName: H-Crime
+   cell: J13
+   returnBoolean: "Yes|No"
+-
+   Source Worksheet: 'Name of Administrator:'
+   pageName: H-Crime
+   cell: 'N13'
+   key: administratorname
+# -
+#    key:
+#    Source Worksheet: 'Automobile Liability Limit '
+#    pageName: J
+#    cell: K8
+# -
+#    key:
+#    Source Worksheet: 'General Liability Each Occurrence limit '
+#    pageName: J
+#    cell: L8
+# -
+#    key:
+#    Source Worksheet: Medical Expense (Auto & Premises)
+#    pageName: J
+#    cell: K11
+# -
+#    Source Worksheet: 'Deductible:'
+#    pageName: J
+#    cell: 'M7'
+#    key: 
+-
+   Source Worksheet: Garagekeepers (per location)
+   pageName: J
+   cell: 'F37'
+   key: genericData*locationScheduleGridData_garagekeepersperlocation
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Customer Goods (per Location)
+   pageName: J
+   cell: 'P37'
+   key: genericData*locationScheduleGridData_customergoodsperlocation
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Comp Deductible:'
+   pageName: J
+   cell: F34
+   key: garagecompdeductible
+-
+   key: garagecolldeductible
+   Source Worksheet: 'Collision Deductible:'
+   pageName: J
+   cell: F34
+-
+   key: repairpercentlabor
+   Source Worksheet: 'Repair % - Labor:'
+   pageName: J
+   cell: L28
+   returnBoolean: "P|C"
+-
+   key: repairpercentlabor
+   pageName: : J
+   cell: I28
+# -
+#    key: repairpercentparts
+#    Source Worksheet: 'Repair % - Parts:'
+#    pageName: J
+#    cell: M35
+-
+   key: repairpercentparts
+   pageName: : J
+   cell: I29
+-
+   key: garagekeepersbasis
+   Source Worksheet: 'Garagekeepers Basis:'
+   pageName: J
+   cell: F33
+-
+   key: customersgoodsdeductible
+   Source Worksheet: 'Customers Goods Deductible (Per Auto):'
+   pageName: J
+   cell: P34
+-
+   Source Worksheet: '# of Dealer Plates'
+   pageName: J
+   cell: 'L23'
+   key: genericData*locationScheduleGridData__garagenumberofdealerplates
+-
+   Source Worksheet: F/T employees Furnished an Auto
+   pageName: J
+   cell: F23
+   key: 
+   method: simpleDatagrid
+   type: DataGrid
+   Note: "Note Mapped \r\nNotes Buildings should not be separately listed out.  The Harco workbook will sum the total number of employees at each location."
+-
+   Source Worksheet: P/T employees furnished an auto
+   pageName: J
+   cell: G23
+   key: 
+   method: simpleDatagrid
+   type: DataGrid
+   Note: "\r\nNotes: Buildings should not be separately listed out.  The Harco workbook will sum the total number of employees at each location."
+-
+   Source Worksheet: 'F/T All other employees including F&I managers '
+   pageName: J
+   cell: H23
+   key: 
+   method: simpleDatagrid
+   type: DataGrid
+   note: Buildings should not be separately listed out.  The Harco workbook
+      will sum the total number of employees at each location.
+-
+   Source Worksheet: 'P/T All other employees including F&I managers '
+   pageName: J
+   cell: I23
+   key: 
+   method: simpleDatagrid
+   type: DataGrid
+   note: Buildings should not be separately listed out.  The Harco workbook
+      will sum the total number of employees at each location.
+-
+   Source Worksheet: Non-Employees under the age of 25 furnished an auto
+   pageName: J
+   cell: J23
+   key: 
+   method: simpleDatagrid
+   type: DataGrid
+   note: Buildings should not be separately listed out.  The Harco workbook
+      will sum the total number of employees at each location.
+-
+   Source Worksheet: Non-Employees 25 years old or older furnished an auto
+   pageName: J
+   cell: K23
+   key: 
+   method: simpleDatagrid
+   type: DataGrid
+   note: Buildings should not be separately listed out.  The Harco workbook
+      will sum the total number of employees at each location.
+# -
+#    Source Worksheet: Credit Life or A&H
+#    pageName: K
+#    cell: K8
+#    method: checkbox_X
+#    key: doesTheInsuredSellAnyOfTheFollowingProducts_creditLifeOrAH
+# -
+#    key: doesTheInsuredSellAnyOfTheFollowingProducts_physicalDamageCoverage
+#    Source Worksheet: Physical Damage Coverage
+#    pageName: K
+#    cell: K8
+#    method: checkbox_X
+-
+   pageName: K
+   key: medicalexpensedeductible
+   cell: N8
+-
+   key: agentseo
+   Source Worksheet: 'Agents E/O '
+   pageName: K
+   cell: K8
+   method: checkbox_X
+-
+   key: entergrosssales
+   Source Worksheet: 'gross sales: '
+   pageName: K
+   cell: 'M11'
+-
+   Source Worksheet: Drive Other Car Coverage
+   pageName: K
+   cell: B17
+   key: driveothercarcoverage
+   method: checkbox_X
+-
+   Source Worksheet: Name of Driver (and Spouse) to be covered
+   pageName: K
+   cell: 'C26'
+   key: driverOtherCargrid_nameofdrivertobecovered
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Medical Expense (Auto & Premises)
+   pageName: K
+   cell: D21
+   key: driverOtherCargrid_medicalexpenceautopremises
+-
+   pageName: K
+   key: driverOtherCargrid_medicalexpenceautopremises
+   cell: G21
+-
+   key: driverOtherCargrid_driveumuim
+   Source Worksheet: UM/UIM
+   pageName: K
+   cell: G22
+-
+   key: driverOtherCargrid_compdeductible
+   Source Worksheet: Comp Deductible
+   pageName: K
+   cell: G20
+-
+   key: driverOtherCargrid_compdeductible
+   Source Worksheet: Comp Deductible
+   pageName: K
+   cell: C20
+   method: checkbox_X
+# -
+#    Source Worksheet: 'EPLI Coverage: '
+#    pageName: K
+#    cell: B8
+#    Note: IF EPLI Coverage is selected the Harco Workbook will default to the
+#       options listed in the document titled Harco Deep Dive Review
+#    key: 
+-
+   Source Worksheet: 'Include 3rd Party:'
+   pageName: K
+   cell: B9
+   method: checkbox_X
+   key: thirdparty
+   note:  This will only map to the Harco Workbook if the state is not in
+      California. 
+-
+   Source Worksheet: 'Include 3rd Party Deductible:'
+   pageName: K
+   cell: I9
+   key: thirdpartydeduc
+   note:  This will only map to the Harco Workbook if the state is not in
+      California. 
+-
+   Source Worksheet: Umbrella name
+   pageName: K
+   cell: C40
+   key: UmbrellaCoverageAdditional_umbrellaCoverageAdditionalName
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: "Is there a written flood emergency plan in place?\r\n\r\nIf YES, please attach a copy of written flood emergency plan"
+   pageName: L-DPD
+   cell: L22
+   key: dolisthremergncypln
+   returnBoolean: "Yes|No"
+-
+   Source Worksheet: Lockbox
+   pageName: L-DPD
+   cell: Check Box 9
+   type: Checkbox
+   key: 
+   note: If "Keys in Cars" is selected, the system will select "Other" in the
+      Harco app and type "Keys in Cars" in the explanation cell L21
+-
+   Source Worksheet: 'computerized key vault'
+   pageName: L-DPD
+   cell: Check Box 12
+   key: 
+   type: Checkbox
+-
+   Source Worksheet: 'locking key cabinet'
+   pageName: L-DPD
+   cell: Check Box 10
+   key: 
+   type: Checkbox
+-
+   Source Worksheet: 'daily key inventory'
+   pageName: L-DPD
+   cell: Check Box 11
+   key: 
+   type: Checkbox
+-
+   Source Worksheet: 'locked in managers office'
+   pageName: L-DPD
+   cell: Check Box 13
+   key: 
+   type: Checkbox
+-
+   Source Worksheet: 'others'
+   pageName: L-DPD
+   cell: Check Box 14
+   key: 
+   type: Checkbox
+-
+   Source Worksheet: 'others'
+   pageName: L-DPD
+   cell: L21
+   key: 
+-
+   Source Worksheet: 'Wind/Hail Deductible: '
+   pageName: 'L-DPD '
+   cell: H7
+   key: dolwindhaildeduc
+   note: Harco has a max Wind Ded of $2,000. If a higher deductible has been
+      selected the system will map $2,000 to the Harco App.
+# -
+#    Source Worksheet: Standard Open Lot
+#    pageName: L-DPD
+#    cell: I10
+#    key: 
+#    method: simpleDatagrid
+#    type: DataGrid
+# -
+#    Source Worksheet: Non-Standard Open Lot
+#    pageName: 'L-DPD '
+#    cell: 'J10'
+#    key: 
+#    method: simpleDatagrid
+#    type: DataGrid
+# -
+#    Source Worksheet: Building
+#    pageName: L-DPD
+#    cell: 'K10'
+#    key: 
+#    method: simpleDatagrid
+#    type: DataGrid
+-
+   Source Worksheet: Location
+   pageName: 'M-GL'
+   cell: 'E23'
+   key: locationNum
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Description
+   pageName: 'M-GL'
+   cell: 'F23'
+   key: description
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Exposure Amount
+   pageName: 'M-GL'
+   cell: Q23
+   key: exposureAmount
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'If YES, is insurance coverage placed elsewhere for this exposure?'
+   pageName: N-L&R
+   cell: 'K24'
+   key: 
+-
+   Source Worksheet: Insured do any "in house" leasing?
+   pageName: N-L&R
+   cell: 'K22'
+   key: insuresdoanyinhouseleasing
+   type: Checkbox
+-
+   Source Worksheet: 'If YES, minimum liability limit required?'
+   pageName: N-L&R
+   cell: 'G7'
+   key: minimumliabilitylimitrequired
+   Note: Wrongly mapped
+-
+   Source Worksheet: Number of vehicles out on Lease?
+   pageName: N-L&R
+   cell: G17
+   key: numberofvehiclesoutonlease
+-
+   Source Worksheet: Rental/Leasing
+   pageName: N-L&R
+   cell: 'E12'
+   key: locationScheduleGridData_rentalLeasingSales
+-
+   Source Worksheet: company's name
+   pageName: P-Pollution
+   cell: 'L44'
+   key: epaDetails_pollutionname
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: epa
+   pageName: P-Pollution
+   cell: 'P44'
+   key: epaDetails_epaNumber
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Applicant have any underground storage tanks?
+   pageName: P-Pollution
+   cell: 'L36'
+   key: pollutionLiabilityUnderwritingSurvey_applicantHasAnyAboveGroundTanks
+-
+   Source Worksheet: What type of tests/inspections are performed for security, stability, and
+      safety of the tanks?
+   pageName: P-Pollution
+   cell: 'L40'
+   key: testsinspections
+-
+   Source Worksheet: How often are inspections completed/tanks tested?
+   pageName: P-Pollution
+   cell: 'L41'
+   key: inspectionoftanks
+-
+   Source Worksheet: Who does the inspections / tank testing?
+   pageName: P-Pollution
+   cell: 'L42'
+   key: tanktesting
+-
+   Source Worksheet: Have any of the tanks failed an inspection within the last five (5) years?
+   pageName: P-Pollution
+   cell: 'L43'
+   key: pollutionLiabilityUnderwritingSurvey_haveAnyOfTheTanksFailedAnInspection
+-
+   Source Worksheet: Federal/state reportable quantity discharge, dispersal, release, escape,
+      spill or leak at this facility/location in the last 10 yrs?
+   pageName: P-Pollution
+   cell: 'L44'
+   key: pollutionLiabilityUnderwritingSurvey_federalStateReport
+-
+   Source Worksheet: Within the last five (5) years, has the applicant been the subject of
+      third party liability claims?
+   pageName: P-Pollution
+   cell: 'L45'
+   key: pollutionLiabilityUnderwritingSurvey_withinTheLastFive5YearsHasTheApplicantBeenTheSubjectOfThirdPartyLiabilityClaims
+-
+   Source Worksheet: Are there any abandoned tanks on site?
+   pageName: P-Pollution
+   cell: 'L46'
+   key: pollutionLiabilityUnderwritingSurvey_areThereAnyAbandonedTanksOnSite
+-
+   Source Worksheet: Do they contain product?
+   pageName: P-Pollution
+   cell: 'L47'
+   key: pollutionLiabilityUnderwritingSurvey_doTheyContainProduct
+-
+   Source Worksheet: 'Loc #'
+   pageName: P-Pollution
+   cell: 'E24'
+   key: genericData*storageTankGridData_
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Tank #'
+   pageName: P-Pollution
+   cell: 'F24'
+   key: genericData*storageTankGridData_
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Tank Contents
+   pageName: P-Pollution
+   cell: 'G24'
+   key: genericData*storageTankGridData_
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Other Tank Contents '
+   pageName: P-Pollution
+   cell: 'K24'
+   key: genericData*storageTankGridData_
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Installation Date
+   pageName: P-Pollution
+   cell: 'H24'
+   key: genericData*storageTankGridData_
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: 'Tank Capacity '
+   pageName: P-Pollution
+   cell: 'I24'
+   key: genericData*storageTankGridData_
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Each Occurrence
+   pageName: P-Pollution
+   cell: I8
+   key: eachoccurrence
+-
+   Source Worksheet: New Sales
+   pageName: Q-Umb
+   cell: 'E29'
+   key: harco_newcarsales
+-
+   Source Worksheet: Used Sales
+   pageName: Q-Umb
+   cell: 'I29'
+   key: harco_usedCarSales
+-
+   Source Worksheet: Finance/Insurance
+   pageName: Q-Umb
+   cell: 'M31'
+   key: harco_fISales
+-
+   Source Worksheet: Service/Repair
+   pageName: Q-Umb
+   cell: 'E30'
+   key: harco_serviceRepairSales
+-
+   Source Worksheet: Auto Body
+   pageName: Q-Umb
+   cell: 'M32'
+   key: harco_autoBodySales
+-
+   Source Worksheet: Parts
+   pageName: Q-Umb
+   cell: 'I30'
+   key: harco_partsSales
+-
+   Source Worksheet: Limit
+   pageName: 'Q-Umb '
+   cell: 'C6'
+   key: umbrellalimit
+-
+   Source Worksheet: Umbrella - Name
+      ONLY
+   pageName: 'Q-Umb '
+   cell: B21
+   key: UmbrellaCoverageAdditional_umbrellaCoverageAdditionalName
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Note mentioned as B21'
+-
+   Source Worksheet: Umbrella - Ownership %
+   pageName: 'Q-Umb '
+   cell: 'I21'
+   key: UmbrellaCoverageAdditional_ownershipPercentage
+   method: simpleDatagrid
+   type: DataGrid
+-
+   Source Worksheet: Package Target Premium
+   pageName: Supporting Info
+   cell: H15
+   key: packageTargetPremium
+-
+   Source Worksheet: 'Number of years in business under current ownership:'
+   pageName: UW Q's
+   cell: 'E6'
+   key: numYearsOfOwnership
+-
+   Source Worksheet: 'If less than three years, describe experience of management:'
+   pageName: UW Q's
+   cell: 'E19'
+   key: lessThan3years
+-
+   Source Worksheet: Any policy or coverage declined, cancelled or non-renewed during the prior
+      10 years for any premises or operations?
+   pageName: UW Q's
+   cell: 'E7'
+   type: Checkbox
+   key: policyDeclined
+   Note: It’s the check boxes in UW Q's sheet with options
+-
+   Source Worksheet: 'If YES, please explain:'
+   pageName: UW Q's
+   cell: 'E19'
+   key: policyDeclinedExplain
+-
+   Source Worksheet: Does applicant perform body work and spray painting?
+   pageName: UW Q's
+   cell: 'E38'
+   key: spraypainting
+-
+   Source Worksheet: Is there a different employee handling each aspect of inventory (ordering,
+      receiving, auditing)?
+   pageName: UW Q's
+   cell: 'E77'
+   key: underwritesurvey_isThereADifferentEmployeeHandlingEachAspectOfInventoryOrderingReceivingAuditing
+-
+   Source Worksheet: Are bank/credit card statements reconciled monthly by someone with no
+      access to cash/credit card receipts/disbursements?
+   pageName: UW Q's
+   cell: 'E78'
+   key: underwritesurvey_areBankCreditCardStatementsReconciledMonthlyBySomeoneWithNoAccessToCashCreditCardReceiptsDisbursements
+-
+   Source Worksheet: Are two (2) employees required to sign off on all purchase orders?
+   pageName: UW Q's
+   cell: 'E79'
+   key: underwritesurvey_areTwo2EmployeesRequiredToSignOffOnAllPurchaseOrders
+-
+   Source Worksheet: Are monthly accounts receivable statements reviewed by management and
+      mailed to customers by someone other than the peson responsible
+   pageName: UW Q's
+   cell: 'E81'
+   key: underwritesurvey_areMonthlyAccountsReceivableStatementsReviewedByManagementAndMailedToCustomersBySomeoneOtherThanThePersonResponsible
+-
+   Source Worksheet: 'Audit is performed by:'
+   pageName: UW Q's
+   cell: 'E80'
+   key: auditperformed
+-
+   Source Worksheet: Has dealership experienced employee theft losses in the last 5 years?
+   pageName: UW Q's
+   cell: 'E75'
+   key: theftloss
+-
+   Source Worksheet: Are criminal background checks performed on all employees?
+   pageName: UW Q's
+   cell: 'E59'
+   key: criminalbackgroundcheck
+-
+   Source Worksheet: Does dealership have a Buy Here / Pay Here (BH/PH) operation? If Yes,
+      please complete the below questions
+   pageName: UW Q's
+   cell: 'E94'
+   key: doesdealershiphaveabuyhere
+-
+   Source Worksheet: '% of sales done through the BH/PH operation?'
+   pageName: UW Q's
+   cell: 'E95'
+   key: percentofsalesdonethroughbhph
+-
+   Source Worksheet: Dealer reviews documents used in loan process?
+   pageName: UW Q's
+   cell: 'E96'
+   key: dealerreviewsdocuments
+   note: If both rows 14 & 15 are answered YES, indicate YES on the Harco
+      app.
+-
+   Source Worksheet: Controls are in place to prevent identity theft of customerspersonal
+      information?
+   pageName: UW Q's
+   cell: 'E96'
+   key: controlsareinplacetoprevent
+-
+   Source Worksheet: What is the average percentage of loans in default?
+   pageName: UW Q's
+   cell: 'E97'
+   key: whatistheaveragepercentage
+-
+   Source Worksheet: Customersinsurance verified at time of sale?
+   pageName: UW Q's
+   cell: 'E98'
+   key: customersinsuranceverified
+   note: If both rows 18 & 19 are answered YES, indicate YES on the Harco
+      app.
+-
+   Source Worksheet: Regularly throughout term of loan?
+   pageName: UW Q's
+   cell: 'E98'
+   key: regularlythroughouttermofloan
+-
+   Source Worksheet: 'Are repossessions handled by:'
+   pageName: UW Q's
+   cell: 'E99'
+   key: repossessionshandledby
+   Note: 'Notes: If Third Party is selected, indicate YES on the Harco app.'
+-
+   Source Worksheet: Demo / Furnished auto agreement?
+   pageName: UW Q's
+   cell: 'E21'
+   key: demofurnishedautoagreement
+   type: Checkbox
+-
+   Source Worksheet: Employee deductible participation?
+   pageName: UW Q's
+   cell: 'E21'
+   key: employeedeductibleparticipation
+   type: Checkbox
+-
+   Source Worksheet: Driver(s) provides own insurance?
+   pageName: UW Q's
+   cell: 'E21'
+   key: driversprovidesowninsurance
+   type: Checkbox
+   note: If rows 48 & 49 are marked yes then the checkbox They provide
+      their own insurance with applicant listed as an additional insured will be
+      selected.
+-
+   Source Worksheet: Dealer listed as additional insured on driver's policy?
+   pageName: UW Q's
+   cell: 'E21'
+   key: dealerlistedasadditionalinsured
+   Note: Not mapped in Template
+-
+   Source Worksheet: MVR's on all drivers reviewed annually?
+   pageName: UW Q's
+   cell: 'E25'
+   key: mvrsonalldriversreviewedannually
+-
+   Source Worksheet: Accident review procedures w/detailed action plan?
+   pageName: UW Q's
+   cell: 'E30'
+   key: accidentreviewprocedures
+-
+   Source Worksheet: Do EE's use own vehicle for business purposes?
+   pageName: UW Q's
+   cell: 'E24'
+   key: doEEsuseownvehicleforbusiness
+-
+   Source Worksheet: Defensive driver training on all drivers? (If YES, attach defensive driver
+      training documentation with submission)
+   pageName: UW Q's
+   cell: 'E26'
+   key: defensivedrivertrainingonalldrivers
+-
+   Source Worksheet: Employees NOT furnished a company vehicle allowed to take vehicles home
+      overnight?
+   pageName: UW Q's
+   cell: 'E22'
+   key: employeenotfurnishedacompany
+-
+   Source Worksheet: 'Total # of service vehicles:'
+   pageName: UW Q's
+   cell: 'E47'
+   key: totalnumberofservicevehicles
+-
+   Source Worksheet: 'Parts:'
+   pageName: UW Q's
+   cell: 'E47'
+   key: totalnumberofservicesparts
+-
+   Source Worksheet: 'Trucks, shuttle, tow trucks, mobile maintenance, etc.:'
+   pageName: UW Q's
+   cell: 'E43 '
+   key: trucksshuttletowtrucks
+   Note: Wrongly mapped
+-
+   Source Worksheet: 'Avg # of times contract drivers used per month at any one location?'
+   pageName: UW Q's
+   cell: 'E47'
+   key: avgOfTimesContractDriversUsedPerMonth
+-
+   Source Worksheet: Any tow for hire?
+   pageName: UW Q's
+   cell: 'E111'
+   key: anytowforhire
+-
+   Source Worksheet: Documented OEM training on all service techs?
+   pageName: UW Q's
+   cell: 'E39'
+   key: documentoemtrainingonallservicestools
+-
+   Source Worksheet: Procedures/action plan for comebacks?
+   pageName: UW Q's
+   cell: 'E42'
+   key: produceractionplanforcomebacks
+   Note: 'Wrongly mapped '
+-
+   Source Worksheet: All work orders signed by customer? (incl refused work)
+   pageName: UW Q's
+   cell: 'E40'
+   key: allworkorderssignedbycustomer
+-
+   Source Worksheet: Formal safety meetings:( If at least quarterly, please attach copy of
+      minutes from last meeting)
+   pageName: UW Q's
+   cell: 'E36'
+   key: formalsafetymeetings
+-
+   Source Worksheet: Does applicant reposess their own vehicles?
+   pageName: UW Q's
+   cell: 'E99'
+   key: doesapplicantreposestheirownvehicles
+-
+   Source Worksheet: Does the insured have a certificate of insurance for repo company?
+   pageName: UW Q's
+   cell: 'E100'
+   key: certificateofinsuranceforrepocompany
+-
+   Source Worksheet: Does the insured service buses?
+   pageName: UW Q's
+   cell: 'E84'
+   key: doestheinsuredservicebuses
+-
+   Source Worksheet: Test drives always accompanied by employee?
+   pageName: UW Q's
+   cell: 'E28'
+   key: testdrivesalwaysaccompanied
+-
+   Source Worksheet: Overnight test drives allowed?
+   pageName: UW Q's
+   cell: 'E22'
+   key: overnighttestdrivesallowed
+# -
+#    Source Worksheet: 'Test Drive Procedures:'
+#    pageName: UW Q's
+#    cell: 'E28'
+#    key: 
+#    note: If Copy of Drivers License and Copy of Insurance Card are both
+#       selected the system will map "YES" to Sheet!UW-Q E29. If Sales Person
+#       Always Accompanies is selected the system will map YES to Sheet!UW-Q
+#       E28
+# -
+#    pageName: UW Q's
+#    cell: 'E29'
+#    key: 
+-
+   Source Worksheet: Is a Loaner  or Rental contract used? Please include a copy of contract
+      used.
+   pageName: UW Q's
+   cell: 'E27'
+   key: loanerrentalcontractused
+-
+   Source Worksheet: Are Drivers License and Insurance verified?
+   pageName: UW Q's
+   cell: 'E29'
+   key: aredriverslicenseinsuredverified
+-
+   Source Worksheet: Checklist used to inspect vehicles prior to sale?
+   pageName: UW Q's
+   cell: 'E51'
+   key: checklistusedtoinspectvehicles
+-
+   Source Worksheet: Outside service to confirm prior damage/mileage/title?
+   pageName: UW Q's
+   cell: 'E52'
+   key: outsideservicetoconfirm
+-
+   Source Worksheet: Full disclosure to customer of prior damage on unit?
+   pageName: UW Q's
+   cell: 'E50'
+   key: fulldisclosuretocustomer
+-
+   Source Worksheet: Does customer sign disclosure for acknowledgment?
+   pageName: UW Q's
+   cell: 'E51'
+   key: doescustomersigndisclosure
+-
+   Source Worksheet: Is a title search service used?
+   pageName: UW Q's
+   cell: 'E52'
+   key: isatitlesearchserviceused
+-
+   Source Worksheet: 'If YES, describe:'
+   pageName: UW Q's
+   cell: 'E54'
+   key: titlesearchdescribe
+-
+   Source Worksheet: Does applicant subcontract any work?
+   pageName: UW Q's
+   cell: 'E44'
+   key: applicantsubcontractanywork
+-
+   Source Worksheet: All work by sub-contractors governed by signed contracts that include
+      favorable indemnification provisions?
+   pageName: UW Q's
+   cell: 'E44'
+   key: allworkbysubcontractgoverned
+-
+   Source Worksheet: All sub-contractors/vendors required to provide evidence of at least
+      $1,000,000 liability limits with an insurer rated A- or better?
+   pageName: UW Q's
+   cell: 'E45'
+   key: allsubcontractorsvendorsprovideevidence
+-
+   Source Worksheet: Dealer requires being added as Additional Insured on sub-contractorsand
+      vendorsinsurance policies?
+   pageName: UW Q's
+   cell: 'E46'
+   key: dealerrequiresbeingadded
+-
+   Source Worksheet: Formal employment application/interview process?
+   pageName: UW Q's
+   cell: 'E58'
+   key: empapplication
+-
+   Source Worksheet: Arbitration agreement signed by all employees?
+   pageName: UW Q's
+   cell: 'E60'
+   key: arbitrationagreement
+-
+   Source Worksheet: Performance reviews done annually?
+   pageName: UW Q's
+   cell: 'E65'
+   key: performancereview
+# -
+#    Source Worksheet: 'Drug-testing programs:'
+#    pageName: UW Q's
+#    cell: 'E61'
+#    key: 
+#    type: Checkbox
+-
+   Source Worksheet: Employee performance issues documented and communicated to employee within
+      30 days of incident(s)?
+   pageName: UW Q's
+   cell: 'E64'
+   key: 
+-
+   Source Worksheet: Documented anti-discrimination and anti-harassment training to all
+      employees annually?
+   pageName: UW Q's
+   cell: 'E63'
+   key: trainingdoc
+-
+   Source Worksheet: 'Number of Involuntary terminations in the last 12 months:'
+   pageName: UW Q's
+   cell: 'E67'
+   key: involuntarytermination
+-
+   Source Worksheet: "During the last 5 years, has there been any charges filed with the EEOC or state agency against any applicant, whether filed by current employees, terminated employees or employees not hired?\r\n\r\nIf YES, for each charge, attach a copy of the charges, the applicant's response and the dismissal or status"
+   pageName: UW Q's
+   cell: 'E66'
+   key: eeocorstateagency
+-
+   Source Worksheet: Applicant works on or stores customer vehicles that are valued over
+      $100,000?
+   pageName: UW Q's
+   cell: 'E33'
+   key: garagekeeperUnderwritingApplicantStoresVehicles
+-
+   Source Worksheet: "Any vehicles valued in excess of $100,000 per unit?\r\n\r\n If YES, attach a current schedule"
+   pageName: UW Q's
+   cell: 'E33'
+   key: dolVehicleValuedInExcess
+# -
+#    Source Worksheet: "Spot Delivery Procedures:"
+#    pageName: UW Q's
+#    cell: E98
+#    key: 
+#    note: If written insurance verification is selected the system will map
+#       "Yes" to sheet!UW-Q's E98-G98
+-
+   Source Worksheet: After Hours Lighting
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolaftrhrslighting
+   type: Checkbox
+-
+   Source Worksheet: Security Guards
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolsecguards
+   type: Checkbox
+-
+   Source Worksheet: Alarm System
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolalrmsys
+   type: Checkbox
+-
+   Source Worksheet: Surveill. Cameras not monitored
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolsurcamnotmoniotrd
+   type: Checkbox
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes" to the applicable carrier app.
+-
+   Source Worksheet: Surveill. Cameras monitored / intruder notification
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolsurvcammoniintrunotifi
+   type: Checkbox
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes" to the applicable carrier app.
+-
+   Source Worksheet: Guard Dogs
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolguarddogs
+   type: Checkbox
+-
+   Source Worksheet: Blocked Entrances
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolblckdentrances
+   type: Checkbox
+-
+   Source Worksheet: Fully Fenced Premises
+   pageName: UW Q's
+   cell: D34
+   key: locationScheduleGridData_dolflyfencdpremises
+   type: Checkbox
+# -
+#    Source Worksheet: Other (type in)
+#    pageName: UW Q's
+#    cell: D35
+#    key: 
+-
+   Source Worksheet: Anti-virus and software regularly updated
+   pageName: UW Q's
+   cell: 'E70'
+   key: antivirussoftware
+   type: Checkbox
+-
+   Source Worksheet: All computers protected with firewalls
+   pageName: UW Q's
+   cell: E70
+   key: protectedfirewalls
+   type: Checkbox
+-
+   Source Worksheet: Daily virus scans ran on all computers
+   pageName: UW Q's
+   cell: E70
+   key: virusscans
+   type: Checkbox
+-
+   Source Worksheet: Formal policy in place for disposal of paper documents/electronic
+      equipment that may contain sensitive personal information?
+   pageName: UW Q's
+   cell: E71
+   key: formalpolicy
+-
+   Source Worksheet: How does applicant limit access to sensitive personal information for
+      employees and customers?
+   pageName: UW Q's
+   cell: E72
+   key: applicantlimitaccess
+-
+   Source Worksheet: Lightpoles
+   pageName: NOT MENTIONED
+   cell: 'F9'
+   key: locationScheduleGridData_lightpoles
+   Note: Sheet is not mentioned
+-
+   Source Worksheet: 'Awanings & Canopies'
+   pageName: NOT MENTIONED
+   cell: F9
+   key: locationScheduleGridData_awaningsscanopies
+   Note: Sheet is not mentioned
