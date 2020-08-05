@@ -2450,6 +2450,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "combinedSingleLimit",
+							"redrawOn": "data",
 							"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
 							"key": "combinedSingleLimit",
 							"type": "hidden",
@@ -2458,6 +2459,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "annualAggregate",
+							"redrawOn": "data",
 							"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
 							"key": "annualAggregate",
 							"type": "hidden",
@@ -2466,6 +2468,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "groupExcessLiabilityLimit",
+							"redrawOn": "data",
 							"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
 							"key": "groupExcessLiabilityLimit",
 							"type": "hidden",
@@ -14250,6 +14253,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-08-05T10:12:02.454Z",
+	"modified": "2020-08-05T11:21:44.313Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
