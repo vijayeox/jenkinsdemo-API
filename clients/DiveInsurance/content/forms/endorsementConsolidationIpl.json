@@ -1994,7 +1994,7 @@
 										"inputFormat": "plain",
 										"redrawOn": "data",
 										"clearOnHide": false,
-										"calculateValue": "if(data.csrGrandTotal && parseFloat(data.csrGrandTotal) != 0){\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}else{\n  value = 0;\n}",
+										"calculateValue": "if(data.csrGrandTotal && parseFloat(data.csrGrandTotal) != 0){\n    var total = parseFloat(data.csrGrandTotal) - parseFloat(data.userGrandTotal);\n    value = total;\n}else{\n  value = 0;\n}",
 										"key": "balanceEndor",
 										"type": "number",
 										"input": true,
@@ -3317,6 +3317,20 @@
 			"type": "htmlelement",
 			"input": false,
 			"hideLabel": true
+		}, {
+			"label": "Please process the refund and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the refund of <b>${{data.balanceEndor * -1}}</b> and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "pleaseProcessTheRefundAndApprove",
+			"customConditional": "show = ((parseFloat(data.balanceEndor) < 0) &&(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ;",
+			"type": "htmlelement",
+			"input": false,
+			"hideLabel": true
 		}],
 		"input": false,
 		"path": "page6",
@@ -3348,6 +3362,19 @@
 			"tableView": false,
 			"key": "page6Pleaseprocessthepaymentandapprove",
 			"customConditional": "show = (parseFloat(data.balanceEndor) > 0);",
+			"type": "htmlelement",
+			"input": false
+		}, {
+			"label": "Please process the refund and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the refund of <b>${{data.balanceEndor * -1}}</b> and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page6Pleaseprocesstherefundandapprove",
+			"customConditional": "show = (parseFloat(data.balanceEndor) < 0);",
 			"type": "htmlelement",
 			"input": false
 		}, {
@@ -3471,7 +3498,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 303,
+	"_vid": 310,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3492,6 +3519,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-07-29T06:44:13.821Z",
+	"modified": "2020-08-06T13:38:31.220Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
