@@ -11657,7 +11657,6 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"validate": {
@@ -11694,7 +11693,7 @@
 								"actions": [{
 									"name": "Disable Manual Over ride",
 									"type": "mergeComponentSchema",
-									"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true}"
+									"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true,redraw:\"data\"}"
 								}]
 							}],
 							"type": "number",
@@ -14256,6 +14255,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-08-06T06:57:34.533Z",
+	"modified": "2020-08-06T10:02:05.880Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
