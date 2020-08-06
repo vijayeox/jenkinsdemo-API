@@ -113,7 +113,9 @@ class WorkflowService extends AbstractService
             $startFormId = null;
             $workFlowList = array();
             $workFlowFormIds = array();
+            $fields = NULL;
             if (isset($processes)) {
+                //CAUTION: Current deployment expects only one process in a file
                 foreach ($processes as $process) {
                     $activityData = array();
                     if (isset($process['form']['properties'])) {
@@ -138,6 +140,9 @@ class WorkflowService extends AbstractService
                             $formData['template'] = file_get_contents($filePath);
                             $formResult = $this->formService->createForm($appUuid, $formData);
                         }
+                    }
+                    if (isset($formProperties['fields'])) {
+                        $fields = json_encode(array_map('trim', explode(",", $formProperties['fields'])));
                     }
                     $startFormId = $formData['id'];
                     if (isset($process['activity'])) {
@@ -173,7 +178,7 @@ class WorkflowService extends AbstractService
                 }
             }
             if (isset($workflowName)) {
-                $deployedData = array('id' => $workFlowId, 'workflow_deployment_id' => $workflowDeploymentId, 'app_id' => $appId, 'name' => $workflowName, 'process_id' => $processId, 'process_definition_id' => $processDefinitionId, 'form_id' => $startFormId, 'file' => $file, 'entity_id' => $entityId, 'uuid' => $workflow['uuid']);
+                $deployedData = array('id' => $workFlowId, 'workflow_deployment_id' => $workflowDeploymentId, 'app_id' => $appId, 'name' => $workflowName, 'process_id' => $processId, 'process_definition_id' => $processDefinitionId, 'form_id' => $startFormId, 'file' => $file, 'fields' => $fields, 'entity_id' => $entityId, 'uuid' => $workflow['uuid']);
                 $this->logger->info("Deployed Data-" . json_encode($deployedData));
                 try {
                     $workFlow = $this->saveWorkflow($appId, $deployedData);
