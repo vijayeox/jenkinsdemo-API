@@ -2,6 +2,6 @@ name: 'Pay Period'
 description: 'Pay Period'
 content:
     -
-        type: Dashboard
+        type: DashboardManager
         content:
             uuid: 2a288707-c121-4c99-874d-b282e01cca34

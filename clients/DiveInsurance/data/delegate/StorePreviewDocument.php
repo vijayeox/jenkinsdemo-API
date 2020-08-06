@@ -12,6 +12,9 @@ class StorePreviewDocument extends PolicyDocument
     public function execute(array $data,Persistence $persistenceService)
     {
         $originalData = $data;
+        $this->processSurplusYear($data);
+        $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+        $data['license_number'] = $this->getLicenseNumber($data,$persistenceService);
         $options = array();
         if(isset($data['endorsement_options'])){
             $endorsementOptions = is_array($data['endorsement_options']) ?  $data['endorsement_options'] : json_decode($data['endorsement_options'],true);
@@ -156,7 +159,8 @@ class StorePreviewDocument extends PolicyDocument
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
         if ($this->type != 'endorsement') {
-            $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+            if($temp['product'] == 'Dive Store')
+                $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
             if($temp['propertyCoverageSelect'] == 'yes'){
                 $this->logger->info("DOCUMENT property_coi_document");
                 $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
@@ -167,10 +171,7 @@ class StorePreviewDocument extends PolicyDocument
               $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
               array_push($documents['endorsement_coi_document'], $endorsementDoc);
         }
-
-        if($this->type == 'policy'){
-            $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
-        }
+        $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         $originalData['finalDocuments'] = $documents;
         return $originalData;
     }

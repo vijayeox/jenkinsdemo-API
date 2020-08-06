@@ -539,11 +539,9 @@ table.proposal_table td:last-child {
 	margin-left: 6%;
 	font-family: sans-serif;
 	font-style: normal;
-	font-size: 13px;
 	margin-bottom:3%;
 	margin-top:5px;
 	padding: 0px;
 	letter-spacing: 1px;
 	width:80%;
-	text-align: justify;
 }

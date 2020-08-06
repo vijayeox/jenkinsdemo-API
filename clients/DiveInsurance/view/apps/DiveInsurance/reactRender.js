@@ -19,7 +19,7 @@ module.exports = function(core, proc) {
           const params = {
             productName: req.params.productName,
             proc: proc,
-            core: core
+            core: core,
           };
           const component = ReactDOMServer.renderToString(
             <Register {...params} />

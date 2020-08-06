@@ -138,8 +138,10 @@ content:
                 - padi
                 - firstname
                 - lastname
+                - name
                 - product
                 - phone
+                - business_name
             filterOperator : startswith
             placeholder: 'Search using Name or PADI or Product or Phone'
             operations:
@@ -183,9 +185,11 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.firstname + " " + item.lastname}</td>'
                     multiFieldFilter:
                         - lastname
+                        - business_name
+                        - name
                 -
                     title: Product
                     field: entity_name

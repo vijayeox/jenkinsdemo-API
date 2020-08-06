@@ -48,7 +48,7 @@ class ForgotPasswordControllerTest extends ControllerTest
 
     public function testForgotPassword()
     {
-        $data = ['username' => 'bharatgtest'];
+        $data = ['username' => 'admintest'];
         $this->setJsonContent(json_encode($data));
         if(enableCamel == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -59,7 +59,7 @@ class ForgotPasswordControllerTest extends ControllerTest
         $this->setDefaultAsserts('forgotPassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'],'bharatgtest');
+        $this->assertEquals($content['data']['username'],'admintest');
     }
 
     public function testForgotPasswordWrongEmail()

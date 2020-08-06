@@ -9,7 +9,7 @@ content:
             forceDefaultFilters: true
             filterable: true
             resizable: true
-            sortable: 
+            sortable:
                 allowUnsort: true
                 mode: single
             pageable:
@@ -19,7 +19,7 @@ content:
                     - 20
                     - 50
                 info: true
-            exportToExcel: 
+            exportToExcel:
                 columnConfig:
                     -
                         title: PADI
@@ -35,7 +35,7 @@ content:
                     -
                         title: Name
                         field: firstname
-                        cell: 'data.firstname + " " +data.lastname'
+                        cell: 'data.product == "Dive Store" ? data.business_name : data.firstname + " " + data.lastname'
                     -
                         title: Product
                         field: product
@@ -51,6 +51,15 @@ content:
                         field: end_date
                         cell: 'formatDateWithoutTimezone(data.end_date)'
             actions:
+                -
+                    name: Policy Regeneration
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            form_id: db82e118-cbef-11ea-87d0-0242ac130003
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-file'
                 -
                     name: Endorsement
                     rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
@@ -80,7 +89,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: startform
                                     -
@@ -100,7 +109,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -120,7 +129,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: cb74d176-225a-11ea-978f-2e728ce88125
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -140,7 +149,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: cb99e634-de00-468d-9230-d6f77d241c5b
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -160,7 +169,7 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                commands: 
+                                commands:
                                     -
                                         command: file
                                     -
@@ -188,6 +197,15 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     icon: 'fa fa-pencil'
                 -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Group Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
                     name: Comment
                     rule: 'true'
                     details:
@@ -197,20 +215,40 @@ content:
                             useRowData: true
                         -
                             type: Comment
-                            url: '{{uuid}}'
+                            content: '{{uuid}}'
                     icon: 'far fa-comment'
                 -
                     name: 'View Policy'
                     icon: 'fa fa-envelope-open'
-                    rule: '''{{policyStatus}}'' != ''Rejected'''
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Store'')'
                     details:
                         -
-                            type: Document
-                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period:{moment(data.start_date).format(''MM-DD-YYYY'')} - {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
-                            useRowData: true
+                            params:
+                                page_id: 'eb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Group Professional Liability'')'
+                    details:
                         -
-                            type: DocumentViewer
-                            url: 'file/{{uuid}}/document'
+                            params:
+                                page_id: 'fb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'ab018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'bb018dfd-be95-4c53-9a97-042f615f3623'
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
@@ -242,6 +280,15 @@ content:
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
                     rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                -
+                    name: 'Cancel Policy'
+                    icon: 'fa fa-ban'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     details:
                         -
                             type: Form
@@ -283,14 +330,6 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     icon: 'fa fa-repeat'
-                -
-                    name: 'View Activity Log'
-                    details: 
-                        -
-                            params:
-                                page_id: '121ba91d-f17a-2034-a25f-86f108594637' 
-                    rule: 'true'
-                    icon: 'fa fa-list'
             columnConfig:
                 -
                     title: PADI
@@ -301,9 +340,11 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.firstname + " " + item.lastname}</td>'
                     multiFieldFilter:
                         - lastname
+                        - business_name
+                        - name
                 -
                     title: Product
                     field: product
@@ -314,6 +355,7 @@ content:
                             - 'Dive Boat'
                             - 'Dive Store'
                             - 'Emergency First Response'
+                            - 'Group Professional Liability'
                         placeholder: 'Select Product'
                 -
                     title: 'Policy Status'

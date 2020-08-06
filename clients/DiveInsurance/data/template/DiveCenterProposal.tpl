@@ -12,7 +12,7 @@
   <center>
       <b>
         <p style="margin-top: 5px;" class="info">Store Location:
-        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false)}
+        {if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress === "false" || $sameasmailingaddress == 0)}
               <span class="uppercase">{$mailaddress1}</span>,
               <span class="uppercase">{$mailaddress2}</span>,
               <span class="uppercase">{$physical_city}</span>,
@@ -162,15 +162,15 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$10,000,000</td>
                         {else}
                             <td>$1,000,000</td>
@@ -178,15 +178,15 @@
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$10,000,000</td>
                         {else}
                             <td>$1,000,000</td>
@@ -194,15 +194,15 @@
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$6,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$11,000,000</td>
                         {else}
                             <td>$2,000,000</td>
@@ -210,15 +210,15 @@
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$6,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
                             <td>$11,000,000</td>
                         {else}
                             <td>$2,000,000</td>
@@ -230,7 +230,7 @@
                     </tr>
                     <tr>
                         <td>Medical Expense:</td>
-                        {if isset($medicalPayment) && ($medicalPayment != "false" && $medicalPayment != false) }
+                        {if isset($medicalPayment) && ($medicalPayment == "true" || $medicalPayment == true || $medicalPayment == 1) }
                             <td>$5000</td>
                         {else}
                             <td>Excluded</td>{/if}
@@ -261,7 +261,7 @@
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if isset($travelAgentEOReceiptsPL) && (int)$travelAgentEOReceiptsPL > 0}
+                        {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
                             <td>$1,000,000</td>
                         {else}
                             <td>Not Included</td>
@@ -317,7 +317,15 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is {if isset($PropDeductibleCredit)}${$PropDeductibleCredit}}.{else}$0.00{/if}
+                            Mechanical breakdown is $2500. All other perils is {if $propertyDeductibles == "propertyDeductibles1000"}
+                           $1,000
+                        {elseif $propertyDeductibles == "propertyDeductibles2500"}
+                           $2,500
+                        {elseif $propertyDeductibles == "propertyDeductibles5000"}
+                           $5,000
+                        {else}
+                           $0.00
+                        {/if}
                             </td>
                     </tr>
                 </tbody>
@@ -623,7 +631,7 @@
                 {elseif $state == 'Utah'}
                 <center>
                     <p class="notice">
-                        <b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+                        <b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
                     </p>
                 </center>
                 {elseif $state == 'Virginia'}
@@ -663,16 +671,16 @@
                     </p>
                 </center>
                 {/if}
-
+                {if isset(excludedOperation) && $excludedOperation != ""}
+                    <center>
+                    <p class ="exop notice" style="margin-top:1px;color:red;font-size: 20px;text-align: justify;text-transform: uppercase;"><b>{$excludedOperation}</b></p>
+                    </center>
+                {/if}
         </div>
 
         <!-- Second Page -->
     </div>
-        {if isset(excludedOperation) && $excludedOperation != ""}
-            <center>
-            <p class ="exop notice" style="margin-top:1px;color:red;""><b>{$excludedOperation}</b></p>
-            </center>
-        {/if}
+
 </body>
 
 </html>

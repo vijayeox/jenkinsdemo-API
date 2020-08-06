@@ -41,7 +41,7 @@ role:
             -
                 privilege_name: MANAGE_APPLICATION_EXPORT
                 permission: 3
-        uuid: 77a1d830-c016-4849-802e-a80117c43c2a
+        uuid: 76e6c9fe-3f22-4a57-808d-8dbd5dec6505
 entity:
     -
         name: 'Dealer Policy'
@@ -52,6 +52,26 @@ entity:
                 text: Status
                 index: true
                 data_type: text
+            -
+                name: producername
+                text: Producer
+                index: true
+                data_type: text
+            -
+                name: namedInsured
+                text: 'Named Insured'
+                index: true
+                data_type: text
+            -
+                name: effectiveDate
+                text: 'Effective Date'
+                index: true
+                data_type: datetime
+            -
+                name: producerdate
+                text: Date
+                index: true
+                data_type: datetime
             -
                 name: documents
                 text: Documents
@@ -83,13 +103,3 @@ form:
         description: 'Dealer Workbook form to generate carrier templates'
         template_file: dealerWorkbook.json
         entity: 'Dealer Policy'
-job:
-    -
-        uuid: 3d040d2b-4cdc-4ecb-a06f-235b2740e596
-        name: 'Trigger Template Generation'
-        url: /app/da8f0152-b8d3-43bf-8090-40103bb98d5e/delegate/TriggerTemplateService
-        cron: '30000 * * * * ? *'
-        data:
-            orgId: 34bf01ab-79ca-42df-8284-965d8dbf290e
-            appId: da8f0152-b8d3-43bf-8090-40103bb98d5e
-            entityName: 'Dealer Policy'

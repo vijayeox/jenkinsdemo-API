@@ -69,9 +69,9 @@ class PadiVerification extends AbstractAppDelegate
         }
         if(isset($data['padiNumber']) && $data['padiNumber'] != ''){
             $data['member_number'] = $data['padiNumber'];
-        }else if(isset($data['padi']) && $data['padi'] != '' && $data['product'] != 'Dive Store'){
+        }else if(isset($data['padi']) && $data['padi'] != '' && ($data['product'] != 'Dive Store' || $data['product'] != 'Group Professional Liability')){
             $data['member_number'] = $data['padi'];
-        }else if(isset($data['business_padi']) && $data['business_padi'] != '' && $data['product'] == 'Dive Store'){
+        }else if(isset($data['business_padi']) && $data['business_padi'] != '' && ($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability')){
             $data['member_number'] = $data['business_padi'];
         }
         if(isset($data['business_padi']) && $data['business_padi'] != ''){
@@ -155,11 +155,12 @@ class PadiVerification extends AbstractAppDelegate
                     $returnArray['padiVerified'] = true;
                     $returnArray['businessPadiVerified'] = false;
                 }
-            } else if(isset($data['product']) && ($data['product'] == 'Dive Store')){
+            } else if(isset($data['product']) && (($data['product'] == 'Dive Store') || ($data['product'] == 'Group Professional Liability'))){
                 if(isset($response[0]['business_name']) && $response[0]['business_name'] != ''){
                     $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = true;
                     $returnArray['padiNotFound'] = false;
+                    $returnArray['padiNotApplicable'] = false;
                 } else if(isset($response[0]['firstname']) && ($response[0]['firstname'] != '' && $response[0]['firstname'] != null)){
                     $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = false;
@@ -169,6 +170,7 @@ class PadiVerification extends AbstractAppDelegate
                     $returnArray['padiVerified'] = false;
                     $returnArray['businessPadiVerified'] = false;
                     $returnArray['padiNotFound'] = true;
+                    $returnArray['padiNotApplicable'] = false;
                 }
             } else {
                 if(isset($response[0]['firstname']) && $response[0]['firstname'] != '' && $response[0]['firstname'] != null ){

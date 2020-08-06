@@ -184,6 +184,7 @@ public function execute(array $data,Persistence $persistenceService)
             $policy['previous_LiaTax'] = $data['LiaTax'];
             $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
             $policy['previous_AddILocTax'] = $data['AddILocTax'];
+            $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
             $policy['previous_padiFeePL'] = $data['padiFeePL'];
             $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
             $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
@@ -300,6 +301,15 @@ public function execute(array $data,Persistence $persistenceService)
             $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
         }
 
+        if(isset($data['groupPL'])){
+            if($data['groupPL'] != ""){
+                foreach ($data['groupPL'] as $key => $value) {
+                    if(!isset($value['effectiveDate'])){
+                        $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                    }
+                }
+            }
+        }
         if(isset($data['paymentOptions'])){
             unset($data['paymentOptions']);
         }

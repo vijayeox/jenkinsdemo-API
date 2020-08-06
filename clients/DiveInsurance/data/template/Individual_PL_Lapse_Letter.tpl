@@ -30,7 +30,6 @@
 				<p class="certi">{$padi}</p>
 				<p class="certi">{$start_date}</p>
 				<p class = "certi">{$end_date|date_format:"%d %B %Y"}&nbsp12:01:00 AM</p>
-
 			</div>
 		</div>
 	</div>
@@ -44,16 +43,23 @@
 			If you have any questions, please contact our office at (800) 223-9998.
 		</p>
 
-
-			<p class = "spacing">Sincerely,</p>
-			<p class = "lapse_font">Vincencia & Buckley A Division of HUB International</p>
-			<p class = "lapse_font">Insurance Service</p>
-		</p>
-
-		<p class = "footer_title">
-			PADI PROFESSIONAL LIABILITY DEPARTMENT
-		</p>
-		<p class = "lapse_font">Email Address: instructors@diveinsurance.com</p>
+		Sincerely,
+		<br/><br/>
+		PADI Department<br/>
+		Vicencia & Buckley, a Division of HUB International Insurance Services Inc.<br/>
+		A division of HUB International<br/>
+		6 Centerpointe Dr. #350<br/>
+		La Palma, CA  90623<br/>
+		Email: padi-professional@hubinternational.com<br/>
+		Phone: 800-223-9998 or 714-739-3177<br/>
+		Fax: 714-739-3188<br/>
+		License #0757776
+		<br/><br/>
+		PLEASE ADD OUR DOMAINS <a href = "https://www.hubinternational.com/" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>hubinternational.com</u></a> and <a href = "https://www.diveinsurance.com/" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>diveinsurance.com</u></a> TO YOUR SAFE SENDERS LIST!
+		<br/><br/>
+		You can find us at <a href = "https://www.diveinsurance.com/" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>www.diveinsurance.com</u></a>
+		<br/><br/><br/><br/>
+		This message, together with any attachments, is intended only for the use of the individual or entity to which it is addressed. It may contain information that is confidential and prohibited from disclosure. If you are not the intended recipient, you are hereby notified that any dissemination or copying of this message or any attachment is strictly prohibited. If you have received this message in error, please notify the original sender immediately by telephone or by return e-mail and delete this message, along with any attachments, from your computer. Thank You!
 	</div>
   </div>
 </div>

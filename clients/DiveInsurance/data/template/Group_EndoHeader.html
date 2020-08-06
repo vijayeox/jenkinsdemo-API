@@ -19,7 +19,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','initial_combinedSingleLimit','initial_annualAggregate','state_in_short','padi','update_date','group_carrier'];
+     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','business_padi','end_date','group_policy_id','address1','address2','initial_combinedSingleLimit','initial_annualAggregate','state_in_short','padi','update_date','group_carrier','dba','business_name'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -46,6 +46,11 @@
             }  
             if (css_selector_classes[css_class] == "initial_annualAggregate") {
               document.getElementsByClassName("initial_annualAggregate")[0].textContent = vars[css_selector_classes[css_class]].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }  
+            if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
             }  
           }
         }
@@ -78,7 +83,7 @@
       <div class ="content1">
           <b class = "grp_caption">Agent information</b>
           <div class = "grp_caption1">
-            <p class ="grp_info1" id="nameVal"></p>
+            <p class ="grp_info3" id="nameVal"></p>
             <p class ="grp_info2" id ="addressLineVal"></p>
 						<p class ="grp_info2" id = "addressLine2Val"></p>
             <p class ="grp_info"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
@@ -87,10 +92,11 @@
           </div>
           <b class = "grp_caption2">Named Insured and Mailing Address:</b>
           <p class = "grp_details"><span class ="business_name"></p>
-          <p class = "grp_details"><span class ="business_address1"></span></p>
-          <p class = "grp_details"><span class ="business_address2"></span></p>
-          <p class = "grp_details"><span class ="business_city"></span>,<span class ="state_in_short"></span> - <span class ="business_zip"></span></p>
-          <p class = "grp_details"><span class ="business_country"></span></p>
+          <p class = "details" id = "dbaName" style = "display:none;">DBA:<span class ="dba"></span></p>
+          <p class = "grp_details"><span class ="address1"></span></p>
+          <p class = "grp_details"><span class ="address2"></span></p>
+          <p class = "grp_details"><span class ="city"></span>,<span class ="state_in_short"></span> - <span class ="zip"></span></p>
+          <p class = "grp_details"><span class ="country"></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -101,7 +107,7 @@
         </div>
         <div class = "certificate_data1">
           <p class = "grpp_margin"><span class ="group_certificate_no"></span></p>
-          <p class = "grpp_margin"><span class ="padi"></span></p>
+          <p class = "grpp_margin"><span class ="business_padi"></span></p>
           <p class = "grpp_margin"><span class ="start_date"></span></p>
           <p class = "grpp_margin"><span class ="end_date"></span></p>
         </div>

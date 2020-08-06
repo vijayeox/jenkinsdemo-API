@@ -92,6 +92,11 @@ entity:
                 name: product
                 data_type: text
                 index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
         identifiers:
@@ -112,6 +117,10 @@ entity:
                 data_type: date
                 index: true
             -
+                name: business_name
+                data_type: text
+                index: true
+            -
                 name: end_date
                 data_type: date
                 index: true
@@ -129,6 +138,11 @@ entity:
                 index: true
             -
                 name: business_padi
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
                 data_type: text
                 index: true
     -
@@ -171,6 +185,11 @@ entity:
                 name: business_padi
                 data_type: text
                 index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
         identifiers:
@@ -208,6 +227,11 @@ entity:
                 index: true
             -
                 name: product
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
                 data_type: text
                 index: true
     -
@@ -257,6 +281,59 @@ entity:
                 name: product
                 data_type: text
                 index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+    -
+        name: 'Group Professional Liability'
+        identifiers:
+            -
+                identifier: business_padi
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+                index: true
+            -
+                name: documents
+                text: 'Policy Documents'
+                data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: business_name
+                data_type: text
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: business_padi
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
 pages:
     -
         page_name: UserHomePage.yml
@@ -297,6 +374,18 @@ pages:
     -
         page_name: AdminPage.yml
         uuid: c869ce1d-022c-40b8-8214-86ba3d6442e4
+    -
+        page_name: DiveStore.yml
+        uuid: eb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: Group.yml
+        uuid: fb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: IPL.yml
+        uuid: ab018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: EFR.yml
+        uuid: bb018dfd-be95-4c53-9a97-042f615f3623
 menu:
     -
         name: Home
@@ -450,12 +539,16 @@ workflow:
         name: 'Dive Store'
         uuid: cb99e634-de00-468d-9230-d6f77d241c5b
         bpmn_file: 'Dive Store/NewApplication.bpmn'
-        entity: 'Dive Store'
+        entity:
+            - 'Dive Store'
+            - 'Group Professional Liability'
     -
         name: 'Dive Store Endorsement'
         uuid: 2bc1caaa-9628-486d-8b42-104534625994
         bpmn_file: 'Dive Store/DiveStoreEndorsement.bpmn'
-        entity: 'Dive Store'
+        entity:
+            - 'Dive Store'
+            - 'Group Professional Liability'
 form:
     -
         name: 'PADI Verification'
@@ -469,6 +562,12 @@ form:
         description: 'Lets CSR generate and view Pocket Cards'
         template_file: pocketCard.json
         entity: 'Pocket Card Job'
+    -
+        name: 'Policy Regeneration'
+        uuid: db82e118-cbef-11ea-87d0-0242ac130003
+        description: 'Lets CSR regenerate the policy document'
+        template_file: iplPolicyRegeneration.json
+        entity: 'Individual Professional Liability'
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03

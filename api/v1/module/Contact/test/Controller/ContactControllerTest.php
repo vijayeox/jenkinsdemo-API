@@ -153,16 +153,20 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['last_name'], 'Agarwal');
 
         $this->assertEquals($content['data']['orgContacts'][0]['user_id'], 1);
-        $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Bharat');
-        $this->assertEquals($content['data']['orgContacts'][0]['last_name'], 'Gogineni');
+        $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Admin');
+        $this->assertEquals($content['data']['orgContacts'][0]['last_name'], 'Test');
 
-        $this->assertEquals($content['data']['orgContacts'][1]['user_id'], 2);
-        $this->assertEquals($content['data']['orgContacts'][1]['first_name'], 'Karan');
-        $this->assertEquals($content['data']['orgContacts'][1]['last_name'], 'Agarwal');
+        $this->assertEquals($content['data']['orgContacts'][1]['user_id'], 4);
+        $this->assertEquals($content['data']['orgContacts'][1]['first_name'], 'Cleveland');
+        $this->assertEquals($content['data']['orgContacts'][1]['last_name'], 'Admin');
 
         $this->assertEquals($content['data']['orgContacts'][2]['user_id'], 3);
-        $this->assertEquals($content['data']['orgContacts'][2]['first_name'], 'rakshith');
-        $this->assertEquals($content['data']['orgContacts'][2]['last_name'], 'amin');
+        $this->assertEquals($content['data']['orgContacts'][2]['first_name'], 'Employee');
+        $this->assertEquals($content['data']['orgContacts'][2]['last_name'], 'Test');
+
+        $this->assertEquals($content['data']['orgContacts'][3]['user_id'], 2);
+        $this->assertEquals($content['data']['orgContacts'][3]['first_name'], 'Manager');
+        $this->assertEquals($content['data']['orgContacts'][3]['last_name'], 'Test');
     }
 
     public function testgetcontactsForAllColumnsSuccess()
@@ -173,7 +177,6 @@ class ContactControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-
         $this->assertEquals($content['data']['myContacts'][0]['user_id'], 1);
         $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
         $this->assertEquals($content['data']['myContacts'][0]['last_name'], 'Agarwal');
@@ -181,29 +184,38 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['phone_list'], array('data'=>["8399547885"," 7899290200"," 123123122445"]));
         $this->assertEquals($content['data']['myContacts'][0]['email'], 'karan@myvamla.com');
         $this->assertEquals($content['data']['myContacts'][0]['email_list'], array('data'=>["raks@va.com"," asas@ox.com"]));
+        
         $this->assertEquals($content['data']['orgContacts'][0]['user_id'], '1');
-        $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Bharat');
-        $this->assertEquals($content['data']['orgContacts'][0]['last_name'], 'Gogineni');
+        $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Admin');
+        $this->assertEquals($content['data']['orgContacts'][0]['last_name'], 'Test');
         $this->assertEquals($content['data']['orgContacts'][0]['phone_1'], '+93-1234567891');
         $this->assertEquals($content['data']['orgContacts'][0]['phone_list'], null);
-        $this->assertEquals($content['data']['orgContacts'][0]['email'], 'bharatg@myvamla.com');
+        $this->assertEquals($content['data']['orgContacts'][0]['email'], 'admin1@eoxvantage.in');
         $this->assertEquals($content['data']['orgContacts'][0]['email_list'], null);
 
-        $this->assertEquals($content['data']['orgContacts'][1]['user_id'], '2');
-        $this->assertEquals($content['data']['orgContacts'][1]['first_name'], 'Karan');
-        $this->assertEquals($content['data']['orgContacts'][1]['last_name'], 'Agarwal');
-        $this->assertEquals($content['data']['orgContacts'][1]['phone_1'], '+93-1234567891');
+        $this->assertEquals($content['data']['orgContacts'][1]['user_id'], '4');
+        $this->assertEquals($content['data']['orgContacts'][1]['first_name'], 'Cleveland');
+        $this->assertEquals($content['data']['orgContacts'][1]['last_name'], 'Admin');
+        $this->assertEquals($content['data']['orgContacts'][1]['phone_1'], '+91-1234567890');
         $this->assertEquals($content['data']['orgContacts'][1]['phone_list'], null);
-        $this->assertEquals($content['data']['orgContacts'][1]['email'], 'test1@va.com');
+        $this->assertEquals($content['data']['orgContacts'][1]['email'], 'admin4@eoxvantage.in');
         $this->assertEquals($content['data']['orgContacts'][1]['email_list'], null);
 
         $this->assertEquals($content['data']['orgContacts'][2]['user_id'], '3');
-        $this->assertEquals($content['data']['orgContacts'][2]['first_name'], 'rakshith');
-        $this->assertEquals($content['data']['orgContacts'][2]['last_name'], 'amin');
+        $this->assertEquals($content['data']['orgContacts'][2]['first_name'], 'Employee');
+        $this->assertEquals($content['data']['orgContacts'][2]['last_name'], 'Test');
         $this->assertEquals($content['data']['orgContacts'][2]['phone_1'], '+93-1234567891');
         $this->assertEquals($content['data']['orgContacts'][2]['phone_list'], null);
-        $this->assertEquals($content['data']['orgContacts'][2]['email'], 'test@va.com');
+        $this->assertEquals($content['data']['orgContacts'][2]['email'], 'admin3@eoxvantage.in');
         $this->assertEquals($content['data']['orgContacts'][2]['email_list'], null);
+
+        $this->assertEquals($content['data']['orgContacts'][3]['user_id'], '2');
+        $this->assertEquals($content['data']['orgContacts'][3]['first_name'], 'Manager');
+        $this->assertEquals($content['data']['orgContacts'][3]['last_name'], 'Test');
+        $this->assertEquals($content['data']['orgContacts'][3]['phone_1'], '+93-1234567891');
+        $this->assertEquals($content['data']['orgContacts'][3]['phone_list'], null);
+        $this->assertEquals($content['data']['orgContacts'][3]['email'], 'admin2@eoxvantage.in');
+        $this->assertEquals($content['data']['orgContacts'][3]['email_list'], null);
     }
 
     public function testgetcontactsWithFilter()

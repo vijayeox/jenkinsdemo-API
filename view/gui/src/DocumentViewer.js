@@ -3,7 +3,8 @@ import Accordion from "react-bootstrap/Accordion";
 import { useAccordionToggle } from "react-bootstrap/AccordionToggle";
 import { Card, Button } from "react-bootstrap";
 import "./public/css/documentViewer.scss";
-import { Upload } from '@progress/kendo-react-upload';
+import { Upload } from "@progress/kendo-react-upload";
+import Notification from "./Notification";
 
 export default class DocumentViewer extends Component {
   constructor(props) {
@@ -15,77 +16,84 @@ export default class DocumentViewer extends Component {
       documentsList: undefined,
       documentTypes: [],
       activeCard: "",
-      uploadWindow: false,
-      files: [],
-      validFiles:[]
+      uploadFiles: []
     };
     this.loader = this.core.make("oxzion/splash");
     this.helper = this.core.make("oxzion/restClient");
     this.baseUrl = this.core.config("wrapper.url");
+    this.notif = React.createRef();
     this.getDocumentsList = this.getDocumentsList.bind(this);
-    this.uploadAttachments = this.uploadAttachments.bind(this);
     this.getDocumentsList();
   }
-    onAdd = (event) => {
-        console.log('onAdd: ');
 
-        this.setState({
-            files: event.newState,
-            validFiles: event.newState.filter(item => {
-              if (item.validationErrors) {
-                if (item.validationErrors.length > 0) {
-                  return false;
-                }
-              }else{
-                return true;
-              }
-            })
-        });
-    }
+  onFileChange = (event) => {
+    let fileError = false;
+    let validFiles = event.newState.filter((item) => {
+      if (item.validationErrors) {
+        if (item.validationErrors.length > 0) {
+          fileError = true;
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
 
-    onRemove = (event) => {
-        console.log('onRemove: ');
-
-        this.setState({
-            files: event.newState
-        });
-    }
-
-    uploadAttachments(){     
-      this.state.validFiles.map(item => {
-        console.log(item);
-        this.postAttachments(item).then(response => {
-          console.log(response);
-          if (response.status == 'success') {
-            this.getDocumentsList();
-          }
-          this.setState({
-            uploadWindow:false,
-            files: [],
-            validFiles: []
-          });
-        });
+    if (validFiles) {
+      this.setState({
+        uploadFiles: validFiles
       });
-    };
+    }
+    fileError
+      ? this.notif.current.notify(
+          "Unsupported File",
+          "Please choose a different file.",
+          "danger"
+        )
+      : null;
+  };
 
-    async postAttachments(file){
-      var urlRes = (this.props.url).split('/');
-      var fileId = urlRes[urlRes.length - 2];
-      let response = await this.helper.request(
+  uploadAttachments(fileIndex) {
+    if (fileIndex < 0) {
+      this.setState(
+        {
+          selectedDocument: undefined,
+          documentsList: undefined,
+          documentTypes: [],
+          activeCard: "",
+          uploadFiles: []
+        },
+        this.getDocumentsList()
+      );
+    } else {
+      this.postAttachments(this.state.uploadFiles[fileIndex]).then(
+        (response) => {
+          if (response.status == "success") {
+            this.uploadAttachments(fileIndex - 1);
+          }
+        }
+      );
+    }
+  }
+
+  async postAttachments(file) {
+    var urlRes = this.props.url.split("/");
+    var fileId = urlRes[urlRes.length - 2];
+    let response = await this.helper.request(
       "v1",
       "/app/" + this.appId + "/file/attachment",
-     {
-      file:file.getRawFile(),
-      name:file.name,
-      type:"file/"+file.extension.split('.')[1],
-      fileId:fileId,
-      fieldLabel:this.state.activeCard
-     } ,
+      {
+        file: file.getRawFile(),
+        name: file.name,
+        type: "file/" + file.extension.split(".")[1],
+        fileId: fileId,
+        fieldLabel: this.state.activeCard
+      },
       "filepost"
     );
 
     return response;
-    }
+  }
 
   async getDocumentsListService(url) {
     let response = await this.helper.request(
@@ -112,7 +120,7 @@ export default class DocumentViewer extends Component {
                 if (response.data[docType].value.length > 0) {
                   documentsList[docType] = response.data[docType].value;
                   folderType[docType] = response.data[docType].type;
-                }else if (response.data[docType].type == 'file'){
+                } else if (response.data[docType].type == "file") {
                   documentsList[docType] = [];
                   folderType[docType] = response.data[docType].type;
                 }
@@ -125,16 +133,14 @@ export default class DocumentViewer extends Component {
               .sort((a, b) => a.localeCompare(b))
               .filter((item) => item !== "Documents");
             documentsList.Documents ? validDocTypes.unshift("Documents") : null;
-            console.log(validDocTypes);
             this.setState({
               documentsList: documentsList,
-              folderType:folderType,
+              folderType: folderType,
               selectedDocument: documentsList[validDocTypes[0]][0],
               activeCard: validDocTypes[0],
               documentTypes: validDocTypes
             });
           }
-          console.log(folderType);
           this.loader.destroy();
         }
       });
@@ -154,66 +160,105 @@ export default class DocumentViewer extends Component {
       this.state.documentTypes.map((docType, index) => {
         this.state.documentsList[docType]
           ? accordionHTML.push(
-            <Card key={index}>
-              <Card.Header>
-                <CustomToggle
-                  eventKey={docType}
-                  currentSelected={this.state.activeCard}
-                  type={this.state.folderType[docType]}
-                  update={(item) => {
-                    (this.state.documentsList[item].length !== 0) ?
-                    this.setState({
-                      activeCard: item,
-                      selectedDocument: this.state.documentsList[item][0]
-                    }) : this.setState({
-                      activeCard: item
-                    }) ;
-                  }}
-                  showFileWindow={() => {
-                    this.setState({
-                      uploadWindow: true
-                    });
-                  }}
-                >
-                  {docType}
-                </CustomToggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey={docType}>
-                <Card.Body>
-                  {this.state.documentsList[docType].map((doc, i) => {
-                    return (
-                      <Card
-                        className="docItems"
-                        onClick={(e) => {
-                          doc.file != this.state.selectedDocument.file
-                            ? this.handleDocumentClick(doc)
-                            : null;
-                        }}
-                        key={i}
-                      >
-                        <div
-                          className={
-                            doc.file == this.state.selectedDocument.file
-                              ? "docListBody borderActive"
-                              : "docListBody border"
-                          }
+              <Card key={index}>
+                <Card.Header>
+                  <CustomToggle
+                    eventKey={docType}
+                    currentSelected={this.state.activeCard}
+                    type={this.state.folderType[docType]}
+                    update={(item) => {
+                      this.state.documentsList[item].length !== 0
+                        ? this.setState({
+                            activeCard: item,
+                            selectedDocument: this.state.documentsList[item][0]
+                          })
+                        : this.setState({
+                            activeCard: item
+                          });
+                    }}
+                  >
+                    {docType}
+                  </CustomToggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey={docType}>
+                  <Card.Body>
+                    {this.state.documentsList[docType].map((doc, i) => {
+                      return (
+                        <Card
+                          className="docItems"
+                          onClick={(e) => {
+                            doc.file != this.state.selectedDocument.file
+                              ? this.handleDocumentClick(doc)
+                              : null;
+                          }}
+                          key={i}
                         >
-                          <i
-                            className={"docIcon " + this.getDocIcon(doc.type)}
-                          ></i>
-                          <p>
-                            {doc.originalName.length > 30
-                              ? this.chopFileName(doc.originalName)
-                              : doc.originalName}
-                          </p>
-                        </div>
-                      </Card>
-                    );
-                  })}
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          )
+                          <div
+                            className={
+                              doc.file == this.state.selectedDocument.file
+                                ? "docListBody borderActive"
+                                : "docListBody border"
+                            }
+                          >
+                            <i
+                              className={"docIcon " + this.getDocIcon(doc.type)}
+                            ></i>
+                            <p>
+                              {doc.originalName.length > 30
+                                ? this.chopFileName(doc.originalName)
+                                : doc.originalName}
+                            </p>
+                          </div>
+                        </Card>
+                      );
+                    })}
+                    {this.state.folderType[docType] == "file" ? (
+                      <div className="popupWindow">
+                        <Upload
+                          batch={false}
+                          multiple={true}
+                          autoUpload={false}
+                          files={this.state.uploadFiles}
+                          onAdd={this.onFileChange}
+                          onRemove={this.onFileChange}
+                          restrictions={{
+                            allowedExtensions: [
+                              ".jpg",
+                              ".jpeg",
+                              ".png",
+                              ".gif",
+                              ".pdf",
+                              ".doc",
+                              ".docx",
+                              ".xlsx",
+                              ".xls"
+                            ],
+                            maxFileSize: 25000000
+                          }}
+                        />
+                        <button
+                          className={
+                            this.state.uploadFiles.length == 0
+                              ? "uploadButton invalidButton"
+                              : "uploadButton"
+                          }
+                          disabled={this.state.uploadFiles.length == 0}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            this.loader.show();
+                            this.uploadAttachments(
+                              this.state.uploadFiles.length - 1
+                            );
+                          }}
+                        >
+                          Upload
+                        </button>
+                      </div>
+                    ) : null}
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            )
           : null;
       });
     }
@@ -222,36 +267,36 @@ export default class DocumentViewer extends Component {
 
   getDocIcon(type) {
     try {
-    var type = type.split("/")[1].toLowerCase();
-    if (type == "png" || type == "jpg" || type == "jpeg" || type == "gif") {
-      return "fa fa-picture-o";
-    } else if (type == "pdf") {
-      return "fa fa-file-pdf-o";
-    } else if (type == "mp4" || type == "avi") {
-      return "fa fa-file-video-o";
-    } else if (
-      type == "odt" ||
-      type == "odp" ||
-      type == "ods" ||
-      type == "doc" ||
-      type == "docx"
-    ) {
-      return "fa fa-file-word-o";
-    } else {
-      return "fa fa-file-o";
-    }
-    } catch(Exception){
-      return "fa fa-file-o";
+      var type = type.split("/")[1].toLowerCase();
+      if (type == "png" || type == "jpg" || type == "jpeg" || type == "gif") {
+        return "fa fa-picture-o";
+      } else if (type == "pdf") {
+        return "fa fa-file-pdf-o";
+      } else if (type == "mp4" || type == "avi") {
+        return "fa fa-file-video-o";
+      } else if (
+        type == "odt" ||
+        type == "odp" ||
+        type == "ods" ||
+        type == "doc" ||
+        type == "docx"
+      ) {
+        return "fa fa-file-word-o";
+      } else {
+        return "far fa-file";
+      }
+    } catch (Exception) {
+      return "far fa-file";
     }
   }
 
-  chopFileName = title => {
+  chopFileName = (title) => {
     let type = "...." + title.split(".")[1];
     var displayTitle = title.substring(0, 26) + type;
     return displayTitle;
   };
 
-  handleDocumentClick = doc => {
+  handleDocumentClick = (doc) => {
     var documentViewerDiv = document.querySelector(".docViewerWindow");
     this.loader.show(documentViewerDiv);
     this.setState({
@@ -259,7 +304,7 @@ export default class DocumentViewer extends Component {
     });
   };
 
-  displayDocumentData = documentData => {
+  displayDocumentData = (documentData) => {
     var url;
     var type = documentData.type.split("/")[1].toLowerCase();
     if (type == "png" || type == "jpg" || type == "jpeg" || type == "gif") {
@@ -285,7 +330,7 @@ export default class DocumentViewer extends Component {
             target="_blank"
             className="image-download-button"
           >
-            <i class="fa fa-download" aria-hidden="true"></i>
+            <i className="fa fa-download" aria-hidden="true"></i>
             Download
           </a>
         </React.Fragment>
@@ -356,7 +401,7 @@ export default class DocumentViewer extends Component {
             target="_blank"
             className="image-download-button"
           >
-            <i class="fa fa-download" aria-hidden="true"></i>
+            <i className="fa fa-download" aria-hidden="true"></i>
             Download
           </a>
         </React.Fragment>
@@ -365,32 +410,11 @@ export default class DocumentViewer extends Component {
   };
 
   render() {
-    console.log(this.state);
     const { documentsList } = this.state;
     if (documentsList) {
       return (
         <div className="docViewerComponent">
-        {this.state.uploadWindow ?
-          <div className="popupWindow"> 
-            <Upload
-                batch={false}
-                multiple={true}
-                autoUpload={false}
-                files={this.state.files}
-                onAdd={this.onAdd}
-                onRemove={this.onRemove}
-                restrictions={{
-                  allowedExtensions: [".jpg", ".jpeg", ".png", ".gif",".pdf", ".doc", ".docx", ".xlsx",".xls"],
-                  maxFileSize: 25000000
-                }}
-            />
-            <button className={ this.state.validFiles.length == 0 ? "uploadButton invalidButton" : "uploadButton"}
-            disabled={this.state.validFiles.length == 0} 
-            onClick={this.uploadAttachments}>
-              Upload
-            </button>
-          </div> : null
-         }
+          <Notification ref={this.notif} />
           <div className="col-md-3 docListDiv">
             <Accordion defaultActiveKey={this.state.documentTypes[0]}>
               {this.generateDocumentList()}
@@ -400,8 +424,8 @@ export default class DocumentViewer extends Component {
             {this.state.selectedDocument ? (
               this.displayDocumentData(this.state.selectedDocument)
             ) : (
-                <p>No files to display.</p>
-              )}
+              <p>No files to display.</p>
+            )}
           </div>
         </div>
       );
@@ -424,8 +448,8 @@ function CustomToggle(props) {
       onClick={
         props.currentSelected !== props.eventKey
           ? useAccordionToggle(props.eventKey, () =>
-            props.update.call(undefined, props.eventKey)
-          )
+              props.update.call(undefined, props.eventKey)
+            )
           : null
       }
     >
@@ -437,11 +461,6 @@ function CustomToggle(props) {
         }
       ></i>
       {props.children}
-      {props.type == 'file' ? (
-      <div class="element">
-      <i class="fa fa-upload uploadFile" onClick={() => props.showFileWindow()}></i>
-      </div>
-      ): ''}
     </Button>
   );
 }

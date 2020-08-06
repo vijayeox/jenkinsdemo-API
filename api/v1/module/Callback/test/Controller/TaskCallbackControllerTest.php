@@ -152,10 +152,10 @@ class TaskCallbackControllerTest extends ControllerTest
     public function testAddUserToProject()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => 'demo-project'];
+        $data = ['username' => 'employeetest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => 'demo-project'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForTaskService();
-            $mockRestClient->expects('postWithHeader')->with("oxusers", array('username' => 'rakshithtest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => 'demo-project'))->once()->andReturn(array("body" => json_encode(array("status" => "success", "data" => array('username' => 'rakshithtest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => 'demo-project')))));
+            $mockRestClient->expects('postWithHeader')->with("oxusers", array('username' => 'employeetest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => 'demo-project'))->once()->andReturn(array("body" => json_encode(array("status" => "success", "data" => array('username' => 'employeetest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York', 'projectUuid' => 'demo-project')))));
         }
         $this->dispatch('/callback/task/addusertotasktracker', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -169,10 +169,10 @@ class TaskCallbackControllerTest extends ControllerTest
     public function testAddUserToProjectWithMissingData()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York'];
+        $data = ['username' => 'employeetest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForTaskService();
-            $mockRestClient->expects('postWithHeader')->with("oxusers", array('username' => 'rakshithtest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York'))->once()->andReturn(array("body" => json_encode(array("status" => "error", "data" => array('username' => 'rakshithtest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York')))));
+            $mockRestClient->expects('postWithHeader')->with("oxusers", array('username' => 'employeetest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York'))->once()->andReturn(array("body" => json_encode(array("status" => "error", "data" => array('username' => 'employeetest', 'firstname' => 'rakshith', 'lastname' => 'amin', 'email' => 'test@va.com', 'timezone' => 'United States/New York')))));
         }
         $this->dispatch('/callback/task/addusertotasktracker', 'POST', $data);
         $this->assertResponseStatusCode(400);
@@ -185,10 +185,10 @@ class TaskCallbackControllerTest extends ControllerTest
     public function testRemoveUserFromProject()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest', 'projectUuid' => 'demo-project'];
+        $data = ['username' => 'employeetest', 'projectUuid' => 'demo-project'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForTaskService();
-            $mockRestClient->expects('deleteWithHeader')->with("oxusers", array('username' => 'rakshithtest', 'projectUuid' => 'demo-project'))->once()->andReturn(array("body" => json_encode(array("status" => "success", "data" => array('username' => 'rakshithtest', 'projectUuid' => 'demo-project')))));
+            $mockRestClient->expects('deleteWithHeader')->with("oxusers", array('username' => 'employeetest', 'projectUuid' => 'demo-project'))->once()->andReturn(array("body" => json_encode(array("status" => "success", "data" => array('username' => 'employeetest', 'projectUuid' => 'demo-project')))));
         }
         $this->dispatch('/callback/task/deleteuserfromtasktracker', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -202,10 +202,10 @@ class TaskCallbackControllerTest extends ControllerTest
     public function testRemoveUserFromProjectWithMissingData()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest'];
+        $data = ['username' => 'employeetest'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForTaskService();
-            $mockRestClient->expects('deleteWithHeader')->with("oxusers", array('username' => 'rakshithtest', 'projectUuid' => null))->once()->andReturn(array("body" => json_encode(array("status" => "error", "data" => array('username' => 'rakshithtest')))));
+            $mockRestClient->expects('deleteWithHeader')->with("oxusers", array('username' => 'employeetest', 'projectUuid' => null))->once()->andReturn(array("body" => json_encode(array("status" => "error", "data" => array('username' => 'employeetest')))));
         }
         $this->dispatch('/callback/task/deleteuserfromtasktracker', 'POST', $data);
         $this->assertResponseStatusCode(400);

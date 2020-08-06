@@ -39,7 +39,7 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name + " - " + item.entity_name : item.firstname + " " + item.lastname + " - " + item.entity_name}</td>'
                 -
                     title: Product
                     field: entity_name
