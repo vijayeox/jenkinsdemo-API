@@ -23,6 +23,9 @@ class RegenerateDocuments extends PolicyDocument
         $result = $this->getFile($files[$i],false,$data['orgId']);
         $fileData = $result['data'];
         if(isset($fileData['endorsement_options'])){
+            if ($fileData['product'] == 'Individual Professional Liability') {
+                $this->logger->info("PADI NUMBER -----".print_r($fileData['padi'],true));
+            }
             continue;
         }        
         $fileData['fileId'] = $files[$i];
