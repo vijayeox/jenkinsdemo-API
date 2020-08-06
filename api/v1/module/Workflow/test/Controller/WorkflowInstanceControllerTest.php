@@ -292,7 +292,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testCreateWithOngoingProcess()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343", "identifier_field" => "padi_number", "padi_number" => "1234"];
+        $data = ['name' => 'workflow3', 'app_id' => 1, 'fax' => "34343434343", "identifier_field" => "padi_number", "padi_number" => "1234", "email" => "test@eoxvantage.in", "firstname" => "Test", "lastname" => "User","address1" => "Address 1", "city" => "Bengaluru", "state" => "Karnataka", "country" => "India", "zip" => "560085"];
         $query = "update ox_file set last_workflow_instance_id = 3 where id = 11";
         $result = $this->executeUpdate($query);
         $fileCount = $this->getConnection()->getRowCount('ox_file');

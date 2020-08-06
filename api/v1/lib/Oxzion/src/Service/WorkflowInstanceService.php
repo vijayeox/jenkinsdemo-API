@@ -198,6 +198,7 @@ class WorkflowInstanceService extends AbstractService
             $params['appId'] = null;
         }
 
+        $this->setupIdentityField($params);
         $workflow = $this->workflowService->getWorkflow($workflowId, $params['appId']);
         if (empty($workflow)) {
             $this->logger->info("EMPTY WORKFLOW --- ");
@@ -266,7 +267,6 @@ class WorkflowInstanceService extends AbstractService
             $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'],'fileId'=>$this->getIdFromUuid('ox_file', $params['fileId']),'startData'=>json_encode($fileData['data']));
             $this->logger->info("Query1 - $updateQuery with Parametrs - " . print_r($updateParams, true));
             $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
-            $this->setupIdentityField($params);
             $this->commit();
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
