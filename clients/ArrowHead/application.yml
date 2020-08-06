@@ -53,37 +53,29 @@ entity:
                 index: true
                 data_type: text
             -
+                name: producername
+                text: Producer
+                index: true
+                data_type: text
+            -
+                name: namedInsured
+                text: 'Named Insured'
+                index: true
+                data_type: text
+            -
+                name: effectiveDate
+                text: 'Effective Date'
+                index: true
+                data_type: datetime
+            -
+                name: producerdate
+                text: Date
+                index: true
+                data_type: datetime
+            -
                 name: documents
                 text: Documents
                 data_type: document
-            -
-                name: genericData
-                text: 'Generic Data Massaging'
-                data_type: json
-            -
-                name: locationSchedule
-                text: 'Location Schedule'
-                data_type: json
-            -
-                name: franchisedAutoDealer
-                text: 'Franchised Auto Dealer'
-                data_type: json
-            -
-                name: dealerguardOpenLot
-                text: 'Dealerguard Open Lot'
-                data_type: json
-            -
-                name: victorAutoPhysicalDamage
-                text: 'Victor Auto Physical Damage'
-                data_type: json
-            -
-                name: harcoExcelData
-                text: 'Harco EXCEL Data'
-                data_type: json
-            -
-                name: rpsCyberPDFData
-                text: 'RPS Cyber PDF Data'
-                data_type: json
 pages:
     -
         page_name: AgentHomePage.yml

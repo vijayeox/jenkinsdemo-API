@@ -54,6 +54,11 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     border-color: $secondary;
   }
 
+  .btn-secondary.formio-button-remove-row{
+    background-color: #F04124;
+    border-color: #F04124;
+  }
+
   .bg-primary {
     background-color: $primary-color !important;
   }
@@ -106,6 +111,13 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
       font-size:25px;
       font-weight:bolder;
       color:white;
+    }
+    .formio-dialog{
+      .formio-dialog-buttons{
+        .btn-success.formio-dialog-button{
+          float: left;
+        }
+      }
     }
   }
 

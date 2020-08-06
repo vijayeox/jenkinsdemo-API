@@ -197,6 +197,15 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     icon: 'fa fa-pencil'
                 -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Group Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
                     name: Comment
                     rule: 'true'
                     details:
@@ -206,7 +215,7 @@ content:
                             useRowData: true
                         -
                             type: Comment
-                            url: '{{uuid}}'
+                            content: '{{uuid}}'
                     icon: 'far fa-comment'
                 -
                     name: 'View Policy'
@@ -216,6 +225,14 @@ content:
                         -
                             params:
                                 page_id: 'eb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Group Professional Liability'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'fb018dfd-be95-4c53-9a97-042f615f3623'
                 -
                     name: 'View Policy'
                     icon: 'fa fa-envelope-open'
@@ -263,6 +280,15 @@ content:
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
                     rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                -
+                    name: 'Cancel Policy'
+                    icon: 'fa fa-ban'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     details:
                         -
                             type: Form
@@ -329,6 +355,7 @@ content:
                             - 'Dive Boat'
                             - 'Dive Store'
                             - 'Emergency First Response'
+                            - 'Group Professional Liability'
                         placeholder: 'Select Product'
                 -
                     title: 'Policy Status'

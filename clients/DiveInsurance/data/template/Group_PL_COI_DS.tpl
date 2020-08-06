@@ -6,19 +6,17 @@
 <body>
 	<div>
 		{if isset($upgradeStatus)}
-		{if $upgradeStatus == true || $upgradeStatus == 'true' }
-		{if isset($upgradeGroupLiability)}
-			{assign var=list value=$upgradeGroupLiability|json_decode:true}
-			{if isset($upgradeData)}
-			{foreach from=$list item=$upgradeData}
-			    		<p class = "grp_endoUpgrade">
-			    			Effective {$upgradeData.update_date} : The Liability Limit are ${$upgradeData.combinedSingleLimit|number_format} per occurance and ${$upgradeData.annualAggregate|number_format} Annual Aggregate.
-			    		</p>
-		    {/foreach}
+			{if $upgradeStatus == true || $upgradeStatus === "true" || $upgradeStatus == 1}
+				{if isset($upgradeGroupLiability)}
+					{assign var=list value=$upgradeGroupLiability|json_decode:true}
+					{foreach from=$list item=$upgradeData}
+					    		<p class = "grp_endoUpgrade">
+					    			Effective {$upgradeData.update_date} : The Liability Limit are ${$upgradeData.combinedSingleLimit|number_format} per occurance and ${$upgradeData.annualAggregate|number_format} Annual Aggregate.
+					    		</p>
+				    {/foreach}
+				{/if}
 		    {/if}
 		{/if}
-		    {/if}
-	{/if}
 	<div class = "second_content">
 		<hr class = "spacing1"></hr>
 			<p class = "grppolicy_notice">

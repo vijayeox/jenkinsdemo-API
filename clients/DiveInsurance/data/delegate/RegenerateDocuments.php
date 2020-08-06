@@ -20,12 +20,41 @@ class RegenerateDocuments extends PolicyDocument
       $files = $data['fileUuid'];
       $param = $data['param'];
       for($i = 0;$i < sizeof($files);$i ++){
-            $result = $this->getFile($files[$i],false,$data['orgId']);
-            $fileData = $result['data'];
-            if(isset($fileData['endorsement_options'])){
-                $this->logger->info("Endorsement File MedicalPayment PADI NO :".print_r($fileData['business_padi'],true)." File ID : ".print_r($files[$i],true));
-                continue;
+        $result = $this->getFile($files[$i],false,$data['orgId']);
+        $fileData = $result['data'];
+        if(isset($fileData['endorsement_options'])){
+            if ($fileData['product'] == 'Individual Professional Liability') {
+                $this->logger->info("PADI NUMBER -----".print_r($fileData['padi'],true));
             }
+            continue;
+        }        
+        $fileData['fileId'] = $files[$i];
+        $fileData['orgId'] = $data['orgId'];
+        if(!isset($fileData['excludedOperation'])){
+            $fileData['excludedOperation'] = "";
+        }
+        $options = array();
+        $temp = array();
+        $dest = "";
+        $documents = $fileData['documents'];
+        if ($fileData[$param] == 'withTecRecEndorsementForSelectionAbove') {
+            $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
+             if(isset($data['previous_policy_data'])){
+                $previous_data = array();
+                $previous_data = is_string($data['previous_policy_data']) ? json_decode($data['previous_policy_data'],true) : $data['previous_policy_data'];
+                $length = sizeof($previous_data);
+            }else{
+                $previous_data = array();
+            }
+            if (is_string($documents)) {
+                $documents = json_decode($documents,true);
+            }
+            $this->setCoverageDetails($fileData,$previous_data,$temp,$documents,$persistenceService); 
+            $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            $this->policyCOI($policyDocuments,$temp,$documents); 
+
+        }
+        if ($param == 'medicalPayment') {
             foreach ($fileData as $key => $value) {
                 if(is_string($value)){
                     $tempValue = json_decode($value,true);
@@ -38,15 +67,6 @@ class RegenerateDocuments extends PolicyDocument
                     }
                 }
             }
-            $fileData['fileId'] = $files[$i];
-            $fileData['orgId'] = $data['orgId'];
-            if(!isset($fileData['excludedOperation'])){
-                $fileData['excludedOperation'] = "";
-            }
-            $options = array();
-            $temp = array();
-            $dest = "";
-            $documents = $fileData['documents'];
             if($fileData[$param] == 1){
                 if(!isset($fileData['MedicalExpenseFP'])){
                     $fileData['MedicalExpenseFP'] = 0;
@@ -91,11 +111,14 @@ class RegenerateDocuments extends PolicyDocument
                 }
             }
             else 
-            if($fileData[$param] == 0){
-                $this->logger->info("FALSE MedicalPayment PADI NO :".print_r($fileData['business_padi'],true)." File ID : ".print_r($files[$i],true));
-                $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
-                $this->generateDiveStoreLiabilityDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
+                if($fileData[$param] == 0){
+                    $this->logger->info("FALSE MedicalPayment PADI NO :".print_r($fileData['business_padi'],true)." File ID : ".print_r($files[$i],true));
+                    $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
+                    $this->generateDiveStoreLiabilityDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
+                }
+
             }
+
         }
     }
 

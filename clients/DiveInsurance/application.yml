@@ -99,7 +99,6 @@ entity:
                 index: true
     -
         name: 'Dive Store'
-        uuid: 80b2d1f8-6929-49a6-8e46-4e027f681b77
         identifiers:
             -
                 identifier: business_padi
@@ -289,7 +288,6 @@ entity:
                 index: true
     -
         name: 'Group Professional Liability'
-        uuid: 62e68b3f-abd0-4938-a82e-2ca42db1ae19
         identifiers:
             -
                 identifier: business_padi
@@ -379,6 +377,9 @@ pages:
     -
         page_name: DiveStore.yml
         uuid: eb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: Group.yml
+        uuid: fb018dfd-be95-4c53-9a97-042f615f3623
     -
         page_name: IPL.yml
         uuid: ab018dfd-be95-4c53-9a97-042f615f3623
@@ -545,7 +546,9 @@ workflow:
         name: 'Dive Store Endorsement'
         uuid: 2bc1caaa-9628-486d-8b42-104534625994
         bpmn_file: 'Dive Store/DiveStoreEndorsement.bpmn'
-        entity: 'Dive Store'
+        entity:
+            - 'Dive Store'
+            - 'Group Professional Liability'
 form:
     -
         name: 'PADI Verification'

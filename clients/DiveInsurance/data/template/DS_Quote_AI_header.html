@@ -24,6 +24,11 @@
               for (var j = 0; j < element.length; ++j) {
                   element[j].textContent = vars[css_selector_classes[css_class]];
               }
+              if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
+              }
           }
       }
       agentInfo();
@@ -89,6 +94,7 @@
         <p class ="padi_margin"></p>                                                                
       </div>
     </div>
+    <div style = "margin-top: 15%;"></div>
 <div class = "spacing_div">&nbsp</div>
     <hr class = "qfooter_line1"></hr>
 </div>

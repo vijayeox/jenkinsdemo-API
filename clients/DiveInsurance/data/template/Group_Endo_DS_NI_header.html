@@ -19,7 +19,7 @@
           }
       }
     
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','business_padi','end_date','group_policy_id','address1','address2','state_in_short','padi','group_carrier'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','business_padi','end_date','group_policy_id','address1','address2','state_in_short','padi','group_carrier','dba'];
        for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -47,6 +47,11 @@
                 moment(vars[css_selector_classes[css_class]]).format(
                   "D MMMM YYYY"
                 ) + " - 12:01:00 AM";
+            }
+            if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
             }
           }
         }
@@ -87,6 +92,7 @@
           </div>
           <b class = "caption2">Named Insured and Mailing Address:</b>
           <p class = "details"><span class ="business_name"></span></p>
+          <p class = "details" id = "dbaName" style = "display:none;">DBA:<span class ="dba"></span></p>
           <p class = "details"><span class ="address1"></span></p>
           <p class = "details"><span class ="address2"></span></p>
           <p class = "details"><span class ="city"></span>,<span class ="state_in_short"></span> - <span class ="zip"></span></p>

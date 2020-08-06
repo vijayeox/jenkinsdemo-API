@@ -30,6 +30,11 @@
                     for (var j = 0; j < element.length; ++j) {
                         element[j].textContent = vars[css_selector_classes[css_class]];
                     }
+                    if (css_selector_classes[css_class] == "dba") {
+                        if(vars['dba'] != ""){
+                            document.getElementById("dbaName").style.display = "block";
+                        }
+                    }
                 }
             }
             agentInfo();
@@ -65,6 +70,7 @@
                 </div>
                     <b class="caption2">Insured's Name and Mailing Address:</b>
                 <p class="details uppercase"><span class="business_name"></span></p>
+                <p class = "details" id = "dbaName" style = "display:none;">DBA:<span class ="dba uppercase"></span></p>
                 <p class = "details uppercase"><span class ="address1"></span></p>
                 <p class = "details uppercase"><span class ="address2"></span></p>
                 <p class = "details uppercase"><span class ="city"></span>, <span class ="state_in_short"></span> <span class ="zip"></span></p>
@@ -92,7 +98,7 @@
     <div>&nbsp</div>
     <div>&nbsp</div>
     <div>&nbsp</div>
-    <div>&nbsp</div>
+    <div style = "margin-bottom:2%">&nbsp</div>
     <div class="spacer2"></div>
 </body>
 
