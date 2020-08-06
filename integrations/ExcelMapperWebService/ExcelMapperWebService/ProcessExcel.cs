@@ -103,6 +103,7 @@ namespace ProcessExcel
             string fCarrier = DateTime.Now.ToString("MMddyyyyhhmmss") + "-" + carrierfile;
             File.Copy(vFolder + "\\" + carrierfile, vFolder + "\\" + fCarrier);
             Workbook wbCarrier = excel.Workbooks.Open(vFolder + "\\" + fCarrier);
+            
             HandleRef hwnd = new HandleRef(excel, (IntPtr)excel.Hwnd);
             int pid;
             GetWindowThreadProcessId(hwnd, out pid);
@@ -141,17 +142,36 @@ namespace ProcessExcel
         private void Copycells(Workbook wbCarrier, JToken mapdata)
         {
             string vVal;
+            string macro="";
             string vDestSheet = mapdata["pageName"].ToString();
             string vDestRange = mapdata["cell"].ToString();
             string vSpecial = mapdata["type"].ToString();
+            bool vStatic = false;
+            if (mapdata["offset"] != null)
+            {
+                if (mapdata["offset"].ToString()!="")
+                {
+                    vDestRange = FindByNameAndOffset(wbCarrier, vDestSheet, vDestRange, mapdata["offset"].ToString());
+                }
+            }
+            if (mapdata["macro"] != null)
+            {
+                macro = mapdata["macro"].ToString();
+            } 
             try
             {
                 switch (vSpecial)
                 {
-                    case "DataGrid":
+                    case "DataGridStatic":
+                        vStatic = true;
                         JToken value = mapdata["value"];
                         List<List<string>> values = mapdata["value"].ToObject<List<List<string>>>();
-                        CopyTable(wbCarrier, vDestSheet, vDestRange,values);
+                        CopyTable(wbCarrier, vDestSheet, vDestRange, values, macro,vStatic);
+                        break;
+                    case "DataGrid":
+                        JToken value2 = mapdata["value"];
+                        List<List<string>> values2 = mapdata["value"].ToObject<List<List<string>>>();
+                        CopyTable(wbCarrier, vDestSheet, vDestRange,values2,macro,vStatic);
                         break;
                     case "Checkbox":
                         vVal = mapdata["value"].ToString();
@@ -184,14 +204,21 @@ namespace ProcessExcel
 
         }
 
-        public void CopyTable(Workbook wbCarrier, string vDestSheet, string vDestRange,  List<List<string>> values)
+        public void CopyTable(Workbook wbCarrier, string vDestSheet, string vDestRange,  List<List<string>> values, string macro,bool vStatic)
         {
             try
             {
                 int rowindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Row;
                 int colindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Column;
+
                 foreach (List<string> row in values)
                 {
+                    if (macro != "" && vStatic==false)
+                    {
+                        Worksheet ws = (wbCarrier.Worksheets[vDestSheet] as Worksheet);
+                        ws.Activate();
+                        wbCarrier.Application.Run(macro);
+                    }
                     int i = colindex;
                     foreach (string value in row)
                     {
@@ -202,7 +229,19 @@ namespace ProcessExcel
 
                         i++;
                     }
-                    rowindex++;
+                    if (vStatic==false)
+                    {
+                        rowindex++;
+                    } else
+                    {
+                        if (macro != "")
+                        {
+                            Worksheet ws = (wbCarrier.Worksheets[vDestSheet] as Worksheet);
+                            ws.Activate();
+                            wbCarrier.Application.Run(macro);
+                        }
+                    }
+                    
                 }
             } catch 
             {
@@ -305,6 +344,25 @@ namespace ProcessExcel
                 Logerror(e.Message, fileName);
             }
         }
+
+        public string FindByNameAndOffset(Workbook wbCarrier, string vDestSheet,string text, string offset)
+        {
+            string[] offsetarry = offset.Split(",");
+            int offsetrow = int.Parse(offsetarry[0]);
+            int offsetcol = int.Parse(offsetarry[1]);
+            Worksheet sheet = (Worksheet)wbCarrier.Worksheets[vDestSheet];
+            Range range = sheet.Cells;
+            var result = range.Find(text, LookAt: XlLookAt.xlPart);
+            int rowindex = result.Row;
+            int colindex = result.Column;
+            rowindex = rowindex + offsetrow;
+            colindex = colindex + offsetcol;
+            var address = (sheet.Cells[rowindex, colindex] as Range).Address;
+            return address;
+        }
+
+
+
 
     }
 }
