@@ -2,6 +2,6 @@ name: 'Monthly Revenue'
 description: 'Monthly Revenue'
 content:
     -
-        type: Dashboard
+        type: DashboardManager
         content:
             uuid: 936b6dfe-d704-4dc8-8acb-ec6582054759

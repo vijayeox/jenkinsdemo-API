@@ -2,6 +2,6 @@ name: 'Available Loads'
 description: 'Available Loads'
 content:
     -
-        type: Dashboard
+        type: DashboardManager
         content:
             uuid: 218b1966-d94d-42fa-b4e4-c8518f088493
