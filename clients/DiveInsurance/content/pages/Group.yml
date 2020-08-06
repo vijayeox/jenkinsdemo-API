@@ -17,7 +17,7 @@ content:
                           -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                                 details:
                                   -
                                       type: Form
