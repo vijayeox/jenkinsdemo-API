@@ -105,28 +105,32 @@ content:
                                                         </div>
                                                         <div class="card-body">
                                                                 <div class="form-group">
+                                                                    <label>Applied for Property Coverage?</label>
+                                                                    <p> {data.propertyCoverageSelect}</p>
+                                                                </div>
+                                                                <div class="form-group">
                                                                     <label>Contents Limit (${data.dspropTotal.toFixed(2)})</label>
-                                                                    <p> ${data.ContentsFP.toFixed(2)}</p>
+                                                                    <p> ${data.propertyCoverageSelect==''yes''? data.ContentsFP.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Building Limit (${data.dspropreplacementvalue.toFixed(2)})</label>
-                                                                    <p> ${data.BuildingLimitFP.toFixed(2)}</p>
+                                                                    <p> ${data.propertyCoverageSelect==''yes''? data.BuildingLimitFP.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Loss of Business Income(${data.lossOfBusIncome.toFixed(2)})</label>
-                                                                    <p class="uppercase"> ${data.LossofBusIncomeFP.toFixed(2)}</p>
+                                                                    <p class="uppercase"> ${data.propertyCoverageSelect==''yes''? data.LossofBusIncomeFP.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Property Tax</label>
-                                                                    <p> ${data.PropTax.toFixed(2)}</p>
+                                                                    <p> ${data.propertyCoverageSelect==''yes''? data.PropTax.toFixed(2):0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Property Coverages Total</label>
-                                                                    <p> ${data.propertyCoveragesTotalPL.toFixed(2)}</p>
+                                                                    <p> ${data.propertyCoverageSelect==''yes''? data.propertyCoveragesTotalPL.toFixed(2):0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>ProRated Property Premium</label>
-                                                                    <p> ${data.propertyProRataPremium.toFixed(2)}</p>
+                                                                    <p> ${data.propertyCoverageSelect==''yes''? data.propertyProRataPremium.toFixed(2):0.00}</p>
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -154,7 +158,7 @@ content:
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Medical Expenses</label>
-                                                                    <p class="uppercase">${data.MedicalExpenseFP.toFixed(2)}</p>
+                                                                    <p class="uppercase">${data.medicalPayment==''true''? data.MedicalExpenseFP.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Non Owned Auto Liability</label>
@@ -213,24 +217,28 @@ content:
                                                         </div>
                                                         <div class="card-body">
                                                                 <div class="form-group">
-                                                                    <label>Group Coverage (Receipts : ${data.annualEstimatedResponseRecieptsGL.toFixed(2)})</label>
-                                                                    <p>${data.groupCoverage.toFixed(2)}</p>
+                                                                    <label>Applied for Group Coverage?</label>
+                                                                    <p> {data.groupProfessionalLiabilitySelect}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Group Coverage (Receipts : ${data.groupProfessionalLiabilitySelect==''yes''? data.annualEstimatedResponseRecieptsGL.toFixed(2): 0.00})</label>
+                                                                    <p>${data.groupProfessionalLiabilitySelect==''yes''? data.groupCoverage.toFixed(2): 0}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Group Excess Liability</label>
-                                                                    <p> ${data.groupExcessLiabilityAmount.toFixed(2)}</p>
+                                                                    <p> ${data.groupProfessionalLiabilitySelect==''yes''? data.groupExcessLiabilityAmount.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Group Padi Fee</label>
-                                                                    <p class="uppercase">${data.groupPadiFee.toFixed(2)}</p>
+                                                                    <p class="uppercase">${data.groupProfessionalLiabilitySelect==''yes''? data.groupPadiFee.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Group Tax Amount</label>
-                                                                    <p class="uppercase">${data.groupTaxAmount.toFixed(2)}</p>
+                                                                    <p class="uppercase">${data.groupProfessionalLiabilitySelect==''yes''? data.groupTaxAmount.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Group Amount</label>
-                                                                    <p class="uppercase">${data.groupTotalAmount.toFixed(2)}</p>
+                                                                    <p class="uppercase">${data.groupProfessionalLiabilitySelect==''yes''? data.groupTotalAmount.toFixed(2): 0.00}</p>
                                                                 </div>
                                                           </div>
                                                 </div>
