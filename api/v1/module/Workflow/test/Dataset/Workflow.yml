@@ -49,7 +49,7 @@ ox_field:
   - id: 4
     name: "padi_number"
     app_id: 99
-    data_type: "integer"
+    data_type: "text"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 4
@@ -180,6 +180,12 @@ ox_workflow:
     process_id: "Process_1dx3eer"
     uuid: "3341cd2e-cb14-11e9-a32f-2a2ae2dbcc33"
     entity_id: 1
+  - id: 3
+    app_id: 99
+    name: "Test Workflow 3"
+    process_id: "Process_1dx3w3e"
+    uuid: "ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11"
+    entity_id: 1
 ox_workflow_deployment:
   - id: 1
     workflow_id: 1
@@ -193,6 +199,13 @@ ox_workflow_deployment:
     form_id: 1
     latest: 1
     created_by: 1
+  - id: 3
+    workflow_id: 3
+    process_definition_id: "Process_1dx3w3e:ef1b7c8b-fef7-11e9-89d4-0294414e0633"
+    form_id: 1
+    latest: 1
+    created_by: 1
+    fields: '["padi_number", "firstname"]'
 ox_activity:
   - id: 1
     app_id: 99
@@ -204,6 +217,11 @@ ox_activity:
     workflow_deployment_id: 1
     task_id: Task_1s7qwer43
     name: "Temp Task"
+  - id: 3
+    app_id: 99
+    workflow_deployment_id: 3
+    task_id: Task_1s7qwett4
+    name: "Some Task"
 ox_activity_form:
   - id: 1
     activity_id: 1
