@@ -15,7 +15,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "panel",
-		"nextPage": "if (\n  (data.padiVerified === false ||\n    data.padiVerified === \"false\") &&\n  (data.businessPadiVerified === true ||\n    data.businessPadiVerified === \"true\"||\n    data.padiNotFound === true) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"propertyPanel\";\n} else {\n  next = \"panel\";\n}",
+		"nextPage": "if (\n  (data.businessPadiVerified === true ||\n    data.businessPadiVerified === \"true\"||\n    data.padiNotFound === true) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"propertyPanel\";\n} else {\n  next = \"panel\";\n}",
 		"type": "panel",
 		"label": "Primary Contact",
 		"components": [{
@@ -14253,9 +14253,9 @@
 	},
 	"settings": {},
 	"name": "diveStoreConsolidation",
-	"path": "divestoreconsolidation",
+	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-08-06T06:51:02.575Z",
+	"modified": "2020-08-06T06:57:34.533Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }

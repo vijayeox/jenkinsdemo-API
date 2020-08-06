@@ -10772,6 +10772,7 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"validate": {
@@ -10866,6 +10867,7 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
+							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "value = (((parseFloat(data[\"groupCoverage\"]) || 0) + (parseFloat(data[\"groupExcessLiabilityAmount\"]) ||0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100).toFixed(2);",
 							"key": "groupTaxAmount",
@@ -14613,6 +14615,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-05T16:21:01.069Z",
+	"modified": "2020-08-06T07:19:32.593Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
