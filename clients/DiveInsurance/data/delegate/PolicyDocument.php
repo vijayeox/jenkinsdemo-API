@@ -381,6 +381,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             else if($data['product'] == "Dive Store" || $data['product'] == 'Group Professional Liability'){
                if($this->type != 'endorsementQuote' && $this->type != "quote"){
+                    $addLocations = $temp['additionalLocations'];
+                    unset($temp['additionalLocations']);  
                     if(isset($this->template[$temp['product']]['cover_letter'])){
                         $this->logger->info("DOCUMENT cover_letter");
                         $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
@@ -415,8 +417,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("DOCUMENT lossPayees");
                         $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                     }
-                    $addLocations = $temp['additionalLocations'];   
-                    if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
+                    if(isset($addLocations) && $temp['additionalLocationsSelect']=="yes"){
                         if(is_string($addLocations)){
                             $additionalLocations = json_decode($addLocations,true);
                         } else {
