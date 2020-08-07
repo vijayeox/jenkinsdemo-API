@@ -148,7 +148,7 @@ public function execute(array $data,Persistence $persistenceService)
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
         $data['upgradeStatus'] = true;
         $data['entity_name'] = $data['product'];
-        if($data['initiatedByUser'] == false){
+       if($data['initiatedByUser'] == false){
             $endorsementCoverage = array();
             $endorsementGroupCoverage = array();
             $endorsementGroupLiability = array();
