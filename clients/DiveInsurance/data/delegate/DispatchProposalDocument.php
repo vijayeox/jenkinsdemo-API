@@ -12,12 +12,11 @@ class DispatchProposalDocument extends DispatchDocument {
     public function __construct(){
         $this->template = array(
             'Dive Boat' => 'diveBoatProposalMailTemplate',
-            'Dive Store' => 'diveStoreProposalMailTemplate'
+            'Dive Store' => 'diveStoreProposalMailTemplate',
             'Group Professional Liability' => 'diveStoreProposalMailTemplate');
         parent::__construct();
     }
 
-    
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Proposal DOCUMENT --- ".json_encode($data));
