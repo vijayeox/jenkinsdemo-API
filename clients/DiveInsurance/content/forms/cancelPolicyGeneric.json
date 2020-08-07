@@ -124,9 +124,8 @@
 		"allowCalculateOverride": true,
 		"validate": {
 			"required": true,
-			"customMessage": "Please select the Effective Date for Cancellation"
+			"custom": "if (data.cancellationDate){ \n  valid = ((moment(data.cancellationDate).diff(moment(data['start_date'])) >=0) && (moment(data.cancellationDate).diff(moment(data.end_date)) <=0)) ? true : \"Effective date should not be between policy period\";\n}"
 		},
-		"errorLabel": "Effective Date",
 		"key": "cancellationDate",
 		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse {\n  show = false;\n}",
 		"type": "datetime",
@@ -250,7 +249,7 @@
 		"type": "button"
 	}],
 	"revisions": "original",
-	"_vid": 118,
+	"_vid": 127,
 	"title": "Cancel Policy Generic",
 	"display": "form",
 	"access": [{
@@ -264,7 +263,7 @@
 	"path": "cancelpolicygeneric",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-08T05:30:33.387Z",
-	"modified": "2020-08-06T07:35:40.739Z",
+	"modified": "2020-08-07T15:07:09.843Z",
 	"machineName": "testdivehub:cancelPolicyGeneric",
 	"controller": ""
 }
