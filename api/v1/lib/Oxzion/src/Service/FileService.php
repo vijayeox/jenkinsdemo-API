@@ -665,6 +665,7 @@ class FileService extends AbstractService
                         $childFieldsArray[$i]['field_id'] = $field['id'];
                         $val = isset($value[$field['name']]) ? (is_array($value[$field['name']]) ? json_encode($value[$field['name']]) : $value[$field['name']]) : null;
                         $childFieldsArray[$i]['field_value']=$val;
+                        $childFieldsArray[$i]['sequence'] = $i;
                         $childFieldsArray[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                         $childFieldsArray[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
                         $childFieldsArray[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
