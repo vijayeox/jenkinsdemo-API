@@ -45,7 +45,7 @@ class WorkflowInstanceController extends AbstractApiController
             $count = $this->workflowInstanceService->startWorkflow($params);
             $this->log->info(WorkflowInstanceController::class . "ExecuteWorkflow Response  - " . print_r($count, true));
         } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         } catch (EntityNotFoundException $e) {
             $response = ['data' => $params, 'errors' => $e->getMessage()];
