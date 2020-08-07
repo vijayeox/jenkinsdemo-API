@@ -82,7 +82,7 @@ County Texas locations. Mechanical breakdown is $2500. All other perils is {if $
                            $5,000
                         {/if}.</p></div>
 		<hr></hr>
-		<b><center><p class="addIn">{if !empty($lossPayees)}
+		<b><center><p class="addIn">{if $lossPayeesSelect == "yes"}
 			Certificate has Loss Payees (See Attached)
 			{else}
 			Certificate Does Not Have Loss Payees.
