@@ -80,8 +80,6 @@ County Texas locations. Mechanical breakdown is $2500. All other perils is {if $
                            $2,500
                         {elseif $propertyDeductibles == "propertyDeductibles5000"}
                            $5,000
-                        {else}
-                           $0.00
                         {/if}.</p></div>
 		<hr></hr>
 		<b><center><p class="addIn">{if !empty($lossPayees)}
