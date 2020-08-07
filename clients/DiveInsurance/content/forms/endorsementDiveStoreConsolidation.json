@@ -5245,6 +5245,7 @@
 						"components": [{
 							"label": "Please enter the Location's PADI Number",
 							"tableView": false,
+							"clearOnHide": false,
 							"validate": {
 								"pattern": "[0-9\\s-]*$",
 								"step": "any"
@@ -5489,6 +5490,7 @@
 									"value": "no",
 									"shortcut": ""
 								}],
+								"clearOnHide": false,
 								"validate": {
 									"required": true
 								},
@@ -5509,6 +5511,7 @@
 									"value": "no",
 									"shortcut": ""
 								}],
+								"clearOnHide": false,
 								"validate": {
 									"required": true
 								},
@@ -5869,6 +5872,7 @@
 											}, {
 												"label": "Updates on plumbing, electrical, roof, etc.",
 												"tableView": true,
+												"clearOnHide": false,
 												"validate": {
 													"required": true,
 													"customMessage": "Updates on plumbing,roof,etc. is required"
@@ -14621,6 +14625,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-07T09:50:35.717Z",
+	"modified": "2020-08-07T12:24:46.436Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
