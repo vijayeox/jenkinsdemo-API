@@ -38,6 +38,12 @@ class CoverageList extends AbstractAppDelegate
         } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
             $is_upgrade = 1;
             $product = 'Dive Store';
+        } else if ($data['product'] == 'Group Professional Liability - New Policy' || $data['product'] == 'Group Professional Liability - Group PL') {
+            $is_upgrade = 0;
+            $product = 'Group Professional Liability';
+        } else if ($data['product'] == 'Group Professional Liability - Endorsement' || $data['product'] == 'Group Professional Liability - Group PL Endorsement') {
+            $is_upgrade = 1;
+            $product = 'Group Professional Liability';
         }
         $selectQuery  = "SELECT DISTINCT coverage from premium_rate_card WHERE product = '" . $product . "' AND is_upgrade = 0 AND `year` = " . $data['year']." AND coverage_category = '".$data['coverage_category']."' AND coverage NOT IN ('".$data['coverage']."') ORDER BY coverage";
         $result = $persistenceService->selectQuery($selectQuery);

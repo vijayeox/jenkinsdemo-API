@@ -12,7 +12,8 @@ class DispatchProposalDocument extends DispatchDocument {
     public function __construct(){
         $this->template = array(
             'Dive Boat' => 'diveBoatProposalMailTemplate',
-            'Dive Store' => 'diveStoreProposalMailTemplate');
+            'Dive Store' => 'diveStoreProposalMailTemplate'
+            'Group Professional Liability' => 'diveStoreProposalMailTemplate');
         parent::__construct();
     }
 
@@ -64,6 +65,8 @@ class DispatchProposalDocument extends DispatchDocument {
         }
         if($data['product'] == 'Dive Store'){
             $subject = 'PADI Endorsed Dive Store Insurance Proposal - '.$data['business_padi'];
+        }else if($data['product'] == 'Group Professional Liability'){
+            $subject = 'PADI Endorsed Group Professional Liability Insurance Proposal - '.$data['business_padi'];
         }else if($data['product'] == 'Dive Boat'){
             $subject = 'PADI Endorsed Dive Boat Insurance Proposal - '.$data['padi'];
         }else{
