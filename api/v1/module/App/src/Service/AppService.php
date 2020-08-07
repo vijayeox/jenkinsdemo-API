@@ -459,19 +459,21 @@ class AppService extends AbstractService
             foreach ($workflowData as $value) {
                 $entityName = null;
                 if(isset($value['entity'])) {
-                    $entityName = is_array($value['entity']) ? $value['entity'][0] : $value['entity'];
-                }
-                $result = 0;
-                $result = $this->checkWorkflowData($value,$appUuid);
-                if ($result == 0) {
-                    $entity = $this->entityService->getEntityByName($yamlData['app'][0]['uuid'], $entityName);
-                    if (!$entity) {
-                        $entity = array('name' => $entityName);
-                        $result = $this->entityService->saveEntity($yamlData['app'][0]['uuid'], $entity);
-                    }
-                    if (isset($value['uuid']) && isset($entity['id'])) {
-                        $bpmnFilePath = $path . "content/workflows/" . $value['bpmn_file'];
-                        $result = $this->workflowService->deploy($bpmnFilePath, $appUuid, $value, $entity['id']);
+                    $value['entity'] = is_array($value['entity']) ? $value['entity'] : array($value['entity']);
+                    foreach ($value['entity'] as $entityName) {
+                        $result = 0;
+                        $result = $this->checkWorkflowData($value,$appUuid);
+                        if ($result == 0) {
+                            $entity = $this->entityService->getEntityByName($yamlData['app'][0]['uuid'], $entityName);
+                            if (!$entity) {
+                                $entity = array('name' => $entityName);
+                                $result = $this->entityService->saveEntity($yamlData['app'][0]['uuid'], $entity);
+                            }
+                            if (isset($value['uuid']) && isset($entity['id'])) {
+                                $bpmnFilePath = $path . "content/workflows/" . $value['bpmn_file'];
+                                $result = $this->workflowService->deploy($bpmnFilePath, $appUuid, $value, $entity['id']);
+                            }
+                        }
                     }
                 }
             }
