@@ -11,7 +11,7 @@
       <hr class = "s_hrtag"></hr>
 		<div class="section_col">
 			<div class ="sec1">
-				<p class ="title">Propery Coverages</p>
+				<p class ="title">Property Coverages</p>
 			</div>
 			<div class ="sec2">
 				<p class ="title">Limits</p>
@@ -291,7 +291,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
 				<center><p class = "notice">both of
-					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
